@@ -1,0 +1,21 @@
+{
+  "name": "kopi",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/mikeaustin/kopi#readme",
+  "scripts": {
+    "build": "pegjs -o lib/parser.js src/parser.pegjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeaustin/kopi.git"
+  },
+  "dependencies": {
+    "immutable": "^4.0.0-rc.12",
+    "pegjs": "^0.10.0"
+  }
+}

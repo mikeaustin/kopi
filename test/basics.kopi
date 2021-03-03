@@ -1,0 +1,7 @@
+()
+1, 2
+2.5, foo
+() => 1, 2, 3
+(a, b => a, b) 1, 2
+a, (b, c) => a, (b, c)
+fold (acc, x => add acc, x), xs
