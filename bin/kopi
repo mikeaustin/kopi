@@ -6,24 +6,34 @@ const fs = require("fs");
 const parser = require("../lib/parser");
 
 const source = [
-  // "()",
-  // "1, 2",
-  // "2.5, foo",
-  // "() => 1, 2, 3",
-  // "(a, b => a, b) 1, 2",
-  // "a, (b, c) => a, (b, c)",
-  // "a, (b, c => a), (b, c)",
-  // "fold (acc, x => add acc, x), xs",
-  // "fold (acc, x) => (add acc, x), xs",
-  // "a, b = 1, 2",
-  // `map x => do
-  //    print 5
-  //  end
-  // `,
-  `x => do
-  print x
-  foo bar
-end`,
+  `
+    ()
+  `, `
+    (1)
+  `, `
+    1, 2
+  `, `
+    2.5, foo
+  `, `
+    () => 1, 2, 3
+  `, `
+    (a, b => a, b) 1, 2
+  `, `
+    a, (b, c) => a, (b, c)
+  `, `
+    a, (b, c => a), (b, c)
+  `, `
+    fold (acc, x => add acc, x), xs
+  `, `
+    fold (acc, x) => (add acc, x), xs
+  `, `
+    a, b = 1, 2
+  `, `
+    map x => do
+      print x
+      foo bar
+    end
+  `,
 ];
 
 for (statement of source) {
@@ -38,7 +48,7 @@ for (statement of source) {
     depth: Infinity
   });
 
-  console.log(statement);
+  console.log(statement.replace(/^\s*[\n\r]|[\r\n]\s*$/g, ''));
   console.log();
   console.log(formattedAst);
 }

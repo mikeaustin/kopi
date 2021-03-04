@@ -15,11 +15,14 @@
   class ApplyExpression extends Node { }
 }
 
+// --------------------------------------------------------------------------------------------- //
+// Top Level
+// --------------------------------------------------------------------------------------------- //
+
 Block = $
-  / head:Statement statements:(_ LineTerminator+ _ Statement)* {
-      console.log('>', statements)
-      return statements.reduce((block, statement) => (
-        statement[1] ? [...block, statement[1]] : block
+  / LineTerminator* _ head:Statement statements:(_ LineTerminator+ _ Statement)* {
+      return statements.reduce((block, [,,, statement]) => (
+        statement ? [...block, statement] : block
       ), [head])
     }
 
@@ -37,8 +40,12 @@ Assignment = $
       })
     }
 
+// --------------------------------------------------------------------------------------------- //
+// Expressions
+// --------------------------------------------------------------------------------------------- //
+
 Expression = $
-  /  ApplyExpression
+  / ApplyExpression
   / FunctionExpression
   / TupleExpression
   / PrimaryExpression
@@ -61,14 +68,14 @@ FunctionExpression = $
   / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({
         params: params,
-        body: expr
+        statements: [expr]
       })
     }
 
 TupleExpression = $
   / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)+ {
       return new TupleExpression({
-        elements: tail.reduce((tuple, expression) => [...tuple, expression[3]], [head])
+        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
       })
     }
 
@@ -80,6 +87,10 @@ PrimaryExpression = $
         elements: []
       })
     }
+
+// --------------------------------------------------------------------------------------------- //
+// Patterns
+// --------------------------------------------------------------------------------------------- //
 
 Pattern = $
   / TuplePattern
@@ -100,6 +111,10 @@ PrimaryPattern = $
         elements: []
       })
     }
+
+// --------------------------------------------------------------------------------------------- //
+// Literals
+// --------------------------------------------------------------------------------------------- //
 
 Literal = $
   / NumericLiteral
@@ -123,7 +138,7 @@ _ = $
 
 WhiteSpace "whitespace" = $
   / " "
-  
+
 LineTerminator = $
   / [\n\r]
 
