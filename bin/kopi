@@ -27,15 +27,17 @@ const source = [
   `, `
     fold (acc, x) => (add acc, x), xs
   `,
-  // `
-  //   a, b = 1, 2
-  // `,
-  // `
-  //   map x => do
-  //     print x
-  //     foo bar
-  //   end
-  // `,
+  `
+    a, b = 1, 2
+  `,
+  `
+    xs | map x => do
+      print x
+      foo bar
+    end
+
+    zip x => x
+  `,
 ];
 
 const xsource = [

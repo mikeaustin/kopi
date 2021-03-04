@@ -47,7 +47,6 @@ Assignment = $
 
 Expression = $
   / FunctionExpression
-  // / TupleExpression
   / PipeExpression
 
 PipeExpression = $
@@ -101,10 +100,24 @@ TupleExpression = $
       return head
     }
 
+PrimaryFunctionExpression = $
+  / params:Pattern _ "=>" _ "do" _ LineTerminator+ _ statements:Block _ LineTerminator+ _ "end" {
+      return new FunctionExpression({
+        params: params,
+        statements: statements
+      })
+    }
+  / params:Pattern _ "=>" _ expr:PrimaryExpression {
+      return new FunctionExpression({
+        params: params,
+        statements: [expr]
+      })
+    }
+
 PrimaryExpression = $
+  / PrimaryFunctionExpression
   / Literal
   / Identifier
-  / FunctionExpression
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
         elements: []
