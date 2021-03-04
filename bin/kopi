@@ -26,14 +26,22 @@ const source = [
     fold (acc, x => add acc, x), xs
   `, `
     fold (acc, x) => (add acc, x), xs
-  `, `
-    a, b = 1, 2
-  `, `
-    map x => do
-      print x
-      foo bar
-    end
   `,
+  // `
+  //   a, b = 1, 2
+  // `,
+  // `
+  //   map x => do
+  //     print x
+  //     foo bar
+  //   end
+  // `,
+];
+
+const xsource = [
+  `(a, b => a, b) 1, 2`
+  // `a 1, 2 + b`
+  // `a 1, 2 + b | c 3`
 ];
 
 for (statement of source) {

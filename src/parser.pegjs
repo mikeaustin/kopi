@@ -13,6 +13,7 @@
   class FunctionExpression extends Node { }
   class TuplePattern extends Node { }
   class ApplyExpression extends Node { }
+  class OperatorExpression extends Node { }
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -45,17 +46,15 @@ Assignment = $
 // --------------------------------------------------------------------------------------------- //
 
 Expression = $
-  / ApplyExpression
   / FunctionExpression
-  / TupleExpression
-  / PrimaryExpression
+  // / TupleExpression
+  / PipeExpression
 
-ApplyExpression = $
-  / expr:PrimaryExpression _ args:Expression {
-      return new ApplyExpression({
-        expr: expr,
-        args: args
-      })
+PipeExpression = $
+  / head:AddExpression tail:(_ "|" _ AddExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
     }
 
 FunctionExpression = $
@@ -72,16 +71,40 @@ FunctionExpression = $
       })
     }
 
+AddExpression
+  = head:ApplyExpression tail:(_ ("+" / "-") _ ApplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
+    }
+
+ApplyExpression = $
+  / expr:TupleExpression _ args:TupleExpression? {
+      if (args) {
+        return new ApplyExpression({
+          expr: expr,
+          args: args
+        })
+      }
+
+      return expr
+    }
+
 TupleExpression = $
-  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)+ {
-      return new TupleExpression({
-        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
-      })
+  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
+      if (tail.length > 0) {
+        return new TupleExpression({
+          elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
+        })
+      }
+
+      return head
     }
 
 PrimaryExpression = $
   / Literal
   / Identifier
+  / FunctionExpression
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
         elements: []
