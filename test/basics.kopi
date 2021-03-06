@@ -10,8 +10,12 @@
 # () => 1, 2
 () => 1, 2
 
+1 + 2 > 3 + 4
+
 # f => x => f x
 f => x => f x
+
+add a, b = a + b
 
 # a * (b + c) / 3
 a * (b + c) / 3
@@ -23,6 +27,9 @@ a * (b + c) / 3
 a, (b, c) => a, (b, c)
 
 # fold (z, x => add z, x), xs
+fold (z, x => add z, x), xs
+
+# fold (z, x) => (add z, x), xs
 fold (z, x => add z, x), xs
 
 "a,b,c" | split "," | reverse | join ","
@@ -43,11 +50,3 @@ end
 employeeNames | sort (a, b => a < b) | map (name) => do
   name | split "," | map (name => name | strip) | reverse | join " "
 end
-
-1 + 2 > 3 + 4
-
-add a, b = a + b
-
-employee | sort (a, b) => a < b | map
-
-employee | sort (a, b => a < b) | map

@@ -42,7 +42,7 @@ Comment = $
     }
 
 Assignment = $
-  / pattern:Pattern _ "=" _ expr:Expression {
+  / pattern:AssignmentPattern _ "=" _ expr:Expression {
       return new Assignment({
         pattern: pattern,
         expr: expr
@@ -152,8 +152,11 @@ PrimaryExpression = $
 
 Pattern = $
   / TuplePattern
-  / FunctionPattern
   / PrimaryPattern
+
+AssignmentPattern = $
+  / FunctionPattern
+  / Pattern
 
 TuplePattern = $
   / head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
@@ -163,7 +166,7 @@ TuplePattern = $
   }
 
 FunctionPattern = $
-  / name:Identifier _ args:Pattern _ !"=>" {
+  / name:Identifier _ args:Pattern _ {
       return new FunctionPattern({
         name: name,
         args: args
