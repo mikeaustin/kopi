@@ -36,6 +36,18 @@ xs | map x => do
   foo bar
 end
 
-employeeNames | sort (a, b) => a + b | map (name) => do
+employeeNames | sort (a, b) => a < b | map (name) => do
   name | split "," | map (name) => (name | strip) | reverse | join " "
 end
+
+employeeNames | sort (a, b => a < b) | map (name) => do
+  name | split "," | map (name => name | strip) | reverse | join " "
+end
+
+1 + 2 > 3 + 4
+
+add a, b = a + b
+
+employee | sort (a, b) => a < b | map
+
+employee | sort (a, b => a < b) | map

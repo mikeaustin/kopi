@@ -40,3 +40,34 @@ employeeNames = ['a,b', 'c,d']
 employeeNames.sort((a, b) => a > b).map(name => {
   return name.split(',').map(name => name.trim()).reverse().join(' ')
 })
+
+
+PostfixExpression
+  = argument:LeftHandSideExpression _ operator:PostfixOperator {
+      return {
+        type: "UpdateExpression",
+        operator: operator,
+        argument: argument,
+        prefix: false
+      };
+    }
+  / LeftHandSideExpression
+
+TupleExpression = $
+  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
+      if (tail.length > 0) {
+        return new TupleExpression({
+          elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
+        })
+      }
+
+      return head
+    }
+
+TupleExpression = $
+  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
+      return new TupleExpression({
+        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
+      })
+    }
+  / PrimaryExpression

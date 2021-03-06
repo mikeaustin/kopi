@@ -14,6 +14,8 @@
   class TuplePattern extends Node { }
   class ApplyExpression extends Node { }
   class OperatorExpression extends Node { }
+
+  class FunctionPattern extends Node { }
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -55,13 +57,6 @@ Expression = $
   / FunctionExpression
   / PipeExpression
 
-PipeExpression = $
-  / head:AddExpression tail:(_ "|" _ AddExpression)* {
-      return tail.reduce((result, [, operator,, value]) => {
-        return new OperatorExpression({ op: operator, left: result, right: value })
-      }, head);
-    }
-
 FunctionExpression = $
   / params:Pattern _ "=>" _ "do" _ LineTerminator+ _ statements:Block _ LineTerminator+ _ "end" {
       return new FunctionExpression({
@@ -76,15 +71,29 @@ FunctionExpression = $
       })
     }
 
-AddExpression
-  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
+PipeExpression = $
+  / head:RelationalExpression tail:(_ "|" _ RelationalExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
     }
 
-MultiplyExpression
-  = head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
+RelationalExpression = $
+  / head:AddExpression tail:(_ ("<" / ">") _ AddExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
+    }
+
+AddExpression = $
+  / head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
+    }
+
+MultiplyExpression = $
+  / head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
@@ -120,7 +129,7 @@ PrimaryFunctionExpression = $
         statements: statements
       })
     }
-  / params:Pattern _ "=>" _ expr:AddExpression {
+  / params:Pattern _ "=>" _ expr:RelationalExpression {
       return new FunctionExpression({
         params: params,
         statements: [expr]
@@ -143,6 +152,7 @@ PrimaryExpression = $
 
 Pattern = $
   / TuplePattern
+  / FunctionPattern
   / PrimaryPattern
 
 TuplePattern = $
@@ -151,6 +161,14 @@ TuplePattern = $
       elements: tail.reduce((r, e) => [...r, e[3]], [head])
     })
   }
+
+FunctionPattern = $
+  / name:Identifier _ args:Pattern _ !"=>" {
+      return new FunctionPattern({
+        name: name,
+        args: args
+      })
+    }
 
 PrimaryPattern = $
   / Literal

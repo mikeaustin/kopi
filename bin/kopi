@@ -8,15 +8,19 @@ const parser = require("../lib/parser");
 fs.readFile(process.argv[2], "utf8", (err, input) => {
   const ast = parser.parse(input);
 
+  let prevNode = null;
+
   for (let node of ast) {
     const formattedAst = util.inspect(node, {
       compact: false,
       depth: Infinity
     });
 
-    if (typeof node === 'string') {
+    if (typeof node === 'string' && typeof prevNode !== 'string') {
       console.log();
     }
+
+    prevNode = node;
 
     console.log(formattedAst);
   }
