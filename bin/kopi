@@ -5,70 +5,19 @@ const fs = require("fs");
 
 const parser = require("../lib/parser");
 
-const source = [
-  `
-    ()
-  `, `
-    (1)
-  `, `
-    1, 2
-  `, `
-    2.5, foo
-  `, `
-    () => 1, 2, 3
-  `, `
-    (a, b => a, b) 1, 2
-  `, `
-    a, (b, c) => a, (b, c)
-  `, `
-    a, (b, c => a), (b, c)
-  `, `
-    fold (acc, x => add acc, x), xs
-  `, `
-    fold (acc, x) => (add acc, x), xs
-  `,
-  `
-    a, b = 1, 2
-  `,
-  `
-    xs | map x => do
-      print x
-      foo bar
-    end
+fs.readFile(process.argv[2], "utf8", (err, input) => {
+  const ast = parser.parse(input);
 
-    zip x => x
-  `,
-];
+  for (let node of ast) {
+    const formattedAst = util.inspect(node, {
+      compact: false,
+      depth: Infinity
+    });
 
-const xsource = [
-  `(a, b => a, b) 1, 2`
-  // `a 1, 2 + b`
-  // `a 1, 2 + b | c 3`
-];
+    if (typeof node === 'string') {
+      console.log();
+    }
 
-for (statement of source) {
-  if (statement !== source[0]) {
-    console.log();
-    console.log();
+    console.log(formattedAst);
   }
-
-  const ast = parser.parse(statement);
-  const formattedAst = util.inspect(ast, {
-    compact: false,
-    depth: Infinity
-  });
-
-  console.log(statement.replace(/^\s*[\n\r]|[\r\n]\s*$/g, ''));
-  console.log();
-  console.log(formattedAst);
-}
-
-// fs.readFile(process.argv[2], "utf8", (err, input) => {
-//   const ast = parser.parse(input);
-//   const formattedAst = util.inspect(ast, {
-//     compact: false,
-//     depth: Infinity
-//   });
-
-//   console.log(formattedAst);
-// });
+});

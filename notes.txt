@@ -1,0 +1,42 @@
+
+x = case 1, 2 of
+  1, b => b
+  _    => "error"
+end
+
+x = cond x > 1 ? 1 : x
+
+x = cond
+  x > 1 => 1
+  x     => x
+end
+
+x = case bar
+  Point (x, y)     => "Point"
+  Circle (x, y, r) => "Circle"
+end
+
+
+wordcount string = string | split | reduce (z, a) => (
+  z | update x = 0 => x + 1
+), {:}
+
+match parseYesNo(response)
+    case b is Bool       then "Got good answer"
+    case e is ParseError then "Bad input"
+end
+
+match foobar
+  (x, y) : Point => "Point"
+end
+
+
+employeeNames | sort (a, b) => a > b | map (name) => do
+  name | split "," | map (name) => (name | strip) | reverse | join " "
+end
+
+employeeNames = ['a,b', 'c,d']
+
+employeeNames.sort((a, b) => a > b).map(name => {
+  return name.split(',').map(name => name.trim()).reverse().join(' ')
+})

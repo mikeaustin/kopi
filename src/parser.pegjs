@@ -29,8 +29,14 @@ Block = $
 
 Statement = $
   / Assignment
+  / Comment
   / _ !"end" expr:Expression? {
       return expr
+    }
+
+Comment = $
+  / "#" chars:(!LineTerminator .)* {
+      return '#' + chars.map(([, c]) => c).join("");
     }
 
 Assignment = $
@@ -71,7 +77,14 @@ FunctionExpression = $
     }
 
 AddExpression
-  = head:ApplyExpression tail:(_ ("+" / "-") _ ApplyExpression)* {
+  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
+    }
+
+MultiplyExpression
+  = head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
@@ -107,7 +120,7 @@ PrimaryFunctionExpression = $
         statements: statements
       })
     }
-  / params:Pattern _ "=>" _ expr:PrimaryExpression {
+  / params:Pattern _ "=>" _ expr:AddExpression {
       return new FunctionExpression({
         params: params,
         statements: [expr]
@@ -154,12 +167,18 @@ PrimaryPattern = $
 
 Literal = $
   / NumericLiteral
+  / StringLiteral
 
 NumericLiteral = $
   / literal:[0-9]+ ("." !"." [0-9]+)? {
       return new Literal({
         value: Number(text())
       })
+    }
+
+StringLiteral "string"
+  = '"' chars:(!'"' .)* '"' {
+      return new Literal({ value: chars.map(([, c]) => c).join("") });
     }
 
 Identifier = $

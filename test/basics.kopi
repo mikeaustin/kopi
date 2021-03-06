@@ -1,7 +1,41 @@
+# ()
 ()
+
+# 1, 2
 1, 2
+
+# 2.5, foo
 2.5, foo
-() => 1, 2, 3
+
+# () => 1, 2
+() => 1, 2
+
+# f => x => f x
+f => x => f x
+
+# a * (b + c) / 3
+a * (b + c) / 3
+
+# (a, b => a, b) 1, 2
 (a, b => a, b) 1, 2
+
+# a, (b, c) => a, (b, c)
 a, (b, c) => a, (b, c)
-fold (acc, x => add acc, x), xs
+
+# fold (z, x => add z, x), xs
+fold (z, x => add z, x), xs
+
+"a,b,c" | split "," | reverse | join ","
+
+# xs | map x => do
+#  print xs
+#  foo bar
+# end
+xs | map x => do
+  print xs
+  foo bar
+end
+
+employeeNames | sort (a, b) => a + b | map (name) => do
+  name | split "," | map (name) => (name | strip) | reverse | join " "
+end
