@@ -9,6 +9,8 @@
   class Assignment extends Node { }
   class Literal extends Node { }
   class Identifier extends Node { }
+
+  class RangeExpression extends Node { }
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
   class TuplePattern extends Node { }
@@ -30,8 +32,8 @@ Block = $
     }
 
 Statement = $
-  / Assignment
   / Comment
+  / Assignment
   / _ !"end" expr:Expression? {
       return expr
     }
@@ -72,11 +74,30 @@ FunctionExpression = $
     }
 
 PipeExpression = $
-  / head:RelationalExpression tail:(_ "|" _ RelationalExpression)* {
+  / head:TupleExpression tail:(_ "|" _ TupleExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
     }
+
+TupleExpression = $
+  / head:RangeExpression tail:(_ "," _ RangeExpression)* {
+      if (tail.length > 0) {
+        return new TupleExpression({
+          elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
+        })
+      }
+
+      return head;
+    }
+
+RangeExpression = $
+  / from:RelationalExpression ".." to:RelationalExpression {
+    return new RangeExpression({ from: from, to: to });
+  }
+  / expr:RelationalExpression {
+    return expr;
+  }
 
 RelationalExpression = $
   / head:AddExpression tail:(_ ("<" / ">") _ AddExpression)* {
@@ -100,7 +121,7 @@ MultiplyExpression = $
     }
 
 ApplyExpression = $
-  / expr:TupleExpression _ args:TupleExpression? {
+  / expr:PrimaryExpression _ args:TupleExpression? {
       if (args) {
         return new ApplyExpression({
           expr: expr,
@@ -109,17 +130,6 @@ ApplyExpression = $
       }
 
       return expr
-    }
-
-TupleExpression = $
-  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
-      if (tail.length > 0) {
-        return new TupleExpression({
-          elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
-        })
-      }
-
-      return head
     }
 
 PrimaryFunctionExpression = $

@@ -10,6 +10,8 @@
 # () => 1, 2
 () => 1, 2
 
+a, b = b, a
+
 1 + 2 > 3 + 4
 
 # f => x => f x
@@ -50,3 +52,17 @@ end
 employeeNames | sort (a, b => a < b) | map (name) => do
   name | split "," | map (name => name | strip) | reverse | join " "
 end
+
+# (abs x) + (abs y)
+(abs x) + (abs y)
+# abs(x) + abs(y)
+
+# print (a + b)
+# abs x + abs y
+
+# print 1 + 2, 3 + 4
+print 1 + 2, 3 + 4
+
+xs | fold (z, a) => z + 1, 0
+
+1..10, "a".."z" | zip (z, a) => "{a}: {b}"

@@ -1,0 +1,13 @@
+a, b => b, a
+
+sort a, b
+sort a, b => a, b
+sort (a, b) => a, b
+sort (a, b => a, b)
+sort a, (b => a), b
+
+xs | fold 0, (z, a) => z + b
+
+# sort (a, b) => a + b
+
+foo a + b
