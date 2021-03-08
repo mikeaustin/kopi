@@ -11,12 +11,14 @@
   class Identifier extends Node { }
 
   class RangeExpression extends Node { }
+  class ArrayExpression extends Node { }
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
-  class TuplePattern extends Node { }
   class ApplyExpression extends Node { }
   class OperatorExpression extends Node { }
 
+  class TuplePattern extends Node { }
+  class ArrayPattern extends Node { }
   class FunctionPattern extends Node { }
 }
 
@@ -148,6 +150,7 @@ PrimaryFunctionExpression = $
 
 PrimaryExpression = $
   / PrimaryFunctionExpression
+  / ArrayExpression
   / Literal
   / Identifier
   / "(" head:Expression? ")" {
@@ -156,12 +159,29 @@ PrimaryExpression = $
       })
     }
 
+ArrayExpression = $
+  / "[" _ head:RangeExpression tail:(_ "," _ RangeExpression)* _ "]" {
+    return new ArrayExpression({
+      elements: tail.reduce((array, element) => [...array, element[3]], [head])
+    })
+  }
+  / "[" _ "]" {
+    return new ArrayExpression({
+      elements: []
+    })
+  }
+
 // --------------------------------------------------------------------------------------------- //
 // Patterns
 // --------------------------------------------------------------------------------------------- //
 
 Pattern = $
+  / ArrayPattern
   / TuplePattern
+  / PrimaryPattern
+
+PrimitiveArrayPattern = $
+  / ArrayPattern
   / PrimaryPattern
 
 AssignmentPattern = $
@@ -169,9 +189,16 @@ AssignmentPattern = $
   / Pattern
 
 TuplePattern = $
-  / head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
+  / head:PrimaryPattern tail:(_ "," _ Pattern)+ {
     return new TuplePattern({
       elements: tail.reduce((r, e) => [...r, e[3]], [head])
+    })
+  }
+
+ArrayPattern = $
+  / "[" _ head:PrimitiveArrayPattern tail:(_ "," _ PrimitiveArrayPattern)* _ "]" {
+    return new ArrayPattern({
+      elements: tail.reduce((r, element) => [...r, element[3]], [head])
     })
   }
 

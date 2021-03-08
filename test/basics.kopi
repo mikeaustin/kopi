@@ -1,50 +1,55 @@
-# ()
+# Tuples
+
 ()
 
-# 1, 2
 1, 2
 
-# 2.5, foo
 2.5, foo
-
-# () => 1, 2
-() => 1, 2
 
 a, b = b, a
 
+# Arrays
+
+[]
+
+[(1, 2), (3, 4)]
+
+[a, b] = [b, a]
+
+# Math
+
+(abs x) + (abs y)
+
+a * (b + c) / 3
+
+# Functions
+
 1 + 2 > 3 + 4
 
-# f => x => f x
+() => 1, 2
+
 f => x => f x
 
 add a, b = a + b
 
-# a * (b + c) / 3
-a * (b + c) / 3
-
-# (a, b => a, b) 1, 2
 (a, b => a, b) 1, 2
 
-# a, (b, c) => a, (b, c)
 a, (b, c) => a, (b, c)
 
-# fold (z, x => add z, x), xs
-fold (z, x => add z, x), xs
-
-# fold (z, x) => (add z, x), xs
-fold (z, x => add z, x), xs
+xs | fold 0, (z, a) => z + 1
 
 "a,b,c" | split "," | reverse | join ","
 
-# xs | map x => do
-#  print xs
-#  foo bar
-# end
+print 1 + 2, 3 + 4
+
+# Blocks
+
 xs | map x => do
   print xs
   foo bar
 end
 
+employeeNames = ["Smith, John", "Johnson, Lisa", "Laner, Rob"]
 employeeNames | sort (a, b) => a < b | map (name) => do
   name | split "," | map (name) => (name | strip) | reverse | join " "
 end
@@ -53,16 +58,12 @@ employeeNames | sort (a, b => a < b) | map (name) => do
   name | split "," | map (name => name | strip) | reverse | join " "
 end
 
-# (abs x) + (abs y)
-(abs x) + (abs y)
-# abs(x) + abs(y)
-
-# print (a + b)
-# abs x + abs y
-
-# print 1 + 2, 3 + 4
-print 1 + 2, 3 + 4
-
-xs | fold (z, a) => z + 1, 0
+# Other
 
 1..10, "a".."z" | zip (z, a) => "{a}: {b}"
+
+1..5 | flatMap i => (i..5 | map j => i + j)
+
+"a b b b c c" | reduce [], (map, [key, value]) => do
+  map | update key, 0, (value) => value + 1
+end
