@@ -36,7 +36,7 @@ add a, b = a + b
 
 a, (b, c) => a, (b, c)
 
-xs | fold 0, (z, a) => z + 1
+xs | reduce (z, a) => z + 1, 0
 
 "a,b,c" | split "," | reverse | join ","
 
@@ -64,6 +64,6 @@ end
 
 1..5 | flatMap i => (i..5 | map j => i + j)
 
-"a b b b c c" | reduce [], (map, [key, value]) => do
+"a b b b c c" | reduce (map, [key, value]) => do
   map | update key, 0, (value) => value + 1
-end
+end, []
