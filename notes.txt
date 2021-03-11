@@ -17,8 +17,8 @@ x = case bar
 end
 
 
-wordcount string = string | split | reduce (z, a) => (
-  z | update x = 0 => x + 1
+wordcount string = string | split " " | reduce (counts, word) => (
+  counts | update word, (x = 0) => count + 1
 ), {:}
 
 match parseYesNo(response)

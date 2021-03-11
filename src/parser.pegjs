@@ -16,6 +16,7 @@
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
   class OperatorExpression extends Node { }
+  class CaseExpression extends Node { }
 
   class TuplePattern extends Node { }
   class ArrayPattern extends Node { }
@@ -58,8 +59,17 @@ Assignment = $
 // --------------------------------------------------------------------------------------------- //
 
 Expression = $
+  / CaseExpression
   / FunctionExpression
   / PipeExpression
+
+CaseExpression = $
+  / _ "case" _ expr:Expression _ "of" _ LineTerminator+ _ funcs:Block _ LineTerminator+ _ "end" {
+    return new CaseExpression({
+      expr: expr,
+      funcs: funcs
+    })
+  }
 
 FunctionExpression = $
   / params:Pattern _ "=>" _ "do" _ LineTerminator+ _ statements:Block _ LineTerminator+ _ "end" {
@@ -94,7 +104,7 @@ TupleExpression = $
     }
 
 RangeExpression = $
-  / from:RelationalExpression ".." to:RelationalExpression {
+  / from:RelationalExpression _ ".." _ to:RelationalExpression {
     return new RangeExpression({ from: from, to: to });
   }
   / expr:RelationalExpression {
@@ -102,7 +112,7 @@ RangeExpression = $
   }
 
 RelationalExpression = $
-  / head:AddExpression tail:(_ ("<" / ">") _ AddExpression)* {
+  / head:AddExpression tail:(_ ("<=" / "<" / ">" / "=>") _ AddExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
@@ -152,6 +162,7 @@ PrimaryExpression = $
   / PrimaryFunctionExpression
   / ArrayExpression
   / Literal
+  / Operator
   / Identifier
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
@@ -239,8 +250,11 @@ StringLiteral "string"
       return new Literal({ value: chars.map(([, c]) => c).join("") });
     }
 
+Operator = $
+  / "+" / "-" / "*" / "/"
+
 Identifier = $
-  / name:([a-zA-Z][a-zA-Z0-9]*) {
+  / !("of" / "end") name:([a-zA-Z][a-zA-Z0-9]*) {
       return new Identifier({
         name: text()
       })

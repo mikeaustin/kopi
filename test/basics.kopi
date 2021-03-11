@@ -16,6 +16,12 @@ a, b = b, a
 
 [a, b] = [b, a]
 
+# Ranges
+
+1..10, "a".."z"
+
+1..1 + 2
+
 # Math
 
 (abs x) + (abs y)
@@ -65,5 +71,30 @@ end
 1..5 | flatMap i => (i..5 | map j => i + j)
 
 "a b b b c c" | reduce (map, [key, value]) => do
-  map | update key, 0, (value) => value + 1
+  map | update key, 0, fn (value) => value + 1
 end, []
+
+1 .. 1 + 2
+
+1 .. f 5
+
+xs, yz | zip x, y => x + y
+
+xs | reduce 0, fn sum, x => do
+  acc + x
+end
+
+fact n = case n of
+  0 => 1
+  n => n * fact (n - 1)
+end
+
+fact (case n, (0 => 1, n => n * fact (n - 1)))
+
+a, b => c, d => x, y
+
+(n => 1..n | reduce *, 1) 4
+
+fact n = 1..n | reduce *, 1
+
+fact n = 1..n | reduce (z, x => z + x), 1
