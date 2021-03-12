@@ -34,7 +34,6 @@ Comment = $
     }
 
 Expression = $
-  / FunctionExpression
   / PipeExpression
 
 FunctionExpression = $
@@ -53,6 +52,12 @@ PipeExpression = $
     }
 
 TupleExpression = $
+  / params:Pattern _ "=>" _ expr:TupleExpression {
+      return new FunctionExpression({
+        params: params,
+        statements: [expr]
+      })
+    }
   / head:AddExpression tail:(_ "," _ AddExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
@@ -86,7 +91,6 @@ PrimaryFunctionExpression = $
     }
 
 PrimaryExpression = $
-  / PrimaryFunctionExpression
   / Identifier
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
