@@ -1,13 +1,15 @@
+a + b
+
 a, b => b, a
 
-sort a, b
-sort a, b => a, b
-sort (a, b) => a, b
-sort (a, b => a, b)
-sort a, (b => a), b
+a => b => b, a
 
-xs | fold 0, (z, a) => z + b
+(a, b => b, a) a, b
 
-# sort (a, b) => a + b
+xs | map x, y => double x
 
-foo a + b
+xs | reduce z, id sum, x => sum + x
+
+xs | filter x => even x | map x => double x
+
+xs, ys | map x, y => x + z, y + z | zip x, y => z, y

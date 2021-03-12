@@ -8,6 +8,7 @@
   "homepage": "https://github.com/mikeaustin/kopi#readme",
   "scripts": {
     "build": "pegjs -o lib/parser.js src/parser.pegjs",
+    "validate": "pegjs -o lib/parser.js src/validate.pegjs",
     "test": "npm run build && jest"
   },
   "repository": {
