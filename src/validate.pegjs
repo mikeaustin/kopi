@@ -5,7 +5,8 @@
     }
   }
 
-  class Identifier extends Node { }
+  class Comment extends Node { }
+  class Block extends Node { }
 
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
@@ -13,13 +14,17 @@
   class OperatorExpression extends Node { }
 
   class TuplePattern extends Node { }
+
+  class Identifier extends Node { }
 }
 
 Block = $
   / LineTerminator* _ head:Statement statements:(_ LineTerminator+ _ Statement)* {
-      return statements.reduce((block, [,,, statement]) => (
-        statement ? [...block, statement] : block
-      ), [head])
+      return new Block({
+        statements: statements.reduce((block, [,,, statement]) => (
+          statement ? [...block, statement] : block
+        ), [head])
+      })
     }
 
 Statement = $
@@ -30,7 +35,7 @@ Statement = $
 
 Comment = $
   / "#" chars:(!LineTerminator .)* {
-      return '#' + chars.map(([, c]) => c).join("");
+      return new Comment({ value: chars.map(([, c]) => c).join("").trim() });
     }
 
 Expression = $
@@ -45,14 +50,22 @@ FunctionExpression = $
     }
 
 PipeExpression = $
-  / head:TupleExpression tail:(_ "|" _ TupleExpression)* {
+  / head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
     }
 
+ApplyExpression = $
+  / expr:TupleExpression _ args:TupleExpression? {
+      return !args ? expr : new ApplyExpression({
+        expr: expr,
+        args: args
+      })
+    }
+
 TupleExpression = $
-  / params:Pattern _ "=>" _ expr:TupleExpression {
+  / params:Pattern _ "=>" _ expr:ApplyExpression {
       return new FunctionExpression({
         params: params,
         statements: [expr]
@@ -65,34 +78,15 @@ TupleExpression = $
     }
 
 AddExpression = $
-  / head:ApplyExpression tail:(_ ("+" / "-") _ ApplyExpression)* {
+  / head:PrimaryExpression tail:(_ ("+" / "-") _ PrimaryExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
     }
 
-ApplyExpression = $
-  / expr:PrimaryExpression _ args:TupleExpression {
-      return new ApplyExpression({
-        expr: expr,
-        args: args
-      })
-    }
-  / expr:PrimaryExpression {
-      return expr
-    }
-
-PrimaryFunctionExpression = $
-  / params:Pattern _ "=>" _ expr:TupleExpression {
-      return new FunctionExpression({
-        params: params,
-        statements: [expr]
-      })
-    }
-
 PrimaryExpression = $
   / Identifier
-  / "(" head:Expression? ")" {
+  / "(" LineTerminator* _ head:Expression? _ LineTerminator* ")" {
       return head ? head : new TupleExpression({
         elements: []
       })

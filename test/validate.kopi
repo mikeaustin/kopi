@@ -4,12 +4,22 @@ a, b => b, a
 
 a => b => b, a
 
+a (b, c) + (b c)
+
 (a, b => b, a) a, b
 
-xs | map x, y => double x
+print (a x) + (b x), c + d
 
-xs | reduce z, id sum, x => sum + x
+xs | reduce z, (sum, x => sum + x)
 
 xs | filter x => even x | map x => double x
 
 xs, ys | map x, y => x + z, y + z | zip x, y => z, y
+
+xs, ys | map (x, y) => x + z, y + z | zip (x, y) => z, y
+
+xs, ys | map (x, y => x + z, y + z) | zip (x, y => z, y)
+
+words | split space | reduce (counts, word) => (
+  counts | update word, (count => count + n)
+), map
