@@ -6,6 +6,7 @@
   }
 
   class Comment extends Node { }
+  class Assignment extends Node { }
   class Block extends Node { }
 
   class TupleExpression extends Node { }
@@ -30,6 +31,7 @@ Block = $
 
 Statement = $
   / Comment
+  / Assignment
   / expr:Expression? {
       return expr
     }
@@ -37,6 +39,14 @@ Statement = $
 Comment = $
   / "#" chars:(!LineTerminator .)* {
       return new Comment({ value: chars.map(([, c]) => c).join("").trim() });
+    }
+
+Assignment = $
+  / pattern:Pattern _ "=" _ expr:Expression {
+      return new Assignment({
+        pattern: pattern,
+        expr: expr
+      })
     }
 
 Expression = $

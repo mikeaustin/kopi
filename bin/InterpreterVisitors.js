@@ -13,9 +13,19 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
-  ApplyExpression({ expr: { params, statements }, args }, scope) {
+  Assignment({ pattern, expr }, scope) {
+    const newScope = pattern.name in scope ? Object.create(scope) : scope;
+
+    return newScope[pattern.name] = this.visit(expr, newScope);
+  }
+
+  ApplyExpression({ expr, args }, scope) {
     const evaluatedArgs = this.visit(args, scope);
-    const functionScope = Object.create(scope, params.elements.reduce((scope, param, index) => ({
+    const evaluatedExpr = this.visit(expr, scope);
+
+    const { closure, params, statements } = evaluatedExpr;
+
+    const functionScope = Object.create(closure, params.elements.reduce((scope, param, index) => ({
       ...scope,
       [param.name]: {
         value: evaluatedArgs[index]
@@ -37,8 +47,10 @@ class InterpreterVisitors extends Visitors {
   }
 
   FunctionExpression({ params, statements }, scope) {
+    console.log('here', scope);
     return {
-      params: this.visit(params, scope),
+      closure: scope,
+      params: params,
       statements: statements
     };
   }
