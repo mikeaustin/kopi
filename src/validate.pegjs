@@ -15,6 +15,7 @@
 
   class TuplePattern extends Node { }
 
+  class Literal extends Node { }
   class Identifier extends Node { }
 }
 
@@ -85,6 +86,7 @@ AddExpression = $
     }
 
 PrimaryExpression = $
+  / Literal
   / Identifier
   / "(" LineTerminator* _ head:Expression? _ LineTerminator* ")" {
       return head ? head : new TupleExpression({
@@ -117,6 +119,17 @@ PrimaryPattern = $
 // --------------------------------------------------------------------------------------------- //
 // Literals
 // --------------------------------------------------------------------------------------------- //
+
+Literal = $
+  / NumericLiteral
+  // / StringLiteral
+
+NumericLiteral = $
+  / literal:[0-9]+ ("." !"." [0-9]+)? {
+      return new Literal({
+        value: Number(text())
+      })
+    }
 
 Identifier = $
   / !("of" / "end") name:([a-zA-Z][a-zA-Z0-9]*) {

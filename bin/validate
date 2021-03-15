@@ -6,6 +6,8 @@ var readline = require('readline');
 
 const parser = require("../lib/parser");
 
+const InterpreterVisitors = require('./InterpreterVisitors').default;
+
 const collect = (values, mapper) => {
   return values.reduce((array, item) => {
     const result = mapper(item);
@@ -87,7 +89,13 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  const visitors = new Visitors();
+  let scope = Object.create(null, {
+    a: {
+      value: 10
+    }
+  });
+
+  const visitors = new Visitors(scope);
 
   console.log('Kopi Language 0.0.1 – 2021 Mike Austin');
 
@@ -96,11 +104,19 @@ if (process.argv.length === 3) {
     output: process.stdout,
   });
 
-  // rl.setPrompt('] ');
+
   rl.prompt();
   rl.on('line', function (line) {
     const ast = parser.parse(line);
-    console.log(visit(visitors, ast.statements[0]));
+
+    console.log(ast);
+
+    try {
+      console.log('=', visit(new InterpreterVisitors(scope), ast.statements[0]));
+    } catch (error) {
+      console.log(error.toString());
+    }
+
     rl.prompt();
   });
 }
