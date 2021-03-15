@@ -2,17 +2,19 @@
 // InterpreterVisitors.js
 //
 
-const visit = (visitors, node, scope) => {
-  if (visitors[node.constructor.name]) {
-    return visitors[node.constructor.name](node, scope);
-  } else {
-    throw new Error('No visitor for ' + node.constructor.name);
+class Visitors {
+  visit(node, scope) {
+    if (this[node.constructor.name]) {
+      return this[node.constructor.name](node, scope);
+    } else {
+      throw new Error('No visitor for ' + node.constructor.name);
+    }
   }
-};
+}
 
-class InterpreterVisitors {
+class InterpreterVisitors extends Visitors {
   ApplyExpression({ expr: { params, statements }, args }, scope) {
-    const evaluatedArgs = visit(this, args, scope);
+    const evaluatedArgs = this.visit(args, scope);
     const functionScope = Object.create(scope, params.elements.reduce((scope, param, index) => ({
       ...scope,
       [param.name]: {
@@ -20,29 +22,29 @@ class InterpreterVisitors {
       }
     }), {}));
 
-    return statements.reduce((_, statement) => visit(this, statement, functionScope), undefined);
+    return statements.reduce((_, statement) => this.visit(statement, functionScope), undefined);
   }
 
   OperatorExpression({ op, left, right }, scope) {
     switch (op) {
-      case '+': return visit(this, left, scope) + visit(this, right, scope);
-      case '-': return visit(this, left, scope) - visit(this, right, scope);
+      case '+': return this.visit(left, scope) + this.visit(right, scope);
+      case '-': return this.visit(left, scope) - this.visit(right, scope);
     }
   }
 
   TupleExpression({ elements }, scope) {
-    return elements.map(value => visit(this, value, scope));
+    return elements.map(value => this.visit(value, scope));
   }
 
   FunctionExpression({ params, statements }, scope) {
     return {
-      params: visit(this, params, scope),
+      params: this.visit(params, scope),
       statements: statements
     };
   }
 
   TuplePattern({ elements }, scope) {
-    return elements.map(value => visit(this, value, scope));
+    return elements.map(value => this.visit(value, scope));
   }
 
   Literal({ value }) {
@@ -59,6 +61,5 @@ class InterpreterVisitors {
 }
 
 module.exports = {
-  default: InterpreterVisitors,
-  visit
+  default: InterpreterVisitors
 };

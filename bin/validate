@@ -6,7 +6,7 @@ var readline = require('readline');
 
 const parser = require("../lib/parser");
 
-const { default: InterpreterVisitors, visit: visit2 } = require('./InterpreterVisitors');
+const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
 const collect = (values, mapper) => {
   return values.reduce((array, item) => {
@@ -112,7 +112,7 @@ if (process.argv.length === 3) {
     console.log(ast);
 
     try {
-      console.log('=', visit2(visitors, ast.statements[0], scope));
+      console.log('=', visitors.visit(ast.statements[0], scope));
     } catch (error) {
       console.log(error);
     }
