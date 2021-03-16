@@ -16,51 +16,65 @@ class InterpreterVisitors extends Visitors {
   Assignment({ pattern, expr }, scope) {
     const newScope = pattern.name in scope ? Object.create(scope) : scope;
 
-    return newScope[pattern.name] = this.visit(expr, newScope);
+    // console.log('>', this.visit(expr, scope));
+
+    return {
+      value: pattern.match(this.visit(expr, scope).value, newScope),
+      scope: newScope
+    };
   }
 
   ApplyExpression({ expr, args }, scope) {
-    const evaluatedArgs = this.visit(args, scope);
-    const evaluatedExpr = this.visit(expr, scope);
+    const evaluatedArgs = this.visit(args, scope).value;
+    const evaluatedExpr = this.visit(expr, scope).value;
 
     const { closure, params, statements } = evaluatedExpr;
-
-    const functionScope = Object.create(closure, params.elements.reduce((scope, param, index) => ({
+    const newScope = Object.create(closure, params.elements.reduce((scope, param, index) => ({
       ...scope,
       [param.name]: {
         value: evaluatedArgs[index]
       }
     }), {}));
 
-    return statements.reduce((_, statement) => this.visit(statement, functionScope), undefined);
+    return {
+      value: statements.reduce((_, statement) => this.visit(statement, newScope).value, undefined),
+      scope
+    };
   }
 
   OperatorExpression({ op, left, right }, scope) {
     switch (op) {
-      case '+': return this.visit(left, scope) + this.visit(right, scope);
-      case '-': return this.visit(left, scope) - this.visit(right, scope);
+      case '+': return { value: this.visit(left, scope).value + this.visit(right, scope).value, scope };
+      case '-': return { value: this.visit(left, scope).value - this.visit(right, scope).value, scope };
     }
   }
 
   TupleExpression({ elements }, scope) {
-    return elements.map(value => this.visit(value, scope));
+    return {
+      value: elements.map(value => this.visit(value, scope)),
+      scope
+    };
   }
 
   FunctionExpression({ params, statements }, scope) {
-    console.log('here', scope);
     return {
-      closure: scope,
-      params: params,
-      statements: statements
+      value: {
+        closure: scope,
+        params: params,
+        statements: statements
+      }, scope
     };
   }
 
   TuplePattern({ elements }, scope) {
-    return elements.map(value => this.visit(value, scope));
+    return {
+      value: elements.map(value => this.visit(value, scope).value),
+      scope
+    };
   }
 
   Literal({ value }) {
-    return value;
+    return { value: value };
   }
 
   Identifier({ name }, scope) {
@@ -68,7 +82,7 @@ class InterpreterVisitors extends Visitors {
       throw new Error(`Variable '${name}' is not defined`);
     }
 
-    return scope[name];
+    return { value: scope[name], scope };
   }
 }
 

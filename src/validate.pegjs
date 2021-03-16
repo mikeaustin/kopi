@@ -14,7 +14,21 @@
   class ApplyExpression extends Node { }
   class OperatorExpression extends Node { }
 
-  class TuplePattern extends Node { }
+  class TuplePattern extends Node {
+    match(value, scope) {
+      console.log('elements', this.elements)
+      console.log('value', value)
+
+      return this.elements.map((element, index) => scope[element.name] = value[index].value);
+
+      // return scope[this.value] = value;
+    }
+  }
+  class IdentifierPattern extends Node {
+    match(value, scope) {
+      return scope[this.name] = value;
+    }
+  }
 
   class Literal extends Node { }
   class Identifier extends Node { }
@@ -119,10 +133,17 @@ TuplePattern = $
     }
 
 PrimaryPattern = $
-  / Identifier
+  / IdentifierPattern
   / "(" head:Pattern? ")" {
       return head ? head : new TuplePattern({
         elements: []
+      })
+    }
+
+IdentifierPattern = $
+  / name:([a-zA-Z][a-zA-Z0-9]*) {
+      return new IdentifierPattern({
+        name: text()
       })
     }
 

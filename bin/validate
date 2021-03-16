@@ -89,11 +89,7 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = Object.create(null, {
-    a: {
-      value: 10
-    }
-  });
+  let scope = Object.create(null);
 
   const visitors = new InterpreterVisitors();
 
@@ -112,7 +108,10 @@ if (process.argv.length === 3) {
     console.log(ast);
 
     try {
-      console.log('=', visitors.visit(ast.statements[0], scope));
+      const result = visitors.visit(ast.statements[0], scope);
+      console.log('=', result.value);
+
+      scope = result.scope;
     } catch (error) {
       console.log(error);
     }
