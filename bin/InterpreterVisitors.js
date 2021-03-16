@@ -14,12 +14,12 @@ class Visitors {
 
 class InterpreterVisitors extends Visitors {
   Assignment({ pattern, expr }, scope) {
-    const newScope = pattern.name in scope ? Object.create(scope) : scope;
+    const matches = pattern.match(this.visit(expr, scope).value, scope);
 
-    // console.log('>', this.visit(expr, scope));
+    const newScope = { ...scope, ...matches };
 
     return {
-      value: pattern.match(this.visit(expr, scope).value, newScope),
+      value: undefined,
       scope: newScope
     };
   }
@@ -29,10 +29,11 @@ class InterpreterVisitors extends Visitors {
     const evaluatedExpr = this.visit(expr, scope).value;
 
     const { closure, params, statements } = evaluatedExpr;
+
     const newScope = Object.create(closure, params.elements.reduce((scope, param, index) => ({
       ...scope,
       [param.name]: {
-        value: evaluatedArgs[index]
+        value: evaluatedArgs[index].value
       }
     }), {}));
 
@@ -62,7 +63,8 @@ class InterpreterVisitors extends Visitors {
         closure: scope,
         params: params,
         statements: statements
-      }, scope
+      },
+      scope
     };
   }
 

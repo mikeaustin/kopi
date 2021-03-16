@@ -16,17 +16,18 @@
 
   class TuplePattern extends Node {
     match(value, scope) {
-      console.log('elements', this.elements)
-      console.log('value', value)
-
-      return this.elements.map((element, index) => scope[element.name] = value[index].value);
-
-      // return scope[this.value] = value;
+      return this.elements.reduce((scope, element, index) => ({
+        ...scope,
+        [element.name]: value[index].value
+      }), {});
     }
   }
   class IdentifierPattern extends Node {
     match(value, scope) {
-      return scope[this.name] = value;
+      return {
+        ...scope,
+        [this.name]: value
+      };
     }
   }
 

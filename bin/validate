@@ -105,11 +105,14 @@ if (process.argv.length === 3) {
   rl.on('line', function (line) {
     const ast = parser.parse(line);
 
-    console.log(ast);
+    // console.log(ast);
 
     try {
       const result = visitors.visit(ast.statements[0], scope);
-      console.log('=', result.value);
+
+      if (result.value !== undefined) {
+        console.log(result.value);
+      }
 
       scope = result.scope;
     } catch (error) {
