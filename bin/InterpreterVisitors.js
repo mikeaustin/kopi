@@ -2,6 +2,16 @@
 // InterpreterVisitors.js
 //
 
+class Tuple {
+  constructor(values) {
+    this.values = values;
+  }
+
+  toString() {
+    `(${this.values.map(value => value.toString()).join(', ')})`;
+  }
+}
+
 class Visitors {
   visit(node, scope) {
     if (this[node.constructor.name]) {
@@ -52,7 +62,7 @@ class InterpreterVisitors extends Visitors {
 
   TupleExpression({ elements }, scope) {
     return {
-      value: elements.map(value => this.visit(value, scope)),
+      value: new Tuple(elements.map(value => this.visit(value, scope).value)),
       scope
     };
   }
