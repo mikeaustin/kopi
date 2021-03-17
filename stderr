@@ -1,0 +1,6 @@
+Trace: Apply Function {
+  closure: [Object: null prototype] {},
+  params:
+   TuplePattern { elements: [ [IdentifierPattern], [IdentifierPattern] ] },
+  statements:
+   [ OperatorExpression { op: '+', left: [Identifier], right: [Identifier] } ] } Tuple { values: [ 2, 3 ] }

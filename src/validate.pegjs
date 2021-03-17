@@ -12,7 +12,10 @@
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
+  class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
+
+  class RangeExpression extends Node { }
 
   class TuplePattern extends Node {
     match(value, scope) {
@@ -79,7 +82,7 @@ FunctionExpression = $
 PipeExpression = $
   / head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
-        return new OperatorExpression({ op: operator, left: result, right: value })
+        return new PipeExpression({ op: operator, left: result, right: value })
       }, head);
     }
 
@@ -98,14 +101,22 @@ TupleExpression = $
         statements: [expr]
       })
     }
-  / head:AddExpression tail:(_ "," _ AddExpression)* {
+  / head:RangeExpression tail:(_ "," _ RangeExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
       })
     }
 
+RangeExpression = $
+  / from:AddExpression _ ".." _ to:AddExpression {
+    return new RangeExpression({ from: from, to: to });
+  }
+  / expr:AddExpression {
+    return expr;
+  }
+
 AddExpression = $
-  / head:PrimaryExpression tail:(_ ("+" / "-") _ PrimaryExpression)* {
+  / head:PrimaryExpression tail:(_ ("++" / "+" / "-") _ PrimaryExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
@@ -155,13 +166,18 @@ IdentifierPattern = $
 
 Literal = $
   / NumericLiteral
-  // / StringLiteral
+  / StringLiteral
 
 NumericLiteral = $
   / literal:[0-9]+ ("." !"." [0-9]+)? {
       return new Literal({
         value: Number(text())
       })
+    }
+
+StringLiteral "string"
+  = '"' chars:(!'"' .)* '"' {
+      return new Literal({ value: chars.map(([, c]) => c).join("") });
     }
 
 Identifier = $

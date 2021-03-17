@@ -7,9 +7,41 @@ class Tuple {
     this.values = values;
   }
 
-  toString() {
-    `(${this.values.map(value => value.toString()).join(', ')})`;
+  inspect() {
+    return `(${this.values.map(value => value.inspect()).join(', ')})`;
   }
+}
+
+class Range {
+  constructor(from, to) {
+    this.from = from;
+    this.to = to;
+  }
+
+  inspect() {
+    return `${this.from.inspect()}..${this.to.inspect()}`;
+  }
+}
+
+class Function {
+  constructor(closure, params, statements) {
+    this.closure = closure;
+    this.params = params;
+    this.statements = statements;
+  }
+
+  kopiApply(evaluatedArgs, scope, visitors) {
+    const matches = this.params.match(evaluatedArgs, scope);
+
+    const newScope = Object.setPrototypeOf(matches, this.closure);
+
+    return {
+      value: this.statements.reduce((_, statement) => visitors.visit(statement, newScope).value, undefined),
+      scope
+    };
+  }
+
+  inspect() { return '<function>'; }
 }
 
 class Visitors {
@@ -38,25 +70,23 @@ class InterpreterVisitors extends Visitors {
     const evaluatedArgs = this.visit(args, scope).value;
     const evaluatedExpr = this.visit(expr, scope).value;
 
-    const { closure, params, statements } = evaluatedExpr;
+    console.trace('Apply', evaluatedExpr, evaluatedArgs);
 
-    const newScope = Object.create(closure, params.elements.reduce((scope, param, index) => ({
-      ...scope,
-      [param.name]: {
-        value: evaluatedArgs[index].value
-      }
-    }), {}));
-
-    return {
-      value: statements.reduce((_, statement) => this.visit(statement, newScope).value, undefined),
-      scope
-    };
+    return evaluatedExpr.kopiApply(evaluatedArgs, scope, this);
   }
 
   OperatorExpression({ op, left, right }, scope) {
+    const evaluatedLeft = this.visit(left, scope).value;
+    const evaluatedRight = this.visit(right, scope).value;
+
+    if (op === '+' && !(typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number')) {
+      throw new Error(`Invalid arguments for operator '${op}'`);
+    }
+
     switch (op) {
-      case '+': return { value: this.visit(left, scope).value + this.visit(right, scope).value, scope };
-      case '-': return { value: this.visit(left, scope).value - this.visit(right, scope).value, scope };
+      case '+': return { value: evaluatedLeft + evaluatedRight, scope };
+      case '-': return { value: evaluatedLeft - evaluatedRight, scope };
+      case '++': return { value: evaluatedLeft.concat(evaluatedRight), scope };
     }
   }
 
@@ -67,13 +97,16 @@ class InterpreterVisitors extends Visitors {
     };
   }
 
+  RangeExpression({ from, to }, scope) {
+    return {
+      value: new Range(this.visit(from, scope).value, this.visit(to, scope).value),
+      scope
+    };
+  }
+
   FunctionExpression({ params, statements }, scope) {
     return {
-      value: {
-        closure: scope,
-        params: params,
-        statements: statements
-      },
+      value: new Function(scope, params, statements),
       scope
     };
   }

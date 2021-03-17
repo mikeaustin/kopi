@@ -8,6 +8,14 @@ const parser = require("../lib/parser");
 
 const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
+Number.prototype.inspect = function () {
+  return `${this}`;
+};
+
+String.prototype.inspect = function () {
+  return `"${this}"`;
+};
+
 const collect = (values, mapper) => {
   return values.reduce((array, item) => {
     const result = mapper(item);
@@ -20,7 +28,7 @@ const visit = (visitors, node) => {
   if (visitors[node.constructor.name]) {
     return visitors[node.constructor.name](node);
   } else {
-    throw new Error('No visitor for ' + node.constructor.name);
+    throw new Error(`No AST visitor for '${node.constructor.name}'`);
   }
 };
 
@@ -89,7 +97,11 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = Object.create(null);
+  let scope = Object.create(null, {
+    print: {
+      value: (args) => console.log(args)
+    }
+  });
 
   const visitors = new InterpreterVisitors();
 
@@ -111,7 +123,8 @@ if (process.argv.length === 3) {
       const result = visitors.visit(ast.statements[0], scope);
 
       if (result.value !== undefined) {
-        console.log(result.value);
+        // console.log(JSON.stringify(result.value));
+        console.log(result.value.inspect());
       }
 
       scope = result.scope;
