@@ -16,6 +16,12 @@ String.prototype.inspect = function () {
   return `"${this}"`;
 };
 
+String.prototype['++'] = function (that) {
+  return this.concat(that);
+};
+
+//
+
 const collect = (values, mapper) => {
   return values.reduce((array, item) => {
     const result = mapper(item);
@@ -35,6 +41,8 @@ const visit = (visitors, node) => {
 const parens = (string) => {
   return `\x1b[37;2m(\x1b[0m${string}\x1b[37;2m)\x1b[0m`;
 };
+
+//
 
 class Visitors {
   Comment({ value }) {

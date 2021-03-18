@@ -18,3 +18,31 @@ Trace: Apply Function {
   statements:
    [ ApplyExpression { expr: [Identifier], args: [Identifier] } ] } hi
 Trace: Apply { kopiApply: [Function: kopiApply] } hi
+Trace: Apply Function {
+  closure:
+   { print: { kopiApply: [Function: kopiApply] },
+     x: 1,
+     f:
+      Function {
+        closure: [Object],
+        params: [IdentifierPattern],
+        statements: [Array] } },
+  params:
+   TuplePattern { elements: [ [IdentifierPattern], [IdentifierPattern] ] },
+  statements:
+   [ OperatorExpression { op: '+', left: [Identifier], right: [Identifier] } ] } Tuple { values: [ 1, 2 ] }
+
+readline.js:1106
+            throw err;
+            ^
+SyntaxError: Expected "$", "+", "++", ",", "-", "..", "|", [\n\r], or whitespace but "1" found.
+    at peg$buildStructuredError (/Users/mike/Projects/kopi/lib/parser.js:403:12)
+    at Object.peg$parse [as parse] (/Users/mike/Projects/kopi/lib/parser.js:1970:11)
+    at Interface.<anonymous> (/Users/mike/Projects/kopi/bin/validate:124:24)
+    at Interface.emit (events.js:197:13)
+    at Interface._onLine (readline.js:308:10)
+    at Interface._line (readline.js:675:8)
+    at Interface._ttyWrite (readline.js:954:14)
+    at ReadStream.onkeypress (readline.js:184:10)
+    at ReadStream.emit (events.js:197:13)
+    at emitKeys (internal/readline.js:424:14)

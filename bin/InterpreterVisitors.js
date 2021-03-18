@@ -19,7 +19,7 @@ class Tuple {
     ), []));
   }
 
-  concat(that) {
+  ['++'](that) {
     return new Tuple(this.values.reduce((values, value, index) => (
       values.push(value.concat(that.values[index])), values
     ), []));
@@ -93,7 +93,7 @@ class InterpreterVisitors extends Visitors {
     const evaluatedLeft = this.visit(left, scope).value;
     const evaluatedRight = this.visit(right, scope).value;
 
-    if (typeof evaluatedLeft === 'number') {
+    if (typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number') {
       switch (op) {
         case '+': return { value: evaluatedLeft + evaluatedRight, scope };
         case '-': return { value: evaluatedLeft - evaluatedRight, scope };
@@ -103,7 +103,7 @@ class InterpreterVisitors extends Visitors {
     switch (op) {
       case '+': return { value: evaluatedLeft['+'](evaluatedRight), scope };
       case '-': return { value: evaluatedLeft['-'](evaluatedRight), scope };
-      case '++': return { value: evaluatedLeft.concat(evaluatedRight), scope };
+      case '++': return { value: evaluatedLeft['++'](evaluatedRight), scope };
     }
   }
 
