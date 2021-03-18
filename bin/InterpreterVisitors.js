@@ -10,6 +10,20 @@ class Tuple {
   inspect() {
     return `(${this.values.map(value => value.inspect()).join(', ')})`;
   }
+
+  ['+'](that) {
+    return new Tuple(this.values.reduce((values, value, index) => (
+      values.push(typeof value === 'number'
+        ? value + that.values[index]
+        : value['+'](that.values[index])), values
+    ), []));
+  }
+
+  concat(that) {
+    return new Tuple(this.values.reduce((values, value, index) => (
+      values.push(value.concat(that.values[index])), values
+    ), []));
+  }
 }
 
 class Range {
@@ -79,13 +93,16 @@ class InterpreterVisitors extends Visitors {
     const evaluatedLeft = this.visit(left, scope).value;
     const evaluatedRight = this.visit(right, scope).value;
 
-    if (op === '+' && !(typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number')) {
-      throw new Error(`Invalid arguments for operator '${op}'`);
+    if (typeof evaluatedLeft === 'number') {
+      switch (op) {
+        case '+': return { value: evaluatedLeft + evaluatedRight, scope };
+        case '-': return { value: evaluatedLeft - evaluatedRight, scope };
+      }
     }
 
     switch (op) {
-      case '+': return { value: evaluatedLeft + evaluatedRight, scope };
-      case '-': return { value: evaluatedLeft - evaluatedRight, scope };
+      case '+': return { value: evaluatedLeft['+'](evaluatedRight), scope };
+      case '-': return { value: evaluatedLeft['-'](evaluatedRight), scope };
       case '++': return { value: evaluatedLeft.concat(evaluatedRight), scope };
     }
   }

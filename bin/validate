@@ -99,7 +99,13 @@ if (process.argv.length === 3) {
 } else {
   let scope = Object.create(null, {
     print: {
-      value: (args) => console.log(args)
+      enumerable: true,
+      value: {
+        kopiApply: (args, scope) => ({
+          value: console.log(args.inspect()),
+          scope: scope
+        })
+      }
     }
   });
 
@@ -117,13 +123,10 @@ if (process.argv.length === 3) {
   rl.on('line', function (line) {
     const ast = parser.parse(line);
 
-    // console.log(ast);
-
     try {
       const result = visitors.visit(ast.statements[0], scope);
 
       if (result.value !== undefined) {
-        // console.log(JSON.stringify(result.value));
         console.log(result.value.inspect());
       }
 

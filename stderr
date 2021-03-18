@@ -1,6 +1,20 @@
+Trace: Apply { kopiApply: [Function: kopiApply] } 3
+Trace: Apply { kopiApply: [Function: kopiApply] } Tuple { values: [ 1, 2 ] }
 Trace: Apply Function {
-  closure: [Object: null prototype] {},
-  params:
-   TuplePattern { elements: [ [IdentifierPattern], [IdentifierPattern] ] },
+  closure: { print: { kopiApply: [Function: kopiApply] }, x: 1 },
+  params: IdentifierPattern { name: 'x' },
   statements:
-   [ OperatorExpression { op: '+', left: [Identifier], right: [Identifier] } ] } Tuple { values: [ 2, 3 ] }
+   [ ApplyExpression { expr: [Identifier], args: [Identifier] } ] } 1
+Trace: Apply { kopiApply: [Function: kopiApply] } 1
+Trace: Apply Function {
+  closure: { print: { kopiApply: [Function: kopiApply] }, x: 1 },
+  params: IdentifierPattern { name: 'x' },
+  statements:
+   [ ApplyExpression { expr: [Identifier], args: [Identifier] } ] } Tuple { values: [ 1, 2 ] }
+Trace: Apply { kopiApply: [Function: kopiApply] } Tuple { values: [ 1, 2 ] }
+Trace: Apply Function {
+  closure: { print: { kopiApply: [Function: kopiApply] }, x: 1 },
+  params: IdentifierPattern { name: 'x' },
+  statements:
+   [ ApplyExpression { expr: [Identifier], args: [Identifier] } ] } hi
+Trace: Apply { kopiApply: [Function: kopiApply] } hi
