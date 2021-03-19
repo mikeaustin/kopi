@@ -5,6 +5,8 @@
 class Tuple {
   constructor(values) {
     this.values = values;
+
+    values.forEach((value, index) => this[index] = value);
   }
 
   inspect() {
@@ -36,6 +38,9 @@ class Range {
     return `${this.from.inspect()}..${this.to.inspect()}`;
   }
 }
+
+(x => x).__proto__.inspect = function () { return `<native-function> ${this.name}`; };
+[].__proto__.inspect = function () { return `<native-array>`; };
 
 class Function {
   constructor(closure, params, statements) {
@@ -132,6 +137,13 @@ class InterpreterVisitors extends Visitors {
   FunctionExpression({ params, statements }, scope) {
     return {
       value: new Function(scope, params, statements),
+      scope
+    };
+  }
+
+  FieldExpression({ expr, field }, scope) {
+    return {
+      value: this.visit(expr, scope).value[field.name || field.value],
       scope
     };
   }

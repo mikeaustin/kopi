@@ -50,3 +50,6 @@ map 1..5, (x => map x..5, (y => x + y))
 print 1 + 2, 2 + 3, 1..5 + 2
 
 (() 5) 5 ++ "abc"
+
+range = 1..10
+range.from, range.to

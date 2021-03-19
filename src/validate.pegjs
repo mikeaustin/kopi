@@ -14,6 +14,7 @@
   class ApplyExpression extends Node { }
   class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
+  class FieldExpression extends Node { }
 
   class RangeExpression extends Node { }
 
@@ -116,13 +117,18 @@ RangeExpression = $
   }
 
 AddExpression = $
-  / head:PrimaryExpression tail:(_ ("++" / "+" / "-") _ PrimaryExpression)* {
+  / head:FieldExpression tail:(_ ("++" / "+" / "-") _ FieldExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);
     }
 
-// . access
+FieldExpression = $
+  / head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
+      return tail.reduce((result, [, field]) => (
+        new FieldExpression({ expr: result, field: field })
+      ), head);
+    }
 
 PrimaryExpression = $
   / Literal
