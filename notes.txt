@@ -42,36 +42,11 @@ employeeNames.sort((a, b) => a > b).map(name => {
 })
 
 
-PostfixExpression
-  = argument:LeftHandSideExpression _ operator:PostfixOperator {
-      return {
-        type: "UpdateExpression",
-        operator: operator,
-        argument: argument,
-        prefix: false
-      };
-    }
-  / LeftHandSideExpression
+(x, k => (x, k => k x + 1) x + x, k) 5, (x => x)
 
-TupleExpression = $
-  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
-      if (tail.length > 0) {
-        return new TupleExpression({
-          elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
-        })
-      }
+map = xs, f => f(0)
+map 1..5, (x => map x..5, (y => x + y))
 
-      return head
-    }
+print 1 + 2, 2 + 3, 1..5 + 2
 
-TupleExpression = $
-  / head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
-      return new TupleExpression({
-        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
-      })
-    }
-  / PrimaryExpression
-
-
-a, b
-a, b => a, b
+(() 5) 5 ++ "abc"

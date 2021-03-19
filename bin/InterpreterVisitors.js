@@ -86,6 +86,10 @@ class InterpreterVisitors extends Visitors {
 
     console.trace('Apply', evaluatedExpr, evaluatedArgs);
 
+    if (evaluatedExpr instanceof Tuple && evaluatedExpr.values.length === 0) {
+      return { value: evaluatedExpr, scope };
+    }
+
     return evaluatedExpr.kopiApply(evaluatedArgs, scope, this);
   }
 
@@ -100,11 +104,15 @@ class InterpreterVisitors extends Visitors {
       }
     }
 
-    switch (op) {
-      case '+': return { value: evaluatedLeft['+'](evaluatedRight), scope };
-      case '-': return { value: evaluatedLeft['-'](evaluatedRight), scope };
-      case '++': return { value: evaluatedLeft['++'](evaluatedRight), scope };
+    if (evaluatedLeft instanceof Tuple && evaluatedLeft.values.length === 0) {
+      return { value: evaluatedRight, scope };
     }
+
+    if (evaluatedRight instanceof Tuple && evaluatedRight.values.length === 0) {
+      return { value: evaluatedLeft, scope };
+    }
+
+    return { value: evaluatedLeft[op](evaluatedRight), scope };
   }
 
   TupleExpression({ elements }, scope) {

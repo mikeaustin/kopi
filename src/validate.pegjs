@@ -122,6 +122,8 @@ AddExpression = $
       }, head);
     }
 
+// . access
+
 PrimaryExpression = $
   / Literal
   / Identifier
