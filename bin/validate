@@ -8,6 +8,13 @@ const parser = require("../lib/parser");
 
 const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
+Object.prototype.inspect = function () {
+  return util.inspect(this, {
+    compact: false,
+    depth: Infinity
+  });
+};
+
 Number.prototype.inspect = function () {
   return `${this}`;
 };
@@ -105,7 +112,7 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = Object.create(null, {
+  let scope = Object.create(Object.prototype, {
     print: {
       enumerable: true,
       value: {

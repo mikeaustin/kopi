@@ -44,7 +44,7 @@ employeeNames.sort((a, b) => a > b).map(name => {
 
 (x, k => (x, k => k x + 1) x + x, k) 5, (x => x)
 
-map = xs, f => f(0)
+map = xs, f => f 0
 map 1..5, (x => map x..5, (y => x + y))
 
 print 1 + 2, 2 + 3, 1..5 + 2
@@ -53,3 +53,10 @@ print 1 + 2, 2 + 3, 1..5 + 2
 
 range = 1..10
 range.from, range.to
+
+(1 => 1) 1
+
+
+1..5 | reduce '*, 1
+
+[1, 2, 3] | reduce 'toString, 1

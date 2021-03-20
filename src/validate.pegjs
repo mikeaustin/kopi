@@ -8,6 +8,7 @@
   class Comment extends Node { }
   class Assignment extends Node { }
   class Block extends Node { }
+  class Ast extends Node { }
 
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
@@ -21,6 +22,7 @@
   class TuplePattern extends Node {
     match(value, scope) {
       return this.elements.reduce((scope, element, index) => ({
+        ...scope,
         ...element.match(value.values[index], scope)
       }), {});
     }
@@ -138,6 +140,12 @@ FieldExpression = $
     }
 
 PrimaryExpression = $
+  / "'" "(" _ expr:Expression _ ")" {
+      return new Ast({ expr: expr });
+    }
+  / "'" expr:Identifier {
+      return new Ast({ expr: expr });
+    }
   / Literal
   / Identifier
   / "(" LineTerminator* _ head:Expression? _ LineTerminator* ")" {

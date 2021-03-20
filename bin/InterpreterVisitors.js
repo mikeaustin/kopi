@@ -39,8 +39,8 @@ class Range {
   }
 }
 
-(x => x).__proto__.inspect = function () { return `<native-function> ${this.name}`; };
-[].__proto__.inspect = function () { return `<native-array>`; };
+// (x => x).__proto__.inspect = function () { return `<native-function> ${this.name}`; };
+// [].__proto__.inspect = function () { return `<native-array>`; };
 
 class Function {
   constructor(closure, params, statements) {
@@ -61,8 +61,10 @@ class Function {
     };
   }
 
-  inspect() { return '<function>'; }
+  // inspect() { return '<function>'; }
 }
+
+//
 
 class Visitors {
   visit(node, scope) {
@@ -75,6 +77,10 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
+  Ast({ expr }, scope) {
+    return { value: expr, scope };
+  }
+
   Assignment({ pattern, expr }, scope) {
     const matches = pattern.match(this.visit(expr, scope).value, scope);
 
