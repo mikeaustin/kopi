@@ -133,7 +133,6 @@ if (process.argv.length === 3) {
     output: process.stdout,
   });
 
-
   rl.prompt();
   rl.on('line', function (line) {
     const ast = parser.parse(line);
@@ -145,7 +144,7 @@ if (process.argv.length === 3) {
         console.log(result.value.inspect());
       }
 
-      scope = result.scope;
+      scope = { ...scope, ...result.scope };
     } catch (error) {
       console.log(error);
     }

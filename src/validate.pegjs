@@ -20,7 +20,7 @@
   class RangeExpression extends Node { }
 
   class TuplePattern extends Node {
-    match(value, scope) {
+    match(value) {
       return this.elements.reduce((scope, element, index) => ({
         ...scope,
         ...element.match(value.values[index], scope)
@@ -29,7 +29,7 @@
   }
 
   class IdentifierPattern extends Node {
-    match(value, scope) {
+    match(value) {
       return {
         [this.name]: value
       };
@@ -37,12 +37,12 @@
   }
 
   class Literal extends Node {
-    match(value, scope) {
+    match(value) {
       if (value !== this.value) {
         throw new Error(`Couldn’t match on value ${value}`)
       }
 
-      return { }
+      return {}
     }
   }
 
