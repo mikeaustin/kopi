@@ -21,7 +21,6 @@
   class TuplePattern extends Node {
     match(value, scope) {
       return this.elements.reduce((scope, element, index) => ({
-        ...scope,
         ...element.match(value.values[index], scope)
       }), {});
     }
@@ -30,13 +29,21 @@
   class IdentifierPattern extends Node {
     match(value, scope) {
       return {
-        ...scope,
         [this.name]: value
       };
     }
   }
 
-  class Literal extends Node { }
+  class Literal extends Node {
+    match(value, scope) {
+      if (value !== this.value) {
+        throw new Error(`Couldn’t match on value ${value}`)
+      }
+
+      return { }
+    }
+  }
+
   class Identifier extends Node { }
 }
 
@@ -154,10 +161,18 @@ TuplePattern = $
     }
 
 PrimaryPattern = $
+  / NumericPattern
   / IdentifierPattern
   / "(" head:Pattern? ")" {
       return head ? head : new TuplePattern({
         elements: []
+      })
+    }
+
+NumericPattern = $
+  / literal:[0-9]+ ("." !"." [0-9]+)? {
+      return new Literal({
+        value: Number(text())
       })
     }
 

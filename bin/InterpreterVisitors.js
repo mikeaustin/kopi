@@ -50,6 +50,7 @@ class Function {
   }
 
   kopiApply(evaluatedArgs, scope, visitors) {
+    // const matches = { ...scope, ...this.params.match(evaluatedArgs, scope) };
     const matches = this.params.match(evaluatedArgs, scope);
 
     const newScope = Object.setPrototypeOf(matches, this.closure);
@@ -89,7 +90,7 @@ class InterpreterVisitors extends Visitors {
     const evaluatedArgs = this.visit(args, scope).value;
     const evaluatedExpr = this.visit(expr, scope).value;
 
-    console.trace('Apply', evaluatedExpr, evaluatedArgs);
+    // console.trace('Apply', evaluatedExpr, evaluatedArgs);
 
     if (evaluatedExpr instanceof Tuple && evaluatedExpr.values.length === 0) {
       return { value: evaluatedExpr, scope };
