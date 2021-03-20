@@ -51,10 +51,14 @@ class Function {
 
     const newScope = Object.setPrototypeOf(matches, this.closure);
 
-    return {
-      value: this.statements.reduce((_, statement) => visitors.visit(statement, newScope).value, undefined),
-      scope
-    };
+    return this.statements.reduce(({ value, scope }, statement) => {
+      const result = visitors.visit(statement, newScope);
+
+      return {
+        value: result.value,
+        scope: { ...scope, ...result.scope }
+      };
+    }, { value: undefined, scope });
   }
 }
 
@@ -80,7 +84,7 @@ class InterpreterVisitors extends Visitors {
 
     return {
       value: undefined,
-      scope: matches
+      scope: { ...scope, ...matches }
     };
   }
 
@@ -94,7 +98,9 @@ class InterpreterVisitors extends Visitors {
       return { value: evaluatedExpr, scope };
     }
 
-    return evaluatedExpr.kopiApply(evaluatedArgs, scope, this);
+    const result = evaluatedExpr.kopiApply(evaluatedArgs, scope, this);
+
+    return { value: result.value, scope: { ...scope, ...result.scope } };
   }
 
   OperatorExpression({ op, left, right }, scope) {

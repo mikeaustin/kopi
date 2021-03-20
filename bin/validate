@@ -112,17 +112,27 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = Object.create(Object.prototype, {
+  let scope = {
     print: {
-      enumerable: true,
-      value: {
-        kopiApply: (args, scope) => ({
-          value: console.log(args.inspect()),
-          scope: scope
-        })
-      }
+      kopiApply: (args, scope) => ({
+        value: console.log(args.inspect()),
+        scope: { scope, x: 'here' }
+      })
+    },
+
+    update: {
+      kopiApply: (args, scope) => ({
+        value: {
+          kopiApply: (value, scope) => ({
+            _: console.log('here', value),
+            value: undefined,
+            scope: { ...scope, [args.name]: value }
+          })
+        },
+        scope: { ...scope, z: 0 }
+      })
     }
-  });
+  };
 
   const visitors = new InterpreterVisitors();
 
