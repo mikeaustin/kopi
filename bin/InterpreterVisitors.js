@@ -39,9 +39,6 @@ class Range {
   }
 }
 
-// (x => x).__proto__.inspect = function () { return `<native-function> ${this.name}`; };
-// [].__proto__.inspect = function () { return `<native-array>`; };
-
 class Function {
   constructor(closure, params, statements) {
     this.closure = closure;
@@ -50,8 +47,7 @@ class Function {
   }
 
   kopiApply(evaluatedArgs, scope, visitors) {
-    // const matches = { ...scope, ...this.params.match(evaluatedArgs, scope) };
-    const matches = this.params.match(evaluatedArgs, scope);
+    const matches = this.params.match(evaluatedArgs);
 
     const newScope = Object.setPrototypeOf(matches, this.closure);
 
@@ -60,8 +56,6 @@ class Function {
       scope
     };
   }
-
-  // inspect() { return '<function>'; }
 }
 
 //
@@ -82,14 +76,11 @@ class InterpreterVisitors extends Visitors {
   }
 
   Assignment({ pattern, expr }, scope) {
-    const matches = pattern.match(this.visit(expr, scope).value, scope);
-
-    const newScope = matches;
-    // const newScope = { ...scope, ...matches };
+    const matches = pattern.match(this.visit(expr, scope).value);
 
     return {
       value: undefined,
-      scope: newScope
+      scope: matches
     };
   }
 

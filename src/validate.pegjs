@@ -97,11 +97,13 @@ PipeExpression = $
     }
 
 ApplyExpression = $
-  / expr:TupleExpression _ args:TupleExpression? {
-      return !args ? expr : new ApplyExpression({
-        expr: expr,
-        args: args
-      })
+  / expr:TupleExpression _ args:(_ TupleExpression)* {
+      return args.reduce((result, [, arg]) => (
+        new ApplyExpression({
+          expr: result,
+          args: arg
+        })
+      ), expr);
     }
 
 TupleExpression = $
