@@ -86,6 +86,9 @@ class Visitors {
   }
 };
 
+let buffer = '';
+let inBlock = false;
+
 if (process.argv.length === 3) {
   fs.readFile(process.argv[2], "utf8", (err, input) => {
     const ast = parser.parse(input);
@@ -153,9 +156,36 @@ if (process.argv.length === 3) {
     output: process.stdout,
   });
 
+  process.stdin.setRawMode(true);
+
   rl.prompt();
   rl.on('line', function (line) {
-    const ast = parser.parse(line);
+    if (inBlock) {
+      if (line.match(/^\)/)) {
+        buffer += '\n' + line + '\n';
+
+        inBlock = false;
+
+        console.log('buffer', buffer);
+      } else {
+        buffer += '\n' + line;
+
+        return;
+      }
+    } else if (line.match(/\($/)) {
+      inBlock = true;
+      buffer += line;
+
+      return;
+    } else {
+      buffer = '\n' + line;
+    }
+
+    const ast = parser.parse(buffer);
+
+    if (!inBlock) {
+      buffer = '';
+    }
 
     try {
       const result = visitors.visit(ast.statements[0], scope);

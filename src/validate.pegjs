@@ -81,14 +81,6 @@ Assignment = $
 Expression = $
   / PipeExpression
 
-FunctionExpression = $
-  / params:Pattern _ "=>" _ expr:Expression {
-      return new FunctionExpression({
-        params: params,
-        statements: [expr]
-      })
-    }
-
 PipeExpression = $
   / head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
@@ -107,6 +99,12 @@ ApplyExpression = $
     }
 
 TupleExpression = $
+  / params:Pattern _ "=>" _ "(" LineTerminator+ block:Block _ ")" LineTerminator+  {
+      return new FunctionExpression({
+        params: params,
+        statements: block.statements
+      })
+    }
   / params:Pattern _ "=>" _ expr:ApplyExpression {
       return new FunctionExpression({
         params: params,
@@ -150,7 +148,7 @@ PrimaryExpression = $
     }
   / Literal
   / Identifier
-  / "(" LineTerminator* _ head:Expression? _ LineTerminator* ")" {
+  / "(" _ head:Expression? _ ")" {
       return head ? head : new TupleExpression({
         elements: []
       })
