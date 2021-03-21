@@ -116,20 +116,30 @@ if (process.argv.length === 3) {
     print: {
       kopiApply: (args, scope) => ({
         value: console.log(args.inspect()),
-        scope: { scope, x: 'here' }
+        scope
       })
     },
-
-    update: {
+    set: {
       kopiApply: (args, scope) => ({
         value: {
           kopiApply: (value, scope) => ({
-            _: console.log('here', value),
             value: undefined,
             scope: { ...scope, [args.name]: value }
           })
         },
         scope: { ...scope, z: 0 }
+      })
+    },
+    update: {
+      kopiApply: (args, scope, visitors) => ({
+        value: {
+          kopiApply: (value, scope) => ({
+            _: console.log('here', scope),
+            value: undefined,
+            scope: { ...scope, [args.name]: value.kopiApply(scope[args.name], scope, visitors).value }
+          })
+        },
+        scope
       })
     }
   };

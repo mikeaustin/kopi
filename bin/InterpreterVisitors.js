@@ -47,9 +47,11 @@ class Function {
   }
 
   kopiApply(evaluatedArgs, scope, visitors) {
+    // console.log('Function.kopiApply scope', scope);
+
     const matches = this.params.match(evaluatedArgs);
 
-    const newScope = Object.setPrototypeOf(matches, this.closure);
+    const newScope = Object.setPrototypeOf({ ...scope, ...matches }, this.closure);
 
     return this.statements.reduce(({ value, scope }, statement) => {
       const result = visitors.visit(statement, newScope);

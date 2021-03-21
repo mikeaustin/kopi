@@ -62,4 +62,7 @@ range.from, range.to
 
 '(x + x)
 
-Return AST node?
+x = 0
+f = () => update 'x z => z + 1
+f ()
+x
