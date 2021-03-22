@@ -130,17 +130,31 @@ if (process.argv.length === 3) {
             scope: { ...scope, [args.name]: value }
           })
         },
-        scope: { ...scope, z: 0 }
+        scope
       })
     },
     update: {
       kopiApply: (args, scope, visitors) => ({
         value: {
           kopiApply: (value, scope) => ({
-            _: console.log('here', scope),
             value: undefined,
             scope: { ...scope, [args.name]: value.kopiApply(scope[args.name], scope, visitors).value }
           })
+        },
+        scope
+      })
+    },
+    match: {
+      kopiApply: (value, scope, visitors) => ({
+        value: {
+          kopiApply: (funcs, scope) => {
+            const func = funcs.values.find(func => Object.values(func.params.match(value)).length !== 0);
+
+            return {
+              value: func && func.kopiApply(value, scope, visitors).value,
+              scope
+            };
+          }
         },
         scope
       })
@@ -165,8 +179,6 @@ if (process.argv.length === 3) {
         buffer += '\n' + line + '\n';
 
         inBlock = false;
-
-        console.log('buffer', buffer);
       } else {
         buffer += '\n' + line;
 

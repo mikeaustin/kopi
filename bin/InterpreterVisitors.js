@@ -51,10 +51,11 @@ class Function {
 
     const matches = this.params.match(evaluatedArgs);
 
-    const newScope = Object.setPrototypeOf({ ...scope, ...matches }, this.closure);
+    const newScope = Object.setPrototypeOf(matches, this.closure);
 
     return this.statements.reduce(({ value, scope }, statement) => {
       const result = visitors.visit(statement, newScope);
+      console.trace('Function.koniApply scope', result.scope);
 
       return {
         value: result.value,
@@ -68,6 +69,10 @@ class Function {
 
 class Visitors {
   visit(node, scope) {
+    if (node === null) {
+      return { value: undefined };
+    }
+
     if (this[node.constructor.name]) {
       return this[node.constructor.name](node, scope);
     } else {

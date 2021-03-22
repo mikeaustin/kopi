@@ -39,10 +39,13 @@
   class Literal extends Node {
     match(value) {
       if (value !== this.value) {
-        throw new Error(`Couldn’t match on value ${value}`)
+        return { }
+        // throw new Error(`Couldn’t match on value ${value}`)
       }
 
-      return {}
+      return {
+        [this.value]: value
+      }
     }
   }
 
@@ -109,6 +112,11 @@ TupleExpression = $
       return new FunctionExpression({
         params: params,
         statements: [expr]
+      })
+    }
+  / "(" tail:(_ LineTerminator+ _ Expression)* LineTerminator+ ")" {
+      return new TupleExpression({
+        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [])
       })
     }
   / head:RangeExpression tail:(_ "," _ RangeExpression)* {
