@@ -28,6 +28,14 @@
     }
   }
 
+  class FunctionPattern extends Node {
+    match(value, scope, Function) {
+      return {
+        [this.name]: new Function(scope, this.params, [value])
+      }
+    }
+  }
+
   class IdentifierPattern extends Node {
     match(value) {
       return {
@@ -174,7 +182,16 @@ PrimaryExpression = $
 // --------------------------------------------------------------------------------------------- //
 
 Pattern = $
+  / FunctionPattern
   / TuplePattern
+
+FunctionPattern = $
+  / id:Identifier _ params:Pattern _ {
+      return new FunctionPattern({
+        name: id.name,
+        params: params
+      })
+    }
 
 TuplePattern = $
   / head:PrimaryPattern tail:(_ "," _ PrimaryPattern)* {

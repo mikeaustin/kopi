@@ -64,3 +64,10 @@ x = 0
 f = () => update 'x z => z + 1
 f ()
 x
+
+factorial factorial, n = match n (
+  0 => 1
+  n => n * (factorial factorial, n - 1)
+)
+
+factorial factorial, 5

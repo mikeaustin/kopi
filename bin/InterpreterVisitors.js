@@ -87,7 +87,11 @@ class InterpreterVisitors extends Visitors {
   }
 
   Assignment({ pattern, expr }, scope) {
-    const matches = pattern.match(this.visit(expr, scope).value);
+    const matches = pattern.match(
+      pattern.constructor.name === 'FunctionPattern' ? expr : this.visit(expr, scope).value,
+      scope,
+      Function
+    );
 
     return {
       value: undefined,
