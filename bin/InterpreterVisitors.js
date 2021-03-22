@@ -118,6 +118,7 @@ class InterpreterVisitors extends Visitors {
       switch (op) {
         case '+': return { value: evaluatedLeft + evaluatedRight, scope };
         case '-': return { value: evaluatedLeft - evaluatedRight, scope };
+        case '*': return { value: evaluatedLeft * evaluatedRight, scope };
       }
     }
 

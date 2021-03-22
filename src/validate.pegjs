@@ -134,7 +134,14 @@ RangeExpression = $
   }
 
 AddExpression = $
-  / head:FieldExpression tail:(_ ("++" / "+" / "-") _ FieldExpression)* {
+  / head:MultiplyExpression tail:(_ ("++" / "+" / "-") _ MultiplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => {
+        return new OperatorExpression({ op: operator, left: result, right: value })
+      }, head);
+    }
+
+MultiplyExpression = $
+  / head:FieldExpression tail:(_ ("*" / "/") _ FieldExpression)* {
       return tail.reduce((result, [, operator,, value]) => {
         return new OperatorExpression({ op: operator, left: result, right: value })
       }, head);

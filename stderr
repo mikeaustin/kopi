@@ -1,5 +1,66 @@
-Trace: Function.koniApply scope { x: 5 }
-Trace: Function.koniApply scope { x: Tuple { '0': 1, '1': 2, values: [ 1, 2 ] } }
-Trace: Function.koniApply scope { a: 1, b: 2 }
-Trace: Function.koniApply scope { a: 1, b: 2 }
-Trace: Function.koniApply scope { a: 1, b: 2 }
+Trace: Function.koniApply scope undefined
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 0 }
+Trace: Function.koniApply scope { n: 1 }
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 1 }
+Trace: Function.koniApply scope { n: 2 }
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 2 }
+Trace: Function.koniApply scope { n: 3 }
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 3 }
+Trace: Function.koniApply scope { n: 4 }
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 4 }
+Trace: Function.koniApply scope { n: 5 }
+Trace: Function.koniApply scope { factorial:
+   Function {
+     closure:
+      { print: [Object],
+        set: [Object],
+        update: [Object],
+        match: [Object] },
+     params: TuplePattern { elements: [Array] },
+     statements: [ [ApplyExpression] ] },
+  n: 5 }

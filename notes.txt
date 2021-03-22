@@ -26,7 +26,7 @@ match parseYesNo(response)
 end
 
 match foobar
-  (x, y) : Point => "Point"
+  (x, y): Point => "Point"
 end
 
 
