@@ -34,6 +34,12 @@ class Range {
     this.to = to;
   }
 
+  *[Symbol.iterator]() {
+    for (let i = this.from; i < this.to; ++i) {
+      yield i;
+    }
+  }
+
   inspect() {
     return `${this.from.inspect()}..${this.to.inspect()}`;
   }
@@ -67,6 +73,22 @@ class Function {
 
 //
 
+class InterpreterError extends Error {
+  constructor(message) {
+    super(message);
+
+    this.name = 'InterpreterError';
+  }
+}
+
+class RuntimeError extends Error {
+  constructor(message) {
+    super(message);
+
+    this.name = 'RuntimeError';
+  }
+}
+
 class Visitors {
   visit(node, scope) {
     if (node === null) {
@@ -76,7 +98,7 @@ class Visitors {
     if (this[node.constructor.name]) {
       return this[node.constructor.name](node, scope);
     } else {
-      throw new Error('No visitor for ' + node.constructor.name);
+      throw new InterpreterError(`No AST visitor for '${node.constructor.name}'`);
     }
   }
 }
@@ -178,10 +200,10 @@ class InterpreterVisitors extends Visitors {
 
   Identifier({ name }, scope) {
     if (!(name in scope)) {
-      throw new Error(`Variable '${name}' is not defined`);
+      throw new RuntimeError(`Variable '${name}' is not defined`);
     }
 
-    return { value: scope[name], scope };
+    return { value: scope[name].kopiGet ? scope[name].kopiGet() : scope[name], scope };
   }
 }
 

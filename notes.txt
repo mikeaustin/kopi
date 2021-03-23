@@ -43,8 +43,7 @@ employeeNames.sort((a, b) => a > b).map(name => {
 
 (x, k => (x, k => k x + 1) x + x, k) 5, (x => x)
 
-map = xs, f => f 0
-map 1..5, (x => map x..5, (y => x + y))
+map (i => map (j => i + j) i+1..j) 1..5
 
 print 1 + 2, 2 + 3, 1..5 + 2
 
@@ -71,3 +70,14 @@ factorial factorial, n = match n (
 )
 
 factorial factorial, 5
+
+match 0 (
+  0 => "zero"
+  x => x
+)
+
+map (x => x * x) 1..5
+
+map '(+ 1) 1..5
+
+map '(toString) 1..5

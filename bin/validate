@@ -5,6 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
+const { default: functions } = require('./functions');
 
 const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
@@ -13,6 +14,10 @@ Object.prototype.inspect = function () {
     compact: false,
     depth: Infinity
   });
+};
+
+Boolean.prototype.inspect = function () {
+  return `${this}`;
 };
 
 Number.prototype.inspect = function () {
@@ -37,11 +42,13 @@ const collect = (values, mapper) => {
   }, []);
 };
 
+class InterpreterError extends Error { }
+
 const visit = (visitors, node) => {
   if (visitors[node.constructor.name]) {
     return visitors[node.constructor.name](node);
   } else {
-    throw new Error(`No AST visitor for '${node.constructor.name}'`);
+    throw new InterpreterError(`No AST visitor for '${node.constructor.name}'`);
   }
 };
 
@@ -115,51 +122,7 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = {
-    print: {
-      kopiApply: (args, scope) => ({
-        value: console.log(args.inspect()),
-        scope
-      })
-    },
-    set: {
-      kopiApply: (args, scope) => ({
-        value: {
-          kopiApply: (value, scope) => ({
-            value: undefined,
-            scope: { ...scope, [args.name]: value }
-          })
-        },
-        scope
-      })
-    },
-    update: {
-      kopiApply: (args, scope, visitors) => ({
-        value: {
-          kopiApply: (value, scope) => ({
-            value: undefined,
-            scope: { ...scope, [args.name]: value.kopiApply(scope[args.name], scope, visitors).value }
-          })
-        },
-        scope
-      })
-    },
-    match: {
-      kopiApply: (value, scope, visitors) => ({
-        value: {
-          kopiApply: (funcs, scope) => {
-            const func = funcs.values.find(func => Object.values(func.params.match(value)).length !== 0);
-
-            return {
-              value: func && func.kopiApply(value, scope, visitors).value,
-              scope
-            };
-          }
-        },
-        scope
-      })
-    }
-  };
+  let scope = functions;
 
   const visitors = new InterpreterVisitors();
 
@@ -193,13 +156,13 @@ if (process.argv.length === 3) {
       buffer = '\n' + line;
     }
 
-    const ast = parser.parse(buffer);
-
-    if (!inBlock) {
-      buffer = '';
-    }
-
     try {
+      const ast = parser.parse(buffer);
+
+      if (!inBlock) {
+        buffer = '';
+      }
+
       const result = visitors.visit(ast.statements[0], scope);
 
       if (result.value !== undefined) {
@@ -208,7 +171,7 @@ if (process.argv.length === 3) {
 
       scope = { ...scope, ...result.scope };
     } catch (error) {
-      console.log(error);
+      console.log(error.toString());
     }
 
     rl.prompt();

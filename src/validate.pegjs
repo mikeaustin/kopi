@@ -8,6 +8,7 @@
   class Comment extends Node { }
   class Assignment extends Node { }
   class Block extends Node { }
+
   class Ast extends Node { }
 
   class TupleExpression extends Node { }
@@ -249,6 +250,11 @@ Identifier = $
         name: text()
       })
     }
+  / name:("+" / "=" / "*" / "/") {
+      return new Identifier({
+        name: text()
+      })
+  }
 
 _ = $
   / WhiteSpace*
