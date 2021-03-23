@@ -250,7 +250,7 @@ Identifier = $
         name: text()
       })
     }
-  / name:("+" / "=" / "*" / "/") {
+  / name:("+" / "-" / "*" / "/") {
       return new Identifier({
         name: text()
       })

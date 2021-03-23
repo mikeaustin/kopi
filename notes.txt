@@ -78,6 +78,10 @@ match 0 (
 
 map (x => x * x) 1..5
 
+map 'toString 1..5
+
 map '(+ 1) 1..5
 
-map '(toString) 1..5
+f n = 1..n  # const f = n => range(1, n)
+
+swap a, b = b, a

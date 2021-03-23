@@ -131,6 +131,22 @@ if (process.argv.length === 3) {
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
+    completer: line => {
+      if (line.endsWith('.')) {
+        const ast = parser.parse(line.slice(0, line.length - 1));
+
+        const result = visitors.visit(ast.statements[0], scope);
+
+        // console.log(result);
+
+        // const completions = '.help .error .exit .quit .q'.split(' ');
+        const completions = Object.getOwnPropertyNames(result.value);
+
+        // console.log('line', line);
+
+        return [completions, line];
+      }
+    }
   });
 
   process.stdin.setRawMode(true);
