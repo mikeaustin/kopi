@@ -12,6 +12,7 @@
 
   class Ast extends Node { }
 
+  class TypeExpression extends Node { }
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
@@ -94,12 +95,26 @@ Comment = $
     }
 
 TypeDefinition = $
-  / pattern:TypenamePattern _ "=" _ expr:Typename {
+  / pattern:TypenamePattern _ "=" _ expr:TypeExpression {
     return new TypeDefinition({
       pattern: pattern,
       expr: expr
     })
   }
+
+TypeExpression = $
+  / head:IdentifierPattern ":" _ Typename tail:("," _ IdentifierPattern ":" _ Typename)* {
+      return tail.reduce((result, [,, identifier,,, typename]) => (
+        new TypeExpression({
+
+        })
+      ), head)
+    }
+  / head:Typename {
+      return new TypeExpression({
+
+      })
+    }
 
 Assignment = $
   / pattern:AssignmentPattern _ "=" _ expr:Expression {
@@ -155,9 +170,10 @@ TupleExpression = $
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [])
       })
     }
-  / head:RangeExpression tail:(_ "," _ RangeExpression)* {
+  / head:RangeExpression tail:(_ "," _ (Identifier ":")? _ RangeExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
-        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head])
+        elements: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, expression], [head]),
+        fields: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, id], [head])
       })
     }
 
@@ -287,10 +303,9 @@ Name = $
     }
 
 Identifier "identifier" = $
-  / !("of" / "end") name:Name type:(":" _ Typename)? {
+  / !("of" / "end") name:Name {
       return new Identifier({
         name: name,
-        type: type && type[2]
       })
     }
   / name:("+" / "-" / "*" / "/") {

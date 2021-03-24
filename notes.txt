@@ -89,3 +89,11 @@ swap a, b = b, a
 type 'Range (1, 10)
 
 R = Range
+
+R (1, 10)
+
+TypeExpression = Typename / Typename, Typename
+
+Point = (x: Number, y: Number)
+
+'(x: Number)
