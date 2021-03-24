@@ -6,6 +6,7 @@ var readline = require('readline');
 
 const parser = require("../lib/parser");
 const { default: functions } = require('./functions');
+const { Tuple, Range, Function } = require('./classes');
 
 const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
@@ -125,7 +126,10 @@ if (process.argv.length === 3) {
   let scope = {
     ...functions,
     Number,
-    String
+    String,
+    Tuple,
+    Range,
+    Function
   };
 
   const visitors = new InterpreterVisitors();
