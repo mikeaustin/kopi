@@ -211,7 +211,7 @@ PrimaryExpression = $
 
 AssignmentPattern = $
   / FunctionPattern
-  / PrimaryPattern
+  / Pattern
 
 Pattern = $
   / TuplePattern
@@ -269,22 +269,28 @@ Literal = $
   / NumericLiteral
   / StringLiteral
 
-NumericLiteral = $
+NumericLiteral "number" = $
   / literal:[0-9]+ ("." !"." [0-9]+)? {
       return new Literal({
         value: Number(text())
       })
     }
 
-StringLiteral "string"
-  = '"' chars:(!'"' .)* '"' {
+StringLiteral "string" = $
+  / '"' chars:(!'"' .)* '"' {
       return new Literal({ value: chars.map(([, c]) => c).join("") });
     }
 
-Identifier = $
-  / !("of" / "end") name:([a-z][a-zA-Z0-9]*) {
+Name = $
+  / [a-z][a-zA-Z0-9]* {
+      return text();
+    }
+
+Identifier "identifier" = $
+  / !("of" / "end") name:Name type:(":" _ Typename)? {
       return new Identifier({
-        name: text()
+        name: name,
+        type: type && type[2]
       })
     }
   / name:("+" / "-" / "*" / "/") {
@@ -293,7 +299,7 @@ Identifier = $
       })
   }
 
-Typename = $
+Typename "typename" = $
   / name:([A-Z][a-zA-Z0-9]*) {
       return new Typename({
         name: text()
@@ -306,7 +312,7 @@ _ = $
 WhiteSpace "whitespace" = $
   / " "
 
-LineTerminator = $
+LineTerminator = "newline" $
   / [\n\r]
 
 $ = "$"
