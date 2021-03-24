@@ -108,7 +108,18 @@ class InterpreterVisitors extends Visitors {
     return { value: expr, scope };
   }
 
+  TypeDefinition({ pattern, expr }, scope) {
+    return {
+      value: undefined,
+      scope: { ...scope, [pattern.name]: this.visit(expr, scope).value }
+    };
+  }
+
   Assignment({ pattern, expr }, scope) {
+    if (!pattern.match) {
+      throw new InterpreterError(`No match defined for pattern '${pattern.constructor.name}'`);
+    }
+
     const matches = pattern.match(
       pattern.constructor.name === 'FunctionPattern' ? expr : this.visit(expr, scope).value,
       scope,
@@ -196,6 +207,14 @@ class InterpreterVisitors extends Visitors {
 
   Literal({ value }) {
     return { value: value };
+  }
+
+  Typename({ name }, scope) {
+    if (!(name in scope)) {
+      throw new RuntimeError(`Type '${name}' is not defined`);
+    }
+
+    return { value: scope[name].kopiGet ? scope[name].kopiGet() : scope[name], scope };
   }
 
   Identifier({ name }, scope) {

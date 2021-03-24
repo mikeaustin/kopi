@@ -1,4 +1,23 @@
+const Point = function (args) {
+  this.x = args[0] || 0;
+  this.y = args[1] || 0;
+};
+
+Point.prototype['+'] = function (that) {
+  return new Point([this.x + that.x, this.y + that.y]);
+};
+
+Point.name = 'Point';
+
 let functions = {
+  Point: {
+    kopiApply: (args, scope) => {
+      return ({
+        value: new Point(args),
+        scope
+      });
+    }
+  },
   print: {
     kopiApply: (args, scope) => ({
       value: console.log(args),
@@ -42,8 +61,16 @@ let functions = {
       scope
     })
   },
+  type: {
+    kopiApply: (args, scope) => {
+      return {
+        value: scope[args.name],
+        scope
+      };
+    }
+  },
   id: {
-    kopiApply: (args) => {
+    kopiApply: (args, scope) => {
       return ({
         value: args,
         scope

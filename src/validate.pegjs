@@ -6,6 +6,7 @@
   }
 
   class Comment extends Node { }
+  class TypeDefinition extends Node { }
   class Assignment extends Node { }
   class Block extends Node { }
 
@@ -45,6 +46,14 @@
     }
   }
 
+  class TypenamePattern extends Node {
+    match(value) {
+      return {
+        [this.name]: value
+      };
+    }
+  }
+
   class Literal extends Node {
     match(value) {
       if (value !== this.value) {
@@ -59,6 +68,7 @@
   }
 
   class Identifier extends Node { }
+  class Typename extends Node { }
 }
 
 Block = $
@@ -72,6 +82,7 @@ Block = $
 
 Statement = $
   / Comment
+  / TypeDefinition
   / Assignment
   / expr:Expression? {
       return expr
@@ -82,8 +93,16 @@ Comment = $
       return new Comment({ value: chars.map(([, c]) => c).join("").trim() });
     }
 
+TypeDefinition = $
+  / pattern:TypenamePattern _ "=" _ expr:Typename {
+    return new TypeDefinition({
+      pattern: pattern,
+      expr: expr
+    })
+  }
+
 Assignment = $
-  / pattern:Pattern _ "=" _ expr:Expression {
+  / pattern:AssignmentPattern _ "=" _ expr:Expression {
       return new Assignment({
         pattern: pattern,
         expr: expr
@@ -101,6 +120,14 @@ PipeExpression = $
     }
 
 ApplyExpression = $
+  / expr:Typename _ args:(_ TupleExpression)+ {
+      return args.reduce((result, [, arg]) => (
+        new ApplyExpression({
+          expr: result,
+          args: arg
+        })
+      ), expr);
+    }
   / expr:TupleExpression _ args:(_ TupleExpression)* {
       return args.reduce((result, [, arg]) => (
         new ApplyExpression({
@@ -167,7 +194,7 @@ PrimaryExpression = $
   / "'" "(" _ expr:Expression _ ")" {
       return new Ast({ expr: expr });
     }
-  / "'" expr:Identifier {
+  / "'" expr:(Identifier / Typename / Literal) {
       return new Ast({ expr: expr });
     }
   / Literal
@@ -182,8 +209,11 @@ PrimaryExpression = $
 // Patterns
 // --------------------------------------------------------------------------------------------- //
 
-Pattern = $
+AssignmentPattern = $
   / FunctionPattern
+  / PrimaryPattern
+
+Pattern = $
   / TuplePattern
 
 FunctionPattern = $
@@ -218,8 +248,15 @@ NumericPattern = $
     }
 
 IdentifierPattern = $
-  / name:([a-zA-Z][a-zA-Z0-9]*) {
+  / name:([a-z][a-zA-Z0-9]*) {
       return new IdentifierPattern({
+        name: text()
+      })
+    }
+
+TypenamePattern = $
+  / name:([A-Z][a-zA-Z0-9]*) {
+      return new TypenamePattern({
         name: text()
       })
     }
@@ -245,7 +282,7 @@ StringLiteral "string"
     }
 
 Identifier = $
-  / !("of" / "end") name:([a-zA-Z][a-zA-Z0-9]*) {
+  / !("of" / "end") name:([a-z][a-zA-Z0-9]*) {
       return new Identifier({
         name: text()
       })
@@ -255,6 +292,13 @@ Identifier = $
         name: text()
       })
   }
+
+Typename = $
+  / name:([A-Z][a-zA-Z0-9]*) {
+      return new Typename({
+        name: text()
+      })
+    }
 
 _ = $
   / WhiteSpace*

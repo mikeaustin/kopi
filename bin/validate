@@ -122,7 +122,11 @@ if (process.argv.length === 3) {
     }
   });
 } else {
-  let scope = functions;
+  let scope = {
+    ...functions,
+    Number,
+    String
+  };
 
   const visitors = new InterpreterVisitors();
 
