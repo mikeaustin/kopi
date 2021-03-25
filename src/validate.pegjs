@@ -170,10 +170,10 @@ TupleExpression = $
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [])
       })
     }
-  / head:RangeExpression tail:(_ "," _ (Identifier ":")? _ RangeExpression)* {
-      return tail.length === 0 ? head : new TupleExpression({
-        elements: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, expression], [head]),
-        fields: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, id], [head])
+  / head:((Identifier ":")? _ RangeExpression) tail:(_ "," _ (Identifier ":")? _ RangeExpression)* {
+      return tail.length === 0 ? head[2] : new TupleExpression({
+        elements: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, expression], [head[2]]),
+        fields: tail.reduce((tuple, [,,,id ,, expression]) => [...tuple, id], [head[0]])
       })
     }
 
