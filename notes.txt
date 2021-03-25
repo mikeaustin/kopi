@@ -96,4 +96,6 @@ TypeExpression = Typename / Typename, Typename
 
 Point = (x: Number, y: Number)
 
-'(x: Number)
+(1, y: 2)
+
+1..5 | map '(+ 1)

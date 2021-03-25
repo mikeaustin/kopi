@@ -44,6 +44,20 @@ class Range {
   inspect() {
     return `${this.from.inspect()}..${this.to.inspect()}`;
   }
+
+  map = {
+    kopiApply: (mapper, scope, visitors) => {
+      // console.log('here', mapper);
+
+      const result = [];
+
+      for (let i = this.from; i <= this.to; ++i) {
+        result.push(mapper.kopiApply(i, scope, visitors).value);
+      }
+
+      return { value: result, scope };
+    }
+  };
 }
 
 Range.kopiApply = (args, scope) => {
@@ -69,7 +83,7 @@ class Function {
 
     return this.statements.reduce(({ value, scope }, statement) => {
       const result = visitors.visit(statement, newScope);
-      console.trace('Function.koniApply scope', result.scope);
+      // console.trace('Function.koniApply scope', result.scope);
 
       return {
         value: result.value,

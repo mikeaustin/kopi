@@ -15,7 +15,16 @@
   class TypeExpression extends Node { }
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
-  class ApplyExpression extends Node { }
+  class ApplyExpression extends Node {
+    kopiApply(args, scope, visitors) {
+      console.log('here', this);
+
+      return {
+        value: (args)[this.expr.name](visitors.visit(this.args, scope, visitors).value),
+        scope
+      }
+    }
+  }
   class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FieldExpression extends Node { }
@@ -68,7 +77,17 @@
     }
   }
 
-  class Identifier extends Node { }
+  class Identifier extends Node {
+    kopiApply(args, scope, visitors) {
+      console.log('here', args);
+
+      return {
+        value: (args)[this.name](),
+        scope
+      }
+    }
+  }
+
   class Typename extends Node { }
 }
 

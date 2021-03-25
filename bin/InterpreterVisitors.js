@@ -65,6 +65,16 @@ class InterpreterVisitors extends Visitors {
     };
   }
 
+  PipeExpression({ left, right }, scope) {
+    const evaluatedExpr = this.visit(left, scope).value;
+    const evaluatedArgs = this.visit(right.args, scope).value;
+
+    return {
+      value: evaluatedExpr[right.expr.name].kopiApply(evaluatedArgs, scope, this).value,
+      scope
+    };
+  }
+
   ApplyExpression({ expr, args }, scope) {
     const evaluatedArgs = this.visit(args, scope).value;
     const evaluatedExpr = this.visit(expr, scope).value;
