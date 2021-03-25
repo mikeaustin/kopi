@@ -90,6 +90,10 @@ class Function {
 
     const matches = this.params.match(evaluatedArgs);
 
+    if (matches === null) {
+      throw new Error(`Couldn’t match on value '${evaluatedArgs}'`);
+    }
+
     const newScope = Object.setPrototypeOf(matches, this.closure);
 
     return this.statements.reduce(({ value, scope }, statement) => {

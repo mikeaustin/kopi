@@ -31,10 +31,18 @@
 
   class TuplePattern extends Node {
     match(value) {
-      return this.elements.reduce((scope, element, index) => ({
-        ...scope,
-        ...element.match(value.values[index], scope)
-      }), {});
+      return this.elements.reduce((scope, element, index) => {
+        const matches = element.match(value.values[index]);
+
+        if (matches === null) {
+          throw new Error(`Couldn’t match on value '${value.values[index]}'`);
+        }
+
+        return {
+          ...scope,
+          ...matches
+        };
+      }, {});
     }
   }
 
@@ -65,8 +73,7 @@
   class Literal extends Node {
     match(value) {
       if (value !== this.value) {
-        return { }
-        // throw new Error(`Couldn’t match on value ${value}`)
+        return null;
       }
 
       return {
@@ -78,7 +85,7 @@
   class Identifier extends Node {
     kopiApply(args, scope, visitors) {
       return {
-        value: (args)[this.name](),
+        value: args[this.name](),
         scope
       }
     }

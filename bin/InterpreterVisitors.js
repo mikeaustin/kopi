@@ -53,11 +53,15 @@ class InterpreterVisitors extends Visitors {
       throw new InterpreterError(`No match defined for pattern '${pattern.constructor.name}'`);
     }
 
-    const matches = pattern.match(
-      pattern.constructor.name === 'FunctionPattern' ? expr : this.visit(expr, scope).value,
-      scope,
-      Function
-    );
+    const value = pattern.constructor.name === 'FunctionPattern' ? expr : this.visit(expr, scope).value;
+
+    const matches = pattern.match(value, scope, Function);
+
+    if (matches === null) {
+      throw new RuntimeError(`Couldn’t match on value '${value}'`);
+    }
+
+    console.log('Assignment matches', matches);
 
     return {
       value: undefined,

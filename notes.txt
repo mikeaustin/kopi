@@ -27,6 +27,7 @@ end
 
 match foobar
   (x, y): Point => "Point"
+  Point (x, y)  => "Point"
 end
 
 
