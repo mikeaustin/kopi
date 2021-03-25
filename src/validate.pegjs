@@ -17,8 +17,6 @@
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node {
     kopiApply(args, scope, visitors) {
-      console.log('here', this);
-
       return {
         value: (args)[this.expr.name](visitors.visit(this.args, scope, visitors).value),
         scope
@@ -79,8 +77,6 @@
 
   class Identifier extends Node {
     kopiApply(args, scope, visitors) {
-      console.log('here', args);
-
       return {
         value: (args)[this.name](),
         scope
@@ -130,9 +126,7 @@ TypeExpression = $
       ), head)
     }
   / head:Typename {
-      return new TypeExpression({
-
-      })
+      return head;
     }
 
 Assignment = $

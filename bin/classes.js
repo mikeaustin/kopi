@@ -14,6 +14,17 @@ class Tuple {
     return `(${this.values.map(value => value.inspect()).join(', ')})`;
   }
 
+  zip = {
+    kopiApply: (mapper, scope, visitors) => {
+      console.log('here');
+
+      return {
+        value: undefined,
+        scope
+      };
+    }
+  };
+
   ['+'](that) {
     return new Tuple(this.values.reduce((values, value, index) => (
       values.push(typeof value === 'number'

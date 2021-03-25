@@ -33,6 +33,10 @@ Number.prototype['+'] = function (that) {
   return this + that;
 };
 
+Number.prototype['*'] = function (that) {
+  return this * that;
+};
+
 String.prototype['++'] = function (that) {
   return this.concat(that);
 };

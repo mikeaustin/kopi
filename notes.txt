@@ -92,10 +92,10 @@ R = Range
 
 R (1, 10)
 
-TypeExpression = Typename / Typename, Typename
-
 Point = (x: Number, y: Number)
 
 (1, y: 2)
 
 1..5 | map '(+ 1)
+
+(if (x * 5) then (0 else 1))
