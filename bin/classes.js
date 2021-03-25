@@ -1,11 +1,16 @@
 class Tuple {
-  constructor(values) {
+  constructor(values, fields) {
     this.values = values;
+    this.fields = fields;
 
     values.forEach((value, index) => this[index] = value);
   }
 
   inspect() {
+    return `(${this.values.map((value, index) => (this.fields[index] ? `${this.fields[index].name}: ` : '') + value.inspect()).join(', ')})`;
+  }
+
+  toString() {
     return `(${this.values.map(value => value.inspect()).join(', ')})`;
   }
 

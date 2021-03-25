@@ -3,6 +3,10 @@ const Point = function (args) {
   this.y = args[1] || 0;
 };
 
+Point.prototype.toString = function () {
+  return `Point (${this.x}, ${this.y})`;
+};
+
 Point.prototype['+'] = function (that) {
   return new Point([this.x + that.x, this.y + that.y]);
 };
@@ -20,7 +24,7 @@ let functions = {
   },
   print: {
     kopiApply: (args, scope) => ({
-      value: console.log(args),
+      value: console.log(args.toString()),
       scope
     })
   },

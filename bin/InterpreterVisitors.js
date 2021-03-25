@@ -103,9 +103,9 @@ class InterpreterVisitors extends Visitors {
     return { value: evaluatedLeft[op](evaluatedRight), scope };
   }
 
-  TupleExpression({ elements }, scope) {
+  TupleExpression({ elements, fields }, scope) {
     return {
-      value: new Tuple(elements.map(value => this.visit(value, scope).value)),
+      value: new Tuple(elements.map(value => this.visit(value, scope).value), fields),
       scope
     };
   }
