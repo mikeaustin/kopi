@@ -190,12 +190,12 @@ class InterpreterVisitors extends Visitors {
     };
   }
 
-  TuplePattern({ elements }, scope) {
-    return {
-      value: elements.map(value => this.visit(value, scope).value),
-      scope
-    };
-  }
+  // TuplePattern({ elements }, scope) {
+  //   return {
+  //     value: elements.map(value => this.visit(value, scope).value),
+  //     scope
+  //   };
+  // }
 
   Literal({ value }) {
     return { value: value };

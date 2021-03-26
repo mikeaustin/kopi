@@ -54,7 +54,7 @@ let functions = {
     kopiApply: (value, scope, visitors) => ({
       value: {
         kopiApply: (funcs, scope) => {
-          const func = funcs.values.find(func => Object.values(func.params.match(value)).length !== 0);
+          const func = funcs.values.find(func => func.params.match(value) !== null);
 
           return {
             value: func && func.kopiApply(value, scope, visitors).value,
