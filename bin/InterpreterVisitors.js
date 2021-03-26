@@ -68,7 +68,7 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
-  Ast({ expr }, scope) {
+  AstNode({ expr }, scope) {
     return { value: expr, scope };
   }
 
@@ -106,7 +106,7 @@ class InterpreterVisitors extends Visitors {
       throw new RuntimeError(`Couldn’t match on value '${value}'`);
     }
 
-    console.log('Assignment matches', matches);
+    // console.log('Assignment matches', matches);
 
     return {
       value: undefined,

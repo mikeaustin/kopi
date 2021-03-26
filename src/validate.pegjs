@@ -10,7 +10,7 @@
   class Assignment extends Node { }
   class Block extends Node { }
 
-  class Ast extends Node { }
+  class AstNode extends Node { }
 
   class TupleType extends Node {}
 
@@ -148,9 +148,9 @@ Expression = $
 
 PipeExpression = $
   / head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
-      return tail.reduce((result, [, operator,, value]) => {
-        return new PipeExpression({ op: operator, left: result, right: value })
-      }, head);
+      return tail.reduce((result, [, operator,, value]) => (
+        new PipeExpression({ op: operator, left: result, right: value })
+      ), head);
     }
 
 ApplyExpression = $
@@ -206,16 +206,16 @@ RangeExpression = $
 
 AddExpression = $
   / head:MultiplyExpression tail:(_ ("++" / "+" / "-") _ MultiplyExpression)* {
-      return tail.reduce((result, [, operator,, value]) => {
-        return new OperatorExpression({ op: operator, left: result, right: value })
-      }, head);
+      return tail.reduce((result, [, operator,, value]) => (
+        new OperatorExpression({ op: operator, left: result, right: value })
+      ), head);
     }
 
 MultiplyExpression = $
   / head:FieldExpression tail:(_ ("*" / "/") _ FieldExpression)* {
-      return tail.reduce((result, [, operator,, value]) => {
-        return new OperatorExpression({ op: operator, left: result, right: value })
-      }, head);
+      return tail.reduce((result, [, operator,, value]) => (
+        new OperatorExpression({ op: operator, left: result, right: value })
+      ), head);
     }
 
 FieldExpression = $
@@ -227,10 +227,10 @@ FieldExpression = $
 
 PrimaryExpression = $
   / "'" "(" _ expr:Expression _ ")" {
-      return new Ast({ expr: expr });
+      return new AstNode({ expr: expr });
     }
   / "'" expr:(Identifier / Typename / Literal) {
-      return new Ast({ expr: expr });
+      return new AstNode({ expr: expr });
     }
   / Literal
   / Identifier
@@ -313,7 +313,9 @@ NumericLiteral "number" = $
 
 StringLiteral "string" = $
   / '"' chars:(!'"' .)* '"' {
-      return new Literal({ value: chars.map(([, c]) => c).join("") });
+      return new Literal({
+        value: chars.map(([, c]) => c).join("")
+      });
     }
 
 Name = $
