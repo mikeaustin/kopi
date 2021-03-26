@@ -4,6 +4,37 @@
 
 const { Tuple, Range, Function } = require('./classes');
 
+class TupleType {
+  constructor(elements) {
+    this.elements = elements;
+  }
+
+  kopiApply(args, scope, visitors) {
+    // console.log(args);
+
+    return {
+      value: new Tuple(args.values),
+      scope
+    };
+  }
+}
+
+class TypeDefinition {
+  constructor(name, type) {
+    this.name = name;
+    this.type = type;
+  }
+
+  kopiApply(args, scope, visitors) {
+    // console.log(args);
+
+    return {
+      value: this.type.kopiApply(args, scope),
+      scope
+    };
+  }
+}
+
 //
 
 class InterpreterError extends Error {
@@ -42,10 +73,24 @@ class InterpreterVisitors extends Visitors {
   }
 
   TypeDefinition({ pattern, expr }, scope) {
+    // console.log('TypeDefinition', pattern, expr);
     return {
       value: undefined,
-      scope: { ...scope, [pattern.name]: this.visit(expr, scope).value }
+      // scope: { ...scope, [pattern.name]: this.visit(expr, scope).value }
+      scope: { ...scope, [pattern.name]: new TypeDefinition(pattern.name, expr) }
     };
+  }
+
+  TupleType({ elements }, scope) {
+    return {
+      value: new TupleType(elements),
+      scope
+    };
+
+    // return {
+    //   value: new TupleType(elements.map(value => this.visit(value, scope).value), fields),
+    //   scope
+    // };
   }
 
   Assignment({ pattern, expr }, scope) {

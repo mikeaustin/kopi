@@ -12,7 +12,8 @@
 
   class Ast extends Node { }
 
-  class TypeExpression extends Node { }
+  class TupleType extends Node {}
+
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node {
@@ -117,20 +118,18 @@ Comment = $
     }
 
 TypeDefinition = $
-  / pattern:TypenamePattern _ "=" _ expr:TypeExpression {
+  / pattern:TypenamePattern _ "=" _ expr:TupleType {
     return new TypeDefinition({
       pattern: pattern,
       expr: expr
     })
   }
 
-TypeExpression = $
-  / head:IdentifierPattern ":" _ Typename tail:("," _ IdentifierPattern ":" _ Typename)* {
-      return tail.reduce((result, [,, identifier,,, typename]) => (
-        new TypeExpression({
-
-        })
-      ), head)
+TupleType = $
+  / head:Typename tail:("," _ Typename)* {
+      return new TupleType({
+        elements: tail.reduce((result, [,, typename]) => [...result, typename], [head])
+      });
     }
   / head:Typename {
       return head;

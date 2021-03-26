@@ -203,7 +203,7 @@ if (process.argv.length === 3) {
 
       scope = { ...scope, ...result.scope };
     } catch (error) {
-      console.log(error.toString());
+      console.log(error);
     }
 
     rl.prompt();
