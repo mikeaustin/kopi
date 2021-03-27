@@ -162,7 +162,7 @@ ApplyExpression = $
         })
       ), expr);
     }
-  / expr:TupleExpression _ args:(_ TupleExpression)* {
+  / expr:TupleExpression args:(WhiteSpace+ TupleExpression)* {
       return args.reduce((result, [, arg]) => (
         new ApplyExpression({
           expr: result,

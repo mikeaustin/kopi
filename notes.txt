@@ -79,7 +79,7 @@ div = props => children => "here"
 span = props => children => "here"
 
 div (id: "foo", class: "bar") (
-  span () "Hello"
+  1..5 x => span () "hello"
 )
 
 1..5 | reduce '(* 1)

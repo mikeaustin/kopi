@@ -41,6 +41,10 @@ String.prototype['++'] = function (that) {
   return this.concat(that);
 };
 
+String.prototype.succ = function () {
+  return String.fromCharCode(this.codePointAt(0) + 1);
+};
+
 //
 
 const collect = (values, mapper) => {
