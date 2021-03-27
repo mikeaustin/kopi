@@ -44,12 +44,16 @@ f = () => update 'x z => z + 1
 f ()
 x
 
-factorial factorial, n = match n (
+
+fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+factorial = fix factorial => n => match n (
   0 => 1
-  n => n * (factorial factorial, n - 1)
+  n => n * (factorial n - 1)
 )
 
-factorial factorial, 5
+factorial 5
+
 
 match 0 (
   0 => "zero"

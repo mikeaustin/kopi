@@ -202,7 +202,7 @@ if (process.argv.length === 3) {
       const result = visitors.visit(ast.statements[0], scope);
 
       if (result.value !== undefined) {
-        console.log(result.value.inspect());
+        console.log('=', result.value.inspect());
       }
 
       scope = { ...scope, ...result.scope };
