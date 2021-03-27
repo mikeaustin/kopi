@@ -26,10 +26,10 @@ class TypeDefinition {
   }
 
   kopiApply(args, scope, visitors) {
-    // console.log(args);
+    const evaluatedType = visitors.visit(this.type, scope).value;
 
     return {
-      value: this.type.kopiApply(args, scope),
+      value: evaluatedType.kopiApply(args, scope).value,
       scope
     };
   }
@@ -82,6 +82,8 @@ class InterpreterVisitors extends Visitors {
   }
 
   TupleType({ elements }, scope) {
+    console.log('TupleType');
+
     return {
       value: new TupleType(elements),
       scope

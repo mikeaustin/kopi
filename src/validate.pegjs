@@ -12,7 +12,7 @@
 
   class AstNode extends Node { }
 
-  class TupleType extends Node {}
+  class TupleType extends Node { }
 
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }

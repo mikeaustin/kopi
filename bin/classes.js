@@ -1,5 +1,5 @@
 class Tuple {
-  constructor(values, fields) {
+  constructor(values, fields = []) {
     this.values = values;
     this.fields = fields;
 
