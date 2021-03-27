@@ -56,6 +56,16 @@ class Range {
     return `${this.from.inspect()}..${this.to.inspect()}`;
   }
 
+  kopiApply = (mapper, scope, visitors) => {
+    const result = [];
+
+    for (let i = this.from; i <= this.to; ++i) {
+      result.push(mapper.kopiApply(i, scope, visitors).value);
+    }
+
+    return { value: result, scope };
+  };
+
   map = {
     kopiApply: (mapper, scope, visitors) => {
       // console.log('here', mapper);

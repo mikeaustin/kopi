@@ -186,7 +186,8 @@ TupleExpression = $
     }
   / "(" tail:(_ LineTerminator+ _ Expression)* LineTerminator+ ")" {
       return new TupleExpression({
-        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [])
+        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], []),
+        fields: []
       })
     }
   / head:((Identifier ":")? _ RangeExpression) tail:(_ "," _ (Identifier ":")? _ RangeExpression)* {
