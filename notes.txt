@@ -27,7 +27,7 @@ employeeNames.sort((a, b) => a > b).map(name => {
 
 (x, k => (x, k => k x + 1) x + x, k) 5, (x => x)
 
-map (i => map (j => i + j) i+1..j) 1..5
+map (i => map (j => i + j) i+1..5) 1..5
 
 print 1 + 2, 2 + 3, 1..5 + 2
 
@@ -73,17 +73,14 @@ Point = (x: Number, y: Number)
 
 1..5 | map '(+ 1)
 
-(if (x * 5) then (0 else 1))
+'(if x * 5 then 0 else 1)
 
 1..5 (x => x * x)
 
 1..5 | map (x => x * x)
 
-div = props => children => "here"
-span = props => children => "here"
 
-div (id: "foo", class: "bar") (
-  1..5 x => span () "hello"
-)
+ul = props => children => "<ul>" ++ children ++ "</ul>"
+li = props => children => "<li>" ++ children ++ "</li>"
 
-1..5 | reduce '(* 1)
+ul (id: "foo", class: "bar") (1..5 x => li () ('toString x))

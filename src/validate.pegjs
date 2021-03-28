@@ -1,7 +1,9 @@
 {
   class Node {
     constructor(args) {
-      Object.assign(this, args)
+      Object.assign(this, args);
+
+      // this._type = this.constructor.name;
     }
   }
 
@@ -184,7 +186,7 @@ TupleExpression = $
         statements: [expr]
       })
     }
-  / "(" tail:(_ LineTerminator+ _ Expression)* LineTerminator+ ")" {
+  / "(" tail:(_ LineTerminator+ _ Expression)* LineTerminator+ _ ")" {
       return new TupleExpression({
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], []),
         fields: []

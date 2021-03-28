@@ -7,10 +7,10 @@
   "license": "ISC",
   "homepage": "https://github.com/mikeaustin/kopi#readme",
   "scripts": {
-    "build": "pegjs -o lib/parser.js src/parser.pegjs",
+    "xbuild": "pegjs -o lib/parser.js src/parser.pegjs",
     "validate": "pegjs -o lib/parser.js src/validate.pegjs",
     "repl": "npm run validate && node bin/validate",
-    "test": "npm run build && jest"
+    "test": "clear && npm run validate && jest --verbose"
   },
   "repository": {
     "type": "git",

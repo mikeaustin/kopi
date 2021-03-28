@@ -59,6 +59,7 @@ class Visitors {
       return { value: undefined };
     }
 
+    // console.log('>>>', node);
     if (this[node.constructor.name]) {
       return this[node.constructor.name](node, scope);
     } else {
@@ -93,6 +94,17 @@ class InterpreterVisitors extends Visitors {
     //   value: new TupleType(elements.map(value => this.visit(value, scope).value), fields),
     //   scope
     // };
+  }
+
+  Block({ statements }, scope) {
+    return statements.reduce(({ value, scope }, statement) => {
+      const result = this.visit(statement, scope);
+
+      return {
+        value: result.value,
+        scope: { ...scope, ...result.scope }
+      };
+    }, { value: undefined, scope });
   }
 
   Assignment({ pattern, expr }, scope) {

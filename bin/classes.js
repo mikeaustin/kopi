@@ -97,7 +97,7 @@ class Function {
 
   kopiApply(evaluatedArgs, scope, visitors) {
     // console.log('Function.kopiApply scope', scope);
-
+    // console.log(this.params);
     const matches = this.params.match(evaluatedArgs);
 
     if (matches === null) {
