@@ -10,41 +10,6 @@ const { Tuple, Range, Function } = require('./classes');
 
 const { default: InterpreterVisitors } = require('./InterpreterVisitors');
 
-Object.prototype.inspect = function () {
-  return util.inspect(this, {
-    compact: false,
-    depth: Infinity
-  });
-};
-
-Boolean.prototype.inspect = function () {
-  return `${this}`;
-};
-
-Number.prototype.inspect = function () {
-  return `${this}`;
-};
-
-String.prototype.inspect = function () {
-  return `"${this}"`;
-};
-
-Number.prototype['+'] = function (that) {
-  return this + that;
-};
-
-Number.prototype['*'] = function (that) {
-  return this * that;
-};
-
-String.prototype['++'] = function (that) {
-  return this.concat(that);
-};
-
-String.prototype.succ = function () {
-  return String.fromCharCode(this.codePointAt(0) + 1);
-};
-
 //
 
 const collect = (values, mapper) => {

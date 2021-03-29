@@ -1,3 +1,44 @@
+const util = require("util");
+
+Object.prototype.inspect = function () {
+  return util.inspect(this, {
+    compact: false,
+    depth: Infinity
+  });
+};
+
+Boolean.prototype.inspect = function () {
+  return `${this}`;
+};
+
+Number.prototype.inspect = function () {
+  return `${this}`;
+};
+
+String.prototype.inspect = function () {
+  return `"${this}"`;
+};
+
+Number.prototype['+'] = function (that) {
+  return this + that;
+};
+
+Number.prototype['*'] = function (that) {
+  return this * that;
+};
+
+String.prototype['++'] = function (that) {
+  return this.concat(that);
+};
+
+Number.prototype.succ = function () {
+  return this + 1;
+};
+
+String.prototype.succ = function () {
+  return String.fromCharCode(this.codePointAt(0) + 1);
+};
+
 class Tuple {
   constructor(values, fields = []) {
     this.values = values;
@@ -16,10 +57,21 @@ class Tuple {
 
   zip = {
     kopiApply: (mapper, scope, visitors) => {
-      console.log('here');
+      const iters = this.values.map(value => value[Symbol.iterator]());
+      const values = [];
+
+      let results = iters.map(iter => iter.next());
+
+      while (results.every(result => !result.done)) {
+        values.push(
+          mapper.kopiApply(new Tuple(results.map(result => result.value)), scope, visitors).value
+        );
+
+        results = iters.map(iter => iter.next());
+      }
 
       return {
-        value: undefined,
+        value: values,
         scope
       };
     }
@@ -47,8 +99,8 @@ class Range {
   }
 
   *[Symbol.iterator]() {
-    for (let i = this.from; i < this.to; ++i) {
-      yield i;
+    for (let value = this.from; value <= this.to; value = value.succ()) {
+      yield value;
     }
   }
 
@@ -57,26 +109,24 @@ class Range {
   }
 
   kopiApply = (mapper, scope, visitors) => {
-    const result = [];
+    const values = [];
 
-    for (let i = this.from; i <= this.to; ++i) {
-      result.push(mapper.kopiApply(i, scope, visitors).value);
+    for (let value = this.from; value <= this.to; ++value) {
+      values.push(mapper.kopiApply(value, scope, visitors).value);
     }
 
-    return { value: result, scope };
+    return { value: values, scope };
   };
 
   map = {
     kopiApply: (mapper, scope, visitors) => {
-      // console.log('here', mapper);
+      const values = [];
 
-      const result = [];
-
-      for (let i = this.from; i <= this.to; ++i) {
-        result.push(mapper.kopiApply(i, scope, visitors).value);
+      for (let value = this.from; value <= this.to; value = value.succ()) {
+        values.push(mapper.kopiApply(value, scope, visitors).value);
       }
 
-      return { value: result, scope };
+      return { value: values, scope };
     }
   };
 }
@@ -96,8 +146,6 @@ class Function {
   }
 
   kopiApply(evaluatedArgs, scope, visitors) {
-    // console.log('Function.kopiApply scope', scope);
-    // console.log(this.params);
     const matches = this.params.match(evaluatedArgs);
 
     if (matches === null) {
@@ -108,7 +156,6 @@ class Function {
 
     return this.statements.reduce(({ value, scope }, statement) => {
       const result = visitors.visit(statement, newScope);
-      // console.trace('Function.koniApply scope', result.scope);
 
       return {
         value: result.value,
