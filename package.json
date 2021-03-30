@@ -10,7 +10,7 @@
     "xbuild": "pegjs -o lib/parser.js src/parser.pegjs",
     "validate": "pegjs -o lib/parser.js src/validate.pegjs",
     "repl": "npm run validate && node bin/validate",
-    "test": "clear && npm run validate && jest --verbose"
+    "test": "npm run validate && jest --verbose"
   },
   "repository": {
     "type": "git",
