@@ -59,7 +59,6 @@ class Visitors {
       return { value: undefined };
     }
 
-    // console.log('>>>', node);
     if (this[node.constructor.name]) {
       return this[node.constructor.name](node, scope);
     } else {
