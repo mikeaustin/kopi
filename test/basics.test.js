@@ -4,9 +4,13 @@ const { default: functions } = require('../bin/functions');
 const { Tuple, Range, Function } = require('../bin/classes');
 
 const { default: InterpreterVisitors } = require('../bin/InterpreterVisitors');
+const { default: PrintASTVisitors } = require('../bin/PrintASTVisitors');
 
 let visitors = new InterpreterVisitors();
+let printASTVisitors = new PrintASTVisitors();
 let scope = functions;
+
+const ApplyNonFunction = 
 
 test('cps', () => {
   let ast = parser.parse('(x, k => (x, k => k x + 1) x + x, k) 5, (x => x)');
@@ -88,28 +92,45 @@ Number.+ that: Number
 */
 
 class TypeCheckVisitor extends Visitors {
+  ApplyExpression({ expr, args }, scope) {
+    const failError = message => fail(`> ${printASTVisitors.visit(expr, scope)} ${printASTVisitors.visit(args, scope)}\n` + message);
+
+    try {
+      const evaluatedExpr = this.visit(expr, scope);
+      const evaluatedArgs = this.visit(args, scope);
+
+      if (evaluatedExpr.type !== Function) {
+        return failError(`Function application can't be performed on '${evaluatedExpr.type.name}'`)
+      }
+    } catch (error) {
+      failError(error.message)
+    }
+  }
+
   OperatorExpression({ op, left, right }, scope) {
-    const evaluatedLeft = this.visit(left, scope);
-    const evaluatedRight = this.visit(right, scope);
+    const failError = message => fail(`> ${printASTVisitors.visit(left, scope)} ${op} ${printASTVisitors.visit(right, scope)}\n` + message);
 
-    console.log('>', evaluatedLeft, '<', scope);
+    try {
+      const evaluatedLeft = this.visit(left, scope);
+      const evaluatedRight = this.visit(right, scope);
 
-    const error = message => fail(`> ${evaluatedLeft.value} ${op} ${evaluatedRight.value}\n` + message);
+      if (!evaluatedLeft.type.prototype[op]) {
+        return failError(`Method ${op} is not defined for type '${evaluatedLeft.type.name}'.`);
+      }
 
-    if (!evaluatedLeft.type) {
-      return error(`Variable '${evaluatedLeft.value}' is not defined.`);
-    }
-
-    if (!evaluatedLeft.type.prototype[op]) {
-      return error(`Method ${op} is not defined for type '${evaluatedLeft.type.name}'.`);
-    }
-
-    if (evaluatedLeft.type.signatures[op]?.[0] !== evaluatedRight.type) {
-      return error(`Argument to '${evaluatedLeft.type.name}.${op}' expected to be type '${evaluatedLeft.type.signatures[op]?.[0].name}', but found '${evaluatedRight.type.name}'.`);
+      if (evaluatedLeft.type.signatures[op]?.[0] !== evaluatedRight.type) {
+        return failError(`Argument to '${evaluatedLeft.type.name}.${op}' expected to be type '${evaluatedLeft.type.signatures[op]?.[0].name}', but found '${evaluatedRight.type.name}'.`);
+      }
+    } catch (error) {
+      failError(error.message)
     }
   }
 
   Identifier({ name }, scope) {
+    if (!scope[name]) {
+      throw new Error(`Variable '${name}' is not defined.`);
+    }
+
     return {
       value: name,
       type: scope[name]
@@ -130,13 +151,18 @@ Number.signatures = {
 
 const typeCheckVisitors = new TypeCheckVisitor();
 const typeCheckScope = {
+  print: Function,
   pi: Number
 };
 
-test('tuple zip', () => {
+test('type checking', () => {
   var ast = parser.parse(`
-    1 + "two"
+    x
   `);
 
-  typeCheckVisitors.visit(ast.statements[0], typeCheckScope);
+  try {
+    typeCheckVisitors.visit(ast.statements[0], typeCheckScope);
+  } catch (error) {
+    console.error('*** Error\n' + error.message);
+  }
 });
