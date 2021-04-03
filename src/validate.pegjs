@@ -318,9 +318,9 @@ NumericPattern = $
     }
 
 IdentifierPattern = $
-  / name:([a-z][a-zA-Z0-9]*) {
+  / name:IdentifierName (":" _ Typename)? {
       return new IdentifierPattern({
-        name: text()
+        name: name
       })
     }
 
@@ -355,13 +355,13 @@ StringLiteral "string" = $
       });
     }
 
-Name = $
+IdentifierName = $
   / [a-z][a-zA-Z0-9]* {
       return text();
     }
 
 Identifier "identifier" = $
-  / !("of" / "end") name:Name {
+  / !("of" / "end") name:IdentifierName {
       return new Identifier({
         name: name,
       })
