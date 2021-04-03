@@ -63,6 +63,14 @@
         [this.name]: value
       };
     }
+
+    typeMatch(type, scope) {
+      scope[this.name] = type;
+
+      return {
+        [this.name]: type
+      }
+    }
   }
 
   class TypenamePattern extends Node {

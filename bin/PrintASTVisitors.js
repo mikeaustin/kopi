@@ -54,6 +54,10 @@ class PrintASTVisitors extends Visitors {
     return parens(`${elements.map(value => this.visit(value)).join(', ')}`);
   }
 
+  IdentifierPattern({ name }) {
+    return name;
+  }
+
   Identifier({ name }) {
     return name;
   }
