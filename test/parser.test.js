@@ -30,8 +30,8 @@ test('Tuple', () => {
 
   expect(parser.parse('1, 2').statements[0]).toEqual(new TupleExpression({
     elements: [
-      new Literal({ value: 1 }),
-      new Literal({ value: 2 })
+      new Literal({ value: 1, type: Number }),
+      new Literal({ value: 2, type: Number })
     ],
     fields: [
       null,
@@ -41,8 +41,8 @@ test('Tuple', () => {
 
   expect(parser.parse('1, b: 2').statements[0]).toEqual(new TupleExpression({
     elements: [
-      new Literal({ value: 1 }),
-      new Literal({ value: 2 })
+      new Literal({ value: 1, type: Number }),
+      new Literal({ value: 2, type: Number })
     ],
     fields: [
       null,
@@ -59,8 +59,8 @@ test('Function', () => {
     statements: [
       new Block({
         elements: [
-          new Literal({ value: 1 }),
-          new Literal({ value: 2 }),
+          new Literal({ value: 1, type: Number }),
+          new Literal({ value: 2, type: Number }),
         ],
         fields: [
           null,
@@ -80,8 +80,8 @@ test('Function', () => {
     statements: [
       new Block({
         elements: [
-          new Literal({ value: 1 }),
-          new Literal({ value: 2 }),
+          new Literal({ value: 1, type: Number }),
+          new Literal({ value: 2, type: Number }),
         ],
         fields: [
           null,

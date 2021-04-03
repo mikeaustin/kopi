@@ -47,6 +47,17 @@
         };
       }, {});
     }
+
+    typeMatch(type, outerScope) {
+      this.elements.reduce((scope, element, index) => {
+        const matches = element.typeMatch(type[index].type, outerScope)
+
+        return {
+          ...scope,
+          ...matches
+        };
+      }, {})
+    }
   }
 
   class FunctionPattern extends Node {
@@ -89,6 +100,18 @@
 
       return {
         [this.value]: value
+      }
+    }
+
+    typeMatch(type) {
+      if (type !== this.type) {
+        throw new Error(`Pattern type ${this.type.name} doesn't match value type ${type.name}`);
+
+        return null;
+      }
+
+      return {
+        [this.type]: type
       }
     }
   }
@@ -289,7 +312,8 @@ PrimaryPattern = $
 NumericPattern = $
   / literal:[0-9]+ ("." !"." [0-9]+)? {
       return new Literal({
-        value: Number(text())
+        value: Number(text()),
+        type: Number,
       })
     }
 
@@ -318,14 +342,16 @@ Literal = $
 NumericLiteral "number" = $
   / literal:[0-9]+ ("." !"." [0-9]+)? {
       return new Literal({
-        value: Number(text())
+        value: Number(text()),
+        type: Number
       })
     }
 
 StringLiteral "string" = $
   / '"' chars:(!'"' .)* '"' {
       return new Literal({
-        value: chars.map(([, c]) => c).join("")
+        value: chars.map(([, c]) => c).join(""),
+        type: String
       });
     }
 

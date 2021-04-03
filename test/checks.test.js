@@ -25,6 +25,10 @@ class Visitors {
 /* */
 
 class TypeCheckVisitor extends Visitors {
+  Comment({ value }, scope) {
+    return value;
+  }
+
   Block({ statements }, scope) {
     return statements.reduce((value, statement) => (
       this.visit(statement, scope)
@@ -39,10 +43,16 @@ class TypeCheckVisitor extends Visitors {
     // console.log(evaluatedExpr);
 
     const matches = pattern.typeMatch(evaluatedExpr, scope);
-
-    console.log(matches);
+    // console.log(scope);
+    // console.log(matches);
 
     // scope[evaluatedPattern] = this.visit(expr, scope);
+  }
+
+  TupleExpression({ elements }, scope) {
+    return {
+      type: elements.map(type => this.visit(type, scope))
+    };
   }
 
   ApplyExpression({ expr, args }, scope) {
@@ -117,7 +127,14 @@ test('type checking', () => {
     inc 1
     1 + 1
     x = 1
-    x
+    inc x
+    x = "foo"
+    # inc x
+    1 = 1
+    1 = 2
+    # 1 = "2"
+    a, b = 1, 1
+    inc b
   `);
 
   try {
