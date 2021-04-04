@@ -8,6 +8,26 @@ let printASTVisitors = new PrintASTVisitors();
 
 // const ApplyNonFunction =
 
+class BaseError extends Error {
+  constructor(message) {
+    super(message);
+
+    this.name = this.constructor.name;
+  }
+}
+
+/*
+  SyntaxError
+  InterpreterError
+  TypeError
+  RuntimeError
+*/
+
+/*
+  ArgumentError
+  ApplyNonFunction
+*/
+
 class Visitors {
   visit(node, scope) {
     if (node === null) {
@@ -40,13 +60,7 @@ class TypeCheckVisitor extends Visitors {
 
     const evaluatedExpr = this.visit(expr, scope).type;
 
-    // console.log(evaluatedExpr);
-
     const matches = pattern.typeMatch(evaluatedExpr, scope);
-    // console.log(scope);
-    // console.log(matches);
-
-    // scope[evaluatedPattern] = this.visit(expr, scope);
   }
 
   TupleExpression({ elements }, scope) {
@@ -88,10 +102,6 @@ class TypeCheckVisitor extends Visitors {
       throw new Error(`${message}\n${error.message}`);
     }
   }
-
-  // IdentifierPattern({ name }, scope) {
-  //   return name;
-  // }
 
   Identifier({ name }, scope) {
     if (!scope[name]) {

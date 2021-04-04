@@ -385,7 +385,7 @@ _ = $
 WhiteSpace "whitespace" = $
   / " "
 
-LineTerminator = "newline" $
+LineTerminator "newline" =  $
   / [\n\r]
 
 $ = "$"
