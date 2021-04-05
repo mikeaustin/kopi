@@ -1,49 +1,28 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
-
-class BaseError extends Error {
-  constructor(message) {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
-
-class InterpreterError extends BaseError { }
-class RuntimeError extends BaseError { }
-
+const { RuntimeError } = require('../errors');
+const { Tuple, Function } = require('./classes');
 
 Object.prototype.inspect = function () {
   return JSON.stringify(this);
 };
 
-class Function {
-  constructor(closure, params, body) {
-    this.closure = closure;
-    this.params = params;
-    this.body = body;
-  }
-
-  apply(args, scope, visitors) {
-    const matches = this.params.matchValue(args);
-
-    return visitors.visitNode(this.body, { ...this.closure, ...matches });
-  }
-}
-
 class InterpreterVisitors extends BaseVisitors {
-  Assignment({ left, right }, scope, bind) {
-    const value = this.visitNode(right, scope);
-
-    const matches = left.matchValue(value, scope);
+  Assignment({ pattern, expr }, scope, bind) {
+    const value = this.visitNode(expr, scope);
+    const matches = pattern.matchValue(value, scope);
 
     bind(matches);
   }
 
   ApplyExpression({ expr, args }, scope) {
-    const evaluatedExpr = this.visitNode(expr, scope);
-    const evaluatedArgs = this.visitNode(args, scope);
+    const value = this.visitNode(expr, scope);
+    const arg = this.visitNode(args, scope);
 
-    return evaluatedExpr.apply(evaluatedArgs, scope, this);
+    return value.apply(arg, scope, this);
+  }
+
+  TupleExpression({ elements }, scope) {
+    return new Tuple(elements.map(element => this.visitNode(element, scope)));
   }
 
   FunctionExpression({ params, body }, scope) {

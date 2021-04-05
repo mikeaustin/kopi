@@ -1,36 +1,34 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
-
-class BaseError extends Error {
-  constructor(message) {
-    super(message);
-
-    this.name = this.constructor.name;
-  }
-}
-
-class InterpreterError extends BaseError { }
-class RuntimeError extends BaseError { }
-
+const { InterpreterError } = require('../errors');
+const { Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
-  Assignment({ left, right }, context, bind) {
-    if (!left.matchValue) {
-      throw new InterpreterError(`No matchValue method defined for pattern '${left.constructor.name}'`);
+  Assignment({ pattern, expr }, context, bind) {
+    if (!pattern.matchValue) {
+      throw new InterpreterError(`No matchValue method defined for pattern '${pattern.constructor.name}'`);
     }
 
-    const type = this.visitNode(right, context);
+    const type = this.visitNode(expr, context);
 
-    const matches = left.matchType(type, context);
+    const matches = pattern.matchType(type, context);
 
     bind(matches);
   }
 
   FunctionExpression({ params, body }) {
-
+    return Function;
   }
 
-  ApplyExpression({ expr, args }) {
+  ApplyExpression({ expr, args }, scope) {
+    const type = this.visitNode(expr, scope);
 
+    if (!type.prototype.apply) {
+      throw new TypeError(`Function application not defined for type '${type.name}'`);
+    }
+  }
+
+  TupleExpression({ elements }, scope) {
+    return elements.map(element => this.visitNode(element, scope));
   }
 
   //
