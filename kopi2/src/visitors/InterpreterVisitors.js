@@ -26,6 +26,8 @@ class InterpreterVisitors extends BaseVisitors {
   }
 
   FunctionExpression({ params, body }, scope) {
+    // this.visitNode(params, scope);
+
     return new Function(params, body, scope);
   }
 

@@ -3,6 +3,10 @@ class Tuple {
     this.elements = elements;
   }
 
+  get name() {
+    return `(${this.elements.map(element => element.name).join(', ')})`;
+  }
+
   inspect() {
     return `(${this.elements.map(element => element.inspect()).join(', ')})`;
   }
@@ -13,6 +17,10 @@ class Function {
     this.params = params;
     this.body = body;
     this.closure = scope;
+  }
+
+  get name() {
+    return `(${this.params.map(param => param.name).join(', ')}) => ${0}`;
   }
 
   apply(args, scope, visitors) {

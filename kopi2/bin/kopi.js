@@ -42,14 +42,20 @@ let context = {
       name: 'b',
       type: Boolean
     }),
-    type: Boolean
+    type: Boolean,
+    get name() {
+      return `Boolean => Boolean`;
+    }
   },
   even: {
     params: new IdentifierPattern({
       name: 'n',
       type: Number,
     }),
-    type: Boolean
+    type: Boolean,
+    get name() {
+      return `Number => Boolean`;
+    }
   }
 };
 

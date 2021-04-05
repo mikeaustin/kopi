@@ -23,14 +23,15 @@ class TypecheckVisitors extends BaseVisitors {
     const type = this.visitNode(expr, scope);
     const arg = this.visitNode(args, scope);
 
-    const matches = type.params?.matchType(arg);
-
     if (!type.params) {
-      throw new TypeError(`Function application not defined for type '${type.name}'`);
+      throw new TypeError(`Function application not defined for type '${type.name}.'`);
     }
 
+    const matches = type.params.matchType(arg);
+    console.log(arg);
+
     if (!matches) {
-      throw new TypeError(`Argument to function ${expr?.name} should be of type '${type.params.type?.name}', but found '${arg?.name}'`);
+      throw new TypeError(`Argument to function '${expr?.name}' should be type '${type.params.type?.name}', but found '${arg.name}'.`);
     }
 
     if (type.body) {
@@ -41,7 +42,7 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   TupleExpression({ elements }, scope) {
-    return elements.map(element => this.visitNode(element, scope));
+    return new Tuple(elements.map(element => this.visitNode(element, scope)));
   }
 
   //
@@ -54,19 +55,23 @@ class TypecheckVisitors extends BaseVisitors {
 
   NumericLiteral({ value }) {
     if (typeof value !== 'number') {
-      throw TypeError('Value is not a number');
+      throw TypeError(`Value is not a number.`);
     }
 
     return Number;
   }
 
   StringLiteral({ value }) {
+    if (typeof value !== 'string') {
+      throw TypeError(`Value is not a string.`);
+    }
+
     return String;
   }
 
   Identifier({ name }, context) {
     if (!context[name]) {
-      throw new Error(`Variable '${name}' is not defined.`);
+      throw new Error(`Variable '${name}' is not defined the current scope.`);
     }
 
     return context[name];
