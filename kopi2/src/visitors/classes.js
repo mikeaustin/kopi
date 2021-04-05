@@ -1,3 +1,30 @@
+class IdentifierPattern {
+  constructor(name, type) {
+    this.name = name;
+    this.type = type;
+  }
+
+  inspect() {
+    return this.name;
+  }
+
+  matchValue(value) {
+    return {
+      [this.name]: value
+    };
+  }
+
+  matchType(type) {
+    if (this.type && type !== this.type) {
+      return null;
+    }
+
+    return {
+      [this.name]: type
+    };
+  }
+}
+
 class Tuple {
   constructor(elements) {
     this.elements = elements;
@@ -31,6 +58,7 @@ class Function {
 }
 
 module.exports = {
+  IdentifierPattern,
   Tuple,
   Function
 };

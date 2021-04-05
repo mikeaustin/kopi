@@ -1,6 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { Tuple, Function } = require('./classes');
+const { IdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
   Assignment({ pattern, expr }, context, bind) {
@@ -15,20 +15,21 @@ class TypecheckVisitors extends BaseVisitors {
     bind(matches);
   }
 
-  FunctionExpression({ params, body }, scope) {
-    return new Function(params, body, scope);
+  FunctionExpression({ params, body }, context) {
+    const evaluatedParams = this.visitNode(params, context);
+
+    return new Function(evaluatedParams, body, context);
   }
 
-  ApplyExpression({ expr, args }, scope) {
-    const type = this.visitNode(expr, scope);
-    const arg = this.visitNode(args, scope);
+  ApplyExpression({ expr, args }, context) {
+    const type = this.visitNode(expr, context);
+    const arg = this.visitNode(args, context);
 
     if (!type.params) {
       throw new TypeError(`Function application not defined for type '${type.name}.'`);
     }
 
     const matches = type.params.matchType(arg);
-    console.log(arg);
 
     if (!matches) {
       throw new TypeError(`Argument to function '${expr?.name}' should be type '${type.params.type?.name}', but found '${arg.name}'.`);
@@ -41,14 +42,14 @@ class TypecheckVisitors extends BaseVisitors {
     return type.type;
   }
 
-  TupleExpression({ elements }, scope) {
-    return new Tuple(elements.map(element => this.visitNode(element, scope)));
+  TupleExpression({ elements }, context) {
+    return new Tuple(elements.map(element => this.visitNode(element, context)));
   }
 
   //
 
-  IdentifierPattern({ name }, context) {
-    return this.type;
+  IdentifierPattern({ name, type }, context) {
+    return new IdentifierPattern(name, type);
   }
 
   //

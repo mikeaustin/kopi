@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { IdentifierPattern } = require('../src/parser/classes');
+const { IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -38,20 +38,14 @@ let scope = {
 let context = {
   z: Number,
   test: {
-    params: new IdentifierPattern({
-      name: 'b',
-      type: Boolean
-    }),
+    params: new IdentifierPattern('b', Boolean),
     type: Boolean,
     get name() {
       return `Boolean => Boolean`;
     }
   },
   even: {
-    params: new IdentifierPattern({
-      name: 'n',
-      type: Number,
-    }),
+    params: new IdentifierPattern('n', Number),
     type: Boolean,
     get name() {
       return `Number => Boolean`;

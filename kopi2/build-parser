@@ -1,19 +1,8 @@
 #!/usr/bin/env sh
 
-cat << END
-`echo {`
-`cat src/parser/classes.js`
-`echo }`
-`echo`
-`cat src/parser/main.pegjs`
-`cat src/parser/patterns.pegjs`
-`cat src/parser/terminals.pegjs`
-`cat src/parser/whitespace.pegjs`
-END
-
-# cat \
-#   src/parser/classes.pegjs \
-#   src/parser/main.pegjs \
-#   src/parser/patterns.pegjs \
-#   src/parser/terminals.pegjs \
-#   src/parser/whitespace.pegjs \
+cat \
+  src/parser/classes.pegjs \
+  src/parser/main.pegjs \
+  src/parser/patterns.pegjs \
+  src/parser/terminals.pegjs \
+  src/parser/whitespace.pegjs \
