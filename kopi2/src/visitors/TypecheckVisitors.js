@@ -15,16 +15,29 @@ class TypecheckVisitors extends BaseVisitors {
     bind(matches);
   }
 
-  FunctionExpression({ params, body }) {
-    return Function;
+  FunctionExpression({ params, body }, scope) {
+    return new Function(params, body, scope);
   }
 
   ApplyExpression({ expr, args }, scope) {
     const type = this.visitNode(expr, scope);
+    const arg = this.visitNode(args, scope);
 
-    if (!type.prototype.apply) {
+    const matches = type.params?.matchType(arg);
+
+    if (!type.params) {
       throw new TypeError(`Function application not defined for type '${type.name}'`);
     }
+
+    if (!matches) {
+      throw new TypeError(`Argument to function ${expr?.name} should be of type '${type.params.type?.name}', but found '${arg?.name}'`);
+    }
+
+    if (type.body) {
+      return this.visitNode(type.body, { ...type.closure, ...matches });
+    }
+
+    return type.type;
   }
 
   TupleExpression({ elements }, scope) {
@@ -34,7 +47,7 @@ class TypecheckVisitors extends BaseVisitors {
   //
 
   IdentifierPattern({ name }, context) {
-    console.log('here', name);
+    return this.type;
   }
 
   //

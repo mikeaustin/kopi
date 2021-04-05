@@ -9,10 +9,10 @@ class Tuple {
 }
 
 class Function {
-  constructor(closure, params, body) {
-    this.closure = closure;
+  constructor(params, body, scope) {
     this.params = params;
     this.body = body;
+    this.closure = scope;
   }
 
   apply(args, scope, visitors) {

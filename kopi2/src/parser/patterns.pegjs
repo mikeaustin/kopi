@@ -11,6 +11,7 @@ PrimaryPattern
 IdentifierPattern
   = name:IdentifierName {
       return new IdentifierPattern({
-        name: name
+        name: name,
+        type: null
       })
     }

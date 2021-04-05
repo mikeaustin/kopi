@@ -5,6 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
+const { IdentifierPattern } = require('../src/parser/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -21,8 +22,36 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
-let scope = { x: 1 };
-let context = { x: Number };
+let scope = {
+  z: 1,
+  test: {
+    apply(arg, scope, visitors) {
+      return arg;
+    }
+  },
+  even: {
+    apply(arg, scope, visitors) {
+      return arg % 2 === 0;
+    }
+  }
+};
+let context = {
+  z: Number,
+  test: {
+    params: new IdentifierPattern({
+      name: 'b',
+      type: Boolean
+    }),
+    type: Boolean
+  },
+  even: {
+    params: new IdentifierPattern({
+      name: 'n',
+      type: Number,
+    }),
+    type: Boolean
+  }
+};
 
 const typeCheck = (ast) => {
   const visitors = new TypecheckVisitors();
@@ -36,13 +65,18 @@ async function main() {
   rl.prompt();
 
   for await (const line of rl) {
-    const ast = parser.parse(line);
+    try {
+      const ast = parser.parse(line);
 
-    typeCheck(ast);
-    const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
+      typeCheck(ast);
 
-    if (result !== undefined) {
-      console.log('=', result.inspect());
+      const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
+
+      if (result !== undefined) {
+        console.log(result.inspect());
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     rl.prompt();

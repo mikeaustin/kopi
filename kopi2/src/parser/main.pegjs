@@ -24,7 +24,7 @@ ApplyExpression
     }
 
 TupleExpression
-  = head:(FunctionExpression) tail:(_ "," _ FunctionExpression)* {
+  = head:FunctionExpression tail:(_ "," _ FunctionExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
         elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
       })

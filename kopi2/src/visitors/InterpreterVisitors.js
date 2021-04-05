@@ -26,7 +26,7 @@ class InterpreterVisitors extends BaseVisitors {
   }
 
   FunctionExpression({ params, body }, scope) {
-    return new Function(scope, params, body);
+    return new Function(params, body, scope);
   }
 
   NumericLiteral({ value }) {
