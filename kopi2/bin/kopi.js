@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { IdentifierPattern, Function, Tuple } = require('../src/visitors/classes');
+const { Any, Function, Tuple, Union, IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -22,8 +22,6 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
-class Any { }
-
 let scope = {
   print: new class extends Function {
     apply(arg, scope, visitors) {
@@ -39,12 +37,19 @@ let scope = {
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
     }
+  }(new IdentifierPattern('n', Number), Boolean),
+  union: new class extends Function {
+    apply(arg, scope, visitors) {
+      return (typeof arg === 'string' ? Number(arg) : arg) % 2 === 0;
+    }
   }(new IdentifierPattern('n', Number), Boolean)
 };
+
 let context = {
-  print: new Function(new IdentifierPattern('b')),
-  test: new Function(new IdentifierPattern('b'), Boolean),
-  even: new Function(new IdentifierPattern('n', Number), Boolean)
+  print: new Function(new IdentifierPattern('x', new Any())),
+  test: new Function(new IdentifierPattern('b', Boolean), Boolean),
+  even: new Function(new IdentifierPattern('n', Number), Boolean),
+  union: new Function(new IdentifierPattern('x', new Union(Number, String)), Boolean)
 };
 
 const typeCheck = (ast) => {

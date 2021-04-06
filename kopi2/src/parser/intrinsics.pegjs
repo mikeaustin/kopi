@@ -14,20 +14,13 @@ Assignment
     }
 
 ApplyExpression
-  = expr:TupleExpression args:(_ TupleExpression)* {
+  = expr:FunctionExpression args:(_ FunctionExpression)* {
       return args.reduce((result, [, arg]) => (
         new ApplyExpression({
           _expr: result,
           _args: arg
         })
       ), expr);
-    }
-
-TupleExpression
-  = head:FunctionExpression tail:(_ "," _ FunctionExpression)* {
-      return tail.length === 0 ? head : new TupleExpression({
-        _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
-      })
     }
 
 FunctionExpression
@@ -37,7 +30,14 @@ FunctionExpression
         _body: expr
       })
     }
-  / PrimaryExpression
+  / TupleExpression
+
+TupleExpression
+  = head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
+      return tail.length === 0 ? head : new TupleExpression({
+        _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
+      })
+    }
 
 PrimaryExpression
   = Literal
