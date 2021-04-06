@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { IdentifierPattern, Function } = require('../src/visitors/classes');
+const { IdentifierPattern, Function, Tuple } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -22,42 +22,29 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
+class Any { }
+
 let scope = {
-  print: {
+  print: new class extends Function {
     apply(arg, scope, visitors) {
       console.log(arg.toString());
     }
-  },
-  test: {
+  }(new IdentifierPattern('x', Any), new Tuple([])),
+  test: new class extends Function {
     apply(arg, scope, visitors) {
       return arg;
     }
-  },
-  even: {
+  }(new IdentifierPattern('b', Boolean), Boolean),
+  even: new class extends Function {
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
     }
-  }
+  }(new IdentifierPattern('n', Number), Boolean)
 };
 let context = {
   print: new Function(new IdentifierPattern('b')),
-  // print: {
-  //   params: new IdentifierPattern('b')
-  // },
-  test: {
-    params: new IdentifierPattern('b', Boolean),
-    type: Boolean,
-    get name() {
-      return `Boolean => Boolean`;
-    }
-  },
-  even: {
-    params: new IdentifierPattern('n', Number),
-    type: Boolean,
-    get name() {
-      return `Number => Boolean`;
-    }
-  }
+  test: new Function(new IdentifierPattern('b'), Boolean),
+  even: new Function(new IdentifierPattern('n', Number), Boolean)
 };
 
 const typeCheck = (ast) => {

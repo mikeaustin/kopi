@@ -32,7 +32,7 @@ class InterpreterVisitors extends BaseVisitors {
   }
 
   FunctionExpression({ _params, _body }, scope) {
-    return new Function(this.visitNode(_params, scope), _body, scope);
+    return new Function(this.visitNode(_params, scope), undefined, _body, scope);
   }
 
   IdentifierPattern({ _name }) {

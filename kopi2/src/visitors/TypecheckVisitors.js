@@ -23,7 +23,7 @@ class TypecheckVisitors extends BaseVisitors {
   FunctionExpression({ _params, _body }, context) {
     const params = this.visitNode(_params, context);
 
-    return new Function(params, _body, context);
+    return new Function(params, undefined, _body, context);
   }
 
   ApplyExpression({ _expr, _args }, context) {
@@ -44,7 +44,7 @@ class TypecheckVisitors extends BaseVisitors {
       return this.visitNode(type.body, { ...type.closure, ...matches });
     }
 
-    return type.type;
+    return type.rettype;
   }
 
   TupleExpression({ _elements }, context) {

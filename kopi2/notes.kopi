@@ -1,0 +1,3 @@
+fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+print 1 + 2, 2 + 3, 1..5 + 2

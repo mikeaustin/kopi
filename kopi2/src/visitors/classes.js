@@ -35,6 +35,10 @@ class Tuple {
   }
 
   get name() {
+    if (this.elements.length === 0) {
+      return `Void`;
+    }
+
     return `(${this.elements.map(element => element.name).join(', ')})`;
   }
 
@@ -48,18 +52,19 @@ class Tuple {
 }
 
 class Function {
-  constructor(params, body, scope) {
+  constructor(params, rettype, body, scope) {
     this.params = params;
+    this.rettype = rettype;
     this.body = body;
     this.closure = scope;
   }
 
   get name() {
-    return `(${this.params.map(param => param.name).join(', ')}) => ${0}`;
+    return `${this.params.type.name} => ${this.rettype.name}`;
   }
 
   inspect() {
-    return `<Function>`;
+    return this.name;
   }
 
   toString() {
