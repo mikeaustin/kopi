@@ -1,5 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
+const { AnyType, BooleanType, NumberType, StringType, FunctionType, UnionType } = require('./types');
 const { IdentifierPattern, AstNode, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
@@ -64,7 +65,7 @@ class TypecheckVisitors extends BaseVisitors {
       throw TypeError(`Value is not a number.`);
     }
 
-    return Number;
+    return NumberType;
   }
 
   StringLiteral({ value }) {
@@ -72,7 +73,7 @@ class TypecheckVisitors extends BaseVisitors {
       throw TypeError(`Value is not a string.`);
     }
 
-    return String;
+    return StringType;
   }
 
   Identifier({ name }, context) {

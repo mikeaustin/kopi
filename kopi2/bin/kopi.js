@@ -5,7 +5,8 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { Any, Function, Tuple, Union, IdentifierPattern } = require('../src/visitors/classes');
+const { AnyType, BooleanType, NumberType, StringType, FunctionType, UnionType } = require('../src/visitors/types');
+const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -23,33 +24,40 @@ var rl = readline.createInterface({
 });
 
 let scope = {
+  true: true,
+  false: false,
   print: new class extends Function {
     apply(arg, scope, visitors) {
       console.log(arg.toString());
     }
-  }(new IdentifierPattern('x', Any), new Tuple([])),
+  }(new IdentifierPattern('x', AnyType), new Tuple([])),
+
   test: new class extends Function {
     apply(arg, scope, visitors) {
       return arg;
     }
-  }(new IdentifierPattern('b', Boolean), Boolean),
+  }(new IdentifierPattern('b', BooleanType), BooleanType),
+
   even: new class extends Function {
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
     }
-  }(new IdentifierPattern('n', Number), Boolean),
+  }(new IdentifierPattern('n', NumberType), BooleanType),
+
   union: new class extends Function {
     apply(arg, scope, visitors) {
       return (typeof arg === 'string' ? Number(arg) : arg) % 2 === 0;
     }
-  }(new IdentifierPattern('n', Number), Boolean)
+  }(new IdentifierPattern('n', NumberType), BooleanType)
 };
 
 let context = {
-  print: new Function(new IdentifierPattern('x', new Any())),
-  test: new Function(new IdentifierPattern('b', Boolean), Boolean),
-  even: new Function(new IdentifierPattern('n', Number), Boolean),
-  union: new Function(new IdentifierPattern('x', new Union(Number, String)), Boolean)
+  true: BooleanType,
+  false: BooleanType,
+  print: FunctionType(new IdentifierPattern('x', AnyType)),
+  test: FunctionType(new IdentifierPattern('b', BooleanType), BooleanType),
+  even: FunctionType(new IdentifierPattern('n', NumberType), BooleanType),
+  union: FunctionType(new IdentifierPattern('x', UnionType(NumberType, StringType)), BooleanType)
 };
 
 const typeCheck = (ast) => {

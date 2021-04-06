@@ -2,12 +2,6 @@ class AstNode {
 
 }
 
-class Any {
-  includesType(type) {
-    return true;
-  }
-}
-
 class IdentifierPattern {
   constructor(name, type) {
     this.name = name;
@@ -57,20 +51,6 @@ class Tuple {
   }
 }
 
-class Union {
-  constructor(...values) {
-    this.values = values;
-  }
-
-  get name() {
-    return `${this.values.map(value => value.name).join(' | ')}`;
-  }
-
-  includesType(type) {
-    return this.values.includes(type);
-  }
-}
-
 class Function {
   constructor(params, rettype, body, scope) {
     this.params = params;
@@ -80,7 +60,7 @@ class Function {
   }
 
   get name() {
-    return `${this.params.type.name} => ${this.rettype.name}`;
+    return `${this.params.type?.name} => ${this.rettype?.name}`;
   }
 
   inspect() {
@@ -100,9 +80,7 @@ class Function {
 
 module.exports = {
   AstNode,
-  Any,
   IdentifierPattern,
   Tuple,
-  Union,
   Function
 };
