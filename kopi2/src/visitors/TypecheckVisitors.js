@@ -1,38 +1,43 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { IdentifierPattern, Tuple, Function } = require('./classes');
+const { IdentifierPattern, AstNode, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
-  Assignment({ pattern, expr }, context, bind) {
-    if (!pattern.matchValue) {
-      throw new InterpreterError(`No matchValue method defined for pattern '${pattern.constructor.name}'`);
-    }
+  AstNode({ _expr }) {
+    return AstNode;
+  }
 
-    const type = this.visitNode(expr, context);
+  Assignment({ _pattern, _expr }, context, bind) {
+    const pattern = this.visitNode(_pattern, context);
+    const type = this.visitNode(_expr, context);
+
+    if (!pattern.matchValue) {
+      throw new InterpreterError(`No matchValue method defined for pattern '${_pattern.constructor.name}'`);
+    }
 
     const matches = pattern.matchType(type, context);
 
     bind(matches);
   }
 
-  FunctionExpression({ params, body }, context) {
-    const evaluatedParams = this.visitNode(params, context);
+  FunctionExpression({ _params, _body }, context) {
+    const params = this.visitNode(_params, context);
 
-    return new Function(evaluatedParams, body, context);
+    return new Function(params, _body, context);
   }
 
-  ApplyExpression({ expr, args }, context) {
-    const type = this.visitNode(expr, context);
-    const arg = this.visitNode(args, context);
+  ApplyExpression({ _expr, _args }, context) {
+    const type = this.visitNode(_expr, context);
+    const args = this.visitNode(_args, context);
 
     if (!type.params) {
       throw new TypeError(`Function application not defined for type '${type.name}.'`);
     }
 
-    const matches = type.params.matchType(arg);
+    const matches = type.params.matchType(args);
 
     if (!matches) {
-      throw new TypeError(`Argument to function '${expr?.name}' should be type '${type.params.type?.name}', but found '${arg.name}'.`);
+      throw new TypeError(`Argument to function '${_expr?.name}' should be type '${type.params.type?.name}', but found '${args.name}'.`);
     }
 
     if (type.body) {
@@ -42,14 +47,14 @@ class TypecheckVisitors extends BaseVisitors {
     return type.type;
   }
 
-  TupleExpression({ elements }, context) {
-    return new Tuple(elements.map(element => this.visitNode(element, context)));
+  TupleExpression({ _elements }, context) {
+    return new Tuple(_elements.map(element => this.visitNode(element, context)));
   }
 
   //
 
-  IdentifierPattern({ name, type }, context) {
-    return new IdentifierPattern(name, type);
+  IdentifierPattern({ _name, type }, context) {
+    return new IdentifierPattern(_name, type);
   }
 
   //

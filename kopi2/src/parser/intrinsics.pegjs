@@ -8,8 +8,8 @@ Expression
 Assignment
   = pattern:Pattern _ "=" _ expr:Expression {
       return new Assignment({
-        pattern: pattern,
-        expr: expr
+        _pattern: pattern,
+        _expr: expr
       })
     }
 
@@ -17,8 +17,8 @@ ApplyExpression
   = expr:TupleExpression args:(_ TupleExpression)* {
       return args.reduce((result, [, arg]) => (
         new ApplyExpression({
-          expr: result,
-          args: arg
+          _expr: result,
+          _args: arg
         })
       ), expr);
     }
@@ -26,15 +26,15 @@ ApplyExpression
 TupleExpression
   = head:FunctionExpression tail:(_ "," _ FunctionExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
-        elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
+        _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
       })
     }
 
 FunctionExpression
   = pattern:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({
-        params: pattern,
-        body: expr
+        _params: pattern,
+        _body: expr
       })
     }
   / PrimaryExpression
@@ -42,8 +42,18 @@ FunctionExpression
 PrimaryExpression
   = Literal
   / Identifier
+  / "'" expr:(Identifier / Literal) {
+      return new AstNode({
+        _expr: expr
+      });
+    }
+  / "'" "(" _ expr:Expression _ ")" {
+      return new AstNode({
+        _expr: expr
+      });
+    }
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
-        elements: []
+        _elements: []
       })
     }

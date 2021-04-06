@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { IdentifierPattern } = require('../src/visitors/classes');
+const { IdentifierPattern, Function } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
@@ -23,7 +23,11 @@ var rl = readline.createInterface({
 });
 
 let scope = {
-  z: 1,
+  print: {
+    apply(arg, scope, visitors) {
+      console.log(arg.toString());
+    }
+  },
   test: {
     apply(arg, scope, visitors) {
       return arg;
@@ -36,7 +40,10 @@ let scope = {
   }
 };
 let context = {
-  z: Number,
+  print: new Function(new IdentifierPattern('b')),
+  // print: {
+  //   params: new IdentifierPattern('b')
+  // },
   test: {
     params: new IdentifierPattern('b', Boolean),
     type: Boolean,

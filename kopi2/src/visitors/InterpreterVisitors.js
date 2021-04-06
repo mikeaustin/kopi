@@ -7,32 +7,36 @@ Object.prototype.inspect = function () {
 };
 
 class InterpreterVisitors extends BaseVisitors {
-  Assignment({ pattern, expr }, scope, bind) {
-    const value = this.visitNode(expr, scope);
-    const matches = pattern.matchValue(value, scope);
+  AstNode({ _expr }) {
+    return _expr;
+  }
+
+  Assignment({ _pattern, _expr }, scope, bind) {
+    const evaluatedPattern = this.visitNode(_pattern, scope);
+    const value = this.visitNode(_expr, scope);
+
+    const matches = evaluatedPattern.matchValue(value, scope);
 
     bind(matches);
   }
 
-  ApplyExpression({ expr, args }, scope) {
-    const value = this.visitNode(expr, scope);
-    const arg = this.visitNode(args, scope);
+  ApplyExpression({ _expr, _args }, scope) {
+    const value = this.visitNode(_expr, scope);
+    const args = this.visitNode(_args, scope);
 
-    return value.apply(arg, scope, this);
+    return value.apply(args, scope, this);
   }
 
-  TupleExpression({ elements }, scope) {
-    return new Tuple(elements.map(element => this.visitNode(element, scope)));
+  TupleExpression({ _elements }, scope) {
+    return new Tuple(_elements.map(element => this.visitNode(element, scope)));
   }
 
-  FunctionExpression({ params, body }, scope) {
-    this.visitNode(params, scope);
-
-    return new Function(this.visitNode(params, scope), body, scope);
+  FunctionExpression({ _params, _body }, scope) {
+    return new Function(this.visitNode(_params, scope), _body, scope);
   }
 
-  IdentifierPattern({ name }) {
-    return new IdentifierPattern(name);
+  IdentifierPattern({ _name }) {
+    return new IdentifierPattern(_name);
   }
 
   NumericLiteral({ value }) {

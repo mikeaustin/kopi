@@ -1,3 +1,7 @@
+class AstNode {
+
+}
+
 class IdentifierPattern {
   constructor(name, type) {
     this.name = name;
@@ -37,6 +41,10 @@ class Tuple {
   inspect() {
     return `(${this.elements.map(element => element.inspect()).join(', ')})`;
   }
+
+  toString() {
+    return `${this.elements.join(', ')}`;
+  }
 }
 
 class Function {
@@ -50,6 +58,14 @@ class Function {
     return `(${this.params.map(param => param.name).join(', ')}) => ${0}`;
   }
 
+  inspect() {
+    return `<Function>`;
+  }
+
+  toString() {
+    return `<Function>`;
+  }
+
   apply(args, scope, visitors) {
     const matches = this.params.matchValue(args);
 
@@ -58,6 +74,7 @@ class Function {
 }
 
 module.exports = {
+  AstNode,
   IdentifierPattern,
   Tuple,
   Function

@@ -5,6 +5,7 @@
     }
   }
 
+  class AstNode extends Node { }
   class Assignment extends Node { }
 
   class ApplyExpression extends Node { }
