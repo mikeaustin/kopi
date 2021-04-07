@@ -23,41 +23,50 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
-let scope = {
-  true: true,
-  false: false,
-  print: new class extends Function {
-    apply(arg, scope, visitors) {
-      console.log(arg.toString());
-    }
-  }(new IdentifierPattern('x', AnyType), Void),
-
-  test: new class extends Function {
-    apply(arg, scope, visitors) {
-      return arg;
-    }
-  }(new IdentifierPattern('b', BooleanType), BooleanType),
-
-  even: new class extends Function {
-    apply(arg, scope, visitors) {
-      return arg % 2 === 0;
-    }
-  }(new IdentifierPattern('n', NumberType), BooleanType),
-
-  union: new class extends Function {
-    apply(arg, scope, visitors) {
-      return (typeof arg === 'string' ? Number(arg) : arg) % 2 === 0;
-    }
-  }(new IdentifierPattern('n', NumberType), BooleanType)
-};
-
 let context = {
   true: BooleanType,
   false: BooleanType,
   print: FunctionType(new IdentifierPattern('x', AnyType), Void),
-  test: FunctionType(new IdentifierPattern('b', BooleanType), BooleanType),
+  not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
   even: FunctionType(new IdentifierPattern('n', NumberType), BooleanType),
   union: FunctionType(new IdentifierPattern('x', UnionType(NumberType, StringType)), BooleanType)
+};
+
+let scope = {
+  true: true,
+  false: false,
+  print: new class extends Function {
+    params = context.print.params;
+    rettype = context.print.rettype;
+
+    apply(arg, scope, visitors) {
+      console.log(arg.toString());
+    }
+  },
+  not: new class extends Function {
+    params = context.not.params;
+    rettype = context.not.params;
+
+    apply(arg, scope, visitors) {
+      return !arg;
+    }
+  },
+  even: new class extends Function {
+    params = context.even.params;
+    rettype = context.even.params;
+
+    apply(arg, scope, visitors) {
+      return arg % 2 === 0;
+    }
+  },
+  union: new class extends Function {
+    params = context.union.params;
+    rettype = context.union.params;
+
+    apply(arg, scope, visitors) {
+      return (typeof arg === 'string' ? Number(arg) : arg) % 2 === 0;
+    }
+  }
 };
 
 const typeCheck = (ast) => {

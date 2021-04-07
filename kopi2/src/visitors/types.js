@@ -1,4 +1,8 @@
 class AnyType {
+  get name() {
+    return `Any`;
+  }
+
   includesType(type) {
     return true;
   }
