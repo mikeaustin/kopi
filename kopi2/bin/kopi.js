@@ -23,6 +23,9 @@ Object.prototype.inspect = function () {
   });
 };
 
+Number.prototype.type = NumberType;
+String.prototype.type = StringType;
+
 Number.prototype.inspect = function () {
   return `${this}`;
 };
@@ -39,6 +42,7 @@ var rl = readline.createInterface({
 let context = {
   true: BooleanType,
   false: BooleanType,
+  type: FunctionType(new IdentifierPattern('value', AnyType), Void),
   inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
   not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
   even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),
@@ -49,11 +53,15 @@ let context = {
 let scope = {
   true: true,
   false: false,
+  type: new class extends Function {
+    apply(arg, scope, visitors) {
+      console.log(arg.type.name);
+    }
+  },
   inspect: new class extends Function {
     apply(arg, scope, visitors) {
       console.log(Object.prototype.inspect.apply(arg));
     }
-
   },
   not: new class extends Function {
     apply(arg, scope, visitors) {
@@ -79,7 +87,7 @@ let scope = {
 
 Object.entries(scope).forEach(([name, value]) => {
   value.params = context[name].params;
-  value.type = context[name].type;
+  value.type = context[name];
 });
 
 const typeCheck = (ast) => {

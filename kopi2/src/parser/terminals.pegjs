@@ -10,7 +10,6 @@ NumericLiteral "number"
   = literal:[0-9]+ ("." !"." [0-9]+)? {
       return new NumericLiteral({
         value: Number(text()),
-        type: Number
       })
     }
 
@@ -18,7 +17,6 @@ StringLiteral "string"
   = '"' chars:(!'"' .)* '"' {
       return new StringLiteral({
         value: chars.map(([, c]) => c).join(""),
-        type: String
       });
     }
 
