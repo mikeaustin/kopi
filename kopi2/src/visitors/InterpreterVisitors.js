@@ -28,7 +28,7 @@ class InterpreterVisitors extends BaseVisitors {
   }
 
   TupleExpression({ _elements }, scope) {
-    return new Tuple(_elements.map(element => this.visitNode(element, scope)));
+    return new Tuple(..._elements.map(element => this.visitNode(element, scope)));
   }
 
   FunctionExpression({ _params, _body }, scope) {

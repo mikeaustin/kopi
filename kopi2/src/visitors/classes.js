@@ -30,7 +30,7 @@ class IdentifierPattern {
 }
 
 class Tuple {
-  constructor(elements) {
+  constructor(...elements) {
     this.elements = elements;
   }
 
