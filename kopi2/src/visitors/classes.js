@@ -1,3 +1,5 @@
+const { TupleType, FunctionType } = require('./types');
+
 class AstNode {
   constructor(expr) {
     this.expr = expr;
@@ -56,6 +58,10 @@ class Tuple {
     });
   }
 
+  get type() {
+    return TupleType(...this.elements.map(element => element.type));
+  }
+
   inspect() {
     return `(${this.elements.map(element => element.inspect()).join(', ')})`;
   }
@@ -66,15 +72,19 @@ class Tuple {
 }
 
 class Function {
-  constructor(params, type, body, scope) {
+  constructor(params, rettype, body, scope) {
     this.params = params;
-    this.type = type;
+    this.rettype = rettype;
     this.body = body;
     this.closure = scope;
   }
 
-  get name() {
-    return `${this.params.type?.name} => ${this.type?.name}`;
+  inspect() {
+    return `<Function(${this.params.inspect()})>`;
+  }
+
+  get type() {
+    return FunctionType(this.params, this.rettype);
   }
 
   // inspect() {

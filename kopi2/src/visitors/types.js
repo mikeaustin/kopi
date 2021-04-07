@@ -63,13 +63,13 @@ class TupleType {
 }
 
 class FunctionType {
-  constructor(params, type, body, scope) {
+  constructor(params, rettype, body, scope) {
     this.params = params;
-    this.type = type;
+    this.rettype = rettype;
   }
 
   get name() {
-    return `${this.params.type?.name} => ${this.type?.name}`;
+    return `${this.params.type?.name} => ${this.rettype?.name}`;
   }
 
   // includesType(valueType) {
