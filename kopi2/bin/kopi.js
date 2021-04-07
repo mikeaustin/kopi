@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const { AnyType, BooleanType, NumberType, StringType, FunctionType, UnionType } = require('../src/visitors/types');
+const { AnyType, Void, BooleanType, NumberType, StringType, TupleType, FunctionType, UnionType } = require('../src/visitors/types');
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
@@ -30,7 +30,7 @@ let scope = {
     apply(arg, scope, visitors) {
       console.log(arg.toString());
     }
-  }(new IdentifierPattern('x', AnyType), new Tuple([])),
+  }(new IdentifierPattern('x', AnyType), Void),
 
   test: new class extends Function {
     apply(arg, scope, visitors) {
@@ -54,7 +54,7 @@ let scope = {
 let context = {
   true: BooleanType,
   false: BooleanType,
-  print: FunctionType(new IdentifierPattern('x', AnyType)),
+  print: FunctionType(new IdentifierPattern('x', AnyType), Void),
   test: FunctionType(new IdentifierPattern('b', BooleanType), BooleanType),
   even: FunctionType(new IdentifierPattern('n', NumberType), BooleanType),
   union: FunctionType(new IdentifierPattern('x', UnionType(NumberType, StringType)), BooleanType)

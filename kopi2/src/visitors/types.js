@@ -34,6 +34,20 @@ class StringType {
   }
 }
 
+class TupleType {
+  constructor(...types) {
+    this.types = types;
+  }
+
+  get name() {
+    if (this.types.length === 0) {
+      return `Void`;
+    }
+
+    return `(${this.types.map(type => type.name).join(', ')})`;
+  }
+}
+
 class FunctionType {
   constructor(params, rettype, body, scope) {
     this.params = params;
@@ -65,9 +79,11 @@ class UnionType {
 
 module.exports = {
   AnyType: new AnyType(),
+  Void: new TupleType(),
   BooleanType: new BooleanType(),
   NumberType: new NumberType(),
   StringType: new StringType(),
+  TupleType: (...types) => new TupleType(...types),
   FunctionType: (params, rettype) => new FunctionType(params, rettype),
   UnionType: (...types) => new UnionType(...types),
 };

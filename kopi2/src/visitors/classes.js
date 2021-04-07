@@ -34,14 +34,6 @@ class Tuple {
     this.elements = elements;
   }
 
-  get name() {
-    if (this.elements.length === 0) {
-      return `Void`;
-    }
-
-    return `(${this.elements.map(element => element.name).join(', ')})`;
-  }
-
   inspect() {
     return `(${this.elements.map(element => element.inspect()).join(', ')})`;
   }

@@ -1,6 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { AnyType, BooleanType, NumberType, StringType, FunctionType, UnionType } = require('./types');
+const { AnyType, BooleanType, NumberType, StringType, TupleType, FunctionType, UnionType } = require('./types');
 const { IdentifierPattern, AstNode, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
@@ -49,7 +49,7 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   TupleExpression({ _elements }, context) {
-    return new Tuple(_elements.map(element => this.visitNode(element, context)));
+    return TupleType(..._elements.map(element => this.visitNode(element, context)));
   }
 
   //
