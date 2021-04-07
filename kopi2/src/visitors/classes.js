@@ -44,15 +44,15 @@ class Tuple {
 }
 
 class Function {
-  constructor(params, rettype, body, scope) {
+  constructor(params, type, body, scope) {
     this.params = params;
-    this.rettype = rettype;
+    this.type = type;
     this.body = body;
     this.closure = scope;
   }
 
   get name() {
-    return `${this.params.type?.name} => ${this.rettype?.name}`;
+    return `${this.params.type?.name} => ${this.type?.name}`;
   }
 
   inspect() {

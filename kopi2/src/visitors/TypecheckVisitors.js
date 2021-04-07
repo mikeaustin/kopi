@@ -45,7 +45,7 @@ class TypecheckVisitors extends BaseVisitors {
       return this.visitNode(type.body, { ...type.closure, ...matches });
     }
 
-    return type.rettype;
+    return type.type;
   }
 
   TupleExpression({ _elements }, context) {

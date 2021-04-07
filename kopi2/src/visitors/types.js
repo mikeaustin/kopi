@@ -53,13 +53,13 @@ class TupleType {
 }
 
 class FunctionType {
-  constructor(params, rettype, body, scope) {
+  constructor(params, type, body, scope) {
     this.params = params;
-    this.rettype = rettype;
+    this.type = type;
   }
 
   get name() {
-    return `${this.params.type?.name} => ${this.rettype?.name}`;
+    return `${this.params.type?.name} => ${this.type?.name}`;
   }
 
   // includesType(valueType) {
@@ -88,6 +88,6 @@ module.exports = {
   NumberType: new NumberType(),
   StringType: new StringType(),
   TupleType: (...types) => new TupleType(...types),
-  FunctionType: (params, rettype) => new FunctionType(params, rettype),
+  FunctionType: (params, type) => new FunctionType(params, type),
   UnionType: (...types) => new UnionType(...types),
 };
