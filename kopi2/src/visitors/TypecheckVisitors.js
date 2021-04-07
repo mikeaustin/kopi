@@ -1,11 +1,11 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
 const { AnyType, BooleanType, NumberType, StringType, TupleType, FunctionType, UnionType } = require('./types');
-const { IdentifierPattern, AstNode, Tuple, Function } = require('./classes');
+const { IdentifierPattern, AstNode, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
   AstNode({ _expr }) {
-    return AstNode;
+    return _expr;
   }
 
   Assignment({ _pattern, _expr }, context, bind) {
@@ -56,6 +56,10 @@ class TypecheckVisitors extends BaseVisitors {
 
   IdentifierPattern({ _name, type }, context) {
     return new IdentifierPattern(_name, type);
+  }
+
+  AstNodeIdentifierPattern({ _expr }) {
+    return new AstNodeIdentifierPattern(_expr);
   }
 
   //

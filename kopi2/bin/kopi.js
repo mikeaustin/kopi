@@ -10,6 +10,19 @@ const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes'
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 
+Object.prototype.inspect = function () {
+  if (this.closure) {
+    this.closure[util.inspect.custom] = function (depth, opts) {
+      return `{ ... }`;
+    };
+  }
+
+  return util.inspect(this, {
+    compact: false,
+    depth: Infinity,
+  });
+};
+
 Number.prototype.inspect = function () {
   return `${this}`;
 };
@@ -26,6 +39,7 @@ var rl = readline.createInterface({
 let context = {
   true: BooleanType,
   false: BooleanType,
+  inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
   not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
   even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),
   union: FunctionType(new IdentifierPattern('value', UnionType(NumberType, StringType)), BooleanType),
@@ -35,6 +49,12 @@ let context = {
 let scope = {
   true: true,
   false: false,
+  inspect: new class extends Function {
+    apply(arg, scope, visitors) {
+      console.log(Object.prototype.inspect.apply(arg));
+    }
+
+  },
   not: new class extends Function {
     apply(arg, scope, visitors) {
       return !arg;

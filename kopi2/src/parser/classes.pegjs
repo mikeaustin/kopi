@@ -12,6 +12,7 @@
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }
 
+  class AstNodeIdentifierPattern extends Node { }
   class IdentifierPattern extends Node { }
 
   class NumericLiteral extends Node { }

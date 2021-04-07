@@ -7,6 +7,11 @@ Pattern
 
 PrimaryPattern
   = IdentifierPattern
+  / "'" expr:IdentifierPattern {
+      return new AstNodeIdentifierPattern({
+        _expr: expr
+      });
+    }
 
 IdentifierPattern
   = name:IdentifierName {

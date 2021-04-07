@@ -1,3 +1,13 @@
+class NoneType {
+  get name() {
+    return `None`;
+  }
+
+  includesType(type) {
+    return false;
+  }
+}
+
 class AnyType {
   get name() {
     return `Any`;
@@ -82,6 +92,7 @@ class UnionType {
 }
 
 module.exports = {
+  NoneType: new NoneType(),
   AnyType: new AnyType(),
   Void: new TupleType(),
   BooleanType: new BooleanType(),

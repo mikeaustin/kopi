@@ -1,10 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { RuntimeError } = require('../errors');
-const { IdentifierPattern, Tuple, Function } = require('./classes');
-
-Object.prototype.inspect = function () {
-  return JSON.stringify(this);
-};
+const { IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class InterpreterVisitors extends BaseVisitors {
   AstNode({ _expr }) {
@@ -37,6 +33,10 @@ class InterpreterVisitors extends BaseVisitors {
 
   IdentifierPattern({ _name }) {
     return new IdentifierPattern(_name);
+  }
+
+  AstNodeIdentifierPattern({ _expr }) {
+    return new AstNodeIdentifierPattern(_expr);
   }
 
   NumericLiteral({ value }) {

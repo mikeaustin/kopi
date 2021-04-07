@@ -1,5 +1,7 @@
 class AstNode {
-
+  constructor(expr) {
+    this.expr = expr;
+  }
 }
 
 class IdentifierPattern {
@@ -29,9 +31,29 @@ class IdentifierPattern {
   }
 }
 
+class AstNodeIdentifierPattern {
+  constructor(expr) {
+    this.expr = expr;
+  }
+
+  matchValue(value) {
+    return null;
+  }
+
+  matchType(type) {
+    if (type.name !== this.expr._name) {
+      throw Error(`Match expects identifier pattern '${this.expr._name}', but got '${type.name}'`);
+    }
+  }
+}
+
 class Tuple {
   constructor(...elements) {
     this.elements = elements;
+
+    elements.forEach((element, index) => {
+      this[index] = element;
+    });
   }
 
   inspect() {
@@ -55,9 +77,9 @@ class Function {
     return `${this.params.type?.name} => ${this.type?.name}`;
   }
 
-  inspect() {
-    return this.name;
-  }
+  // inspect() {
+  //   return this.name;
+  // }
 
   toString() {
     return `<Function>`;
@@ -73,6 +95,7 @@ class Function {
 module.exports = {
   AstNode,
   IdentifierPattern,
+  AstNodeIdentifierPattern,
   Tuple,
   Function
 };
