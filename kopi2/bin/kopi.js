@@ -23,14 +23,23 @@ Object.prototype.inspect = function () {
   });
 };
 
+Boolean.prototype.type = BooleanType;
 Number.prototype.type = NumberType;
 String.prototype.type = StringType;
 
-Number.prototype.inspect = function () {
+// Object.prototype.escape = function () {
+//   return Object.prototype.inspect.apply(this);
+// };
+
+Boolean.prototype.escape = function () {
   return `${this}`;
 };
 
-String.prototype.inspect = function () {
+Number.prototype.escape = function () {
+  return `${this}`;
+};
+
+String.prototype.escape = function () {
   return `"${this}"`;
 };
 
@@ -42,6 +51,7 @@ var rl = readline.createInterface({
 let context = {
   true: BooleanType,
   false: BooleanType,
+  help: FunctionType(new IdentifierPattern('func', AnyType), Void),
   type: FunctionType(new IdentifierPattern('value', AnyType), Void),
   inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
   not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
@@ -53,9 +63,14 @@ let context = {
 let scope = {
   true: true,
   false: false,
+  help: new class extends Function {
+    apply(arg, scope, visitors) {
+      console.log(arg.help.trim().split('\n').map(line => line.trim()).join('\n'));
+    }
+  },
   type: new class extends Function {
     apply(arg, scope, visitors) {
-      console.log(arg.type.name);
+      return arg.type;
     }
   },
   inspect: new class extends Function {
@@ -69,6 +84,10 @@ let scope = {
     }
   },
   even: new class extends Function {
+    help = `
+      even (value: Number) => Boolean
+      Return true if number is even, else return false.
+    `;
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
     }
@@ -88,7 +107,6 @@ let scope = {
 Object.entries(scope).forEach(([name, value]) => {
   value.params = context[name].params;
   value.rettype = context[name].rettype;
-  value.type = context[name];
 });
 
 const typeCheck = (ast) => {
@@ -111,7 +129,7 @@ async function main() {
       const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
 
       if (result !== undefined) {
-        console.log(result.inspect());
+        console.log(result.escape());
       }
     } catch (error) {
       console.log(error);

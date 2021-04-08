@@ -4,7 +4,12 @@ class AstNode {
   constructor(expr) {
     this.expr = expr;
   }
+
+  escape() {
+    return this.name;
+  }
 }
+
 
 class IdentifierPattern {
   constructor(name, type) {
@@ -12,7 +17,7 @@ class IdentifierPattern {
     this.type = type;
   }
 
-  inspect() {
+  escape() {
     return this.name;
   }
 
@@ -36,6 +41,10 @@ class IdentifierPattern {
 class AstNodeIdentifierPattern {
   constructor(expr) {
     this.expr = expr;
+  }
+
+  escape() {
+    return this.expr;
   }
 
   matchValue(value) {
@@ -62,8 +71,8 @@ class Tuple {
     return TupleType(...this.elements.map(element => element.type));
   }
 
-  inspect() {
-    return `(${this.elements.map(element => element.inspect()).join(', ')})`;
+  escape() {
+    return `(${this.elements.map(element => element.escape()).join(', ')})`;
   }
 
   toString() {
@@ -77,22 +86,18 @@ class Function {
     this.rettype = rettype;
     this.body = body;
     this.closure = scope;
+
+    Object.defineProperty(this, 'toString', {
+      value: undefined,
+    });
   }
 
-  inspect() {
-    return `<Function(${this.params.inspect()})>`;
+  escape() {
+    return `<function>`;
   }
 
   get type() {
     return FunctionType(this.params, this.rettype);
-  }
-
-  // inspect() {
-  //   return this.name;
-  // }
-
-  toString() {
-    return `<Function>`;
   }
 
   apply(args, scope, visitors) {

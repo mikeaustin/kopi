@@ -1,10 +1,14 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { RuntimeError } = require('../errors');
-const { IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
+const { AstNode, IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class InterpreterVisitors extends BaseVisitors {
   AstNode({ _expr }) {
-    return _expr;
+    return new AstNode(_expr);
+  }
+
+  AstIdentifierNode({ _expr }) {
+    return new AstIdentifierNode(_expr);
   }
 
   Assignment({ _pattern, _expr }, scope, bind) {

@@ -3,6 +3,10 @@ class NoneType {
     return `None`;
   }
 
+  escape() {
+    return this.name;
+  }
+
   includesType(type) {
     return false;
   }
@@ -11,6 +15,10 @@ class NoneType {
 class AnyType {
   get name() {
     return `Any`;
+  }
+
+  escape() {
+    return this.name;
   }
 
   includesType(type) {
@@ -23,6 +31,10 @@ class BooleanType {
     return `Boolean`;
   }
 
+  escape() {
+    return this.name;
+  }
+
   includesType(valueType) {
     return valueType instanceof BooleanType;
   }
@@ -33,6 +45,10 @@ class NumberType {
     return `Number`;
   }
 
+  escape() {
+    return this.name;
+  }
+
   includesType(valueType) {
     return valueType instanceof NumberType;
   }
@@ -41,6 +57,10 @@ class NumberType {
 class StringType {
   get name() {
     return `String`;
+  }
+
+  escape() {
+    return this.name;
   }
 
   includesType(valueType) {
@@ -60,10 +80,14 @@ class TupleType {
 
     return `(${this.types.map(type => type.name).join(', ')})`;
   }
+
+  escape() {
+    return this.name;
+  }
 }
 
 class FunctionType {
-  constructor(params, rettype, body, scope) {
+  constructor(params, rettype) {
     this.params = params;
     this.rettype = rettype;
   }
@@ -72,9 +96,13 @@ class FunctionType {
     return `${this.params.type?.name} => ${this.rettype?.name}`;
   }
 
-  // includesType(valueType) {
-  //   return valueType;
-  // }
+  escape() {
+    return this.name;
+  }
+
+  includesType(valueType) {
+    return valueType instanceof FunctionType;
+  }
 }
 
 class UnionType {
@@ -84,6 +112,10 @@ class UnionType {
 
   get name() {
     return `${this.types.map(type => type.name).join(' | ')}`;
+  }
+
+  escape() {
+    return this.name;
   }
 
   includesType(valueType) {
