@@ -11,6 +11,9 @@ const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitor
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
 const { default: PrintCodeVisitors } = require('../src/visitors/PrintCodeVisitors');
 
+const { default: initialContext } = require('./context');
+const { default: initialScope } = require('./scope');
+
 Object.prototype.inspect = function () {
   if (this.closure) {
     this.closure[util.inspect.custom] = function (depth, opts) {
@@ -24,25 +27,9 @@ Object.prototype.inspect = function () {
   });
 };
 
-Boolean.prototype.type = BooleanType;
-Number.prototype.type = NumberType;
-String.prototype.type = StringType;
-
 // Object.prototype.escape = function () {
 //   return Object.prototype.inspect.apply(this);
 // };
-
-Boolean.prototype.escape = function () {
-  return `${this}`;
-};
-
-Number.prototype.escape = function () {
-  return `${this}`;
-};
-
-String.prototype.escape = function () {
-  return `"${this}"`;
-};
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -51,71 +38,8 @@ var rl = readline.createInterface({
 
 const printCodeVisitors = new PrintCodeVisitors();
 
-let context = {
-  true: BooleanType,
-  false: BooleanType,
-  help: FunctionType(new IdentifierPattern('func', AnyType), Void),
-  source: FunctionType(new IdentifierPattern('func', AnyType), Void),
-  type: FunctionType(new IdentifierPattern('value', AnyType), Void),
-  inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
-  not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
-  even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),
-  union: FunctionType(new IdentifierPattern('value', UnionType(NumberType, StringType)), BooleanType),
-  print: FunctionType(new IdentifierPattern('value', AnyType), Void),
-};
-
-let scope = {
-  true: true,
-  false: false,
-  help: new class extends Function {
-    apply(arg, scope, visitors) {
-      console.log(arg.help.trim().split('\n').map(line => line.trim()).join('\n'));
-    }
-  },
-  source: new class extends Function {
-    apply(arg, scope, visitors) {
-      if (arg.body) {
-        console.log(printCodeVisitors.visitNode(arg));
-      } else {
-        console.log('<native function>');
-      }
-    }
-  },
-  type: new class extends Function {
-    apply(arg, scope, visitors) {
-      return arg.type;
-    }
-  },
-  inspect: new class extends Function {
-    apply(arg, scope, visitors) {
-      console.log(Object.prototype.inspect.apply(arg));
-    }
-  },
-  not: new class extends Function {
-    apply(arg, scope, visitors) {
-      return !arg;
-    }
-  },
-  even: new class extends Function {
-    help = `
-      even (value: Number) => Boolean
-      Return true if number is even, else return false.
-    `;
-    apply(arg, scope, visitors) {
-      return arg % 2 === 0;
-    }
-  },
-  union: new class extends Function {
-    apply(arg, scope, visitors) {
-      return (typeof arg === 'string' ? Number(arg) : arg) % 2 === 0;
-    }
-  },
-  print: new class extends Function {
-    apply(arg, scope, visitors) {
-      console.log(arg.toString());
-    }
-  },
-};
+let context = initialContext;
+let scope = initialScope;
 
 Object.entries(scope).forEach(([name, value]) => {
   value.params = context[name].params;
@@ -131,6 +55,9 @@ const typeCheck = (ast) => {
 const visitors = new InterpreterVisitors();
 
 async function main() {
+  console.log('Kopi 0.0.1 Shell | 2021 Mike Austin');
+  console.log('Enter \'env\' to view the top-level environment.');
+
   rl.prompt();
 
   for await (const line of rl) {
