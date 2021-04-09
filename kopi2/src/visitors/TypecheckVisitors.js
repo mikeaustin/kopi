@@ -52,6 +52,10 @@ class TypecheckVisitors extends BaseVisitors {
     return TupleType(..._elements.map(element => this.visitNode(element, context)));
   }
 
+  FieldExpression({ expr, field }) {
+
+  }
+
   //
 
   IdentifierPattern({ _name, type }, context) {

@@ -56,7 +56,7 @@ const visitors = new InterpreterVisitors();
 
 async function main() {
   console.log('Kopi 0.0.1 Shell | 2021 Mike Austin');
-  console.log('Enter \'env\' to view the top-level environment.');
+  console.log('Enter \'help\' to view top-level functions.');
 
   rl.prompt();
 

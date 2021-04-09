@@ -35,6 +35,10 @@ class InterpreterVisitors extends BaseVisitors {
     return new Function(this.visitNode(_params, scope), undefined, _body, scope);
   }
 
+  FieldExpression({ expr, field }, scope) {
+    return this.visitNode(expr, scope)[field.name || field.value];
+  }
+
   IdentifierPattern({ _name }) {
     return new IdentifierPattern(_name);
   }

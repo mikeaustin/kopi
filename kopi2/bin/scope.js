@@ -1,18 +1,36 @@
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 
+const doc = strings => strings[0].trim().split('\n').map(line => line.trim()).join('\n');
+
 let scope = {
   true: true,
   false: false,
-  env: new class extends Function {
-    escape() {
-      Object.entries(scope).forEach(([name, value]) => console.log(name, value.help));
-
-      return '';
-    }
-  },
   help: new class extends Function {
+    help = doc`
+      Shows top-level functions available.
+    `;
+
+    escape() {
+      console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
+      Object.entries(scope).filter(([name, value]) => value instanceof Function).forEach(([name, value], index) => {
+        if (index > 0) console.log('\t\t––––––––––––––––––––––––––––––––––––––––––––––––––');
+        console.log(`${name}\r\t\t${value.help?.split('\n')[0] ?? 'No help available.'}`);
+        console.log(`\t\t${value.type.escape()}`);
+      });
+      console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
+
+      return 'Type \'help\' <function> for detailed help.';
+    }
+
     apply(arg, scope, visitors) {
-      console.log(arg.help.trim().split('\n').map(line => line.trim()).join('\n'));
+      const help = arg.help?.split('\n') ?? [];
+
+      console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
+      console.log(help[0] ?? 'No help available.');
+      console.log(`${arg.type.escape()}`);
+      console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
+      console.log(help[1] ?? 'No detailed help available.');
+      console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
     }
   },
   source: new class extends Function {
@@ -40,9 +58,9 @@ let scope = {
     }
   },
   even: new class extends Function {
-    help = `
-      even (value: Number) => Boolean
-      Return true if number is even, else return false.
+    help = doc`
+      Returns true if number is even, else false.
+      Detailed documentation...
     `;
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
@@ -54,6 +72,9 @@ let scope = {
     }
   },
   print: new class extends Function {
+    help = doc`
+      Write's all arguments to the console.
+    `;
     apply(arg, scope, visitors) {
       console.log(arg.toString());
     }

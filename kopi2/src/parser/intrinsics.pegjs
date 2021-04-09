@@ -33,10 +33,17 @@ FunctionExpression
   / TupleExpression
 
 TupleExpression
-  = head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* {
+  = head:FieldExpression tail:(_ "," _ FieldExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
         _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
       })
+    }
+
+FieldExpression
+  = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
+      return tail.reduce((result, [, field]) => (
+        new FieldExpression({ expr: result, field: field })
+      ), head);
     }
 
 PrimaryExpression
