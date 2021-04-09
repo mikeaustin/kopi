@@ -9,6 +9,7 @@ const { AnyType, Void, BooleanType, NumberType, StringType, TupleType, FunctionT
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
+const { default: PrintCodeVisitors } = require('../src/visitors/PrintCodeVisitors');
 
 Object.prototype.inspect = function () {
   if (this.closure) {
@@ -48,10 +49,13 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
+const printCodeVisitors = new PrintCodeVisitors();
+
 let context = {
   true: BooleanType,
   false: BooleanType,
   help: FunctionType(new IdentifierPattern('func', AnyType), Void),
+  source: FunctionType(new IdentifierPattern('func', AnyType), Void),
   type: FunctionType(new IdentifierPattern('value', AnyType), Void),
   inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
   not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
@@ -66,6 +70,15 @@ let scope = {
   help: new class extends Function {
     apply(arg, scope, visitors) {
       console.log(arg.help.trim().split('\n').map(line => line.trim()).join('\n'));
+    }
+  },
+  source: new class extends Function {
+    apply(arg, scope, visitors) {
+      if (arg.body) {
+        console.log(printCodeVisitors.visitNode(arg));
+      } else {
+        console.log('<native function>');
+      }
     }
   },
   type: new class extends Function {
