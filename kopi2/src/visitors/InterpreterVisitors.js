@@ -1,6 +1,9 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { RuntimeError } = require('../errors');
 const { AstNode, IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
+const { default: TypeCheckVisitors } = require('./TypeCheckVisitors');
+
+const typeCheckVisitors = new TypeCheckVisitors();
 
 class InterpreterVisitors extends BaseVisitors {
   AstNode({ _expr }) {
@@ -53,6 +56,14 @@ class InterpreterVisitors extends BaseVisitors {
 
   StringLiteral({ value }) {
     return value;
+  }
+
+  ArrayLiteral({ elements }, scope) {
+    const array = elements.map(element => this.visitNode(element, scope));
+
+    array.type = typeCheckVisitors.ArrayLiteral({ elements });
+
+    return array;
   }
 
   Identifier({ name }, scope) {

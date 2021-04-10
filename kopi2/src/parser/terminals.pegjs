@@ -5,6 +5,7 @@
 Literal
   = NumericLiteral
   / StringLiteral
+  / ArrayLiteral
 
 NumericLiteral "number"
   = literal:[0-9]+ ("." !"." [0-9]+)? {
@@ -19,6 +20,18 @@ StringLiteral "string"
         value: chars.map(([, c]) => c).join(""),
       });
     }
+
+ArrayLiteral
+  = "[" head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* "]" {
+      return new ArrayLiteral({
+        elements: tail.reduce((result, [,,, expr]) => [...result, expr], [head])
+      })
+    }
+  / "[]" {
+    return new ArrayLiteral({
+      elements: []
+    })
+  }
 
 Identifier "identifier"
   = name:IdentifierName {

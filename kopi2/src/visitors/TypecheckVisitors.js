@@ -1,6 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { AnyType, BooleanType, NumberType, StringType, TupleType, FunctionType, UnionType } = require('./types');
+const { AnyType, BooleanType, NumberType, StringType, TupleType, FunctionType, UnionType, ArrayType } = require('./types');
 const { IdentifierPattern, AstNode, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
@@ -52,8 +52,16 @@ class TypecheckVisitors extends BaseVisitors {
     return TupleType(..._elements.map(element => this.visitNode(element, context)));
   }
 
-  FieldExpression({ expr, field }) {
+  FieldExpression({ expr, field }, context) {
+    const evaluatedExpr = this.visitNode(expr, context);
 
+    const type = evaluatedExpr.typeForField(field);
+
+    if (!type) {
+      throw new TypeError(`Field access type error`);
+    }
+
+    return type;
   }
 
   //
@@ -82,6 +90,16 @@ class TypecheckVisitors extends BaseVisitors {
     }
 
     return StringType;
+  }
+
+  ArrayLiteral({ elements }, context) {
+    const valueTypes = elements.map(element => this.visitNode(element, context));
+
+    if (!valueTypes.every(type => type === valueTypes[0])) {
+      throw new TypeError(`Array elements must all be the same type`);
+    }
+
+    return ArrayType(...elements.map(element => this.visitNode(element, context)));
   }
 
   Identifier({ name }, context) {

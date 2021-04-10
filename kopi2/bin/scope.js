@@ -79,6 +79,11 @@ let scope = {
       console.log(arg.toString());
     }
   },
+  test: new class extends Function {
+    apply(arg, scope, visitors) {
+      return arg;
+    }
+  },
 };
 
 module.exports = {

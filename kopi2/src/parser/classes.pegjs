@@ -19,5 +19,6 @@
 
   class NumericLiteral extends Node { }
   class StringLiteral extends Node { }
+  class ArrayLiteral extends Node { }
   class Identifier extends Node { }
 }

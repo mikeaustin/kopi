@@ -66,11 +66,31 @@ class StringType {
   includesType(valueType) {
     return valueType instanceof StringType;
   }
+
+  typeForField(field) {
+    if (String.prototype[field.name] === undefined) {
+      return null;
+    }
+
+    switch (field.name) {
+      case 'length': return new NumberType();
+    }
+  }
 }
 
 class TupleType {
   constructor(...types) {
     this.types = types;
+  }
+
+  typeForField(field) {
+    if (typeof field.value === 'number') {
+      if (field.value > this.types.length - 1) {
+        return null;
+      }
+
+      return this.types[field.value];
+    }
   }
 
   get name() {
@@ -123,6 +143,26 @@ class UnionType {
   }
 }
 
+class ArrayType {
+  constructor(elementType) {
+    this.elementType = elementType;
+  }
+
+  get name() {
+    return `[${this.elementType?.name ?? ''}]`;
+  }
+
+  escape() {
+    return this.name;
+  }
+
+  includesType(valueType) {
+    // console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
+
+    return valueType instanceof ArrayType && (valueType.elementType === undefined || valueType.elementType === this.elementType);
+  }
+}
+
 module.exports = {
   NoneType: new NoneType(),
   AnyType: new AnyType(),
@@ -133,4 +173,5 @@ module.exports = {
   TupleType: (...types) => new TupleType(...types),
   FunctionType: (params, type) => new FunctionType(params, type),
   UnionType: (...types) => new UnionType(...types),
+  ArrayType: (type) => new ArrayType(type),
 };

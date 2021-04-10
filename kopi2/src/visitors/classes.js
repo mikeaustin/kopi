@@ -28,6 +28,8 @@ class IdentifierPattern {
   }
 
   matchType(type) {
+    // console.log('IdentifierPattern.matchType()', this.type, type);
+
     if (this.type && !this.type.includesType(type)) {
       return null;
     }

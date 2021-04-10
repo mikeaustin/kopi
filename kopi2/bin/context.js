@@ -6,7 +6,8 @@ const {
   StringType,
   TupleType,
   FunctionType,
-  UnionType
+  UnionType,
+  ArrayType,
 } = require('../src/visitors/types');
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 
@@ -26,6 +27,10 @@ String.prototype.escape = function () {
   return `"${this}"`;
 };
 
+Array.prototype.escape = function () {
+  return `[${this.join(', ')}]`;
+};
+
 let context = {
   true: BooleanType,
   false: BooleanType,
@@ -38,6 +43,7 @@ let context = {
   even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),
   union: FunctionType(new IdentifierPattern('value', UnionType(NumberType, StringType)), BooleanType),
   print: FunctionType(new IdentifierPattern('value', AnyType), Void),
+  test: FunctionType(new IdentifierPattern('value', ArrayType(NumberType)), Void),
 };
 
 module.exports = {
