@@ -10,7 +10,7 @@
     "build-windows": "powershell -ExecutionPolicy Bypass -File .\\build-parser.ps1 | pegjs -o lib\\parser.js",
     "repl": "npm run build && node bin/kopi",
     "repl-windows": "npm run build-windows && node bin/kopi",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run build && jest --verbose"
   },
   "dependencies": {
     "jest": "^26.6.3",

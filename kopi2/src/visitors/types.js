@@ -4,20 +4,6 @@ class Type {
   }
 }
 
-class NoneType extends Type {
-  get name() {
-    return `None`;
-  }
-
-  escape() {
-    return this.name;
-  }
-
-  includesType(type) {
-    return false;
-  }
-}
-
 class AnyType extends Type {
   get name() {
     return `Any`;
@@ -29,6 +15,12 @@ class AnyType extends Type {
 
   includesType(type) {
     return true;
+  }
+}
+
+class NoneType extends AnyType {
+  get name() {
+    return `None`;
   }
 }
 
