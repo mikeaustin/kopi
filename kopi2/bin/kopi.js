@@ -49,7 +49,7 @@ Object.entries(scope).forEach(([name, value]) => {
 const typeCheck = (ast) => {
   const visitors = new TypecheckVisitors();
 
-  visitors.visitNode(ast, context, types => context = { ...context, ...types });
+  return visitors.visitNode(ast, context, types => context = { ...context, ...types });
 };
 
 const visitors = new InterpreterVisitors();
@@ -64,7 +64,7 @@ async function main() {
     try {
       const ast = parser.parse(line);
 
-      typeCheck(ast);
+      const typeCheckedAst = typeCheck(ast);
 
       const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
 

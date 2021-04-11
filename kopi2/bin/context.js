@@ -28,7 +28,7 @@ String.prototype.escape = function () {
 };
 
 Array.prototype.escape = function () {
-  return `[${this.join(', ')}]`;
+  return `[${this.map(element => element.escape()).join(', ')}]`;
 };
 
 let context = {

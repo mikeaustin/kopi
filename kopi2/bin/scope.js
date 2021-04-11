@@ -1,4 +1,7 @@
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
+const { default: PrintCodeVisitors } = require('../src/visitors/PrintCodeVisitors');
+
+const printCodeVisitors = new PrintCodeVisitors();
 
 const doc = strings => strings[0].trim().split('\n').map(line => line.trim()).join('\n');
 

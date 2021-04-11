@@ -1,4 +1,4 @@
-const { TupleType, FunctionType } = require('./types');
+const { TupleType, FunctionType, RangeType } = require('./types');
 
 class AstNode {
   constructor(expr) {
@@ -82,6 +82,21 @@ class Tuple {
   }
 }
 
+class Range {
+  constructor(from, to) {
+    this.from = from;
+    this.to = to;
+  }
+
+  escape() {
+    return `${this.from.escape()}..${this.to.escape()}`;
+  }
+
+  // get type() {
+  //   return RangeType();
+  // }
+}
+
 class Function {
   constructor(params, rettype, body, scope) {
     this.params = params;
@@ -113,6 +128,7 @@ module.exports = {
   AstNode,
   IdentifierPattern,
   AstNodeIdentifierPattern,
+  Function,
   Tuple,
-  Function
+  Range,
 };

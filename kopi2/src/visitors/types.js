@@ -1,4 +1,10 @@
-class NoneType {
+class Type {
+  equals(type) {
+    return type instanceof this.constructor;
+  }
+}
+
+class NoneType extends Type {
   get name() {
     return `None`;
   }
@@ -12,7 +18,7 @@ class NoneType {
   }
 }
 
-class AnyType {
+class AnyType extends Type {
   get name() {
     return `Any`;
   }
@@ -26,7 +32,7 @@ class AnyType {
   }
 }
 
-class BooleanType {
+class BooleanType extends Type {
   get name() {
     return `Boolean`;
   }
@@ -40,7 +46,7 @@ class BooleanType {
   }
 }
 
-class NumberType {
+class NumberType extends Type {
   get name() {
     return `Number`;
   }
@@ -54,7 +60,7 @@ class NumberType {
   }
 }
 
-class StringType {
+class StringType extends Type {
   get name() {
     return `String`;
   }
@@ -78,8 +84,10 @@ class StringType {
   }
 }
 
-class TupleType {
+class TupleType extends Type {
   constructor(...types) {
+    super();
+
     this.types = types;
   }
 
@@ -106,8 +114,10 @@ class TupleType {
   }
 }
 
-class FunctionType {
+class FunctionType extends Type {
   constructor(params, rettype) {
+    super();
+
     this.params = params;
     this.rettype = rettype;
   }
@@ -143,23 +153,51 @@ class UnionType {
   }
 }
 
-class ArrayType {
+class RangeType extends Type {
   constructor(elementType) {
+    super();
+
     this.elementType = elementType;
   }
 
   get name() {
-    return `[${this.elementType?.name ?? ''}]`;
+    return `Range[${this.elementType?.name}]`;
   }
 
   escape() {
     return this.name;
   }
 
-  includesType(valueType) {
-    // console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
+  equals(type) {
+    return type.elementType === this.elementType;
+  }
+}
 
-    return valueType instanceof ArrayType && (valueType.elementType === undefined || valueType.elementType === this.elementType);
+class ArrayType extends Type {
+  constructor(elementType) {
+    super();
+
+    this.elementType = elementType;
+  }
+
+  get name() {
+    return `Array[${this.elementType?.name ?? ''}]`;
+  }
+
+  escape() {
+    return this.name;
+  }
+
+  equals(type) {
+    return type.elementType === this.elementType;
+  }
+
+  includesType(valueType) {
+    console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
+
+    // return valueType instanceof ArrayType && (valueType.elementType === undefined || valueType.elementType === this.elementType);
+    return valueType instanceof ArrayType
+      && (valueType.elementType === undefined || valueType.elementType.equals(this.elementType));
   }
 }
 
@@ -170,6 +208,7 @@ module.exports = {
   BooleanType: new BooleanType(),
   NumberType: new NumberType(),
   StringType: new StringType(),
+  RangeType: (type) => new RangeType(type),
   TupleType: (...types) => new TupleType(...types),
   FunctionType: (params, type) => new FunctionType(params, type),
   UnionType: (...types) => new UnionType(...types),
