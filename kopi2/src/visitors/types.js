@@ -1,7 +1,4 @@
 class Type {
-  equals(type) {
-    return type instanceof this.constructor;
-  }
 }
 
 class AnyType extends Type {
@@ -160,7 +157,7 @@ class RangeType extends Type {
     return this.name;
   }
 
-  equals(type) {
+  includesType(type) {
     return type.elementType === this.elementType;
   }
 }
@@ -180,16 +177,12 @@ class ArrayType extends Type {
     return this.name;
   }
 
-  equals(type) {
-    return type.elementType === this.elementType;
-  }
-
   includesType(valueType) {
     console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
 
     // return valueType instanceof ArrayType && (valueType.elementType === undefined || valueType.elementType === this.elementType);
     return valueType instanceof ArrayType
-      && (valueType.elementType === undefined || valueType.elementType.equals(this.elementType));
+      && (valueType.elementType === undefined || valueType.elementType.includesType(this.elementType));
   }
 }
 

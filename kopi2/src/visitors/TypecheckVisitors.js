@@ -1,6 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { AnyType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
+const { AnyType, NoneType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
 const { IdentifierPattern, AstNode, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
@@ -53,7 +53,7 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   RangeExpression({ from, to }, context) {
-    if (!this.visitNode(from, context).equals(this.visitNode(to, context))) {
+    if (!this.visitNode(from, context).includesType(this.visitNode(to, context))) {
       throw new TypeError(`Range types must be equal`);
     }
 
@@ -101,9 +101,13 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   ArrayLiteral({ elements }, context) {
+    if (elements.length === 0) {
+      return ArrayType(NoneType);
+    }
+
     const valueTypes = elements.map(element => this.visitNode(element, context));
 
-    if (!valueTypes.every(type => type.equals(valueTypes[0]))) {
+    if (!valueTypes.every(type => type.includesType(valueTypes[0]))) {
       throw new TypeError(`Array elements must all be the same type`);
     }
 
