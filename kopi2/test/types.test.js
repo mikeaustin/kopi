@@ -1,7 +1,8 @@
+const util = require("util");
 const parser = require("../lib/parser");
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: initialContext } = require('../bin/context');
-const { BooleanType } = require('../src/visitors/types');
+const { BooleanType, NumberType, StringType, ArrayType, UnionType } = require('../src/visitors/types');
 
 let context = initialContext;
 
@@ -10,7 +11,9 @@ const bind = types => context = { ...context, ...types };
 const check = (line, context) => visitors.visitNode(parser.parse(line), context, bind);
 
 test('Array', () => {
-  expect(() => check('[1, "x"]', context)).toThrow(TypeError);
+  // expect(() => check('[1, "x"]', context)).toThrow(TypeError);
+  expect(check('[1, "x"]', context)).toEqual(ArrayType(UnionType(NumberType, StringType)));
+  expect(check('[[], [1]]', context)).toEqual(ArrayType(ArrayType(NumberType)));
 });
 
 test('Argument', () => {

@@ -37,7 +37,7 @@ let context = {
   env: FunctionType(Void, Void),
   help: FunctionType(new IdentifierPattern('func', AnyType), Void),
   source: FunctionType(new IdentifierPattern('func', AnyType), Void),
-  type: FunctionType(new IdentifierPattern('value', AnyType), Void),
+  type: FunctionType(new IdentifierPattern('value', AnyType), AnyType),
   inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
   not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
   even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),

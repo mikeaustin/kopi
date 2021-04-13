@@ -106,17 +106,29 @@ class TypecheckVisitors extends BaseVisitors {
     }
 
     const valueTypes = elements.map(element => this.visitNode(element, context));
-    const valueTypesSet = Array.from(new Set(valueTypes));
 
+    const valueTypesSet = valueTypes.filter(
+      (valueType, index) => (valueType instanceof ArrayType.constructor)
+        ? index === valueTypes.findIndex((t) => t.elementType === valueType.elementType)
+        : true
+    );
+
+    // console.log('valueTypesSet\n', valueTypesSet, '\n');
     // if (!valueTypes.every(type => type.includesType(valueTypes[0]))) {
     //   throw new TypeError(`Array elements must all be the same type`);
     // }
 
-    if (valueTypesSet.length === 1) {
+    if (valueTypesSet.every(valueType => valueType.elementType === NoneType)) {
       return ArrayType(valueTypesSet[0]);
     }
 
-    return ArrayType(UnionType(...valueTypesSet.filter(valueType => valueType.elementType !== NoneType)));
+    const filteredValueTypesSet = valueTypesSet.filter(valueType => valueType.elementType !== NoneType);
+
+    if (filteredValueTypesSet.length === 1) {
+      return ArrayType(filteredValueTypesSet[0]);
+    }
+
+    return ArrayType(UnionType(...filteredValueTypesSet));
   }
 
   Identifier({ name }, context) {
