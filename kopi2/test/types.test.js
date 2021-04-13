@@ -2,7 +2,18 @@ const util = require("util");
 const parser = require("../lib/parser");
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: initialContext } = require('../bin/context');
-const { NoneType, VoidType, BooleanType, NumberType, StringType, TupleType, ArrayType, RangeType, UnionType } = require('../src/visitors/types');
+
+const {
+  NoneType,
+  VoidType,
+  BooleanType,
+  NumberType,
+  StringType,
+  TupleType,
+  ArrayType,
+  RangeType,
+  UnionType
+} = require('../src/visitors/types');
 
 let context = initialContext;
 
@@ -10,17 +21,22 @@ const visitors = new TypecheckVisitors();
 const bind = types => context = { ...context, ...types };
 const check = (line, context) => visitors.visitNode(parser.parse(line), context, bind);
 
+test('Tuple', () => {
+  expect(check('()', context)).toEqual(VoidType);
+  expect(check('(5)', context)).toEqual(NumberType);
+  // expect(check('(5)', context)).toEqual(TupleType(NumberType));
+});
+
 test('Array', () => {
-  // expect(() => check('[1, "x"]', context)).toThrow(TypeError);
   expect(check('[]', context)).toEqual(ArrayType(NoneType));
   expect(check('[[]]', context)).toEqual(ArrayType(ArrayType(NoneType)));
   expect(check('[[], []]', context)).toEqual(ArrayType(ArrayType(NoneType)));
-  expect(check('[1, 1]', context)).toEqual(ArrayType(NumberType));
-  expect(check('[1, "x"]', context)).toEqual(ArrayType(UnionType(NumberType, StringType)));
-  expect(check('[[1], []]', context)).toEqual(ArrayType(ArrayType(NumberType)));
-  expect(check('[[], [1]]', context)).toEqual(ArrayType(ArrayType(NumberType)));
+  expect(check('[5, 5]', context)).toEqual(ArrayType(NumberType));
+  expect(check('[5, "x"]', context)).toEqual(ArrayType(UnionType(NumberType, StringType)));
+  expect(check('[[5], []]', context)).toEqual(ArrayType(ArrayType(NumberType)));
+  expect(check('[[], [5]]', context)).toEqual(ArrayType(ArrayType(NumberType)));
   expect(check('[[], []]', context)).toEqual(ArrayType(ArrayType(NoneType)));
-  expect(check('[[1], [1]]', context)).toEqual(ArrayType(ArrayType(NumberType)));
+  expect(check('[[5], [5]]', context)).toEqual(ArrayType(ArrayType(NumberType)));
   // expect(check('[(1, "x"), (1..5, "a".."z"), ()]', context)).toEqual(
   //   ArrayType(
   //     UnionType(
