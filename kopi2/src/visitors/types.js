@@ -206,7 +206,7 @@ module.exports = {
   StringType: new StringType(),
   RangeType: (type) => new RangeType(type),
   TupleType: (...types) => new TupleType(...types),
-  FunctionType: (params, type) => new FunctionType(params, type),
+  FunctionType: (params, rettype) => new FunctionType(params, rettype),
   UnionType: (...types) => new UnionType(...types),
   ArrayType: (type) => new ArrayType(type),
 };

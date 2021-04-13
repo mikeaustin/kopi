@@ -1,5 +1,6 @@
 const util = require("util");
 const parser = require("../lib/parser");
+const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: initialContext } = require('../bin/context');
 
@@ -9,6 +10,7 @@ const {
   BooleanType,
   NumberType,
   StringType,
+  FunctionType,
   TupleType,
   ArrayType,
   RangeType,
@@ -24,13 +26,16 @@ const check = (line, context) => visitors.visitNode(parser.parse(line), context,
 test('Tuple', () => {
   expect(check('()', context)).toEqual(VoidType);
   expect(check('(5)', context)).toEqual(NumberType);
-  // expect(check('(5)', context)).toEqual(TupleType(NumberType));
+  expect(check('(5, "x")', context)).toEqual(TupleType(NumberType, StringType));
 });
 
 test('Array', () => {
   expect(check('[]', context)).toEqual(ArrayType(NoneType));
   expect(check('[[]]', context)).toEqual(ArrayType(ArrayType(NoneType)));
   expect(check('[[], []]', context)).toEqual(ArrayType(ArrayType(NoneType)));
+  expect(check('[()]', context)).toEqual(ArrayType(VoidType));
+  expect(check('[(), ()]', context)).toEqual(ArrayType(VoidType));
+  expect(check('[(), 5]', context)).toEqual(ArrayType(UnionType(VoidType, NumberType)));
   expect(check('[5, 5]', context)).toEqual(ArrayType(NumberType));
   expect(check('[5, "x"]', context)).toEqual(ArrayType(UnionType(NumberType, StringType)));
   expect(check('[[5], []]', context)).toEqual(ArrayType(ArrayType(NumberType)));
@@ -48,11 +53,13 @@ test('Array', () => {
   // );
 });
 
-test('Argument', () => {
-  expect(() => check('even "x"', context)).toThrow(TypeError);
+test('Lambda', () => {
+  expect(check('even', context)).toEqual(FunctionType(new IdentifierPattern('value', NumberType), BooleanType));
+  // expect(check('x => x', context)).toEqual(FunctionType(new IdentifierPattern('x', undefined), undefined));
 });
 
-test('Lambda', () => {
+test('Application', () => {
+  expect(() => check('even "x"', context)).toThrow(TypeError);
   expect(check('even 0', context)).toEqual(BooleanType);
   expect(check('not (even 0)', context)).toEqual(BooleanType);
   expect(check('even ((x => x) 0)', context)).toEqual(BooleanType);
