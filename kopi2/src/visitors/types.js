@@ -185,6 +185,12 @@ class ArrayType extends Type {
     return this.name;
   }
 
+  typeForField(field) {
+    if (typeof field.value === 'number') {
+      return new UnionType(this.elementType, new TupleType());
+    }
+  }
+
   includesType(valueType) {
     // console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
 

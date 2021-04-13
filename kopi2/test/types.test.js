@@ -24,9 +24,32 @@ const bind = types => context = { ...context, ...types };
 const check = (line, context) => visitors.visitNode(parser.parse(line), context, bind);
 
 test('Tuple', () => {
-  expect(check('()', context)).toEqual(VoidType);
-  expect(check('(5)', context)).toEqual(NumberType);
-  expect(check('(5, "x")', context)).toEqual(TupleType(NumberType, StringType));
+  expect(check('()', context)).toEqual(
+    VoidType
+  );
+  expect(check('(5)', context)).toEqual(
+    NumberType
+  );
+  expect(check('(5, "x")', context)).toEqual(
+    TupleType(
+      NumberType,
+      StringType
+    )
+  );
+});
+
+test('Range', () => {
+  expect(check('1..5', context)).toEqual(
+    RangeType(
+      NumberType
+    )
+  );
+  expect(check('(1..5, "z".."z")', context)).toEqual(
+    UnionType(
+      RangeType(NumberType),
+      RangeType(StringType)
+    )
+  );
 });
 
 test('Array', () => {
