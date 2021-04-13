@@ -80,6 +80,14 @@ class TupleType extends Type {
     this.types = types;
   }
 
+  includesType(valueType) {
+    // if (valueType.types.length === 0 && this.types.length === 0) {
+    //   return true;
+    // }
+
+    return valueType instanceof TupleType && valueType.types.every((t, index) => t.includesType(this.types[index]));
+  }
+
   typeForField(field) {
     if (typeof field.value === 'number') {
       if (field.value > this.types.length - 1) {
@@ -178,18 +186,21 @@ class ArrayType extends Type {
   }
 
   includesType(valueType) {
-    console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
+    // console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
 
     // return valueType instanceof ArrayType && (valueType.elementType === undefined || valueType.elementType === this.elementType);
-    return valueType instanceof ArrayType
-      && (valueType.elementType === undefined || valueType.elementType.includesType(this.elementType));
+
+    // return valueType instanceof ArrayType
+    //   && (valueType.elementType === undefined || valueType.elementType.includesType(this.elementType));
+
+    return valueType.elementType.includesType(this.elementType);
   }
 }
 
 module.exports = {
   NoneType: new NoneType(),
   AnyType: new AnyType(),
-  Void: new TupleType(),
+  VoidType: new TupleType(),
   BooleanType: new BooleanType(),
   NumberType: new NumberType(),
   StringType: new StringType(),

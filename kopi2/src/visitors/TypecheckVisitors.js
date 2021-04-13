@@ -108,9 +108,7 @@ class TypecheckVisitors extends BaseVisitors {
     const valueTypes = elements.map(element => this.visitNode(element, context));
 
     const valueTypesSet = valueTypes.filter(
-      (valueType, index) => (valueType instanceof ArrayType.constructor)
-        ? index === valueTypes.findIndex((t) => t.elementType === valueType.elementType)
-        : true
+      (valueType, index) => index === valueTypes.findIndex((t) => t.includesType(valueType))
     );
 
     // console.log('valueTypesSet\n', valueTypesSet, '\n');
