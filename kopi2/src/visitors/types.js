@@ -47,6 +47,12 @@ class NumberType extends Type {
   includesType(valueType) {
     return valueType instanceof NumberType;
   }
+
+  typeForField(field) {
+    if (typeof field.value === 'number' && field.value === 0) {
+      return NumberType;
+    }
+  }
 }
 
 class StringType extends Type {

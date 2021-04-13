@@ -15,6 +15,12 @@ Boolean.prototype.type = BooleanType;
 Number.prototype.type = NumberType;
 String.prototype.type = StringType;
 
+Object.defineProperty(Number.prototype, '0', {
+  get: function () {
+    return this;
+  }
+});
+
 Boolean.prototype.escape = function () {
   return `${this}`;
 };
