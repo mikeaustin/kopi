@@ -74,6 +74,8 @@ test('Array', () => {
   //     )
   //   )
   // );
+  expect(check('[1].0', context)).toEqual(UnionType(NumberType, VoidType));
+  expect(() => check('even [1].0', context)).toThrow(TypeError);
 });
 
 test('Lambda', () => {

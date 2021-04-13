@@ -189,6 +189,10 @@ class ArrayType extends Type {
     if (typeof field.value === 'number') {
       return new UnionType(this.elementType, new TupleType());
     }
+
+    if (field.name === 'length') {
+      return NumberType;
+    }
   }
 
   includesType(valueType) {

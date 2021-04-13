@@ -66,7 +66,7 @@ class TypecheckVisitors extends BaseVisitors {
     const type = evaluatedExpr.typeForField(field);
 
     if (!type) {
-      throw new TypeError(`Field access type error`);
+      throw new TypeError(`Tuple index ${field.value} is out of bounds`);
     }
 
     return type;
