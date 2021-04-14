@@ -6,7 +6,6 @@ const { default: initialContext } = require('../bin/context');
 
 const {
   NoneType,
-  VoidType,
   BooleanType,
   NumberType,
   StringType,
@@ -25,7 +24,7 @@ const check = (line, context) => visitors.visitNode(parser.parse(line), context,
 
 test('Tuple', () => {
   expect(check('()', context)).toEqual(
-    VoidType
+    TupleType()
   );
   expect(check('(5)', context)).toEqual(
     NumberType
@@ -68,9 +67,9 @@ test('Array', () => {
   expect(check('[]', context)).toEqual(ArrayType(NoneType));
   expect(check('[[]]', context)).toEqual(ArrayType(ArrayType(NoneType)));
   expect(check('[[], []]', context)).toEqual(ArrayType(ArrayType(NoneType)));
-  expect(check('[()]', context)).toEqual(ArrayType(VoidType));
-  expect(check('[(), ()]', context)).toEqual(ArrayType(VoidType));
-  expect(check('[(), 5]', context)).toEqual(ArrayType(UnionType(VoidType, NumberType)));
+  expect(check('[()]', context)).toEqual(ArrayType(TupleType()));
+  expect(check('[(), ()]', context)).toEqual(ArrayType(TupleType()));
+  expect(check('[(), 5]', context)).toEqual(ArrayType(UnionType(TupleType(), NumberType)));
   expect(check('[5, 5]', context)).toEqual(ArrayType(NumberType));
   expect(check('[5, "x"]', context)).toEqual(ArrayType(UnionType(NumberType, StringType)));
   expect(check('[[5], []]', context)).toEqual(ArrayType(ArrayType(NumberType)));
@@ -86,7 +85,7 @@ test('Array', () => {
   //     )
   //   )
   // );
-  expect(check('[1].0', context)).toEqual(UnionType(NumberType, VoidType));
+  expect(check('[1].0', context)).toEqual(UnionType(NumberType, TupleType()));
   expect(() => check('even [1].0', context)).toThrow(TypeError);
 });
 

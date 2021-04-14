@@ -107,7 +107,7 @@ class TupleType extends Type {
 
   get name() {
     if (this.types.length === 0) {
-      return `Void`;
+      return `()`;
     }
 
     return `(${this.types.map(type => type.name).join(', ')})`;
@@ -217,7 +217,6 @@ class ArrayType extends Type {
 module.exports = {
   NoneType: new NoneType(),
   AnyType: new AnyType(),
-  VoidType: new TupleType(),
   BooleanType: new BooleanType(),
   NumberType: new NumberType(),
   StringType: new StringType(),
