@@ -1,4 +1,12 @@
 {
+  function extractList(list, index) {
+    return list.map(function(element) { return index !== undefined ? element[index] : null; });
+  }
+
+  function buildList(head, tail, index) {
+    return [...(head !== undefined ? [head] : []) ].concat(extractList(tail, index));
+  }
+
   class Node {
     constructor(properties) {
       Object.assign(this, properties);

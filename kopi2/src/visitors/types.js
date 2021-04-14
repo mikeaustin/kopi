@@ -1,4 +1,5 @@
 class Type {
+  // tag = 'Person';
 }
 
 class AnyType extends Type {

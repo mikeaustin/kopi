@@ -36,6 +36,18 @@ test('Tuple', () => {
       StringType
     )
   );
+  expect(check('1, y: 2', context)).toEqual(
+    TupleType(
+      NumberType,
+      NumberType
+    )
+  );
+  expect(check('x: 1, y: 2', context)).toEqual(
+    TupleType(
+      NumberType,
+      NumberType
+    )
+  );
 });
 
 test('Range', () => {

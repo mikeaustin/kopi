@@ -32,11 +32,25 @@ FunctionExpression
     }
   / TupleExpression
 
-TupleExpression
+xxxTupleExpression
   = head:RangeExpression tail:(_ "," _ RangeExpression)* {
       return tail.length === 0 ? head : new TupleExpression({
         _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
       })
+    }
+
+TupleExpression
+  = headNames:(Identifier ":" _ RangeExpression) tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
+      return tailNames.length === 0 ? headNames : new TupleExpression({
+        _elements: buildList(headNames[3], tailNames, 6),
+        _fields: buildList(headNames[0], tailNames, 3)
+      });
+    }
+  / head:RangeExpression tail:(_ "," _ !(Identifier ":") RangeExpression)* tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
+      return [...tail, ...tailNames].length === 0 ? head : new TupleExpression({
+        _elements: [...buildList(head, tail, 4), ...buildList(undefined, tailNames, 6)],
+        _fields: [...buildList(null, tail, undefined), ...buildList(undefined, tailNames, 4)],
+      });
     }
 
 RangeExpression

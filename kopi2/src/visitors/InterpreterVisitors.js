@@ -1,5 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { RuntimeError } = require('../errors');
+const { AnyType, NoneType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
 const { AstNode, IdentifierPattern, AstNodeIdentifierPattern, Tuple, Range, Function } = require('./classes');
 const { default: TypeCheckVisitors } = require('./TypeCheckVisitors');
 
@@ -35,12 +36,14 @@ class InterpreterVisitors extends BaseVisitors {
   }
 
   FunctionExpression({ _params, _body }, scope) {
-    return new Function(this.visitNode(_params, scope), undefined, _body, scope);
+    const evaluatedParams = this.visitNode(_params, scope);
+    evaluatedParams.type = NoneType;
+
+    return new Function(evaluatedParams, NoneType, _body, scope);
   }
 
   RangeExpression({ from, to }, scope) {
     const range = new Range(this.visitNode(from, scope), this.visitNode(to, scope));
-
     range.type = typeCheckVisitors.RangeExpression({ from, to });
 
     return range;
