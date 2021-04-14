@@ -29,7 +29,7 @@ test('Tuple', () => {
   expect(check('(5)', context)).toEqual(
     NumberType
   );
-  expect(check('(5, "x")', context)).toEqual(
+  expect(check('5, "x"', context)).toEqual(
     TupleType(
       NumberType,
       StringType
@@ -55,7 +55,7 @@ test('Range', () => {
       NumberType
     )
   );
-  expect(check('(1..5, "z".."z")', context)).toEqual(
+  expect(check('1..5, "z".."z"', context)).toEqual(
     UnionType(
       RangeType(NumberType),
       RangeType(StringType)
