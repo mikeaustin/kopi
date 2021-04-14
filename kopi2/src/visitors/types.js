@@ -88,9 +88,9 @@ class TupleType extends Type {
   }
 
   includesType(valueType) {
-    // if (valueType.types.length === 0 && this.types.length === 0) {
-    //   return true;
-    // }
+    if (valueType.types.length === 0 && this.types.length === 0) {
+      return true;
+    }
 
     return valueType instanceof TupleType && valueType.types.every((t, index) => t.includesType(this.types[index]));
   }

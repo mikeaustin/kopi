@@ -111,11 +111,6 @@ class TypecheckVisitors extends BaseVisitors {
       (valueType, index) => index === valueTypes.findIndex((t) => t.includesType(valueType))
     );
 
-    // console.log('valueTypesSet\n', valueTypesSet, '\n');
-    // if (!valueTypes.every(type => type.includesType(valueTypes[0]))) {
-    //   throw new TypeError(`Array elements must all be the same type`);
-    // }
-
     if (valueTypesSet.every(valueType => valueType.elementType === NoneType)) {
       return ArrayType(valueTypesSet[0]);
     }
