@@ -8,6 +8,7 @@ const {
   UnionType,
   ArrayType,
 } = require('../src/visitors/types');
+
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 
 Boolean.prototype.type = BooleanType;
