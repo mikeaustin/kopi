@@ -22,7 +22,7 @@ StringLiteral "string"
     }
 
 ArrayLiteral
-  = "[" head:PrimaryExpression tail:(_ "," _ PrimaryExpression)* "]" {
+  = "[" head:ApplyExpressionInArrayExpression tail:(_ "," _ ApplyExpressionInArrayExpression)* "]" {
       return new ArrayLiteral({
         elements: tail.reduce((result, [,,, expr]) => [...result, expr], [head])
       })

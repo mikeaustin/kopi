@@ -1,11 +1,13 @@
 const { AnyType } = require('./AnyType');
 
 class FunctionType extends AnyType {
-  constructor(params, rettype) {
+  constructor(params, rettype, body, context) {
     super();
 
     this.params = params;
     this.rettype = rettype;
+    this.body = body;
+    this.context = context;
   }
 
   get name() {

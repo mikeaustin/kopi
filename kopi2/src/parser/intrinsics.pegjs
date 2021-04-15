@@ -23,6 +23,16 @@ ApplyExpression
       ), expr);
     }
 
+ApplyExpressionInArrayExpression
+  = expr:FunctionExpressionInArrayExpression args:(_ FunctionExpressionInArrayExpression)* {
+      return args.reduce((result, [, arg]) => (
+        new ApplyExpression({
+          _expr: result,
+          _args: arg
+        })
+      ), expr);
+    }
+
 FunctionExpression
   = pattern:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({
@@ -31,6 +41,15 @@ FunctionExpression
       })
     }
   / TupleExpression
+
+FunctionExpressionInArrayExpression
+  = pattern:Pattern _ "=>" _ expr:ApplyExpressionInArrayExpression {
+      return new FunctionExpression({
+        _params: pattern,
+        _body: expr
+      })
+    }
+  / RangeExpression
 
 TupleExpression
   = headNames:(Identifier ":" _ RangeExpression) tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
