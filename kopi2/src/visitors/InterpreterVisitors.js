@@ -54,6 +54,7 @@ class InterpreterVisitors extends BaseVisitors {
     return range;
   }
 
+  // TODO: Add ArrayFieldExpression and return Union type | ()
   FieldExpression({ expr, field }, scope) {
     return this.visitNode(expr, scope)[field.name || field.value];
   }

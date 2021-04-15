@@ -25,7 +25,7 @@ class ArrayType extends AnyType {
     // return valueType instanceof ArrayType
     //   && (valueType.elementType === undefined || valueType.elementType.includesType(this.elementType));
 
-    return valueType.elementType.includesType(this.elementType);
+    return valueType instanceof ArrayType && valueType.elementType.includesType(this.elementType);
   }
 
   //
