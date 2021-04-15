@@ -69,10 +69,6 @@ class Tuple {
     });
   }
 
-  get type() {
-    return TupleType(...this.elements.map(element => element.type));
-  }
-
   escape() {
     return `(${this.elements.map(element => element.escape()).join(', ')})`;
   }
@@ -91,10 +87,6 @@ class Range {
   escape() {
     return `${this.from.escape()}..${this.to.escape()}`;
   }
-
-  // get type() {
-  //   return RangeType();
-  // }
 }
 
 class Function {
@@ -113,9 +105,9 @@ class Function {
     return `<function>`;
   }
 
-  get type() {
-    return FunctionType(this.params, this.rettype);
-  }
+  // get type() {
+  //   return FunctionType(this.params, this.rettype);
+  // }
 
   apply(args, scope, visitors) {
     const matches = this.params.matchValue(args);

@@ -63,6 +63,7 @@ async function main() {
       const ast = parser.parse(line);
 
       const typeCheckedAst = typeCheck(ast);
+      // console.log(ast);
 
       const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
 

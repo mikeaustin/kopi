@@ -1,4 +1,5 @@
 const { AnyType } = require('./AnyType');
+const { NumberType } = require('./NumberType');
 
 class StringType extends AnyType {
   get name() {

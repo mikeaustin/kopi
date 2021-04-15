@@ -21,13 +21,17 @@ class TypecheckVisitors extends BaseVisitors {
     bind(matches);
   }
 
-  FunctionExpression({ _params, _body }, context) {
+  FunctionExpression(astNode, context) {
+    const { _params, _body } = astNode;
+
     const params = this.visitNode(_params, context);
 
-    return new Function(params, undefined, _body, context);
+    return astNode.type = new Function(params, undefined, _body, context);
   }
 
-  ApplyExpression({ _expr, _args }, context) {
+  ApplyExpression(astNode, context) {
+    const { _expr, _args } = astNode;
+
     const type = this.visitNode(_expr, context);
     const args = this.visitNode(_args, context);
 
@@ -45,22 +49,28 @@ class TypecheckVisitors extends BaseVisitors {
       return this.visitNode(type.body, { ...type.closure, ...matches });
     }
 
-    return type.rettype;
+    return astNode.type = type.rettype;
   }
 
-  TupleExpression({ _elements }, context) {
-    return TupleType(..._elements.map(element => this.visitNode(element, context)));
+  TupleExpression(astNode, context) {
+    const { _elements } = astNode;
+
+    return astNode.type = TupleType(..._elements.map(element => this.visitNode(element, context)));
   }
 
-  RangeExpression({ from, to }, context) {
+  RangeExpression(astNode, context) {
+    const { from, to } = astNode;
+
     if (!this.visitNode(from, context).includesType(this.visitNode(to, context))) {
       throw new TypeError(`Range types must be equal`);
     }
 
-    return RangeType(this.visitNode(from, context), this.visitNode(to, context));
+    return astNode.type = RangeType(this.visitNode(from, context), this.visitNode(to, context));
   }
 
-  FieldExpression({ expr, field }, context) {
+  FieldExpression(astNode, context) {
+    const { expr, field } = astNode;
+
     const evaluatedExpr = this.visitNode(expr, context);
 
     const type = evaluatedExpr.typeForField(field);
@@ -69,7 +79,7 @@ class TypecheckVisitors extends BaseVisitors {
       throw new TypeError(`Tuple index ${field.value} is out of bounds`);
     }
 
-    return type;
+    return astNode.type = type;
   }
 
   //
@@ -84,27 +94,33 @@ class TypecheckVisitors extends BaseVisitors {
 
   //
 
-  NumericLiteral({ value }) {
+  NumericLiteral(astNode) {
+    const { value } = astNode;
+
     if (typeof value !== 'number') {
       throw TypeError(`Value is not a number.`);
     }
 
-    return NumberType;
+    return astNode.type = NumberType;
   }
 
-  StringLiteral({ value }) {
+  StringLiteral(astNode) {
+    const { value } = astNode;
+
     if (typeof value !== 'string') {
       throw TypeError(`Value is not a string.`);
     }
 
-    return StringType;
+    return astNode.type = StringType;
   }
 
-  ArrayLiteral({ elements }, context) {
+  ArrayLiteral(astNode, context) {
+    const { elements } = astNode;
+
     // console.error('> ArrayLiteral', { elements });
 
     if (elements.length === 0) {
-      return ArrayType(NoneType);
+      return astNode.type = ArrayType(NoneType);
     }
 
     const valueTypes = elements.map(element => this.visitNode(element, context));
@@ -114,26 +130,28 @@ class TypecheckVisitors extends BaseVisitors {
     );
 
     if (valueTypesSet.every(valueType => valueType.elementType === NoneType)) {
-      return ArrayType(valueTypesSet[0]);
+      return astNode.type = ArrayType(valueTypesSet[0]);
     }
 
     const filteredValueTypesSet = valueTypesSet.filter(valueType => valueType.elementType !== NoneType);
 
     if (filteredValueTypesSet.length === 1) {
-      return ArrayType(filteredValueTypesSet[0]);
+      return astNode.type = ArrayType(filteredValueTypesSet[0]);
     }
 
-    return ArrayType(UnionType(...filteredValueTypesSet));
+    return astNode.type = ArrayType(UnionType(...filteredValueTypesSet));
   }
 
-  Identifier({ name }, context) {
+  Identifier(astNode, context) {
     // console.error('Identifier', name, context);
+
+    const { name } = astNode;
 
     if (!context[name]) {
       throw new Error(`Variable '${name}' is not defined the current scope.`);
     }
 
-    return context[name];
+    return astNode.type = context[name];
   }
 }
 

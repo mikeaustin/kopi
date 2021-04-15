@@ -31,20 +31,26 @@ class InterpreterVisitors extends BaseVisitors {
     return value.apply(args, scope, this);
   }
 
-  TupleExpression({ _elements }, scope) {
-    return new Tuple(..._elements.map(element => this.visitNode(element, scope)));
+  TupleExpression({ _elements, type }, scope) {
+    const tuple = new Tuple(..._elements.map(element => this.visitNode(element, scope)));
+    tuple.type = type;
+
+    return tuple;
   }
 
-  FunctionExpression({ _params, _body }, scope) {
+  FunctionExpression({ _params, _body, type }, scope) {
     const evaluatedParams = this.visitNode(_params, scope);
     evaluatedParams.type = NoneType;
 
-    return new Function(evaluatedParams, NoneType, _body, scope);
+    const func = new Function(evaluatedParams, NoneType, _body, scope);
+    func.type = type;
+
+    return func;
   }
 
-  RangeExpression({ from, to }, scope) {
+  RangeExpression({ from, to, type }, scope) {
     const range = new Range(this.visitNode(from, scope), this.visitNode(to, scope));
-    range.type = typeCheckVisitors.RangeExpression({ from, to });
+    range.type = type;
 
     return range;
   }
@@ -69,10 +75,9 @@ class InterpreterVisitors extends BaseVisitors {
     return value;
   }
 
-  ArrayLiteral({ elements }, scope) {
+  ArrayLiteral({ elements, type }, scope) {
     const array = elements.map(element => this.visitNode(element, scope));
-
-    // array.type = typeCheckVisitors.ArrayLiteral({ elements });
+    array.type = type;
 
     return array;
   }
