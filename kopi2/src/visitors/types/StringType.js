@@ -13,6 +13,8 @@ class StringType extends AnyType {
     return valueType instanceof StringType;
   }
 
+  //
+
   typeForField(field) {
     if (String.prototype[field.name] === undefined) {
       return null;

@@ -9,6 +9,14 @@ const { RangeType } = require('./RangeType');
 const { FunctionType } = require('./FunctionType');
 const { UnionType } = require('./UnionType');
 
+/*
+
+interface FieldAccess {
+  typeForField(field: Number | String): Type
+}
+
+*/
+
 module.exports = {
   AnyType: new AnyType(),
   NoneType: new NoneType(),

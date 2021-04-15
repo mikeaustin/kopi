@@ -17,16 +17,6 @@ class ArrayType extends AnyType {
     return this.name;
   }
 
-  typeForField(field) {
-    if (typeof field.value === 'number') {
-      return new UnionType(this.elementType, new TupleType());
-    }
-
-    if (field.name === 'length') {
-      return NumberType;
-    }
-  }
-
   includesType(valueType) {
     // console.log('ArrayType.includesType()', valueType.elementType, this.elementType);
 
@@ -36,6 +26,18 @@ class ArrayType extends AnyType {
     //   && (valueType.elementType === undefined || valueType.elementType.includesType(this.elementType));
 
     return valueType.elementType.includesType(this.elementType);
+  }
+
+  //
+
+  typeForField(field) {
+    if (typeof field.value === 'number') {
+      return new UnionType(this.elementType, new TupleType());
+    }
+
+    if (field.name === 'length') {
+      return NumberType;
+    }
   }
 }
 

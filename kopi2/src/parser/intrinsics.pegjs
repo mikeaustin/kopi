@@ -32,13 +32,6 @@ FunctionExpression
     }
   / TupleExpression
 
-xxxTupleExpression
-  = head:RangeExpression tail:(_ "," _ RangeExpression)* {
-      return tail.length === 0 ? head : new TupleExpression({
-        _elements: tail.reduce((tuple, [,,, expression]) => [...tuple, expression], [head]),
-      })
-    }
-
 TupleExpression
   = headNames:(Identifier ":" _ RangeExpression) tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
       return tailNames.length === 0 ? headNames : new TupleExpression({

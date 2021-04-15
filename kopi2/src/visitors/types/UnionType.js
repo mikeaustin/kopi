@@ -7,6 +7,8 @@ class UnionType extends AnyType {
     this.types = types;
   }
 
+  //
+
   get name() {
     return `${this.types.map(type => type.name).join(' | ')}`;
   }
