@@ -101,6 +101,8 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   ArrayLiteral({ elements }, context) {
+    // console.error('> ArrayLiteral', { elements });
+
     if (elements.length === 0) {
       return ArrayType(NoneType);
     }
@@ -125,6 +127,8 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   Identifier({ name }, context) {
+    // console.error('Identifier', name, context);
+
     if (!context[name]) {
       throw new Error(`Variable '${name}' is not defined the current scope.`);
     }

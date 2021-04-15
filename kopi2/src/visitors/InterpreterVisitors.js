@@ -72,7 +72,7 @@ class InterpreterVisitors extends BaseVisitors {
   ArrayLiteral({ elements }, scope) {
     const array = elements.map(element => this.visitNode(element, scope));
 
-    array.type = typeCheckVisitors.ArrayLiteral({ elements });
+    // array.type = typeCheckVisitors.ArrayLiteral({ elements });
 
     return array;
   }
