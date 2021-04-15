@@ -25,6 +25,8 @@ class TypecheckVisitors extends BaseVisitors {
     const { _params, _body } = astNode;
 
     const params = this.visitNode(_params, context);
+    // TODO: Find rettype of body
+    // const body = this.visitNode(_body, { x: params.type, ...context });
 
     return astNode.type = FunctionType(params, undefined, _body, context);
   }
@@ -84,8 +86,9 @@ class TypecheckVisitors extends BaseVisitors {
 
   //
 
-  IdentifierPattern({ _name, type }, context) {
-    return new IdentifierPattern(_name, type);
+  IdentifierPattern({ _name }, context) {
+    // TODO: Add generic type variable
+    return new IdentifierPattern(_name, undefined);
   }
 
   AstNodeIdentifierPattern({ _expr }) {

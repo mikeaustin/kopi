@@ -40,9 +40,8 @@ class InterpreterVisitors extends BaseVisitors {
 
   FunctionExpression({ _params, _body, type }, scope) {
     const evaluatedParams = this.visitNode(_params, scope);
-    evaluatedParams.type = NoneType;
 
-    const func = new Function(evaluatedParams, NoneType, _body, scope);
+    const func = new Function(evaluatedParams, type.rettype, _body, scope);
     func.type = type;
 
     return func;
