@@ -26,7 +26,7 @@ class TypecheckVisitors extends BaseVisitors {
 
     const params = this.visitNode(_params, context);
 
-    return astNode.type = new Function(params, undefined, _body, context);
+    return astNode.type = FunctionType(params, undefined, _body, context);
   }
 
   ApplyExpression(astNode, context) {
@@ -46,7 +46,7 @@ class TypecheckVisitors extends BaseVisitors {
     }
 
     if (type.body) {
-      return this.visitNode(type.body, { ...type.closure, ...matches });
+      return this.visitNode(type.body, { ...type.context, ...matches });
     }
 
     return astNode.type = type.rettype;

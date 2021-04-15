@@ -26,6 +26,6 @@ module.exports = {
   TupleType: (...types) => new TupleType(...types),
   ArrayType: (type) => new ArrayType(type),
   RangeType: (type) => new RangeType(type),
-  FunctionType: (params, rettype) => new FunctionType(params, rettype),
+  FunctionType: (params, rettype, body, context) => new FunctionType(params, rettype, body, context),
   UnionType: (...types) => new UnionType(...types),
 };
