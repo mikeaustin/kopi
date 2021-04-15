@@ -42,6 +42,7 @@ let scope = initialScope;
 Object.entries(scope).forEach(([name, value]) => {
   value.params = context[name].params;
   value.rettype = context[name].rettype;
+  value.type = context[name];
 });
 
 const typeCheck = (ast) => {
