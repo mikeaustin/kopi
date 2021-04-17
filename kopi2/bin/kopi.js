@@ -58,10 +58,10 @@ const visitors = new InterpreterVisitors();
 const extend = (typesMap, type, funcsObject) => {
   return new Map([
     ...typesMap,
-    ...new Map([[type, {
+    [type, {
       ...(typesMap.get(type) || {}),
       ...funcsObject
-    }]])
+    }]
   ]);
 };
 

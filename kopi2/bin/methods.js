@@ -111,11 +111,10 @@ console.log(__.get(Number).abs.apply(-1));
 
 const extend = (typesMap, type, funcsObject) => {
   return new Map([
-    ...typesMap,
-    ...new Map([[type, {
+    ...typesMap, [type, {
       ...(typesMap.get(type) || {}),
       ...funcsObject
-    }]])
+    }]
   ]);
 };
 
