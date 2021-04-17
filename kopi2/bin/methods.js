@@ -1,9 +1,12 @@
-const merge = (a, b) => {
+const merge = (funcsObjectA, funcsObjB) => {
   return {
-    ...a,
-    ...Object.entries(b).reduce((obj, [name]) => ({
-      ...obj,
-      [name]: new Map([...(a[name] || new Map()), ...b[name]])
+    ...funcsObjectA,
+    ...Object.entries(funcsObjB).reduce((mergedFuncs, [name]) => ({
+      ...mergedFuncs,
+      [name]: new Map([
+        ...(funcsObjectA[name] || new Map()),
+        ...funcsObjB[name]
+      ])
     }), {})
   };
 };
@@ -43,24 +46,94 @@ Number.abs
 
 */
 
-const merge2 = (a, b) => {
+
+const merge2 = (typeMapA, typeMapB) => {
   return new Map([
-    ...a,
-    ...[...b].reduce((map, [name, value]) => (
-      new Map([...map, [name, { ...(a.get(name) || {}), ...b.get(name) }]])
+    ...typeMapA,
+    ...[...typeMapB].reduce((mergedTypeMap, [type, value]) => (
+      new Map([...mergedTypeMap, [type, {
+        ...(typeMapA.get(type) || {}),
+        ...typeMapB.get(type)
+      }]])
     ), new Map())
   ]);
 };
 
 __ = new Map();
 
-__ = merge2(__, new Map([[Number, { toString: function () { return this.toString(); } }]]));
+__ = merge2(__, new Map([
+  [Number, { toString: function () { return this.toString(); } }]
+]));
 
-__ = merge2(__, new Map([[String, { toString: function () { return this.valueOf(); } }]]));
+__ = merge2(__, new Map([
+  [String, { toString: function () { return this.valueOf(); } }]
+]));
 
-__ = merge2(__, new Map([[Number, { abs: function () { return Math.abs(this); } }]]));
+__ = merge2(__, new Map([
+  [Number, { abs: function () { return Math.abs(this); } }]
+]));
 
 // console.log(__);
 console.log(__.get(Number).toString.apply(1));
 console.log(__.get(String).toString.apply("x"));
 console.log(__.get(Number).abs.apply(-1));
+
+
+const merge3 = (typesMap, [type, funcsObject]) => {
+  return new Map([
+    ...typesMap,
+    ...new Map([[type, {
+      ...(typesMap.get(type) || {}),
+      ...funcsObject
+    }]])
+  ]);
+};
+
+__ = new Map();
+
+__ = merge3(__, [Number, {
+  toString: function () { return this.toString(); }
+}]);
+
+__ = merge3(__, [String, {
+  toString: function () { return this.valueOf(); }
+}]);
+
+__ = merge3(__, [Number, {
+  abs: function () { return Math.abs(this); }
+}]);
+
+// console.log(__);
+console.log(__.get(Number).toString.apply(1));
+console.log(__.get(String).toString.apply("x"));
+console.log(__.get(Number).abs.apply(-1));
+
+
+const extend = (typesMap, type, funcsObject) => {
+  return new Map([
+    ...typesMap,
+    ...new Map([[type, {
+      ...(typesMap.get(type) || {}),
+      ...funcsObject
+    }]])
+  ]);
+};
+
+// __ = new Map();
+
+// __ = extend(__, Number, {
+//   toString: function () { return this.toString(); }
+// });
+
+// __ = extend(__, String, {
+//   toString: function () { return this.valueOf(); }
+// });
+
+// __ = extend(__, Number, {
+//   abs: function () { return Math.abs(this); }
+// });
+
+// // console.log(__);
+// console.log(__.get(Number).toString.apply(1));
+// console.log(__.get(String).toString.apply("x"));
+// console.log(__.get(Number).abs.apply(-1));
