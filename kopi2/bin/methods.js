@@ -119,21 +119,21 @@ const extend = (typesMap, type, funcsObject) => {
   ]);
 };
 
-// __ = new Map();
+_methods = new Map();
 
-// __ = extend(__, Number, {
-//   toString: function () { return this.toString(); }
-// });
+_methods = extend(_methods, Number, {
+  toString: function () { return this.toString(); }
+});
 
-// __ = extend(__, String, {
-//   toString: function () { return this.valueOf(); }
-// });
+_methods = extend(_methods, String, {
+  toString: function () { return this.valueOf(); }
+});
 
-// __ = extend(__, Number, {
-//   abs: function () { return Math.abs(this); }
-// });
+_methods = extend(_methods, Number, {
+  abs: function () { return Math.abs(this); }
+});
 
-// // console.log(__);
-// console.log(__.get(Number).toString.apply(1));
-// console.log(__.get(String).toString.apply("x"));
-// console.log(__.get(Number).abs.apply(-1));
+// console.log(_methods);
+console.log(($ = 1, _methods.get($.constructor).toString.apply($)));
+console.log(($ = "x", _methods.get($.constructor).toString.apply($)));
+console.log(($ = -3, _methods.get($.constructor).abs.apply($)));

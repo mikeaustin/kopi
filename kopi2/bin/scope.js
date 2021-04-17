@@ -87,9 +87,9 @@ let scope = {
       return arg;
     }
   },
-  _: {
-    toString: new Map([[Number, function () { return this.toString(); }]])
-  }
+  _methods: new Map([
+    [Number, { toString: function () { return this.toString(); } }]
+  ])
 };
 
 module.exports = {

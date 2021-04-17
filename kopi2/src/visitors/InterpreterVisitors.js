@@ -28,7 +28,7 @@ class InterpreterVisitors extends BaseVisitors {
     const left = this.visitNode(_left, scope);
     // const args = this.visitNode(_right._args, scope);
 
-    return scope._[_right.name].get(left.constructor).apply(left);
+    return scope._methods.get(left.constructor)[_right.name].apply(left);
   }
 
   ApplyExpression({ _expr, _args }, scope) {

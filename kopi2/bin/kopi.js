@@ -55,6 +55,21 @@ const typeCheck = (ast) => {
 
 const visitors = new InterpreterVisitors();
 
+const extend = (typesMap, type, funcsObject) => {
+  return new Map([
+    ...typesMap,
+    ...new Map([[type, {
+      ...(typesMap.get(type) || {}),
+      ...funcsObject
+    }]])
+  ]);
+};
+
+scope._methods = extend(scope._methods, String, {
+  toString: function () { return this.valueOf(); },
+  capitalize: function () { return this.slice(0, 1).toUpperCase() + this.slice(1); }
+});
+
 async function main() {
   console.log('Kopi 0.0.1 Shell | 2021 Mike Austin');
   console.log('Enter \'help\' to view top-level functions.');
