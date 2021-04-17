@@ -1,5 +1,6 @@
 const {
   AnyType,
+  NoneType,
   BooleanType,
   NumberType,
   StringType,
@@ -40,7 +41,6 @@ Array.prototype.escape = function () {
 let context = {
   true: BooleanType,
   false: BooleanType,
-  env: FunctionType(TupleType(), TupleType()),
   help: FunctionType(new IdentifierPattern('func', AnyType), TupleType()),
   source: FunctionType(new IdentifierPattern('func', AnyType), TupleType()),
   type: FunctionType(new IdentifierPattern('value', AnyType), AnyType),
@@ -50,6 +50,7 @@ let context = {
   union: FunctionType(new IdentifierPattern('value', UnionType(NumberType, StringType)), BooleanType),
   print: FunctionType(new IdentifierPattern('value', AnyType), TupleType()),
   test: FunctionType(new IdentifierPattern('value', ArrayType(NumberType)), TupleType()),
+  _: NoneType
 };
 
 module.exports = {

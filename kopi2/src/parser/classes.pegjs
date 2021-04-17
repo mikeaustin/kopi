@@ -17,6 +17,7 @@
   class AstIdentifierNode extends Node { }
   class Assignment extends Node { }
 
+  class PipeExpression extends Node { }
   class ApplyExpression extends Node { }
   class TupleExpression extends Node { }
   class FunctionExpression extends Node { }

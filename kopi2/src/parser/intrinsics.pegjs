@@ -3,7 +3,7 @@ Statement
   / Expression
 
 Expression
-  = ApplyExpression
+  = PipeExpression
 
 Assignment
   = pattern:Pattern _ "=" _ expr:Expression {
@@ -11,6 +11,27 @@ Assignment
         _pattern: pattern,
         _expr: expr
       })
+    }
+
+PipeExpression
+  = head:ApplyExpression tail:(_ "|" _ PipeApplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => (
+        new PipeExpression({
+          _op: operator,
+          _left: result,
+          _right: value
+        })
+      ), head);
+    }
+
+PipeApplyExpression
+  = expr:Identifier args:(_ FunctionExpression)* {
+      return args.reduce((result, [, arg]) => (
+        new ApplyExpression({
+          _expr: result,
+          _args: arg
+        })
+      ), expr);
     }
 
 ApplyExpression

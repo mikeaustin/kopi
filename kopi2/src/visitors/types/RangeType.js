@@ -1,4 +1,5 @@
 const { AnyType } = require('./AnyType');
+const { NumberType } = require('./NumberType');
 
 class RangeType extends AnyType {
   constructor(elementType) {
@@ -17,6 +18,12 @@ class RangeType extends AnyType {
 
   includesType(type) {
     return type.elementType === this.elementType;
+  }
+
+  //
+
+  typeForMethod(method) {
+    return new NumberType();
   }
 }
 

@@ -24,6 +24,13 @@ class InterpreterVisitors extends BaseVisitors {
     bind(matches);
   }
 
+  PipeExpression({ _left, _right }, scope) {
+    const left = this.visitNode(_left, scope);
+    // const args = this.visitNode(_right._args, scope);
+
+    return scope._[_right.name].get(left.constructor).apply(left);
+  }
+
   ApplyExpression({ _expr, _args }, scope) {
     const value = this.visitNode(_expr, scope);
     const args = this.visitNode(_args, scope);

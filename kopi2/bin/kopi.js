@@ -40,9 +40,11 @@ let context = initialContext;
 let scope = initialScope;
 
 Object.entries(scope).forEach(([name, value]) => {
-  value.params = context[name].params;
-  value.rettype = context[name].rettype;
-  value.type = context[name];
+  if (value.params) {
+    value.params = context[name].params;
+    value.rettype = context[name].rettype;
+    value.type = context[name];
+  }
 });
 
 const typeCheck = (ast) => {
@@ -64,7 +66,6 @@ async function main() {
       const ast = parser.parse(line);
 
       const typeCheckedAst = typeCheck(ast);
-      // console.log(ast);
 
       const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
 

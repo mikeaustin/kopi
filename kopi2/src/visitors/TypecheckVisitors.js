@@ -21,6 +21,13 @@ class TypecheckVisitors extends BaseVisitors {
     bind(matches);
   }
 
+  PipeExpression(astNode, context) {
+    const { _left, _right } = astNode;
+
+    const type = this.visitNode(_left, context);
+    // const args = this.visitNode(_right, context);
+  }
+
   FunctionExpression(astNode, context) {
     const { _params, _body } = astNode;
 
