@@ -69,6 +69,8 @@ scope._methods = extend(scope._methods, String, {
   capitalize: function () { return this.slice(0, 1).toUpperCase() + this.slice(1); }
 });
 
+const bind = variables => scope = { ...scope, ...variables };
+
 async function main() {
   console.log('Kopi 0.0.1 Shell | 2021 Mike Austin');
   console.log('Enter \'help\' to view top-level functions.');
@@ -80,8 +82,7 @@ async function main() {
       const ast = parser.parse(line);
 
       const typeCheckedAst = typeCheck(ast);
-
-      const result = visitors.visitNode(ast, scope, variables => scope = { ...scope, ...variables });
+      const result = visitors.visitNode(ast, scope, bind);
 
       if (result !== undefined) {
         console.log(result.escape());
