@@ -52,13 +52,12 @@ const merge2 = (a, b) => {
   ]);
 };
 
-__ = new Map([
-  [Number, { toString: function () { return this.toString(); } }]
-]);
+__ = new Map();
 
-__ = merge2(__, new Map([[String, {
-  toString: function () { return this.valueOf(); }
-}]]));
+__ = merge2(__, new Map([[Number, { toString: function () { return this.toString(); } }]]));
+
+__ = merge2(__, new Map([[String, { toString: function () { return this.valueOf(); } }]]));
+
 __ = merge2(__, new Map([[Number, { abs: function () { return Math.abs(this); } }]]));
 
 // console.log(__);
