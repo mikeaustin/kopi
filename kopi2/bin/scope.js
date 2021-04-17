@@ -89,7 +89,14 @@ let scope = {
   },
   _methods: new Map([
     [Number, { toString: function () { return this.toString(); } }]
-  ])
+  ]),
+  _methods: new Map([
+    [Number, {
+      toString: new class extends Function {
+        apply() { return this.toString(); }
+      }
+    }]
+  ]),
 };
 
 module.exports = {

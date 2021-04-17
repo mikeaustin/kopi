@@ -49,8 +49,9 @@ Object.entries(scope).forEach(([name, value]) => {
 
 const typeCheck = (ast) => {
   const visitors = new TypecheckVisitors();
+  const bind = types => context = { ...context, ...types };
 
-  return visitors.visitNode(ast, context, types => context = { ...context, ...types });
+  return visitors.visitNode(ast, context, bind);
 };
 
 const visitors = new InterpreterVisitors();
@@ -65,8 +66,12 @@ const extend = (typesMap, type, funcsObject) => {
 };
 
 scope._methods = extend(scope._methods, String, {
-  toString: function () { return this.valueOf(); },
-  capitalize: function () { return this.slice(0, 1).toUpperCase() + this.slice(1); }
+  toString: new class extends Function {
+    apply() { return this.valueOf(); }
+  },
+  capitalize: new class extends Function {
+    apply() { return this.slice(0, 1).toUpperCase() + this.slice(1); }
+  },
 });
 
 const bind = variables => scope = { ...scope, ...variables };
