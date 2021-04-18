@@ -1,18 +1,3 @@
-Statement
-  = Assignment
-  / Expression
-
-Expression
-  = PipeExpression
-
-Assignment
-  = pattern:Pattern _ "=" _ expr:Expression {
-      return new Assignment({
-        _pattern: pattern,
-        _expr: expr
-      })
-    }
-
 PipeExpression
   = head:ApplyExpression tail:(_ "|" _ PipeApplyExpression)* {
       return tail.reduce((result, [, operator,, value]) => (
@@ -44,16 +29,6 @@ ApplyExpression
       ), expr);
     }
 
-ApplyExpressionInArrayExpression
-  = expr:FunctionExpressionInArrayExpression args:(_ FunctionExpressionInArrayExpression)* {
-      return args.reduce((result, [, arg]) => (
-        new ApplyExpression({
-          _expr: result,
-          _args: arg
-        })
-      ), expr);
-    }
-
 FunctionExpression
   = pattern:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({
@@ -62,15 +37,6 @@ FunctionExpression
       })
     }
   / TupleExpression
-
-FunctionExpressionInArrayExpression
-  = pattern:Pattern _ "=>" _ expr:ApplyExpressionInArrayExpression {
-      return new FunctionExpression({
-        _params: pattern,
-        _body: expr
-      })
-    }
-  / RangeExpression
 
 TupleExpression
   = headNames:(Identifier ":" _ RangeExpression) tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
