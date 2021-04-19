@@ -5,9 +5,9 @@ const fs = require("fs");
 var readline = require('readline');
 
 const parser = require("../lib/parser");
+
 const { default: TypecheckVisitors } = require('../src/visitors/TypecheckVisitors');
 const { default: InterpreterVisitors } = require('../src/visitors/InterpreterVisitors');
-const { default: PrintCodeVisitors } = require('../src/visitors/PrintCodeVisitors');
 
 const { default: initialContext } = require('./context');
 const { default: initialScope } = require('./scope');
@@ -34,13 +34,11 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
-const printCodeVisitors = new PrintCodeVisitors();
-
 let context = initialContext;
 let scope = initialScope;
 
 Object.entries(scope).forEach(([name, value]) => {
-  if (value.params) {
+  if (context[name]?.params) {
     value.params = context[name].params;
     value.rettype = context[name].rettype;
     value.type = context[name];

@@ -26,7 +26,12 @@ class InterpreterVisitors extends BaseVisitors {
 
   PipeExpression({ _left, _right }, scope) {
     const left = this.visitNode(_left, scope);
-    // const args = this.visitNode(_right._args, scope);
+
+    if (_right._args) {
+      const args = this.visitNode(_right._args, scope);
+
+      return scope._methods.get(left.constructor)[_right._expr.name].apply.apply(left, [args, scope, this]);
+    }
 
     return scope._methods.get(left.constructor)[_right.name].apply.apply(left);
   }
@@ -48,7 +53,7 @@ class InterpreterVisitors extends BaseVisitors {
   FunctionExpression({ _params, _body, type }, scope) {
     const evaluatedParams = this.visitNode(_params, scope);
 
-    const func = new Function(evaluatedParams, type.rettype, _body, scope);
+    const func = new Function(evaluatedParams, type?.rettype, _body, scope);
     func.type = type;
 
     return func;
@@ -61,9 +66,23 @@ class InterpreterVisitors extends BaseVisitors {
     return range;
   }
 
+  OperatorExpression({ left, op, right }, scope) {
+    const evaluatedLeft = this.visitNode(left, scope);
+    const evaluatedRight = this.visitNode(right, scope);
+
+    if (typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number') {
+      switch (op) {
+        case '+': return evaluatedLeft + evaluatedRight;
+        case '-': return evaluatedLeft - evaluatedRight;
+        case '*': return evaluatedLeft * evaluatedRight;
+        case '/': return evaluatedLeft / evaluatedRight;
+      }
+    }
+  }
+
   // TODO: Add ArrayFieldExpression and return Union type | ()
   FieldExpression({ expr, field }, scope) {
-    return this.visitNode(expr, scope)[field.name || field.value];
+    return this.visitNode(expr, scope).valueForField(field.name || field.value);
   }
 
   IdentifierPattern({ _name }) {

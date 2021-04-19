@@ -77,6 +77,13 @@ class TypecheckVisitors extends BaseVisitors {
     return astNode.type = RangeType(this.visitNode(from, context), this.visitNode(to, context));
   }
 
+  OperatorExpression(astNode, context) {
+    const { left, right } = astNode;
+
+    const evaluatedLeft = this.visitNode(left, context);
+    const evaluatedRight = this.visitNode(right, context);
+  }
+
   FieldExpression(astNode, context) {
     const { expr, field } = astNode;
 

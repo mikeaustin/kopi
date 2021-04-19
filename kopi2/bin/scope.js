@@ -1,4 +1,4 @@
-const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
+const { Function, Tuple, Range, IdentifierPattern } = require('../src/visitors/classes');
 const { default: PrintCodeVisitors } = require('../src/visitors/PrintCodeVisitors');
 
 const printCodeVisitors = new PrintCodeVisitors();
@@ -88,14 +88,22 @@ let scope = {
     }
   },
   _methods: new Map([
-    [Number, { toString: function () { return this.toString(); } }]
-  ]),
-  _methods: new Map([
     [Number, {
       toString: new class extends Function {
         apply() { return this.toString(); }
       }
-    }]
+    }],
+    [Range, {
+      map: new class extends Function {
+        apply(args, scope, visitors) {
+          return Array.from({ length: this.to - this.from + 1 }, (x, index) => args.apply(index + this.from, scope, visitors));
+
+          // return Array.prototype.map.apply({ length: this.to - this.from }, element => args.apply(element, scope, visitors));
+          // return this.elements.map(element => args.apply(1, scope, visitors));
+          return console.log('>', args.apply(this.to, scope, visitors));
+        }
+      }
+    }],
   ]),
 };
 

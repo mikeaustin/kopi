@@ -22,6 +22,12 @@ Object.defineProperty(Number.prototype, '0', {
   }
 });
 
+Array.prototype.valueForField = function (field) {
+  if (typeof field === 'number') {
+    return this[field] ?? TupleType();
+  }
+};
+
 Boolean.prototype.escape = function () {
   return `${this}`;
 };

@@ -14,6 +14,14 @@ class Tuple {
   toString() {
     return `${this.elements.join(', ')}`;
   }
+
+  //
+
+  valueForField(field) {
+    if (typeof field === 'number') {
+      return this.elements[field];
+    }
+  }
 }
 
 module.exports = {

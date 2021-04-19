@@ -53,15 +53,40 @@ TupleExpression
     }
 
 RangeExpression
-  = from:FieldExpression _ ".." _ to:FieldExpression {
+  = from:AddExpression _ ".." _ to:AddExpression {
     return new RangeExpression({ from: from, to: to });
   }
-  / FieldExpression
+  / AddExpression
+
+AddExpression
+  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
+      return tail.reduce((result, [, operator,, value]) => (
+        new OperatorExpression({
+          op: operator,
+          left: result,
+          right: value
+        })
+      ), head);
+    }
+
+MultiplyExpression
+  = head:FieldExpression tail:(_ ("*" / "/") _ FieldExpression)* {
+      return tail.reduce((result, [, operator,, value]) => (
+        new OperatorExpression({
+          op: operator,
+          left: result,
+          right: value
+        })
+      ), head);
+    }
 
 FieldExpression
   = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
       return tail.reduce((result, [, field]) => (
-        new FieldExpression({ expr: result, field: field })
+        new FieldExpression({
+          expr: result,
+          field: field
+        })
       ), head);
     }
 
