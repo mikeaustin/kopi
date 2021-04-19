@@ -78,10 +78,19 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   OperatorExpression(astNode, context) {
-    const { left, right } = astNode;
+    const { left, op, right } = astNode;
 
     const evaluatedLeft = this.visitNode(left, context);
     const evaluatedRight = this.visitNode(right, context);
+    console.log(evaluatedRight);
+
+    if (evaluatedLeft.includesType(NumberType)) {
+      if (!evaluatedRight.includesType(NumberType)) {
+        throw new TypeError(`Argument to operator 'Number.${op}' should be type 'Number', but found '${evaluatedRight.name}'`);
+      }
+    }
+
+    return evaluatedRight;
   }
 
   FieldExpression(astNode, context) {
