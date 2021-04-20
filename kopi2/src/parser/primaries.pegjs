@@ -12,7 +12,7 @@ PrimaryExpression
   = Literal
   / Identifier
   / "'" expr:(Identifier / Literal) {
-      return new AstIdentifierNode({
+      return new AstNode({
         _expr: expr
       });
     }

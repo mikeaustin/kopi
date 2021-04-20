@@ -4,7 +4,7 @@ class AstNode {
   }
 
   escape() {
-    return this.name;
+    return this.expr;
   }
 }
 

@@ -1,5 +1,6 @@
 const { AnyType } = require('./AnyType');
 const { NoneType } = require('./NoneType');
+const { AstNodeType } = require('./AstNodeType');
 const { BooleanType } = require('./BooleanType');
 const { NumberType } = require('./NumberType');
 const { StringType } = require('./StringType');
@@ -20,6 +21,7 @@ interface FieldAccess {
 module.exports = {
   AnyType: () => new AnyType(),
   NoneType: () => new NoneType(),
+  AstNodeType: () => new AstNodeType(),
   BooleanType: () => new BooleanType(),
   NumberType: () => new NumberType(),
   StringType: () => new StringType(),

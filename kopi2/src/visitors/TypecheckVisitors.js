@@ -1,12 +1,16 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
-const { AnyType, NoneType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
-const { IdentifierPattern, AstNode, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
+const { AnyType, NoneType, AstNodeType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
+const { IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
   AstNode({ _expr }) {
-    return _expr;
+    return AstNodeType();
   }
+
+  // AstIdentifierNode({ _expr }) {
+
+  // }
 
   Assignment({ _pattern, _expr }, context, bind) {
     const pattern = this.visitNode(_pattern, context);
@@ -82,7 +86,6 @@ class TypecheckVisitors extends BaseVisitors {
 
     const evaluatedLeft = this.visitNode(left, context);
     const evaluatedRight = this.visitNode(right, context);
-    console.log(evaluatedRight);
 
     if (evaluatedLeft.includesType(NumberType())) {
       if (!evaluatedRight.includesType(NumberType())) {
