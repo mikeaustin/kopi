@@ -10,7 +10,7 @@ class BooleanType extends AnyType {
   }
 
   includesType(valueType) {
-    return valueType instanceof BooleanType;
+    return valueType instanceof this.constructor;
   }
 
   isSupertypeOf(valueType, depth = 0) {

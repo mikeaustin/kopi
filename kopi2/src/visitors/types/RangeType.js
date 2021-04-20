@@ -19,7 +19,7 @@ class RangeType extends AnyType {
   }
 
   includesType(type) {
-    return type.elementType === this.elementType;
+    return type.elementType.includesType(this.elementType);
   }
 
   //

@@ -17,11 +17,7 @@ class UnionType extends AnyType {
     return this.name;
   }
 
-  includesType(valueType, depth = 0) {
-    if (depth > 2) {
-      return false;
-    }
-
+  includesType(valueType) {
     return this.types.some(type => type.includesType(valueType));
   }
 

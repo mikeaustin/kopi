@@ -27,7 +27,7 @@ test('Array', () => {
     ArrayType(
       UnionType(
         TupleType(),
-        TupleType(NumberType, NumberType),
+        TupleType(NumberType(), NumberType()),
       )
     )
   );

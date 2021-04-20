@@ -10,7 +10,7 @@ class NumberType extends AnyType {
   }
 
   includesType(valueType) {
-    return valueType instanceof NumberType;
+    return valueType instanceof this.constructor;
   }
 
   isSupertypeOf(valueType, depth = 0) {
@@ -33,7 +33,7 @@ class NumberType extends AnyType {
 
   typeForField(field) {
     if (typeof field.value === 'number' && field.value === 0) {
-      return NumberType;
+      return new NumberType();
     }
   }
 }

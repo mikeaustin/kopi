@@ -12,9 +12,9 @@ const {
 
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 
-Boolean.prototype.type = BooleanType;
-Number.prototype.type = NumberType;
-String.prototype.type = StringType;
+Boolean.prototype.type = BooleanType();
+Number.prototype.type = NumberType();
+String.prototype.type = StringType();
 
 Object.defineProperty(Number.prototype, '0', {
   get: function () {
@@ -45,18 +45,18 @@ Array.prototype.escape = function () {
 };
 
 let context = {
-  true: BooleanType,
-  false: BooleanType,
-  help: FunctionType(new IdentifierPattern('func', AnyType), TupleType()),
-  source: FunctionType(new IdentifierPattern('func', AnyType), TupleType()),
-  type: FunctionType(new IdentifierPattern('value', AnyType), AnyType),
-  inspect: FunctionType(new IdentifierPattern('value', AnyType), StringType),
-  not: FunctionType(new IdentifierPattern('value', BooleanType), BooleanType),
-  even: FunctionType(new IdentifierPattern('value', NumberType), BooleanType),
-  union: FunctionType(new IdentifierPattern('value', UnionType(NumberType, StringType)), BooleanType),
-  print: FunctionType(new IdentifierPattern('value', AnyType), TupleType()),
-  test: FunctionType(new IdentifierPattern('value', ArrayType(NumberType)), TupleType()),
-  _: NoneType
+  true: BooleanType(),
+  false: BooleanType(),
+  help: FunctionType(new IdentifierPattern('func', AnyType()), TupleType()),
+  source: FunctionType(new IdentifierPattern('func', AnyType()), TupleType()),
+  type: FunctionType(new IdentifierPattern('value', AnyType()), AnyType()),
+  inspect: FunctionType(new IdentifierPattern('value', AnyType()), StringType()),
+  not: FunctionType(new IdentifierPattern('value', BooleanType()), BooleanType()),
+  even: FunctionType(new IdentifierPattern('value', NumberType()), BooleanType()),
+  union: FunctionType(new IdentifierPattern('value', UnionType(NumberType(), StringType())), BooleanType()),
+  print: FunctionType(new IdentifierPattern('value', AnyType()), TupleType()),
+  test: FunctionType(new IdentifierPattern('value', ArrayType(NumberType())), TupleType()),
+  _: NoneType()
 };
 
 module.exports = {

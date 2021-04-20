@@ -84,8 +84,8 @@ class TypecheckVisitors extends BaseVisitors {
     const evaluatedRight = this.visitNode(right, context);
     console.log(evaluatedRight);
 
-    if (evaluatedLeft.includesType(NumberType)) {
-      if (!evaluatedRight.includesType(NumberType)) {
+    if (evaluatedLeft.includesType(NumberType())) {
+      if (!evaluatedRight.includesType(NumberType())) {
         throw new TypeError(`Argument to operator 'Number.${op}' should be type 'Number', but found '${evaluatedRight.name}'`);
       }
     }
@@ -127,7 +127,7 @@ class TypecheckVisitors extends BaseVisitors {
       throw TypeError(`Value is not a number.`);
     }
 
-    return astNode.type = NumberType;
+    return astNode.type = NumberType();
   }
 
   StringLiteral(astNode) {
@@ -137,7 +137,7 @@ class TypecheckVisitors extends BaseVisitors {
       throw TypeError(`Value is not a string.`);
     }
 
-    return astNode.type = StringType;
+    return astNode.type = StringType();
   }
 
   ArrayLiteral(astNode, context) {
@@ -146,7 +146,7 @@ class TypecheckVisitors extends BaseVisitors {
     // console.error('> ArrayLiteral', { elements });
 
     if (elements.length === 0) {
-      return astNode.type = ArrayType(NoneType);
+      return astNode.type = ArrayType(NoneType());
     }
 
     const valueTypes = elements.map(element => this.visitNode(element, context));
@@ -155,11 +155,11 @@ class TypecheckVisitors extends BaseVisitors {
       (valueType, index) => index === valueTypes.findIndex((t) => t.includesType(valueType))
     );
 
-    if (valueTypesSet.every(valueType => valueType.elementType === NoneType)) {
+    if (valueTypesSet.every(valueType => valueType.elementType?.includesType(NoneType()))) {
       return astNode.type = ArrayType(valueTypesSet[0]);
     }
 
-    const filteredValueTypesSet = valueTypesSet.filter(valueType => valueType.elementType !== NoneType);
+    const filteredValueTypesSet = valueTypesSet.filter(valueType => !(valueType.elementType?.includesType(NoneType())));
 
     if (filteredValueTypesSet.length === 1) {
       return astNode.type = ArrayType(filteredValueTypesSet[0]);

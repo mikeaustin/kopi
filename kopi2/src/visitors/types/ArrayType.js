@@ -40,7 +40,7 @@ class ArrayType extends AnyType {
     }
 
     if (field.name === 'length') {
-      return NumberType;
+      return NumberType();
     }
   }
 }

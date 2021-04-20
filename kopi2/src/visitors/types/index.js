@@ -18,11 +18,11 @@ interface FieldAccess {
 */
 
 module.exports = {
-  AnyType: new AnyType(),
-  NoneType: new NoneType(),
-  BooleanType: new BooleanType(),
-  NumberType: new NumberType(),
-  StringType: new StringType(),
+  AnyType: () => new AnyType(),
+  NoneType: () => new NoneType(),
+  BooleanType: () => new BooleanType(),
+  NumberType: () => new NumberType(),
+  StringType: () => new StringType(),
   TupleType: (...types) => new TupleType(...types),
   ArrayType: (type) => new ArrayType(type),
   RangeType: (type) => new RangeType(type),

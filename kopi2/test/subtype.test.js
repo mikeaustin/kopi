@@ -13,62 +13,62 @@ contravariant
 
 */
 
-class FloatType extends NumberType.constructor { }
+class FloatType extends NumberType().constructor { }
 
 test('Any/None', () => {
   expect(
-    AnyType.isSupertypeOf(AnyType)
+    AnyType().isSupertypeOf(AnyType())
   ).toBe(true);
 
   expect(
-    AnyType.isSupertypeOf(NoneType)
+    AnyType().isSupertypeOf(NoneType())
   ).toBe(true);
 
   expect(
-    NoneType.isSubtypeOf(AnyType)
+    NoneType().isSubtypeOf(AnyType())
   ).toBe(true);
 
   expect(
-    NoneType.isSubtypeOf(NoneType)
+    NoneType().isSubtypeOf(NoneType())
   ).toBe(true);
 
   expect(
-    AnyType.isSupertypeOf(NumberType)
+    AnyType().isSupertypeOf(NumberType())
   ).toBe(true);
 
   expect(
-    NumberType.isSubtypeOf(AnyType)
+    NumberType().isSubtypeOf(AnyType())
   ).toBe(true);
 });
 
 test('Primitives', () => {
   expect(
-    NumberType.isSubtypeOf(NumberType)
+    NumberType().isSubtypeOf(NumberType())
   ).toBe(true);
 
   expect(
-    NumberType.isSupertypeOf(NumberType)
+    NumberType().isSupertypeOf(NumberType())
   ).toBe(true);
 
   expect(
-    new FloatType().isSubtypeOf(NumberType)
+    new FloatType().isSubtypeOf(NumberType())
   ).toBe(true);
 
   expect(
-    NumberType.isSupertypeOf(new FloatType())
+    NumberType().isSupertypeOf(new FloatType())
   ).toBe(true);
 
   expect(
-    UnionType(NumberType, StringType).isSupertypeOf(NumberType)
+    UnionType(NumberType(), StringType()).isSupertypeOf(NumberType())
   ).toBe(true);
 
   expect(
-    NumberType.isSubtypeOf(UnionType(NumberType, StringType))
+    NumberType().isSubtypeOf(UnionType(NumberType(), StringType()))
   ).toBe(true);
 
 
   expect(
-    NumberType.isSubtypeOf(StringType)
+    NumberType().isSubtypeOf(StringType())
   ).toBe(false);
 
   // expect(

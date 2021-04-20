@@ -11,7 +11,7 @@ class StringType extends AnyType {
   }
 
   includesType(valueType) {
-    return valueType instanceof StringType;
+    return valueType instanceof this.constructor;
   }
 
   isSupertypeOf(valueType, depth = 0) {
