@@ -21,12 +21,13 @@ class UnionType extends AnyType {
     return this.types.some(type => type.includesType(valueType));
   }
 
-  isSupertypeOf(valueType, depth = 0) {
-    if (depth > 2) {
+  isSupertypeOf(valueType, visited = new Set(), depth = 0) {
+    if (depth > 2 && visited.has(this)) {
       return false;
     }
 
-    return this.types.some(type => valueType.isSubtypeOf(type, depth + 1));
+    // TODO: visited.add(this?) or type?
+    return this.types.some(type => valueType.isSubtypeOf(type, visited.add(this), depth + 1));
   }
 }
 

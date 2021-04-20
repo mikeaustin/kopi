@@ -13,20 +13,20 @@ class NumberType extends AnyType {
     return valueType instanceof this.constructor;
   }
 
-  isSupertypeOf(valueType, depth = 0) {
-    if (depth > 2) {
+  isSupertypeOf(valueType, visited = new Set(), depth = 0) {
+    if (depth > 2 && visited.has(this)) {
       return false;
     }
 
-    return this.isSubtypeOf(valueType, depth + 1);
+    return this.isSubtypeOf(valueType, visited.add(this), depth + 1);
   }
 
-  isSubtypeOf(valueType, depth = 0) {
-    if (depth > 2) {
+  isSubtypeOf(valueType, visited = new Set(), depth = 0) {
+    if (depth > 2 && visited.has(this)) {
       return false;
     }
 
-    return valueType instanceof this.constructor || valueType.isSupertypeOf(this, depth + 1);
+    return valueType instanceof this.constructor || valueType.isSupertypeOf(this, visited.add(this), depth + 1);
   }
 
   //

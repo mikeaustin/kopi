@@ -59,6 +59,12 @@ test('Primitives', () => {
   ).toBe(true);
 
   expect(
+    NumberType().isSubtypeOf(StringType())
+  ).toBe(false);
+});
+
+test('Union', () => {
+  expect(
     UnionType(NumberType(), StringType()).isSupertypeOf(NumberType())
   ).toBe(true);
 
@@ -66,12 +72,13 @@ test('Primitives', () => {
     NumberType().isSubtypeOf(UnionType(NumberType(), StringType()))
   ).toBe(true);
 
-
   expect(
-    NumberType().isSubtypeOf(StringType())
-  ).toBe(false);
+    UnionType(StringType(), NumberType()).isSupertypeOf(NumberType())
+  ).toBe(true);
+});
 
+test('Array', () => {
   // expect(
-  //   UnionType(StringType, NumberType).isSupertypeOf(NumberType)
-  // ).toBe(true);
+  //   Array(NumberType()).isSubtypeOf(Array(StringType()))
+  // ).toBe(false);
 });
