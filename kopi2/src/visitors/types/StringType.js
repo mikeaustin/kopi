@@ -14,6 +14,22 @@ class StringType extends AnyType {
     return valueType instanceof StringType;
   }
 
+  isSupertypeOf(valueType, depth = 0) {
+    if (depth > 2) {
+      return false;
+    }
+
+    return this.isSubtypeOf(valueType);
+  }
+
+  isSubtypeOf(valueType, depth = 0) {
+    if (depth > 2) {
+      return false;
+    }
+
+    return valueType instanceof this.constructor || valueType.isSupertypeOf(this, depth + 1);
+  }
+
   //
 
   typeForField(field) {

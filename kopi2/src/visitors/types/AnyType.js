@@ -10,6 +10,14 @@ class AnyType {
   includesType(type) {
     return true;
   }
+
+  isSupertypeOf(valueType) {
+    return true;
+  }
+
+  isSubtypeOf(valueType) {
+    return false;
+  }
 }
 
 module.exports = {

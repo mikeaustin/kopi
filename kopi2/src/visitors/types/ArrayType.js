@@ -28,6 +28,10 @@ class ArrayType extends AnyType {
     return valueType instanceof ArrayType && valueType.elementType.includesType(this.elementType);
   }
 
+  isSubtypeOf(valueType) {
+    // return valueType instanceof ArrayType && valueType.elementType.includesType(this.elementType);
+  }
+
   //
 
   typeForField(field) {
