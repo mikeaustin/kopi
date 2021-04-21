@@ -1,10 +1,18 @@
+const { default: PrintCodeVisitors } = require('../PrintCodeVisitors');
+
+const visitors = new PrintCodeVisitors();
+
 class AstNode {
   constructor(expr) {
     this.expr = expr;
   }
 
   escape() {
-    return this.expr;
+    return `'${visitors.visitNode(this.expr)}`;
+  }
+
+  toString() {
+    return `'${visitors.visitNode(this.expr)}`;
   }
 }
 

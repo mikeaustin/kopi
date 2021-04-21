@@ -16,7 +16,7 @@ PrimaryExpression
         _expr: expr
       });
     }
-  / "'" "(" _ expr:Expression _ ")" {
+  / "'" "(" _ expr:Statement _ ")" {
       return new AstNode({
         _expr: expr
       });
