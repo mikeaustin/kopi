@@ -8,6 +8,9 @@ class RangeType extends AnyType {
     super();
 
     this.elementType = elementType;
+    this.params = {
+      matchType() { return true; }
+    };
   }
 
   get name() {
