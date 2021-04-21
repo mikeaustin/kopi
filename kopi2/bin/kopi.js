@@ -13,12 +13,6 @@ const { default: initialContext } = require('./context');
 const { default: initialScope } = require('./scope');
 
 Object.prototype.inspect = function () {
-  if (this.closure) {
-    this.closure[util.inspect.custom] = function (depth, opts) {
-      return `{ ... }`;
-    };
-  }
-
   return util.inspect(this, {
     compact: false,
     depth: Infinity,

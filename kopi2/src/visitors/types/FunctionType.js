@@ -1,3 +1,5 @@
+const util = require("util");
+
 const { AnyType } = require('./AnyType');
 
 class FunctionType extends AnyType {
@@ -8,6 +10,10 @@ class FunctionType extends AnyType {
     this.rettype = rettype;
     this.body = body;
     this.context = context;
+
+    if (this.context) this.context[util.inspect.custom] = () => {
+      return '{ ... }';
+    };
   }
 
   get name() {
