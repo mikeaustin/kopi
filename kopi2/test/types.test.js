@@ -49,19 +49,19 @@ test('Tuple', () => {
   );
 });
 
-test('Range', () => {
-  expect(check('1..5', context)).toEqual(
-    RangeType(
-      NumberType()
-    )
-  );
-  expect(check('1..5, "z".."z"', context)).toEqual(
-    UnionType(
-      RangeType(NumberType()),
-      RangeType(StringType())
-    )
-  );
-});
+// test('Range', () => {
+//   expect(check('1..5', context)).toEqual(
+//     RangeType(
+//       NumberType()
+//     )
+//   );
+//   expect(check('1..5, "z".."z"', context)).toEqual(
+//     UnionType(
+//       RangeType(NumberType()),
+//       RangeType(StringType())
+//     )
+//   );
+// });
 
 test('Array', () => {
   expect(check('[]', context)).toEqual(ArrayType(NoneType()));

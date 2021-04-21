@@ -3,3 +3,9 @@ fix = f => (x => f (y => x x y)) x => f (y => x x y)
 print 1 + 2, 2 + 3, 1..5 + 2
 
 2..1 (0-0.2) | map x => x, x + x
+
+obj = (x => x + x), (x => x * x)
+
+obj = add: (x => x + x), mul: (x => x * x)
+obj.add 10
+obj.mul 10

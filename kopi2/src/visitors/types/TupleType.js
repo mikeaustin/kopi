@@ -1,4 +1,5 @@
 const { AnyType } = require('./AnyType');
+const { FunctionType } = require('./FunctionType');
 
 class TupleType extends AnyType {
   constructor(...types) {
@@ -39,6 +40,9 @@ class TupleType extends AnyType {
 
       return this.types[field.value];
     }
+
+    return this.types[0];
+    // return this.types[this.fieldTypes.indexOf(field.value)];
   }
 }
 

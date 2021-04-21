@@ -1,10 +1,7 @@
 class Tuple {
-  constructor(...elements) {
+  constructor(elements, fields) {
     this.elements = elements;
-
-    elements.forEach((element, index) => {
-      this[index] = element;
-    });
+    this.fields = fields;
   }
 
   escape() {
@@ -21,6 +18,8 @@ class Tuple {
     if (typeof field === 'number') {
       return this.elements[field];
     }
+
+    return this.elements[this.fields.indexOf(field)];
   }
 }
 

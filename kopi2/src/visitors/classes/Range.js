@@ -1,7 +1,7 @@
 const { TupleType } = require("../types/TupleType");
 
 class Range {
-  constructor(from, to, step) {
+  constructor(from, to, step = 1) {
     this.from = from;
     this.to = to;
     this.step = step;

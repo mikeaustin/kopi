@@ -39,8 +39,8 @@ class InterpreterVisitors extends BaseVisitors {
     return value.apply(args, scope, this);
   }
 
-  TupleExpression({ _elements, type }, scope) {
-    const tuple = new Tuple(..._elements.map(element => this.visitNode(element, scope)));
+  TupleExpression({ _elements, _fields, type }, scope) {
+    const tuple = new Tuple(_elements.map(element => this.visitNode(element, scope)), _fields.map(field => field.name));
     tuple.type = type;
 
     return tuple;
