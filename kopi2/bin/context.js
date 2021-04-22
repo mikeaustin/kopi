@@ -24,7 +24,7 @@ Object.defineProperty(Number.prototype, '0', {
 
 Array.prototype.valueForField = function (field) {
   if (typeof field === 'number') {
-    return this[field] ?? TupleType();
+    return this[field] ?? new Tuple();
   }
 };
 
@@ -49,7 +49,6 @@ let context = {
   false: BooleanType(),
   help: FunctionType(new IdentifierPattern('func', AnyType()), TupleType()),
   source: FunctionType(new IdentifierPattern('func', AnyType()), TupleType()),
-  type: FunctionType(new IdentifierPattern('value', AnyType()), AnyType()),
   inspect: FunctionType(new IdentifierPattern('value', AnyType()), StringType()),
   not: FunctionType(new IdentifierPattern('value', BooleanType()), BooleanType()),
   even: FunctionType(new IdentifierPattern('value', NumberType()), BooleanType()),

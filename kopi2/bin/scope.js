@@ -49,11 +49,6 @@ let scope = {
       }
     }
   },
-  type: new class extends Function {
-    apply(arg, scope, visitors) {
-      return arg.type;
-    }
-  },
   inspect: new class extends Function {
     apply(arg, scope, visitors) {
       console.log(Object.prototype.inspect.apply(arg));

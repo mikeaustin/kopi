@@ -82,7 +82,7 @@ async function main() {
       const result = visitors.visitNode(ast, scope, bind);
 
       if (result !== undefined) {
-        console.log(result.escape());
+        console.log(`${result.escape()}\x1B[90m :: ${typeCheckedAst.escape()}\x1B[0m`);
       }
     } catch (error) {
       console.log(error);

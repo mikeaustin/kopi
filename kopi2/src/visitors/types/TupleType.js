@@ -12,7 +12,7 @@ class TupleType extends AnyType {
 
   get name() {
     if (this.types.length === 0) {
-      return `()`;
+      return `Unit`;
     }
 
     return `(${this.types.map(type => type.name).join(', ')})`;
