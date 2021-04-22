@@ -12,6 +12,7 @@ class InterpreterVisitors extends BaseVisitors {
     const evaluatedPattern = this.visitNode(_pattern, scope);
     const value = this.visitNode(_expr, scope);
 
+    // TODO: Pass _expr to matchValue so FunctionPattern can bind
     const matches = evaluatedPattern.matchValue(value, scope);
 
     bind(matches);
