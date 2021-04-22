@@ -40,7 +40,7 @@ FunctionExpression
 
 TupleExpression
   = headNames:(Identifier ":" _ RangeExpression) tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
-      return tailNames.length === 0 ? headNames : new TupleExpression({
+      return tailNames.length === 0 ? headNames[3] : new TupleExpression({
         _elements: buildList(headNames[3], tailNames, 6),
         _fields: buildList(headNames[0], tailNames, 3)
       });

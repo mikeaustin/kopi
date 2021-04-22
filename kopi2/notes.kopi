@@ -9,3 +9,10 @@ obj = (x => x + x), (x => x * x)
 obj = add: (x => x + x), mul: (x => x * x)
 obj.add 10
 obj.mul 10
+
+5..1 step: 0.5 | map x => x
+
+double = x => x * x
+1..5 step: 0.5 | map double
+
+double x = x * x
