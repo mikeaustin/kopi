@@ -9,16 +9,20 @@ let scope = {
   true: true,
   false: false,
   help: new class extends Function {
-    help = doc`
-      Shows top-level functions available.
-    `;
+    constructor() {
+      super();
+
+      this.help = doc`
+        Shows top-level functions available.
+      `;
+    }
 
     escape() {
       console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
       Object.entries(scope).filter(([name, value]) => value instanceof Function).forEach(([name, value], index) => {
         if (index > 0) console.log('\t\t––––––––––––––––––––––––––––––––––––––––––––––––––');
         console.log(`${name}\r\t\t${value.help?.split('\n')[0] ?? 'No help available.'}`);
-        console.log(`\t\t${value.type.escape()}`);
+        value.type && console.log(`\t\t${value.type.escape()}`);
       });
       console.log('––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––');
 
@@ -61,10 +65,15 @@ let scope = {
     }
   },
   even: new class extends Function {
-    help = doc`
-      Returns true if number is even, else false.
-      Detailed documentation...
-    `;
+    constructor() {
+      super();
+
+      this.help = doc`
+        Returns true if number is even, else false.
+        Detailed documentation...
+      `;
+    }
+
     apply(arg, scope, visitors) {
       return arg % 2 === 0;
     }
@@ -75,9 +84,14 @@ let scope = {
     }
   },
   print: new class extends Function {
-    help = doc`
-      Write's all arguments to the console.
-    `;
+    constructor() {
+      super();
+
+      this.help = doc`
+        Write's all arguments to the console.
+      `;
+    }
+
     apply(arg, scope, visitors) {
       console.log(arg.toString());
     }

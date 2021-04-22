@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript">
+      module = {};
+    </script>
+    <script type="text/javascript" src="./parser.js"></script>
+    <script type="text/javascript">
+      console.log(module);
+
+      const { parse } = module.exports;
+
+      const ast = parse('2 + 3');
+
+      console.log(ast);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

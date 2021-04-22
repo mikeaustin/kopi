@@ -1,4 +1,4 @@
-const util = require("util");
+// const util = require("util");
 
 class Function {
   constructor(params, rettype, body, scope) {
@@ -7,9 +7,9 @@ class Function {
     this.body = body;
     this.closure = scope;
 
-    if (this.closure) this.closure[util.inspect.custom] = () => {
-      return '{ ... }';
-    };
+    // if (this.closure) this.closure[util.inspect.custom] = () => {
+    //   return '{ ... }';
+    // };
 
     Object.defineProperty(this, 'toString', {
       value: undefined,

@@ -1,4 +1,4 @@
-const util = require("util");
+// const util = require("util");
 
 const { AnyType } = require('./AnyType');
 
@@ -11,9 +11,9 @@ class FunctionType extends AnyType {
     this.body = body;
     this.context = context;
 
-    if (this.context) this.context[util.inspect.custom] = () => {
-      return '{ ... }';
-    };
+    // if (this.context) this.context[util.inspect.custom] = () => {
+    //   return '{ ... }';
+    // };
   }
 
   get name() {
