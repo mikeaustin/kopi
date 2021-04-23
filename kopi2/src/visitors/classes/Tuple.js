@@ -5,7 +5,9 @@ class Tuple {
   }
 
   escape() {
-    return `(${this.elements.map(element => element.escape()).join(', ')})`;
+    return `(${this.elements.map((element, index) => (
+      `${this.fields[index] ? `${this.fields[index]}: ` : ''}${element.escape()}`)
+    ).join(', ')})`;
   }
 
   toString() {

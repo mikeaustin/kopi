@@ -48,7 +48,7 @@ TupleExpression
   / head:RangeExpression tail:(_ "," _ !(Identifier ":") RangeExpression)* tailNames:(_ "," _ Identifier ":" _ RangeExpression)* {
       return [...tail, ...tailNames].length === 0 ? head : new TupleExpression({
         _elements: [...buildList(head, tail, 4), ...buildList(undefined, tailNames, 6)],
-        _fields: [...buildList(null, tail, undefined), ...buildList(undefined, tailNames, 4)],
+        _fields: [...buildList(null, tail, undefined), ...buildList(undefined, tailNames, 3)],
       });
     }
 
