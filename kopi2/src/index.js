@@ -64,7 +64,7 @@ line.addEventListener('keydown', event => {
 
       if (value !== undefined) {
         const div = document.createElement('div');
-        div.textContent = `${value.escape()} :: ${type.escape()}`;
+        div.textContent = `${value.escape()} :: ${type?.escape()}`;
 
         history.appendChild(div);
       }
