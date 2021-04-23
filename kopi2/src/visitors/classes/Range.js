@@ -1,4 +1,4 @@
-const { TupleType } = require("../types/TupleType");
+const { TupleType } = require("../types");
 
 class Range {
   constructor(from, to, step = 1) {
@@ -15,7 +15,7 @@ class Range {
 
   valueForField(field) {
     if (typeof field === 'number') {
-      return this[field] ?? new TupleType();
+      return field + this.from <= this.to ? this.from + field : TupleType();
     }
   }
 
