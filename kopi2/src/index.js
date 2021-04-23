@@ -9,6 +9,18 @@ import initialScope from '../bin/scope';
 const history = document.querySelector('.history');
 const line = document.querySelector('.line');
 
+const exampleClick = (event) => {
+  if (event.target.innerText) {
+    line.value = event.target.innerText;
+    line.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+  }
+};
+
+const examples = document.querySelectorAll('.examples div');
+examples.forEach(example => {
+  example.addEventListener('click', exampleClick);
+});
+
 line.focus();
 
 const typecheckVisitors = new TypecheckVisitors.default();
