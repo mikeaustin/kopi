@@ -15,15 +15,27 @@
         padding: 0;
       }
 
-      .history {
+      div {
         display: flex;
         flex-direction: column;
+      }
+
+      .frame {
+        flex-direction: row;
+        flex: 1;
+      }
+
+      .terminal {
+        flex: 1;
+      }
+
+      .history {
         flex: 1;
         margin: 10px;
         justify-content: flex-end;
       }
 
-      div {
+      .history div {
         margin-top: 5px;
       }
 
@@ -32,11 +44,36 @@
         padding: 5px;
       }
 
+      .examples {
+        padding: 10px;
+        background: hsl(0, 0%, 95%);
+      }
+
+      .examples div {
+        margin-bottom: 10px;
+      }
+
     </style>
   </head>
   <body>
-    <div class="history"></div>
-    <input class="line" />
+    <div class="frame">
+      <div class="terminal">
+        <div class="history"></div>
+        <input class="line" />
+      </div>
+      <div class="examples">
+        <div>help</div>
+        <div>even 2</div>
+        <div>not (even 2)</div>
+        <div>a, b = 1, 2</div>
+        <div>a, b, c = b, a, 3</div>
+        <div>name: "Joe", age: 30</div>
+        <div>[(1, "a"), (true, 1..5)]</div>
+        <div>1..2 step: 0.5 | map x => (x..2 step: 0.5 | map y => x, y)</div>
+        <div>fix = f => (x => f (y => x x y)) x => f (y => x x y)</div>
+        <div>fix (f => x => x * x) 5</div>
+      </div>
+    </div>
     <script type="text/javascript" src="./main.js"></script>
   </body>
 </html>

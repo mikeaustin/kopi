@@ -22,7 +22,7 @@ class RangeType extends AnyType {
   }
 
   includesType(type) {
-    return type.elementType.includesType(this.elementType);
+    return type instanceof this.constructor && this.elementType.includesType(type.elementType);
   }
 
   //

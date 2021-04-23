@@ -30,7 +30,7 @@ ApplyExpression
     }
 
 FunctionExpression
-  = pattern:Pattern _ "=>" _ expr:Expression {
+  = pattern:Pattern _ "=>" _ expr:ApplyExpression {
       return new FunctionExpression({
         _params: pattern,
         _body: expr

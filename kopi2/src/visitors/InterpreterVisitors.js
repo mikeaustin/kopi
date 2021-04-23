@@ -1,6 +1,6 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { RuntimeError } = require('../errors');
-const { AstNode, IdentifierPattern, AstIdentifierNode, AstNodeIdentifierPattern, Tuple, Range, Function } = require('./classes');
+const { AstNode, IdentifierPattern, TuplePattern, AstIdentifierNode, AstNodeIdentifierPattern, Tuple, Range, Function } = require('./classes');
 const { default: TypecheckVisitors } = require('./TypecheckVisitors');
 
 class InterpreterVisitors extends BaseVisitors {
@@ -77,6 +77,13 @@ class InterpreterVisitors extends BaseVisitors {
   // TODO: Add ArrayFieldExpression and return Union type | ()
   FieldExpression({ expr, field }, scope) {
     return this.visitNode(expr, scope).valueForField(field.name || field.value);
+  }
+
+  TuplePattern({ elements, type }, scope) {
+    const tuple = new TuplePattern(elements.map(element => this.visitNode(element, scope)));
+    tuple.type = type;
+
+    return tuple;
   }
 
   IdentifierPattern({ _name }) {

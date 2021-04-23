@@ -45,6 +45,10 @@ const bind = variables => scope = { ...scope, ...variables };
 
 line.addEventListener('keydown', event => {
   if (event.key === 'Enter') {
+    if (event.target.value === '') {
+      return;
+    }
+
     const ast = parse(event.target.value);
 
     console.log(ast);
@@ -55,12 +59,12 @@ line.addEventListener('keydown', event => {
     history.appendChild(div1);
 
     try {
-      typecheckVisitors.visitNode(ast, context, bindTypes);
+      const type = typecheckVisitors.visitNode(ast, context, bindTypes);
       const value = visitors.visitNode(ast, scope, bind);
 
       if (value !== undefined) {
         const div = document.createElement('div');
-        div.textContent = value.escape();
+        div.textContent = `${value.escape()} :: ${type.escape()}`;
 
         history.appendChild(div);
       }

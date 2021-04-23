@@ -1,7 +1,7 @@
 const { default: BaseVisitors } = require('./BaseVisitor');
 const { InterpreterError } = require('../errors');
 const { AnyType, NoneType, AstNodeType, BooleanType, NumberType, StringType, TupleType, FunctionType, RangeType, UnionType, ArrayType } = require('./types');
-const { IdentifierPattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
+const { IdentifierPattern, TuplePattern, AstNodeIdentifierPattern, Tuple, Function } = require('./classes');
 
 class TypecheckVisitors extends BaseVisitors {
   AstNode({ _expr }) {
@@ -111,6 +111,12 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   //
+
+  TuplePattern(astNode, context) {
+    const { elements } = astNode;
+
+    return astNode.type = new TuplePattern(elements.map(element => this.visitNode(element, context)));
+  }
 
   IdentifierPattern({ _name }, context) {
     // TODO: Add generic type variable
