@@ -30,22 +30,22 @@ test('Tuple', () => {
     NumberType()
   );
   expect(check('5, "x"', context)).toEqual(
-    TupleType(
+    TupleType([
       NumberType(),
       StringType()
-    )
+    ], [undefined, undefined])
   );
   expect(check('1, y: 2', context)).toEqual(
-    TupleType(
+    TupleType([
       NumberType(),
       NumberType()
-    )
+    ], [undefined, 'y'])
   );
   expect(check('x: 1, y: 2', context)).toEqual(
-    TupleType(
+    TupleType([
       NumberType(),
       NumberType()
-    )
+    ], ['x', 'y'])
   );
 });
 

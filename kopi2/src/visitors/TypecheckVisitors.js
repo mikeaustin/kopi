@@ -66,9 +66,12 @@ class TypecheckVisitors extends BaseVisitors {
   }
 
   TupleExpression(astNode, context) {
-    const { _elements } = astNode;
+    const { _elements, _fields } = astNode;
 
-    return astNode.type = TupleType(..._elements.map(element => this.visitNode(element, context)));
+    return astNode.type = TupleType(
+      _elements.map(element => this.visitNode(element, context)),
+      _fields.map(field => field?.name)
+    );
   }
 
   RangeExpression(astNode, context) {
@@ -104,7 +107,7 @@ class TypecheckVisitors extends BaseVisitors {
     const type = evaluatedExpr.typeForField(field);
 
     if (!type) {
-      throw new TypeError(`Tuple index ${field.value} is out of bounds`);
+      throw new TypeError(`Tuple index ${field.name || field.value} is out of bounds`);
     }
 
     return astNode.type = type;

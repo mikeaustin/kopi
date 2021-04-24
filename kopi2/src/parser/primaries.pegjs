@@ -23,6 +23,7 @@ PrimaryExpression
     }
   / "(" head:Expression? ")" {
       return head ? head : new TupleExpression({
-        _elements: []
+        _elements: [],
+        _fields: []
       })
     }
