@@ -100,14 +100,37 @@ let scope = {
     [Number, {
       toString: new class extends Function {
         apply() { return this.toString(); }
-      }
+      },
+      mapTo: new class extends Function {
+        *apply([to, step, mapper], scope, visitors) {
+          const lastIndex = (to - this) / step;
+
+          for (let index = 0; index <= lastIndex; ++index) {
+            yield mapper.apply(index * step + this, scope, visitors);
+          }
+        }
+      },
+    }],
+    [String, {
+      toString: new class extends Function {
+        apply() { return this.toString(); }
+      },
+      mapTo: new class extends Function {
+        *apply([to, step, mapper], scope, visitors) {
+          const last = String.fromCharCode(to.codePointAt(0));
+
+          for (let index = 0; String.fromCharCode(this.codePointAt(0) + index) <= last; index += step) {
+            yield mapper.apply(String.fromCharCode(this.codePointAt(0) + index), scope, visitors);
+          }
+        }
+      },
     }],
     [Range, {
       map: new class extends Function {
-        apply(args, scope, visitors) {
-          return Array.from({ length: (this.to - this.from) / this.step + 1 }, (x, index) => (
-            args.apply(index * this.step + this.from, scope, visitors)
-          ));
+        apply(mapper, scope, visitors) {
+          return [...scope._methods.get(this.from.constructor)['mapTo'].apply.call(
+            this.from, [this.to, this.step, mapper], scope, visitors
+          )];
         }
       }
     }],
