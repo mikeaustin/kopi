@@ -183,7 +183,7 @@ class TypecheckVisitors extends BaseVisitors {
     const { name } = astNode;
 
     if (!context[name]) {
-      throw new Error(`Variable '${name}' is not defined the current scope.`);
+      throw new Error(`Variable '${name}' is not defined in the current scope.`);
     }
 
     return astNode.type = context[name];
