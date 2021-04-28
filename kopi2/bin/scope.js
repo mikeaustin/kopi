@@ -6,6 +6,14 @@ const printCodeVisitors = new PrintCodeVisitors();
 const doc = strings => strings[0].trim().split('\n').map(line => line.trim()).join('\n');
 
 let scope = {
+  image: new class extends Function {
+    apply(arg, source, visitor) {
+      const image = new Image();
+      image.src = arg;
+
+      return image;
+    }
+  },
   true: true,
   false: false,
   help: new class extends Function {

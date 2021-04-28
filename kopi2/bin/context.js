@@ -16,12 +16,6 @@ Boolean.prototype.type = BooleanType();
 Number.prototype.type = NumberType();
 String.prototype.type = StringType();
 
-Object.defineProperty(Number.prototype, '0', {
-  get: function () {
-    return this;
-  }
-});
-
 Array.prototype.valueForField = function (field) {
   if (typeof field === 'number') {
     return this[field] ?? new Tuple();
@@ -36,6 +30,21 @@ Number.prototype.escape = function () {
   return `${this}`;
 };
 
+// Number.prototype.toElement = function () {
+//   const node = document.createTextNode(`${this}`);
+
+//   return node;
+// };
+
+Image.prototype.toElement = function () {
+  const node = document.createElement('img');
+  node.src = this.src;
+  node.width = this.width;
+  node.height = this.height;
+
+  return node;
+};
+
 String.prototype.escape = function () {
   return `"${this}"`;
 };
@@ -45,6 +54,7 @@ Array.prototype.escape = function () {
 };
 
 let context = {
+  image: FunctionType(new IdentifierPattern('url', StringType()), TupleType()),
   true: BooleanType(),
   false: BooleanType(),
   help: FunctionType(new IdentifierPattern('func', AnyType()), TupleType()),
