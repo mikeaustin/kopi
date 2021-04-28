@@ -12,7 +12,7 @@
     "repl-windows": "npm run build-windows && node bin/kopi",
     "test": "npm run build && jest --verbose",
     "test-windows": "npm run build-windows && jest --verbose",
-    "webpack": "webpack.js --mode development",
+    "webpack": "webpack --mode development",
     "serve": "webpack serve --mode development --content-base dist"
   },
   "devDependencies": {

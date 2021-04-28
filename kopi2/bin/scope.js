@@ -5,6 +5,36 @@ const printCodeVisitors = new PrintCodeVisitors();
 
 const doc = strings => strings[0].trim().split('\n').map(line => line.trim()).join('\n');
 
+class NumberRangeIterable {
+  constructor(from, to, step) {
+    this.from = from;
+    this.to = to;
+    this.step = step;
+  }
+
+  *[Symbol.iterator]() {
+    const lastIndex = (this.to - this.from) / this.step;
+
+    for (let index = 0; index <= lastIndex; ++index) {
+      yield index * this.step + this.from;
+    }
+  }
+}
+
+class StringRangeIterable {
+  constructor(from, to, step) {
+    this.from = from;
+    this.to = to;
+    this.step = step;
+  }
+
+  *[Symbol.iterator]() {
+    for (let index = 0; String.fromCodePoint(this.from.codePointAt(0) + index) <= this.to; index += String.fromCodePoint(this.from.codePointAt(0) + index).length) {
+      yield String.fromCodePoint(this.from.codePointAt(0) + index);
+    }
+  }
+}
+
 let scope = {
   image: new class extends Function {
     apply(arg, source, visitor) {
@@ -109,13 +139,9 @@ let scope = {
       toString: new class extends Function {
         apply() { return this.toString(); }
       },
-      mapTo: new class extends Function {
-        *apply([to, step, mapper], scope, visitors) {
-          const lastIndex = (to - this) / step;
-
-          for (let index = 0; index <= lastIndex; ++index) {
-            yield mapper.apply(index * step + this, scope, visitors);
-          }
+      rangeIterator: new class extends Function {
+        apply([to, step]) {
+          return new NumberRangeIterable(this, to, step);
         }
       },
     }],
@@ -123,22 +149,26 @@ let scope = {
       toString: new class extends Function {
         apply() { return this.toString(); }
       },
-      mapTo: new class extends Function {
-        *apply([to, step, mapper], scope, visitors) {
-          const last = String.fromCharCode(to.codePointAt(0));
-
-          for (let index = 0; String.fromCharCode(this.codePointAt(0) + index) <= last; index += step) {
-            yield mapper.apply(String.fromCharCode(this.codePointAt(0) + index), scope, visitors);
-          }
+      rangeIterator: new class extends Function {
+        apply([to, step]) {
+          return new StringRangeIterable(this, to, step);
         }
       },
     }],
     [Range, {
       map: new class extends Function {
         apply(mapper, scope, visitors) {
-          return [...scope._methods.get(this.from.constructor)['mapTo'].apply.call(
-            this.from, [this.to, this.step, mapper], scope, visitors
-          )];
+          const iterable = scope._methods.get(this.from.constructor).rangeIterator.apply.call(
+            this.from, [this.to, this.step], scope, visitors
+          );
+
+          const values = [];
+
+          for (let item of iterable) {
+            values.push(mapper.apply(item, scope, visitors));
+          }
+
+          return values;
         }
       }
     }],

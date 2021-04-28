@@ -12,6 +12,10 @@ const {
 
 const { Function, Tuple, IdentifierPattern } = require('../src/visitors/classes');
 
+if (typeof Image === 'undefined') {
+  global.Image = class { };
+}
+
 Boolean.prototype.type = BooleanType();
 Number.prototype.type = NumberType();
 String.prototype.type = StringType();
