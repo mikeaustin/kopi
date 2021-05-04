@@ -1,6 +1,3 @@
-Expression
-  = PrimaryExpression
-
 PrimaryExpression
   = Literal
   / Identifier

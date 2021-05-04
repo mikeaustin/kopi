@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "build": "run-script-os",
-    "build:nix": "./build-parser.sh | pegjs -o lib/parser.js",
+    "build:nix": "bin/build.sh | pegjs -o lib/parser.js",
     "build:windows": "powershell -ExecutionPolicy Bypass -File bin\\build.ps1 | pegjs -o lib\\parser.js",
     "repl": "npm run build && node bin/kopi",
     "test": "echo \"Error: no test specified\" && exit 1"

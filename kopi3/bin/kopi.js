@@ -1,8 +1,8 @@
 var readline = require('readline');
 
 const parser = require("../lib/parser");
-const InterpreterVisitors = require('../src/visitors/InterpreterVisitors');
 const initialEnv = require('../lib/env');
+const InterpreterVisitors = require('../src/visitors/InterpreterVisitors');
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -11,6 +11,8 @@ var rl = readline.createInterface({
 
 let env = initialEnv;
 
+const bind = bindings => env = { ...env, ...bindings };
+
 async function main() {
   rl.prompt();
 
@@ -18,7 +20,7 @@ async function main() {
     try {
       const ast = parser.parse(line);
 
-      const result = InterpreterVisitors.visitNode(ast, env);
+      const result = InterpreterVisitors.visitNode(ast, env, bind);
 
       if (result !== undefined) {
         console.log(result.inspect());
