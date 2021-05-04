@@ -1,5 +1,14 @@
 Pattern
-  = PrimaryPattern
+  = FunctionPattern
+  / PrimaryPattern
+
+FunctionPattern
+  = name:IdentifierName _ params:Pattern {
+      return new FunctionPattern({
+        name: name,
+        params: params
+      })
+    }
 
 PrimaryPattern
   = IdentifierPattern
@@ -7,6 +16,6 @@ PrimaryPattern
 IdentifierPattern
   = name:IdentifierName {
       return new IdentifierPattern({
-        name: name,
+        name: name
       })
     }

@@ -15,4 +15,4 @@ Assignment
     }
 
 Expression
-  = PrimaryExpression
+  = ApplyExpression

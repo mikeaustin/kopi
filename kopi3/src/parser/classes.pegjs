@@ -27,6 +27,7 @@
 
   class AstNodeIdentifierPattern extends Node { }
   class TuplePattern extends Node { }
+  class FunctionPattern extends Node { }
   class IdentifierPattern extends Node { }
 
   class NumericLiteral extends Node { }

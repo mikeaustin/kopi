@@ -1,5 +1,5 @@
 const BaseVisitors = require('./BaseVisitors');
-const { IdentifierPattern } = require('../classes');
+const { IdentifierPattern, FunctionPattern } = require('../classes');
 
 class InterpreterVisitors extends BaseVisitors {
   Assignment({ pattern: _pattern, expr: _expr }, env, bind) {
@@ -8,6 +8,17 @@ class InterpreterVisitors extends BaseVisitors {
     const matches = pattern.matchValue(_expr, env, this);
 
     bind(matches);
+  }
+
+  ApplyExpression({ expr: _expr, args: _args }, env, bind) {
+    const func = this.visitNode(_expr, env);
+    // const args = this.visitNode(_args, env);
+
+    return func.apply(null, [_args, env, this]);
+  }
+
+  FunctionPattern({ name, params }) {
+    return new FunctionPattern({ name, params });
   }
 
   IdentifierPattern({ name }) {
