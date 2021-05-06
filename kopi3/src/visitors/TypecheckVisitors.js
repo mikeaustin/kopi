@@ -1,63 +1,67 @@
 const BaseVisitors = require('./BaseVisitors');
-const { IdentifierPattern, FunctionPattern } = require('../classes');
+const { NumberType } = require('../types');
 
 class TypecheckVisitors extends BaseVisitors {
   Assignment({ pattern: _pattern, expr: _expr }, context, bind) {
     const pattern = this.visitNode(_pattern, context);
 
-    console.log(pattern);
     const matches = pattern.matchType(_expr, context, this);
 
     bind(matches);
   }
 
-  ApplyExpression({ expr: _expr, args: _args }, context, bind) {
+  ApplyExpression({ expr: _expr, args: _args, constructor }, context, bind) {
     const func = this.visitNode(_expr, context);
     const args = this.visitNode(_args, context);
 
-    console.log('>', func);
-    // const matches = func.params.matchType(args);
+    console.log('>>', func.type);
+    const matches = func.type.params.matchType(_args, context, this);
 
     // if (func.body) {
     //   return this.visitNode(func.body, { ...type.context, ...matches });
     // }
+
+    return new constructor({
+      expr: _expr,
+      args: _args,
+      type: func.type.rettype,
+    });
   }
 
-  FunctionPattern({ name, params }) {
-    return new FunctionPattern({
+  FunctionPattern({ name, params, constructor }) {
+    return new constructor({
       name: name,
       params: params,
       type: undefined
     });
   }
 
-  IdentifierPattern({ name }, context) {
-    return new IdentifierPattern({
+  IdentifierPattern({ name, constructor }, context) {
+    return new constructor({
       name: name,
-      type: undefined
+      type: undefined,
     });
   }
 
-  NumericLiteral(astNode) {
-    const { value } = astNode;
-
-    return new astNode.constructor({
+  NumericLiteral({ value, constructor }) {
+    return new constructor({
       value: value,
-      type: Number,
+      type: NumberType(),
     });
   }
 
-  StringLiteral(astNode) {
-    const { value } = astNode;
-
-    return new astNode.constructor({
+  StringLiteral({ value, constructor }) {
+    return new constructor({
       value: value,
       type: String,
     });
   }
 
-  Identifier({ name }, context) {
-    return context[name];
+  Identifier({ name, constructor }, context) {
+    return new constructor({
+      name: name,
+      type: context[name],
+    });
   }
 };
 

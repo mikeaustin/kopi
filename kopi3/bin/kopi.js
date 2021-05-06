@@ -2,6 +2,7 @@ var readline = require('readline');
 
 const parser = require("../lib/parser");
 const initialEnv = require('../lib/env');
+const initialContext = require('../lib/context');
 const InterpreterVisitors = require('../src/visitors/InterpreterVisitors');
 const TypecheckVisitors = require('../src/visitors/TypecheckVisitors');
 
@@ -10,10 +11,7 @@ var rl = readline.createInterface({
   output: process.stdout
 });
 
-let context = {
-  version: String
-};
-
+let context = initialContext;
 let env = initialEnv;
 
 const bindContext = types => context = { ...context, ...types };

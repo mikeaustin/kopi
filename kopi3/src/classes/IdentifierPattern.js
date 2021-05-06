@@ -1,6 +1,7 @@
 class IdentifierPattern {
-  constructor({ name }) {
+  constructor({ name, type }) {
     this.name = name;
+    this.type = type;
   }
 
   matchValue(_expr, env, visitors) {

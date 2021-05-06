@@ -15,7 +15,7 @@ Function.prototype.inspect = function () {
 };
 
 const env = {
-  version: '0.0.1',
+  true: true,
   even: (_args, env, visitors) => {
     const args = visitors.visitNode(_args, env);
 

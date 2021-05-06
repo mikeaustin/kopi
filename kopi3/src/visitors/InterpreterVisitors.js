@@ -1,5 +1,5 @@
 const BaseVisitors = require('./BaseVisitors');
-const { IdentifierPattern, FunctionPattern } = require('../classes');
+const { IdentifierPattern, FunctionPattern } = require('../parser/classes');
 
 class InterpreterVisitors extends BaseVisitors {
   Assignment({ pattern: _pattern, expr: _expr }, env, bind) {

@@ -1,5 +1,7 @@
 class AnyType {
-  name = `Any`;
+  get name() {
+    return `Any`;
+  }
 
   escape() {
     return this.name;
@@ -14,6 +16,4 @@ class AnyType {
   }
 }
 
-module.exports = {
-  AnyType,
-};
+module.exports = AnyType;

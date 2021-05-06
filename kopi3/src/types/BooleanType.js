@@ -1,6 +1,6 @@
-class NoneType {
+class BooleanType {
   get name() {
-    return `None`;
+    return `Number`;
   }
 
   isSupertypeOf(type) {
@@ -12,4 +12,4 @@ class NoneType {
   }
 }
 
-module.exports = NoneType;
+module.exports = BooleanType;
