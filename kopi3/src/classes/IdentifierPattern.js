@@ -10,6 +10,14 @@ class IdentifierPattern {
       [this.name]: value
     };
   }
+
+  matchType(_expr, context, visitors) {
+    const type = visitors.visitNode(_expr, context);
+
+    return {
+      [this.name]: type
+    };
+  }
 }
 
 module.exports = IdentifierPattern;

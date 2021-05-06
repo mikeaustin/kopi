@@ -11,6 +11,14 @@ class FunctionPattern {
       [this.name]: new Function({ params: this.params, body: _expr, closure: env })
     };
   }
+
+  matchType(_expr, context, visitors) {
+    const type = visitors.visitNode(_expr, context);
+
+    return {
+      [this.name]: type
+    };
+  }
 }
 
 module.exports = FunctionPattern;
