@@ -3,3 +3,11 @@ x => x
 What is the type of x? T
 
 const T = new TypeVar();
+
+https://docs.python.org/3/library/typing.html
+
+params: {
+  x: NoneType()
+}
+
+https://webpack.js.org/configuration/resolve/#resolvemainfiles
