@@ -1,0 +1,5 @@
+x => x
+
+What is the type of x? T
+
+const T = new TypeVar();

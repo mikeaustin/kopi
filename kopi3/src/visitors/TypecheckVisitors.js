@@ -11,7 +11,16 @@ class TypecheckVisitors extends BaseVisitors {
     bind(matches);
   }
 
-  ApplyExpression({ expr: _expr, args: _args }, env, bind) {
+  ApplyExpression({ expr: _expr, args: _args }, context, bind) {
+    const func = this.visitNode(_expr, context);
+    const args = this.visitNode(_args, context);
+
+    console.log('>', func);
+    // const matches = func.params.matchType(args);
+
+    // if (func.body) {
+    //   return this.visitNode(func.body, { ...type.context, ...matches });
+    // }
   }
 
   FunctionPattern({ name, params }) {
