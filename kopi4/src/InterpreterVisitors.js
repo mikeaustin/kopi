@@ -1,48 +1,9 @@
-const util = require("util");
-
-class Tuple {
-  constructor(elements) {
-    this.elements = elements;
-  }
-
-  [util.inspect.custom]() {
-    return `${this.elements.join(', ')}`;
-  }
-}
-
-class Range {
-  constructor(from, to) {
-    this.from = from;
-    this.to = to;
-  }
-
-  [util.inspect.custom]() {
-    return `${this.from}..${this.to}`;
-  }
-}
-
-class Function {
-  constructor(params, expr, closure) {
-    this.params = params;
-    this.expr = expr;
-    this.closure = closure;
-  }
-
-  [util.inspect.custom]() {
-    return `<function>`;
-  }
-
-  apply(thisArg, args, visitors) {
-    const matchs = this.params.match(args[0]);
-
-    return visitors.visit(this.expr, { ...this.closure, ...matchs });
-  }
-}
+const { Tuple, Range, Function } = require('./classes');
 
 class Visitors {
-  visit(node, scope) {
-    if (this[node.constructor.name]) {
-      return this[node.constructor.name](node, scope);
+  visit(astNode, scope, bind) {
+    if (this[astNode.constructor.name]) {
+      return this[astNode.constructor.name](astNode, scope, bind);
     } else {
       throw new Error(`No AST visitor for '${node.constructor.name}'`);
     }
@@ -50,6 +11,14 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
+  Assignment({ pattern, expr }, scope, bind) {
+    const evaluatedExpr = this.visit(expr, scope);
+
+    const matches = pattern.match(evaluatedExpr);
+
+    bind(matches);
+  }
+
   ApplyExpression({ expr, args }, scope) {
     const evaluatedArgs = this.visit(args, scope);
     const evaluatedExpr = this.visit(expr, scope);

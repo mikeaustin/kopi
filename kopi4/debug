@@ -1,297 +1,88 @@
 
-RangeExpression {
-  from: NumericLiteral {
+Assignment {
+  pattern: NumericLiteralPattern {
     value: 1
   },
-  to: NumericLiteral {
+  expr: Identifier {
+    name: 'x'
+  }
+}
+
+Assignment {
+  pattern: NumericLiteralPattern {
+    value: 1
+  },
+  expr: NumericLiteral {
+    value: 1
+  }
+}
+
+FunctionExpression {
+  params: TuplePattern {
+    elements: [
+      NumericLiteralPattern {
+        value: 1
+      },
+      NumericLiteralPattern {
+        value: 2
+      }
+    ]
+  },
+  expr: NumericLiteral {
     value: 5
   }
 }
 
-RangeExpression {
-  from: NumericLiteral {
-    value: 1
+Assignment {
+  pattern: IdentifierPattern {
+    name: 'f'
   },
-  to: Identifier {
-    name: 'z'
-  }
-}
-
-OperatorExpression {
-  op: '+',
-  left: RangeExpression {
-    from: NumericLiteral {
-      value: 1
+  expr: FunctionExpression {
+    params: TuplePattern {
+      elements: [
+        NumericLiteralPattern {
+          value: 1
+        },
+        NumericLiteralPattern {
+          value: 2
+        }
+      ]
     },
-    to: Identifier {
-      name: 'z'
-    }
-  },
-  right: NumericLiteral {
-    value: 1
-  }
-}
-
-RangeExpression {
-  from: NumericLiteral {
-    value: 1
-  },
-  to: OperatorExpression {
-    op: '+',
-    left: Identifier {
-      name: 'z'
-    },
-    right: NumericLiteral {
-      value: 1
+    expr: NumericLiteral {
+      value: 5
     }
   }
 }
 
 ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: IdentifierPattern {
-          name: 'b'
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'a'
-          },
-          right: Identifier {
-            name: 'b'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
+  expr: Identifier {
+    name: 'f'
   },
-  args: NumericLiteral {
-    value: 2
+  args: TupleExpression {
+    elements: []
   }
 }
+TypeError: Cannot read property '0' of undefined
+    at /Users/mike/Projects/kopi/kopi4/lib/parser.js:1479:42
+    at Array.reduce (<anonymous>)
+    at TuplePattern.match (/Users/mike/Projects/kopi/kopi4/lib/parser.js:1477:30)
+    at Function.apply (/Users/mike/Projects/kopi/kopi4/src/classes.js:40:32)
+    at InterpreterVisitors.ApplyExpression (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:28:26)
+    at InterpreterVisitors.visit (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:6:44)
+    at main (/Users/mike/Projects/kopi/kopi4/bin/kopi.js:42:43)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
 
 ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: TuplePattern {
-          elements: [
-            IdentifierPattern {
-              name: 'x'
-            },
-            IdentifierPattern {
-              name: 'y'
-            }
-          ]
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'a'
-          },
-          right: Identifier {
-            name: 'b'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
+  expr: Identifier {
+    name: 'f'
   },
   args: TupleExpression {
     elements: [
       NumericLiteral {
-        value: 2
+        value: 1
       },
-      NumericLiteral {
-        value: 3
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: TuplePattern {
-          elements: [
-            IdentifierPattern {
-              name: 'x'
-            },
-            IdentifierPattern {
-              name: 'y'
-            }
-          ]
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'a'
-          },
-          right: Identifier {
-            name: 'x'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
-  },
-  args: TupleExpression {
-    elements: [
       NumericLiteral {
         value: 2
-      },
-      NumericLiteral {
-        value: 3
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: TuplePattern {
-          elements: [
-            IdentifierPattern {
-              name: 'x'
-            },
-            IdentifierPattern {
-              name: 'y'
-            }
-          ]
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'a'
-          },
-          right: Identifier {
-            name: 'y'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 2
-      },
-      NumericLiteral {
-        value: 3
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: TuplePattern {
-          elements: [
-            IdentifierPattern {
-              name: 'x'
-            },
-            IdentifierPattern {
-              name: 'y'
-            }
-          ]
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'x'
-          },
-          right: Identifier {
-            name: 'y'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 2
-      },
-      NumericLiteral {
-        value: 3
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: TuplePattern {
-          elements: [
-            IdentifierPattern {
-              name: 'x'
-            },
-            IdentifierPattern {
-              name: 'y'
-            }
-          ]
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: Identifier {
-            name: 'x'
-          },
-          right: Identifier {
-            name: 'y'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 1
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 2
-      },
-      NumericLiteral {
-        value: 3
       }
     ]
   }

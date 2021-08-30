@@ -18,6 +18,8 @@ let scope = {
   z: 5,
 };
 
+const bind = updates => scope = ({ ...scope, ...updates });
+
 async function main() {
   let input = null;
 
@@ -37,7 +39,7 @@ async function main() {
       const ast = parser.parse(line);
 
       for (const astNode of ast.statements) {
-        const value = InterpreterVisitors.visit(astNode, scope);
+        const value = InterpreterVisitors.visit(astNode, scope, bind);
 
         if (value !== undefined) {
           const formattedValue = util.inspect(value, {

@@ -1,17 +1,3 @@
-// 2 * (3 + 4)
-// 1, 2, 3
-// print max 1, 2
-// x = print 1, 2 + 3
-// map (x => x, x), 5
-// a b c
-// (x => x * x) 5
-// print fold (x => x * x), 5
-// (a, b => a + b) 1, 2
-// sort "julie" ++ "moronuki"
-// xs | reduce 0 sum, x => sum + x
-// (a, b => a + b + z) 2, 3
-// (a => b => a + b + z) 2 3
-
 {
   class Node {
     constructor(args) {
@@ -49,6 +35,13 @@
       };
     }
   }
+
+  class NumericLiteralPattern extends Node {
+    match(value) {
+      return {};
+    }
+  }
+
 }
 
 //
@@ -85,13 +78,19 @@ ApplyExpression
   / FunctionExpression
 
 FunctionExpression
-  = params:Pattern _ "=>" _ expr:Expression {
+  = "()" _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
+    }
+  / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
   / TupleExpression
 
 TupleExpression
-  = head:AddExpression _ tail:("," _ AddExpression)+ {
+  = "()" {
+    return new TupleExpression({ elements: [] });
+  }
+  / head:AddExpression _ tail:("," _ AddExpression)+ {
   	  return new TupleExpression({
         elements: tail.reduce((expressions, [, , expression]) => [
           ...expressions,
@@ -143,6 +142,11 @@ TuplePattern
     }
   / PrimaryPattern
 
+NumericLiteralPattern
+  = number:NumericLiteral {
+      return new NumericLiteralPattern({ value: number.value });
+    }
+
 IdentifierPattern
   = ident:Identifier {
       return new IdentifierPattern({ name: ident.name });
@@ -150,7 +154,7 @@ IdentifierPattern
 
 PrimaryPattern
   = "(" pattern:Pattern ")" { return pattern; }
-  / NumericLiteral
+  / NumericLiteralPattern
   / IdentifierPattern
 
 //
