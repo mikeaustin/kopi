@@ -12,17 +12,9 @@ class Function {
   }
 
   apply(thisArg, args, visitors) {
-    // const scope = this.params.reduce((scope, param, index) => ({
-    //   ...scope,
-    //   [param.name]: args[index]
-    // }), this.closure);
+    const matchs = this.params.match(args[0]);
 
-    const scope = {
-      ...this.closure,
-      [this.params.name]: args[0]
-    };
-
-    return visitors.visit(this.expr, scope);
+    return visitors.visit(this.expr, { ...this.closure, ...matchs });
   }
 }
 

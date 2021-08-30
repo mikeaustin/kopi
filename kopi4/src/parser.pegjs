@@ -9,6 +9,7 @@
 // (a, b => a + b) 1, 2
 // sort "julie" ++ "moronuki"
 // xs | reduce 0 sum, x => sum + x
+// (a, b => a + b + z) 2, 3
 
 {
   class Node {
@@ -30,8 +31,27 @@
   class NumericLiteral extends Node { }
   class Identifier extends Node { }
 
-  class TuplePattern extends Node { }
+  class TuplePattern extends Node {
+    match(value) {
+      return this.elements.reduce((scope, element, index) => ({
+        ...scope,
+        ...element.match(value.elements[index]),
+      }), {});
+    }
+  }
+
+  class IdentifierPattern extends Node {
+    match(value) {
+      return {
+        [this.name]: value
+      };
+    }
+  }
 }
+
+//
+// Rules
+//
 
 Block
   = Newline* head:Statement tail:(Newline+ Statement)* Newline* {
@@ -69,7 +89,10 @@ FunctionExpression
 TupleExpression
   = head:AddExpression _ tail:("," _ AddExpression)+ {
   	  return new TupleExpression({
-        elements: tail.reduce((expressions, [, , expression]) => [...expressions, expression], [head])
+        elements: tail.reduce((expressions, [, , expression]) => [
+          ...expressions,
+          expression
+        ], [head])
       });
     }
   / AddExpression
@@ -96,6 +119,8 @@ PrimaryExpression
   / Identifier
 
 //
+// Patterns
+//
 
 Pattern
   = TuplePattern
@@ -108,11 +133,18 @@ TuplePattern
     }
   / PrimaryPattern
 
+IdentifierPattern
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
+    }
+
 PrimaryPattern
   = "(" pattern:Pattern ")" { return pattern; }
   / NumericLiteral
-  / Identifier
+  / IdentifierPattern
 
+//
+// Literals
 //
 
 Identifier
@@ -120,6 +152,10 @@ Identifier
 
 NumericLiteral "number"
   = _ [0-9]+ { return new NumericLiteral({ value: Number(text()) }); }
+
+//
+// Whitespace
+//
 
 _
   = Whitespace*

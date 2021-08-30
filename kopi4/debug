@@ -1,40 +1,6 @@
-
-ApplyExpression {
-  expr: FunctionExpression {
-    params: Identifier {
-      name: 'x'
-    },
-    expr: OperatorExpression {
-      op: '+',
-      left: Identifier {
-        name: 'x'
-      },
-      right: Identifier {
-        name: 'z'
-      }
-    }
-  },
-  args: NumericLiteral {
-    value: 5
-  }
-}
-
-ApplyExpression {
-  expr: FunctionExpression {
-    params: Identifier {
-      name: 'x'
-    },
-    expr: OperatorExpression {
-      op: '+',
-      left: Identifier {
-        name: 'x'
-      },
-      right: Identifier {
-        name: 'z'
-      }
-    }
-  },
-  args: NumericLiteral {
-    value: 1
-  }
-}
+Error: No AST visitor for 'Array'
+    at InterpreterVisitors.visit (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:26:13)
+    at InterpreterVisitors.ApplyExpression (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:53:32)
+    at InterpreterVisitors.visit (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:24:41)
+    at main (/Users/mike/Projects/kopi/kopi4/bin/kopi.js:35:43)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
