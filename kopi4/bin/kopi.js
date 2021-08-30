@@ -15,6 +15,7 @@ Function.prototype[util.inspect.custom] = function () {
 let scope = {
   print: (args) => console.log(args),
   even: (args) => args % 2 === 0,
+  max: (args) => Math.max(args.elements[0], args.elements[1]),
   z: 5,
 };
 

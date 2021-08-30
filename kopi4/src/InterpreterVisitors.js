@@ -5,7 +5,7 @@ class Visitors {
     if (this[astNode.constructor.name]) {
       return this[astNode.constructor.name](astNode, scope, bind);
     } else {
-      throw new Error(`No AST visitor for '${node.constructor.name}'`);
+      throw new Error(`No AST visitor for '${astNode.constructor.name}'`);
     }
   }
 }

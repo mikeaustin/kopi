@@ -1,85 +1,75 @@
 
-Assignment {
-  pattern: NumericLiteralPattern {
-    value: 1
+NumericLiteral {
+  value: 1
+}
+
+FunctionExpression {
+  params: IdentifierPattern {
+    name: 'x'
   },
   expr: Identifier {
     name: 'x'
   }
 }
 
-Assignment {
-  pattern: NumericLiteralPattern {
-    value: 1
-  },
-  expr: NumericLiteral {
-    value: 1
-  }
-}
-
-FunctionExpression {
-  params: TuplePattern {
-    elements: [
-      NumericLiteralPattern {
-        value: 1
-      },
-      NumericLiteralPattern {
-        value: 2
-      }
-    ]
-  },
-  expr: NumericLiteral {
-    value: 5
-  }
-}
-
-Assignment {
-  pattern: IdentifierPattern {
-    name: 'f'
-  },
+ApplyExpression {
   expr: FunctionExpression {
     params: TuplePattern {
       elements: [
-        NumericLiteralPattern {
-          value: 1
+        IdentifierPattern {
+          name: 'a'
         },
-        NumericLiteralPattern {
-          value: 2
+        IdentifierPattern {
+          name: 'b'
         }
       ]
     },
-    expr: NumericLiteral {
-      value: 5
+    expr: OperatorExpression {
+      op: '+',
+      left: Identifier {
+        name: 'a'
+      },
+      right: Identifier {
+        name: 'b'
+      }
     }
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'f'
-  },
-  args: TupleExpression {
-    elements: []
-  }
-}
-TypeError: Cannot read property '0' of undefined
-    at /Users/mike/Projects/kopi/kopi4/lib/parser.js:1479:42
-    at Array.reduce (<anonymous>)
-    at TuplePattern.match (/Users/mike/Projects/kopi/kopi4/lib/parser.js:1477:30)
-    at Function.apply (/Users/mike/Projects/kopi/kopi4/src/classes.js:40:32)
-    at InterpreterVisitors.ApplyExpression (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:28:26)
-    at InterpreterVisitors.visit (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:6:44)
-    at main (/Users/mike/Projects/kopi/kopi4/bin/kopi.js:42:43)
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'f'
   },
   args: TupleExpression {
     elements: [
       NumericLiteral {
         value: 1
+      },
+      NumericLiteral {
+        value: 2
+      }
+    ]
+  }
+}
+
+ApplyExpression {
+  expr: Identifier {
+    name: 'max'
+  },
+  args: TupleExpression {
+    elements: [
+      NumericLiteral {
+        value: 1
+      },
+      NumericLiteral {
+        value: 2
+      }
+    ]
+  }
+}
+
+ApplyExpression {
+  expr: Identifier {
+    name: 'max'
+  },
+  args: TupleExpression {
+    elements: [
+      NumericLiteral {
+        value: 3
       },
       NumericLiteral {
         value: 2
