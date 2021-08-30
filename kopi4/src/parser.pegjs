@@ -10,6 +10,7 @@
 // sort "julie" ++ "moronuki"
 // xs | reduce 0 sum, x => sum + x
 // (a, b => a + b + z) 2, 3
+// (a => b => a + b + z) 2 3
 
 {
   class Node {
@@ -27,6 +28,7 @@
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
   class TupleExpression extends Node { }
+  class RangeExpression extends Node { }
 
   class NumericLiteral extends Node { }
   class Identifier extends Node { }
@@ -75,8 +77,10 @@ Expression
   = ApplyExpression
 
 ApplyExpression
-  = expr:PrimaryExpression _ args:Expression {
-  	  return new ApplyExpression({ expr, args })
+  = expr:FunctionExpression _ args:(_ FunctionExpression)+ {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr)
     }
   / FunctionExpression
 
@@ -106,10 +110,16 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = head:PrimaryExpression tail:(_ ("*" / "/") _ PrimaryExpression)+ {
+  = head:RangeExpression tail:(_ ("*" / "/") _ RangeExpression)+ {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
+    }
+  / RangeExpression
+
+RangeExpression
+  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+      return new RangeExpression({ from, to });
     }
   / PrimaryExpression
 

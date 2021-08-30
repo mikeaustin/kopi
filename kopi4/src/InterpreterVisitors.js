@@ -1,6 +1,23 @@
+const util = require("util");
+
 class Tuple {
   constructor(elements) {
     this.elements = elements;
+  }
+
+  [util.inspect.custom]() {
+    return `${this.elements.join(', ')}`;
+  }
+}
+
+class Range {
+  constructor(from, to) {
+    this.from = from;
+    this.to = to;
+  }
+
+  [util.inspect.custom]() {
+    return `${this.from}..${this.to}`;
   }
 }
 
@@ -9,6 +26,10 @@ class Function {
     this.params = params;
     this.expr = expr;
     this.closure = closure;
+  }
+
+  [util.inspect.custom]() {
+    return `<function>`;
   }
 
   apply(thisArg, args, visitors) {
@@ -29,6 +50,27 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
+  ApplyExpression({ expr, args }, scope) {
+    const evaluatedArgs = this.visit(args, scope);
+    const evaluatedExpr = this.visit(expr, scope);
+
+    // console.log(evaluatedArgs);
+
+    return evaluatedExpr.apply(undefined, [evaluatedArgs], this);
+  }
+
+  FunctionExpression({ params, expr }, scope) {
+    return new Function(params, expr, scope);
+  }
+
+  TupleExpression({ elements }, scope) {
+    return new Tuple(elements.map(element => this.visit(element, scope)));
+  }
+
+  RangeExpression({ from, to }, scope) {
+    return new Range(this.visit(from, scope), this.visit(to, scope));
+  }
+
   OperatorExpression({ op, left, right }, scope) {
     const evaluatedLeft = this.visit(left, scope);
     const evaluatedRight = this.visit(right, scope);
@@ -39,23 +81,6 @@ class InterpreterVisitors extends Visitors {
       case '*': return evaluatedLeft * evaluatedRight;
       case '/': return evaluatedLeft / evaluatedRight;
     }
-  }
-
-  TupleExpression({ elements }, scope) {
-    return new Tuple(elements.map(element => this.visit(element, scope)));
-  }
-
-  FunctionExpression({ params, expr }, scope) {
-    return new Function(params, expr, scope);
-  }
-
-  ApplyExpression({ expr, args }, scope) {
-    const evaluatedArgs = this.visit(args, scope);
-    const evaluatedExpr = this.visit(expr, scope);
-
-    // console.log(evaluatedArgs);
-
-    return evaluatedExpr.apply(undefined, [evaluatedArgs], this);
   }
 
   NumericLiteral({ value }) {

@@ -8,7 +8,12 @@ const parser = require("../lib/parser");
 
 const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
 
+Function.prototype[util.inspect.custom] = function () {
+  return `<function>`;
+};
+
 let scope = {
+  print: (args) => console.log(args),
   even: (args) => args % 2 === 0,
   z: 5,
 };
@@ -34,12 +39,14 @@ async function main() {
       for (const astNode of ast.statements) {
         const value = InterpreterVisitors.visit(astNode, scope);
 
-        const formattedValue = util.inspect(value, {
-          compact: false,
-          depth: Infinity
-        });
+        if (value !== undefined) {
+          const formattedValue = util.inspect(value, {
+            compact: false,
+            depth: Infinity
+          });
 
-        console.log(formattedValue);
+          console.log(formattedValue);
+        }
 
         const formattedAst = util.inspect(astNode, {
           compact: false,
