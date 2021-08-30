@@ -1,4 +1,5 @@
 const BaseVisitors = require('./BaseVisitors');
+const { Function } = require('../classes');
 const { NumberType } = require('../types');
 
 class TypecheckVisitors extends BaseVisitors {
@@ -14,7 +15,7 @@ class TypecheckVisitors extends BaseVisitors {
     const func = this.visitNode(_expr, context);
     const args = this.visitNode(_args, context);
 
-    console.log('>>', func.type);
+    console.log('>>', func);
     const matches = func.type.params.matchType(_args, context, this);
 
     // if (func.body) {
@@ -28,18 +29,34 @@ class TypecheckVisitors extends BaseVisitors {
     });
   }
 
-  FunctionPattern({ name, params, constructor }) {
+  FunctionPattern({ name, params, constructor, ...props }) {
     return new constructor({
+      ...props,
       name: name,
       params: params,
-      type: undefined
+      type: undefined,
+      matchType: function (_expr, context, visitors) {
+        const type = visitors.visitNode(_expr, context);
+
+        return {
+          [this.name]: new Function({ params: params, body: _expr, closure: context })
+        };
+      }
     });
   }
 
-  IdentifierPattern({ name, constructor }, context) {
+  IdentifierPattern({ name, constructor, ...props }, context) {
     return new constructor({
+      ...props,
       name: name,
       type: undefined,
+      matchType: function (_expr, context, visitors) {
+        const type = visitors.visitNode(_expr, context);
+
+        return {
+          [this.name]: type
+        };
+      }
     });
   }
 

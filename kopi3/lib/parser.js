@@ -966,21 +966,21 @@ function peg$parse(input, options) {
   class TuplePattern extends Node { }
   class FunctionPattern extends Node { }
   class IdentifierPattern extends Node {
-    matchValue(_expr, env, visitors) {
-      const value = visitors.visitNode(_expr, env);
+    // matchValue(_expr, env, visitors) {
+    //   const value = visitors.visitNode(_expr, env);
 
-      return {
-        [this.name]: value
-      };
-    }
+    //   return {
+    //     [this.name]: value
+    //   };
+    // }
 
-    matchType(_expr, context, visitors) {
-      const type = visitors.visitNode(_expr, context);
+    // matchType(_expr, context, visitors) {
+    //   const type = visitors.visitNode(_expr, context);
 
-      return {
-        [this.name]: type
-      };
-    }
+    //   return {
+    //     [this.name]: type
+    //   };
+    // }
   }
 
   class NumericLiteral extends Node { }

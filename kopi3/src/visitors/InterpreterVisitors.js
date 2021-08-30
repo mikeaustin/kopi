@@ -1,10 +1,10 @@
 const BaseVisitors = require('./BaseVisitors');
-const { IdentifierPattern, FunctionPattern } = require('../parser/classes');
+const { Function } = require('../classes');
 
 class InterpreterVisitors extends BaseVisitors {
   Assignment({ pattern: _pattern, expr: _expr }, env, bind) {
     const pattern = this.visitNode(_pattern, env);
-
+    console.log(pattern);
     const matches = pattern.matchValue(_expr, env, this);
 
     bind(matches);
@@ -17,12 +17,31 @@ class InterpreterVisitors extends BaseVisitors {
     return func.apply(null, [_args, env, this]);
   }
 
-  FunctionPattern({ name, params }) {
-    return new FunctionPattern({ name, params });
+  FunctionPattern({ name, params, constructor, ...props }) {
+    return new constructor({
+      ...props,
+      name,
+      params,
+      matchValue: function (_expr, env, visitors) {
+        return {
+          [this.name]: new Function({ params: this.params, body: _expr, closure: env })
+        };
+      }
+    });
   }
 
-  IdentifierPattern({ name }) {
-    return new IdentifierPattern({ name });
+  IdentifierPattern({ name, constructor, ...props }) {
+    return new constructor({
+      ...props,
+      name,
+      matchValue: function (_expr, env, visitors) {
+        const value = visitors.visitNode(_expr, env);
+
+        return {
+          [this.name]: value
+        };
+      },
+    });
   }
 
   NumericLiteral({ value }) {
