@@ -61,8 +61,8 @@ ApplyExpression
   / FunctionExpression
 
 FunctionExpression
-  = args:Pattern _ "=>" _ expr:Expression {
-      return new FunctionExpression({ args, expr });
+  = params:Pattern _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params, expr });
     }
   / TupleExpression
 

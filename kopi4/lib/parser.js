@@ -158,8 +158,8 @@ function peg$parse(input, options) {
           },
       peg$c5 = "=>",
       peg$c6 = peg$literalExpectation("=>", false),
-      peg$c7 = function(args, expr) {
-            return new FunctionExpression({ args, expr });
+      peg$c7 = function(params, expr) {
+            return new FunctionExpression({ params, expr });
           },
       peg$c8 = ",",
       peg$c9 = peg$literalExpectation(",", false),

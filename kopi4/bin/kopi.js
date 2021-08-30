@@ -6,50 +6,54 @@ const readline = require('readline');
 
 const parser = require("../lib/parser");
 
-const InterpreterVisitors = require('../src/InterpreterVisitors');
+const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
+
+let scope = {
+  even: (args) => args % 2 === 0,
+  z: 5,
+};
 
 async function main() {
+  let input = null;
+
   if (process.argv.length > 2) {
-    const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
-
-    const ast = parser.parse(input);
-
-    for (let node of ast.statements) {
-      const formattedAst = util.inspect(node, {
-        compact: false,
-        depth: Infinity
-      });
-
-      console.log(formattedAst);
-    }
-
-    return;
+    input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
+  } else {
+    input = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
   }
 
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+  process.argv.length === 2 && input.prompt();
 
-  rl.prompt();
-
-  for await (const line of rl) {
+  for await (const line of input) {
     try {
       const ast = parser.parse(line);
 
-      for (let node of ast.statements) {
-        const formattedAst = util.inspect(node, {
+      for (const astNode of ast.statements) {
+        const value = InterpreterVisitors.visit(astNode, scope);
+
+        const formattedValue = util.inspect(value, {
           compact: false,
           depth: Infinity
         });
 
-        console.log(formattedAst);
+        console.log(formattedValue);
+
+        const formattedAst = util.inspect(astNode, {
+          compact: false,
+          depth: Infinity
+        });
+
+        console.error();
+        console.error(formattedAst);
       }
     } catch (error) {
       console.error(error);
     }
 
-    rl.prompt();
+    process.argv.length === 2 && input.prompt();
   }
 }
 
