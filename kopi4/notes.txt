@@ -2,7 +2,6 @@
 1, 2, 3
 print (max 1, 2)
 map (x => x, x), 5
-a b c
 (x => x * x) 5
 fold (a, x => x * x), 1..5
 (a, b => a + b) 1, 2

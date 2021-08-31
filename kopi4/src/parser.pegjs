@@ -19,29 +19,10 @@
   class NumericLiteral extends Node { }
   class Identifier extends Node { }
 
-  class TuplePattern extends Node {
-    match(value) {
-      return this.elements.reduce((scope, element, index) => ({
-        ...scope,
-        ...element.match(value.elements[index]),
-      }), {});
-    }
-  }
-
-  class IdentifierPattern extends Node {
-    match(value) {
-      return {
-        [this.name]: value
-      };
-    }
-  }
-
-  class NumericLiteralPattern extends Node {
-    match(value) {
-      return {};
-    }
-  }
-
+  class TuplePattern extends Node { }
+  class IdentifierPattern extends Node { }
+  class NumericLiteralPattern extends Node { }
+  class FunctionPattern extends Node { }
 }
 
 //
@@ -132,7 +113,8 @@ PrimaryExpression
 //
 
 Pattern
-  = TuplePattern
+  = FunctionPattern
+  / TuplePattern
 
 TuplePattern
   = head:PrimaryPattern tail:("," _ PrimaryPattern)+ {
@@ -150,6 +132,11 @@ NumericLiteralPattern
 IdentifierPattern
   = ident:Identifier {
       return new IdentifierPattern({ name: ident.name });
+    }
+
+FunctionPattern
+  = ident:Identifier _ params:Pattern {
+      return new FunctionPattern({ name: ident.name, params });
     }
 
 PrimaryPattern

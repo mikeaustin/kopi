@@ -1,79 +1,12 @@
 
-NumericLiteral {
-  value: 1
-}
-
-FunctionExpression {
-  params: IdentifierPattern {
-    name: 'x'
-  },
-  expr: Identifier {
-    name: 'x'
-  }
-}
-
-ApplyExpression {
-  expr: FunctionExpression {
-    params: TuplePattern {
-      elements: [
-        IdentifierPattern {
-          name: 'a'
-        },
-        IdentifierPattern {
-          name: 'b'
-        }
-      ]
-    },
-    expr: OperatorExpression {
-      op: '+',
-      left: Identifier {
-        name: 'a'
-      },
-      right: Identifier {
-        name: 'b'
-      }
+Assignment {
+  pattern: FunctionPattern {
+    name: 'f',
+    params: IdentifierPattern {
+      name: 'x'
     }
   },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 1
-      },
-      NumericLiteral {
-        value: 2
-      }
-    ]
-  }
-}
-
-ApplyExpression {
   expr: Identifier {
-    name: 'max'
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 1
-      },
-      NumericLiteral {
-        value: 2
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'max'
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 3
-      },
-      NumericLiteral {
-        value: 2
-      }
-    ]
+    name: 'x'
   }
 }

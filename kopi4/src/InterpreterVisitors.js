@@ -1,4 +1,4 @@
-const { Tuple, Range, Function } = require('./classes');
+const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralPattern, FunctionPattern } = require('./classes');
 
 class Visitors {
   visit(astNode, scope, bind) {
@@ -13,8 +13,10 @@ class Visitors {
 class InterpreterVisitors extends Visitors {
   Assignment({ pattern, expr }, scope, bind) {
     const evaluatedExpr = this.visit(expr, scope);
+    const evaluatedPattern = this.visit(pattern, scope);
 
-    const matches = pattern.match(evaluatedExpr);
+    // TODO: pass expr directly so FunctionPattern can use it as body
+    const matches = evaluatedPattern.match(evaluatedExpr, scope, expr);
 
     bind(matches);
   }
@@ -29,7 +31,9 @@ class InterpreterVisitors extends Visitors {
   }
 
   FunctionExpression({ params, expr }, scope) {
-    return new Function(params, expr, scope);
+    const evaluatedParams = this.visit(params, scope);
+
+    return new Function(evaluatedParams, expr, scope);
   }
 
   TupleExpression({ elements }, scope) {
@@ -50,6 +54,24 @@ class InterpreterVisitors extends Visitors {
       case '*': return evaluatedLeft * evaluatedRight;
       case '/': return evaluatedLeft / evaluatedRight;
     }
+  }
+
+  TuplePattern({ elements }) {
+    return new TuplePattern(elements);
+  }
+
+  IdentifierPattern({ name }) {
+    return new IdentifierPattern(name);
+  }
+
+  NumericLiteralPattern({ value }) {
+    return new NumericLiteralPattern(value);
+  }
+
+  FunctionPattern({ name, params }, scope) {
+    const evaluatedParams = this.visit(params, scope);
+
+    return new FunctionPattern(name, evaluatedParams);
   }
 
   NumericLiteral({ value }) {
