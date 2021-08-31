@@ -37,6 +37,8 @@ class Function {
   }
 
   apply(thisArg, args, visitors) {
+    // TODO: get unevaluated args to pass to match
+    // If we pass unevaled args, we'll also need scope
     const matchs = this.params.match(args[0]);
 
     return visitors.visit(this.expr, { ...this.closure, ...matchs });
@@ -86,11 +88,11 @@ class FunctionPattern {
     this.params = params;
   }
 
-  match(value, scope, expr) {
+  match(value, scope, unevaluatedValue) {
     console.log('here', value);
 
     return {
-      [this.name]: new Function(this.params, expr, scope)
+      [this.name]: new Function(this.params, unevaluatedValue, scope)
     };
   }
 }

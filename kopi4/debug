@@ -6,7 +6,51 @@ Assignment {
       name: 'x'
     }
   },
+  expr: OperatorExpression {
+    op: '*',
+    left: Identifier {
+      name: 'x'
+    },
+    right: Identifier {
+      name: 'x'
+    }
+  }
+}
+
+ApplyExpression {
   expr: Identifier {
-    name: 'x'
+    name: 'f'
+  },
+  args: NumericLiteral {
+    value: 5
+  }
+}
+
+Assignment {
+  pattern: IdentifierPattern {
+    name: 'g'
+  },
+  expr: FunctionExpression {
+    params: IdentifierPattern {
+      name: 'x'
+    },
+    expr: OperatorExpression {
+      op: '*',
+      left: Identifier {
+        name: 'x'
+      },
+      right: Identifier {
+        name: 'x'
+      }
+    }
+  }
+}
+
+ApplyExpression {
+  expr: Identifier {
+    name: 'g'
+  },
+  args: NumericLiteral {
+    value: 5
   }
 }
