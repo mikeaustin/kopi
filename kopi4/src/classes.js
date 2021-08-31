@@ -70,13 +70,14 @@ class TuplePattern {
 }
 
 class IdentifierPattern {
-  constructor(name) {
+  constructor(name, init) {
     this.name = name;
+    this.init = init;
   }
 
   match(value) {
     return {
-      [this.name]: value
+      [this.name]: value ?? this.init,
     };
   }
 }

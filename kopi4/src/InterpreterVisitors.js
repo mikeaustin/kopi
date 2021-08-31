@@ -71,8 +71,8 @@ class InterpreterVisitors extends Visitors {
     return new TuplePattern(elements.map(element => this.visit(element, scope)));
   }
 
-  IdentifierPattern({ name }) {
-    return new IdentifierPattern(name);
+  IdentifierPattern({ name, init }, scope) {
+    return new IdentifierPattern(name, this.visit(init, scope));
   }
 
   NumericLiteralPattern({ value }) {

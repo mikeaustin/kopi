@@ -125,7 +125,7 @@ TuplePattern
   = head:PrimaryPattern tail:("," _ PrimaryPattern)+ {
       return new TuplePattern({
         elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
-      })
+      });
     }
   / PrimaryPattern
 
@@ -135,8 +135,8 @@ NumericLiteralPattern
     }
 
 IdentifierPattern
-  = ident:Identifier {
-      return new IdentifierPattern({ name: ident.name });
+  = ident:Identifier init:(_ "=" _ NumericLiteral)? {
+      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
 
 FunctionPattern
