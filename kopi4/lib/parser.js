@@ -213,7 +213,7 @@ function peg$parse(input, options) {
             return new NumericLiteralPattern({ value: number.value });
           },
       peg$c34 = function(ident) {
-            return new IdentifierPattern({ name: ident.name, x: 'x' });
+            return new IdentifierPattern({ name: ident.name });
           },
       peg$c35 = function(ident, params) {
             return new FunctionPattern({ name: ident.name, params });

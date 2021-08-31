@@ -78,6 +78,10 @@ class NumericLiteralPattern {
   }
 
   match(value) {
+    if (value !== this.value) {
+      return null;
+    }
+
     return {};
   }
 }

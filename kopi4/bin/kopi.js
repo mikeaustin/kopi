@@ -16,7 +16,13 @@ let scope = {
   print: (args) => console.log(args.toString()),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  z: 5,
+  case: (value) => (funcs) => {
+    for (func of funcs.elements) {
+      if (func.params.match(value)) {
+        return func.apply(undefined, [value], InterpreterVisitors);
+      }
+    }
+  },
 };
 
 const bind = updates => scope = ({ ...scope, ...updates });
