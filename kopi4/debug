@@ -1,220 +1,33 @@
 
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: Identifier {
-      name: 'case'
-    },
-    args: NumericLiteral {
-      value: 5
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      FunctionExpression {
-        params: NumericLiteralPattern {
-          value: 0
-        },
-        expr: NumericLiteral {
-          value: 1
-        }
-      },
-      FunctionExpression {
-        params: IdentifierPattern {
-          name: 'n'
-        },
-        expr: OperatorExpression {
-          op: '*',
-          left: Identifier {
-            name: 'n'
-          },
-          right: Identifier {
-            name: 'n'
-          }
-        }
-      }
-    ]
-  }
-}
-TypeError: Cannot read property 'match' of undefined
-    at /Users/mike/Projects/kopi/kopi4/bin/kopi.js:21:23
-    at InterpreterVisitors.ApplyExpression (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:31:26)
-    at InterpreterVisitors.visit (/Users/mike/Projects/kopi/kopi4/src/InterpreterVisitors.js:6:44)
-    at main (/Users/mike/Projects/kopi/kopi4/bin/kopi.js:50:43)
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: Identifier {
-      name: 'case'
-    },
-    args: NumericLiteral {
-      value: 5
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      FunctionExpression {
-        params: NumericLiteralPattern {
-          value: 0
-        },
-        expr: NumericLiteral {
-          value: 1
-        }
-      },
-      FunctionExpression {
-        params: IdentifierPattern {
-          name: 'n'
-        },
-        expr: OperatorExpression {
-          op: '*',
-          left: Identifier {
-            name: 'n'
-          },
-          right: Identifier {
-            name: 'n'
-          }
-        }
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: ApplyExpression {
-    expr: FunctionExpression {
-      params: IdentifierPattern {
-        name: 'a'
-      },
-      expr: FunctionExpression {
-        params: IdentifierPattern {
-          name: 'b'
-        },
-        expr: OperatorExpression {
-          op: '+',
-          left: OperatorExpression {
-            op: '+',
-            left: Identifier {
-              name: 'a'
-            },
-            right: Identifier {
-              name: 'b'
-            }
-          },
-          right: Identifier {
-            name: 'z'
-          }
-        }
-      }
-    },
-    args: NumericLiteral {
-      value: 2
-    }
-  },
-  args: NumericLiteral {
-    value: 3
-  }
-}
-
-ApplyExpression {
-  expr: FunctionExpression {
-    params: TuplePattern {
-      elements: [
-        IdentifierPattern {
-          name: 'a'
-        },
-        IdentifierPattern {
-          name: 'b'
-        }
-      ]
-    },
-    expr: OperatorExpression {
-      op: '+',
-      left: OperatorExpression {
-        op: '+',
-        left: Identifier {
-          name: 'a'
-        },
-        right: Identifier {
-          name: 'b'
-        }
-      },
-      right: Identifier {
-        name: 'z'
-      }
-    }
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 2
-      },
-      NumericLiteral {
-        value: 3
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'max'
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 1
-      },
-      NumericLiteral {
-        value: 2
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'print'
-  },
-  args: NumericLiteral {
-    value: 5
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'print'
-  },
-  args: TupleExpression {
-    elements: [
-      NumericLiteral {
-        value: 1
-      },
-      NumericLiteral {
-        value: 2
-      }
-    ]
-  }
-}
-
-ApplyExpression {
-  expr: Identifier {
-    name: 'print'
-  },
-  args: RangeExpression {
-    from: NumericLiteral {
+TupleExpression {
+  elements: [
+    NumericLiteral {
       value: 1
     },
-    to: NumericLiteral {
-      value: 5
+    TupleExpression {
+      elements: [
+        NumericLiteral {
+          value: 2
+        },
+        NumericLiteral {
+          value: 3
+        }
+      ]
     }
-  }
+  ]
 }
 
-RangeExpression {
-  from: NumericLiteral {
-    value: 1
-  },
-  to: NumericLiteral {
-    value: 5
-  }
+TupleExpression {
+  elements: [
+    NumericLiteral {
+      value: 1
+    },
+    NumericLiteral {
+      value: 2
+    }
+  ]
+}
+
+NumericLiteral {
+  value: 1
 }

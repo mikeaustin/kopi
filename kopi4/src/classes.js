@@ -1,5 +1,10 @@
 const util = require("util");
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 class Tuple {
   constructor(elements = []) {
     this.elements = elements;
@@ -10,7 +15,7 @@ class Tuple {
       return '()';
     }
 
-    return `${this.elements.join(', ')}`;
+    return `(${this.elements.map(element => inspect(element)).join(', ')})`;
   }
 }
 
