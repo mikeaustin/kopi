@@ -16,7 +16,7 @@ let scope = {
   print: (args) => console.log(args.toString()),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  case: (value) => (funcs) => {
+  match: (value) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.match(value)) {
         return func.apply(undefined, [value], InterpreterVisitors);
@@ -28,18 +28,35 @@ let scope = {
 const bind = updates => scope = ({ ...scope, ...updates });
 
 async function main() {
-  let input = null;
-
   if (process.argv.length > 2) {
-    input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
-  } else {
-    input = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
+    const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
+
+    try {
+      const ast = parser.parse(input);
+
+      const value = InterpreterVisitors.visit(ast, scope, bind);
+
+      if (value !== undefined) {
+        const formattedValue = util.inspect(value, {
+          compact: false,
+          depth: Infinity
+        });
+
+        console.log(formattedValue);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return;
   }
 
-  process.argv.length === 2 && input.prompt();
+  const input = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  input.prompt();
 
   for await (const line of input) {
     try {
@@ -69,7 +86,7 @@ async function main() {
       console.error(error);
     }
 
-    process.argv.length === 2 && input.prompt();
+    input.prompt();
   }
 }
 

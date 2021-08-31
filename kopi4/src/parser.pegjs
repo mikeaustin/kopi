@@ -77,6 +77,9 @@ TupleExpression
         ], [head])
       });
     }
+  / "(" exprs:(Newline+ Expression)+ Newline+ ")" {
+    return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
+  }
   / AddExpression
 
 //
@@ -106,7 +109,7 @@ RangeExpression
   / PrimaryExpression
 
 PrimaryExpression
-  = "(" _ expr:Expression _ ")" { return expr; }
+  = _ "(" _ expr:Expression _ ")" { return expr; }
   / NumericLiteral
   / Identifier
 
@@ -115,8 +118,8 @@ PrimaryExpression
 //
 
 Pattern
-  = FunctionPattern
-  / TuplePattern
+  // = FunctionPattern
+  = TuplePattern
 
 TuplePattern
   = head:PrimaryPattern tail:("," _ PrimaryPattern)+ {
@@ -142,7 +145,7 @@ FunctionPattern
     }
 
 PrimaryPattern
-  = "(" pattern:Pattern ")" { return pattern; }
+  = _ "(" pattern:Pattern ")" { return pattern; }
   / NumericLiteralPattern
   / IdentifierPattern
 
@@ -151,7 +154,7 @@ PrimaryPattern
 //
 
 Identifier
-  = name:[a-z][a-zA-Z0-9]* { return new Identifier({ name: text() }); }
+  = _ [a-z][a-zA-Z0-9]* { return new Identifier({ name: text().trim() }); }
 
 NumericLiteral "number"
   = _ [0-9]+ { return new NumericLiteral({ value: Number(text()) }); }

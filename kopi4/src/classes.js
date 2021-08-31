@@ -10,12 +10,16 @@ class Tuple {
     this.elements = elements;
   }
 
-  [util.inspect.custom]() {
+  toString() {
     if (this.elements.length === 0) {
       return '()';
     }
 
     return `(${this.elements.map(element => inspect(element)).join(', ')})`;
+  }
+
+  [util.inspect.custom]() {
+    return this.toString();
   }
 }
 

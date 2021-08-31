@@ -2,6 +2,10 @@ const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralP
 
 class Visitors {
   visit(astNode, scope, bind) {
+    if (!astNode) {
+      return;
+    }
+
     if (this[astNode.constructor.name]) {
       return this[astNode.constructor.name](astNode, scope, bind);
     } else {
@@ -11,6 +15,12 @@ class Visitors {
 }
 
 class InterpreterVisitors extends Visitors {
+  Block({ statements }, scope) {
+    const bind = updates => scope = ({ ...scope, ...updates });
+
+    return statements.reduce((result, statement) => this.visit(statement, scope, bind), undefined);
+  }
+
   Assignment({ pattern, expr }, scope, bind) {
     const evaluatedExpr = this.visit(expr, scope);
     const evaluatedPattern = this.visit(pattern, scope);
