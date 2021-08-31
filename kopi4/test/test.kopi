@@ -1,0 +1,20 @@
+print 1, 2, 3
+
+print (
+  (a, b => a + b) 2, 3
+  2 * (3 + 4) + 1
+  match 5 (0 => 1), (n => n * n)
+)
+
+(x, k => (x, k => k x + 1) x + x, k) 5, (x => x)
+
+fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+factorial = fix factorial => n => match n (
+  0 => 1
+  n => n * (factorial n - 1)
+)
+
+print (factorial 5)
+
+let (x = 5) => x * x

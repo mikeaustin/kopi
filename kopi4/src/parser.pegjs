@@ -1,20 +1,6 @@
-// 2 * (3 + 4)
-// 1, 2, 3
-// print max 1, 2
-// x = print 1, 2 + 3
-// map (x => x, x), 5
-// a b c
-// (x => x * x) 5
-// print fold (x => x * x), 5
-// (a, b => a + b) 1, 2
-// sort "julie" ++ "moronuki"
-// xs | reduce 0 sum, x => sum + x
-
 {
   class Node {
     constructor(args) {
-      // this.type = this.constructor.name;
-
       Object.assign(this, args);
     }
   }
@@ -26,12 +12,20 @@
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
   class TupleExpression extends Node { }
+  class RangeExpression extends Node { }
 
   class NumericLiteral extends Node { }
   class Identifier extends Node { }
 
   class TuplePattern extends Node { }
+  class IdentifierPattern extends Node { }
+  class NumericLiteralPattern extends Node { }
+  class FunctionPattern extends Node { }
 }
+
+//
+// Rules
+//
 
 Block
   = Newline* head:Statement tail:(Newline+ Statement)* Newline* {
@@ -55,24 +49,42 @@ Expression
   = ApplyExpression
 
 ApplyExpression
-  = expr:PrimaryExpression _ args:Expression {
-  	  return new ApplyExpression({ expr, args })
+  = expr:FunctionExpression _ args:(_ FunctionExpression)+ {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr)
     }
   / FunctionExpression
 
 FunctionExpression
-  = params:Pattern _ "=>" _ expr:Expression {
+  = "()" _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
+    }
+  / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
   / TupleExpression
 
 TupleExpression
-  = head:AddExpression _ tail:("," _ AddExpression)+ {
+  = "()" {
+    return new TupleExpression({ elements: [] });
+  }
+  / head:AddExpression _ tail:("," _ AddExpression)+ {
   	  return new TupleExpression({
-        elements: tail.reduce((expressions, [, , expression]) => [...expressions, expression], [head])
+        elements: tail.reduce((expressions, [, , expression]) => [
+          ...expressions,
+          expression
+        ], [head])
       });
     }
+  / "(" exprs:(Newline+ Expression)+ Newline+ ")" {
+    return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
+  }
   / AddExpression
+
+//
+// Operators
+//
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)+ {
@@ -83,43 +95,73 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = head:PrimaryExpression tail:(_ ("*" / "/") _ PrimaryExpression)+ {
+  = head:RangeExpression tail:(_ ("*" / "/") _ RangeExpression)+ {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
+  / RangeExpression
+
+RangeExpression
+  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+      return new RangeExpression({ from, to });
+    }
   / PrimaryExpression
 
 PrimaryExpression
-  = "(" _ expr:Expression _ ")" { return expr; }
+  = _ "(" _ expr:Expression _ ")" { return expr; }
   / NumericLiteral
   / Identifier
 
 //
+// Patterns
+//
 
 Pattern
+  // = FunctionPattern
   = TuplePattern
 
 TuplePattern
   = head:PrimaryPattern tail:("," _ PrimaryPattern)+ {
       return new TuplePattern({
         elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
-      })
+      });
     }
   / PrimaryPattern
 
-PrimaryPattern
-  = "(" pattern:Pattern ")" { return pattern; }
-  / NumericLiteral
-  / Identifier
+NumericLiteralPattern
+  = number:NumericLiteral {
+      return new NumericLiteralPattern({ value: number.value });
+    }
 
+IdentifierPattern
+  = ident:Identifier init:(_ "=" _ NumericLiteral)? {
+      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+    }
+
+FunctionPattern
+  = ident:Identifier _ params:Pattern {
+      return new FunctionPattern({ name: ident.name, params });
+    }
+
+PrimaryPattern
+  = _ "(" pattern:Pattern ")" { return pattern; }
+  / NumericLiteralPattern
+  / IdentifierPattern
+
+//
+// Literals
 //
 
 Identifier
-  = name:[a-z][a-zA-Z0-9]* { return new Identifier({ name: text() }); }
+  = _ [a-z][a-zA-Z0-9]* { return new Identifier({ name: text().trim() }); }
 
 NumericLiteral "number"
   = _ [0-9]+ { return new NumericLiteral({ value: Number(text()) }); }
+
+//
+// Whitespace
+//
 
 _
   = Whitespace*

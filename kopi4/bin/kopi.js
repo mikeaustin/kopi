@@ -8,38 +8,72 @@ const parser = require("../lib/parser");
 
 const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
 
-let scope = {
-  even: (args) => args % 2 === 0,
-  z: 5,
+Function.prototype[util.inspect.custom] = function () {
+  return `<function>`;
 };
 
+let scope = {
+  print: (args) => console.log(args.toString()),
+  even: (args) => args % 2 === 0,
+  max: (args) => Math.max(args.elements[0], args.elements[1]),
+  let: (args) => args.apply(undefined, [undefined], InterpreterVisitors),
+  match: (value) => (funcs) => {
+    for (func of funcs.elements) {
+      if (func.params.match(value)) {
+        return func.apply(undefined, [value], InterpreterVisitors);
+      }
+    }
+  },
+};
+
+const bind = updates => scope = ({ ...scope, ...updates });
+
 async function main() {
-  let input = null;
-
   if (process.argv.length > 2) {
-    input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
-  } else {
-    input = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-  }
+    const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
 
-  process.argv.length === 2 && input.prompt();
-
-  for await (const line of input) {
     try {
-      const ast = parser.parse(line);
+      const ast = parser.parse(input);
 
-      for (const astNode of ast.statements) {
-        const value = InterpreterVisitors.visit(astNode, scope);
+      const value = InterpreterVisitors.visit(ast, scope, bind);
 
+      if (value !== undefined) {
         const formattedValue = util.inspect(value, {
           compact: false,
           depth: Infinity
         });
 
         console.log(formattedValue);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return;
+  }
+
+  const input = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  input.prompt();
+
+  for await (const line of input) {
+    try {
+      const ast = parser.parse(line);
+
+      for (const astNode of ast.statements) {
+        const value = InterpreterVisitors.visit(astNode, scope, bind);
+
+        if (value !== undefined) {
+          const formattedValue = util.inspect(value, {
+            compact: false,
+            depth: Infinity
+          });
+
+          console.log(formattedValue);
+        }
 
         const formattedAst = util.inspect(astNode, {
           compact: false,
@@ -53,7 +87,7 @@ async function main() {
       console.error(error);
     }
 
-    process.argv.length === 2 && input.prompt();
+    input.prompt();
   }
 }
 

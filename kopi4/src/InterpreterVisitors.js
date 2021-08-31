@@ -1,42 +1,60 @@
-class Tuple {
-  constructor(elements) {
-    this.elements = elements;
-  }
-}
-
-class Function {
-  constructor(params, expr, closure) {
-    this.params = params;
-    this.expr = expr;
-    this.closure = closure;
-  }
-
-  apply(thisArg, args, visitors) {
-    // const scope = this.params.reduce((scope, param, index) => ({
-    //   ...scope,
-    //   [param.name]: args[index]
-    // }), this.closure);
-
-    const scope = {
-      ...this.closure,
-      [this.params.name]: args[0]
-    };
-
-    return visitors.visit(this.expr, scope);
-  }
-}
+const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralPattern, FunctionPattern } = require('./classes');
 
 class Visitors {
-  visit(node, scope) {
-    if (this[node.constructor.name]) {
-      return this[node.constructor.name](node, scope);
+  visit(astNode, scope, bind) {
+    if (!astNode) {
+      return;
+    }
+
+    if (this[astNode.constructor.name]) {
+      return this[astNode.constructor.name](astNode, scope, bind);
     } else {
-      throw new Error(`No AST visitor for '${node.constructor.name}'`);
+      throw new Error(`No AST visitor for '${astNode.constructor.name}'`);
     }
   }
 }
 
 class InterpreterVisitors extends Visitors {
+  Block({ statements }, scope) {
+    const bind = updates => scope = ({ ...scope, ...updates });
+
+    return statements.reduce((result, statement) => this.visit(statement, scope, bind), undefined);
+  }
+
+  Assignment({ pattern, expr }, scope, bind) {
+    const evaluatedExpr = this.visit(expr, scope);
+    const evaluatedPattern = this.visit(pattern, scope);
+
+    // TODO: pass expr directly so FunctionPattern can use it as body
+    const matches = evaluatedPattern.match(evaluatedExpr, scope, expr);
+
+    bind(matches);
+  }
+
+  ApplyExpression({ expr, args }, scope) {
+    const evaluatedArgs = this.visit(args, scope);
+    const evaluatedExpr = this.visit(expr, scope);
+
+    // console.log(evaluatedArgs);
+
+    // TODO: Passing unevaluated args, FunctionPattern can store expr
+    return evaluatedExpr.apply(undefined, [evaluatedArgs], this);
+  }
+
+  FunctionExpression({ params, expr }, scope) {
+    const evaluatedParams = this.visit(params, scope);
+
+    return new Function(evaluatedParams, expr, scope);
+  }
+
+  TupleExpression({ elements }, scope) {
+    return new Tuple(elements.map(element => this.visit(element, scope)));
+  }
+
+  RangeExpression({ from, to }, scope) {
+    return new Range(this.visit(from, scope), this.visit(to, scope));
+  }
+
   OperatorExpression({ op, left, right }, scope) {
     const evaluatedLeft = this.visit(left, scope);
     const evaluatedRight = this.visit(right, scope);
@@ -49,21 +67,22 @@ class InterpreterVisitors extends Visitors {
     }
   }
 
-  TupleExpression({ elements }, scope) {
-    return new Tuple(elements.map(element => this.visit(element, scope)));
+  TuplePattern({ elements }, scope) {
+    return new TuplePattern(elements.map(element => this.visit(element, scope)));
   }
 
-  FunctionExpression({ params, expr }, scope) {
-    return new Function(params, expr, scope);
+  IdentifierPattern({ name, init }, scope) {
+    return new IdentifierPattern(name, this.visit(init, scope));
   }
 
-  ApplyExpression({ expr, args }, scope) {
-    const evaluatedArgs = this.visit(args, scope);
-    const evaluatedExpr = this.visit(expr, scope);
+  NumericLiteralPattern({ value }) {
+    return new NumericLiteralPattern(value);
+  }
 
-    // console.log(evaluatedArgs);
+  FunctionPattern({ name, params }, scope) {
+    const evaluatedParams = this.visit(params, scope);
 
-    return evaluatedExpr.apply(undefined, [evaluatedArgs], this);
+    return new FunctionPattern(name, evaluatedParams);
   }
 
   NumericLiteral({ value }) {
