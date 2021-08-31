@@ -1,8 +1,6 @@
 {
   class Node {
     constructor(args) {
-      // this.type = this.constructor.name;
-
       Object.assign(this, args);
     }
   }
@@ -80,6 +78,10 @@ TupleExpression
       });
     }
   / AddExpression
+
+//
+// Operators
+//
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)+ {

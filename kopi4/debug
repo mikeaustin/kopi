@@ -1,38 +1,122 @@
 
 Assignment {
-  pattern: FunctionPattern {
-    name: 'f',
-    params: IdentifierPattern {
-      name: 'x'
+  pattern: TuplePattern {
+    elements: [
+      IdentifierPattern {
+        name: 'a',
+        x: 'x'
+      },
+      IdentifierPattern {
+        name: 'b',
+        x: 'x'
+      }
+    ]
+  },
+  expr: TupleExpression {
+    elements: [
+      NumericLiteral {
+        value: 1
+      },
+      NumericLiteral {
+        value: 2
+      }
+    ]
+  }
+}
+
+Identifier {
+  name: 'a'
+}
+
+Identifier {
+  name: 'b'
+}
+
+ApplyExpression {
+  expr: FunctionExpression {
+    params: TuplePattern {
+      elements: [
+        IdentifierPattern {
+          name: 'a',
+          x: 'x'
+        },
+        IdentifierPattern {
+          name: 'b',
+          x: 'x'
+        }
+      ]
+    },
+    expr: OperatorExpression {
+      op: '+',
+      left: OperatorExpression {
+        op: '+',
+        left: Identifier {
+          name: 'a'
+        },
+        right: Identifier {
+          name: 'b'
+        }
+      },
+      right: Identifier {
+        name: 'z'
+      }
     }
   },
-  expr: OperatorExpression {
-    op: '*',
-    left: Identifier {
-      name: 'x'
-    },
-    right: Identifier {
-      name: 'x'
-    }
+  args: TupleExpression {
+    elements: [
+      NumericLiteral {
+        value: 2
+      },
+      NumericLiteral {
+        value: 3
+      }
+    ]
   }
 }
 
 ApplyExpression {
-  expr: Identifier {
-    name: 'f'
+  expr: ApplyExpression {
+    expr: FunctionExpression {
+      params: IdentifierPattern {
+        name: 'a',
+        x: 'x'
+      },
+      expr: FunctionExpression {
+        params: IdentifierPattern {
+          name: 'b',
+          x: 'x'
+        },
+        expr: OperatorExpression {
+          op: '+',
+          left: OperatorExpression {
+            op: '+',
+            left: Identifier {
+              name: 'a'
+            },
+            right: Identifier {
+              name: 'b'
+            }
+          },
+          right: Identifier {
+            name: 'z'
+          }
+        }
+      }
+    },
+    args: NumericLiteral {
+      value: 2
+    }
   },
   args: NumericLiteral {
-    value: 5
+    value: 3
   }
 }
 
-Assignment {
-  pattern: IdentifierPattern {
-    name: 'g'
-  },
+ApplyExpression {
   expr: FunctionExpression {
     params: IdentifierPattern {
-      name: 'x'
+      name: 'x',
+      x: 'x'
     },
     expr: OperatorExpression {
       op: '*',
@@ -43,14 +127,59 @@ Assignment {
         name: 'x'
       }
     }
+  },
+  args: NumericLiteral {
+    value: 5
   }
 }
 
 ApplyExpression {
   expr: Identifier {
-    name: 'g'
+    name: 'print'
   },
-  args: NumericLiteral {
-    value: 5
+  args: ApplyExpression {
+    expr: Identifier {
+      name: 'max'
+    },
+    args: TupleExpression {
+      elements: [
+        NumericLiteral {
+          value: 1
+        },
+        NumericLiteral {
+          value: 2
+        }
+      ]
+    }
+  }
+}
+
+TupleExpression {
+  elements: [
+    NumericLiteral {
+      value: 1
+    },
+    NumericLiteral {
+      value: 2
+    },
+    NumericLiteral {
+      value: 3
+    }
+  ]
+}
+
+OperatorExpression {
+  op: '*',
+  left: NumericLiteral {
+    value: 2
+  },
+  right: OperatorExpression {
+    op: '+',
+    left: NumericLiteral {
+      value: 3
+    },
+    right: NumericLiteral {
+      value: 4
+    }
   }
 }

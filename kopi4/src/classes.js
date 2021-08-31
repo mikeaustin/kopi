@@ -89,8 +89,6 @@ class FunctionPattern {
   }
 
   match(value, scope, unevaluatedValue) {
-    console.log('here', value);
-
     return {
       [this.name]: new Function(this.params, unevaluatedValue, scope)
     };

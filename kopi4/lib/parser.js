@@ -213,7 +213,7 @@ function peg$parse(input, options) {
             return new NumericLiteralPattern({ value: number.value });
           },
       peg$c34 = function(ident) {
-            return new IdentifierPattern({ name: ident.name });
+            return new IdentifierPattern({ name: ident.name, x: 'x' });
           },
       peg$c35 = function(ident, params) {
             return new FunctionPattern({ name: ident.name, params });
@@ -1497,8 +1497,6 @@ function peg$parse(input, options) {
 
     class Node {
       constructor(args) {
-        // this.type = this.constructor.name;
-
         Object.assign(this, args);
       }
     }
