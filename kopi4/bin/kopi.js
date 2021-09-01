@@ -16,7 +16,7 @@ let scope = {
   print: (args) => console.log(args.toString()),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args) => args.apply(undefined, [undefined], InterpreterVisitors),
+  let: (args) => args.apply(undefined, [{ elements: [undefined, undefined] }], InterpreterVisitors),
   match: (value) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.match(value)) {
