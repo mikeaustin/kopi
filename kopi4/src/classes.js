@@ -32,6 +32,12 @@ class Range {
   [util.inspect.custom]() {
     return `${this.from}..${this.to}`;
   }
+
+  map(args, visitors) {
+    return Array.from({ length: this.to - this.from + 1 }, (_, index) => (
+      args.apply(undefined, [index + this.from], visitors)
+    ));
+  }
 }
 
 class Function {

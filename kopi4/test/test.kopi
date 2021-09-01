@@ -17,4 +17,6 @@ factorial = fix factorial => n => match n (
 
 print (factorial 5)
 
-let (x = 2, y = 3) => x + y
+print (let (x = 2, y = 3) => x + y)
+
+1..5 | map (n) => n * n

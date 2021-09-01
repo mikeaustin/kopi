@@ -8,6 +8,7 @@
   class Block extends Node { }
   class Assignment extends Node { }
 
+  class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
@@ -46,7 +47,15 @@ Assignment
     }
 
 Expression
-  = ApplyExpression
+  = PipeExpression
+
+PipeExpression
+  = head:ApplyExpression tail:(_ "|" _ ApplyExpression)+ {
+      return tail.reduce((left, [, op,, right]) => (
+        new PipeExpression({ left, right })
+      ), head);
+    }
+    / ApplyExpression
 
 ApplyExpression
   = expr:FunctionExpression _ args:(_ FunctionExpression)+ {

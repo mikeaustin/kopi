@@ -31,6 +31,13 @@ class InterpreterVisitors extends Visitors {
     bind(matches);
   }
 
+  PipeExpression({ left, right }, scope) {
+    const evaluatedExpr = this.visit(left, scope);
+    const evaluatedArgs = this.visit(right.args, scope);
+
+    return evaluatedExpr[right.expr.name].apply(evaluatedExpr, [evaluatedArgs, this], scope);
+  }
+
   ApplyExpression({ expr, args }, scope) {
     const evaluatedArgs = this.visit(args, scope);
     const evaluatedExpr = this.visit(expr, scope);
