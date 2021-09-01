@@ -1,0 +1,13 @@
+
+ApplyExpression {
+  expr: Identifier {
+    name: 'input'
+  },
+  args: TupleExpression {
+    elements: []
+  }
+}
+
+NumericLiteral {
+  value: 5
+}

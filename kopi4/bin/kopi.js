@@ -12,11 +12,29 @@ Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
 };
 
+let input;
+
 let scope = {
   print: (args) => console.log(args.toString()),
+  input: (args) => {
+    const rl = input ?? readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl.question('Name? ', data => {
+      console.log(data);
+
+      if (rl === input) {
+        rl.prompt();
+      } else {
+        rl.close();
+      }
+    });
+  },
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args) => args.apply(undefined, [{ elements: [undefined, undefined] }], InterpreterVisitors),
+  let: (args) => args.apply(undefined, [{ elements: [] }], InterpreterVisitors),
   match: (value) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.match(value)) {
@@ -52,7 +70,7 @@ async function main() {
     return;
   }
 
-  const input = readline.createInterface({
+  input = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
