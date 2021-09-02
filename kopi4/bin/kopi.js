@@ -34,11 +34,11 @@ let scope = {
   },
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args) => args.apply(undefined, [{ elements: [] }], InterpreterVisitors),
+  let: (args) => args.apply(undefined, [{ elements: [] }, InterpreterVisitors]),
   match: (value) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.getMatches(value)) {
-        return func.apply(undefined, [value], InterpreterVisitors);
+        return func.apply(undefined, [value, InterpreterVisitors]);
       }
     }
   },
