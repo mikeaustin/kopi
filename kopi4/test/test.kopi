@@ -19,13 +19,12 @@ print (factorial 5)
 
 print (let (x = 2, y = 3) => x + y)
 
-5 # input "Name?"
+0 # input "Name?"
 
 print (1..5 | map (n) => n * n)
 
-0 # square x = x * x
-0 # print (square 5)
-
 (0, x => x) | getMatches 0, 1
 
-(Point (1, 2)) + (Point (2, 3))
+print ((Vector 1, 2) + (Vector 2, 3) | length)
+
+5 | toFixed 2

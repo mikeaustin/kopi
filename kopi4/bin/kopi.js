@@ -12,14 +12,18 @@ Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
 };
 
-class Point {
+class Vector {
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
 
   ['+'](that) {
-    return new Point(this.x + that.x, this.y + that.y);
+    return new Vector(this.x + that.x, this.y + that.y);
+  }
+
+  length() {
+    return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
   }
 }
 
@@ -43,7 +47,7 @@ let scope = {
       }
     });
   },
-  Point: (args) => new Point(args.elements[0], args.elements[1]),
+  Vector: (args) => new Vector(args.elements[0], args.elements[1]),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
   let: (args) => args.apply(undefined, [{ elements: [] }, InterpreterVisitors]),
@@ -78,7 +82,7 @@ async function main() {
         console.log(formattedValue);
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
 
     return;
@@ -92,9 +96,19 @@ async function main() {
   input.prompt();
 
   for await (const line of input) {
-    try {
-      const ast = parser.parse(line);
+    let ast;
 
+    try {
+      ast = parser.parse(line);
+    } catch (error) {
+      console.error('SyntaxError:', error.message);
+
+      input.prompt();
+
+      continue;
+    }
+
+    try {
       for (const astNode of ast.statements) {
         const value = InterpreterVisitors.visitNode(astNode, scope, bind);
 
@@ -116,7 +130,7 @@ async function main() {
         console.error(formattedAst);
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
 
     input.prompt();

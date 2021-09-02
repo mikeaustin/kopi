@@ -35,7 +35,11 @@ class InterpreterVisitors extends Visitors {
     const evaluatedExpr = this.visitNode(left, scope);
     const evaluatedArgs = this.visitNode(right.args, scope);
 
-    return evaluatedExpr[right.expr.name].apply(evaluatedExpr, [evaluatedArgs, this], scope);
+    const value = evaluatedExpr[right.name ?? right.expr.name];
+
+    return typeof value === 'function' || typeof value === 'object' && 'apply' in value
+      ? value.apply(evaluatedExpr, [evaluatedArgs, this], scope)
+      : value;
   }
 
   ApplyExpression({ expr, args }, scope) {
