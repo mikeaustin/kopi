@@ -54,9 +54,17 @@ class Function {
   apply(thisArg, args, visitors) {
     // TODO: get unevaluated args to pass to match
     // If we pass unevaled args, we'll also need scope
-    const matchs = this.params.match(args[0]);
+    const matches = this.params.match(args[0]);
 
-    return visitors.visit(this.expr, { ...this.closure, ...matchs });
+    if (matches === null) {
+      return undefined;
+    }
+
+    return visitors.visit(this.expr, { ...this.closure, ...matches });
+  }
+
+  match(args) {
+    return this.params.match(args);
   }
 }
 
@@ -68,9 +76,15 @@ class TuplePattern {
   }
 
   match(value) {
-    return this.elements.reduce((scope, element, index) => ({
+    const matchesArray = this.elements.map((element, index) => element.match(value.elements[index]));
+
+    if (matchesArray.some(match => match === null)) {
+      return null;
+    }
+
+    return matchesArray.reduce((scope, matches) => ({
       ...scope,
-      ...element.match(value.elements[index]),
+      ...matches,
     }), {});
   }
 }

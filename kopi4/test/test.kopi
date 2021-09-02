@@ -27,3 +27,5 @@ print (1..5 | map (n) => n * n)
 
 square x = x * x
 print (square 5)
+
+(0, x => x) | match 0, 1
