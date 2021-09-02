@@ -51,8 +51,10 @@ async function main() {
     const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
 
     try {
+      console.log('Parsing...');
       const ast = parser.parse(input);
 
+      console.log('Evaluating...');
       const value = InterpreterVisitors.visit(ast, scope, bind);
 
       if (value !== undefined) {

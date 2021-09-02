@@ -23,4 +23,7 @@ print (let (x = 2, y = 3) => x + y)
 
 5 # input "Name?"
 
-1..5 | map (n) => n * n
+print (1..5 | map (n) => n * n)
+
+square x = x * x
+print (square 5)

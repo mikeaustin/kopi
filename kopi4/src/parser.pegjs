@@ -30,7 +30,7 @@
 //
 
 Block
-  = Newline* head:Statement tail:(Newline+ Statement)* Newline* {
+  = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
       return new Block({
         statements: tail.reduce((block, [, statement]) => (
           statement ? [...block, statement] : block
@@ -43,7 +43,7 @@ Statement
   / Expression
 
 Assignment
-  = pattern:Pattern _ "=" _ expr:Expression {
+  = pattern:AssignmentPattern _ "=" _ expr:Expression {
       return new Assignment({ pattern, expr })
     }
 
@@ -128,8 +128,40 @@ PrimaryExpression
 // Patterns
 //
 
+AssignmentPattern
+  = AssignmentTuplePattern
+
+AssignmentTuplePattern
+  = head:AssignmentPrimaryPattern tail:("," _ AssignmentPrimaryPattern)+ {
+      return new TuplePattern({
+        elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
+      });
+    }
+  / AssignmentPrimaryPattern
+
+AssignmentPrimaryPattern
+  = AssignmentFunctionPattern
+  / AssignmentNumericLiteralPattern
+  / AssignmentIdentifierPattern
+
+AssignmentNumericLiteralPattern
+  = number:NumericLiteral {
+      return new NumericLiteralPattern({ value: number.value });
+    }
+
+AssignmentIdentifierPattern
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
+    }
+
+AssignmentFunctionPattern
+  = ident:Identifier _ params:AssignmentPattern {
+      return new FunctionPattern({ name: ident.name, params });
+    }
+
+//
+
 Pattern
-  // = FunctionPattern
   = TuplePattern
 
 TuplePattern
@@ -140,6 +172,11 @@ TuplePattern
     }
   / PrimaryPattern
 
+PrimaryPattern
+  = _ "(" pattern:Pattern ")" { return pattern; }
+  / NumericLiteralPattern
+  / IdentifierPattern
+
 NumericLiteralPattern
   = number:NumericLiteral {
       return new NumericLiteralPattern({ value: number.value });
@@ -149,16 +186,6 @@ IdentifierPattern
   = ident:Identifier init:(_ "=" _ NumericLiteral)? {
       return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
-
-FunctionPattern
-  = ident:Identifier _ params:Pattern {
-      return new FunctionPattern({ name: ident.name, params });
-    }
-
-PrimaryPattern
-  = _ "(" pattern:Pattern ")" { return pattern; }
-  / NumericLiteralPattern
-  / IdentifierPattern
 
 //
 // Literals

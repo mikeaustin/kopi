@@ -1,5 +1,0 @@
-Expected ",", "=", "=>", comment, or whitespace but end of input found.
-
-Identifier {
-  name: 'x'
-}
