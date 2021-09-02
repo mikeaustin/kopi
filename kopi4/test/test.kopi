@@ -19,8 +19,6 @@ print (factorial 5)
 
 print (let (x = 2, y = 3) => x + y)
 
-1..5 | map (n) => n * n
-
 5 # input "Name?"
 
 print (1..5 | map (n) => n * n)
@@ -28,4 +26,4 @@ print (1..5 | map (n) => n * n)
 square x = x * x
 print (square 5)
 
-(0, x => x) | match 0, 1
+(0, x => x) | getMatches 0, 1

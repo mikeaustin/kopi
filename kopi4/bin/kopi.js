@@ -37,7 +37,7 @@ let scope = {
   let: (args) => args.apply(undefined, [{ elements: [] }], InterpreterVisitors),
   match: (value) => (funcs) => {
     for (func of funcs.elements) {
-      if (func.params.match(value)) {
+      if (func.params.getMatches(value)) {
         return func.apply(undefined, [value], InterpreterVisitors);
       }
     }
@@ -55,7 +55,7 @@ async function main() {
       const ast = parser.parse(input);
 
       console.log('Evaluating...');
-      const value = InterpreterVisitors.visit(ast, scope, bind);
+      const value = InterpreterVisitors.visitNode(ast, scope, bind);
 
       if (value !== undefined) {
         const formattedValue = util.inspect(value, {
@@ -84,7 +84,7 @@ async function main() {
       const ast = parser.parse(line);
 
       for (const astNode of ast.statements) {
-        const value = InterpreterVisitors.visit(astNode, scope, bind);
+        const value = InterpreterVisitors.visitNode(astNode, scope, bind);
 
         if (value !== undefined) {
           const formattedValue = util.inspect(value, {

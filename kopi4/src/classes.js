@@ -54,17 +54,17 @@ class Function {
   apply(thisArg, args, visitors) {
     // TODO: get unevaluated args to pass to match
     // If we pass unevaled args, we'll also need scope
-    const matches = this.params.match(args[0]);
+    const matches = this.params.getMatches(args[0]);
 
     if (matches === null) {
       return undefined;
     }
 
-    return visitors.visit(this.expr, { ...this.closure, ...matches });
+    return visitors.visitNode(this.expr, { ...this.closure, ...matches });
   }
 
-  match(args) {
-    return this.params.match(args);
+  getMatches(args) {
+    return this.params.getMatches(args);
   }
 }
 
@@ -75,8 +75,8 @@ class TuplePattern {
     this.elements = elements;
   }
 
-  match(value) {
-    const matchesArray = this.elements.map((element, index) => element.match(value.elements[index]));
+  getMatches(value) {
+    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index]));
 
     if (matchesArray.some(match => match === null)) {
       return null;
@@ -95,7 +95,7 @@ class IdentifierPattern {
     this.init = init;
   }
 
-  match(value) {
+  getMatches(value) {
     return {
       [this.name]: value ?? this.init,
     };
@@ -107,7 +107,7 @@ class NumericLiteralPattern {
     this.value = value;
   }
 
-  match(value) {
+  getMatches(value) {
     if (value !== this.value) {
       return null;
     }
@@ -122,7 +122,7 @@ class FunctionPattern {
     this.params = params;
   }
 
-  match(value, scope, unevaluatedValue) {
+  getMatches(value, scope, unevaluatedValue) {
     return {
       [this.name]: new Function(this.params, unevaluatedValue, scope)
     };
