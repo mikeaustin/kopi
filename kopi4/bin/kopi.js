@@ -12,6 +12,17 @@ Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
 };
 
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  ['+'](that) {
+    return new Point(this.x + that.x, this.y + that.y);
+  }
+}
+
 let input;
 
 let scope = {
@@ -32,6 +43,7 @@ let scope = {
       }
     });
   },
+  Point: (args) => new Point(args.elements[0], args.elements[1]),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
   let: (args) => args.apply(undefined, [{ elements: [] }, InterpreterVisitors]),

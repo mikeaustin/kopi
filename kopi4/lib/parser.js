@@ -232,8 +232,8 @@ function peg$parse(input, options) {
       peg$c41 = function(ident, init) {
             return new IdentifierPattern({ name: ident.name, init: init?.[3] });
           },
-      peg$c42 = /^[a-z]/,
-      peg$c43 = peg$classExpectation([["a", "z"]], false, false),
+      peg$c42 = /^[a-zA-Z]/,
+      peg$c43 = peg$classExpectation([["a", "z"], ["A", "Z"]], false, false),
       peg$c44 = /^[a-zA-Z0-9]/,
       peg$c45 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"]], false, false),
       peg$c46 = function(name) { return new Identifier({ name: name[0] + name[1].join('') }); },

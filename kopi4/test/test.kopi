@@ -23,7 +23,9 @@ print (let (x = 2, y = 3) => x + y)
 
 print (1..5 | map (n) => n * n)
 
-square x = x * x
-print (square 5)
+0 # square x = x * x
+0 # print (square 5)
 
 (0, x => x) | getMatches 0, 1
+
+(Point (1, 2)) + (Point (2, 3))

@@ -66,12 +66,16 @@ class InterpreterVisitors extends Visitors {
     const evaluatedLeft = this.visitNode(left, scope);
     const evaluatedRight = this.visitNode(right, scope);
 
-    switch (op) {
-      case '+': return evaluatedLeft + evaluatedRight;
-      case '-': return evaluatedLeft - evaluatedRight;
-      case '*': return evaluatedLeft * evaluatedRight;
-      case '/': return evaluatedLeft / evaluatedRight;
+    if (typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number') {
+      switch (op) {
+        case '+': return evaluatedLeft + evaluatedRight;
+        case '-': return evaluatedLeft - evaluatedRight;
+        case '*': return evaluatedLeft * evaluatedRight;
+        case '/': return evaluatedLeft / evaluatedRight;
+      }
     }
+
+    return evaluatedLeft[op].apply(evaluatedLeft, [evaluatedRight]);
   }
 
   //
