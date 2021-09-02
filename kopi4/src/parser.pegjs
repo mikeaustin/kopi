@@ -51,20 +51,18 @@ Expression
   = PipeExpression
 
 PipeExpression
-  = head:ApplyExpression tail:(_ "|" _ ApplyExpression)+ {
+  = head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
         new PipeExpression({ left, right })
       ), head);
     }
-    / ApplyExpression
 
 ApplyExpression
-  = expr:FunctionExpression _ args:(_ FunctionExpression)+ {
+  = expr:FunctionExpression _ args:(_ FunctionExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
     }
-  / FunctionExpression
 
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
@@ -97,12 +95,11 @@ TupleExpression
 //
 
 AddExpression
-  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)+ {
+  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
-  / MultiplyExpression
 
 MultiplyExpression
   = head:RangeExpression tail:(_ ("*" / "/") _ RangeExpression)+ {
