@@ -165,23 +165,26 @@ PrimaryPattern
 //
 
 Identifier
-  = _ name:([a-z][a-zA-Z0-9]*) { return new Identifier({ name: name[0] + name[1].join('') }); }
+  = _ name:([a-z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
-  = _ value:[0-9]+ { return new NumericLiteral({ value: Number(value) }); }
+  = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value) }); }
 
 StringLiteral "string"
-  = _ "\"" value:[^"]* "\"" { return new StringLiteral({ value: value.join('') }); }
+  = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
 
 //
 // Whitespace
 //
 
 _
-  = Whitespace*
+  = (Whitespace / Comment)*
 
 Whitespace "whitespace"
   = [ \t]
+
+Comment "comment"
+  = "#" (!Newline .)*
 
 Newline "newline"
   = [\n\r]
