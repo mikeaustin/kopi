@@ -237,7 +237,7 @@ function peg$parse(input, options) {
       peg$c46 = peg$otherExpectation("number"),
       peg$c47 = /^[0-9]/,
       peg$c48 = peg$classExpectation([["0", "9"]], false, false),
-      peg$c49 = function(value) { return new NumericLiteral({ value: Number(value) }); },
+      peg$c49 = function(value) { return new NumericLiteral({ value: Number(value.join('')) }); },
       peg$c50 = peg$otherExpectation("string"),
       peg$c51 = "\"",
       peg$c52 = peg$literalExpectation("\"", false),
@@ -1817,19 +1817,30 @@ function peg$parse(input, options) {
   }
 
   function peg$parse_() {
-    var s0, s1;
+    var s0, s1, s2;
 
-    s0 = [];
-    s1 = peg$parseWhitespace();
-    if (s1 === peg$FAILED) {
-      s1 = peg$parseComment();
+    s0 = peg$currPos;
+    s1 = [];
+    s2 = peg$parseWhitespace();
+    while (s2 !== peg$FAILED) {
+      s1.push(s2);
+      s2 = peg$parseWhitespace();
     }
-    while (s1 !== peg$FAILED) {
-      s0.push(s1);
-      s1 = peg$parseWhitespace();
-      if (s1 === peg$FAILED) {
-        s1 = peg$parseComment();
+    if (s1 !== peg$FAILED) {
+      s2 = peg$parseComment();
+      if (s2 === peg$FAILED) {
+        s2 = null;
       }
+      if (s2 !== peg$FAILED) {
+        s1 = [s1, s2];
+        s0 = s1;
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
     }
 
     return s0;

@@ -168,7 +168,7 @@ Identifier
   = _ name:([a-z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
-  = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value) }); }
+  = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }
 
 StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
