@@ -21,4 +21,6 @@ print (let (x = 2, y = 3) => x + y)
 
 1..5 | map (n) => n * n
 
-input ()
+input "Name?"
+
+1..5 | map (n) => n * n

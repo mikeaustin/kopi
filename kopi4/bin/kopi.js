@@ -22,7 +22,7 @@ let scope = {
       output: process.stdout
     });
 
-    rl.question('Name? ', data => {
+    rl.question(`${args} `, data => {
       console.log(data);
 
       if (rl === input) {

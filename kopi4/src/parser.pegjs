@@ -16,6 +16,7 @@
   class RangeExpression extends Node { }
 
   class NumericLiteral extends Node { }
+  class StringLiteral extends Node { }
   class Identifier extends Node { }
 
   class TuplePattern extends Node { }
@@ -120,6 +121,7 @@ RangeExpression
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
   / NumericLiteral
+  / StringLiteral
   / Identifier
 
 //
@@ -163,10 +165,13 @@ PrimaryPattern
 //
 
 Identifier
-  = _ [a-z][a-zA-Z0-9]* { return new Identifier({ name: text().trim() }); }
+  = _ name:([a-z][a-zA-Z0-9]*) { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
-  = _ [0-9]+ { return new NumericLiteral({ value: Number(text()) }); }
+  = _ value:[0-9]+ { return new NumericLiteral({ value: Number(value) }); }
+
+StringLiteral "string"
+  = _ "\"" value:[^"]* "\"" { return new StringLiteral({ value: value.join('') }); }
 
 //
 // Whitespace

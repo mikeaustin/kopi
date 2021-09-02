@@ -96,6 +96,10 @@ class InterpreterVisitors extends Visitors {
     return value;
   }
 
+  StringLiteral({ value }) {
+    return value;
+  }
+
   Identifier({ name }, scope) {
     return scope[name];
   }
