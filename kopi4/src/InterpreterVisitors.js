@@ -1,4 +1,11 @@
+const util = require("util");
+
 const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralPattern, FunctionPattern } = require('./classes');
+
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
 
 class Visitors {
   visitNode(astNode, scope, bind) {
@@ -109,6 +116,10 @@ class InterpreterVisitors extends Visitors {
   }
 
   StringLiteral({ value }) {
+    return value;
+  }
+
+  AstLiteral({ value }) {
     return value;
   }
 

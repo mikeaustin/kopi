@@ -51,6 +51,7 @@ let scope = {
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
   let: (args) => args.apply(undefined, [{ elements: [] }, InterpreterVisitors]),
+  do: (args, scope) => InterpreterVisitors.visitNode(args, scope),
   match: (value) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.getMatches(value)) {
@@ -76,7 +77,7 @@ async function main() {
       if (value !== undefined) {
         const formattedValue = util.inspect(value, {
           compact: false,
-          depth: Infinity
+          depth: Infinity,
         });
 
         console.log(formattedValue);

@@ -5,6 +5,30 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+//
+
+Number.prototype.succ = function () {
+  return this + 1;
+};
+
+String.prototype[util.inspect.custom] = function () {
+  return `"${this}"`;
+};
+
+String.prototype.succ = function () {
+  return String.fromCodePoint(this.codePointAt(0) + 1);
+};
+
+Array.prototype.toString = function () {
+  return `[${this.map(element => element.toString()).join(', ')}]`;
+};
+
+Array.prototype[util.inspect.custom] = function () {
+  return `[${this.map(element => inspect(element)).join(', ')}]`;
+};
+
+//
+
 class Tuple {
   constructor(elements = []) {
     this.elements = elements;
@@ -21,6 +45,23 @@ class Tuple {
   [util.inspect.custom]() {
     return this.toString();
   }
+
+  map(mapper, visitors) {
+    const iters = this.elements.map(element => element[Symbol.iterator]());
+    const values = [];
+
+    let results = iters.map(iter => iter.next());
+
+    while (results.every(result => !result.done)) {
+      values.push(
+        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), visitors])
+      );
+
+      results = iters.map(iter => iter.next());
+    }
+
+    return values;
+  }
 }
 
 class Range {
@@ -31,6 +72,12 @@ class Range {
 
   [util.inspect.custom]() {
     return `${this.from}..${this.to}`;
+  }
+
+  *[Symbol.iterator]() {
+    for (let i = this.from; i <= this.to; i = i.succ()) {
+      yield i;
+    }
   }
 
   map(args, visitors) {

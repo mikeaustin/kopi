@@ -17,6 +17,7 @@
 
   class NumericLiteral extends Node { }
   class StringLiteral extends Node { }
+  class AstLiteral extends Node { }
   class Identifier extends Node { }
 
   class TuplePattern extends Node { }
@@ -119,6 +120,7 @@ PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
   / NumericLiteral
   / StringLiteral
+  / AstLiteral
   / Identifier
 
 //
@@ -196,6 +198,17 @@ NumericLiteral "number"
 
 StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
+
+AstLiteral
+  = "'(" block:Block ")" {
+    return new AstLiteral({ value: block });
+  }
+  / "'" "(" expr:Statement ")" {
+      return new AstLiteral({ value: expr });
+    }
+  / "'" ident:Identifier {
+      return new AstLiteral({ value: ident });
+    }
 
 //
 // Whitespace
