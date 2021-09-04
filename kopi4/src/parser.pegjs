@@ -18,7 +18,11 @@
   class NumericLiteral extends Node { }
   class StringLiteral extends Node { }
   class AstLiteral extends Node { }
-  class Identifier extends Node { }
+  class Identifier extends Node {
+    apply(thisArg, args) {
+      return args[0][this.name].apply(args[0], []);
+    }
+  }
 
   class TuplePattern extends Node { }
   class IdentifierPattern extends Node { }
@@ -118,6 +122,7 @@ RangeExpression
 
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
+  / _ "\\(" block:Block ")" { return new Block({ statements: block.statements })}
   / NumericLiteral
   / StringLiteral
   / AstLiteral
@@ -200,8 +205,8 @@ StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
 
 AstLiteral
-  = "'(" block:Block ")" {
-    return new AstLiteral({ value: block });
+  = "'(" exprs:(Newline+ Expression)+ Newline+ ")" {
+    return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
   }
   / "'" "(" expr:Statement ")" {
       return new AstLiteral({ value: expr });

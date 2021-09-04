@@ -26,6 +26,13 @@ print (1..2, "a".."z" | map (a, b) => a, b)
 
 print (1..3 | map even)
 
-1..5 | map n => do '(
-  n
+print (1..5 | map n => \(
+  n * n
+))
+
+print (1..3 | map 'toString)
+
+'(
+  a
+  b
 )
