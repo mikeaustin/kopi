@@ -50,12 +50,12 @@ let scope = {
   Vector: (args) => new Vector(args.elements[0], args.elements[1]),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args) => args.apply(undefined, [{ elements: [] }, InterpreterVisitors]),
+  let: (args, _, visitors) => args.apply(undefined, [{ elements: [] }, scope, visitors]),
   do: (args, scope) => InterpreterVisitors.visitNode(args, scope),
-  match: (value) => (funcs) => {
+  match: (value, _, visitors) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.getMatches(value)) {
-        return func.apply(undefined, [value, InterpreterVisitors]);
+        return func.apply(undefined, [value, scope, visitors]);
       }
     }
   },

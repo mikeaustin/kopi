@@ -46,7 +46,7 @@ class Tuple {
     return this.toString();
   }
 
-  map(mapper, visitors) {
+  map(mapper, scope, visitors) {
     const iters = this.elements.map(element => element[Symbol.iterator]());
     const values = [];
 
@@ -54,7 +54,7 @@ class Tuple {
 
     while (results.every(result => !result.done)) {
       values.push(
-        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), visitors])
+        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), scope, visitors])
       );
 
       results = iters.map(iter => iter.next());
@@ -80,9 +80,9 @@ class Range {
     }
   }
 
-  map(args, visitors) {
+  map(args, scope, visitors) {
     return Array.from({ length: this.to - this.from + 1 }, (_, index) => (
-      args.apply(undefined, [index + this.from, visitors])
+      args.apply(undefined, [index + this.from, scope, visitors])
     ));
   }
 }
@@ -98,7 +98,7 @@ class Function {
     return `<function>`;
   }
 
-  apply(thisArg, [args, visitors]) {
+  apply(thisArg, [args, scope, visitors]) {
     // TODO: get unevaluated args to pass to match
     // If we pass unevaled args, we'll also need scope
     const matches = this.params.getMatches(args);

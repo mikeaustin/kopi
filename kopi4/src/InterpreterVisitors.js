@@ -45,7 +45,7 @@ class InterpreterVisitors extends Visitors {
     const value = evaluatedExpr[right.name ?? right.expr.name];
 
     return typeof value === 'function' || typeof value === 'object' && 'apply' in value
-      ? value.apply(evaluatedExpr, [evaluatedArgs, this], scope)
+      ? value.apply(evaluatedExpr, [evaluatedArgs, scope, this])
       : value;
   }
 
@@ -56,7 +56,7 @@ class InterpreterVisitors extends Visitors {
     // console.log(evaluatedArgs);
 
     // TODO: Passing unevaluated args, FunctionPattern can store expr
-    return evaluatedExpr.apply(undefined, [evaluatedArgs, this]);
+    return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this]);
   }
 
   FunctionExpression({ params, expr }, scope) {
@@ -86,7 +86,7 @@ class InterpreterVisitors extends Visitors {
       }
     }
 
-    return evaluatedLeft[op].apply(evaluatedLeft, [evaluatedRight]);
+    return evaluatedLeft[op].apply(evaluatedLeft, [evaluatedRight, scope, this]);
   }
 
   //
