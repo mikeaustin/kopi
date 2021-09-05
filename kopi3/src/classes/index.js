@@ -1,7 +1,5 @@
-const IdentifierPattern = require('./IdentifierPattern');
-const FunctionPattern = require('./FunctionPattern');
+const Function = require('./Function');
 
-// module.exports = {
-//   IdentifierPattern,
-//   FunctionPattern
-// };
+module.exports = {
+  Function,
+};
