@@ -8,6 +8,7 @@
   class Block extends Node { }
   class Assignment extends Node { }
 
+  class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
@@ -15,7 +16,13 @@
   class RangeExpression extends Node { }
 
   class NumericLiteral extends Node { }
-  class Identifier extends Node { }
+  class StringLiteral extends Node { }
+  class AstLiteral extends Node { }
+  class Identifier extends Node {
+    apply(thisArg, args) {
+      return args[0][this.name].apply(args[0], []);
+    }
+  }
 
   class TuplePattern extends Node { }
   class IdentifierPattern extends Node { }
@@ -28,7 +35,7 @@
 //
 
 Block
-  = Newline* head:Statement tail:(Newline+ Statement)* Newline* {
+  = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
       return new Block({
         statements: tail.reduce((block, [, statement]) => (
           statement ? [...block, statement] : block
@@ -41,20 +48,26 @@ Statement
   / Expression
 
 Assignment
-  = pattern:Pattern _ "=" _ expr:Expression {
+  = pattern:AssignmentPattern _ "=" _ expr:Expression {
       return new Assignment({ pattern, expr })
     }
 
 Expression
-  = ApplyExpression
+  = PipeExpression
+
+PipeExpression
+  = head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
+      return tail.reduce((left, [, op,, right]) => (
+        new PipeExpression({ left, right })
+      ), head);
+    }
 
 ApplyExpression
-  = expr:FunctionExpression _ args:(_ FunctionExpression)+ {
+  = expr:FunctionExpression _ args:(_ FunctionExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
     }
-  / FunctionExpression
 
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
@@ -87,12 +100,11 @@ TupleExpression
 //
 
 AddExpression
-  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)+ {
+  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
-  / MultiplyExpression
 
 MultiplyExpression
   = head:RangeExpression tail:(_ ("*" / "/") _ RangeExpression)+ {
@@ -110,15 +122,50 @@ RangeExpression
 
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
+  / _ "\\(" block:Block ")" { return new Block({ statements: block.statements })}
   / NumericLiteral
+  / StringLiteral
+  / AstLiteral
   / Identifier
 
 //
 // Patterns
 //
 
+AssignmentPattern
+  = AssignmentTuplePattern
+
+AssignmentTuplePattern
+  = head:AssignmentPrimaryPattern tail:("," _ AssignmentPrimaryPattern)+ {
+      return new TuplePattern({
+        elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
+      });
+    }
+  / AssignmentPrimaryPattern
+
+AssignmentPrimaryPattern
+  = AssignmentFunctionPattern
+  / AssignmentNumericLiteralPattern
+  / AssignmentIdentifierPattern
+
+AssignmentNumericLiteralPattern
+  = number:NumericLiteral {
+      return new NumericLiteralPattern({ value: number.value });
+    }
+
+AssignmentIdentifierPattern
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
+    }
+
+AssignmentFunctionPattern
+  = ident:Identifier _ params:AssignmentPattern {
+      return new FunctionPattern({ name: ident.name, params });
+    }
+
+//
+
 Pattern
-  // = FunctionPattern
   = TuplePattern
 
 TuplePattern
@@ -128,6 +175,11 @@ TuplePattern
       });
     }
   / PrimaryPattern
+
+PrimaryPattern
+  = _ "(" pattern:Pattern ")" { return pattern; }
+  / NumericLiteralPattern
+  / IdentifierPattern
 
 NumericLiteralPattern
   = number:NumericLiteral {
@@ -139,35 +191,42 @@ IdentifierPattern
       return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
 
-FunctionPattern
-  = ident:Identifier _ params:Pattern {
-      return new FunctionPattern({ name: ident.name, params });
-    }
-
-PrimaryPattern
-  = _ "(" pattern:Pattern ")" { return pattern; }
-  / NumericLiteralPattern
-  / IdentifierPattern
-
 //
 // Literals
 //
 
 Identifier
-  = _ [a-z][a-zA-Z0-9]* { return new Identifier({ name: text().trim() }); }
+  = _ name:([a-zA-Z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
-  = _ [0-9]+ { return new NumericLiteral({ value: Number(text()) }); }
+  = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }
+
+StringLiteral "string"
+  = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
+
+AstLiteral
+  = "'(" exprs:(Newline+ Expression)+ Newline+ ")" {
+    return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
+  }
+  / "'" "(" expr:Statement ")" {
+      return new AstLiteral({ value: expr });
+    }
+  / "'" ident:Identifier {
+      return new AstLiteral({ value: ident });
+    }
 
 //
 // Whitespace
 //
 
 _
-  = Whitespace*
+  = (Whitespace / Comment)*
 
 Whitespace "whitespace"
   = [ \t]
+
+Comment "comment"
+  = "#" (!Newline .)*
 
 Newline "newline"
   = [\n\r]

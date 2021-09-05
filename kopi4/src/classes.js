@@ -5,6 +5,30 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+//
+
+Number.prototype.succ = function () {
+  return this + 1;
+};
+
+String.prototype[util.inspect.custom] = function () {
+  return `"${this}"`;
+};
+
+String.prototype.succ = function () {
+  return String.fromCodePoint(this.codePointAt(0) + 1);
+};
+
+Array.prototype.toString = function () {
+  return `[${this.map(element => element.toString()).join(', ')}]`;
+};
+
+Array.prototype[util.inspect.custom] = function () {
+  return `[${this.map(element => inspect(element)).join(', ')}]`;
+};
+
+//
+
 class Tuple {
   constructor(elements = []) {
     this.elements = elements;
@@ -21,6 +45,23 @@ class Tuple {
   [util.inspect.custom]() {
     return this.toString();
   }
+
+  map(mapper, scope, visitors) {
+    const iters = this.elements.map(element => element[Symbol.iterator]());
+    const values = [];
+
+    let results = iters.map(iter => iter.next());
+
+    while (results.every(result => !result.done)) {
+      values.push(
+        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), scope, visitors])
+      );
+
+      results = iters.map(iter => iter.next());
+    }
+
+    return values;
+  }
 }
 
 class Range {
@@ -31,6 +72,18 @@ class Range {
 
   [util.inspect.custom]() {
     return `${this.from}..${this.to}`;
+  }
+
+  *[Symbol.iterator]() {
+    for (let i = this.from; i <= this.to; i = i.succ()) {
+      yield i;
+    }
+  }
+
+  map(args, scope, visitors) {
+    return Array.from({ length: this.to - this.from + 1 }, (_, index) => (
+      args.apply(undefined, [index + this.from, scope, visitors])
+    ));
   }
 }
 
@@ -45,12 +98,20 @@ class Function {
     return `<function>`;
   }
 
-  apply(thisArg, args, visitors) {
+  apply(thisArg, [args, scope, visitors]) {
     // TODO: get unevaluated args to pass to match
     // If we pass unevaled args, we'll also need scope
-    const matchs = this.params.match(args[0]);
+    const matches = this.params.getMatches(args);
 
-    return visitors.visit(this.expr, { ...this.closure, ...matchs });
+    if (matches === null) {
+      return undefined;
+    }
+
+    return visitors.visitNode(this.expr, { ...this.closure, ...matches });
+  }
+
+  getMatches(args) {
+    return this.params.getMatches(args);
   }
 }
 
@@ -61,10 +122,16 @@ class TuplePattern {
     this.elements = elements;
   }
 
-  match(value) {
-    return this.elements.reduce((scope, element, index) => ({
+  getMatches(value) {
+    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index]));
+
+    if (matchesArray.some(match => match === null)) {
+      return null;
+    }
+
+    return matchesArray.reduce((scope, matches) => ({
       ...scope,
-      ...element.match(value.elements[index]),
+      ...matches,
     }), {});
   }
 }
@@ -75,7 +142,7 @@ class IdentifierPattern {
     this.init = init;
   }
 
-  match(value) {
+  getMatches(value) {
     return {
       [this.name]: value ?? this.init,
     };
@@ -87,7 +154,7 @@ class NumericLiteralPattern {
     this.value = value;
   }
 
-  match(value) {
+  getMatches(value) {
     if (value !== this.value) {
       return null;
     }
@@ -102,7 +169,7 @@ class FunctionPattern {
     this.params = params;
   }
 
-  match(value, scope, unevaluatedValue) {
+  getMatches(value, scope, unevaluatedValue) {
     return {
       [this.name]: new Function(this.params, unevaluatedValue, scope)
     };
