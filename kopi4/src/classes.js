@@ -39,11 +39,11 @@ class Tuple {
       return '()';
     }
 
-    return `(${this.elements.map(element => inspect(element)).join(', ')})`;
+    return `(${this.elements.map(element => element.toString()).join(', ')})`;
   }
 
   [util.inspect.custom]() {
-    return this.toString();
+    return `(${this.elements.map(element => inspect(element)).join(', ')})`;
   }
 
   map(mapper, scope, visitors) {
