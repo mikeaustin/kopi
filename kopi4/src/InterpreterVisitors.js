@@ -25,14 +25,14 @@ class InterpreterVisitors extends Visitors {
   Block({ statements }, scope) {
     const bind = updates => scope = ({ ...scope, ...updates });
 
-    return statements.reduce((result, statement) => (
-      this.visitNode(statement, scope, bind)
+    return statements.reduce(async (result, statement) => (
+      await result, this.visitNode(statement, scope, bind)
     ), undefined);
   }
 
-  Assignment({ pattern, expr }, scope, bind) {
-    const evaluatedExpr = this.visitNode(expr, scope);
-    const evaluatedPattern = this.visitNode(pattern, scope);
+  async Assignment({ pattern, expr }, scope, bind) {
+    const evaluatedExpr = await this.visitNode(expr, scope);
+    const evaluatedPattern = await this.visitNode(pattern, scope);
 
     // TODO: pass expr directly so FunctionPattern can use it as body
     const matches = evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
@@ -40,9 +40,9 @@ class InterpreterVisitors extends Visitors {
     bind(matches);
   }
 
-  PipeExpression({ left, right }, scope) {
-    const evaluatedExpr = this.visitNode(left, scope);
-    const evaluatedArgs = this.visitNode(right.args, scope);
+  async PipeExpression({ left, right }, scope) {
+    const evaluatedExpr = await this.visitNode(left, scope);
+    const evaluatedArgs = await this.visitNode(right.args, scope);
 
     const value = evaluatedExpr[right.name ?? right.expr.name];
 
@@ -51,9 +51,9 @@ class InterpreterVisitors extends Visitors {
       : value;
   }
 
-  ApplyExpression({ expr, args }, scope) {
-    const evaluatedArgs = this.visitNode(args, scope);
-    const evaluatedExpr = this.visitNode(expr, scope);
+  async ApplyExpression({ expr, args }, scope) {
+    const evaluatedArgs = await this.visitNode(args, scope);
+    const evaluatedExpr = await this.visitNode(expr, scope);
 
     // console.log(evaluatedArgs);
 
@@ -61,23 +61,23 @@ class InterpreterVisitors extends Visitors {
     return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this]);
   }
 
-  FunctionExpression({ params, expr }, scope) {
-    const evaluatedParams = this.visitNode(params, scope);
+  async FunctionExpression({ params, expr }, scope) {
+    const evaluatedParams = await this.visitNode(params, scope);
 
     return new Function(evaluatedParams, expr, scope);
   }
 
-  TupleExpression({ elements }, scope) {
-    return new Tuple(elements.map(element => this.visitNode(element, scope)));
+  async TupleExpression({ elements }, scope) {
+    return new Tuple(await Promise.all(elements.map(element => this.visitNode(element, scope))));
   }
 
   RangeExpression({ from, to }, scope) {
     return new Range(this.visitNode(from, scope), this.visitNode(to, scope));
   }
 
-  OperatorExpression({ op, left, right }, scope) {
-    const evaluatedLeft = this.visitNode(left, scope);
-    const evaluatedRight = this.visitNode(right, scope);
+  async OperatorExpression({ op, left, right }, scope) {
+    const evaluatedLeft = await this.visitNode(left, scope);
+    const evaluatedRight = await this.visitNode(right, scope);
 
     if (typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number') {
       switch (op) {

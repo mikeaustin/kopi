@@ -73,7 +73,7 @@ async function main() {
       const ast = parser.parse(input);
 
       console.log('Evaluating...');
-      const value = InterpreterVisitors.visitNode(ast, scope, bind);
+      const value = await InterpreterVisitors.visitNode(ast, scope, bind);
 
       if (value !== undefined) {
         const formattedValue = util.inspect(value, {
@@ -84,7 +84,7 @@ async function main() {
         console.log(formattedValue);
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error.name === 'SyntaxError' ? error.message : error);
     }
 
     return;

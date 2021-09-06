@@ -60,7 +60,7 @@ class Tuple {
       results = iters.map(iter => iter.next());
     }
 
-    return values;
+    return Promise.all(values);
   }
 }
 
@@ -81,9 +81,9 @@ class Range {
   }
 
   map(args, scope, visitors) {
-    return Array.from({ length: this.to - this.from + 1 }, (_, index) => (
+    return Promise.all(Array.from({ length: this.to - this.from + 1 }, (_, index) => (
       args.apply(undefined, [index + this.from, scope, visitors])
-    ));
+    )));
   }
 }
 
