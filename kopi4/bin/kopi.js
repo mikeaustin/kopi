@@ -31,6 +31,7 @@ let input;
 
 let scope = {
   print: (args) => console.log(args.toString()),
+  sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
   input: (args) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,

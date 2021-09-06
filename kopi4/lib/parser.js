@@ -216,7 +216,7 @@ function peg$parse(input, options) {
       peg$c35 = function(expr) { return expr; },
       peg$c36 = "\\(",
       peg$c37 = peg$literalExpectation("\\(", false),
-      peg$c38 = function(block) { return new Block({ statements: block.statements })},
+      peg$c38 = function(block) { return block; },
       peg$c39 = function(head, tail) {
             return new TuplePattern({
               elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
