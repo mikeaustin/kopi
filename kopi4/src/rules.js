@@ -1,3 +1,7 @@
+//
+// Experiment to abstract out rule precedence. Run "node rules.js" to see the output.
+//
+
 const nonTerminals = {
   Expression: NextRule => `
     = AddExpression
