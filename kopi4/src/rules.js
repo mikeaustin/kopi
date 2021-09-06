@@ -4,7 +4,7 @@
 
 const nonTerminals = {
   Expression: NextRule => `
-    = AddExpression
+    = ${NextRule}
   `,
 
   AddExpression: NextRule => `
