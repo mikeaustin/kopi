@@ -1,10 +1,20 @@
-null
+OperatorExpression {
+  op: '+',
+  left: NumericLiteral {
+    value: 2
+  },
+  right: NumericLiteral {
+    value: 3
+  }
+}
 
-null
+NumericLiteral {
+  value: 2
+}
 
-null
-
-null
+NumericLiteral {
+  value: 3
+}
 
 OperatorExpression {
   op: '+',
@@ -16,14 +26,12 @@ OperatorExpression {
   }
 }
 
-OperatorExpression {
-  op: '+',
-  left: NumericLiteral {
-    value: 2
-  },
-  right: NumericLiteral {
-    value: 3
-  }
+NumericLiteral {
+  value: 2
+}
+
+NumericLiteral {
+  value: 3
 }
 
 Assignment {
@@ -35,11 +43,13 @@ Assignment {
   }
 }
 
-null
+NumericLiteral {
+  value: 5
+}
 
-null
-
-null
+IdentifierPattern {
+  name: 'x'
+}
 
 ApplyExpression {
   expr: Identifier {
@@ -48,5 +58,13 @@ ApplyExpression {
   args: NumericLiteral {
     value: 5
   }
+}
+
+NumericLiteral {
+  value: 5
+}
+
+Identifier {
+  name: 'even'
 }
 

@@ -1,4 +1,5 @@
 const util = require("util");
+const fs = require("fs");
 
 const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralPattern, FunctionPattern } = require('./classes');
 
@@ -7,11 +8,15 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+const parserLog = fs.createWriteStream('log/tracer');
+
 class Visitors {
   visitNode(astNode, scope, bind) {
     if (!astNode) {
       return;
     }
+
+    parserLog.write(`${inspect(astNode)}\n\n`);
 
     if (this[astNode.constructor.name]) {
       return this[astNode.constructor.name](astNode, scope, bind);
