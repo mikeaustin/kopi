@@ -25,7 +25,9 @@ class InterpreterVisitors extends Visitors {
   Block({ statements }, scope) {
     const bind = updates => scope = ({ ...scope, ...updates });
 
-    return statements.reduce((result, statement) => this.visitNode(statement, scope, bind), undefined);
+    return statements.reduce((result, statement) => (
+      this.visitNode(statement, scope, bind)
+    ), undefined);
   }
 
   Assignment({ pattern, expr }, scope, bind) {

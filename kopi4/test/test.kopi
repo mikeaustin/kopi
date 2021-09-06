@@ -32,3 +32,8 @@ print (1..5 | map n => \(
 ))
 
 print (1..3 | map 'toString)
+
+\(
+  x = 5
+  x
+)
