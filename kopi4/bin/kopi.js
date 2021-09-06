@@ -65,12 +65,21 @@ let scope = {
 const bind = updates => scope = ({ ...scope, ...updates });
 
 async function main() {
+  const parserLog = fs.createWriteStream('log/parser');
+
   if (process.argv.length > 2) {
     const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
 
     try {
       console.log('Parsing...');
       const ast = parser.parse(input);
+
+      const formattedAst = util.inspect(ast, {
+        compact: false,
+        depth: Infinity
+      });
+
+      parserLog.write(`${formattedAst}\n\n`);
 
       console.log('Evaluating...');
       const value = await InterpreterVisitors.visitNode(ast, scope, bind);
@@ -98,21 +107,18 @@ async function main() {
   input.prompt();
 
   for await (const line of input) {
-    let ast;
-
     try {
-      ast = parser.parse(line);
-    } catch (error) {
-      console.error('SyntaxError:', error.message);
+      const ast = parser.parse(line);
 
-      input.prompt();
-
-      continue;
-    }
-
-    try {
       for (const astNode of ast.statements) {
-        const value = InterpreterVisitors.visitNode(astNode, scope, bind);
+        const formattedAst = util.inspect(astNode, {
+          compact: false,
+          depth: Infinity
+        });
+
+        parserLog.write(`${formattedAst}\n\n`);
+
+        const value = await InterpreterVisitors.visitNode(astNode, scope, bind);
 
         if (value !== undefined) {
           const formattedValue = util.inspect(value, {
@@ -122,17 +128,9 @@ async function main() {
 
           console.log(formattedValue);
         }
-
-        const formattedAst = util.inspect(astNode, {
-          compact: false,
-          depth: Infinity
-        });
-
-        console.error();
-        console.error(formattedAst);
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.name === 'SyntaxError' ? error.message : error);
     }
 
     input.prompt();
