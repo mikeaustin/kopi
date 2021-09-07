@@ -16,7 +16,13 @@ class Visitors {
       return;
     }
 
-    parserLog.write(`${inspect(astNode)}\n\n`);
+    parserLog.write(`${astNode.constructor.name}` + (() => {
+      switch (astNode.constructor.name) {
+        case 'Identifier': return ` '${astNode.name}'`;
+        case 'ApplyExpression': return ` '${astNode.expr.name}'`;
+        default: return '';
+      }
+    })() + '\n');
 
     if (this[astNode.constructor.name]) {
       return this[astNode.constructor.name](astNode, scope, bind);
@@ -41,6 +47,12 @@ class InterpreterVisitors extends Visitors {
 
     // TODO: pass expr directly so FunctionPattern can use it as body
     const matches = evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
+
+    Object.entries(matches).forEach(([name, value]) => {
+      if (value instanceof Function) {
+        value.closure[name] = value;
+      }
+    });
 
     bind(matches);
   }
