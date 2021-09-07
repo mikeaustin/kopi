@@ -80,7 +80,6 @@ async function main() {
     const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
 
     try {
-      console.log('Parsing...');
       const ast = parser.parse(input);
 
       const formattedAst = util.inspect(ast, {
@@ -90,17 +89,7 @@ async function main() {
 
       parserLog.write(`${formattedAst}\n\n`);
 
-      console.log('Evaluating...');
       const value = await InterpreterVisitors.visitNode(ast, scope, bind);
-
-      if (value !== undefined) {
-        const formattedValue = util.inspect(value, {
-          compact: false,
-          depth: Infinity,
-        });
-
-        console.log(formattedValue);
-      }
     } catch (error) {
       console.error(error.name === 'SyntaxError' ? error.message : error);
     }

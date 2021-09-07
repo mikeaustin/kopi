@@ -91,7 +91,7 @@ TupleExpression
         ], [head])
       });
     }
-  / "(" exprs:(Newline+ Expression)+ Newline+ ")" {
+  / "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
     return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
   }
   / AddExpression
@@ -203,7 +203,7 @@ IdentifierPattern
 //
 
 Identifier
-  = _ name:([a-zA-Z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
+  = _ name:([_a-zA-Z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
   = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }
