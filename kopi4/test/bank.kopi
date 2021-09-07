@@ -1,3 +1,5 @@
+# Simple input and recursion tests
+
 account = balance => balance, (amount => account balance - amount)
 
 balance, withdraw = account 100

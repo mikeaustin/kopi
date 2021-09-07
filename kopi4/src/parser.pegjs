@@ -123,7 +123,7 @@ RangeExpression
 
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
-  / _ "\\(" block:Block ")" { return block; }
+  / _ "\\(" _ block:Block _ ")" { return block; }
   / NumericLiteral
   / StringLiteral
   / AstLiteral
@@ -227,7 +227,7 @@ AstLiteral
 //
 
 _
-  = (Whitespace / Comment)*
+  = Whitespace*
 
 Whitespace "whitespace"
   = [ \t]
@@ -236,4 +236,4 @@ Comment "comment"
   = "#" (!Newline .)*
 
 Newline "newline"
-  = [\n\r]
+  = Comment? [\n\r]
