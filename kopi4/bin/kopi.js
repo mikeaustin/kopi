@@ -8,6 +8,7 @@ const fetch = require('node-fetch');
 const parser = require("../lib/parser");
 
 const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
+const { EventEmitter } = require("stream");
 
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
@@ -30,6 +31,8 @@ class Vector {
 
 let input;
 
+const target = new EventEmitter();
+
 let scope = {
   print: (args) => console.log(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
@@ -37,6 +40,10 @@ let scope = {
   spawn: (args, _, visitors) => {
     args.apply(undefined, [{ elements: [] }, scope, visitors]);
   },
+  wait: (args) => new Promise(resolve => target.once('message', (data) => {
+    resolve(data);
+  })),
+  send: (args) => (data) => setImmediate(() => target.emit('message', data)),
   input: (args) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,

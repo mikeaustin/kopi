@@ -1,0 +1,11 @@
+loop = () => \(
+  print (wait ())
+
+  loop ()
+)
+
+x = spawn loop
+
+send x 1
+send x 2
+send x 3
