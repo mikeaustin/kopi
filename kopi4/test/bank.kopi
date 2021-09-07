@@ -1,0 +1,23 @@
+account = balance => balance, (amount => account balance - amount)
+
+balance, withdraw = account 100
+print balance
+
+balance, withdraw = withdraw 10
+print balance
+
+amount = input "Amount?"
+match amount (
+  "0" => print "> Zero"
+  "1" => print "> One"
+  n   => print "> Unknown"
+)
+
+main = balance => \(
+  print "Balance", balance
+  amount = input "Withdraw $10?"
+
+  main (balance - 10)
+)
+
+main 100

@@ -163,6 +163,20 @@ class NumericLiteralPattern {
   }
 }
 
+class StringLiteralPattern {
+  constructor(value) {
+    this.value = value;
+  }
+
+  getMatches(value) {
+    if (value !== this.value) {
+      return null;
+    }
+
+    return {};
+  }
+}
+
 class FunctionPattern {
   constructor(name, params) {
     this.name = name;
@@ -183,5 +197,6 @@ module.exports = {
   TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,
+  StringLiteralPattern,
   FunctionPattern,
 };

@@ -1,7 +1,8 @@
 const util = require("util");
 const fs = require("fs");
 
-const { Tuple, Range, Function, TuplePattern, IdentifierPattern, NumericLiteralPattern, FunctionPattern } = require('./classes');
+const { Tuple, Range, Function } = require('./classes');
+const { TuplePattern, IdentifierPattern, NumericLiteralPattern, StringLiteralPattern, FunctionPattern } = require('./classes');
 
 const inspect = value => util.inspect(value, {
   compact: false,
@@ -120,6 +121,10 @@ class InterpreterVisitors extends Visitors {
 
   NumericLiteralPattern({ value }) {
     return new NumericLiteralPattern(value);
+  }
+
+  StringLiteralPattern({ value }) {
+    return new StringLiteralPattern(value);
   }
 
   FunctionPattern({ name, params }, scope) {
