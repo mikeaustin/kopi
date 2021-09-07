@@ -304,7 +304,7 @@ Block {
         name: 'factorial'
       },
       args: NumericLiteral {
-        value: 5
+        value: 170
       }
     }
   }, ApplyExpression {
@@ -340,8 +340,29 @@ Block {
         }
       }
     }
-  }, NumericLiteral {
-    value: 0
+  }, Assignment {
+    pattern: IdentifierPattern {
+      name: 'name'
+    },
+    expr: ApplyExpression {
+      expr: Identifier {
+        name: 'input'
+      },
+      args: StringLiteral {
+        value: 'Name?'
+      }
+    }
+  }, ApplyExpression {
+    expr: Identifier {
+      name: 'print'
+    },
+    args: TupleExpression {
+      elements: [StringLiteral {
+        value: 'hi'
+      }, Identifier {
+        name: 'name'
+      }]
+    }
   }, PipeExpression {
     left: FunctionExpression {
       params: TuplePattern {
@@ -564,37 +585,72 @@ Block {
         }
       }
     }
-  }, Block {
-    statements: [Assignment {
-      pattern: IdentifierPattern {
-        name: 'x'
+  }, TupleExpression {
+    elements: [ApplyExpression {
+      expr: Identifier {
+        name: 'fetch'
       },
-      expr: NumericLiteral {
-        value: 5
+      args: StringLiteral {
+        value: 'https://google.com'
       }
-    }, Identifier {
-      name: 'x'
+    }, ApplyExpression {
+      expr: Identifier {
+        name: 'fetch'
+      },
+      args: StringLiteral {
+        value: 'https://google.jp'
+      }
     }]
   }, ApplyExpression {
     expr: Identifier {
-      name: 'print'
+      name: 'spawn'
     },
-    args: NumericLiteral {
-      value: 1
+    args: ApplyExpression {
+      expr: Identifier {
+        name: 'fix'
+      },
+      args: FunctionExpression {
+        params: IdentifierPattern {
+          name: 'loop',
+          init: undefined
+        },
+        expr: FunctionExpression {
+          params: TuplePattern {
+            elements: []
+          },
+          expr: Block {
+            statements: [ApplyExpression {
+              expr: Identifier {
+                name: 'sleep'
+              },
+              args: NumericLiteral {
+                value: 1
+              }
+            }, ApplyExpression {
+              expr: Identifier {
+                name: 'print'
+              },
+              args: StringLiteral {
+                value: 'hi'
+              }
+            }, ApplyExpression {
+              expr: Identifier {
+                name: 'loop'
+              },
+              args: TupleExpression {
+                elements: []
+              }
+            }]
+          }
+        }
+      }
     }
   }, ApplyExpression {
     expr: Identifier {
-      name: 'sleep'
-    },
-    args: NumericLiteral {
-      value: 3
-    }
-  }, ApplyExpression {
-    expr: Identifier {
       name: 'print'
     },
-    args: NumericLiteral {
-      value: 2
+    args: StringLiteral {
+      value: 'done'
     }
   }]
 }

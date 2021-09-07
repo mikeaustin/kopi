@@ -3,6 +3,7 @@
 const util = require("util");
 const fs = require("fs");
 const readline = require('readline');
+const fetch = require('node-fetch');
 
 const parser = require("../lib/parser");
 
@@ -32,20 +33,28 @@ let input;
 let scope = {
   print: (args) => console.log(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
+  fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
+  spawn: (args, _, visitors) => {
+    args.apply(undefined, [{ elements: [] }, scope, visitors]);
+  },
   input: (args) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
 
-    rl.question(`${args} `, data => {
-      console.log(data);
+    return new Promise(resolve => {
+      rl.question(`${args} `, data => {
+        console.log(data);
 
-      if (rl === input) {
-        rl.prompt();
-      } else {
-        rl.close();
-      }
+        if (rl === input) {
+          rl.prompt();
+        } else {
+          rl.close();
+        }
+
+        resolve(data);
+      });
     });
   },
   Vector: (args) => new Vector(args.elements[0], args.elements[1]),
