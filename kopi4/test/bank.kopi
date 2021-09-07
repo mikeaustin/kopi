@@ -6,11 +6,10 @@ print balance
 balance, withdraw = withdraw 10
 print balance
 
-amount = input "Amount?"
-match amount (
+match (input "Amount?") (
   "0" => print "> Zero"
   "1" => print "> One"
-  n   => print "> Unknown"
+   n  => print "> Unknown"
 )
 
 main = balance => \(
