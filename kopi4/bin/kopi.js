@@ -43,7 +43,11 @@ let scope = {
   wait: (args) => new Promise(resolve => target.once('message', (data) => {
     resolve(data);
   })),
-  send: (args) => (data) => setImmediate(() => target.emit('message', data)),
+  send: (args) => (data) => new Promise(resolve => setImmediate(() => {
+    target.emit('message', data);
+
+    resolve(5);
+  })),
   input: (args) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,

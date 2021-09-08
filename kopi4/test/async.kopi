@@ -1,10 +1,17 @@
-loop = () => \(
+coroutine = () => \(
+  print "Starting..."
   print (wait ())
+
+  loop = () => \(
+    print (wait ())
+
+    loop ()
+  )
 
   loop ()
 )
 
-x = spawn loop
+x = spawn coroutine
 
 send x 1
 send x 2
