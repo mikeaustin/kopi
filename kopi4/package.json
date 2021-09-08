@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "pegjs -o lib/parser.js src/parser.pegjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "npm run build",
+    "start": "node bin/kopi.js",
+    "test": "npm start test/test.kopi"
   },
   "author": "",
   "license": "ISC",

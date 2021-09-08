@@ -1,0 +1,25 @@
+{
+    "name": "kopi-language",
+    "displayName": "Kopi Language",
+    "description": "Syntax highlighting for the Kopi language",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.54.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "kopi",
+            "aliases": ["Kopi", "kopi"],
+            "extensions": [".kopi"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "kopi",
+            "scopeName": "source.kopi",
+            "path": "./syntaxes/kopi.tmLanguage.json"
+        }]
+    }
+}
