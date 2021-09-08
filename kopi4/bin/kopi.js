@@ -44,9 +44,9 @@ let scope = {
     resolve(data);
   })),
   send: (args) => (data) => new Promise(resolve => setImmediate(() => {
-    target.emit('message', data);
+    target.once('reply', data => resolve(data));
 
-    resolve(5);
+    target.emit('message', data);
   })),
   input: (args) => {
     const rl = input ?? readline.createInterface({

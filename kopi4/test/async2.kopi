@@ -1,0 +1,10 @@
+generator = () => \(
+  a = wait ()
+  send 0 (a * a)
+)
+
+spawn generator
+
+x = send 0 5
+
+print x

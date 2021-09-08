@@ -1,6 +1,5 @@
 coroutine = () => \(
   print "Starting..."
-  print (wait ())
 
   loop = () => \(
     print (wait ())
