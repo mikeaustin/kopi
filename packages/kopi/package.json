@@ -1,7 +1,10 @@
 {
   "name": "kopi4",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A simple, immutable, 100% async language",
+  "license": "ISC",
+  "author": "Mike Austin <mike.austin.1024@gmail.com>",
+  "homepage": "https://github.com/mikeaustin/kopi",
   "main": "index.js",
   "scripts": {
     "build": "pegjs -o lib/parser.js src/parser.pegjs",
@@ -9,9 +12,7 @@
     "start": "node bin/kopi.js",
     "test": "npm start test/test.kopi"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "node-fetch": "^2.6.0",
     "pegjs": "^0.10.0"
   }

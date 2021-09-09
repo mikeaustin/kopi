@@ -10,7 +10,6 @@ const parser = require("../lib/parser");
 const { Tuple } = require('../src/classes');
 
 const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
-const { Stack } = require("immutable");
 
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
@@ -36,6 +35,7 @@ let input;
 const target = new EventEmitter();
 
 let scope = {
+  import: (args) => 0,
   print: (args) => console.log(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
