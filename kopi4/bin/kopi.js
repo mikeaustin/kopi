@@ -4,11 +4,13 @@ const util = require("util");
 const fs = require("fs");
 const readline = require('readline');
 const fetch = require('node-fetch');
+const { EventEmitter } = require("stream");
 
 const parser = require("../lib/parser");
+const { Tuple } = require('../src/classes');
 
 const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
-const { EventEmitter } = require("stream");
+const { Stack } = require("immutable");
 
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
@@ -40,14 +42,43 @@ let scope = {
   spawn: (args, _, visitors) => {
     args.apply(undefined, [{ elements: [] }, scope, visitors]);
   },
-  wait: (args) => new Promise(resolve => target.once('message', (data) => {
-    resolve(data);
-  })),
-  send: (args) => (data) => new Promise(resolve => setImmediate(() => {
-    target.once('reply', data => resolve(data));
+  wait: (args, _, visitors) => {
+    // console.log('\t\twait', args);
 
-    target.emit('message', data);
-  })),
+    return new Promise(resolve => {
+      // console.log('\t\tonce');
+
+      target.once('message', (event) => {
+        const value = args.apply(undefined, [event.data, scope, visitors]);
+        event.value = value;
+
+        resolve(value);
+      });
+    });
+  },
+  send: (args) => (data) => {
+    return new Promise(resolve => setTimeout(() => {
+      // console.log('\t\tsend', data);
+
+      const event = { data };
+      target.emit('message', event);
+
+      resolve(event.value);
+    }));
+
+    return value;
+  },
+  random: (argss) => Math.random(),
+  repeat: (args, _, visitors) => (
+    function next(value) {
+      if (value?.elements?.length === 0) {
+        value = 1;
+      }
+      const nextValue = args.apply(undefined, [value, scope, visitors]);
+
+      return new Tuple([nextValue, () => next(nextValue)]);
+    }
+  ),
   input: (args) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,
