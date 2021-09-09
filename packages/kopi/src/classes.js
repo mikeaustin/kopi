@@ -1,5 +1,9 @@
 const util = require("util");
 
+const { default: Tuple } = require('./classes/Tuple');
+const { default: Range } = require('./classes/Range');
+const { default: Function } = require('./classes/Function');
+
 const inspect = value => util.inspect(value, {
   compact: false,
   depth: Infinity
@@ -26,94 +30,6 @@ Array.prototype.toString = function () {
 Array.prototype[util.inspect.custom] = function () {
   return `[${this.map(element => inspect(element)).join(', ')}]`;
 };
-
-//
-
-class Tuple {
-  constructor(elements = []) {
-    this.elements = elements;
-  }
-
-  toString() {
-    if (this.elements.length === 0) {
-      return '()';
-    }
-
-    return `(${this.elements.map(element => element.toString()).join(', ')})`;
-  }
-
-  [util.inspect.custom]() {
-    return `(${this.elements.map(element => inspect(element)).join(', ')})`;
-  }
-
-  map(mapper, scope, visitors) {
-    const iters = this.elements.map(element => element[Symbol.iterator]());
-    const values = [];
-
-    let results = iters.map(iter => iter.next());
-
-    while (results.every(result => !result.done)) {
-      values.push(
-        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), scope, visitors])
-      );
-
-      results = iters.map(iter => iter.next());
-    }
-
-    return Promise.all(values);
-  }
-}
-
-class Range {
-  constructor(from, to) {
-    this.from = from;
-    this.to = to;
-  }
-
-  [util.inspect.custom]() {
-    return `${this.from}..${this.to}`;
-  }
-
-  *[Symbol.iterator]() {
-    for (let i = this.from; i <= this.to; i = i.succ()) {
-      yield i;
-    }
-  }
-
-  map(args, scope, visitors) {
-    return Promise.all(Array.from({ length: this.to - this.from + 1 }, (_, index) => (
-      args.apply(undefined, [index + this.from, scope, visitors])
-    )));
-  }
-}
-
-class Function {
-  constructor(params, expr, closure) {
-    this.params = params;
-    this.expr = expr;
-    this.closure = closure;
-  }
-
-  [util.inspect.custom]() {
-    return `<function>`;
-  }
-
-  apply(thisArg, [args, scope, visitors]) {
-    // TODO: get unevaluated args to pass to match
-    // If we pass unevaled args, we'll also need scope
-    const matches = this.params.getMatches(args);
-
-    if (matches === null) {
-      return undefined;
-    }
-
-    return visitors.visitNode(this.expr, { ...this.closure, ...matches });
-  }
-
-  getMatches(args) {
-    return this.params.getMatches(args);
-  }
-}
 
 //
 

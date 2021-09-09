@@ -5,11 +5,11 @@
   "license": "ISC",
   "author": "Mike Austin <mike.austin.1024@gmail.com>",
   "homepage": "https://github.com/mikeaustin/kopi",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "pegjs -o lib/parser.js src/parser.pegjs",
     "prestart": "npm run build",
-    "start": "node bin/kopi.js",
+    "start": "node src/index.js",
     "test": "npm start test/test.kopi"
   },
   "devDependencies": {

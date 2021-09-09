@@ -7,9 +7,9 @@ const fetch = require('node-fetch');
 const { EventEmitter } = require("stream");
 
 const parser = require("../lib/parser");
-const { Tuple } = require('../src/classes');
+const { Tuple } = require('./classes');
 
-const { default: InterpreterVisitors } = require('../src/InterpreterVisitors');
+const { default: interpreter } = require('./visitors/Interpreter');
 
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
@@ -94,7 +94,7 @@ let scope = {
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
   let: (args, _, visitors) => args.apply(undefined, [{ elements: [] }, scope, visitors]),
-  do: (args, scope) => InterpreterVisitors.visitNode(args, scope),
+  do: (args, scope) => interpreter.visitNode(args, scope),
   match: (value, _, visitors) => (funcs) => {
     for (func of funcs.elements) {
       if (func.params.getMatches(value)) {
@@ -122,7 +122,7 @@ async function main() {
 
       parserLog.write(`${formattedAst}\n\n`);
 
-      const value = await InterpreterVisitors.visitNode(ast, scope, bind);
+      const value = await interpreter.visitNode(ast, scope, bind);
     } catch (error) {
       console.error(error.name === 'SyntaxError' ? error.message : error);
     }
@@ -149,7 +149,7 @@ async function main() {
 
         parserLog.write(`${formattedAst}\n\n`);
 
-        const value = await InterpreterVisitors.visitNode(astNode, scope, bind);
+        const value = await interpreter.visitNode(astNode, scope, bind);
 
         if (value !== undefined) {
           const formattedValue = util.inspect(value, {
