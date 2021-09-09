@@ -42,31 +42,22 @@ let scope = {
   spawn: (args, _, visitors) => {
     args.apply(undefined, [{ elements: [] }, scope, visitors]);
   },
-  wait: (args, _, visitors) => {
-    // console.log('\t\twait', args);
-
+  yield: (args, _, visitors) => {
     return new Promise(resolve => {
-      // console.log('\t\tonce');
-
       target.once('message', (event) => {
-        const value = args.apply(undefined, [event.data, scope, visitors]);
-        event.value = value;
+        event.value = args.apply(undefined, [event.data, scope, visitors]);
 
-        resolve(value);
+        resolve(event.value);
       });
     });
   },
   send: (args) => (data) => {
-    return new Promise(resolve => setTimeout(() => {
-      // console.log('\t\tsend', data);
-
+    return new Promise(resolve => setImmediate(() => {
       const event = { data };
       target.emit('message', event);
 
       resolve(event.value);
     }));
-
-    return value;
   },
   random: (argss) => Math.random(),
   repeat: (args, _, visitors) => (

@@ -1,37 +1,27 @@
-receive = fns => wait (x => match x fns)
-
-generator = () => \(
+generator = spawn () => \(
   loop = (x) => \(
-    wait _ => x
-
+    yield _ => x
     loop (x + 1)
   )
-
   loop (1)
 )
 
-x = spawn generator
+# prints [1, 2, 3] to the console
+print (1..3 | map (n) => send generator ())
 
-print (send x ())
-print (send x ())
-print (send x ())
+# Convenience for yield + match
+select = fns => yield (x => match x fns)
 
-
-coroutine = () => \(
+coroutine = spawn () => \(
   loop = () => \(
-    value = receive (
+    value = select (
       0 => 1
       n => n * n
     )
-
     loop ()
   )
-
   loop ()
 )
 
-x = spawn coroutine
-
-print (send x 1)
-print (send x 2)
-print (send x 3)
+# prints [1, 4, 9] to the console
+print (1..3 | map (n) => send coroutine n)
