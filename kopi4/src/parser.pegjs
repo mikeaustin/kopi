@@ -123,7 +123,7 @@ RangeExpression
 
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }
-  / _ "\\(" _ block:Block _ ")" { return block; }
+  / _ "{" _ block:Block _ "}" { return block; }
   / NumericLiteral
   / StringLiteral
   / AstLiteral

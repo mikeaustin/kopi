@@ -14,7 +14,7 @@ match (input "Amount?") (
    n  => print "> Unknown"
 )
 
-main = balance => \(
+main = balance => {
   print "Balance", balance
   amount = input "Withdraw $10? (y/n)"
 
@@ -23,6 +23,6 @@ main = balance => \(
     "y" => main (balance - 10)
      _  => main (balance)
   )
-)
+}
 
 main 100

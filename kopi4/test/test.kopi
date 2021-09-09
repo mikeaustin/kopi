@@ -8,7 +8,9 @@ print (
   match 5 (0 => 1), (n => n * n)
 )
 
+
 print ((x, k => (x, k => k x + 1) x + x, k) 5, (x => x))
+
 
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
 factorial = fix factorial => n => match n (
@@ -17,44 +19,55 @@ factorial = fix factorial => n => match n (
 )
 print (factorial 170)
 
+
 factorial = n => match n (
   0 => 1
   n => n * (factorial n - 1)
 )
 print (factorial 170)
 
+
 print (let (x = 2, y = 3) => x + y)
+
 
 (0, x => x) | getMatches 0, 1
 
+
 vecA, vecB = (Vector 1, 2), (Vector 2, 3)
 print (vecA + vecB | length | toFixed 3)
+
 
 print (1..2, "a".."z" | map (a, b) => a, b)
 
 print (1..3 | map even)
 
-print (1..5 | map n => \(
+print (1..5 | map n => {
   x = n * n
   x
-))
+})
 
 print (1..3 | map 'toString)
 
-generator = repeat random
 
-#print (1..3 | map () => (generator | toFixed 3))
+next = repeat (n) => n + 1
+
+value, next = next ()
+value, next = next ()
+
+print value
+
 
 print (
   fetch "https://google.com"
   fetch "https://google.jp"
 )
 
-loop = () => \(
+
+loop = () => {
   sleep 1
   print "..."
   loop ()
-)
+}
 
 spawn loop
 

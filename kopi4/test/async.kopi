@@ -1,10 +1,10 @@
-generator = spawn () => \(
-  loop = (x) => \(
+generator = spawn () => {
+  loop = (x) => {
     yield _ => x
     loop (x + 1)
-  )
+  }
   loop (1)
-)
+}
 
 # prints [1, 2, 3] to the console
 print (1..3 | map (n) => send generator ())
@@ -12,16 +12,16 @@ print (1..3 | map (n) => send generator ())
 # Convenience for yield + match
 select = fns => yield (x => match x fns)
 
-coroutine = spawn () => \(
-  loop = () => \(
+coroutine = spawn () => {
+  loop = () => {
     value = select (
       0 => 1
       n => n * n
     )
     loop ()
-  )
+  }
   loop ()
-)
+}
 
 # prints [1, 4, 9] to the console
 print (1..3 | map (n) => send coroutine n)
