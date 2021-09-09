@@ -3,6 +3,7 @@ const util = require("util");
 const { default: Tuple } = require('./classes/Tuple');
 const { default: Range } = require('./classes/Range');
 const { default: Function } = require('./classes/Function');
+const { default: Vector } = require('./classes/Vector');
 
 const inspect = value => util.inspect(value, {
   compact: false,
@@ -110,6 +111,7 @@ module.exports = {
   Tuple,
   Range,
   Function,
+  Vector,
   TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,

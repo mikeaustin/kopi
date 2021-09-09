@@ -1,108 +1,24 @@
 #!/usr/bin/env node
 
-const util = require("util");
-const fs = require("fs");
+const util = require('util');
+const fs = require('fs');
 const readline = require('readline');
-const fetch = require('node-fetch');
-const { EventEmitter } = require("stream");
 
-const parser = require("../lib/parser");
-const { Tuple } = require('./classes');
+const parser = require('../lib/parser');
 
 const { default: interpreter } = require('./visitors/Interpreter');
+const { default: getScope } = require('./scope');
 
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
 };
 
-class Vector {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
+const input = process.argv.length === 2 ? readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+}) : null;
 
-  ['+'](that) {
-    return new Vector(this.x + that.x, this.y + that.y);
-  }
-
-  length() {
-    return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-  }
-}
-
-let input;
-
-const target = new EventEmitter();
-
-let scope = {
-  import: (args) => 0,
-  print: (args) => console.log(args.toString()),
-  sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
-  fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
-  spawn: (args, _, visitors) => {
-    args.apply(undefined, [{ elements: [] }, scope, visitors]);
-  },
-  yield: (args, _, visitors) => {
-    return new Promise(resolve => {
-      target.once('message', (event) => {
-        event.value = args.apply(undefined, [event.data, scope, visitors]);
-
-        resolve(event.value);
-      });
-    });
-  },
-  send: (args) => (data) => {
-    return new Promise(resolve => setImmediate(() => {
-      const event = { data };
-      target.emit('message', event);
-
-      resolve(event.value);
-    }));
-  },
-  random: (argss) => Math.random(),
-  repeat: (args, _, visitors) => (
-    function next(value) {
-      if (value?.elements?.length === 0) {
-        value = 1;
-      }
-      const nextValue = args.apply(undefined, [value, scope, visitors]);
-
-      return new Tuple([nextValue, () => next(nextValue)]);
-    }
-  ),
-  input: (args) => {
-    const rl = input ?? readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    return new Promise(resolve => {
-      rl.question(`${args} `, data => {
-        console.log(data);
-
-        if (rl === input) {
-          rl.prompt();
-        } else {
-          rl.close();
-        }
-
-        resolve(data);
-      });
-    });
-  },
-  Vector: (args) => new Vector(args.elements[0], args.elements[1]),
-  even: (args) => args % 2 === 0,
-  max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args, _, visitors) => args.apply(undefined, [{ elements: [] }, scope, visitors]),
-  do: (args, scope) => interpreter.visitNode(args, scope),
-  match: (value, _, visitors) => (funcs) => {
-    for (func of funcs.elements) {
-      if (func.params.getMatches(value)) {
-        return func.apply(undefined, [value, scope, visitors]);
-      }
-    }
-  },
-};
+let scope = getScope(input);
 
 const bind = updates => scope = ({ ...scope, ...updates });
 
@@ -129,11 +45,6 @@ async function main() {
 
     return;
   }
-
-  input = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
 
   input.prompt();
 
