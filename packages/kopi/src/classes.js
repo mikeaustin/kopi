@@ -94,6 +94,29 @@ class StringLiteralPattern {
   }
 }
 
+class ConstructorPattern {
+  constructor(name, pattern) {
+    this.name = name;
+    this.pattern = pattern;
+  }
+
+  getMatches(value) {
+    console.log('>>>', value);
+
+    if (value.constructor.name !== this.name) {
+      return null;
+    }
+
+    return {};
+
+    //   if (value !== this.value) {
+    //     return null;
+    //   }
+
+    //   return {};
+  }
+}
+
 class FunctionPattern {
   constructor(name, params) {
     this.name = name;
@@ -116,5 +139,6 @@ module.exports = {
   IdentifierPattern,
   NumericLiteralPattern,
   StringLiteralPattern,
+  ConstructorPattern,
   FunctionPattern,
 };

@@ -6,6 +6,7 @@ const { TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,
   StringLiteralPattern,
+  ConstructorPattern,
   FunctionPattern
 } = require('../classes');
 
@@ -131,6 +132,10 @@ class Interpreter extends Visitors {
 
   StringLiteralPattern({ value }) {
     return new StringLiteralPattern(value);
+  }
+
+  ConstructorPattern({ name, pattern }) {
+    return new ConstructorPattern(name, pattern);
   }
 
   FunctionPattern({ name, params }, scope) {

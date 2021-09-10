@@ -25,10 +25,11 @@
   }
 
   class TuplePattern extends Node { }
-  class IdentifierPattern extends Node { }
   class NumericLiteralPattern extends Node { }
   class StringLiteralPattern extends Node { }
+  class ConstructorPattern extends Node { }
   class FunctionPattern extends Node { }
+  class IdentifierPattern extends Node { }
 }
 
 //
@@ -181,6 +182,7 @@ PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
   / NumericLiteralPattern
   / StringLiteralPattern
+  // / ConstructorPatern
   / IdentifierPattern
 
 NumericLiteralPattern
@@ -191,6 +193,11 @@ NumericLiteralPattern
 StringLiteralPattern
   = number:StringLiteral {
       return new StringLiteralPattern({ value: number.value });
+    }
+
+ConstructorPatern
+  = ident:Identifier _ pattern:PrimaryPattern {
+      return new ConstructorPattern({ name: ident.name, pattern });
     }
 
 IdentifierPattern
