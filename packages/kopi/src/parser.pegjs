@@ -125,6 +125,9 @@ TupleExpression
           ], [head])
         });
       }
+    / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
+        return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
+      }
     / AddExpression
 //
 // Operators

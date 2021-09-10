@@ -1,7 +1,6 @@
 items = 1..3
 
 ul = props => children => "<ul>" ++ (children | join "") ++ "</ul>"
-li = props => children => "<li>" ++ (children | xmap (el => el | toString) | join "") ++ "</li>"
 li = props => children => "<li>" ++ (children | xmap 'toString | join "") ++ "</li>"
 
 
@@ -23,18 +22,18 @@ html = (
 print html
 
 
-# html = (
-#   ul () (
-#     li () 1
-#     li () 2
-#     li () 3
-#   )
-# )
+html = (
+  ul () [
+    li () [1]
+    li () [2]
+    li () [3]
+  ]
+)
 
-# print html
+print html
 
 
-# html = (
+# const html = (
 #   <ul>
 #     {items.map(item => (
 #       <li>{item * item}</li>
