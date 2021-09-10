@@ -93,7 +93,13 @@ class Interpreter extends Visitors {
       return Tuple.empty;
     }
 
-    return new Tuple(await Promise.all(elements.map(element => this.visitNode(element, scope))));
+    return new Tuple(
+      await Promise.all(elements.map(element => this.visitNode(element, scope)))
+    );
+  }
+
+  ArrayExpression({ elements }, scope) {
+    return Promise.all(elements.map(element => this.visitNode(element, scope)));
   }
 
   RangeExpression({ from, to }, scope) {

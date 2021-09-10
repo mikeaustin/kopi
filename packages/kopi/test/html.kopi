@@ -1,12 +1,13 @@
 items = 1..3
 
 ul = props => children => "<ul>" ++ (children | join "") ++ "</ul>"
-li = props => children => "<li>" ++ (children | toString) ++ "</li>"
+li = props => children => "<li>" ++ (children | xmap (el => el | toString) | join "") ++ "</li>"
+li = props => children => "<li>" ++ (children | xmap 'toString | join "") ++ "</li>"
 
 
 html = (
   ul () (items | map (item) => (
-    li () item
+    li () [item]
   ))
 )
 
@@ -15,7 +16,7 @@ print html
 
 html = (
   ul () $ items | map (item) => {
-    li () item
+    li () [item]
   }
 )
 
@@ -40,3 +41,5 @@ print html
 #     ))}
 #   </ul>
 # )
+
+print ([1, (sleep 1), 3] | xmap 'toString)

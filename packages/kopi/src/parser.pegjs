@@ -13,6 +13,7 @@
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node { }
   class TupleExpression extends Node { }
+  class ArrayExpression extends Node { }
   class RangeExpression extends Node { }
 
   class NumericLiteral extends Node { }
@@ -98,7 +99,7 @@ TupleExpression
   = "()" {
     return new TupleExpression({ elements: [] });
   }
-  / head:AddExpression _ tail:("," _ AddExpression)+ {
+  / head:ArrayExpression _ tail:("," _ ArrayExpression)+ {
   	  return new TupleExpression({
         elements: tail.reduce((expressions, [, , expression]) => [
           ...expressions,
@@ -113,8 +114,18 @@ TupleExpression
 
     return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
   }
-  / AddExpression
+  / ArrayExpression
 
+  ArrayExpression
+    = "[" _ head:AddExpression tail:("," _ AddExpression)* _ "]" {
+  	    return new ArrayExpression({
+          elements: tail.reduce((elements, [, , element]) => [
+            ...elements,
+            element
+          ], [head])
+        });
+      }
+    / AddExpression
 //
 // Operators
 //

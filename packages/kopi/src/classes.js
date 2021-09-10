@@ -36,6 +36,12 @@ Array.prototype[util.inspect.custom] = function () {
   return `[${this.map(element => inspect(element)).join(', ')}]`;
 };
 
+Array.prototype.xmap = function (args, scope, visitors) {
+  return Promise.all(this.map((element) => (
+    args.apply(undefined, [element, scope, visitors])
+  )));
+};
+
 //
 
 class TuplePattern {
