@@ -1,11 +1,3 @@
-f = (command) => match command (
-      "set" => "x"
-      "get" => "y"
-      _ => "nope"
-    )
-
-print ("print", (f "get"))
-
 
 # database = () => {
 #   loop = (value) => {
@@ -21,7 +13,10 @@ print ("print", (f "get"))
 
 database = () => {
   loop = (value) => {
-    yield (command, newValue) => command
+    value = yield (command, newValue) => match command (
+      "set" => newValue
+      "get" => value
+    )
     loop (value)
   }
   loop (0)
@@ -29,5 +24,7 @@ database = () => {
 
 db = spawn database
 
-print (send db ("set", 1))
-print (send db ("get", 1))
+print (send db ("set", 5))
+print (send db ("get", 0))
+print (send db ("set", 10))
+print (send db ("get", 0))
