@@ -1,0 +1,33 @@
+f = (command) => match command (
+      "set" => "x"
+      "get" => "y"
+      _ => "nope"
+    )
+
+print ("print", (f "get"))
+
+
+# database = () => {
+#   loop = (value) => {
+#     print "loop"
+#     yield (command, newValue) => match command (
+#       "set" => database (newValue)
+#       "get" => database (value)
+#       _ => "nope"
+#     )
+#   }
+#   loop (0)
+# }
+
+database = () => {
+  loop = (value) => {
+    yield (command, newValue) => command
+    loop (value)
+  }
+  loop (0)
+}
+
+db = spawn database
+
+print (send db ("set", 1))
+print (send db ("get", 1))
