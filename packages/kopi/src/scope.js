@@ -62,7 +62,9 @@ let getScope = (input) => ({
   Vector: (args) => new Vector(args.elements[0], args.elements[1]),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
-  let: (args, scope, visitors) => args.apply(undefined, [{ elements: [] }, scope, visitors]),
+  let: (args, scope, visitors) => {
+    return args.apply(undefined, [new Tuple(), scope, visitors]);
+  },
   do: (args, scope) => interpreter.visitNode(args, scope),
   match: (value, scope, visitors) => (funcs) => {
     for (func of funcs.elements) {
