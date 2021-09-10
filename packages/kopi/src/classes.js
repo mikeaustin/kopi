@@ -24,6 +24,10 @@ String.prototype.succ = function () {
   return String.fromCodePoint(this.codePointAt(0) + 1);
 };
 
+String.prototype['++'] = function (that) {
+  return this.concat(that);
+};
+
 Array.prototype.toString = function () {
   return `[${this.map(element => element.toString()).join(', ')}]`;
 };

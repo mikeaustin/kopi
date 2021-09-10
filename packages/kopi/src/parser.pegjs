@@ -55,19 +55,26 @@ Assignment
     }
 
 Expression
-  = PipeExpression
+  = LowPrecedenceApplyExpression
 
 LowPrecedenceApplyExpression
-  = head:PipeExpression _ "$" _ tail:PipeExpression {
-      return args.reduce((expr, [, args]) => (
+  = head:PipeExpression tail:(_ "$" _ PipeExpression)* {
+      return tail.reduce((expr, [, op, , args]) => (
         new ApplyExpression({ expr, args })
-      ), expr)
+      ), head);
     }
 
 PipeExpression
-  = head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
+  = head:ConcatinationExpression tail:(_ "|" _ ConcatinationExpression)* {
       return tail.reduce((left, [, op,, right]) => (
         new PipeExpression({ left, right })
+      ), head);
+    }
+
+ConcatinationExpression
+  = head:ApplyExpression tail:(_ "++" _ Expression)* {
+      return tail.reduce((left, [, op, , right]) => (
+        new OperatorExpression({ op, left, right })
       ), head);
     }
 

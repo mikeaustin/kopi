@@ -1,20 +1,23 @@
 items = 1..3
 
-ul = props => children => ("<ul>", children, "</ul>")
-li = props => children => ("<li>", children, "</li>")
+ul = props => children => "<ul>" ++ (children | toString) ++ "</ul>"
+li = props => children => "<li>" ++ (children | toString) ++ "</li>"
 
 
 html = (
-  ul () (items | map (item) => {
-    li () item * item
-  })
+  ul () (items | map (item) => (
+    li () item
+  ))
 )
 
-# html = (
-#   ul () $ items | map (item) => {
-#     li () item * item
-#   }
-# )
+print html
+
+
+html = (
+  ul () $ items | map (item) => {
+    li () item
+  }
+)
 
 print html
 
