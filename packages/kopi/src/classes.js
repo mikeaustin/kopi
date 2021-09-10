@@ -40,7 +40,7 @@ class TuplePattern {
   }
 
   getMatches(value) {
-    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index] ?? new Tuple()));
+    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index] ?? Tuple.empty));
 
     if (matchesArray.some(match => match === null)) {
       return null;
@@ -61,7 +61,7 @@ class IdentifierPattern {
 
   getMatches(value) {
     return {
-      [this.name]: value instanceof Tuple && value.elements.length === 0 ? this.init : value,
+      [this.name]: value === Tuple.empty ? this.init : value,
     };
   }
 }

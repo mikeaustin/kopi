@@ -1,7 +1,21 @@
 const util = require("util");
 
 class Tuple {
+  static empty = new Tuple(null);
+
   constructor(elements = []) {
+    if (elements === null) {
+      this.elements = [];
+
+      return this;
+    }
+
+    if (elements.length === 0) {
+      console.log('Use Tuple.empty instead of calling Tuple([]).');
+
+      return Tuple.empty;
+    }
+
     this.elements = elements;
   }
 

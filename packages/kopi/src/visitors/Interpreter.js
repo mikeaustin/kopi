@@ -78,9 +78,6 @@ class Interpreter extends Visitors {
     const evaluatedArgs = await this.visitNode(args, scope);
     const evaluatedExpr = await this.visitNode(expr, scope);
 
-    // console.log(evaluatedArgs);
-
-    // TODO: Passing unevaluated args, FunctionPattern can store expr
     return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this]);
   }
 
@@ -91,6 +88,10 @@ class Interpreter extends Visitors {
   }
 
   async TupleExpression({ elements }, scope) {
+    if (elements.length === 0) {
+      return Tuple.empty;
+    }
+
     return new Tuple(await Promise.all(elements.map(element => this.visitNode(element, scope))));
   }
 
