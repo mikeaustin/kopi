@@ -57,6 +57,13 @@ Assignment
 Expression
   = PipeExpression
 
+LowPrecedenceApplyExpression
+  = head:PipeExpression _ "$" _ tail:PipeExpression {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr)
+    }
+
 PipeExpression
   = head:ApplyExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
@@ -93,6 +100,10 @@ TupleExpression
       });
     }
   / "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
+    if (exprs.length === 1) {
+      return exprs[0][1];
+    }
+
     return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
   }
   / AddExpression

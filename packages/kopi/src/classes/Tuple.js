@@ -1,5 +1,10 @@
 const util = require("util");
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 class Tuple {
   static empty = new Tuple(null);
 
