@@ -1748,10 +1748,7 @@ function peg$parse(input, options) {
       if (s0 === peg$FAILED) {
         s0 = peg$parseStringLiteralPattern();
         if (s0 === peg$FAILED) {
-          s0 = peg$parseConstructorPatern();
-          if (s0 === peg$FAILED) {
-            s0 = peg$parseIdentifierPattern();
-          }
+          s0 = peg$parseIdentifierPattern();
         }
       }
     }
