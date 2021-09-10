@@ -49,15 +49,6 @@ print html
 print ([1, (sleep 2), (string (print 3))] | xmap 'toString)
 
 
-x = {
-  1
-  2
-  3
-}
-
-print x
-
-
 # for await (variable of iterable) {
 #   statement
 # }
