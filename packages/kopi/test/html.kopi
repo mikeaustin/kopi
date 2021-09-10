@@ -4,41 +4,68 @@ ul = props => children => "<ul>" ++ (children | join "") ++ "</ul>"
 li = props => children => "<li>" ++ (children | xmap 'toString | join "") ++ "</li>"
 
 
-html = (
+html = [
   ul () (items | map (item) => (
     li () [item]
   ))
-)
-
-print html
-
-
-html = (
-  ul () $ items | map (item) => {
-    li () [item]
-  }
-)
-
-print html
-
-
-html = (
-  ul () [
-    li () [1]
-    li () [2]
-    li () [3]
-  ]
-)
+]
 
 print html
 
 
 # const html = (
 #   <ul>
-#     {items.map(item => (
-#       <li>{item * item}</li>
-#     ))}
+#     {range(1, 3).map(item => {
+#       const x = item * item;
+#       return <li>{x}</li>
+#     })}
 #   </ul>
 # )
 
-print ([1, (sleep 1), 3] | xmap 'toString)
+html = [
+  ul () $ 1..3 | map (item) => {
+    let (x = (item * item)) => li () [x]
+  }
+  ul () $ 4..5 | map (item) => {
+    x = item * item
+    li () [x]
+  }
+]
+
+print html
+
+
+html = [
+  ul () [
+    li () [1]
+    li () [2]
+    li () [3]
+  ]
+]
+
+print html
+
+
+print ([1, (sleep 2), (string (print 3))] | xmap 'toString)
+
+
+x = {
+  1
+  2
+  3
+}
+
+print x
+
+
+# for await (variable of iterable) {
+#   statement
+# }
+#
+# Promise.all([fetch(''), fetch('')])
+#
+# [fetch(''), fetch('')].reduce((res, f) => [(...await r)])
+
+x = [(sleep 1), (sleep 1), (sleep 1)]
+
+print (at 0 x)

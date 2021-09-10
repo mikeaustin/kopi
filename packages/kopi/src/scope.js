@@ -7,8 +7,10 @@ const { Tuple, Vector } = require('./classes');
 const target = new EventEmitter();
 
 let getScope = (input) => ({
+  at: (index) => async array => await array[index],
   import: (args) => 0,
   number: (args) => Number(args),
+  string: (args) => String(args),
   print: (args) => console.log(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
