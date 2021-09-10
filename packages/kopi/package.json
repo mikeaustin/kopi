@@ -1,5 +1,5 @@
 {
-  "name": "kopi4",
+  "name": "kopi-language",
   "version": "0.1.0",
   "description": "A simple, immutable, 100% async language",
   "license": "ISC",
