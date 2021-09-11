@@ -1,30 +1,19 @@
-
-# database = () => {
-#   loop = (value) => {
-#     print "loop"
-#     yield (command, newValue) => match command (
-#       "set" => database (newValue)
-#       "get" => database (value)
-#       _ => "nope"
-#     )
-#   }
-#   loop (0)
-# }
+select = fns => yield (x => match x fns)
 
 database = () => {
   loop = (value) => {
-    value = yield (command, newValue) => match command (
-      "set" => newValue
-      "get" => value
+    loop $ select (
+      "get"           => value
+      "set", newValue => newValue
     )
-    loop (value)
   }
   loop (0)
 }
 
 db = spawn database
 
-print (send db ("set", 5))
-print (send db ("get", 0))
-print (send db ("set", 10))
-print (send db ("get", 0))
+print $ send db "get"
+print $ send db "set", 5
+print $ send db "get"
+print $ send db "set", 10
+print $ send db "get"
