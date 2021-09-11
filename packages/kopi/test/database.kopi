@@ -20,6 +20,13 @@ select = fns => yield (x => match x fns)
 #   loop (0)
 # }
 
+# database = () => {
+#   let loop (value = 0) => loop $ select (
+#     "get"           => value
+#     "set", newValue => newValue
+#   )
+# }
+
 database = () => {
   let $ fix loop => (value = 0) => loop $ select (
     "get"           => value
