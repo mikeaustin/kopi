@@ -12,7 +12,7 @@ let getScope = (input) => ({
   number: (args) => Number(args),
   string: (args) => String(args),
   print: (args) => console.log(args.toString()),
-  sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args * 1000), Number(args * 1000))),
+  sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
   spawn: (args, scope, visitors) => {
     args.apply(undefined, [{ elements: [] }, scope, visitors]);
