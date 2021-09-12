@@ -271,8 +271,8 @@ function peg$parse(input, options) {
       peg$c59 = function(ident, init) {
             return new IdentifierPattern({ name: ident.name, init: init?.[3] });
           },
-      peg$c60 = /^[_a-zA-Z]/,
-      peg$c61 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"]], false, false),
+      peg$c60 = /^[_a-zA-Z+\-*\/]/,
+      peg$c61 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"], "+", "-", "*", "/"], false, false),
       peg$c62 = /^[a-zA-Z0-9]/,
       peg$c63 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"]], false, false),
       peg$c64 = function(name) { return new Identifier({ name: name[0] + name[1].join('') }); },
@@ -2881,7 +2881,15 @@ function peg$parse(input, options) {
     class PipeExpression extends Node { }
     class OperatorExpression extends Node { }
     class FunctionExpression extends Node { }
-    class ApplyExpression extends Node { }
+    class ApplyExpression extends Node {
+      apply(thisArg, [func, scope, visitors]) {
+        return func[this.expr.name].apply(func, [
+          visitors.visitNode(this.args, scope, visitors),
+          scope,
+          visitors,
+        ]);
+      }
+    }
     class TupleExpression extends Node { }
     class ArrayExpression extends Node { }
     class RangeExpression extends Node { }
