@@ -15,7 +15,7 @@ let getScope = (input) => ({
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
   spawn: (args, scope, visitors) => {
-    args.apply(undefined, [{ elements: [] }, scope, visitors]);
+    args.apply(undefined, [KopiTuple.empty, scope, visitors]);
   },
   yield: (args, scope, visitors) => {
     return new Promise(resolve => {

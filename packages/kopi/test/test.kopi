@@ -63,10 +63,13 @@ print (
 )
 
 
-loop = () => {
+loop = (n = 1) => {
   sleep 1
-  print "..."
-  loop ()
+  print n
+  match n (
+    3 => ()
+    n  => loop (n + 1)
+  )
 }
 
 spawn loop
