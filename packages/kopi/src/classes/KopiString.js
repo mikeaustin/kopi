@@ -17,6 +17,10 @@ class KopiString {
     return this.value[Symbol.iterator]();
   }
 
+  ['++'](that) {
+    return this.value.concat(that.value);;
+  }
+
   succ() {
     return String.fromCodePoint(this.value.codePointAt(0) + 1);
   }

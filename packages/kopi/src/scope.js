@@ -10,8 +10,10 @@ let getScope = (input) => ({
   at: (index) => async array => await array[index],
   import: (args) => 0,
   number: (args) => Number(args.value),
+  chr: (args) => String.fromCodePoint(args),
   string: (args) => String(args),
   print: (args) => console.log(args.toString()),
+  write: (args) => process.stdout.write(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
   spawn: (args, scope, visitors) => {
@@ -35,6 +37,7 @@ let getScope = (input) => ({
     }));
   },
   random: (argss) => Math.random(),
+  time: () => new Date().toLocaleTimeString(),
   repeat: (args, scope, visitors) => (
     function next(value) {
       if (value?.elements?.length === 0) {
