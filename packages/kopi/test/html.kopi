@@ -46,7 +46,7 @@ html = [
 print html
 
 
-print ([1, (sleep 2), (string (print 3))] | xmap 'toString)
+print $ [1, (sleep 2), (string (print 3))] | xmap 'toString
 
 
 # for await (variable of iterable) {
