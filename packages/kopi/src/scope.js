@@ -2,7 +2,7 @@ const readline = require('readline');
 const fetch = require('node-fetch');
 const { EventEmitter } = require('stream');
 
-const { Tuple, Vector } = require('./classes');
+const { KopiTuple, KopiVector } = require('./classes');
 
 const target = new EventEmitter();
 
@@ -42,7 +42,7 @@ let getScope = (input) => ({
       }
       const nextValue = args.apply(undefined, [value, scope, visitors]);
 
-      return new Tuple([nextValue, () => next(nextValue)]);
+      return new KopiTuple([nextValue, () => next(nextValue)]);
     }
   ),
   input: (args) => {
@@ -61,11 +61,11 @@ let getScope = (input) => ({
       });
     });
   },
-  Vector: (args) => new Vector(args.elements[0], args.elements[1]),
+  Vector: (args) => new KopiVector(args.elements[0], args.elements[1]),
   even: (args) => args % 2 === 0,
   max: (args) => Math.max(args.elements[0], args.elements[1]),
   let: (args, scope, visitors) => {
-    return args.apply(undefined, [Tuple.empty, scope, visitors]);
+    return args.apply(undefined, [KopiTuple.empty, scope, visitors]);
   },
   do: (args, scope) => interpreter.visitNode(args, scope),
   match: (value, scope, visitors) => (funcs) => {

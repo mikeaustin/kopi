@@ -1,6 +1,6 @@
 const util = require("util");
 
-class Function {
+class KopiFunction {
   constructor(params, expr, closure) {
     this.params = params;
     this.expr = expr;
@@ -29,5 +29,5 @@ class Function {
 }
 
 module.exports = {
-  default: Function,
+  default: KopiFunction,
 };

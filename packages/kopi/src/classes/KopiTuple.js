@@ -5,8 +5,8 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
-class Tuple {
-  static empty = new Tuple(null);
+class KopiTuple {
+  static empty = new KopiTuple(null);
 
   constructor(elements = []) {
     if (elements === null) {
@@ -16,9 +16,9 @@ class Tuple {
     }
 
     if (elements.length === 0) {
-      console.log('Use Tuple.empty instead of calling Tuple([]).');
+      console.log('Use KopiTuple.empty instead of calling KopiTuple([]).');
 
-      return Tuple.empty;
+      return KopiTuple.empty;
     }
 
     this.elements = elements;
@@ -44,7 +44,7 @@ class Tuple {
 
     while (results.every(result => !result.done)) {
       values.push(
-        mapper.apply(undefined, [new Tuple(results.map(result => result.value)), scope, visitors])
+        mapper.apply(undefined, [new KopiTuple(results.map(result => result.value)), scope, visitors])
       );
 
       results = iters.map(iter => iter.next());
@@ -55,5 +55,5 @@ class Tuple {
 }
 
 module.exports = {
-  default: Tuple,
+  default: KopiTuple,
 };

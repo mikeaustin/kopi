@@ -1,9 +1,9 @@
 const util = require("util");
 
-const { default: Tuple } = require('./classes/Tuple');
-const { default: Range } = require('./classes/Range');
-const { default: Function } = require('./classes/Function');
-const { default: Vector } = require('./classes/Vector');
+const { default: KopiTuple } = require('./classes/KopiTuple');
+const { default: KopiRange } = require('./classes/KopiRange');
+const { default: KopiFunction } = require('./classes/KopiFunction');
+const { default: KopiVector } = require('./classes/KopiVector');
 
 const inspect = value => util.inspect(value, {
   compact: false,
@@ -50,7 +50,7 @@ class TuplePattern {
   }
 
   getMatches(value) {
-    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index] ?? Tuple.empty));
+    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index] ?? KopiTuple.empty));
 
     if (matchesArray.some(match => match === null)) {
       return null;
@@ -71,7 +71,7 @@ class IdentifierPattern {
 
   getMatches(value) {
     return {
-      [this.name]: value === Tuple.empty ? this.init : value,
+      [this.name]: value === KopiTuple.empty ? this.init : value,
     };
   }
 }
@@ -135,16 +135,16 @@ class FunctionPattern {
 
   getMatches(value, scope, unevaluatedValue) {
     return {
-      [this.name]: new Function(this.params, unevaluatedValue, scope)
+      [this.name]: new KopiFunction(this.params, unevaluatedValue, scope)
     };
   }
 }
 
 module.exports = {
-  Tuple,
-  Range,
-  Function,
-  Vector,
+  KopiTuple,
+  KopiRange,
+  KopiFunction,
+  KopiVector,
   TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,

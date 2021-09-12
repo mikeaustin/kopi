@@ -1,11 +1,11 @@
-class Vector {
+class KopiVector {
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
 
   ['+'](that) {
-    return new Vector(this.x + that.x, this.y + that.y);
+    return new KopiVector(this.x + that.x, this.y + that.y);
   }
 
   length() {
@@ -14,5 +14,5 @@ class Vector {
 }
 
 module.exports = {
-  default: Vector,
+  default: KopiVector,
 };

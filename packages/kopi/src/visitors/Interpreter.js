@@ -1,7 +1,7 @@
 const util = require("util");
 const fs = require("fs");
 
-const { Tuple, Range, Function } = require('../classes');
+const { KopiTuple, KopiRange, KopiFunction } = require('../classes');
 const { TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,
@@ -56,7 +56,7 @@ class Interpreter extends Visitors {
     const matches = evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
 
     Object.entries(matches).forEach(([name, value]) => {
-      if (value instanceof Function) {
+      if (value instanceof KopiFunction) {
         value.closure[name] = value;
       }
     });
@@ -85,15 +85,15 @@ class Interpreter extends Visitors {
   async FunctionExpression({ params, expr }, scope) {
     const evaluatedParams = await this.visitNode(params, scope);
 
-    return new Function(evaluatedParams, expr, scope);
+    return new KopiFunction(evaluatedParams, expr, scope);
   }
 
   async TupleExpression({ elements }, scope) {
     if (elements.length === 0) {
-      return Tuple.empty;
+      return KopiTuple.empty;
     }
 
-    return new Tuple(
+    return new KopiTuple(
       await Promise.all(elements.map(element => this.visitNode(element, scope)))
     );
   }
@@ -103,7 +103,7 @@ class Interpreter extends Visitors {
   }
 
   RangeExpression({ from, to }, scope) {
-    return new Range(this.visitNode(from, scope), this.visitNode(to, scope));
+    return new KopiRange(this.visitNode(from, scope), this.visitNode(to, scope));
   }
 
   async OperatorExpression({ op, left, right }, scope) {

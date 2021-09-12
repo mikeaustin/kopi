@@ -1,6 +1,6 @@
 const util = require("util");
 
-class Range {
+class KopiRange {
   constructor(from, to) {
     this.from = from;
     this.to = to;
@@ -24,5 +24,5 @@ class Range {
 }
 
 module.exports = {
-  default: Range,
+  default: KopiRange,
 };
