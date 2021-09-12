@@ -1,7 +1,7 @@
 const util = require("util");
 const fs = require("fs");
 
-const { KopiTuple, KopiRange, KopiFunction } = require('../classes');
+const { KopiString, KopiTuple, KopiRange, KopiFunction } = require('../classes');
 const { TuplePattern,
   IdentifierPattern,
   NumericLiteralPattern,
@@ -157,7 +157,7 @@ class Interpreter extends Visitors {
   }
 
   StringLiteral({ value }) {
-    return value;
+    return new KopiString(value);
   }
 
   AstLiteral({ value }) {

@@ -9,7 +9,7 @@ const target = new EventEmitter();
 let getScope = (input) => ({
   at: (index) => async array => await array[index],
   import: (args) => 0,
-  number: (args) => Number(args),
+  number: (args) => Number(args.value),
   string: (args) => String(args),
   print: (args) => console.log(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),

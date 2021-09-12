@@ -1,5 +1,6 @@
 const util = require("util");
 
+const { default: KopiString } = require('./classes/KopiString');
 const { default: KopiTuple } = require('./classes/KopiTuple');
 const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
@@ -141,6 +142,7 @@ class FunctionPattern {
 }
 
 module.exports = {
+  KopiString,
   KopiTuple,
   KopiRange,
   KopiFunction,
