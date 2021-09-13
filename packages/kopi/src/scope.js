@@ -10,20 +10,21 @@ let getScope = (input) => ({
   at: (index) => async array => await array[index],
   import: (args) => 0,
   number: (args) => Number(args.value),
-  chr: (args) => String.fromCodePoint(args),
+  char: (args) => String.fromCodePoint(args),
   string: (args) => String(args),
   print: (args) => console.log(args.toString()),
-  write: (args) => process.stdout.write(args.toString()),
+  write: (args) => new Promise(resolve => process.stdout.write(args.toString(), () => resolve())),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
-  loop: (args, scope, visitors) => {
+  loop: async (args, scope, visitors) => {
     const exit = () => { throw -1; };
+    const func = await args.apply(undefined, [exit, scope, visitors]);
 
     let value = KopiTuple.empty;
 
     function loop(value) {
       setImmediate(async () => {
-        value = await args.apply(undefined, [new KopiTuple([exit, value]), scope, visitors]);
+        value = await func.apply(undefined, [value, scope, visitors]);
 
         loop(value);
       });
