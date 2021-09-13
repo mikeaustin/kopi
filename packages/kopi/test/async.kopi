@@ -40,3 +40,11 @@ spawn () => {
   }
   loop ()
 }
+
+
+# loop (exit, n = 1) => {
+#   print n
+#   sleep 1
+
+#   n + 1
+# }

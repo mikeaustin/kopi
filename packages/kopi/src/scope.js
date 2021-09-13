@@ -16,6 +16,20 @@ let getScope = (input) => ({
   write: (args) => process.stdout.write(args.toString()),
   sleep: (args) => new Promise(resolve => setTimeout(() => resolve(args), args * 1000)),
   fetch: (args) => fetch(args).then(data => data.headers.get('content-type')),
+  loop: (args, scope, visitors) => {
+    const exit = () => { throw -1; };
+
+    let value = KopiTuple.empty;
+
+    function loop(value) {
+      setImmediate(async () => {
+        value = await args.apply(undefined, [new KopiTuple([exit, value]), scope, visitors]);
+
+        loop(value);
+      });
+    }
+    loop(value);
+  },
   spawn: (args, scope, visitors) => {
     args.apply(undefined, [KopiTuple.empty, scope, visitors]);
   },
