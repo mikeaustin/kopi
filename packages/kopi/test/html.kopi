@@ -5,9 +5,17 @@ li = props => children => "<li>" ++ (children | xmap 'toString | join "") ++ "</
 
 
 html = [
-  ul () (items | map (item) => (
-    li () [item]
-  ))
+  ul () (
+    items | map (item) => (
+      li () [item * item]
+    )
+  )
+]
+
+html = [
+  ul () $ items | map (item) => {
+    li () [item * item]
+  }
 ]
 
 print html
