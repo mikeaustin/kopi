@@ -157,7 +157,7 @@ class Interpreter extends Visitors {
   }
 
   StringLiteral({ value }) {
-    return new KopiString(value);
+    return value;
   }
 
   AstLiteral({ value }) {

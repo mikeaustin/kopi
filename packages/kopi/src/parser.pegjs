@@ -11,7 +11,15 @@
   class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
-  class ApplyExpression extends Node { }
+  class ApplyExpression extends Node {
+    apply(thisArg, [func, scope, visitors]) {
+      return func[this.expr.name].apply(func, [
+        visitors.visitNode(this.args, scope, visitors),
+        scope,
+        visitors,
+      ]);
+    }
+  }
   class TupleExpression extends Node { }
   class ArrayExpression extends Node { }
   class RangeExpression extends Node { }
@@ -242,7 +250,7 @@ IdentifierPattern
 //
 
 Identifier
-  = _ name:([_a-zA-Z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
+  = _ name:([_a-zA-Z\*][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
   = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }

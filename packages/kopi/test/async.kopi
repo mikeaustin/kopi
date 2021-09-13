@@ -30,3 +30,16 @@ print $ 1..3 | map (n) => send coroutine n
 
 # Waits 3 seconds then adds 1 + 2
 print $ (sleep 1) + (sleep 2)
+
+
+spawn () => loop exit => () => {
+  write $ time ()
+  sleep 1
+}
+
+loop exit => (n = 1) => {
+  write $ " " ++ (string n) ++ (char 13)
+  sleep 1
+
+  n + 1
+}

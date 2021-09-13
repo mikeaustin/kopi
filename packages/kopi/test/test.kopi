@@ -46,7 +46,9 @@ print $ 1..5 | map n => {
   x
 }
 
-print $ 1..3 | map 'toString
+print $ 1..5 | map 'toString
+
+print $ 1..5 | map '(* 2)
 
 
 next = repeat (n) => n + 1
