@@ -33,12 +33,12 @@ print $ (sleep 1) + (sleep 2)
 
 
 spawn () => loop exit => () => {
-  write $ " " ++ time () ++ (char 13)
+  write $ time ()
   sleep 1
 }
 
-spawn () => loop exit => (n = 1) => {
-  write $ (string n)
+loop exit => (n = 1) => {
+  write $ " " ++ (string n) ++ (char 13)
   sleep 1
 
   n + 1

@@ -10,7 +10,7 @@
     "build": "pegjs -o lib/parser.js src/parser.pegjs",
     "prestart": "npm run build",
     "start": "node src/index.js",
-    "test": "npm --silent start test/test.kopi && npm --silent start test/async.kopi"
+    "test": "npm --silent start test/test.kopi && npm --silent start test/async.kopi && npm --silent start test/html.kopi"
   },
   "devDependencies": {
     "node-fetch": "^2.6.0",
