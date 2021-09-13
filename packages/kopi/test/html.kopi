@@ -22,6 +22,12 @@ print html
 #   </ul>
 # )
 
+# html = [
+#   ul (id: "list") $ items | map (item) => {
+#     li (class: "item") [item * item]
+#   }
+# ]
+
 html = [
   ul () $ 1..3 | map (item) => {
     let (x = (item * item)) => li () [x]
