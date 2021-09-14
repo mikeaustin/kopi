@@ -1,21 +1,21 @@
 const readline = require('readline');
 const fetch = require('node-fetch');
-const { EventEmitter } = require('stream');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
-const coroutineEventEmitter = new EventEmitter();
-
-let nextCoroutineId = 0;
+const { print, char, string, number, random, time, id } = require('./functions/core');
+const { spawn, yield, send } = require('./functions/coroutines');
 
 let getScope = (input) => ({
-  id: (x) => x,
+  print,
+  char,
+  string,
+  number,
+  random,
+  time,
+  id,
   at: (index) => async array => await array[index],
   import: (args) => 0,
-  number: ({ value }) => Number(value),
-  char: (num) => String.fromCodePoint(num),
-  string: (num) => String(num),
-  print: (val) => console.log(val.toString()),
   write: (val) => new Promise(resolve => process.stdout.write(val.toString(), () => resolve())),
   sleep: (secs) => new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000)),
   fetch: (url) => fetch(url).then(data => data.headers.get('content-type')),
@@ -34,32 +34,9 @@ let getScope = (input) => ({
     }
     loop(value);
   },
-  spawn: (fn, scope, visitors) => {
-    const coroutineId = nextCoroutineId++;
-
-    fn.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
-
-    return coroutineId;
-  },
-  yield: (fn, scope, visitors) => {
-    return new Promise(resolve => {
-      coroutineEventEmitter.once(scope._coroutineId, (event) => {
-        event.value = fn.apply(undefined, [event.data, scope, visitors]);
-
-        resolve(event.value);
-      });
-    });
-  },
-  send: (coroutineId) => (data) => {
-    return new Promise(resolve => setImmediate(() => {
-      const event = { data };
-      coroutineEventEmitter.emit(coroutineId, event);
-
-      resolve(event.value);
-    }));
-  },
-  random: () => Math.random(),
-  time: () => new Date().toLocaleTimeString(),
+  spawn,
+  yield,
+  send,
   repeat: (fn, scope, visitors) => (
     function next(value) {
       if (value?.elements?.length === 0) {
