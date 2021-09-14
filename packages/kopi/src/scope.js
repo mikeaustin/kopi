@@ -4,7 +4,9 @@ const { EventEmitter } = require('stream');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
-const target = new EventEmitter();
+const coroutineEventEmitter = new EventEmitter();
+
+let nextCoroutineId = 0;
 
 let getScope = (input) => ({
   id: (x) => x,
@@ -33,21 +35,25 @@ let getScope = (input) => ({
     loop(value);
   },
   spawn: (fn, scope, visitors) => {
-    fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
+    const coroutineId = nextCoroutineId++;
+
+    fn.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
+
+    return coroutineId;
   },
   yield: (fn, scope, visitors) => {
     return new Promise(resolve => {
-      target.once('message', (event) => {
+      coroutineEventEmitter.once(scope._coroutineId, (event) => {
         event.value = fn.apply(undefined, [event.data, scope, visitors]);
 
         resolve(event.value);
       });
     });
   },
-  send: (cid) => (data) => {
+  send: (coroutineId) => (data) => {
     return new Promise(resolve => setImmediate(() => {
       const event = { data };
-      target.emit('message', event);
+      coroutineEventEmitter.emit(coroutineId, event);
 
       resolve(event.value);
     }));

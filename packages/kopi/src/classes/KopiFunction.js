@@ -12,15 +12,13 @@ class KopiFunction {
   }
 
   apply(thisArg, [args, scope, visitors]) {
-    // TODO: get unevaluated args to pass to match
-    // If we pass unevaled args, we'll also need scope
     const matches = this.params.getMatches(args);
 
     if (matches === null) {
       return undefined;
     }
 
-    return visitors.visitNode(this.expr, { ...this.closure, ...matches });
+    return visitors.visitNode(this.expr, { ...this.closure, ...matches, _coroutineId: scope._coroutineId });
   }
 
   getMatches(args) {

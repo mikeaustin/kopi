@@ -1,3 +1,6 @@
+print "== basics ========================================"
+print ""
+
 # Basic syntax and semantics tests
 
 print $ max 1, 2

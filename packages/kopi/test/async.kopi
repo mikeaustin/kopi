@@ -1,3 +1,7 @@
+print ""
+print "== async ========================================="
+print ""
+
 # Spawns coroutine that simply yields values
 generator = spawn () => {
   loop = (x) => {

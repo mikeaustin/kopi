@@ -1,3 +1,7 @@
+print ""
+print "== bank =========================================="
+print ""
+
 # Simple input and recursion tests
 
 account = balance => balance, (amount => account balance - amount)
