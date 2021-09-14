@@ -35,6 +35,16 @@ database = () => {
   )
 }
 
+database = () => {
+  let $ fix loop => (value = 0) => loop (
+    select (
+      "get"             => value
+      "set", newValue   => newValue
+      "update", updater => updater value
+    )
+  )
+}
+
 db = spawn database
 
 print $ send db "get"
