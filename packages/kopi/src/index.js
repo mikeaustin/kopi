@@ -24,7 +24,7 @@ const bind = updates => scope = ({ ...scope, ...updates });
 
 async function main() {
   if (process.argv.length > 2) {
-    compile(process.argv[2], scope);
+    await compile(process.argv[2], scope);
 
     return;
   }

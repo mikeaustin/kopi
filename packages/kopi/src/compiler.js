@@ -11,7 +11,7 @@ const compile = async (filename, scope) => {
   try {
     const astRootNode = parser.parse(source);
 
-    return await interpreter.visitNode(astRootNode, scope);
+    return interpreter.visitNode(astRootNode, scope);
   } catch (error) {
     console.error(error.name === 'SyntaxError' ? error.message : error);
   }
