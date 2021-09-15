@@ -36,6 +36,15 @@ class KopiTuple {
     return `(${this.elements.map(element => inspect(element)).join(', ')})`;
   }
 
+  ['=='](that) {
+    if (!(that instanceof KopiTuple)) {
+      return false;
+    }
+
+    // TODO: Optimization for numbers
+    return this.elements.every((element, index) => that.elements[index]['=='](element));
+  }
+
   map(mapper, scope, visitors) {
     const iters = this.elements.map(element => element[Symbol.iterator]());
     const values = [];

@@ -13,6 +13,10 @@ const inspect = value => util.inspect(value, {
 
 //
 
+Number.prototype.succ = function () {
+  return this + 1;
+};
+
 Number.prototype['+'] = function (that) {
   return this + that;
 };
@@ -21,9 +25,15 @@ Number.prototype['*'] = function (that) {
   return this * that;
 };
 
-Number.prototype.succ = function () {
-  return this + 1;
+Number.prototype['=='] = function (that) {
+  if (typeof that !== 'number') {
+    return false;
+  }
+
+  return this.valueOf() === that.valueOf();
 };
+
+//
 
 String.prototype[util.inspect.custom] = function () {
   return `"${this}"`;
@@ -36,6 +46,16 @@ String.prototype.succ = function () {
 String.prototype['++'] = function (that) {
   return this.concat(that);
 };
+
+String.prototype['=='] = function (that) {
+  if (typeof that !== 'string') {
+    return false;
+  }
+
+  return this.valueOf() === that.valueOf();
+};
+
+//
 
 Array.prototype.toString = function () {
   return `[${this.map(element => element.toString()).join(', ')}]`;

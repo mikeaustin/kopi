@@ -125,7 +125,7 @@ TupleExpression
   / ArrayExpression
 
   ArrayExpression
-    = "[" _ head:AddExpression tail:("," _ AddExpression)* _ "]" {
+    = "[" _ head:OperatorExpression tail:("," _ OperatorExpression)* _ "]" {
   	    return new ArrayExpression({
           elements: tail.reduce((elements, [, , element]) => [
             ...elements,
@@ -136,10 +136,21 @@ TupleExpression
     / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
         return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
       }
-    / AddExpression
+    / OperatorExpression
+
 //
 // Operators
 //
+
+OperatorExpression
+  = EqualityExpression
+
+EqualityExpression
+  = head:AddExpression tail:(_ ("==" / "!=") _ AddExpression)* {
+      return tail.reduce((left, [, op, , right]) => (
+        new OperatorExpression({ op, left, right })
+      ), head);
+    }
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
