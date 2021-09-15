@@ -12,6 +12,10 @@
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
   class ApplyExpression extends Node {
+    toString() {
+      return `'(${this.expr.name} ${this.args})`;
+    }
+
     apply(thisArg, [func, scope, visitors]) {
       return func[this.expr.name].apply(func, [
         visitors.visitNode(this.args, scope, visitors),
@@ -24,10 +28,19 @@
   class ArrayExpression extends Node { }
   class RangeExpression extends Node { }
 
-  class NumericLiteral extends Node { }
+  class NumericLiteral extends Node {
+    toString() {
+      return `${this.value}`;
+    }
+  }
+
   class StringLiteral extends Node { }
   class AstLiteral extends Node { }
   class Identifier extends Node {
+    toString() {
+      return `'${this.name}`;
+    }
+
     apply(thisArg, args) {
       return args[0][this.name].apply(args[0], []);
     }
