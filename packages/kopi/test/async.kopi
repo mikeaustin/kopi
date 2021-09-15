@@ -47,3 +47,28 @@ print $ (sleep 1) + (sleep 2)
 
 #   n + 1
 # }
+
+
+# ca = spawn () => {
+#   loop = () => {
+#     yield x => (print x), x * x
+#     loop ()
+#   }
+#   loop ()
+# }
+
+# cb = spawn () => {
+#   loop = (x) => {
+#     print x
+#     yield _ => send ca x
+#     sleep 1
+#     loop (x + 1)
+#   }
+#   loop (1)
+# }
+
+# print $ send cb ()
+# print $ send cb ()
+# print $ send cb ()
+
+print "done"

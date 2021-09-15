@@ -3,7 +3,6 @@ sort "julie" ++ "moronuki"
 xs | reduce 0 sum, x => sum + x
 
 
-
 loop (exit, a = 1) => {
   print "hello"
 
@@ -12,11 +11,6 @@ loop (exit, a = 1) => {
     n  => n + 1
   )
 }
-
-reduce return early
-
-
-equality
 
 
 match n (
@@ -39,7 +33,6 @@ grayscale = color => match color (
   RGB (r, g, b) => (r + g + b) / 3
   HSL (h, s, l) => l
 )
-
 
 
 [1 + 1, "a" ++ "b", even 1, x => x]
