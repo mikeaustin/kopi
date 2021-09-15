@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
-const { print, char, string, number, random, time, id } = require('./functions/core');
+const { print, char, string, number, random, time, id, even, max, _let, match, write, sleep, _fetch } = require('./functions/core');
 const { spawn, yield, send } = require('./functions/coroutines');
 
 let getScope = (input) => ({
@@ -16,9 +16,12 @@ let getScope = (input) => ({
   id,
   at: (index) => async array => await array[index],
   import: (args) => 0,
-  write: (val) => new Promise(resolve => process.stdout.write(val.toString(), () => resolve())),
-  sleep: (secs) => new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000)),
-  fetch: (url) => fetch(url).then(data => data.headers.get('content-type')),
+  write,
+  sleep,
+  fetch: _fetch,
+  spawn,
+  yield,
+  send,
   loop: async (fn, scope, visitors) => {
     const exit = () => { throw -1; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);
@@ -34,9 +37,6 @@ let getScope = (input) => ({
     }
     loop(value);
   },
-  spawn,
-  yield,
-  send,
   repeat: (fn, scope, visitors) => (
     function next(value) {
       if (value?.elements?.length === 0) {
@@ -64,19 +64,10 @@ let getScope = (input) => ({
     });
   },
   Vector: (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]),
-  even: (num) => num % 2 === 0,
-  max: (tuple) => Math.max(tuple.elements[0], tuple.elements[1]),
-  let: (fn, scope, visitors) => {
-    return fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
-  },
-  // do: (args, scope) => interpreter.visitNode(args, scope),
-  match: (value, scope, visitors) => (funcs) => {
-    for (func of funcs.elements) {
-      if (func.params.getMatches(value)) {
-        return func.apply(undefined, [value, scope, visitors]);
-      }
-    }
-  },
+  even,
+  max,
+  let: _let,
+  match,
 });
 
 module.exports = {
