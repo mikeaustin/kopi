@@ -8,20 +8,29 @@ const { spawn, yield, send } = require('./functions/coroutines');
 
 let getScope = (input) => ({
   print,
+  write,
+
   char,
   string,
   number,
+
   random,
   time,
   id,
-  at: (index) => async array => await array[index],
-  import: (args) => 0,
-  write,
+  even,
+  max,
+
+  let: _let,
+  match,
   sleep,
   fetch: _fetch,
+
   spawn,
   yield,
   send,
+
+  at: (index) => async array => await array[index],
+  import: (args) => 0,
   loop: async (fn, scope, visitors) => {
     const exit = () => { throw -1; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);
@@ -64,10 +73,6 @@ let getScope = (input) => ({
     });
   },
   Vector: (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]),
-  even,
-  max,
-  let: _let,
-  match,
 });
 
 module.exports = {

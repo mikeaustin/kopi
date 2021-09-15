@@ -21,13 +21,22 @@ const input = process.argv.length === 2 ? readline.createInterface({
 let scope = getScope(input);
 
 async function main() {
+  const parserLog = fs.createWriteStream('log/parser');
+
   if (process.argv.length > 2) {
     const input = await util.promisify(fs.readFile)(process.argv[2], 'utf8');
 
     try {
-      const astRootNode = parser.parse(input);
+      const ast = parser.parse(input);
 
-      const value = await interpreter.visitNode(astRootNode, scope);
+      const formattedAst = util.inspect(ast, {
+        compact: false,
+        depth: Infinity
+      });
+
+      parserLog.write(`${formattedAst}\n\n`);
+
+      const value = await interpreter.visitNode(ast, scope);
     } catch (error) {
       console.error(error.name === 'SyntaxError' ? error.message : error);
     }
@@ -39,9 +48,16 @@ async function main() {
 
   for await (const line of input) {
     try {
-      const astRootNode = parser.parse(line);
+      const ast = parser.parse(line);
 
-      for (const astNode of astRootNode.statements) {
+      for (const astNode of ast.statements) {
+        const formattedAst = util.inspect(astNode, {
+          compact: false,
+          depth: Infinity
+        });
+
+        parserLog.write(`${formattedAst}\n\n`);
+
         const value = await interpreter.visitNode(astNode, scope);
 
         if (value !== undefined) {
