@@ -1,0 +1,10 @@
+import "test/basics.kopi"
+import "test/database.kopi"
+import "test/html.kopi"
+import "test/async.kopi"
+
+f, g = import "test/module.kopi"
+
+# (f: f, g: g) = import "test/module.kopi"
+
+print $ f ()

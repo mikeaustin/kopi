@@ -6,6 +6,8 @@ const { KopiTuple, KopiVector } = require('./classes');
 const { print, char, string, number, random, time, id, even, max, _let, match, write, sleep, _fetch } = require('./functions/core');
 const { spawn, yield, send } = require('./functions/coroutines');
 
+const { compile } = require('./compiler');
+
 let getScope = (input) => ({
   print,
   write,
@@ -30,7 +32,9 @@ let getScope = (input) => ({
   send,
 
   at: (index) => async array => await array[index],
-  import: (args) => 0,
+  import: (filename, scope) => compile(filename, scope),
+  export: (values) => values,
+  exit: (code) => process.exit(code),
   loop: async (fn, scope, visitors) => {
     const exit = () => { throw -1; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);
