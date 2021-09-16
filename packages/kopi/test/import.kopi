@@ -3,24 +3,15 @@ import "test/database.kopi"
 import "test/html.kopi"
 import "test/async.kopi"
 
-f, g = import "test/module.kopi"
-
-print $ f 5
-
-
 coroutine = (x = 1) => {
-  print "import 'test/module.kopi'"
-
   f, g = import "test/module.kopi"
 
   loop = (x) => {
-    cmd = yield cmd => match cmd (
-      "eval" => f x
-      "x"    => 0
-    )
+    cmd, _ = yield cmd => (cmd, x)
+
     match cmd (
       "reload" => coroutine (x)
-      _        => loop (x + 1)
+      "eval"   => loop (x + 1)
     )
   }
   loop x
@@ -32,3 +23,5 @@ print $ send co "eval"
 send co "reload"
 print $ send co "eval"
 print $ send co "eval"
+
+print $ "done"
