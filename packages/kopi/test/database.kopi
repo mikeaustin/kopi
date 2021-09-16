@@ -5,31 +5,26 @@ print ""
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
 select = fns => yield (x => match x fns)
 
-# database = () => {
-#   loop = (value) => {
-#     value = yield command => match command (
-#       "get"           => value
-#       "set", newValue => newValue
-#     )
-#     loop (value)
-#   }
-#   loop (0)
-# }
+database = () => {
+  loop = (value) => {
+    value = yield command => match command (
+      "get"             => value
+      "set", newValue   => newValue
+      "update", updater => updater value
+    )
+    loop (value)
+  }
+  loop (0)
+}
 
-# database = () => {
-#   loop = (value) => loop $ select (
-#     "get"           => value
-#     "set", newValue => newValue
-#   )
-#   loop (0)
-# }
-
-# database = () => {
-#   let loop (value = 0) => loop $ select (
-#     "get"           => value
-#     "set", newValue => newValue
-#   )
-# }
+database = () => {
+  loop = (value) => loop $ select (
+    "get"             => value
+    "set", newValue   => newValue
+    "update", updater => updater value
+  )
+  loop (0)
+}
 
 database = () => {
   let $ fix loop => (value = 0) => loop $ select (

@@ -9,7 +9,14 @@ let nextCoroutineId = 0;
 class Deferred {
   constructor() {
     const promise = new Promise((resolve, reject) => {
-      this.resolve = resolve;
+      const timeoutId = setTimeout(() => reject, Math.pow(2, 32) / 2 - 1);
+
+      this.resolve = (value) => {
+        clearTimeout(timeoutId);
+
+        resolve(value);
+      };
+
       this.reject = reject;
     });
 
@@ -28,16 +35,19 @@ class Deferred {
 //   console.log(await deferred);
 // })();
 
-coroutineMap = {};
+let coroutinePromises = {};
+let coroutinePromises2 = {};
 
 const spawn = (fn, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
 
-  coroutineMap[coroutineId] = new Deferred();
+  coroutinePromises[coroutineId] = new Deferred();
+  coroutinePromises2[coroutineId] = new Deferred();
 
   coroutineEventEmitter.on(coroutineId, (event) => {
-    console.log('1');
-    event.promise = coroutineMap[coroutineId];
+    event.promise = coroutinePromises[coroutineId];
+
+    coroutinePromises2[coroutineId].resolve(event.data);
   });
 
   fn.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
@@ -45,28 +55,25 @@ const spawn = (fn, scope, visitors) => {
   return coroutineId;
 };
 
-const yield = (fn, scope, visitors) => {
-  const value = fn.apply(undefined, [event.data, scope, visitors]);
+const yield = async (fn, scope, visitors) => {
+  const coroutineId = scope._coroutineId;
 
-  coroutineMap[scope._coroutineId].resolve(value);
+  const data = await coroutinePromises2[coroutineId];
+  coroutinePromises2[coroutineId] = new Deferred();
 
-  return value;
-  // return new Promise(resolve => {
-  //   coroutineEventEmitter.once(scope._coroutineId, (event) => {
-  //     event.value = fn.apply(undefined, [event.data, scope, visitors]);
+  const value = fn.apply(undefined, [data, scope, visitors]);
 
-  //     resolve(event.value);
-  //   });
-  // });
+  coroutinePromises[coroutineId].resolve(value);
 };
 
-const send = (coroutineId) => (data) => {
-  return new Promise(resolve => setImmediate(async () => {
-    const event = { data };
-    coroutineEventEmitter.emit(coroutineId, event);
+const send = (coroutineId) => async (data) => {
+  const event = { data };
+  coroutineEventEmitter.emit(coroutineId, event);
 
-    resolve(await event.promise);
-  }));
+  const value = await event.promise;
+  coroutinePromises[coroutineId] = new Deferred();
+
+  return value;
 };
 
 module.exports = {

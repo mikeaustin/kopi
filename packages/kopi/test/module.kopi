@@ -2,7 +2,7 @@ print ""
 print "== module ========================================"
 print ""
 
-f = () => "hi"
+f = (x) => x
 g = () => "bye"
 
 export (

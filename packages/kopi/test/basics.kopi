@@ -76,15 +76,15 @@ print (
 )
 
 
-loop = (n = 1) => {
-  sleep 1
-  print n
-  match n (
-    3 => ()
-    n => loop (n + 1)
-  )
-}
+# loop = (n = 1) => {
+#   sleep 1
+#   print n
+#   match n (
+#     3 => ()
+#     n => loop (n + 1)
+#   )
+# }
 
-spawn loop
+# spawn loop
 
-print "done"
+# print "done"

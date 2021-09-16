@@ -5,26 +5,30 @@ import "test/async.kopi"
 
 f, g = import "test/module.kopi"
 
-# (f: f, g: g) = import "test/module.kopi"
-
-print $ f ()
+print $ f 5
 
 
-coroutine = () => {
+coroutine = (x = 1) => {
+  print "import 'test/module.kopi'"
+
   f, g = import "test/module.kopi"
 
-  print $ f ()
-
   loop = (x) => {
-    yield cmd => match cmd (
-      "reload" => coroutine ()
-      "eval"   => f x
+    cmd = yield cmd => match cmd (
+      "eval" => f x
+      "x"    => 0
     )
-    loop (x + 1)
+    match cmd (
+      "reload" => coroutine (x)
+      _        => loop (x + 1)
+    )
   }
-  loop 1
+  loop x
 }
 
 co = spawn coroutine
 
-# print $ send co "reload"
+print $ send co "eval"
+send co "reload"
+print $ send co "eval"
+print $ send co "eval"
