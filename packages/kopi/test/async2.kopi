@@ -1,0 +1,6 @@
+generator = spawn () => {
+  sleep 0
+  yield _ => "hi"
+}
+
+print $ send generator ()
