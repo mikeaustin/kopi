@@ -6,6 +6,28 @@ const coroutineEventEmitter = new EventEmitter();
 
 let nextCoroutineId = 0;
 
+class Deferred {
+  constructor() {
+    const promise = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+
+    promise.resolve = this.resolve;
+    promise.reject = this.reject;
+
+    return promise;
+  }
+}
+
+(async () => {
+  const deferred = new Deferred();
+
+  deferred.resolve(15);
+
+  console.log(await deferred);
+})();
+
 const spawn = (fn, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
 
