@@ -76,6 +76,9 @@ print (
 )
 
 
+print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
+
+
 x = loop exit => (x = 1) => {
   print $ x
 

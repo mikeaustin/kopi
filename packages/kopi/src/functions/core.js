@@ -1,30 +1,50 @@
 const fetch = require('node-fetch');
 
-const { KopiTuple, KopiVector } = require('../classes');
+const { KopiTuple } = require('../classes');
 
-const print = (val) => console.log(val.toString());
+const coroutines = require('./coroutines');
 
-const char = (num) => String.fromCodePoint(num);
+const kopi_print = (val) => {
+  console.log(val.toString());
+};
 
-const string = (num) => String(num);
+const kopi_char = (num) => {
+  String.fromCodePoint(num);
+};
 
-const number = ({ value }) => Number(value);
+const kopi_string = (num) => {
+  return String(num);
+};
 
-const random = () => Math.random();
+const kopi_number = ({ value }) => {
+  return Number(value);
+};
 
-const time = () => new Date().toLocaleTimeString();
+const kopi_random = () => {
+  return Math.random();
+};
 
-const id = (x) => x;
+const kopi_time = () => {
+  return new Date().toLocaleTimeString();
+};
 
-const even = (num) => num % 2 === 0;
+const kopi_ident = (x) => {
+  return x;
+};
 
-const max = (tuple) => Math.max(tuple.elements[0], tuple.elements[1]);
+const kopi_even = (num) => {
+  return num % 2 === 0;
+};
 
-const _let = (fn, scope, visitors) => {
+const kopi_max = (tuple) => {
+  return Math.max(tuple.elements[0], tuple.elements[1]);
+};
+
+const kopi_let = (fn, scope, visitors) => {
   return fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
 };
 
-const match = (value, scope, visitors) => (funcs) => {
+const kopi_match = (value, scope, visitors) => (funcs) => {
   for (func of funcs.elements) {
     if (func.params.getMatches(value)) {
       return func.apply(undefined, [value, scope, visitors]);
@@ -32,25 +52,34 @@ const match = (value, scope, visitors) => (funcs) => {
   }
 };
 
-const write = (val) => new Promise(resolve => process.stdout.write(val.toString(), () => resolve()));
+const kopi_write = (val) => {
+  return new Promise(resolve => process.stdout.write(val.toString(), () => resolve()));
+};
 
-const sleep = (secs) => new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000));
+const kopi_sleep = (secs) => {
+  return new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000));
+};
 
-const _fetch = (url) => fetch(url).then(data => data.headers.get('content-type'));
+const kopi_fetch = (url) => {
+  return fetch(url).then(data => data.headers.get('content-type'));
+};
 
 module.exports = {
-  print,
-  char,
-  string,
-  number,
-  random,
-  time,
-  id,
-  even,
-  max,
-  _let,
-  match,
-  write,
-  sleep,
-  _fetch,
+  kopi_print,
+  kopi_char,
+  kopi_string,
+  kopi_number,
+  kopi_random,
+  kopi_time,
+  kopi_ident,
+  kopi_even,
+  kopi_max,
+  kopi_let,
+  kopi_match,
+  kopi_write,
+  kopi_sleep,
+  kopi_fetch,
+  kopi_spawn: coroutines.kopi_spawn,
+  kopi_yield: coroutines.kopi_yield,
+  kopi_send: coroutines.kopi_send,
 };

@@ -1,6 +1,6 @@
 const { EventEmitter } = require('stream');
 
-const { KopiTuple, KopiVector } = require('../classes');
+const { KopiTuple } = require('../classes');
 
 const coroutineEventEmitter = new EventEmitter();
 
@@ -27,18 +27,10 @@ class Deferred {
   }
 }
 
-// (async () => {
-//   const deferred = new Deferred();
-
-//   deferred.resolve(15);
-
-//   console.log(await deferred);
-// })();
-
 let coroutinePromises = {};
 let coroutinePromises2 = {};
 
-const spawn = (fn, scope, visitors) => {
+const kopi_spawn = (fn, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
 
   coroutinePromises[coroutineId] = new Deferred();
@@ -55,7 +47,7 @@ const spawn = (fn, scope, visitors) => {
   return coroutineId;
 };
 
-const yield = async (fn, scope, visitors) => {
+const kopi_yield = async (fn, scope, visitors) => {
   const coroutineId = scope._coroutineId;
 
   const data = await coroutinePromises2[coroutineId];
@@ -68,7 +60,7 @@ const yield = async (fn, scope, visitors) => {
   return value;
 };
 
-const send = (coroutineId) => async (data) => {
+const kopi_send = (coroutineId) => async (data) => {
   return new Promise(resolve => setImmediate(async () => {
     const event = { data };
     coroutineEventEmitter.emit(coroutineId, event);
@@ -81,7 +73,7 @@ const send = (coroutineId) => async (data) => {
 };
 
 module.exports = {
-  spawn,
-  yield,
-  send,
+  kopi_spawn,
+  kopi_yield,
+  kopi_send,
 };

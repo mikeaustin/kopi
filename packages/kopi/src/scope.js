@@ -3,33 +3,32 @@ const fetch = require('node-fetch');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
-const { print, char, string, number, random, time, id, even, max, _let, match, write, sleep, _fetch } = require('./functions/core');
-const { spawn, yield, send } = require('./functions/coroutines');
+const core = require('./functions/core');
 
 const { compile } = require('./compiler');
 
 let getScope = (input) => ({
-  print,
-  write,
+  print: core.kopi_print,
+  write: core.kopi_write,
 
-  char,
-  string,
-  number,
+  char: core.kopi_char,
+  string: core.kopi_string,
+  number: core.kopi_number,
 
-  random,
-  time,
-  id,
-  even,
-  max,
+  random: core.kopi_random,
+  time: core.kopi_time,
+  ident: core.kopi_ident,
+  even: core.kopi_even,
+  max: core.kopi_max,
 
-  let: _let,
-  match,
-  sleep,
-  fetch: _fetch,
+  let: core.kopi_let,
+  match: core.kopi_match,
+  sleep: core.kopi_sleep,
+  fetch: core.kopi_fetch,
 
-  spawn,
-  yield,
-  send,
+  spawn: core.kopi_spawn,
+  yield: core.kopi_yield,
+  send: core.kopi_send,
 
   at: (index) => async array => await array[index],
   import: (filename, scope) => compile(filename, scope),
