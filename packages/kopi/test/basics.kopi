@@ -7,6 +7,8 @@ print $ max 1, 2
 
 print $ ("first", "second").1
 
+print $ (date ()), (time ())
+
 
 print (
   (a, b => a + b) 2, 3

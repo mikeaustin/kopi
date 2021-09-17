@@ -1,5 +1,6 @@
 const util = require('util');
 const fs = require('fs');
+const http = require('http');
 const readline = require('readline');
 const fetch = require('node-fetch');
 
@@ -8,6 +9,7 @@ const { KopiTuple, KopiVector } = require('./classes');
 const core = require('./functions/core');
 
 const { compile } = require('./compiler');
+const { Server } = require('http');
 
 let getScope = (input) => ({
   print: core.kopi_print,
@@ -37,7 +39,17 @@ let getScope = (input) => ({
 
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
+  yield2: core.kopi_yield2,
   send: core.kopi_send,
+
+  listen: (coid) => http.createServer(async (request, response) => {
+    const value = await core.kopi_send(coid)(request);
+
+    response.writeHead(200);
+    response.end(value);
+  }).listen({
+    port: 8080,
+  }),
 
   at: (index) => async array => await array[index],
   loop: async (fn, scope, visitors) => {

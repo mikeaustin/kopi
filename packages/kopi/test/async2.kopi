@@ -13,7 +13,7 @@
 generator = spawn () => {
   loop = (x) => {
     sleep 1
-    yield _ => x
+    yield2 _ => x
     loop (x + 1)
   }
   loop (1)

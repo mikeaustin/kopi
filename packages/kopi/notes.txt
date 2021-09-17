@@ -47,25 +47,3 @@ grayscale = color => match color (
   1 + 1,
   1..5
 ]
-
-
-
-spawn adds a new listener
-  if data arives, store it and block (return promise)
-  when yield is called, get data and resolve promise
-
-put a promise in coroutineBufferMap?
-
-
-
-
-const coroutineBufferMap = {};
-
-class Deferred extends Promise {
-
-}
-
-  coroutineEventEmitter.on(coroutineId, (event) => {
-    coroutineBufferMap[coroutineId] = [event.data,];
-  });
-  

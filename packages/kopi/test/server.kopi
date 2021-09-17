@@ -1,0 +1,20 @@
+server = spawn () => {
+  loop = (x = 1) => {
+    request, response = yield2 request => match request.url (
+      "/" => "Hello, world! " ++ (string x)
+       _  => (string 404)
+    )
+
+    match request.url (
+      "/" => loop (x + 1)
+       _  => loop x
+    )
+  }
+
+  loop 1
+}
+
+listen server
+
+# print $ send server 1
+# print $ send server 2

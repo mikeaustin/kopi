@@ -3,45 +3,41 @@ print "== database ======================================"
 print ""
 
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
-select = fns => yield (x => match x fns)
+select = fns => yield2 (x => match x fns)
 
 database = () => {
   loop = (value) => {
-    value = yield command => match command (
+    _, value = yield2 command => match command (
       "get"             => value
       "set", newValue   => newValue
       "update", updater => updater value
     )
-    loop (value)
+    loop value
   }
-  loop (0)
+  loop 0
 }
 
 database = () => {
-  loop = (value) => loop $ select (
-    "get"             => value
-    "set", newValue   => newValue
-    "update", updater => updater value
-  )
-  loop (0)
-}
-
-database = () => {
-  let $ fix loop => (value = 0) => loop $ select (
-    "get"             => value
-    "set", newValue   => newValue
-    "update", updater => updater value
-  )
-}
-
-database = () => {
-  let $ fix loop => (value = 0) => loop (
-    select (
+  loop = (value) => {
+    _, result = select (
       "get"             => value
       "set", newValue   => newValue
       "update", updater => updater value
     )
-  )
+    loop result
+  }
+  loop 0
+}
+
+database = () => {
+  let $ fix loop => (value = 0) => {
+    _, result = select (
+      "get"             => value
+      "set", newValue   => newValue
+      "update", updater => updater value
+    )
+    loop result
+  }
 }
 
 db = spawn database
