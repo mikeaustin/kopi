@@ -20,7 +20,7 @@ select = fns => yield (x => match x fns)
 # Spawns a coroutine that yields squares
 coroutine = spawn () => {
   loop = () => {
-    value = select (
+    select (
       0 => 1
       n => n * n
     )

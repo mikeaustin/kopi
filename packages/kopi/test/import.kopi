@@ -7,11 +7,11 @@ coroutine = (x = 1) => {
   f, g = import "test/module.kopi"
 
   loop = (x) => {
-    cmd, _ = yield cmd => (cmd, x)
+    cmd, _ = yield cmd => cmd, x
 
     match cmd (
       "reload" => coroutine (x)
-      "eval"   => loop (x + 1)
+      "next"   => loop (f x)
     )
   }
   loop x
@@ -19,9 +19,6 @@ coroutine = (x = 1) => {
 
 co = spawn coroutine
 
-print $ send co "eval"
+print $ send co "next"
 send co "reload"
-print $ send co "eval"
-print $ send co "eval"
-
-print $ "done"
+print $ send co "next"
