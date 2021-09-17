@@ -44,6 +44,10 @@ String.prototype.succ = function () {
 };
 
 String.prototype['++'] = function (that) {
+  if (typeof that !== 'string') {
+    throw new Error(`Can't concat string with ${that.constructor.name}`);
+  }
+
   return this.concat(that);
 };
 
@@ -63,6 +67,14 @@ Array.prototype.toString = function () {
 
 Array.prototype[util.inspect.custom] = function () {
   return `[${this.map(element => inspect(element)).join(', ')}]`;
+};
+
+Array.prototype['++'] = function (that) {
+  if (!Array.isArray(that)) {
+    throw new Error(`Can't concat array with ${that.constructor.name}`);
+  }
+
+  return this.concat(that);
 };
 
 Array.prototype.xmap = function (args, scope, visitors) {

@@ -70,6 +70,8 @@ value, next = next ()
 print value
 
 
+print $ read "notes.txt" | length
+
 print (
   fetch "https://google.com"
   fetch "https://google.jp"
@@ -77,6 +79,8 @@ print (
 
 
 print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
+
+sleep 1 | toFixed 3
 
 
 x = loop exit => (x = 1) => {

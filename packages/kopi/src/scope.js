@@ -1,3 +1,5 @@
+const util = require('util');
+const fs = require('fs');
 const readline = require('readline');
 const fetch = require('node-fetch');
 
@@ -15,25 +17,29 @@ let getScope = (input) => ({
   string: core.kopi_string,
   number: core.kopi_number,
 
-  random: core.kopi_random,
-  time: core.kopi_time,
   ident: core.kopi_ident,
+
+  random: core.kopi_random,
+  date: core.kopi_date,
+  time: core.kopi_time,
+  read: (filename) => util.promisify(fs.readFile)(filename, 'utf8'),
+
   even: core.kopi_even,
   max: core.kopi_max,
 
+  import: (filename, scope) => compile(filename, scope),
+  export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
   sleep: core.kopi_sleep,
   fetch: core.kopi_fetch,
+  exit: (code) => process.exit(code),
 
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
   send: core.kopi_send,
 
   at: (index) => async array => await array[index],
-  import: (filename, scope) => compile(filename, scope),
-  export: (values) => values,
-  exit: (code) => process.exit(code),
   loop: async (fn, scope, visitors) => {
     const exit = () => { done = true; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);

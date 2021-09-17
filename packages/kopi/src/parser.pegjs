@@ -173,7 +173,7 @@ AddExpression
     }
 
 MultiplyExpression
-  = head:RangeExpression tail:(_ ("*" / "/") _ RangeExpression)+ {
+  = head:RangeExpression tail:(_ ("*" / "/" / "%") _ RangeExpression)+ {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);

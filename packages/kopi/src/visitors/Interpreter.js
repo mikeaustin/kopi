@@ -116,7 +116,9 @@ class Interpreter extends Visitors {
         case '-': return evaluatedLeft - evaluatedRight;
         case '*': return evaluatedLeft * evaluatedRight;
         case '/': return evaluatedLeft / evaluatedRight;
+        case '%': return evaluatedLeft % evaluatedRight;
         case '==': return evaluatedLeft === evaluatedRight;
+        case '!=': return evaluatedLeft !== evaluatedRight;
       }
     }
 

@@ -24,6 +24,10 @@ const kopi_random = () => {
   return Math.random();
 };
 
+const kopi_date = () => {
+  return new Date().toLocaleDateString();
+};
+
 const kopi_time = () => {
   return new Date().toLocaleTimeString();
 };
@@ -70,6 +74,7 @@ module.exports = {
   kopi_string,
   kopi_number,
   kopi_random,
+  kopi_date,
   kopi_time,
   kopi_ident,
   kopi_even,
