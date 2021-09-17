@@ -39,7 +39,6 @@ let getScope = (input) => ({
 
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
-  yield2: core.kopi_yield2,
   send: core.kopi_send,
 
   listen: (coid) => http.createServer(async (request, response) => {

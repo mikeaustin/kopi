@@ -57,19 +57,6 @@ const kopi_yield = async (fn, scope, visitors) => {
 
   coroutinePromises[coroutineId].resolve(value);
 
-  return value;
-};
-
-const kopi_yield2 = async (fn, scope, visitors) => {
-  const coroutineId = scope._coroutineId;
-
-  const data = await coroutinePromises2[coroutineId];
-  coroutinePromises2[coroutineId] = new Deferred();
-
-  const value = fn.apply(undefined, [data, scope, visitors]);
-
-  coroutinePromises[coroutineId].resolve(value);
-
   return new KopiTuple([data, value]);
 };
 
@@ -88,6 +75,5 @@ const kopi_send = (coroutineId) => async (data) => {
 module.exports = {
   kopi_spawn,
   kopi_yield,
-  kopi_yield2,
   kopi_send,
 };

@@ -86,6 +86,5 @@ module.exports = {
   kopi_fetch,
   kopi_spawn: coroutines.kopi_spawn,
   kopi_yield: coroutines.kopi_yield,
-  kopi_yield2: coroutines.kopi_yield2,
   kopi_send: coroutines.kopi_send,
 };

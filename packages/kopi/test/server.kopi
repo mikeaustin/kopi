@@ -1,7 +1,7 @@
 server = spawn () => {
   loop = (x = 1) => {
-    request, response = yield2 request => match request.url (
-      "/" => "Hello, world! " ++ (string x)
+    request, _ = yield request => match request.url (
+      "/" => "Hello, world!" ++ " " ++ (string x)
        _  => (string 404)
     )
 

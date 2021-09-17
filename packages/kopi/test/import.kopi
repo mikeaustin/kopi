@@ -7,9 +7,9 @@ coroutine = (x = 1) => {
   f, g = import "test/module.kopi"
 
   loop = (x) => {
-    cmd, _ = yield2 cmd => x
+    command, _ = yield command => x
 
-    match cmd (
+    match command (
       "reload" => coroutine (x)
       "next"   => loop (f x)
     )

@@ -3,11 +3,11 @@ print "== database ======================================"
 print ""
 
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
-select = fns => yield2 (x => match x fns)
+select = fns => yield (x => match x fns)
 
 database = () => {
   loop = (value) => {
-    _, value = yield2 command => match command (
+    _, value = yield command => match command (
       "get"             => value
       "set", newValue   => newValue
       "update", updater => updater value
