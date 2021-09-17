@@ -76,15 +76,13 @@ print (
 )
 
 
-# loop = (n = 1) => {
-#   sleep 1
-#   print n
-#   match n (
-#     3 => ()
-#     n => loop (n + 1)
-#   )
-# }
+x = loop exit => (x = 1) => {
+  print $ x
 
-# spawn loop
+  sleep 1
 
-# print "done"
+  match x (
+    3 => exit ()
+    n => n + 1
+  )
+}

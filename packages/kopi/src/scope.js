@@ -36,19 +36,27 @@ let getScope = (input) => ({
   export: (values) => values,
   exit: (code) => process.exit(code),
   loop: async (fn, scope, visitors) => {
-    const exit = () => { throw -1; };
+    const exit = () => { done = true; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);
 
+    let done = false;
     let value = KopiTuple.empty;
 
-    function loop(value) {
-      setImmediate(async () => {
-        value = await func.apply(undefined, [value, scope, visitors]);
-
-        loop(value);
-      });
+    while (!done) {
+      value = await func.apply(undefined, [value, scope, visitors]);
     }
-    loop(value);
+
+    return value;
+
+    // function loop(value) {
+    //   setImmediate(async () => {
+    //     value = await func.apply(undefined, [value, scope, visitors]);
+
+    //     loop(value);
+    //   });
+    //   loop(value);
+    // }
+    // loop(value);
   },
   repeat: (fn, scope, visitors) => (
     function next(value) {
