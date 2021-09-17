@@ -106,6 +106,12 @@ class Interpreter extends Visitors {
     return new KopiRange(this.visitNode(from, scope), this.visitNode(to, scope));
   }
 
+  async MemberExpression({ expr, member }, scope) {
+    const evaluatedExpr = await this.visitNode(expr, scope);
+
+    return evaluatedExpr[member];
+  }
+
   async OperatorExpression({ op, left, right }, scope) {
     const evaluatedLeft = await this.visitNode(left, scope);
     const evaluatedRight = await this.visitNode(right, scope);

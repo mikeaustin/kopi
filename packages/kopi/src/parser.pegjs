@@ -27,6 +27,7 @@
   class TupleExpression extends Node { }
   class ArrayExpression extends Node { }
   class RangeExpression extends Node { }
+  class MemberExpression extends Node { }
 
   class NumericLiteral extends Node {
     toString() {
@@ -173,18 +174,24 @@ AddExpression
     }
 
 MultiplyExpression
-  = head:RangeExpression tail:(_ ("*" / "/" / "%") _ RangeExpression)+ {
+  = head:RangeExpression tail:(_ ("*" / "/" / "%") _ RangeExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
-  / RangeExpression
 
 RangeExpression
-  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+  = from:MemberExpression _ ".." _ to:MemberExpression {
       return new RangeExpression({ from, to });
     }
-  / PrimaryExpression
+  / MemberExpression
+
+MemberExpression
+  = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
+      return tail.reduce((expr, [, ident]) => (
+        new MemberExpression({ expr, member: ident?.name ?? ident.value })
+      ), head)
+    }
 
 PrimaryExpression
   = _ "(" _ expr:Expression _ ")" { return expr; }

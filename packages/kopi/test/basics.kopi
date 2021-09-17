@@ -5,6 +5,9 @@ print ""
 
 print $ max 1, 2
 
+print $ ("first", "second").1
+
+
 print (
   (a, b => a + b) 2, 3
   2 * (3 + 4) + 1
@@ -84,10 +87,8 @@ sleep 1 | toFixed 3
 
 
 x = loop exit => (x = 1) => {
-  print $ x
-
+  print x
   sleep 1
-
   match x (
     3 => exit ()
     n => n + 1

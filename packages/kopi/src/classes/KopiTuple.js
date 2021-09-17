@@ -21,6 +21,8 @@ class KopiTuple {
       return KopiTuple.empty;
     }
 
+    elements.forEach((element, index) => this[index] = element);
+
     this.elements = elements;
   }
 

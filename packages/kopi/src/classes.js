@@ -69,12 +69,12 @@ Array.prototype[util.inspect.custom] = function () {
   return `[${this.map(element => inspect(element)).join(', ')}]`;
 };
 
-Array.prototype['++'] = function (that) {
-  if (!Array.isArray(that)) {
-    throw new Error(`Can't concat array with ${that.constructor.name}`);
-  }
+Array.prototype.toArray = function () {
+  return this;
+};
 
-  return this.concat(that);
+Array.prototype['++'] = function (that) {
+  return this.concat(that.toArray());
 };
 
 Array.prototype.xmap = function (args, scope, visitors) {

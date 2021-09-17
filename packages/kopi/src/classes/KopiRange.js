@@ -16,6 +16,14 @@ class KopiRange {
     }
   }
 
+  toArray() {
+    return Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from);
+  }
+
+  ['++'](that) {
+    return this.toArray().concat(that.toArray());
+  }
+
   async map(args, scope, visitors) {
     const values = [];
 
