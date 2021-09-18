@@ -96,3 +96,8 @@ x = loop exit => (x = 1) => {
     n => n + 1
   )
 }
+
+
+print $ match 5 (
+  x => x * x
+)
