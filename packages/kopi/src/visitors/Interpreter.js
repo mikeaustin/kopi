@@ -99,7 +99,8 @@ class Interpreter extends Visitors {
   }
 
   ArrayExpression({ elements }, scope) {
-    return Promise.all(elements.map(element => this.visitNode(element, scope)));
+    // return Promise.all(elements.map(element => this.visitNode(element, scope)));
+    return elements.map(element => this.visitNode(element, scope));
   }
 
   RangeExpression({ from, to }, scope) {

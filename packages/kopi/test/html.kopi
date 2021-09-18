@@ -4,8 +4,8 @@ print ""
 
 items = 1..3
 
-ul = props => children => "<ul>" ++ (children | join "") ++ "</ul>"
-li = props => children => "<li>" ++ (children | xmap 'toString | join "") ++ "</li>"
+ul = props => children => "<ul>" ++ (children | xjoin "") ++ "</ul>"
+li = props => children => "<li>" ++ (children | xmap 'toString | xjoin "") ++ "</li>"
 
 
 html = [

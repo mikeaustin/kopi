@@ -61,8 +61,10 @@ String.prototype['=='] = function (that) {
 
 //
 
-Array.prototype.toString = function () {
-  return `[${this.map(element => element.toString()).join(', ')}]`;
+Array.prototype.toString = async function () {
+  const elements = await Promise.all(this.map(async element => (await element).toString()));
+
+  return `[${elements.join(', ')}]`;
 };
 
 Array.prototype[util.inspect.custom] = function () {
@@ -77,10 +79,16 @@ Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
 
+Array.prototype.xjoin = async function (args) {
+  const elements = await Promise.all(this.map(async element => await element));
+
+  return elements.join(args);
+};
+
 Array.prototype.xmap = function (args, scope, visitors) {
-  return Promise.all(this.map((element) => (
+  return this.map((element) => (
     args.apply(undefined, [element, scope, visitors])
-  )));
+  ));
 };
 
 //

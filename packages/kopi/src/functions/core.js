@@ -4,8 +4,8 @@ const { KopiTuple } = require('../classes');
 
 const coroutines = require('./coroutines');
 
-const kopi_print = (val) => {
-  console.log(val.toString());
+const kopi_print = async (val) => {
+  console.log(await val.toString());
 };
 
 const kopi_char = (num) => {
@@ -71,7 +71,8 @@ const kopi_sleep = (secs) => {
 };
 
 const kopi_fetch = (url) => {
-  return fetch(url).then(data => data.headers.get('content-type'));
+  console.log('url', url);
+  return fetch(url).then(data => String(data.headers.get('content-type')));
 };
 
 module.exports = {

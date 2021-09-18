@@ -26,12 +26,20 @@ class KopiTuple {
     this.elements = elements;
   }
 
-  toString() {
+  // Array.prototype.toString = async function () {
+  //   const elements = await Promise.all(this.map(async element => (await element).toString()));
+
+  //   return `[${elements.join(', ')}]`;
+  // };
+
+  async toString() {
     if (this.elements.length === 0) {
       return '()';
     }
 
-    return `(${this.elements.map(element => element.toString()).join(', ')})`;
+    const elements = await Promise.all(this.elements.map(async element => (await element).toString()));
+
+    return `(${elements.join(', ')})`;
   }
 
   [util.inspect.custom]() {

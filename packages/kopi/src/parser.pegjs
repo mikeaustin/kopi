@@ -16,9 +16,9 @@
       return `'(${this.expr.name} ${this.args})`;
     }
 
-    apply(thisArg, [func, scope, visitors]) {
+    async apply(thisArg, [func, scope, visitors]) {
       return func[this.expr.name].apply(func, [
-        visitors.visitNode(this.args, scope, visitors),
+        await visitors.visitNode(this.args, scope, visitors),
         scope,
         visitors,
       ]);
@@ -42,8 +42,10 @@
       return `'${this.name}`;
     }
 
-    apply(thisArg, args) {
-      return args[0][this.name].apply(args[0], []);
+    async apply(thisArg, [value]) {
+      const evaluatedValue = await value;
+
+      return evaluatedValue[this.name].apply(evaluatedValue, []);
     }
   }
 

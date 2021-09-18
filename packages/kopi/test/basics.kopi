@@ -77,10 +77,12 @@ print value
 
 print $ read "notes.txt" | length
 
-print (
-  fetch "https://google.com"
-  fetch "https://google.jp"
-)
+# print $ fetch "https://google.com"
+
+# print (
+#   fetch "https://google.com"
+#   fetch "https://google.jp"
+# )
 
 
 print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
