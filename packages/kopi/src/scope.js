@@ -12,6 +12,8 @@ const { compile } = require('./compiler');
 const { Server } = require('http');
 
 let getScope = (input) => ({
+  true: true,
+  false: false,
   print: core.kopi_print,
   write: core.kopi_write,
 
