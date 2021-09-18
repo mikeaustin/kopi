@@ -11,7 +11,16 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+
+Boolean.prototype.toStringAsync = function () {
+  return this.toString();
+};
+
 //
+
+Number.prototype.toStringAsync = function () {
+  return this.toString();
+};
 
 Number.prototype.succ = function () {
   return this + 1;
@@ -34,6 +43,10 @@ Number.prototype['=='] = function (that) {
 };
 
 //
+
+String.prototype.toStringAsync = function () {
+  return this.toString();
+};
 
 String.prototype[util.inspect.custom] = function () {
   return `"${this}"`;
@@ -61,8 +74,8 @@ String.prototype['=='] = function (that) {
 
 //
 
-Array.prototype.toString = async function () {
-  const elements = await Promise.all(this.map(async element => (await element).toString()));
+Array.prototype.toStringAsync = async function () {
+  const elements = await Promise.all(this.map(async element => (await element).toStringAsync()));
 
   return `[${elements.join(', ')}]`;
 };

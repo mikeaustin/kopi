@@ -5,7 +5,7 @@ const { KopiTuple } = require('../classes');
 const coroutines = require('./coroutines');
 
 const kopi_print = async (val) => {
-  console.log(await val.toString());
+  console.log(await val.toStringAsync());
 };
 
 const kopi_char = (num) => {
@@ -63,7 +63,7 @@ const kopi_match = (value, scope, visitors) => (funcs) => {
 };
 
 const kopi_write = (val) => {
-  return new Promise(resolve => process.stdout.write(val.toString(), () => resolve()));
+  return new Promise(resolve => process.stdout.write(val.toStringAsync(), () => resolve()));
 };
 
 const kopi_sleep = (secs) => {
