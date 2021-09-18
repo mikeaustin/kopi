@@ -24,11 +24,11 @@ class KopiRange {
     return this.toArray().concat(that.toArray());
   }
 
-  async map(args, scope, visitors) {
+  map(args, scope, visitors) {
     const values = [];
 
     for (let index = this.from; index <= this.to; index++) {
-      values.push(await args.apply(undefined, [index + this.from, scope, visitors]));
+      values.push(args.apply(undefined, [index, scope, visitors]));
     }
 
     return values;

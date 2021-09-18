@@ -48,14 +48,14 @@ const kopi_let = (fn, scope, visitors) => {
   return fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
 };
 
-const kopi_match = (value, scope, visitors) => (funcs) => {
+const kopi_match = (value, scope, visitors) => async (funcs) => {
   if (funcs.apply) {
     if (funcs.params.getMatches(value)) {
       return funcs.apply(undefined, [value, scope, visitors]);
     }
   }
 
-  for (func of funcs.elements) {
+  for await (func of funcs.elements) {
     if (func.params.getMatches(value)) {
       return func.apply(undefined, [value, scope, visitors]);
     }

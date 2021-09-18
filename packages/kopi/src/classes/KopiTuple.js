@@ -26,18 +26,14 @@ class KopiTuple {
     this.elements = elements;
   }
 
-  // Array.prototype.toString = async function () {
-  //   const elements = await Promise.all(this.map(async element => (await element).toString()));
-
-  //   return `[${elements.join(', ')}]`;
-  // };
-
   async toStringAsync() {
     if (this.elements.length === 0) {
       return '()';
     }
 
-    const elements = await Promise.all(this.elements.map(async element => (await element).toStringAsync()));
+    const elements = await Promise.all(
+      this.elements.map(async element => (await element).toStringAsync())
+    );
 
     return `(${elements.join(', ')})`;
   }
@@ -46,13 +42,22 @@ class KopiTuple {
     return `(${this.elements.map(element => inspect(element)).join(', ')})`;
   }
 
-  ['=='](that) {
+  async ['=='](that) {
     if (!(that instanceof KopiTuple)) {
       return false;
     }
 
     // TODO: Optimization for numbers
-    return this.elements.every((element, index) => that.elements[index]['=='](element));
+
+    for (const [index, element] of this.elements.entries()) {
+      if (!await (await element)['=='](await that.elements[index])) {
+        return false;
+      }
+    }
+
+    return true;
+
+    // return thisElements.every((element, index) => thatElements[index]['=='](element));
   }
 
   map(mapper, scope, visitors) {

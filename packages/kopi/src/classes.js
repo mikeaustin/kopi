@@ -83,7 +83,9 @@ String.prototype['=='] = function (that) {
 //
 
 Array.prototype.toStringAsync = async function () {
-  const elements = await Promise.all(this.map(async element => (await element).toStringAsync()));
+  const elements = await Promise.all(
+    this.map(async element => (await element).toStringAsync())
+  );
 
   return `[${elements.join(', ')}]`;
 };
@@ -101,7 +103,7 @@ Array.prototype['++'] = function (that) {
 };
 
 Array.prototype.xjoin = async function (args) {
-  const elements = await Promise.all(this.map(async element => await element));
+  const elements = await Promise.all(this);
 
   return elements.join(args);
 };

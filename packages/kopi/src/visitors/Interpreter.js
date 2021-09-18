@@ -94,7 +94,7 @@ class Interpreter extends Visitors {
     }
 
     return new KopiTuple(
-      await Promise.all(elements.map(element => this.visitNode(element, scope)))
+      elements.map(element => this.visitNode(element, scope))
     );
   }
 
