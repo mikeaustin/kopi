@@ -40,6 +40,7 @@ let getScope = (input) => ({
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
   send: core.kopi_send,
+  tasks: core.kopi_tasks,
 
   listen: (coid) => http.createServer(async (request, response) => {
     const value = await core.kopi_send(coid)(request);

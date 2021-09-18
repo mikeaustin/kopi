@@ -4,6 +4,8 @@ const { KopiTuple } = require('../classes');
 
 const coroutineEventEmitter = new EventEmitter();
 
+const coroutinesList = [];
+
 let nextCoroutineId = 0;
 
 class Deferred {
@@ -32,6 +34,11 @@ let coroutinePromises2 = {};
 
 const kopi_spawn = (fn, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
+
+  coroutinesList.push({
+    id: coroutineId,
+    started: Date.now(),
+  });
 
   coroutinePromises[coroutineId] = new Deferred();
   coroutinePromises2[coroutineId] = new Deferred();
@@ -72,8 +79,16 @@ const kopi_send = (coroutineId) => async (data) => {
   }));
 };
 
+const kopi_tasks = () => {
+  console.log(`Id\tStarted`);
+  coroutinesList.forEach(coroutine => {
+    console.log(`${coroutine.id}\r\t${new Date(coroutine.started).toLocaleString()}`);
+  });
+};
+
 module.exports = {
   kopi_spawn,
   kopi_yield,
   kopi_send,
+  kopi_tasks,
 };

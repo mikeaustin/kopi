@@ -93,4 +93,5 @@ module.exports = {
   kopi_spawn: coroutines.kopi_spawn,
   kopi_yield: coroutines.kopi_yield,
   kopi_send: coroutines.kopi_send,
+  kopi_tasks: coroutines.kopi_tasks,
 };
