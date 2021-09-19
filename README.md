@@ -2,7 +2,7 @@
 
 ### A simple, immutable, 100% asynchronous programming language.
 
-What started out as an excersize turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
+What started out as an exercise turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
