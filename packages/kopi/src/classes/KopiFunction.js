@@ -7,6 +7,10 @@ class KopiFunction {
     this.closure = closure;
   }
 
+  toStringAsync() {
+    return `<function>`;
+  }
+
   [util.inspect.custom]() {
     return `<function>`;
   }

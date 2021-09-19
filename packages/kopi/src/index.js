@@ -9,6 +9,10 @@ const { compile } = require('./compiler');
 const { default: interpreter } = require('./visitors/Interpreter');
 const { default: getScope } = require('./scope');
 
+Function.prototype.toStringAsync = function () {
+  return `<function>`;
+};
+
 Function.prototype[util.inspect.custom] = function () {
   return `<function>`;
 };

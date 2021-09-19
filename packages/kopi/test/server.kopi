@@ -1,7 +1,11 @@
+generate, html, text = import "test/html.kopi"
+
+template = message => generate (html () [(text message)]), 0
+
 server = spawn () => {
   loop = (x = 1) => {
     request, _ = yield request => match request.url (
-      "/" => "Hello, world!" ++ " " ++ (string x)
+      "/" => template ("Hello, world!" ++ " " ++ (string x))
        _  => (string 404)
     )
 
