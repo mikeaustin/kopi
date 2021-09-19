@@ -2,7 +2,7 @@
 
 ### A simple, immutable, 100% asynchronous programming language.
 
-What started out as an excersize turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. More details can be found here:
+What started out as an excersize turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
@@ -40,6 +40,24 @@ Shared mutable data is evil, but some impure functions such as 'print' and 'rand
     )
 
     (sleep 1) + (sleep 1)
+
+### Other examples
+
+    1..2, "a".."z" | map (a, b) => a, b
+    
+    1..5 | map () => sleep 1
+    
+    1..3 | map 'toString
+    
+    coroutine = spawn () => {
+      loop = () => {
+        yield x => x * x
+        loop ()
+      }
+      loop ()
+    }
+    
+    send coroutine 5  # prints '25'
 
 ## Installation and running tests
 
