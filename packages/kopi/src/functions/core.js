@@ -9,7 +9,7 @@ const kopi_print = async (val) => {
 };
 
 const kopi_char = (num) => {
-  String.fromCodePoint(num);
+  return String.fromCodePoint(num);
 };
 
 const kopi_string = (num) => {

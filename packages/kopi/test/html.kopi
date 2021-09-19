@@ -2,63 +2,49 @@ print ""
 print "== html =========================================="
 print ""
 
-items = 1..3
+html = props => children => ("element", "html", props, children)
+ul = props => children => ("element", "ul", props, children)
+li = props => children => ("element", "li", props, children)
+text = value => ("text", value)
 
-ul = props => children => "<ul>" ++ (children | xjoin "") ++ "</ul>"
-li = props => children => "<li>" ++ (children | xmap 'toString | xjoin "") ++ "</li>"
-
-
-html = [
-  ul () (
-    items | map (item) => (
-      li () [item * item]
-    )
+indent = (n) => {
+  loop = (n, str) => match n (
+    0 => str
+    _ => loop (n - 1), (str ++ "  ")
   )
-]
+  loop (n, "")
+}
 
-html = [
-  ul () $ items | map (item) => {
-    li () [item * item]
-  }
-]
+generate = (node, level) => {
+  match node (
+    "text", value => {
+      (indent level) ++ (string value) ++ char 10
+    }
+    "element", tag, props, children => {
+      inner = children | xmap child => generate (child, level + 1)
+      (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (inner | xjoin "") ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
+    }
+  )
+}
 
-print html
-
-
-# const html = (
-#   <ul>
-#     {range(1, 3).map(item => {
-#       const x = item * item;
-#       return <li>{x}</li>
-#     })}
-#   </ul>
-# )
-
-# html = [
-#   ul (id: "list") $ items | map (item) => {
-#     li (class: "item") [item * item]
-#   }
-# ]
-
-html = [
-  ul () $ 1..3 | map (item) => {
-    let (x = (item * item)) => li () [x]
-  }
-  ul () $ 4..5 | map (item) => {
-    x = item * item
-    li () [x]
-  }
-]
-
-print html
-
-
-html = [
-  ul () [
-    li () [1]
-    li () [2]
-    li () [3]
+htmlNodes = (
+  html () [
+    text "Hello"
+    ul () [
+      li () [(text 1)]
+      li () [(text 2)]
+    ]
   ]
-]
+)
+
+html = generate (htmlNodes, 0)
 
 print html
+
+export (
+  generate
+  html
+  text
+  ul
+  li
+)
