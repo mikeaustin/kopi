@@ -71,8 +71,7 @@ const kopi_sleep = (secs) => {
 };
 
 const kopi_fetch = (url) => {
-  console.log('url', url);
-  return fetch(url).then(data => String(data.headers.get('content-type')));
+  return fetch(url).then(data => data.headers.get('content-type'));
 };
 
 module.exports = {
