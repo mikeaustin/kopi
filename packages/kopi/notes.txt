@@ -3,16 +3,6 @@ sort "julie" ++ "moronuki"
 xs | reduce 0 sum, x => sum + x
 
 
-loop (exit, a = 1) => {
-  print "hello"
-
-  match a (
-    10 => exit ()
-    n  => n + 1
-  )
-}
-
-
 match n (
   0 => 1
   n => n * n

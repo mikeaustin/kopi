@@ -143,7 +143,7 @@ class IdentifierPattern {
 
   getMatches(value) {
     return {
-      [this.name]: value === KopiTuple.empty ? this.init : value,
+      [this.name]: value === KopiTuple.empty && this.init ? this.init : value,
     };
   }
 }
