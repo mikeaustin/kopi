@@ -123,7 +123,7 @@ TupleExpression
   = "()" {
     return new TupleExpression({ elements: [] });
   }
-  / head:ArrayExpression _ tail:("," _ ArrayExpression)+ {
+  / head:NewlineTupleExpression _ tail:("," _ NewlineTupleExpression)+ {
   	  return new TupleExpression({
         elements: tail.reduce((expressions, [, , expression]) => [
           ...expressions,
@@ -131,7 +131,10 @@ TupleExpression
         ], [head])
       });
     }
-  / "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
+  / NewlineTupleExpression
+
+NewlineTupleExpression
+  = "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
     if (exprs.length === 1) {
       return exprs[0][1];
     }
@@ -140,19 +143,19 @@ TupleExpression
   }
   / ArrayExpression
 
-  ArrayExpression
-    = "[" _ head:OperatorExpression tail:("," _ OperatorExpression)* _ "]" {
-  	    return new ArrayExpression({
-          elements: tail.reduce((elements, [, , element]) => [
-            ...elements,
-            element
-          ], [head])
-        });
-      }
-    / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
-        return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
-      }
-    / OperatorExpression
+ArrayExpression
+  = "[" _ head:OperatorExpression tail:("," _ OperatorExpression)* _ "]" {
+      return new ArrayExpression({
+        elements: tail.reduce((elements, [, , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    }
+  / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
+      return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
+    }
+  / OperatorExpression
 
 //
 // Operators
