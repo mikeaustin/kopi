@@ -1,12 +1,12 @@
 # kopi
 
-## A simple, immutable, 100% asynchronous programming language.
+### A simple, immutable, 100% asynchronous programming language.
 
-What started out as an excersize turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript.
+What started out as an excersize turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. More details can be found here:
 
-<br />
+https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
-## There are no keywords
+### There are no keywords
 
 'match' is simply a function, and pattern matching is just a n-tuple of anonymous functions.
 
@@ -17,9 +17,7 @@ What started out as an excersize turned into a real language. I has a Haskell/ML
 
     print (factorial 170)
 
-<br />
-
-## There is no mutation
+### There is no mutation
 
 Shared mutable data is evil, but some impure functions such as 'print' and 'random' are handy.
 
@@ -31,9 +29,7 @@ Shared mutable data is evil, but some impure functions such as 'print' and 'rand
 
     > (1, "hi")
 
-<br />
-
-## No more async awaits
+### No more async awaits
 
 'input' simply waits for user input and resolves as an argument to 'match'. 'sleep' does the same.
 
@@ -45,9 +41,7 @@ Shared mutable data is evil, but some impure functions such as 'print' and 'rand
 
     (sleep 1) + (sleep 1)
 
-<br />
-
-# Installation and running tests
+## Installation and running tests
 
 Install the project
 
@@ -55,19 +49,13 @@ Install the project
     cd kopi/packages/kopi
     > npm install
 
-<br />
-
 To start the REPL
 
     > npm start
 
-<br />
-
 To run a specific test
 
     > npm start test/basics.kopi
-
-<br />
 
 Run all tests
 
