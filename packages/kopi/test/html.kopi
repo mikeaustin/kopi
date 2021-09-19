@@ -3,6 +3,7 @@ print "== html =========================================="
 print ""
 
 html = props => children => ("element", "html", props, children)
+body = props => children => ("element", "body", props, children)
 ul = props => children => ("element", "ul", props, children)
 li = props => children => ("element", "li", props, children)
 text = value => ("text", value)
@@ -47,5 +48,6 @@ print htmlString
 export (
   generate
   html
+  body
   text
 )

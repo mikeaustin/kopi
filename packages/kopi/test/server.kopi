@@ -1,6 +1,12 @@
-generate, html, text = import "test/html.kopi"
+generate, html, body, text = import "test/html.kopi"
 
-template = message => generate (html () [(text message)]), 0
+template = message => generate (
+  html () [
+    body () [
+      text message
+    ]
+  ]
+), 0
 
 server = spawn () => {
   loop = (x = 1) => {
