@@ -18,11 +18,13 @@ indent = (n) => {
 generate = (node, level) => {
   match node (
     "text", value => {
-      (indent level) ++ (string value) ++ char 10
+      indent level ++ string value ++ char 10
     }
     "element", tag, props, children => {
       inner = children | xmap child => generate (child, level + 1)
-      (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (inner | xjoin "") ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
+      (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (
+        inner | xjoin ""
+      ) ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
     }
   )
 }
