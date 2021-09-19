@@ -22,6 +22,7 @@ generate = (node, level) => {
     }
     "element", tag, props, children => {
       inner = children | xmap child => generate (child, level + 1)
+
       (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (
         inner | xjoin ""
       ) ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
@@ -29,7 +30,7 @@ generate = (node, level) => {
   )
 }
 
-htmlNodes = (
+tree = (
   html () [
     text "Hello"
     ul () [
@@ -39,9 +40,9 @@ htmlNodes = (
   ]
 )
 
-html = generate (htmlNodes, 0)
+str = generate (tree, 0)
 
-print html
+print str
 
 export (
   generate
