@@ -30,7 +30,7 @@ generate = (node, level) => {
   )
 }
 
-tree = (
+documentTree = (
   html () [
     text "Hello"
     ul () [
@@ -40,9 +40,9 @@ tree = (
   ]
 )
 
-str = generate (tree, 0)
+htmlString = generate (documentTree, 0)
 
-print str
+print htmlString
 
 export (
   generate
