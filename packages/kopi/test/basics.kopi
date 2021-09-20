@@ -73,6 +73,8 @@ print $ 1..5 | map 'toString
 
 print $ 1..5 | map '(* 2)
 
+print $ 'toString 5
+
 
 next = repeat (n) => n + 1
 

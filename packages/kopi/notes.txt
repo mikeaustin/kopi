@@ -1,3 +1,28 @@
+wordcount string = string | split " " | reduce (counts, word) => (
+  counts | update word, (x = 0) => count + 1
+), {:}
+
+match foobar
+  (x, y): Point => "Point"
+  Point (x, y)  => "Point"
+end
+
+employeeNames = ['a,b', 'c,d']
+employeeNames | sort (a, b) => a > b | map (name) => do
+  name | split "," | map (name) => (name | strip) | reverse | join " "
+end
+
+Point = (x: Number, y: Number)
+
+(1, y: 2)
+
+ul (id: "foo", class: "bar") (
+  1..5 | map (x) => (
+    li () [text x]
+  )
+)
+
+
 fold (a, x => x * x), 1..5
 sort "julie" ++ "moronuki"
 xs | reduce 0 sum, x => sum + x
