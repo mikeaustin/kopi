@@ -8,7 +8,7 @@ https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5d
 
 ### There are no keywords
 
-'match' is simply a function, and pattern matching is just a n-tuple of anonymous functions.
+'match' is simply a function, and pattern matching is just an n-tuple of anonymous functions.
 
     factorial = n => match n (
       0 => 1
@@ -63,8 +63,8 @@ Shared mutable data is evil, but some impure functions such as 'print' and 'rand
 
 Install the project
 
-    git clone https://github.com/mikeaustin/kopi.git
-    cd kopi/packages/kopi
+    > git clone https://github.com/mikeaustin/kopi.git
+    > cd kopi/packages/kopi
     > npm install
 
 To start the REPL
@@ -75,6 +75,6 @@ To run a specific test
 
     > npm start test/basics.kopi
 
-Run all tests
+To run all tests
 
     > npm test
