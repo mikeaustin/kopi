@@ -67,8 +67,7 @@ const kopi_yield = async (fn, scope, visitors) => {
 
 const kopi_send = (coroutineId) => async (data) => {
   return new Promise(resolve => setImmediate(async () => {
-    const event = { data };
-    coroutineEventEmitter.emit(coroutineId, event);
+    coroutineEventEmitter.emit(coroutineId, { data });
 
     const value = await senderPromises[coroutineId];
     senderPromises[coroutineId] = new Deferred();

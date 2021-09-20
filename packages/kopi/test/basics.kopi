@@ -102,6 +102,7 @@ print $ sleep 1 | toFixed 2
 
 print $ loop exit => (x = 1) => {
   print x
+  sleep 1
   match x (
     3 => exit 100
     n => n + 1
