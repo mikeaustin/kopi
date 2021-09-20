@@ -29,8 +29,8 @@ class Deferred {
   }
 }
 
-let coroutinePromises = {};
-let coroutinePromises2 = {};
+let senderPromises = {};
+let receiverPromises = {};
 
 const kopi_spawn = (fn, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
@@ -40,13 +40,11 @@ const kopi_spawn = (fn, scope, visitors) => {
     started: Date.now(),
   });
 
-  coroutinePromises[coroutineId] = new Deferred();
-  coroutinePromises2[coroutineId] = new Deferred();
+  senderPromises[coroutineId] = new Deferred();
+  receiverPromises[coroutineId] = new Deferred();
 
   coroutineEventEmitter.on(coroutineId, (event) => {
-    event.promise = coroutinePromises[coroutineId];
-
-    coroutinePromises2[coroutineId].resolve(event.data);
+    receiverPromises[coroutineId].resolve(event.data);
   });
 
   fn.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
@@ -57,12 +55,12 @@ const kopi_spawn = (fn, scope, visitors) => {
 const kopi_yield = async (fn, scope, visitors) => {
   const coroutineId = scope._coroutineId;
 
-  const data = await coroutinePromises2[coroutineId];
-  coroutinePromises2[coroutineId] = new Deferred();
+  const data = await receiverPromises[coroutineId];
+  receiverPromises[coroutineId] = new Deferred();
 
   const value = fn.apply(undefined, [data, scope, visitors]);
 
-  coroutinePromises[coroutineId].resolve(value);
+  senderPromises[coroutineId].resolve(value);
 
   return new KopiTuple([data, value]);
 };
@@ -72,8 +70,8 @@ const kopi_send = (coroutineId) => async (data) => {
     const event = { data };
     coroutineEventEmitter.emit(coroutineId, event);
 
-    const value = await event.promise;
-    coroutinePromises[coroutineId] = new Deferred();
+    const value = await senderPromises[coroutineId];
+    senderPromises[coroutineId] = new Deferred();
 
     resolve(value);
   }));
