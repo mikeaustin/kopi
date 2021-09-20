@@ -96,7 +96,7 @@ print $ match 5 (
 
 print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
 
-sleep 1 | toFixed 3
+print $ sleep 1 | toFixed 2
 
 print $ loop exit => (x = 1) => {
   print x
