@@ -109,6 +109,11 @@ ApplyExpression
         new ApplyExpression({ expr, args })
       ), expr)
     }
+  / expr:("+" / "-" / "*" / "/" / "%") _ args:(_ FunctionExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), new Identifier({ name: '+' }));
+    }
 
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
@@ -286,7 +291,7 @@ IdentifierPattern
 //
 
 Identifier
-  = _ name:([_a-zA-Z\*][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
+  = _ name:([_a-zA-Z][a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
   = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }
