@@ -108,10 +108,14 @@ Array.prototype.xjoin = async function (args) {
   return elements.join(args);
 };
 
-Array.prototype.xmap = function (args, scope, visitors) {
-  return this.map((element) => (
-    args.apply(undefined, [element, scope, visitors])
-  ));
+Array.prototype.xmap = async function (args, scope, visitors) {
+  const values = [];
+
+  for (const element of this) {
+    values.push(await args.apply(undefined, [element, scope, visitors]));
+  }
+
+  return values;
 };
 
 //
