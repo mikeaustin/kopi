@@ -2,14 +2,12 @@ const util = require('util');
 const fs = require('fs');
 const http = require('http');
 const readline = require('readline');
-const fetch = require('node-fetch');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
 const core = require('./functions/core');
 
 const { compile } = require('./compiler');
-const { Server } = require('http');
 
 let getScope = (input) => ({
   true: true,
@@ -55,7 +53,7 @@ let getScope = (input) => ({
 
   at: (index) => async array => await array[index],
   loop: async (fn, scope, visitors) => {
-    const exit = () => { done = true; };
+    const exit = (value) => { done = true; return value; };
     const func = await fn.apply(undefined, [exit, scope, visitors]);
 
     let done = false;

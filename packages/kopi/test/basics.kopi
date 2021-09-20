@@ -89,22 +89,19 @@ print (
   fetch "https://google.jp"
 )
 
+print $ match 5 (
+  x => x * x
+)
+
 
 print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
 
 sleep 1 | toFixed 3
 
-
-x = loop exit => (x = 1) => {
+print $ loop exit => (x = 1) => {
   print x
-  sleep 1
   match x (
-    3 => exit ()
+    3 => exit 100
     n => n + 1
   )
 }
-
-
-print $ match 5 (
-  x => x * x
-)
