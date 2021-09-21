@@ -104,12 +104,12 @@ ConcatinationExpression
     }
 
 ApplyExpression
-  = expr:FunctionExpression _ args:(_ FunctionExpression)* {
+  = expr:FunctionExpression args:(_ FunctionExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
     }
-  / expr:("+" / "-" / "*" / "/" / "%") _ args:(_ FunctionExpression)* {
+  / expr:("+" / "-" / "*" / "/" / "%") args:(_ FunctionExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), new Identifier({ name: '+' }));
@@ -128,9 +128,9 @@ TupleExpression
   = "()" {
     return new TupleExpression({ elements: [] });
   }
-  / head:NewlineTupleExpression _ tail:("," _ NewlineTupleExpression)+ {
+  / head:NewlineTupleExpression tail:(_ "," _ NewlineTupleExpression)+ {
   	  return new TupleExpression({
-        elements: tail.reduce((expressions, [, , expression]) => [
+        elements: tail.reduce((expressions, [, , , expression]) => [
           ...expressions,
           expression
         ], [head])
@@ -149,9 +149,9 @@ NewlineTupleExpression
   / ArrayExpression
 
 ArrayExpression
-  = "[" _ head:OperatorExpression tail:("," _ OperatorExpression)* _ "]" {
+  = "[" _ head:OperatorExpression tail:(_ "," _ OperatorExpression)* _ "]" {
       return new ArrayExpression({
-        elements: tail.reduce((elements, [, , element]) => [
+        elements: tail.reduce((elements, [, , , element]) => [
           ...elements,
           element
         ], [head])
@@ -252,9 +252,9 @@ Pattern
   = TuplePattern
 
 TuplePattern
-  = head:PrimaryPattern tail:("," _ PrimaryPattern)+ {
+  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
       return new TuplePattern({
-        elements: tail.reduce((elements, [, , element]) => [...elements, element], [head])
+        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head])
       });
     }
   / PrimaryPattern
