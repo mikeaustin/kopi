@@ -70,8 +70,10 @@ const kopi_sleep = (secs) => {
   return new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000));
 };
 
-const kopi_fetch = (url) => {
-  return fetch(url).then(data => data.headers.get('content-type'));
+const kopi_fetch = async (url) => {
+  const request = await fetch(url);
+
+  return request.text();
 };
 
 module.exports = {

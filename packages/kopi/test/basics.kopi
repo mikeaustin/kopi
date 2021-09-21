@@ -86,10 +86,7 @@ print value
 
 print $ read "notes.txt" | length
 
-print (
-  fetch "https://google.com"
-  fetch "https://google.jp"
-)
+print $ fetch "http://mike-austin.com/example.html"
 
 print $ match 5 (
   x => x * x
