@@ -210,7 +210,7 @@ function peg$parse(input, options) {
       peg$c32 = ",",
       peg$c33 = peg$literalExpectation(",", false),
       peg$c34 = function(head, tail) {
-        	  return new TupleExpression({
+        	  return tail.length === 0 ? head : new TupleExpression({
               elements: tail.reduce((expressions, [, , , expression]) => [
                 ...expressions,
                 expression
@@ -1203,30 +1203,25 @@ function peg$parse(input, options) {
           peg$currPos = s3;
           s3 = peg$FAILED;
         }
-        if (s3 !== peg$FAILED) {
-          while (s3 !== peg$FAILED) {
-            s2.push(s3);
-            s3 = peg$currPos;
-            s4 = peg$parse_();
-            if (s4 !== peg$FAILED) {
-              if (input.charCodeAt(peg$currPos) === 44) {
-                s5 = peg$c32;
-                peg$currPos++;
-              } else {
-                s5 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c33); }
-              }
-              if (s5 !== peg$FAILED) {
-                s6 = peg$parse_();
-                if (s6 !== peg$FAILED) {
-                  s7 = peg$parseNewlineTupleExpression();
-                  if (s7 !== peg$FAILED) {
-                    s4 = [s4, s5, s6, s7];
-                    s3 = s4;
-                  } else {
-                    peg$currPos = s3;
-                    s3 = peg$FAILED;
-                  }
+        while (s3 !== peg$FAILED) {
+          s2.push(s3);
+          s3 = peg$currPos;
+          s4 = peg$parse_();
+          if (s4 !== peg$FAILED) {
+            if (input.charCodeAt(peg$currPos) === 44) {
+              s5 = peg$c32;
+              peg$currPos++;
+            } else {
+              s5 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c33); }
+            }
+            if (s5 !== peg$FAILED) {
+              s6 = peg$parse_();
+              if (s6 !== peg$FAILED) {
+                s7 = peg$parseNewlineTupleExpression();
+                if (s7 !== peg$FAILED) {
+                  s4 = [s4, s5, s6, s7];
+                  s3 = s4;
                 } else {
                   peg$currPos = s3;
                   s3 = peg$FAILED;
@@ -1239,9 +1234,10 @@ function peg$parse(input, options) {
               peg$currPos = s3;
               s3 = peg$FAILED;
             }
+          } else {
+            peg$currPos = s3;
+            s3 = peg$FAILED;
           }
-        } else {
-          s2 = peg$FAILED;
         }
         if (s2 !== peg$FAILED) {
           peg$savedPos = s0;
@@ -1254,9 +1250,6 @@ function peg$parse(input, options) {
       } else {
         peg$currPos = s0;
         s0 = peg$FAILED;
-      }
-      if (s0 === peg$FAILED) {
-        s0 = peg$parseNewlineTupleExpression();
       }
     }
 

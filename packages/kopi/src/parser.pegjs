@@ -128,15 +128,14 @@ TupleExpression
   = "()" {
     return new TupleExpression({ elements: [] });
   }
-  / head:NewlineTupleExpression tail:(_ "," _ NewlineTupleExpression)+ {
-  	  return new TupleExpression({
+  / head:NewlineTupleExpression tail:(_ "," _ NewlineTupleExpression)* {
+  	  return tail.length === 0 ? head : new TupleExpression({
         elements: tail.reduce((expressions, [, , , expression]) => [
           ...expressions,
           expression
         ], [head])
       });
     }
-  / NewlineTupleExpression
 
 NewlineTupleExpression
   = "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
