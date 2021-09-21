@@ -128,12 +128,18 @@ TupleExpression
   = "()" {
     return new TupleExpression({ elements: [] });
   }
-  / head:NewlineTupleExpression tail:(_ "," _ NewlineTupleExpression)* {
-  	  return tail.length === 0 ? head : new TupleExpression({
-        elements: tail.reduce((expressions, [, , , expression]) => [
-          ...expressions,
-          expression
-        ], [head])
+  / head:NewlineTupleExpression tail:(_ "," _ !(Identifier ":") NewlineTupleExpression)* tailNames:(_ "," _ (Identifier ":") _ NewlineTupleExpression)* {
+  	  return [...tail, ...tailNames].length === 0 ? head : new TupleExpression({
+        elements: [
+          ...tail.reduce((expressions, [, , , , expression]) => [
+            ...expressions,
+            expression
+          ], [head]),
+          ...tailNames.reduce((expressions, [, , , , , expression]) => [
+            ...expressions,
+            expression
+          ], []),
+        ]
       });
     }
 
