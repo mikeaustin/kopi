@@ -1,6 +1,5 @@
 const util = require('util');
 const fs = require('fs');
-const http = require('http');
 const readline = require('readline');
 
 const { KopiTuple, KopiVector } = require('./classes');
@@ -12,6 +11,7 @@ const { compile } = require('./compiler');
 let getScope = (input) => ({
   true: true,
   false: false,
+
   print: core.kopi_print,
   write: core.kopi_write,
 
@@ -35,21 +35,13 @@ let getScope = (input) => ({
   match: core.kopi_match,
   sleep: core.kopi_sleep,
   fetch: core.kopi_fetch,
+  listen: core.kopi_listen,
   exit: (code) => process.exit(code),
 
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
   send: core.kopi_send,
   tasks: core.kopi_tasks,
-
-  listen: (coid) => http.createServer(async (request, response) => {
-    const value = await core.kopi_send(coid)(request);
-
-    response.writeHead(200);
-    response.end(value);
-  }).listen({
-    port: 8080,
-  }),
 
   at: (index) => async array => await array[index],
   loop: async (fn, scope, visitors) => {

@@ -1,3 +1,4 @@
+const http = require('http');
 const fetch = require('node-fetch');
 
 const { KopiTuple } = require('../classes');
@@ -76,6 +77,16 @@ const kopi_fetch = async (url) => {
   return request.text();
 };
 
+const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {
+  const value = await coroutines.kopi_send(co)(request);
+
+  response.writeHead(200);
+  response.end(value);
+}).listen({
+  port: port,
+});
+
+
 module.exports = {
   kopi_print,
   kopi_char,
@@ -92,6 +103,7 @@ module.exports = {
   kopi_write,
   kopi_sleep,
   kopi_fetch,
+  kopi_listen,
   kopi_spawn: coroutines.kopi_spawn,
   kopi_yield: coroutines.kopi_yield,
   kopi_send: coroutines.kopi_send,

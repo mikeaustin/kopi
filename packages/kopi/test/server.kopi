@@ -24,7 +24,7 @@ server = spawn () => {
   loop 1
 }
 
-listen server
+listen 8080 server
 
 # print $ send server 1
 # print $ send server 2
