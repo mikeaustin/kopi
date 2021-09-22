@@ -3,25 +3,24 @@ generate, html, body, text = import "test/html.kopi"
 template = message => generate (
   html () [
     body () [
+      text "<p>This is a dynamic document</p>"
       text message
     ]
   ]
 ), 0
 
 server = spawn () => {
-  loop = (x = 1) => {
+  loop = (requests) => {
     request, _ = yield request => match request.url (
-      "/" => template ("Hello, world!" ++ " " ++ (string x))
-       _  => (string 404)
+      "/favicon.ico" => ""
+      "/"            => template ("[" ++ (string requests) ++ " requests] <a href='test.html'>Link to static document</a>")
+       _             => read ("test/" ++ request.url)
     )
 
-    match request.url (
-      "/" => loop (x + 1)
-       _  => loop x
-    )
+    loop (requests + 1)
   }
 
-  loop 1
+  loop 0
 }
 
 listen 8080 server
