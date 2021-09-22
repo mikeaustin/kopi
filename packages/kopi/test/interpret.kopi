@@ -1,6 +1,7 @@
 source = "
   10 PRINT 'HELLO'
   20 GOTO 10
+  30 foo 5
 "
 
 program = source | trim | xsplit (char 13) | xmap 'trim
@@ -11,9 +12,9 @@ print ""
 interpret = program => {
   program | xmap (line) => {
     match (tuple $ line | xsplit " ") (
-      line, "PRINT", value => print value
+      line, "PRINT", value => print $ value
       line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
-      _                    => print "*** UNKNOWN COMMAND ***"
+      line, command        => print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
     )
   }
 }
