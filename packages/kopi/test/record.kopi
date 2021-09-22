@@ -20,3 +20,8 @@ glTexImage2D = (target, level, internalformat, width, height, border, format, ty
 print $ glTexImage2D (target: GL_TEXTURE_2D, level: 0, internalformat: GL_RGBA, width: 512, height: 512, border: 0, format: GL_RGBA, type: GL_FLOAT, data: [
   1, 2, 3
 ])
+
+print "
+  10 PRINT 'HELLO'
+  20 GOTO 10
+"
