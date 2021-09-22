@@ -1,0 +1,22 @@
+source = "
+  10 PRINT 'HELLO'
+  20 GOTO 10
+"
+
+program = source | trim | xsplit (char 13) | xmap 'trim
+
+print program
+print ""
+
+interpret = program => {
+  program | xmap (line) => {
+    statement = line | xsplit " "
+    match statement.1 (
+      "PRINT" => print statement.2
+      "GOTO"  => print "GOTO NOT IMPLEMENTED"
+      _       => print "*** UNKNOWN COMMAND ***"
+    )
+  }
+}
+
+interpret program

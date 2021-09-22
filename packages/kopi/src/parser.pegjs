@@ -155,13 +155,25 @@ TupleExpression
     }
 
 NewlineTupleExpression
-  = "(" _ exprs:(Newline+ Expression)+ Newline+ _ ")" {
-    if (exprs.length === 1) {
-      return exprs[0][1];
+  = "(" _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _ ")" {
+      return new TupleExpression({
+        elements: [
+          ...exprsNames.map(expr => expr[2])
+        ],
+      });
     }
+  / "(" _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+ exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _ ")" {
+      if (exprs.length === 1 && exprsNames.length === 0) {
+        return exprs[0][2];
+      }
 
-    return new TupleExpression({ elements: exprs.map(expr => expr[1]) });
-  }
+      return new TupleExpression({
+        elements: [
+          ...exprs.map(expr => expr[2]),
+          ...exprsNames.map(expr => expr[2])
+        ],
+      });
+    }
   / ArrayExpression
 
 ArrayExpression

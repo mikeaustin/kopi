@@ -64,6 +64,10 @@ String.prototype.succ = function () {
   return String.fromCodePoint(this.codePointAt(0) + 1);
 };
 
+String.prototype.xsplit = function (delimiter) {
+  return this.split(delimiter);
+};
+
 String.prototype['++'] = function (that) {
   if (typeof that !== 'string') {
     throw new Error(`Can't concat string with ${that.constructor.name}`);

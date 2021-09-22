@@ -7,21 +7,32 @@ print (x: 1, y: 2, z: 3)
 vector = (Vector 1, 2)
 
 GL_POINTS = 0
-GL_TEXTURE_2D = 0
-GL_RGBA = 0
-GL_FLOAT
+GL_TEXTURE_2D = 1
+GL_RGBA = 2
+GL_FLOAT = 3
 
-glDrawArrays = (mode, first, count) => "hi"
+glDrawArrays = (mode, first, count) => (mode, first, count)
+
+print $ glDrawArrays (
+  mode: GL_POINTS
+  first: 0
+  count: 10
+)
 
 print $ glDrawArrays (mode: GL_POINTS, first: 0, count: 10)
 
-glTexImage2D = (target, level, internalformat, width, height, border, format, type, data) => "hi"
+glTexImage2D = (target, level, internalformat, width, height, border, format, type, data) => (target, level, internalformat, width, height, border, format, type, data)
 
-print $ glTexImage2D (target: GL_TEXTURE_2D, level: 0, internalformat: GL_RGBA, width: 512, height: 512, border: 0, format: GL_RGBA, type: GL_FLOAT, data: [
-  1, 2, 3
-])
-
-print "
-  10 PRINT 'HELLO'
-  20 GOTO 10
-"
+print $ glTexImage2D (
+  target: GL_TEXTURE_2D
+  level: 0
+  internalformat: GL_RGBA
+  width: 512
+  height: 512
+  border: 0
+  format: GL_RGBA
+  type: GL_FLOAT
+  data: [
+    1, 2, 3
+  ]
+)

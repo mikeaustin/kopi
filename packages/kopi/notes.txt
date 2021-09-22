@@ -65,3 +65,9 @@ grayscale = color => match color (
 
 
 even = '(% 2 == 0)
+
+
+print (1, 2, z: 3)
+print (1, y: 2, z: 3)
+print (x: 1, y: 2, z: 3)
+print (1, y: 2, 3)
