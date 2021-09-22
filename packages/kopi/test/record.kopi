@@ -14,7 +14,7 @@ GL_FLOAT = 3
 glDrawArrays = (mode, first, count) => (mode, first, count)
 
 print $ glDrawArrays (
-  mode: GL_POINTS
+  GL_POINTS
   first: 0
   count: 10
 )
@@ -32,7 +32,5 @@ print $ glTexImage2D (
   border: 0
   format: GL_RGBA
   type: GL_FLOAT
-  data: [
-    1, 2, 3
-  ]
+  data: [1, 2, 3]
 )
