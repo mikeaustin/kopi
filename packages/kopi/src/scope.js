@@ -9,6 +9,8 @@ const core = require('./functions/core');
 const { compile } = require('./compiler');
 
 let getScope = (input) => ({
+  tuple: (array) => new KopiTuple(array),
+
   true: true,
   false: false,
 

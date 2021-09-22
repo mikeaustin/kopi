@@ -10,11 +10,10 @@ print ""
 
 interpret = program => {
   program | xmap (line) => {
-    statement = line | xsplit " "
-    match statement.1 (
-      "PRINT" => print statement.2
-      "GOTO"  => print "GOTO NOT IMPLEMENTED"
-      _       => print "*** UNKNOWN COMMAND ***"
+    match (tuple $ line | xsplit " ") (
+      line, "PRINT", value => print value
+      line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
+      _                    => print "*** UNKNOWN COMMAND ***"
     )
   }
 }
