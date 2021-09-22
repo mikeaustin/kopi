@@ -9,6 +9,9 @@
 			"include": "#keywords"
 		},
 		{
+			"include": "#types"
+		},
+		{
 			"include": "#identifiers"
 		},
 		{
@@ -35,11 +38,19 @@
 				}
 			]
 		},
+		"types": {
+			"patterns": [
+				{
+					"name": "entity.name.type",
+					"match": "\\b[A-Z][_a-zA-Z0-9]*\\b"
+				}
+			]
+		},
 		"identifiers": {
 			"patterns": [
 				{
 					"name": "variable",
-					"match": "\\b[a-zA-Z][a-zA-Z0-9]*\\b"
+					"match": "\\b[_a-z][_a-zA-Z0-9]*\\b"
 				}
 			]
 		},
