@@ -354,8 +354,8 @@ function peg$parse(input, options) {
       peg$c98 = "'(",
       peg$c99 = peg$literalExpectation("'(", false),
       peg$c100 = function(exprs) {
-          return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
-        },
+            return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
+          },
       peg$c101 = "'",
       peg$c102 = peg$literalExpectation("'", false),
       peg$c103 = function(expr) {

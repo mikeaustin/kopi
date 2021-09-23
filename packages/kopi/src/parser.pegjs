@@ -168,14 +168,19 @@ TupleExpression
     }
 
 NewlineTupleExpression
-  = "(" _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _ ")" {
+  = "("
+      _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _
+    ")" {
       return new TupleExpression({
         elements: [
           ...exprsNames.map(expr => expr[2])
         ],
       });
     }
-  / "(" _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+ exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _ ")" {
+  / "("
+       _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+
+       exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _
+    ")" {
       if (exprs.length === 1 && exprsNames.length === 0) {
         return exprs[0][2];
       }
@@ -198,7 +203,9 @@ ArrayExpression
         ], [head])
       });
     }
-  / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
+  / "["
+       _ exprs:(Newline+ Expression)+ Newline+ _
+    "]" {
       return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
     }
   / OperatorExpression
@@ -351,9 +358,11 @@ StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
 
 AstLiteral
-  = "'(" exprs:(Newline+ Expression)+ Newline+ ")" {
-    return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
-  }
+  = "'("
+      exprs:(Newline+ Expression)+ Newline+
+    ")" {
+      return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
+    }
   / "'" "(" expr:Statement ")" {
       return new AstLiteral({ value: expr });
     }
