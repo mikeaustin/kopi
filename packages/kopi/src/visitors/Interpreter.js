@@ -3,6 +3,7 @@ const fs = require("fs");
 
 const { KopiString, KopiTuple, KopiRange, KopiFunction } = require('../classes');
 const { TuplePattern,
+  BooleanLiteralPattern,
   IdentifierPattern,
   NumericLiteralPattern,
   StringLiteralPattern,
@@ -136,6 +137,10 @@ class Interpreter extends Visitors {
 
   TuplePattern({ elements }, scope) {
     return new TuplePattern(elements.map(element => this.visitNode(element, scope)));
+  }
+
+  BooleanLiteralPattern({ value }) {
+    return new BooleanLiteralPattern(value);
   }
 
   IdentifierPattern({ name, init }, scope) {

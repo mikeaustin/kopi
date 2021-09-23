@@ -16,13 +16,13 @@ indent = (n) => {
   loop (n, "")
 }
 
-generate = (node, level) => {
+generateHtmlString = (node, level) => {
   match node (
     "text", value => {
       indent level ++ string value ++ char 10
     }
     "element", tag, props, children => {
-      inner = children | xmap child => generate (child, level + 1)
+      inner = children | xmap child => generateHtmlString (child, level + 1)
 
       (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (
         inner | xjoin ""
@@ -30,6 +30,12 @@ generate = (node, level) => {
     }
   )
 }
+
+"
+  {spaces}<{tag}>
+    {children | map (child) => generateHtmlString (child, level + 1)}
+  {spaces}</{tag}>
+"
 
 documentTree = (
   html () [
@@ -41,12 +47,12 @@ documentTree = (
   ]
 )
 
-htmlString = generate (documentTree, 0)
+htmlString = generateHtmlString (documentTree, 0)
 
 print htmlString
 
 export (
-  generate
+  generateHtmlString
   html
   body
   text

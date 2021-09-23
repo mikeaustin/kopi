@@ -54,6 +54,7 @@
   class StringLiteralPattern extends Node { }
   class ConstructorPattern extends Node { }
   class FunctionPattern extends Node { }
+  class BooleanLiteralPattern extends Node { }
   class IdentifierPattern extends Node { }
 }
 
@@ -292,6 +293,7 @@ PrimaryPattern
   / NumericLiteralPattern
   / StringLiteralPattern
   // / ConstructorPatern
+  / BooleanPattern
   / IdentifierPattern
 
 NumericLiteralPattern
@@ -300,14 +302,19 @@ NumericLiteralPattern
     }
 
 StringLiteralPattern
-  = number:StringLiteral {
-      return new StringLiteralPattern({ value: number.value });
+  = string:StringLiteral {
+      return new StringLiteralPattern({ value: string.value });
     }
 
 ConstructorPatern
   = ident:Identifier _ pattern:PrimaryPattern {
       return new ConstructorPattern({ name: ident.name, pattern });
     }
+
+BooleanPattern
+  = value:("true" / "false") {
+    return new BooleanLiteralPattern({ value: value === 'true' ? true : false })
+  }
 
 IdentifierPattern
   = ident:Identifier init:(_ "=" _ PrimaryExpression)? {

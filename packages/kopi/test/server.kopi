@@ -1,6 +1,6 @@
-generate, html, body, text = import "test/html.kopi"
+generateHtmlString, html, body, text = import "test/html.kopi"
 
-template = message => generate (
+template = message => generateHtmlString (
   html () [
     body () [
       text "<p>This is a dynamic document</p>"

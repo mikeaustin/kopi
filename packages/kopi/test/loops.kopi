@@ -1,0 +1,12 @@
+loop = (x) => {
+  match (x % 100000) (
+    0 => {
+      print "Sleeping"
+      sleep 1
+    }
+    _ => ()
+  )
+  print $ x | toLocaleString
+  loop (x + 1)
+}
+loop 1

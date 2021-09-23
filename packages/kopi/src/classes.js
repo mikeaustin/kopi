@@ -143,6 +143,20 @@ class TuplePattern {
   }
 }
 
+class BooleanLiteralPattern {
+  constructor(value) {
+    this.value = value;
+  }
+
+  getMatches(value) {
+    if (value !== this.value) {
+      return null;
+    }
+
+    return {};
+  }
+}
+
 class IdentifierPattern {
   constructor(name, init) {
     this.name = name;
@@ -227,6 +241,7 @@ module.exports = {
   KopiFunction,
   KopiVector,
   TuplePattern,
+  BooleanLiteralPattern,
   IdentifierPattern,
   NumericLiteralPattern,
   StringLiteralPattern,
