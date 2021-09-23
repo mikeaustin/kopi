@@ -116,6 +116,18 @@ ApplyExpression
       ), new Identifier({ name: '+' }));
     }
 
+NoFunctionApplyExpression
+  = expr:TupleExpression args:(_ TupleExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr)
+    }
+  / expr:("+" / "-" / "*" / "/" / "%") args:(_ TupleExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), new Identifier({ name: '+' }));
+    }
+
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
@@ -278,7 +290,11 @@ AssignmentFunctionPattern
 //
 
 Pattern
-  = TuplePattern
+  = pattern:TuplePattern predicate:(_ "@" _ NoFunctionApplyExpression)? {
+    pattern.predicate = predicate?.[3];
+
+    return pattern;
+  }
 
 TuplePattern
   = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {

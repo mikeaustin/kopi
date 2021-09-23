@@ -24,18 +24,22 @@ class KopiRange {
     return this.toArray().concat(that.toArray());
   }
 
-  async map(args, scope, visitors) {
+  async map(func, scope, visitors) {
     const values = [];
 
     for (let index = this.from; index <= this.to; index++) {
-      values.push(await args.apply(undefined, [index, scope, visitors]));
+      // const argumentsPassed = func.params.getMatches(index);
+      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+        ...scope,
+        [func.params.name]: index
+      }));
+
+      if (predicatePassed) {
+        values.push(await func.apply(undefined, [index, scope, visitors]));
+      }
     }
 
     return values;
-
-    return Promise.all(Array.from({ length: this.to - this.from + 1 }, async (_, index) => (
-      await args.apply(undefined, [index + this.from, scope, visitors])
-    )));
   }
 }
 
