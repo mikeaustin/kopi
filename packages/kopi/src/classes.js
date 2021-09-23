@@ -130,7 +130,9 @@ class TuplePattern {
   }
 
   getMatches(value) {
-    const matchesArray = this.elements.map((element, index) => element.getMatches(value.elements[index] ?? KopiTuple.empty));
+    const matchesArray = this.elements.map((element, index) => (
+      element.getMatches(value.elements[index] ?? KopiTuple.empty)
+    ));
 
     if (matchesArray.some(match => match === null)) {
       return null;
@@ -163,7 +165,14 @@ class IdentifierPattern {
     this.init = init;
   }
 
-  getMatches(value) {
+  getMatches(value, scope, visitors) {
+    // console.log(this.predicate);
+    // const x = visitors.visitNode(this.predicate, {
+    //   ...scope,
+    //   [this.name]: value
+    // });
+    // console.log(x);
+
     return {
       [this.name]: value === KopiTuple.empty && this.init ? this.init : value,
     };

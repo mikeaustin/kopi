@@ -1,6 +1,10 @@
 
-print $ 1..10 | map n @ even n => n * n
+# print $ 1..10 | map n @ even n => n * n
 
 # print $ (n @ even n => n * n) 3
 
 # print $ (1 => 5) 1
+
+print $ match 1 (
+  n @ n == 5 => "Five"
+)

@@ -51,7 +51,7 @@ const kopi_let = (fn, scope, visitors) => {
 
 const kopi_match = (value, scope, visitors) => async (funcs) => {
   if (funcs.apply) {
-    if (funcs.params.getMatches(value)) {
+    if (funcs.params.getMatches(value, scope, visitors)) {
       return funcs.apply(undefined, [value, scope, visitors]);
     }
   }
