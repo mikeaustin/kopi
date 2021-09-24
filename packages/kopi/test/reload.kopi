@@ -1,0 +1,18 @@
+
+start = (x) => {
+  f, g = import "test/module.kopi"
+
+  loop = (x) => {
+    print x
+    command = input "(R)eload or (I)ncrement?"
+
+    match command (
+      "r" => start (x)
+      "i" => loop (g x)
+    )
+  }
+
+  loop x
+}
+
+start 1
