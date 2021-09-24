@@ -13,7 +13,7 @@ generator = spawn () => {
 }
 
 # Prints [1, 2, 3] to the console
-print $ [(sleep 1), 2, 3] | xmap (n) => send generator ()
+print $ [(sleep 1), 2, 3] | _map (n) => send generator ()
 
 # Convenience for yield + match
 select = fns => yield (x => match x fns)

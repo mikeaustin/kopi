@@ -118,13 +118,13 @@ Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
 
-Array.prototype.xjoin = async function (args) {
+Array.prototype._join = async function (args) {
   const elements = await Promise.all(this);
 
   return elements.join(args);
 };
 
-Array.prototype.xmap = async function (args, scope, visitors) {
+Array.prototype._map = async function (args, scope, visitors) {
   const values = [];
 
   for (const element of this) {

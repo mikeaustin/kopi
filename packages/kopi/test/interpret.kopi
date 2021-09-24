@@ -4,13 +4,13 @@ source = "
   30 foo 5
 "
 
-program = source | trim | xsplit (char 13) | xmap 'trim
+program = source | trim | xsplit (char 13) | _map 'trim
 
 print program
 print ""
 
 interpret = program => {
-  program | xmap (line) => {
+  program | _map (line) => {
     match (tuple $ line | xsplit " ") (
       line, "PRINT", value => print $ value
       line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"

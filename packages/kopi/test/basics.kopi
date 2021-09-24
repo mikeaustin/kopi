@@ -100,7 +100,7 @@ print $ match 5 (
 )
 
 
-print $ [1, (sleep 2), (1 + 2)] | xmap 'toString
+print $ [1, (sleep 2), (1 + 2)] | _map 'toString
 
 print $ sleep 1 | toFixed 2
 
@@ -113,6 +113,6 @@ print $ loop exit => (x = 1) => {
   )
 }
 
-print $ ["B, A", "D, C"] | xmap (name) => (
-  name | xsplit "," | xmap 'trim | xreverse | xjoin " "
+print $ ["B, A", "D, C"] | _map (name) => (
+  name | xsplit "," | _map 'trim | xreverse | _join " "
 )

@@ -22,10 +22,10 @@ generateHtmlString = (node, level) => {
       indent level ++ string value ++ char 10
     }
     "element", tag, props, children => {
-      inner = children | xmap child => generateHtmlString (child, level + 1)
+      inner = children | _map child => generateHtmlString (child, level + 1)
 
       (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (
-        inner | xjoin ""
+        inner | _join ""
       ) ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
     }
   )
@@ -52,8 +52,8 @@ htmlString = generateHtmlString (documentTree, 0)
 print htmlString
 
 export (
-  generateHtmlString
-  html
-  body
-  text
+  generateHtmlString: generateHtmlString
+  html: html
+  body: body
+  text: text
 )
