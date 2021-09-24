@@ -60,6 +60,10 @@ class KopiTuple {
     // return thisElements.every((element, index) => thatElements[index]['=='](element));
   }
 
+  async ['!='](that) {
+    return !await this['=='](that);
+  }
+
   map(mapper, scope, visitors) {
     const iters = this.elements.map(element => element[Symbol.iterator]());
     const values = [];

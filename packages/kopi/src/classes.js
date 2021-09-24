@@ -24,6 +24,10 @@ Boolean.prototype['=='] = function (that) {
   return this.valueOf() === that.valueOf();
 };
 
+Boolean.prototype['!='] = function (that) {
+  return !this['=='](that);
+};
+
 //
 
 Number.prototype.toStringAsync = function () {
@@ -48,6 +52,10 @@ Number.prototype['=='] = function (that) {
   }
 
   return this.valueOf() === that.valueOf();
+};
+
+Number.prototype['!='] = function (that) {
+  return !this['=='](that);
 };
 
 //
@@ -82,6 +90,10 @@ String.prototype['=='] = function (that) {
   }
 
   return this.valueOf() === that.valueOf();
+};
+
+String.prototype['!='] = function (that) {
+  return !this['=='](that);
 };
 
 //

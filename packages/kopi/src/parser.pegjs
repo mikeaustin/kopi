@@ -218,7 +218,7 @@ OperatorExpression
   = EqualityExpression
 
 EqualityExpression
-  = head:AddExpression tail:(_ ("==" / "!=") _ AddExpression)* {
+  = head:AddExpression tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ AddExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
