@@ -1,3 +1,8 @@
+:html, :body, :text = import "test/html.kopi"
+
+html:, body:, text: = import "test/html.kopi"
+
+
 wordcount string = string | split " " | reduce (counts, word) => (
   counts | update word, (x = 0) => count + 1
 ), {:}
