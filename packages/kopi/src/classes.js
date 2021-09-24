@@ -122,6 +122,10 @@ Array.prototype.xmap = async function (args, scope, visitors) {
   return values;
 };
 
+Array.prototype.xreverse = async function (args, scope, visitors) {
+  return [...this].reverse();
+};
+
 //
 
 class TuplePattern {

@@ -352,7 +352,11 @@ Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
-  = _ value:[0-9]+ _ { return new NumericLiteral({ value: Number(value.join('')) }); }
+  = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
+    return new NumericLiteral({
+      value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
+    });
+  }
 
 StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }

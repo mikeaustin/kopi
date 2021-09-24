@@ -105,3 +105,7 @@ print $ loop exit => (x = 1) => {
     n => n + 1
   )
 }
+
+print $ ["B, A", "D, C"] | xmap (name) => (
+  name | xsplit "," | xmap 'trim | xreverse | xjoin " "
+)
