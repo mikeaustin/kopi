@@ -49,15 +49,16 @@ const kopi_let = (fn, scope, visitors) => {
   return fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
 };
 
-const kopi_match = (value, scope, visitors) => async (funcs) => {
-  if (funcs.apply) {
-    if (funcs.params.getMatches(value)) {
-      return funcs.apply(undefined, [value, scope, visitors]);
-    }
-  }
+const kopi_match = (value, scope, visitors) => async (_funcs) => {
+  const funcs = _funcs.apply ? new KopiTuple([_funcs]) : _funcs;
 
   for await (func of funcs.elements) {
-    if (func.params.getMatches(value)) {
+    const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+      ...scope,
+      [func.params.name]: value
+    }));
+
+    if (predicatePassed && func.params.getMatches(value)) {
       return func.apply(undefined, [value, scope, visitors]);
     }
   }

@@ -6,6 +6,9 @@ What started out as an exercise turned into a real language. I has a Haskell/ML/
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
+> **NOTE**: Kopi is still in the experimental phase. Lots of things are changing, and new functionality is being added.
+> It's not ready to be used in production environments, but please try it out, experiment with it, and have fun!
+
 ### There are no keywords
 
 'match' is simply a function, and pattern matching is just an n-tuple of anonymous functions.

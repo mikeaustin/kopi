@@ -85,6 +85,7 @@ class Interpreter extends Visitors {
 
   async FunctionExpression({ params, expr }, scope) {
     const evaluatedParams = await this.visitNode(params, scope);
+    evaluatedParams.predicate = params.predicate;
 
     return new KopiFunction(evaluatedParams, expr, scope);
   }

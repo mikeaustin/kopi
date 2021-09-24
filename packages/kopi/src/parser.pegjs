@@ -116,6 +116,18 @@ ApplyExpression
       ), new Identifier({ name: '+' }));
     }
 
+NoFunctionApplyExpression
+  = expr:TupleExpression args:(_ TupleExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr)
+    }
+  / expr:("+" / "-" / "*" / "/" / "%") args:(_ TupleExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), new Identifier({ name: '+' }));
+    }
+
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
@@ -156,14 +168,19 @@ TupleExpression
     }
 
 NewlineTupleExpression
-  = "(" _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _ ")" {
+  = "("
+      _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _
+    ")" {
       return new TupleExpression({
         elements: [
           ...exprsNames.map(expr => expr[2])
         ],
       });
     }
-  / "(" _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+ exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _ ")" {
+  / "("
+       _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+
+       exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _
+    ")" {
       if (exprs.length === 1 && exprsNames.length === 0) {
         return exprs[0][2];
       }
@@ -186,7 +203,9 @@ ArrayExpression
         ], [head])
       });
     }
-  / "[" _ exprs:(Newline+ Expression)+ Newline+ _ "]" {
+  / "["
+       _ exprs:(Newline+ Expression)+ Newline+ _
+    "]" {
       return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
     }
   / OperatorExpression
@@ -278,7 +297,11 @@ AssignmentFunctionPattern
 //
 
 Pattern
-  = TuplePattern
+  = pattern:TuplePattern predicate:(_ "@" _ NoFunctionApplyExpression)? {
+    pattern.predicate = predicate?.[3];
+
+    return pattern;
+  }
 
 TuplePattern
   = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
@@ -335,9 +358,11 @@ StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
 
 AstLiteral
-  = "'(" exprs:(Newline+ Expression)+ Newline+ ")" {
-    return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
-  }
+  = "'("
+      exprs:(Newline+ Expression)+ Newline+
+    ")" {
+      return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
+    }
   / "'" "(" expr:Statement ")" {
       return new AstLiteral({ value: expr });
     }

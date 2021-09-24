@@ -71,3 +71,28 @@ print (1, 2, z: 3)
 print (1, y: 2, z: 3)
 print (x: 1, y: 2, z: 3)
 print (1, y: 2, 3)
+
+
+print $ 1..10 | map (even n) => n * n
+
+print $ 1..10 | map (n) @ even n => n * n
+
+x = z > 1 ? 1 : x
+
+x = if z > 1 then 1 else x
+
+x = match x (
+  x @ x > 1 => 1
+)
+
+x = match () (
+  _ @ x > y => 0
+  _         => 1
+)
+
+x = match () (
+  @ x > y => 0
+  @       => 1
+)
+
+x = match () _ [x > y] => 0, _ [] => 1

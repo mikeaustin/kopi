@@ -16,13 +16,17 @@ class KopiFunction {
   }
 
   apply(thisArg, [args, scope, visitors]) {
-    const matches = this.params.getMatches(args);
+    const matches = this.params.getMatches(args, scope, visitors);
 
     if (matches === null) {
       return undefined;
     }
 
-    return visitors.visitNode(this.expr, { ...this.closure, ...matches, _coroutineId: scope._coroutineId });
+    return visitors.visitNode(this.expr, {
+      ...this.closure,
+      ...matches,
+      _coroutineId: scope._coroutineId
+    });
   }
 
   getMatches(args) {

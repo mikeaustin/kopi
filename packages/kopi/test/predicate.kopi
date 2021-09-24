@@ -1,0 +1,13 @@
+print $ 1..10 | map n @ even n => n * n
+
+x = 1
+
+testGuard = n => match n (
+  n @ n + x == 1 => "Zero"
+  n @ n + x == 2 => "One"
+  _              => "Unknown"
+)
+
+print $ testGuard 0
+print $ testGuard 1
+print $ testGuard 2
