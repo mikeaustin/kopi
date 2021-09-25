@@ -4,6 +4,10 @@ class KopiVector {
     this.y = y;
   }
 
+  toStringAsync() {
+    return `Vector (${this.x}, ${this.y})`;
+  }
+
   ['+'](that) {
     return new KopiVector(this.x + that.x, this.y + that.y);
   }
