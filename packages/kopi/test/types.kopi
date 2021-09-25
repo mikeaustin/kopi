@@ -7,3 +7,20 @@ objects = [
 print $ objects | _map object => match object (
   "ship", position => Ship (position + (Vector 10, 10))
 )
+
+
+f = 0 => "Zero"
+g = n => match n (
+  f
+  n => "Nonzero"
+)
+
+compose = f1 => f2 => arg => match arg (
+  f1
+  f2
+)
+
+f = 0 => "Zero"
+f = compose f n => "Nonzero"
+
+print $ f 0

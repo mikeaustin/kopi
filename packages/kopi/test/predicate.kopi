@@ -11,3 +11,18 @@ testGuard = n => match n (
 print $ testGuard 0
 print $ testGuard 1
 print $ testGuard 2
+
+
+if = a => b => match () (
+  a
+  b
+)
+
+x = 1.5
+
+print $ match () (
+  _ @ x > 1 => 1
+  _         => x
+)
+
+# print $ if (_ @ x > 1 => 1) (_ => x)

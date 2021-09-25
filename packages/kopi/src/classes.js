@@ -190,7 +190,7 @@ class IdentifierPattern {
     // console.log(x);
 
     return {
-      [this.name]: value === KopiTuple.empty && this.init ? this.init : value,
+      [this.name]: value === KopiTuple.empty && this.init !== null ? this.init : value,
     };
   }
 }
