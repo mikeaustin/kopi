@@ -69,6 +69,14 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(left, scope);
     const evaluatedArgs = await this.visitNode(right.args, scope);
 
+    // console.log('PipeExpression', evaluatedExpr);
+
+    const extensionMethod = scope.methods.get(evaluatedExpr.constructor)?.[right.name ?? right.expr.name];
+
+    if (extensionMethod) {
+      return extensionMethod.apply(undefined, [evaluatedExpr, scope, this]);
+    }
+
     const value = evaluatedExpr[right.name ?? right.expr.name];
 
     return typeof value === 'function' || typeof value === 'object' && 'apply' in value

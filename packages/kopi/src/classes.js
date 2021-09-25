@@ -1,144 +1,16 @@
 const util = require("util");
 
+require('./classes/Boolean');
+require('./classes/Number');
+require('./classes/String');
+require('./classes/Array');
+require('./classes/Map');
+
 const { default: KopiString } = require('./classes/KopiString');
 const { default: KopiTuple } = require('./classes/KopiTuple');
 const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
-
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
-
-Boolean.prototype.toStringAsync = function () {
-  return this.toString();
-};
-
-Boolean.prototype['=='] = function (that) {
-  if (typeof that !== 'boolean') {
-    return false;
-  }
-
-  return this.valueOf() === that.valueOf();
-};
-
-Boolean.prototype['!='] = function (that) {
-  return !this['=='](that);
-};
-
-//
-
-Number.prototype.toStringAsync = function () {
-  return this.toString();
-};
-
-Number.prototype.succ = function () {
-  return this + 1;
-};
-
-Number.prototype['+'] = function (that) {
-  return this + that;
-};
-
-Number.prototype['*'] = function (that) {
-  return this * that;
-};
-
-Number.prototype['=='] = function (that) {
-  if (typeof that !== 'number') {
-    return false;
-  }
-
-  return this.valueOf() === that.valueOf();
-};
-
-Number.prototype['!='] = function (that) {
-  return !this['=='](that);
-};
-
-//
-
-String.prototype.toStringAsync = function () {
-  return this.toString();
-};
-
-String.prototype[util.inspect.custom] = function () {
-  return `"${this}"`;
-};
-
-String.prototype.succ = function () {
-  return String.fromCodePoint(this.codePointAt(0) + 1);
-};
-
-String.prototype.xsplit = function (delimiter) {
-  return this.split(delimiter);
-};
-
-String.prototype['++'] = function (that) {
-  if (typeof that !== 'string') {
-    throw new Error(`Can't concat string with ${that.constructor.name}`);
-  }
-
-  return this.concat(that);
-};
-
-String.prototype['=='] = function (that) {
-  if (typeof that !== 'string') {
-    return false;
-  }
-
-  return this.valueOf() === that.valueOf();
-};
-
-String.prototype['!='] = function (that) {
-  return !this['=='](that);
-};
-
-//
-
-Array.prototype.toStringAsync = async function () {
-  const elements = await Promise.all(
-    this.map(async element => (await element).toStringAsync())
-  );
-
-  return `[${elements.join(', ')}]`;
-};
-
-Array.prototype[util.inspect.custom] = function () {
-  return `[${this.map(element => inspect(element)).join(', ')}]`;
-};
-
-Array.prototype.toArray = function () {
-  return this;
-};
-
-Array.prototype['++'] = function (that) {
-  return this.concat(that.toArray());
-};
-
-Array.prototype._join = async function (args) {
-  const elements = await Promise.all(this);
-
-  return elements.join(args);
-};
-
-Array.prototype._map = async function (args, scope, visitors) {
-  const values = [];
-
-  for (const element of this) {
-    values.push(await args.apply(undefined, [element, scope, visitors]));
-  }
-
-  return values;
-};
-
-Array.prototype.xreverse = async function (args, scope, visitors) {
-  return [...this].reverse();
-};
-
-//
 
 class TuplePattern {
   constructor(elements) {

@@ -5,11 +5,25 @@ const readline = require('readline');
 const { KopiTuple, KopiVector } = require('./classes');
 
 const core = require('./functions/core');
-
 const { compile } = require('./compiler');
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 let getScope = (input) => ({
+  inspect: (value) => console.log(inspect(value)),
   tuple: (array) => new KopiTuple(array),
+  methods: new Map(),
+  extend: (type) => async (methods, scope) => {
+    // console.log(methods[0]);
+
+    return new Map(scope.methods).set(type, {
+      ...scope.methods.get(type),
+      capitalize: await methods[0]
+    });
+  },
 
   true: true,
   false: false,
@@ -96,6 +110,7 @@ let getScope = (input) => ({
     });
   },
   Vector: (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]),
+  String,
 });
 
 module.exports = {

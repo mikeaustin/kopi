@@ -1,0 +1,7 @@
+methods = extend String (
+  capitalize: (this) => this ++ ", world!"
+)
+
+inspect methods
+
+print $ "Hello" | capitalize
