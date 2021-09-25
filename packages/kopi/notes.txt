@@ -101,3 +101,9 @@ x = match () (
 )
 
 x = match () _ [x > y] => 0, _ [] => 1
+
+
+match age (
+     1..18  => "child"
+    19..100 => "adult"
+)
