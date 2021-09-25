@@ -1,0 +1,9 @@
+Ship = position => (type: "ship", position: position)
+
+objects = [
+  Ship (position: (Vector 10, 20))
+]
+
+print $ objects | _map object => match object (
+  "ship", position => Ship (position + (Vector 10, 10))
+)
