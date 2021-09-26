@@ -242,6 +242,7 @@ function peg$parse(input, options) {
               elements: [
                 ...exprsNames.map(expr => expr[2])
               ],
+              fields: exprsNames.map(expr => expr[1][1].name)
             });
           },
       peg$c43 = function(exprs, exprsNames) {
@@ -254,6 +255,7 @@ function peg$parse(input, options) {
                 ...exprs.map(expr => expr[2]),
                 ...exprsNames.map(expr => expr[2])
               ],
+              fields: ['foo']
             });
           },
       peg$c44 = "[",

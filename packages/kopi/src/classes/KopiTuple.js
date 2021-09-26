@@ -8,9 +8,10 @@ const inspect = value => util.inspect(value, {
 class KopiTuple {
   static empty = new KopiTuple(null);
 
-  constructor(elements = []) {
+  constructor(elements = [], fields = []) {
     if (elements === null) {
       this.elements = [];
+      this.fields = [];
 
       return this;
     }
@@ -24,6 +25,7 @@ class KopiTuple {
     elements.forEach((element, index) => this[index] = element);
 
     this.elements = elements;
+    this.fields = fields;
   }
 
   async toStringAsync() {
@@ -36,6 +38,7 @@ class KopiTuple {
     );
 
     return `(${elements.join(', ')})`;
+    // return `(${elements.join(', ')}) [${this.fields}]`;
   }
 
   [util.inspect.custom]() {

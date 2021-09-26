@@ -1,7 +1,24 @@
+# methods = extend type 'String
+#   capitalize: (this) => this ++ ", world!"
+# )
+
 methods = extend String (
-  capitalize: (this) => this ++ ", world!"
+  greet: (this) => "Hello, " ++ this
+  wave: (this) => 0
 )
 
-inspect methods
+methods = extend String (
+  wave: (this) => "Waves to " ++ this
+)
 
-print $ "Hello" | capitalize
+print $ String 10
+
+print $ "Joe" | greet
+print $ "Joe" | wave
+
+
+methods = extend Vector (
+  fire: (this) => "Pew! Pew! Pew!"
+)
+
+print $ (Vector 10, 20) | fire

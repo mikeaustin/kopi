@@ -1,26 +1,49 @@
-Ship = position => (type: Ship, position: position)
+Ship = position => (type: "Ship", position: position)
+Asteroid = position => (type: "Asteroid", position: position)
 
 objects = [
   Ship (position: (Vector 10, 20))
+  Asteroid (position: (Vector 20, 30))
 ]
 
 print $ objects | _map object => match object (
-  Ship, position => Ship (position + (Vector 10, 10))
+  "Ship", position => Ship (position + (Vector 10, 10))
+  "Asteroid", position => Asteroid (position + (Vector 1, 1))
 )
 
+# Ship = (position: Vector)
+# creates a tuple with type: Ship?
+#
+# Ship (position) => Ship (position + (Vector 10, 20))
 
-f = 0 => "Zero"
-g = n => match n (
-  f
-  n => "Nonzero"
-)
+# methods = extend Ship (
+#   capitalize: () => "Pew!"
+# )
 
-compose = f1 => f2 => arg => match arg (
-  f1
-  f2
-)
+# print $ objects.0 | capitalize
 
-f = 0 => "Zero"
-f = compose f n => "Nonzero"
+# {
+#   methods = extend Ship (
+#     capitalize: () => "Rawr!"
+#   )
 
-print $ f 0
+#   print $ objects.0 | capitalize
+# }
+
+# print $ objects.0 | capitalize
+
+# f = 0 => "Zero"
+# g = n => match n (
+#   f
+#   n => "Nonzero"
+# )
+
+# compose = f1 => f2 => arg => match arg (
+#   f1
+#   f2
+# )
+
+# f = 0 => "Zero"
+# f = compose f n => "Nonzero"
+
+# print $ f 0

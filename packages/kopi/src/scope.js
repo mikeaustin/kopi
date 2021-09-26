@@ -12,17 +12,24 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+const Vector = (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]);
+Vector.nativeConstructor = KopiVector;
+
+String.nativeConstructor = String;
+
 let getScope = (input) => ({
   inspect: (value) => console.log(inspect(value)),
   tuple: (array) => new KopiTuple(array),
   methods: new Map(),
-  extend: (type) => async (methods, scope) => {
-    // console.log(methods[0]);
+  extend: (constructor) => async (methods, scope) => {
+    const { nativeConstructor } = constructor;
 
-    return new Map(scope.methods).set(type, {
-      ...scope.methods.get(type),
-      capitalize: await methods[0]
-    });
+    return methods.elements.reduce(async (newMethods, method, index) => (
+      (await newMethods).set(nativeConstructor, {
+        ...(await newMethods).get(nativeConstructor),
+        [methods.fields[index]]: await method
+      }), newMethods
+    ), new Map(scope.methods));
   },
 
   true: true,
@@ -109,7 +116,7 @@ let getScope = (input) => ({
       });
     });
   },
-  Vector: (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]),
+  Vector,
   String,
 });
 

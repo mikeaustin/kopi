@@ -77,6 +77,12 @@ class Interpreter extends Visitors {
       return extensionMethod.apply(undefined, [evaluatedExpr, scope, this]);
     }
 
+    // const extensionMethod2 = scope.methods.get(evaluatedExpr[0])?.[right.name ?? right.expr.name];
+
+    // if (extensionMethod2) {
+    //   return extensionMethod2.apply(undefined, [evaluatedExpr, scope, this]);
+    // }
+
     const value = evaluatedExpr[right.name ?? right.expr.name];
 
     return typeof value === 'function' || typeof value === 'object' && 'apply' in value
@@ -98,13 +104,14 @@ class Interpreter extends Visitors {
     return new KopiFunction(evaluatedParams, expr, scope);
   }
 
-  async TupleExpression({ elements }, scope) {
+  async TupleExpression({ elements, fields }, scope) {
     if (elements.length === 0) {
       return KopiTuple.empty;
     }
 
     return new KopiTuple(
-      elements.map(element => this.visitNode(element, scope))
+      elements.map(element => this.visitNode(element, scope)),
+      fields
     );
   }
 
