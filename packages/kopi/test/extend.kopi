@@ -2,23 +2,38 @@
 #   capitalize: (this) => this ++ ", world!"
 # )
 
-methods = extend String (
+extend String (
   greet: (this) => "Hello, " ++ this
-  wave: (this) => 0
 )
 
-methods = extend String (
+extend String (
   wave: (this) => "Waves to " ++ this
 )
-
-print $ String 10
 
 print $ "Joe" | greet
 print $ "Joe" | wave
 
+{
+  extend String (
+    greet: (this) => "Welcome, " ++ this
+  )
 
-methods = extend Vector (
+  print $ "Joe" | greet
+}
+
+print $ "Joe" | greet
+
+
+extend Vector (
   fire: (this) => "Pew! Pew! Pew!"
 )
 
 print $ (Vector 10, 20) | fire
+
+# Under the hood, it's just updating and using 'methods'
+#
+# methods = extend methods String (
+#   greet: (this) => "Hello, " ++ this
+# )
+#
+# methods.get("Joe".nativeConstructor).greet("Joe")
