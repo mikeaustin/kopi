@@ -22,10 +22,12 @@ let getScope = (input) => ({
   tuple: (array) => new KopiTuple(array),
   methods: new Map(),
   extend: (constructor) => async (methods, scope, visitors, bind) => {
+    const { nativeConstructor } = constructor;
+
     newMethods = await methods.elements.reduce(async (newMethods, method, index) => ({
       ...await newMethods,
       [methods.fields[index]]: await method,
-    }), scope.methods.get(constructor.nativeConstructor));
+    }), scope.methods.get(nativeConstructor));
 
     bind({
       methods: new Map(scope.methods).set(nativeConstructor, newMethods)
