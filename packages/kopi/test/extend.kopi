@@ -3,11 +3,11 @@
 # )
 
 extend String (
-  greet: (this) => "Hello, " ++ this
+  greet: (this) => () => "Hello, " ++ this ++ "."
 )
 
 extend String (
-  wave: (this) => "Waves to " ++ this
+  wave: (this) => () => "Waves to " ++ this
 )
 
 print $ "Joe" | greet
@@ -15,7 +15,7 @@ print $ "Joe" | wave
 
 {
   extend String (
-    greet: (this) => "Welcome, " ++ this
+    greet: (this) => () => "Welcome, " ++ this
   )
 
   print $ "Joe" | greet
@@ -25,10 +25,12 @@ print $ "Joe" | greet
 
 
 extend Vector (
-  fire: (this) => "Pew! Pew! Pew!"
+  fire: (this) => () => "Pew! Pew! Pew!"
 )
 
 print $ (Vector 10, 20) | fire
+
+inspect methods
 
 # Under the hood, it's just updating and using 'methods'
 #
