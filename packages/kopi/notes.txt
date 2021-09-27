@@ -19,34 +19,10 @@ end
 
 Point = (x: Number, y: Number)
 
-(1, y: 2)
-
-ul (id: "foo", class: "bar") (
-  1..5 | map (x) => (
-    li () [text x]
-  )
-)
-
-
-fold (a, x => x * x), 1..5
-sort "julie" ++ "moronuki"
-xs | reduce 0 sum, x => sum + x
-
-
-match n (
-  0 => 1
-  n => n * n
-  n @ even => n * n
-)
 
 1..10 | map (n @ even n) => n * n
 
 1..10 | map (n) @ even n => n * n
-
-1..10 | map (n @ n > x) => n * n
-
-
-scheme cond case
 
 
 grayscale = color => match color (

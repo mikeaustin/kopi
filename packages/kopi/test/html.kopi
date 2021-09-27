@@ -40,9 +40,9 @@ generateHtmlString = (node, level) => {
 documentTree = (
   html () [
     text "Hello"
-    ul () [
-      li () [(text 1)]
-      li () [(text 2)]
+    ul (class: "list") [
+      li (class: "item") [(text 1)]
+      li (class: "item") [(text 2)]
     ]
   ]
 )
