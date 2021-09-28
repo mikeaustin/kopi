@@ -158,11 +158,11 @@ TupleExpression
       });
     }
   / head:NewlineTupleExpression
-    tail:(_ "," _ !(Identifier ":") NewlineTupleExpression)*
+    tail:(_ "," _ !(Identifier ":") _ NewlineTupleExpression)*
     tailNames:(_ "," _ (Identifier ":") _ NewlineTupleExpression)* {
   	  return [...tail, ...tailNames].length === 0 ? head : new TupleExpression({
         elements: [
-          ...tail.reduce((expressions, [, , , , expression]) => [
+          ...tail.reduce((expressions, [, , , , , expression]) => [
             ...expressions,
             expression
           ], [head]),
@@ -186,31 +186,31 @@ TupleExpression
 
 NewlineTupleExpression
   = "("
-      _ exprsNames:(Newline+ (_ Identifier ":" _) Expression)+ Newline+ _
+      _ exprsNames:(Newline+ _ (Identifier ":") _ Expression)+ Newline+ _
     ")" {
       return new TupleExpression({
         elements: [
-          ...exprsNames.map(expr => expr[2])
+          ...exprsNames.map(expr => expr[4])
         ],
-        fields: exprsNames.map(expr => expr[1][1].name)
+        fields: exprsNames.map(expr => expr[2][0].name)
       });
     }
   / "("
-       _ exprs:(Newline+ !(_ Identifier ":" _) Expression)+
-       exprsNames:(Newline+ (_ Identifier ":" _) Expression)* Newline+ _
+       _ exprs:(Newline+ _ !(Identifier ":") _ Expression)+
+       exprsNames:(Newline+ _ (Identifier ":") _ Expression)* Newline+ _
     ")" {
       if (exprs.length === 1 && exprsNames.length === 0) {
-        return exprs[0][2];
+        return exprs[0][4];
       }
 
       return new TupleExpression({
         elements: [
-          ...exprs.map(expr => expr[2]),
-          ...exprsNames.map(expr => expr[2])
+          ...exprs.map(expr => expr[4]),
+          ...exprsNames.map(expr => expr[4])
         ],
         fields: [
           ...exprs.map(_ => null),
-          ...exprsNames.map(expr => expr[1][1].name)
+          ...exprsNames.map(expr => expr[2][0].name)
         ],
       });
     }
