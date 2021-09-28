@@ -37,8 +37,9 @@ class KopiTuple {
       this.elements.map(async element => (await (await element).toStringAsync()))
     );
 
-    return `(${elements.join(', ')})`;
-    // return `(${elements.join(', ')}) [${this.fields}]`;
+    return `(${elements.map((element, index) => (
+      `${this.fields[index] ? `${this.fields[index]}: ` : ''}${element}`
+    )).join(', ')})`;
   }
 
   [util.inspect.custom]() {
