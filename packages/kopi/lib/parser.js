@@ -219,7 +219,11 @@ function peg$parse(input, options) {
               elements: tailNames.reduce((expressions, [, , , , , expression]) => [
                 ...expressions,
                 expression
-              ], [headName[2]])
+              ], [headName[2]]),
+              fields: tailNames.reduce((fields, [, , , [field]]) => [
+                ...fields,
+                field.name
+              ], [headName[0][0].name])
             });
           },
       peg$c37 = function(head, tail, tailNames) {
