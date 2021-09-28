@@ -199,7 +199,10 @@ function peg$parse(input, options) {
       peg$c27 = "=>",
       peg$c28 = peg$literalExpectation("=>", false),
       peg$c29 = function(expr) {
-            return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
+            return new FunctionExpression({ params: new TuplePattern({
+              elements: [],
+              fields: []
+            }), expr });
           },
       peg$c30 = function(params, expr) {
             return new FunctionExpression({ params, expr });
@@ -255,7 +258,7 @@ function peg$parse(input, options) {
                 ...exprs.map(expr => expr[2]),
                 ...exprsNames.map(expr => expr[2])
               ],
-              fields: ['foo']
+              fields: []
             });
           },
       peg$c44 = "[",
@@ -306,7 +309,7 @@ function peg$parse(input, options) {
       peg$c74 = function(head, tail) {
             return new TuplePattern({
               elements: tail.reduce((elements, [, , element]) => [...elements, element], [head[0]]),
-              fields: tail.reduce((fields, [, , field, colon]) => [...fields, colon && field], [head[1] && head[0]])
+              fields: tail.reduce((fields, [, , field, colon]) => [...fields, colon && field.name], [head[1] && head[0].name])
             });
           },
       peg$c75 = function(number) {
@@ -327,7 +330,8 @@ function peg$parse(input, options) {
         },
       peg$c81 = function(head, tail) {
             return new TuplePattern({
-              elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head])
+              elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head]),
+              fields: []
             });
           },
       peg$c82 = function(pattern) { return pattern; },

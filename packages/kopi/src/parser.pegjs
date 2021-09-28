@@ -130,7 +130,10 @@ NoFunctionApplyExpression
 
 FunctionExpression
   = "()" _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params: new TuplePattern({ elements: [] }), expr });
+      return new FunctionExpression({ params: new TuplePattern({
+        elements: [],
+        fields: []
+      }), expr });
     }
   / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
@@ -191,7 +194,7 @@ NewlineTupleExpression
           ...exprs.map(expr => expr[2]),
           ...exprsNames.map(expr => expr[2])
         ],
-        fields: ['foo']
+        fields: []
       });
     }
   / ArrayExpression
@@ -272,7 +275,7 @@ AssignmentTuplePattern
   = head:(AssignmentPrimaryPattern ":"?) tail:("," _ AssignmentPrimaryPattern ":"?)+ {
       return new TuplePattern({
         elements: tail.reduce((elements, [, , element]) => [...elements, element], [head[0]]),
-        fields: tail.reduce((fields, [, , field, colon]) => [...fields, colon && field], [head[1] && head[0]])
+        fields: tail.reduce((fields, [, , field, colon]) => [...fields, colon && field.name], [head[1] && head[0].name])
       });
     }
   / AssignmentPrimaryPattern
@@ -309,7 +312,8 @@ Pattern
 TuplePattern
   = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
       return new TuplePattern({
-        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head])
+        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head]),
+        fields: []
       });
     }
   / PrimaryPattern

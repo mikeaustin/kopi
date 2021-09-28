@@ -13,11 +13,33 @@ const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
 
 class TuplePattern {
-  constructor(elements) {
+  constructor(elements, fields) {
     this.elements = elements;
+    this.fields = fields;
   }
 
   getMatches(value) {
+    // console.log('getMatches', this.fields);
+
+    // TODO
+    if (this.fields[0]) {
+      const matchesArray = this.fields.map((field, index) => (
+        this.elements[value.fields.indexOf(field)].getMatches(value.elements[index] ?? KopiTuple.empty)
+        // this.elements[index].getMatches(value.fields.indexOf(field) ?? KopiTuple.empty)
+      ));
+
+      // console.log(matchesArray);
+
+      if (matchesArray.some(match => match === null)) {
+        return null;
+      }
+
+      return matchesArray.reduce((scope, matches) => ({
+        ...scope,
+        ...matches,
+      }), {});
+    }
+
     const matchesArray = this.elements.map((element, index) => (
       element.getMatches(value.elements[index] ?? KopiTuple.empty)
     ));

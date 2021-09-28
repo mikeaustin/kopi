@@ -153,7 +153,10 @@ class Interpreter extends Visitors {
   TuplePattern({ elements, fields }, scope) {
     // console.log('TuplePattern', fields);
 
-    return new TuplePattern(elements.map(element => this.visitNode(element, scope)));
+    return new TuplePattern(
+      elements.map(element => this.visitNode(element, scope)),
+      fields
+    );
   }
 
   BooleanLiteralPattern({ value }) {
