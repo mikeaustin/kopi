@@ -22,7 +22,9 @@ print $ glDrawArrays (
 
 print $ glDrawArrays (mode: GL_POINTS, first: 0, count: 10)
 
-glTexImage2D = (target, level, internalformat, width, height, border, format, type, data) => (target, level, internalformat, width, height, border, format, type, data)
+glTexImage2D = (target, level, internalformat, width, height, border, format, type, data) => {
+  (target, level, internalformat, width, height, border, format, type, data)
+}
 
 print $ glTexImage2D (
   target: GL_TEXTURE_2D
