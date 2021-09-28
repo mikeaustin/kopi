@@ -7,12 +7,29 @@ a:, d:, c:, b: = (
 
 print (a, b, c, d)
 
+print ""
+
+print (
+  1
+  2
+  c: 3
+)
+
+print (
+  1
+  b: 2
+  c: 3
+)
+
 print (
   a: 1
   b: 2
   c: 3
 )
 
-print (a: 1, b: 2, c: 3)
+print ""
 
+print (1, 2, 3)
+print (1, 2, c: 3)
 print (1, b: 2, c: 3)
+print (a: 1, b: 2, c: 3)

@@ -237,6 +237,16 @@ function peg$parse(input, options) {
                   ...expressions,
                   expression
                 ], []),
+              ],
+              fields: [
+                ...tail.reduce((fields, _) => [
+                  ...fields,
+                  null,
+                ], [null]),
+                ...tailNames.reduce((fields, [, , , [field]]) => [
+                  ...fields,
+                  field.name,
+                ], []),
               ]
             });
           },
@@ -262,7 +272,10 @@ function peg$parse(input, options) {
                 ...exprs.map(expr => expr[2]),
                 ...exprsNames.map(expr => expr[2])
               ],
-              fields: []
+              fields: [
+                ...exprs.map(_ => null),
+                ...exprsNames.map(expr => expr[1][1].name)
+              ],
             });
           },
       peg$c44 = "[",
