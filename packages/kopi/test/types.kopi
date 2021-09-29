@@ -1,3 +1,7 @@
+print ""
+print "== types ========================================="
+print ""
+
 Ship = position => (type: "Ship", position: position)
 Asteroid = position => (type: "Asteroid", position: position)
 

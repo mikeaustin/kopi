@@ -84,7 +84,7 @@ const kopi_loop = async (fn, scope, visitors) => {
 
     if (++index % 1000 === 0) {
       global.gc();
-      await core.kopi_sleep(0);
+      await kopi_sleep(0);
     }
   }
 

@@ -1,6 +1,10 @@
 import "test/basics.kopi"
 import "test/database.kopi"
 import "test/html.kopi"
+import "test/record.kopi"
+import "test/types.kopi"
+import "test/predicate.kopi"
+import "test/interpret.kopi"
 import "test/async.kopi"
 
 coroutine = (x = 1) => {

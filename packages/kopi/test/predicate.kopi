@@ -1,3 +1,7 @@
+print ""
+print "== predicate ====================================="
+print ""
+
 print $ 1..10 | map n @ even n => n * n
 
 x = 1

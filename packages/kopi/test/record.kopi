@@ -1,3 +1,7 @@
+print ""
+print "== record ========================================"
+print ""
+
 print (1, 2, 3)
 print (1, 2, z: 3)
 print (1, y:2, z: 3)
