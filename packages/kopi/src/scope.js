@@ -58,35 +58,7 @@ let getScope = (input) => ({
   tasks: core.kopi_tasks,
 
   at: (index) => async array => await array[index],
-  loop: async (fn, scope, visitors) => {
-    const exit = (value) => { done = true; return value; };
-    const func = await fn.apply(undefined, [exit, scope, visitors]);
-
-    let done = false;
-    let index = 0;
-    let value = KopiTuple.empty;
-
-    while (!done) {
-      value = await func.apply(undefined, [value, scope, visitors]);
-
-      if (++index % 1000 === 0) {
-        global.gc();
-        await core.kopi_sleep(0);
-      }
-    }
-
-    return value;
-
-    // function loop(value) {
-    //   setImmediate(async () => {
-    //     value = await func.apply(undefined, [value, scope, visitors]);
-
-    //     loop(value);
-    //   });
-    //   loop(value);
-    // }
-    // loop(value);
-  },
+  loop: core.kopi_loop,
   repeat: (fn, scope, visitors) => (
     function next(value) {
       if (value?.elements?.length === 0) {

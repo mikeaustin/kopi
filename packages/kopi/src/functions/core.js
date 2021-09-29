@@ -71,6 +71,26 @@ const kopi_match = (value, scope, visitors) => async (_funcs) => {
   }
 };
 
+const kopi_loop = async (fn, scope, visitors) => {
+  const exit = (value) => { done = true; return value; };
+  const func = await fn.apply(undefined, [exit, scope, visitors]);
+
+  let done = false;
+  let index = 0;
+  let value = KopiTuple.empty;
+
+  while (!done) {
+    value = await func.apply(undefined, [value, scope, visitors]);
+
+    if (++index % 1000 === 0) {
+      global.gc();
+      await core.kopi_sleep(0);
+    }
+  }
+
+  return value;
+};
+
 const kopi_write = (val) => {
   return new Promise(resolve => process.stdout.write(val.toStringAsync(), () => resolve()));
 };
@@ -120,6 +140,7 @@ module.exports = {
   kopi_max,
   kopi_let,
   kopi_match,
+  kopi_loop,
   kopi_write,
   kopi_sleep,
   kopi_fetch,
