@@ -83,3 +83,25 @@ match age (
      1..18  => "child"
     19..100 => "adult"
 )
+
+
+type aliases?
+
+Person = Person (name: String, age: Int)
+
+person = Person (name: "Joe", age: 30)
+
+Person (:name:, :age)  => "Hello, {name}."
+
+Color = RGB (r: Int, g: Int, b: Int)
+
+Color.RGB (100, 100, 255)
+
+
+Point<T> = Point<T> (x: T, y: T)
+
+Point = T => Point (x: T, y: T)
+
+
+Move read to fetch?
+print to println?
