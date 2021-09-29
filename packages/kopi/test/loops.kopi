@@ -1,19 +1,23 @@
 xloop = (x) => {
   match (x % 100000) (
     0 => {
-      print "Sleeping"
+      print $ x | toLocaleString
+      gc ()
       sleep 1
     }
     _ => ()
   )
-  print $ x | toLocaleString
-  loop (x + 1)
+  xloop (x + 1)
 }
 
-# loop 1
+# xloop 1
 
 loop exit => (x = 1) => {
-  print $ x | toLocaleString
-  sleep 0
+  match (x % 10000) (
+    0 => {
+      print $ x | toLocaleString
+    }
+    _ => ()
+  )
   x + 1
 }

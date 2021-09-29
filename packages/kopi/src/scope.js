@@ -18,6 +18,9 @@ Vector.nativeConstructor = KopiVector;
 String.nativeConstructor = String;
 
 let getScope = (input) => ({
+  gc: () => {
+    global.gc();
+  },
   inspect: (value) => console.log(inspect(value)),
   tuple: (array) => new KopiTuple(array),
   methods: new Map(),
@@ -74,10 +77,16 @@ let getScope = (input) => ({
     const func = await fn.apply(undefined, [exit, scope, visitors]);
 
     let done = false;
+    let index = 0;
     let value = KopiTuple.empty;
 
     while (!done) {
       value = await func.apply(undefined, [value, scope, visitors]);
+
+      if (++index % 10000 === 0) {
+        global.gc();
+        await core.kopi_sleep(0);
+      }
     }
 
     return value;
