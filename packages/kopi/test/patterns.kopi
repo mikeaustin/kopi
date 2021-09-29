@@ -1,9 +1,13 @@
-d:, c:, b: = (
+:d, :c, :b = (
   a: "a"
   b: "b"
   c: "c"
   d: "d"
 )
+
+print (b, c, d)
+
+:d, :c, :b = (a: "a", b: "b", c: "c", d: "d")
 
 print (b, c, d)
 

@@ -289,10 +289,10 @@ AssignmentPattern
   = AssignmentTuplePattern
 
 AssignmentTuplePattern
-  = head:(AssignmentPrimaryPattern ":"?) tail:("," _ AssignmentPrimaryPattern ":"?)+ {
+  = head:(":"? AssignmentPrimaryPattern) tail:("," _ ":"? AssignmentPrimaryPattern)+ {
       return new TuplePattern({
-        elements: tail.reduce((elements, [, , element]) => [...elements, element], [head[0]]),
-        fields: tail.reduce((fields, [, , field, colon]) => [...fields, colon && field.name], [head[1] && head[0].name])
+        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head[1]]),
+        fields: tail.reduce((fields, [, , colon, field]) => [...fields, colon && field.name], [head[0] && head[1].name])
       });
     }
   / AssignmentPrimaryPattern
