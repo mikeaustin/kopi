@@ -19,7 +19,7 @@ indent = (n) => {
 generateHtmlString = (node, level) => {
   match node (
     "text", value => {
-      indent level ++ string value ++ char 10
+      indent level ++ String value ++ char 10
     }
     "element", tag, props, children => {
       inner = children | _map child => generateHtmlString (child, level + 1)

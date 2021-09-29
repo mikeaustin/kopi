@@ -13,14 +13,6 @@ const kopi_char = (num) => {
   return String.fromCodePoint(num);
 };
 
-const kopi_string = (num) => {
-  return String(num);
-};
-
-const kopi_number = ({ value }) => {
-  return Number(value);
-};
-
 const kopi_random = () => {
   return Math.random();
 };
@@ -91,8 +83,6 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
 module.exports = {
   kopi_print,
   kopi_char,
-  kopi_string,
-  kopi_number,
   kopi_random,
   kopi_date,
   kopi_time,

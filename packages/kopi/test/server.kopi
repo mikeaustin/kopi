@@ -15,7 +15,7 @@ server = spawn () => {
   loop = (requests) => {
     request, _ = yield request => match request.url (
       "/favicon.ico" => ""
-      "/"            => template ("[" ++ (string requests) ++ " requests] <a href='test.html'>Link to static document</a>")
+      "/"            => template ("[" ++ (String requests) ++ " requests] <a href='test.html'>Link to static document</a>")
        _             => read ("test/" ++ request.url)
     )
 

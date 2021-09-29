@@ -44,7 +44,7 @@ print $ (sleep 1) + (sleep 2)
 # }
 
 # loop exit => (n = 1) => {
-#   write $ " " ++ (string n) ++ (char 13)
+#   write $ " " ++ (String n) ++ (char 13)
 #   sleep 1
 
 #   n + 1

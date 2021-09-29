@@ -13,7 +13,7 @@ xloop = (x) => {
 # xloop 1
 
 loop exit => (x = 1) => {
-  match (x % 10000) (
+  match (x % 100000) (
     0 => {
       print $ x | toLocaleString
     }

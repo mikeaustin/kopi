@@ -15,6 +15,7 @@ const inspect = value => util.inspect(value, {
 const Vector = (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]);
 Vector.nativeConstructor = KopiVector;
 
+Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
 let getScope = (input) => ({
@@ -44,8 +45,6 @@ let getScope = (input) => ({
   write: core.kopi_write,
 
   char: core.kopi_char,
-  string: core.kopi_string,
-  number: core.kopi_number,
 
   ident: core.kopi_ident,
 
@@ -83,7 +82,7 @@ let getScope = (input) => ({
     while (!done) {
       value = await func.apply(undefined, [value, scope, visitors]);
 
-      if (++index % 10000 === 0) {
+      if (++index % 1000 === 0) {
         global.gc();
         await core.kopi_sleep(0);
       }
@@ -128,6 +127,7 @@ let getScope = (input) => ({
     });
   },
   Vector,
+  Number,
   String,
 });
 
