@@ -1,16 +1,9 @@
-const util = require('util');
-const fs = require('fs');
 const readline = require('readline');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
 const core = require('./functions/core');
 const { compile } = require('./compiler');
-
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
 
 const Vector = (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]);
 Vector.nativeConstructor = KopiVector;
@@ -22,21 +15,10 @@ let getScope = (input) => ({
   gc: () => {
     global.gc();
   },
-  inspect: (value) => console.log(inspect(value)),
+  inspect: core.kopi_inspect,
   tuple: (array) => new KopiTuple(array),
   methods: new Map(),
-  extend: (constructor) => async (methods, scope, visitors, bind) => {
-    const { nativeConstructor } = constructor;
-
-    newMethods = await methods.elements.reduce(async (newMethods, method, index) => ({
-      ...await newMethods,
-      [methods.fields[index]]: await method,
-    }), scope.methods.get(nativeConstructor));
-
-    bind({
-      methods: new Map(scope.methods).set(nativeConstructor, newMethods)
-    });
-  },
+  extend: core.kopi_extend,
 
   true: true,
   false: false,
@@ -47,24 +29,29 @@ let getScope = (input) => ({
   char: core.kopi_char,
 
   ident: core.kopi_ident,
+  // compose
+  // const
+  // not
 
   random: core.kopi_random,
   date: core.kopi_date,
   time: core.kopi_time,
-  read: (filename) => util.promisify(fs.readFile)(filename, 'utf8'),
+  read: core.kopi_read,
 
   even: core.kopi_even,
+  // odd
+  // min
   max: core.kopi_max,
 
   import: (filename, scope) => compile(filename, scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
-  sleep: core.kopi_sleep,
   fetch: core.kopi_fetch,
   listen: core.kopi_listen,
   exit: (code) => process.exit(code),
 
+  sleep: core.kopi_sleep,
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
   send: core.kopi_send,

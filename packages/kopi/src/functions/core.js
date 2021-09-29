@@ -1,3 +1,5 @@
+const util = require('util');
+const fs = require('fs');
 const http = require('http');
 const fetch = require('node-fetch');
 
@@ -5,8 +7,21 @@ const { KopiTuple } = require('../classes');
 
 const coroutines = require('./coroutines');
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
+const kopi_inspect = (value) => {
+  console.log(inspect(value));
+};
+
 const kopi_print = async (val) => {
   console.log(await val.toStringAsync());
+};
+
+const kopi_read = (filename) => {
+  return util.promisify(fs.readFile)(filename, 'utf8');
 };
 
 const kopi_char = (num) => {
@@ -79,9 +94,23 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
   port: port,
 });
 
+const kopi_extend = (constructor) => async (methods, scope, visitors, bind) => {
+  const { nativeConstructor } = constructor;
+
+  newMethods = await methods.elements.reduce(async (newMethods, method, index) => ({
+    ...await newMethods,
+    [methods.fields[index]]: await method,
+  }), scope.methods.get(nativeConstructor));
+
+  bind({
+    methods: new Map(scope.methods).set(nativeConstructor, newMethods)
+  });
+};
 
 module.exports = {
+  kopi_inspect,
   kopi_print,
+  kopi_read,
   kopi_char,
   kopi_random,
   kopi_date,
@@ -99,4 +128,5 @@ module.exports = {
   kopi_yield: coroutines.kopi_yield,
   kopi_send: coroutines.kopi_send,
   kopi_tasks: coroutines.kopi_tasks,
+  kopi_extend,
 };
