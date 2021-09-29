@@ -1,11 +1,11 @@
-a:, d:, c:, b: = (
+d:, c:, b: = (
   a: "a"
   b: "b"
   c: "c"
   d: "d"
 )
 
-print (a, b, c, d)
+print (b, c, d)
 
 print ""
 

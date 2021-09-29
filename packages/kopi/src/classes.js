@@ -21,14 +21,11 @@ class TuplePattern {
   getMatches(value) {
     // console.log('getMatches', this.fields);
 
-    // TODO
+    // TODO: Match one both non-fields and fields in the same tuple
     if (this.fields[0]) {
       const matchesArray = this.fields.map((field, index) => (
-        this.elements[value.fields.indexOf(field)].getMatches(value.elements[index] ?? KopiTuple.empty)
-        // this.elements[index].getMatches(value.fields.indexOf(field) ?? KopiTuple.empty)
+        this.elements[this.fields.indexOf(field)].getMatches(value.elements[value.fields.indexOf(field)] ?? KopiTuple.empty)
       ));
-
-      // console.log(matchesArray);
 
       if (matchesArray.some(match => match === null)) {
         return null;
