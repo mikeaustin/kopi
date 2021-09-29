@@ -1,4 +1,4 @@
-generateHtmlString:, html:, body:, text: = import "test/html.kopi"
+generateHtmlString:, _ = import "test/html.kopi"
 
 html:, body:, text: = import "test/html.kopi"
 
