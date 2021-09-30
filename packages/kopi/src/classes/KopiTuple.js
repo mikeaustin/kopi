@@ -22,7 +22,10 @@ class KopiTuple {
       return KopiTuple.empty;
     }
 
-    elements.forEach((element, index) => this[index] = element);
+    elements.forEach((element, index) => {
+      this[index] = element;
+      this[fields[index]] = element;
+    });
 
     this.elements = elements;
     this.fields = fields;

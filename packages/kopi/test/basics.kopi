@@ -16,6 +16,13 @@ print (
   match 5 (0 => 1), (n => n * n)
 )
 
+print (
+  (foo: 1, bar: 2).0 == (bar: 1, foo: 2).0
+  (foo: 1, bar: 2).foo == (bar: 1, foo: 2).0
+  (foo: 1, bar: 2).bar == (bar: 1, foo: 2).1
+  (foo: 1, bar: 2).foo == (bar: 2, foo: 1).foo
+)
+
 
 print (
   1 == 1
