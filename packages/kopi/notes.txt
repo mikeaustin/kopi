@@ -87,7 +87,7 @@ match age (
 
 type aliases?
 
-Person = Person (name: String, age: Int)
+Person = type (name: String, age: Int)
 
 Person = (name: String, age: Int)
 
@@ -103,7 +103,7 @@ Color.RGB (100, 100, 255)
 
 Point<T> = Point<T> (x: T, y: T)
 
-Point = T => Point (x: T, y: T)
+Point = T => type (x: T, y: T)
 
 
 Move read to fetch?
