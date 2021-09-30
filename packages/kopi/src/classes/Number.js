@@ -14,6 +14,18 @@ Number.prototype['*'] = function (that) {
   return this * that;
 };
 
+Number.prototype['*'] = function (that) {
+  return this + that;
+};
+
+Number.prototype['/'] = function (that) {
+  return this * that;
+};
+
+Number.prototype['%'] = function (that) {
+  return this * that;
+};
+
 Number.prototype['=='] = function (that) {
   if (typeof that !== 'number') {
     return false;
