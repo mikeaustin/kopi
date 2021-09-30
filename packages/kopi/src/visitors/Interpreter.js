@@ -77,7 +77,18 @@ class Interpreter extends Visitors {
     bind(matches);
   }
 
-  TypeExpression({ head }) {
+
+  TupleTypeExpression({ elements = [], fields = [] }) {
+    return new KopiTuple(
+      elements.map(element => this.visitNode(element, scope, bind)),
+      fields
+    );
+  }
+
+  async TypeApplyExpression({ expr, args }, scope, bind) {
+    const evaluatedExpr = await this.visitNode(expr, scope, bind);
+    const evaluatedArgs = await this.visitNode(args, scope, bind);
+
     class _Foo {
       foo() { return 'foo'; }
     };
@@ -91,6 +102,7 @@ class Interpreter extends Visitors {
 
     return Foo;
   }
+
 
   async PipeExpression({ left, right }, scope, bind) {
     const evaluatedExpr = await this.visitNode(left, scope, bind);

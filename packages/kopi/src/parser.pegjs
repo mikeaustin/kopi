@@ -9,7 +9,9 @@
   class TypeAssignment extends Node { }
   class Assignment extends Node { }
 
-  class TypeExpression extends Node { }
+  class TupleTypeExpression extends Node { }
+  class TypeApplyExpression extends Node { }
+
   class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
@@ -79,15 +81,28 @@ Statement
   / Assignment
   / Expression
 
+
 TypeAssignment
   = pattern:Typename _ "=" _ expr:TypeExpression {
       return new TypeAssignment({ pattern, expr });
     }
 
 TypeExpression
-  = "(" _ head:(Identifier ":" _ Typename) _ ")" {
-      return new TypeExpression({ head });
+  = TypeApplyExpression
+
+TypeApplyExpression
+  = expr:TupleTypeExpression args:(_ TupleTypeExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new TypeApplyExpression({ expr, args })
+      ), expr)
     }
+
+TupleTypeExpression
+  = "(" _ head:(Identifier ":" _ Typename) (_ "," _ Identifier ":" _ Typename)* _ ")" {
+      return new TupleTypeExpression({ head });
+    }
+  / Identifier
+
 
 Assignment
   = pattern:AssignmentPattern _ "=" _ expr:Expression {
@@ -386,10 +401,10 @@ IdentifierPattern
 // Literals
 //
 
-Typename
+Typename "typename"
   = _ name:([_A-Z][_a-zA-Z0-9]*) _ { return new Typename({ name: name[0] + name[1].join('') }); }
 
-Identifier
+Identifier "identifier"
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral "number"
@@ -402,7 +417,7 @@ NumericLiteral "number"
 StringLiteral "string"
   = _ "\"" value:[^"]* "\"" _ { return new StringLiteral({ value: value.join('') }); }
 
-AstLiteral
+AstLiteral "astnode"
   = "'("
       exprs:(Newline+ Expression)+ Newline+
     ")" {

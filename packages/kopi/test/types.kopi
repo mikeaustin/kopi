@@ -2,17 +2,17 @@ print ""
 print "== types ========================================="
 print ""
 
-Ship = position => (type: "Ship", position: position)
-Asteroid = position => (type: "Asteroid", position: position)
+ship = position => (type: "ship", position: position)
+asteroid = position => (type: "asteroid", position: position)
 
 objects = [
-  Ship (position: (Vector 10, 20))
-  Asteroid (position: (Vector 20, 30))
+  ship (position: (Vector 10, 20))
+  asteroid (position: (Vector 20, 30))
 ]
 
 print $ objects | _map object => match object (
-  "Ship", position => Ship (position + (Vector 10, 10))
-  "Asteroid", position => Asteroid (position + (Vector 1, 1))
+  "ship", position => ship (position + (Vector 10, 10))
+  "asteroid", position => asteroid (position + (Vector 1, 1))
 )
 
 # Ship = (position: Vector)
@@ -52,7 +52,7 @@ print $ objects | _map object => match object (
 
 # print $ f 0
 
-Point = (x: Int)
+Point = type (x: Int, y: Int)
 
 point = Point ()
 
