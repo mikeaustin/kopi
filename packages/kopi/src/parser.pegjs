@@ -6,8 +6,10 @@
   }
 
   class Block extends Node { }
+  class TypeAssignment extends Node { }
   class Assignment extends Node { }
 
+  class TypeExpression extends Node { }
   class PipeExpression extends Node { }
   class OperatorExpression extends Node { }
   class FunctionExpression extends Node { }
@@ -37,6 +39,7 @@
 
   class StringLiteral extends Node { }
   class AstLiteral extends Node { }
+  class Typename extends Node { }
   class Identifier extends Node {
     toStringAsync() {
       return `'${this.name}`;
@@ -72,8 +75,19 @@ Block
     }
 
 Statement
-  = Assignment
+  = TypeAssignment
+  / Assignment
   / Expression
+
+TypeAssignment
+  = pattern:Typename _ "=" _ expr:TypeExpression {
+      return new TypeAssignment({ pattern, expr });
+    }
+
+TypeExpression
+  = "(" _ head:(Identifier ":" _ Typename) _ ")" {
+      return new TypeExpression({ head });
+    }
 
 Assignment
   = pattern:AssignmentPattern _ "=" _ expr:Expression {
@@ -371,6 +385,9 @@ IdentifierPattern
 //
 // Literals
 //
+
+Typename
+  = _ name:([_A-Z][_a-zA-Z0-9]*) _ { return new Typename({ name: name[0] + name[1].join('') }); }
 
 Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }

@@ -89,9 +89,12 @@ type aliases?
 
 Person = Person (name: String, age: Int)
 
+Person = (name: String, age: Int)
+
 person = Person (name: "Joe", age: 30)
 
 Person (:name:, :age)  => "Hello, {name}."
+
 
 Color = RGB (r: Int, g: Int, b: Int)
 
@@ -105,3 +108,8 @@ Point = T => Point (x: T, y: T)
 
 Move read to fetch?
 print to println?
+
+
+File.read "notes.txt"
+
+Net.fetch "https://google.com"

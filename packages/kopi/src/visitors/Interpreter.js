@@ -50,9 +50,20 @@ class Interpreter extends Visitors {
     ), undefined);
   }
 
-  async Assignment({ pattern, expr }, scope, bind) {
-    const evaluatedExpr = await this.visitNode(expr, scope, bind);
+  async TypeAssignment({ pattern, expr }, scope, bind) {
     const evaluatedPattern = await this.visitNode(pattern, scope, bind);
+    const evaluatedExpr = await this.visitNode(expr, scope, bind);
+
+    console.log(evaluatedPattern);
+
+    bind({
+      Point: evaluatedExpr
+    });
+  }
+
+  async Assignment({ pattern, expr }, scope, bind) {
+    const evaluatedPattern = await this.visitNode(pattern, scope, bind);
+    const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
     // TODO: pass expr directly so FunctionPattern can use it as body
     const matches = evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
@@ -64,6 +75,21 @@ class Interpreter extends Visitors {
     });
 
     bind(matches);
+  }
+
+  TypeExpression({ head }) {
+    class _Foo {
+      foo() { return 'foo'; }
+    };
+
+    Object.defineProperty(_Foo, 'name', {
+      value: 'Hello'
+    });
+
+    const Foo = () => new _Foo();
+    Foo.nativeConstructor = _Foo;
+
+    return Foo;
   }
 
   async PipeExpression({ left, right }, scope, bind) {
@@ -197,6 +223,10 @@ class Interpreter extends Visitors {
 
   AstLiteral({ value }) {
     return value;
+  }
+
+  Typename({ name }, scope) {
+    return name;
   }
 
   Identifier({ name }, scope) {

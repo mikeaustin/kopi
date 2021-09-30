@@ -51,3 +51,15 @@ print $ objects | _map object => match object (
 # f = compose f n => "Nonzero"
 
 # print $ f 0
+
+Point = (x: Int)
+
+point = Point ()
+
+print $ point | foo
+
+extend Point (
+  bar: (this) => () => "bar"
+)
+
+print $ point | bar
