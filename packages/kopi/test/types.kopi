@@ -42,3 +42,14 @@ print $ point | length | toFixed 3
 }
 
 print $ point | length | toFixed 3
+
+
+Person = type (name: String, age: Int)
+
+person = Person (name: "Joe", age: 30)
+
+print person.name, person.age
+
+:name, :age = person
+
+print name, age

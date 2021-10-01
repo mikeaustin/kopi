@@ -54,10 +54,8 @@ class Interpreter extends Visitors {
     const evaluatedPattern = await this.visitNode(pattern, scope, bind);
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
-    // console.log(evaluatedPattern);
-
     bind({
-      Point: evaluatedExpr
+      [evaluatedPattern]: evaluatedExpr
     });
   }
 
@@ -89,7 +87,7 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
     const evaluatedArgs = await this.visitNode(args, scope, bind);
 
-    class _Foo extends KopiTuple {
+    const _Foo = class extends KopiTuple {
       constructor(...args) {
         super(...args);
       }
