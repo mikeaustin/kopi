@@ -6,6 +6,8 @@ What started out as an exercise turned into a real language. Kopi has a Haskell/
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
+Also check out the github Wiki https://github.com/mikeaustin/kopi/wiki, now with more examples and future features, and github Discussions https://github.com/mikeaustin/kopi/discussions if you're interested in talking about Kopi.
+
 > **NOTE**: Kopi is still in the experimental phase. Lots of things are changing, and new functionality is being added.
 > It's not ready to be used in production environments, but please try it out, experiment with it, and have fun!
 
