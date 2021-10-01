@@ -12,7 +12,7 @@ String.prototype.succ = function () {
   return String.fromCodePoint(this.codePointAt(0) + 1);
 };
 
-String.prototype.xsplit = function (delimiter) {
+String.prototype._split = function (delimiter) {
   return this.split(delimiter);
 };
 
