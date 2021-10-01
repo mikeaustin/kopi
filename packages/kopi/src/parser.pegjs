@@ -324,10 +324,16 @@ AssignmentPattern
   = AssignmentTuplePattern
 
 AssignmentTuplePattern
-  = head:(":"? AssignmentPrimaryPattern) tail:("," _ ":"? AssignmentPrimaryPattern)+ {
+  = head:(":"? AssignmentPrimaryPattern) tail:(_ "," _ ":"? AssignmentPrimaryPattern)+ {
       return new TuplePattern({
-        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head[1]]),
-        fields: tail.reduce((fields, [, , colon, field]) => [...fields, colon && field.name], [head[0] && head[1].name])
+        elements: tail.reduce((elements, [, , , , element]) => [
+          ...elements,
+          element
+        ], [head[1]]),
+        fields: tail.reduce((fields, [, , , colon, field]) => [
+          ...fields,
+          colon && field.name
+        ], [head[0] && head[1].name])
       });
     }
   / AssignmentPrimaryPattern
@@ -362,10 +368,16 @@ Pattern
   }
 
 TuplePattern
-  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
+  = head:(":"? PrimaryPattern) tail:(_ "," _ ":"? PrimaryPattern)+ {
       return new TuplePattern({
-        elements: tail.reduce((elements, [, , , element]) => [...elements, element], [head]),
-        fields: []
+        elements: tail.reduce((elements, [, , , , element]) => [
+          ...elements,
+          element
+        ], [head[1]]),
+        fields: tail.reduce((fields, [, , , colon, field]) => [
+          ...fields,
+          colon && field.name
+        ], [head[0] && head[1].name])
       });
     }
   / PrimaryPattern
