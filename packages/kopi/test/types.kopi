@@ -15,52 +15,30 @@ print $ objects | _map object => match object (
   "asteroid", position => asteroid (position + (Vector 1, 1))
 )
 
-# Ship = (position: Vector)
-# creates a tuple with type: Ship?
-#
-# Ship (position) => Ship (position + (Vector 10, 20))
-
-# methods = extend Ship (
-#   capitalize: () => "Pew!"
-# )
-
-# print $ objects.0 | capitalize
-
-# {
-#   methods = extend Ship (
-#     capitalize: () => "Rawr!"
-#   )
-
-#   print $ objects.0 | capitalize
-# }
-
-# print $ objects.0 | capitalize
-
 # f = 0 => "Zero"
 # g = n => match n (
 #   f
 #   n => "Nonzero"
 # )
 
-# compose = f1 => f2 => arg => match arg (
-#   f1
-#   f2
-# )
-
-# f = 0 => "Zero"
-# f = compose f n => "Nonzero"
-
-# print $ f 0
-
 Point = type (x: Int, y: Int)
 
-point = Point (x: 10, y: 20)
+point = Point (x: 1, y: 1)
 
 print $ point.x, point.y
-print $ point | foo
 
 extend Point (
-  bar: (this) => () => "bar"
+  length: (this) => () => (this.x * this.x + this.y * this.y) | sqrt
 )
 
-print $ point | bar
+print $ point | length
+
+{
+  extend Point (
+    length: (this) => () => "qux"
+  )
+
+  print $ point | length
+}
+
+print $ point | length

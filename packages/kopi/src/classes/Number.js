@@ -37,3 +37,7 @@ Number.prototype['=='] = function (that) {
 Number.prototype['!='] = function (that) {
   return !this['=='](that);
 };
+
+Number.prototype['sqrt'] = function () {
+  return Math.sqrt(this);
+};

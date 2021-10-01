@@ -89,22 +89,17 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
     const evaluatedArgs = await this.visitNode(args, scope, bind);
 
-    class _Foo {
-      constructor(args) {
-        // console.log(args);
-
-        this.x = args.elements[0];
-        this.y = args.elements[1];
+    class _Foo extends KopiTuple {
+      constructor(...args) {
+        super(...args);
       }
-
-      foo() { return 'foo'; }
     };
 
     Object.defineProperty(_Foo, 'name', {
       value: 'Hello'
     });
 
-    const Foo = (...args) => new _Foo(...args);
+    const Foo = (args) => new _Foo(args.elements, args.fields);
     Foo.nativeConstructor = _Foo;
 
     return Foo;
