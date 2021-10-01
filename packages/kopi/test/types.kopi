@@ -53,3 +53,6 @@ print person.name, person.age
 :name, :age = person
 
 print name, age
+
+
+print $ Person (name: (input "Name?"), age: 30)
