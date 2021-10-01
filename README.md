@@ -2,9 +2,13 @@
 
 ### A simple, immutable, 100% asynchronous programming language.
 
-What started out as an exercise turned into a real language. I has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
+What started out as an exercise turned into a real language. Kopi has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
+
+Also check out the github Wiki https://github.com/mikeaustin/kopi/wiki, now with more examples and future features, and github Discussions https://github.com/mikeaustin/kopi/discussions if you're interested in talking about Kopi.
+
+There are some code samples here and in the Wiki, but if you want to see code used for testing, check out the samples in the test folder: https://github.com/mikeaustin/kopi/tree/master/packages/kopi/test.
 
 > **NOTE**: Kopi is still in the experimental phase. Lots of things are changing, and new functionality is being added.
 > It's not ready to be used in production environments, but please try it out, experiment with it, and have fun!
