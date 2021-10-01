@@ -98,8 +98,14 @@ TypeApplyExpression
     }
 
 TupleTypeExpression
-  = "(" _ head:(Identifier ":" _ Typename) (_ "," _ Identifier ":" _ Typename)* _ ")" {
-      return new TupleTypeExpression({ head });
+  = "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
+      return new TupleTypeExpression({
+        elements: tail.reduce((elements, [, , , , , element]) => [
+          ...elements,
+          element
+        ], [head[2]]),
+        fields: [],
+       });
     }
   / Identifier
 

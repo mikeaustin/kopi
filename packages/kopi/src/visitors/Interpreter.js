@@ -54,7 +54,7 @@ class Interpreter extends Visitors {
     const evaluatedPattern = await this.visitNode(pattern, scope, bind);
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
-    console.log(evaluatedPattern);
+    // console.log(evaluatedPattern);
 
     bind({
       Point: evaluatedExpr
@@ -78,7 +78,7 @@ class Interpreter extends Visitors {
   }
 
 
-  TupleTypeExpression({ elements = [], fields = [] }) {
+  TupleTypeExpression({ elements, fields }, scope, bind) {
     return new KopiTuple(
       elements.map(element => this.visitNode(element, scope, bind)),
       fields
@@ -90,6 +90,13 @@ class Interpreter extends Visitors {
     const evaluatedArgs = await this.visitNode(args, scope, bind);
 
     class _Foo {
+      constructor(args) {
+        // console.log(args);
+
+        this.x = args.elements[0];
+        this.y = args.elements[1];
+      }
+
       foo() { return 'foo'; }
     };
 
@@ -97,7 +104,7 @@ class Interpreter extends Visitors {
       value: 'Hello'
     });
 
-    const Foo = () => new _Foo();
+    const Foo = (...args) => new _Foo(...args);
     Foo.nativeConstructor = _Foo;
 
     return Foo;
