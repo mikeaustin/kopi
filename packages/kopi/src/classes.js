@@ -12,8 +12,6 @@ const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
 
-const { AnyType, NoneType } = require('./types');
-
 class TuplePattern {
   constructor(elements, fields) {
     this.elements = elements;

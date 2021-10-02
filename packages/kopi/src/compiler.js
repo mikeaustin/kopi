@@ -6,13 +6,30 @@ const parser = require('../lib/parser');
 const { default: interpreter } = require('./visitors/Interpreter');
 const { default: typechecker } = require('./visitors/Typechecker');
 
-const { IdentifierPattern } = require('./classes');
-
-const { AnyType, NoneType, BooleanType, NumberType, FunctionType, IdentifierPatternType } = require('./types');
+const {
+  AnyType, NoneType, UnionType,
+  BooleanType, NumberType, StringType,
+  FunctionType,
+  IdentifierPatternType
+} = require('./types');
 
 const context = {
-  print: new FunctionType(new IdentifierPatternType('value', new AnyType()), new NoneType()),
-  even: new FunctionType(new IdentifierPatternType('value', new NumberType()), new BooleanType()),
+  print: new FunctionType(
+    new IdentifierPatternType('value', new AnyType),
+  ),
+  even: new FunctionType(
+    new IdentifierPatternType('value', new NumberType()),
+    new BooleanType()
+  ),
+  union: new FunctionType(
+    new IdentifierPatternType('value', new UnionType([
+      new NumberType(),
+      new StringType(),
+    ])),
+    new NoneType()
+  ),
+  true: new BooleanType(),
+  false: new BooleanType(),
   Number,
   String,
 };
@@ -23,7 +40,9 @@ const compile = async (filename, scope) => {
   try {
     const astRootNode = parser.parse(source);
 
-    // typechecker.visitNode(astRootNode, context);
+    if (source.startsWith('# enable: typechecking')) {
+      typechecker.visitNode(astRootNode, context);
+    }
 
     return interpreter.visitNode(astRootNode, scope);
   } catch (error) {

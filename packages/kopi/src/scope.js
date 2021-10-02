@@ -12,6 +12,7 @@ Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
 let getScope = (input) => ({
+  union: (args) => args,
   gc: () => {
     global.gc();
   },

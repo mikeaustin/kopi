@@ -1,2 +1,10 @@
+# enable: typechecking
+
 x = 2
+s = "hi"
+
 print (even x)
+
+union x
+union s
+union false

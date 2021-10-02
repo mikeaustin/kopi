@@ -26,6 +26,39 @@ class NoneType extends AnyType {
   }
 }
 
+class UnionType extends AnyType {
+  constructor(types) {
+    super();
+
+    this.types = types;
+  }
+
+  get name() {
+    if (this.types.length === 0) {
+      return `None`;
+    }
+
+    return `${this.types.map(type => type.name).join(' | ')}`;
+  }
+
+  isSupertypeOf(type) {
+    if (this.types.length === 0) {
+      return false;
+    }
+
+    return this.types.some(_type => type instanceof _type.constructor);
+  }
+
+  isSubtypeOf(type) {
+    if (this.types.length === 0) {
+      return false;
+    }
+
+    // TODO: Implement
+    throw Error('UnionType isSubtypeOf() not implemented');
+  }
+}
+
 class BooleanType extends AnyType {
   get name() {
     return `Boolean`;
@@ -105,6 +138,7 @@ class IdentifierPatternType {
 module.exports = {
   AnyType,
   NoneType,
+  UnionType,
   BooleanType,
   NumberType,
   StringType,

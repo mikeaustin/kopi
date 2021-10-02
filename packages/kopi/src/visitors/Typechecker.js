@@ -1,6 +1,6 @@
 const { default: Visitors } = require('./Visitors');
 
-const { NumberType, StringType, FunctionType, IdentifierPatternType } = require('../types');
+const { UnionType, NumberType, StringType, FunctionType, IdentifierPatternType } = require('../types');
 
 class Typechecker extends Visitors {
   Block({ statements }, context) {
