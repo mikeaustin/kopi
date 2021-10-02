@@ -7,4 +7,11 @@ print (even x)
 
 union x
 union s
-union false
+
+f = (x) => x
+
+print (even (f 5))
+
+even (test x => x)
+
+# print (even (test (x => "x")))

@@ -1,6 +1,6 @@
 const { default: Visitors } = require('./Visitors');
 
-const { UnionType, NumberType, StringType, FunctionType, IdentifierPatternType } = require('../types');
+const { UnionType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = require('../types');
 
 class Typechecker extends Visitors {
   Block({ statements }, context) {
@@ -36,10 +36,20 @@ class Typechecker extends Visitors {
       throw new TypeError(`Argument to function '${evaluatedExpr?.name}' should be type '${evaluatedExpr.params.type?.name}', but found '${evaluatedArgs.name}'.`);
     }
 
+    if (evaluatedExpr.expr) {
+      return this.visitNode(evaluatedExpr.expr, { ...evaluatedExpr.context, ...matches });
+    }
+
     return evaluatedExpr.rettype;
   }
 
-  IdentifierPattern({ name }, context) {
+  FunctionExpression({ params, expr }, context) {
+    const evaluatedParams = this.visitNode(params, context);
+
+    return new FunctionType(evaluatedParams, new AnyType(), expr, context);
+  }
+
+  IdentifierPattern({ name }) {
     return new IdentifierPatternType(name);
   }
 

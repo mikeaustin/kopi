@@ -13,6 +13,7 @@ String.nativeConstructor = String;
 
 let getScope = (input) => ({
   union: (args) => args,
+  test: (func, scope, visitors) => func.apply(undefined, [5, scope, visitors]),
   gc: () => {
     global.gc();
   },

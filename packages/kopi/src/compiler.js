@@ -13,13 +13,29 @@ const {
   IdentifierPatternType
 } = require('./types');
 
+// Match returns whatever the function returns
+
+class TypeVar {
+  constructor(type) {
+    this.type = type;
+  }
+}
+
 const context = {
   print: new FunctionType(
-    new IdentifierPatternType('value', new AnyType),
+    new IdentifierPatternType('value', new AnyType()),
+    new NoneType(),
   ),
   even: new FunctionType(
     new IdentifierPatternType('value', new NumberType()),
-    new BooleanType()
+    new BooleanType(),
+  ),
+  test: new FunctionType(
+    new IdentifierPatternType('value', new FunctionType(
+      new IdentifierPatternType('x', new AnyType()),
+      new StringType(),
+    )),
+    new AnyType(),
   ),
   union: new FunctionType(
     new IdentifierPatternType('value', new UnionType([

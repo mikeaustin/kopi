@@ -102,11 +102,15 @@ class StringType extends AnyType {
 }
 
 class FunctionType {
-  constructor(params, rettype, body, context) {
+  constructor(params, rettype, expr, context) {
     this.params = params;
     this.rettype = rettype;
-    this.body = body;
+    this.expr = expr;
     this.context = context;
+  }
+
+  get name() {
+    return `Function`;
   }
 
   isSupertypeOf(type) {
