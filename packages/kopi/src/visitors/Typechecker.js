@@ -1,7 +1,6 @@
 const { default: Visitors } = require('./Visitors');
 
-const { NumberType, StringType, FunctionType } = require('../types');
-const { IdentifierPattern } = require('../classes');
+const { NumberType, StringType, FunctionType, IdentifierPatternType } = require('../types');
 
 class Typechecker extends Visitors {
   Block({ statements }, context) {
@@ -41,7 +40,7 @@ class Typechecker extends Visitors {
   }
 
   IdentifierPattern({ name }, context) {
-    return new IdentifierPattern(name);
+    return new IdentifierPatternType(name);
   }
 
   NumericLiteral({ value }) {

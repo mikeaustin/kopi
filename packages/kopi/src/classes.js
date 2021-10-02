@@ -69,10 +69,9 @@ class BooleanLiteralPattern {
 }
 
 class IdentifierPattern {
-  constructor(name, init, type = new AnyType()) {
+  constructor(name, init) {
     this.name = name;
     this.init = init;
-    this.type = type;
   }
 
   getMatches(value, scope, visitors) {
@@ -85,16 +84,6 @@ class IdentifierPattern {
 
     return {
       [this.name]: value === KopiTuple.empty && this.init !== null ? this.init : value,
-    };
-  }
-
-  getTypeMatches(type) {
-    if (!this.type.isSupertypeOf(type)) {
-      return null;
-    }
-
-    return {
-      [this.name]: type
     };
   }
 }

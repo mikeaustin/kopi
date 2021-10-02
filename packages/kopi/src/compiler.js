@@ -8,11 +8,11 @@ const { default: typechecker } = require('./visitors/Typechecker');
 
 const { IdentifierPattern } = require('./classes');
 
-const { AnyType, NoneType, BooleanType, NumberType, FunctionType } = require('./types');
+const { AnyType, NoneType, BooleanType, NumberType, FunctionType, IdentifierPatternType } = require('./types');
 
 const context = {
-  print: new FunctionType(new IdentifierPattern('value', undefined, new AnyType()), new NoneType()),
-  even: new FunctionType(new IdentifierPattern('value', undefined, new NumberType()), new BooleanType()),
+  print: new FunctionType(new IdentifierPatternType('value', new AnyType()), new NoneType()),
+  even: new FunctionType(new IdentifierPatternType('value', new NumberType()), new BooleanType()),
   Number,
   String,
 };
