@@ -12,6 +12,8 @@ const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
 
+const { AnyType, NoneType } = require('./types');
+
 class TuplePattern {
   constructor(elements, fields) {
     this.elements = elements;
@@ -67,9 +69,10 @@ class BooleanLiteralPattern {
 }
 
 class IdentifierPattern {
-  constructor(name, init) {
+  constructor(name, init, type = new AnyType()) {
     this.name = name;
     this.init = init;
+    this.type = type;
   }
 
   getMatches(value, scope, visitors) {
@@ -82,6 +85,16 @@ class IdentifierPattern {
 
     return {
       [this.name]: value === KopiTuple.empty && this.init !== null ? this.init : value,
+    };
+  }
+
+  getTypeMatches(type) {
+    if (!this.type.isSupertypeOf(type)) {
+      return null;
+    }
+
+    return {
+      [this.name]: type
     };
   }
 }

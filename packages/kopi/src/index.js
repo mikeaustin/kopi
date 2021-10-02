@@ -7,6 +7,7 @@ const parser = require('../lib/parser');
 const { compile } = require('./compiler');
 
 const { default: interpreter } = require('./visitors/Interpreter');
+const { default: typechecker } = require('./visitors/Typechecker');
 const { default: getScope } = require('./scope');
 
 Function.prototype.toStringAsync = function () {
