@@ -6,7 +6,7 @@ class Typechecker extends Visitors {
   Block({ statements }, context) {
     const bind = updates => context = ({ ...context, ...updates });
 
-    return statements.reduce(async (result, statement) => (
+    return statements.reduce((result, statement) => (
       this.visitNode(statement, context, bind)
     ), undefined);
   }
