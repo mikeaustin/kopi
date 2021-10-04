@@ -1,7 +1,3 @@
-:html, :body, :text = import "test/html.kopi"
-
-html:, body:, text: = import "test/html.kopi"
-
 
 wordcount string = string | split " " | reduce (counts, word) => (
   counts | update word, (x = 0) => count + 1
@@ -16,8 +12,6 @@ employeeNames = ['a,b', 'c,d']
 employeeNames | sort (a, b) => a > b | map (name) => do
   name | split "," | map (name) => (name | strip) | reverse | join " "
 end
-
-Point = (x: Number, y: Number)
 
 
 1..10 | map (n @ even n) => n * n
@@ -43,15 +37,6 @@ grayscale = color => match color (
   1 + 1,
   1..5
 ]
-
-
-even = '(% 2 == 0)
-
-
-print (1, 2, z: 3)
-print (1, y: 2, z: 3)
-print (x: 1, y: 2, z: 3)
-print (1, y: 2, 3)
 
 
 print $ 1..10 | map (even n) => n * n
@@ -85,29 +70,15 @@ match age (
 )
 
 
-type aliases?
-
-Person = type (name: String, age: Int)
-
-Person = (name: String, age: Int)
-
-person = Person (name: "Joe", age: 30)
-
-Person (:name:, :age)  => "Hello, {name}."
-
-
 Color = RGB (r: Int, g: Int, b: Int)
 
 Color.RGB (100, 100, 255)
 
 
-Point<T> = Point<T> (x: T, y: T)
-
 Point = T => type (x: T, y: T)
 
 
-Move read to fetch?
-print to println?
+Move print to println?
 
 
 File.read "notes.txt"
