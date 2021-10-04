@@ -5,6 +5,7 @@ import "test/record.kopi"
 import "test/types.kopi"
 import "test/predicate.kopi"
 import "test/interpret.kopi"
+import "test/operators.kopi"
 import "test/async.kopi"
 
 coroutine = (x = 1) => {

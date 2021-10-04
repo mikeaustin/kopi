@@ -148,7 +148,7 @@ ApplyExpression
   / expr:("+" / "-" / "*" / "/" / "%") args:(_ FunctionExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
-      ), new Identifier({ name: '+' }));
+      ), new Identifier({ name: expr }));
     }
 
 NoFunctionApplyExpression
