@@ -1,11 +1,12 @@
 # enable: typechecking
 
-x = 2
+n = 2
 s = "hi"
+b = true
 
-print (even x)
+print (even n)
 
-union x
+union n
 union s
 
 f = (x) => x
@@ -14,6 +15,6 @@ print (even (f 5))
 
 even (test x => x)
 
-even (ident 1)
+even (ident n)
 
 # print (even (test (x => "x")))

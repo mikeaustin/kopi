@@ -62,8 +62,6 @@ const context = {
   ),
   true: new BooleanType(),
   false: new BooleanType(),
-  Number,
-  String,
 };
 
 const compile = async (filename, scope) => {
