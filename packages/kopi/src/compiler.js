@@ -17,11 +17,29 @@ const {
 
 class TypeVar {
   constructor(type) {
-    this.type = type;
+    this._delegateType = null;
+  }
+
+  get name() {
+    return this._delegateType.name;
+  }
+
+  getTypeMatches(type) {
+    return this._delegateType.getTypeMatches(type);
+  }
+
+  isSupertypeOf(type) {
+    return this._delegateType.isSupertypeOf(type);
   }
 }
 
+const T = new TypeVar();
+
 const context = {
+  ident: new FunctionType(
+    new IdentifierPatternType('value', T),
+    T,
+  ),
   print: new FunctionType(
     new IdentifierPatternType('value', new AnyType()),
     new NoneType(),
