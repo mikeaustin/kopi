@@ -6,10 +6,6 @@ class AnyType {
   isSupertypeOf(type) {
     return true;
   }
-
-  isSubtypeOf(type) {
-    return false;
-  }
 }
 
 class NoneType extends AnyType {
@@ -19,10 +15,6 @@ class NoneType extends AnyType {
 
   isSupertypeOf(type) {
     return false;
-  }
-
-  isSubtypeOf(type) {
-    return true;
   }
 }
 
@@ -48,15 +40,6 @@ class UnionType extends AnyType {
 
     return this.types.some(_type => type instanceof _type.constructor);
   }
-
-  isSubtypeOf(type) {
-    if (this.types.length === 0) {
-      return false;
-    }
-
-    // TODO: Implement
-    throw Error('UnionType isSubtypeOf() not implemented');
-  }
 }
 
 class BooleanType extends AnyType {
@@ -67,10 +50,6 @@ class BooleanType extends AnyType {
   isSupertypeOf(type) {
     return this instanceof type.constructor;
   }
-
-  isSubtypeOf(type) {
-    return type instanceof this.constructor;
-  }
 }
 
 class NumberType extends AnyType {
@@ -80,10 +59,6 @@ class NumberType extends AnyType {
 
   isSupertypeOf(type) {
     return this instanceof (type._delegate ?? type).constructor;
-  }
-
-  isSubtypeOf(type) {
-    return type instanceof this.constructor;
   }
 }
 
@@ -96,9 +71,6 @@ class StringType extends AnyType {
     return this instanceof type.constructor;
   }
 
-  isSubtypeOf(type) {
-    return type instanceof this.constructor;
-  }
 }
 
 class FunctionType {
@@ -115,10 +87,6 @@ class FunctionType {
 
   isSupertypeOf(type) {
     return this instanceof type.constructor;
-  }
-
-  isSubtypeOf(type) {
-    return type instanceof this.constructor;
   }
 }
 
