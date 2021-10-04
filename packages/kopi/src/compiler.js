@@ -13,23 +13,21 @@ const {
   IdentifierPatternType
 } = require('./types');
 
-// Match returns whatever the function returns
-
 class TypeVar {
   constructor(type) {
-    this._delegateType = null;
+    this._delegate = null;
   }
 
   get name() {
-    return this._delegateType.name;
+    return this._delegate?.name;
   }
 
   getTypeMatches(type) {
-    return this._delegateType.getTypeMatches(type);
+    return this._delegate.getTypeMatches(type);
   }
 
   isSupertypeOf(type) {
-    return this._delegateType.isSupertypeOf(type);
+    return this._delegate.isSupertypeOf(type);
   }
 }
 

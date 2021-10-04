@@ -30,6 +30,10 @@ class Typechecker extends Visitors {
       throw new TypeError(`Function application not defined for type '${evaluatedExpr.name}'.`);
     }
 
+    if (evaluatedExpr.params.type?.constructor?.name === 'TypeVar') {
+      evaluatedExpr.params.type._delegate = evaluatedArgs;
+    }
+
     const matches = evaluatedExpr.params.getTypeMatches(evaluatedArgs);
 
     if (!matches) {

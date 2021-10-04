@@ -79,7 +79,7 @@ class NumberType extends AnyType {
   }
 
   isSupertypeOf(type) {
-    return this instanceof type.constructor;
+    return this instanceof (type._delegate ?? type).constructor;
   }
 
   isSubtypeOf(type) {

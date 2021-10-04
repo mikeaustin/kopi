@@ -14,6 +14,6 @@ print (even (f 5))
 
 even (test x => x)
 
-even 1
+even (ident 1)
 
 # print (even (test (x => "x")))
