@@ -13,6 +13,7 @@
     "test": "npm --silent start test/import.kopi"
   },
   "devDependencies": {
+    "immutable": "^4.0.0-rc.15",
     "node-fetch": "^2.6.0",
     "pegjs": "^0.10.0"
   }

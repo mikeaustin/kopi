@@ -30,6 +30,7 @@
   }
   class TupleExpression extends Node { }
   class ArrayExpression extends Node { }
+  class DictExpression extends Node { }
   class RangeExpression extends Node { }
   class MemberExpression extends Node { }
 
@@ -265,6 +266,17 @@ ArrayExpression
     "]" {
       return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
     }
+  / DictExpression
+
+DictExpression
+  = "{" _ head:(PrimaryExpression ":" _ PrimaryExpression) tail:(_ "," _ PrimaryExpression ":" _ PrimaryExpression)* _ "}" {
+    return new DictExpression({
+      entries: tail.reduce((entries, [, , , key, , , value]) => [
+        ...entries,
+        [key.value, value]
+      ], [[head[0].value, head[3]]])
+    });
+  }
   / OperatorExpression
 
 //

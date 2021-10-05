@@ -1,0 +1,3 @@
+print $ { 1: "One", 2: "Two" }
+
+print $ 1..5 | map (n) => { 1: "One", 2: "Two" }

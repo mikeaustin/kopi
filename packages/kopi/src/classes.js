@@ -11,6 +11,7 @@ const { default: KopiTuple } = require('./classes/KopiTuple');
 const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
+const { default: KopiDict } = require('./classes/KopiDict');
 
 class TuplePattern {
   constructor(elements, fields) {
@@ -156,6 +157,7 @@ module.exports = {
   KopiRange,
   KopiFunction,
   KopiVector,
+  KopiDict,
   TuplePattern,
   BooleanLiteralPattern,
   IdentifierPattern,

@@ -1,7 +1,7 @@
 const util = require("util");
 const fs = require("fs");
 
-const { KopiString, KopiTuple, KopiRange, KopiFunction } = require('../classes');
+const { KopiString, KopiTuple, KopiRange, KopiFunction, KopiDict } = require('../classes');
 const {
   TuplePattern,
   BooleanLiteralPattern,
@@ -83,7 +83,6 @@ class Interpreter extends Visitors {
     return Foo;
   }
 
-
   async PipeExpression({ left, right }, scope, bind) {
     const evaluatedExpr = await this.visitNode(left, scope, bind);
     const evaluatedArgs = await this.visitNode(right.args, scope, bind);
@@ -129,8 +128,11 @@ class Interpreter extends Visitors {
   }
 
   ArrayExpression({ elements }, scope, bind) {
-    // return Promise.all(elements.map(element => this.visitNode(element, scope)));
     return elements.map(element => this.visitNode(element, scope, bind));
+  }
+
+  DictExpression({ entries }, scope, bind) {
+    return new KopiDict(entries.map(([key, value]) => [key, this.visitNode(value, scope, bind)]));
   }
 
   RangeExpression({ from, to }, scope, bind) {
