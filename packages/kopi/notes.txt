@@ -84,3 +84,44 @@ Move print to println?
 File.read "notes.txt"
 
 Net.fetch "https://google.com"
+
+
+
+$
+==
+++
++ | -
+* | /
+apply
+!
+
+Currying requires left-associative application
+
+1, 2 + 1    (1, (2 + 1))
+
+f x         (f x)
+
+f x + f y   (f x) + (f y)
+
+
+
+operators
+apply
+tuple
+
+
+[ even $ 1,  1 | toString,  "a" ++ "b",  even 1,  x => x,  (1, 2),  1 + 1,  1..5 ]
+
+
+|       PipeExpression
+++      ConcatinationExpression
+x => x  FunctionExpression
+1, 2    TupleExpression
+[1, 2]  ArrayExpression
+{1: 2}  DictExpression
+1 == 1  EqualityExpression
+1 + 1   AddExpression
+1 * 1   MultiplyExpression
+{}      BlockExpression
+1..5    RangeExpression
+v.x     RangeExpression
