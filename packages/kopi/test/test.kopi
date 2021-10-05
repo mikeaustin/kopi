@@ -1,0 +1,1 @@
+w = worker "test/worker.kopi"

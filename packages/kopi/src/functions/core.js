@@ -17,7 +17,7 @@ const kopi_inspect = (value) => {
 };
 
 const kopi_print = async (val) => {
-  console.log(await val.toStringAsync());
+  console.log(val.toStringAsync ? await val.toStringAsync() : val.toString());
 };
 
 const kopi_read = (filename) => {

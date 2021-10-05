@@ -1,4 +1,5 @@
 const readline = require('readline');
+const { Worker } = require('worker_threads');
 
 const { KopiTuple, KopiVector } = require('./classes');
 
@@ -11,7 +12,19 @@ Vector.nativeConstructor = KopiVector;
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
+class KopiWorker {
+  constructor(filename) {
+    this.filename = filename;
+    this.worker = new Worker(`./src/worker.js`, {
+      workerData: filename
+    });
+  }
+}
+
 let getScope = (input) => ({
+  worker: (filename) => {
+    return new KopiWorker(filename);
+  },
   union: (args) => args,
   test: (func, scope, visitors) => func.apply(undefined, [5, scope, visitors]),
   gc: () => {
