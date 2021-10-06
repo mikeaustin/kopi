@@ -4,6 +4,9 @@ class Node {
   }
 }
 
+class Block extends Node { }
+class Assignment extends Node { }
+
 class OperatorExpression extends Node { }
 class TupleExpression extends Node { }
 class FunctionExpression extends Node { }

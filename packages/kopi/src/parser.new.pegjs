@@ -5,6 +5,9 @@ class Node {
   }
 }
 
+class Block extends Node { }
+class Assignment extends Node { }
+
 class OperatorExpression extends Node { }
 class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
@@ -18,14 +21,28 @@ class NumericLiteral extends Node { }
 class Identifier extends Node { }
 }
 
-Expression
-
-  = expr:TupleExpression Newline* {
-      return expr;
+Block
+  = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
+      return new Block({
+        statements: tail.reduce((block, [, statement]) => (
+          statement ? [...block, statement] : block
+        ), [head])
+      });
     }
 
-TupleExpression
+Statement
+  = Assignment
+  / Expression
 
+Assignment
+  = pattern:Pattern _ "=" !">" _ expr:Expression {
+      return new Assignment({ pattern, expr })
+    }
+
+Expression
+  = TupleExpression
+
+TupleExpression
   = head:AddExpression tail:(_ "," _ AddExpression)+ {
       return new TupleExpression({
         elements: tail.reduce((elements, element) => [
@@ -37,7 +54,6 @@ TupleExpression
   / AddExpression
 
 AddExpression
-
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
@@ -45,7 +61,6 @@ AddExpression
     }
 
 MultiplyExpression
-
   = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ ApplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
@@ -53,7 +68,6 @@ MultiplyExpression
     }
 
 ApplyExpression
-
   = expr:PrimaryExpression args:(_ PrimaryExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
@@ -61,7 +75,6 @@ ApplyExpression
     }
 
 PrimaryExpression
-
   = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
@@ -71,7 +84,13 @@ PrimaryExpression
   / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
+  / "()" {
+    return new TupleExpression({ elements: [] });
+  }
   / "(" _ expr:Expression _ ")" { return expr; }
+  / "[]" {
+    return new ArrayExpression({ elements: [] });
+  }
   / "[" _ head:AddExpression tail:(_ "," _ AddExpression)* _ "]" {
       return new ArrayExpression({
         elements: tail.reduce((elements, [, , , element]) => [
@@ -84,11 +103,9 @@ PrimaryExpression
   / Identifier
 
 Pattern
-
   = TuplePattern
 
 TuplePattern
-
   = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
       return new TuplePattern({
         elements: tail.reduce((elements, element) => [
@@ -100,18 +117,15 @@ TuplePattern
   / PrimaryPattern
 
 PrimaryPattern
-
   = _ "(" pattern:Pattern ")" { return pattern; }
   / IdentifierPattern
 
 IdentifierPattern
-
-  = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
-      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
     }
 
 NumericLiteral
-
   = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
     return new NumericLiteral({
       value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
@@ -119,7 +133,6 @@ NumericLiteral
   }
 
 Identifier
-
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
         name: name[0] + name[1].join('')
@@ -127,14 +140,11 @@ Identifier
     }
 
 _
-
   = Whitespace*
 
 Whitespace
-
   = [ \t]
 
 Newline
-
   = [\r?\n]
 

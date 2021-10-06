@@ -20,11 +20,18 @@ async function main() {
 
   }, {});
 
-  const orderedExpressionRules = [
-    'Expression',
-    'TupleExpression',
+  const orderedOperatorRules = [
     'AddExpression',
     'MultiplyExpression',
+  ];
+
+  const orderedExpressionRules = [
+    'Block',
+    'Statement',
+    'Assignment',
+    'Expression',
+    'TupleExpression',
+    ...orderedOperatorRules,
     'ApplyExpression',
     'PrimaryExpression',
   ];

@@ -17,6 +17,6 @@ PrimaryPattern
   / IdentifierPattern
 
 IdentifierPattern
-  = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
-      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
     }

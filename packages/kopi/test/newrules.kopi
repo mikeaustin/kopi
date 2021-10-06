@@ -1,1 +1,13 @@
 print (1, (x => x), (a, b => a + b), [(1, 2), 1 + 1, (x => x), (a, b) => a + b])
+print x => x
+
+x = 1
+f = () => x
+
+print (f ())
+
+x = 2
+
+print (f ())
+
+[]
