@@ -105,4 +105,4 @@ Whitespace
   = [ \t]
 
 Newline
-  = [\n\r]
+  = [\r?\n]

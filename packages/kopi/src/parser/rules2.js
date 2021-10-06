@@ -2,11 +2,11 @@ const util = require('util');
 const fs = require('fs');
 
 async function main() {
-  const functions = await util.promisify(fs.readFile)('./src/parser/functions.js', 'utf8');
-  const source = await util.promisify(fs.readFile)('./src/parser/operators.pegjs', 'utf8');
+  const functions = await util.promisify(fs.readFile)('./src/parser/functions.js', 'utf-8');
+  const source = await util.promisify(fs.readFile)('./src/parser/operators.pegjs', 'utf-8');
 
-  const nonTerminals = source.split('\n\n').reduce((rules, rule) => {
-    const index = rule.indexOf('\n');
+  const nonTerminals = source.split(/\r?\n\r?\n/).reduce((rules, rule) => {
+    const index = rule.search(/\r?\n/);
 
     return {
       ...rules,
@@ -14,6 +14,8 @@ async function main() {
     };
 
   }, {});
+
+  console.error(nonTerminals);
 
   const rules = [
     'Expression',
@@ -40,10 +42,13 @@ async function main() {
     [[...orderedNonTerminals, rule + '\n' + nonTerminals[rule].replace(/NextRule/g, nextRule)], rule]
   ), [[], null])[0].reverse();
 
-  console.log(`{
-${functions}}
-
-${orderedNonTerminals.join('\n\n')}`);
+  console.log(
+    '{\n' +
+    functions +
+    '}\n\n' +
+    orderedNonTerminals.join('\n\n')
+  );
 }
+
 
 main();

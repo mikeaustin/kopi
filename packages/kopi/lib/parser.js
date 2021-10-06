@@ -238,8 +238,8 @@ function peg$parse(input, options) {
           },
       peg$c47 = /^[ \t]/,
       peg$c48 = peg$classExpectation([" ", "\t"], false, false),
-      peg$c49 = /^[\n\r]/,
-      peg$c50 = peg$classExpectation(["\n", "\r"], false, false),
+      peg$c49 = /^[\r?\n]/,
+      peg$c50 = peg$classExpectation(["\r", "?", "\n"], false, false),
 
       peg$currPos          = 0,
       peg$savedPos         = 0,

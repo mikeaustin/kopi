@@ -19,11 +19,13 @@ class Identifier extends Node { }
 }
 
 Expression
+
   = expr:TupleExpression Newline* {
       return expr;
     }
 
 TupleExpression
+
   = head:AddExpression tail:(_ "," _ AddExpression)+ {
       return new TupleExpression({
         elements: tail.reduce((elements, element) => [
@@ -35,6 +37,7 @@ TupleExpression
   / AddExpression
 
 AddExpression
+
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
@@ -42,6 +45,7 @@ AddExpression
     }
 
 MultiplyExpression
+
   = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ ApplyExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
@@ -49,6 +53,7 @@ MultiplyExpression
     }
 
 ApplyExpression
+
   = expr:PrimaryExpression args:(_ PrimaryExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
@@ -56,6 +61,7 @@ ApplyExpression
     }
 
 PrimaryExpression
+
   = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
@@ -78,9 +84,11 @@ PrimaryExpression
   / Identifier
 
 Pattern
+
   = TuplePattern
 
 TuplePattern
+
   = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
       return new TuplePattern({
         elements: tail.reduce((elements, element) => [
@@ -92,15 +100,18 @@ TuplePattern
   / PrimaryPattern
 
 PrimaryPattern
+
   = _ "(" pattern:Pattern ")" { return pattern; }
   / IdentifierPattern
 
 IdentifierPattern
+
   = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
       return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
 
 NumericLiteral
+
   = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
     return new NumericLiteral({
       value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
@@ -108,6 +119,7 @@ NumericLiteral
   }
 
 Identifier
+
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
         name: name[0] + name[1].join('')
@@ -115,11 +127,14 @@ Identifier
     }
 
 _
+
   = Whitespace*
 
 Whitespace
+
   = [ \t]
 
 Newline
-  = [\n\r]
+
+  = [\r?\n]
 
