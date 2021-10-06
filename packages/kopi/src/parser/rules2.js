@@ -17,11 +17,19 @@ async function main() {
 
   const rules = [
     'Expression',
+    'TupleExpression',
+    'FunctionExpression',
     'AddExpression',
     'MultiplyExpression',
     'ApplyExpression',
     'PrimaryExpression',
     'NumericLiteral',
+
+    "Pattern",
+    "TuplePattern",
+    "PrimaryPattern",
+    "IdentifierPattern",
+
     'Identifier',
     '_',
     'Whitespace',

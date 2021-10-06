@@ -6,16 +6,45 @@ class Node {
 }
 
 class OperatorExpression extends Node { }
+class TupleExpression extends Node { }
+class FunctionExpression extends Node { }
+class ArrayExpression extends Node { }
 class ApplyExpression extends Node { }
+
+class TuplePattern extends Node { }
+class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
 class Identifier extends Node { }
 }
 
 Expression
-  = expr:AddExpression Newline* {
+  = expr:TupleExpression Newline* {
       return expr;
     }
+
+TupleExpression
+  = head:FunctionExpression tail:(_ "," _ FunctionExpression)+  {
+      return new TupleExpression({
+        elements: tail.reduce((elements, element) => [
+          ...elements,
+          element[3]
+        ], [head])
+      });
+  }
+  / FunctionExpression
+
+FunctionExpression
+  = "()" _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params: new TuplePattern({
+        elements: [],
+        fields: []
+      }), expr });
+    }
+  / params:Pattern _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params, expr });
+    }
+  / AddExpression
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
@@ -40,6 +69,14 @@ ApplyExpression
 
 PrimaryExpression
   = "(" _ expr:Expression _ ")" { return expr; }
+  / "[" _ head:FunctionExpression tail:(_ "," _ FunctionExpression)* _ "]" {
+      return new ArrayExpression({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    }
   / NumericLiteral
   / Identifier
 
@@ -50,8 +87,35 @@ NumericLiteral
     });
   }
 
+Pattern
+  = TuplePattern
+
+TuplePattern
+  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
+      return new TuplePattern({
+        elements: tail.reduce((elements, element) => [
+          ...elements,
+          element[3]
+        ], [head])
+      });
+    }
+  / PrimaryPattern
+
+PrimaryPattern
+  = _ "(" pattern:Pattern ")" { return pattern; }
+  / IdentifierPattern
+
+IdentifierPattern
+  = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
+      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+    }
+
 Identifier
-  = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ { return new Identifier({ name: name[0] + name[1].join('') }); }
+  = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
+      return new Identifier({
+        name: name[0] + name[1].join('')
+      });
+    }
 
 _
   = Whitespace*
