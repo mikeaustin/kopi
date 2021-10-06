@@ -3,9 +3,14 @@ const fs = require('fs');
 
 async function main() {
   const functions = await util.promisify(fs.readFile)('./src/parser/functions.js', 'utf-8');
-  const source = await util.promisify(fs.readFile)('./src/parser/operators.pegjs', 'utf-8');
+  const expressions = await util.promisify(fs.readFile)('./src/parser/expressions.pegjs', 'utf-8');
+  const operators = await util.promisify(fs.readFile)('./src/parser/operators.pegjs', 'utf-8');
+  const patterns = await util.promisify(fs.readFile)('./src/parser/patterns.pegjs', 'utf-8');
+  const terminals = await util.promisify(fs.readFile)('./src/parser/terminals.pegjs', 'utf-8');
 
-  const nonTerminals = source.split(/\r?\n\r?\n/).reduce((rules, rule) => {
+  const rules = [expressions, operators, patterns, terminals].join('\n');
+
+  const nonTerminals = rules.split(/\r?\n\r?\n/).reduce((rules, rule) => {
     const index = rule.search(/\r?\n/);
 
     return {
@@ -17,7 +22,7 @@ async function main() {
 
   console.error(nonTerminals);
 
-  const rules = [
+  const orderedRules = [
     'Expression',
     'TupleExpression',
     'AddExpression',
@@ -38,7 +43,7 @@ async function main() {
     'Newline',
   ];
 
-  const orderedNonTerminals = rules.reverse().reduce(([orderedNonTerminals, nextRule], rule) => (
+  const orderedNonTerminals = orderedRules.reverse().reduce(([orderedNonTerminals, nextRule], rule) => (
     [[...orderedNonTerminals, rule + '\n' + nonTerminals[rule].replace(/NextRule/g, nextRule)], rule]
   ), [[], null])[0].reverse();
 
