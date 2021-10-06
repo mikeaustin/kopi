@@ -24,7 +24,7 @@ Expression
     }
 
 TupleExpression
-  = head:FunctionExpression tail:(_ "," _ FunctionExpression)+  {
+  = head:AddExpression tail:(_ "," _ AddExpression)+ {
       return new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
@@ -32,18 +32,6 @@ TupleExpression
         ], [head])
       });
   }
-  / FunctionExpression
-
-FunctionExpression
-  = "()" _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params: new TuplePattern({
-        elements: [],
-        fields: []
-      }), expr });
-    }
-  / params:Pattern _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params, expr });
-    }
   / AddExpression
 
 AddExpression
@@ -68,8 +56,17 @@ ApplyExpression
     }
 
 PrimaryExpression
-  = "(" _ expr:Expression _ ")" { return expr; }
-  / "[" _ head:FunctionExpression tail:(_ "," _ FunctionExpression)* _ "]" {
+  = "()" _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params: new TuplePattern({
+        elements: [],
+        fields: []
+      }), expr });
+    }
+  / params:Pattern _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params, expr });
+    }
+  / "(" _ expr:Expression _ ")" { return expr; }
+  / "[" _ head:AddExpression tail:(_ "," _ AddExpression)* _ "]" {
       return new ArrayExpression({
         elements: tail.reduce((elements, [, , , element]) => [
           ...elements,
@@ -79,13 +76,6 @@ PrimaryExpression
     }
   / NumericLiteral
   / Identifier
-
-NumericLiteral
-  = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
-    return new NumericLiteral({
-      value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
-    });
-  }
 
 Pattern
   = TuplePattern
@@ -109,6 +99,13 @@ IdentifierPattern
   = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
       return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
+
+NumericLiteral
+  = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
+    return new NumericLiteral({
+      value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
+    });
+  }
 
 Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {

@@ -14,18 +14,6 @@ TupleExpression
   }
   / NextRule
 
-FunctionExpression
-  = "()" _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params: new TuplePattern({
-        elements: [],
-        fields: []
-      }), expr });
-    }
-  / params:Pattern _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params, expr });
-    }
-  / NextRule
-
 AddExpression
   = head:NextRule tail:(_ ("+" / "-") _ NextRule)* {
       return tail.reduce((left, [, op, , right]) => (
@@ -48,8 +36,17 @@ ApplyExpression
     }
 
 PrimaryExpression
-  = "(" _ expr:Expression _ ")" { return expr; }
-  / "[" _ head:FunctionExpression tail:(_ "," _ FunctionExpression)* _ "]" {
+  = "()" _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params: new TuplePattern({
+        elements: [],
+        fields: []
+      }), expr });
+    }
+  / params:Pattern _ "=>" _ expr:Expression {
+      return new FunctionExpression({ params, expr });
+    }
+  / "(" _ expr:Expression _ ")" { return expr; }
+  / "[" _ head:AddExpression tail:(_ "," _ AddExpression)* _ "]" {
       return new ArrayExpression({
         elements: tail.reduce((elements, [, , , element]) => [
           ...elements,
