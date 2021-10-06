@@ -7,8 +7,10 @@
   }
 
   class OperatorExpression extends Node { }
+  class ApplyExpression extends Node { }
 
   class NumericLiteral extends Node { }
+  class Identifier extends Node { }
 }
 
 Expression
@@ -24,18 +26,28 @@ AddExpression
       }
   
 MultiplyExpression
-    = head:PrimaryExpression tail:(_ ("*" / "/") _ PrimaryExpression)* {
+    = head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
         return tail.reduce((left, [, op, , right]) => (
           new OperatorExpression({ op, left, right })
         ), head);
       }
   
+ApplyExpression
+    = expr:PrimaryExpression args:(_ PrimaryExpression)* {
+        return args.reduce((expr, [, args]) => (
+          new ApplyExpression({ expr, args })
+        ), expr)
+      }
+  
 PrimaryExpression
-    = NumericLiteral
+    = "(" _ expr:Expression _ ")" { return expr; }
+    / NumericLiteral
     / Identifier
   
 Identifier
-    = [a-zA-Z][a-zA-Z0-9]* _ { return text(); }
+    = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
+      return new Identifier({ name: name[0] + name[1].join('') });
+    }
   
 NumericLiteral
     = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {

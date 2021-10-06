@@ -10,8 +10,10 @@ const functions = `
   }
 
   class OperatorExpression extends Node { }
+  class ApplyExpression extends Node { }
 
   class NumericLiteral extends Node { }
+  class Identifier extends Node { }
 `;
 
 const nonTerminals = {
@@ -35,15 +37,27 @@ const nonTerminals = {
         ), head);
       }
   `,
+
+  ApplyExpression: NextRule => `
+    = expr:${NextRule} args:(_ ${NextRule})* {
+        return args.reduce((expr, [, args]) => (
+          new ApplyExpression({ expr, args })
+        ), expr)
+      }
+  `,
+
   PrimaryExpression: NextRule => `
-    = NumericLiteral
+    = "(" _ expr:Expression _ ")" { return expr; }
+    / NumericLiteral
     / Identifier
   `
 };
 
 const terminals = {
   Identifier: `
-    = [a-zA-Z][a-zA-Z0-9]* _ { return text(); }
+    = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
+      return new Identifier({ name: name[0] + name[1].join('') });
+    }
   `,
 
   NumericLiteral: `
@@ -71,6 +85,7 @@ const rules = [
   'Expression',
   'AddExpression',
   'MultiplyExpression',
+  'ApplyExpression',
   'PrimaryExpression'
 ];
 
