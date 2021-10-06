@@ -1,38 +1,24 @@
-{
-class Node {
-  constructor(args) {
-    Object.assign(this, args);
-  }
-}
-
-class OperatorExpression extends Node { }
-class ApplyExpression extends Node { }
-
-class NumericLiteral extends Node { }
-class Identifier extends Node { }
-}
-
 Expression
-  = expr:AddExpression Newline* {
+  = expr:NextRule Newline* {
       return expr;
     }
 
 AddExpression
-  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
+  = head:NextRule tail:(_ ("+" / "-") _ NextRule)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
 
 MultiplyExpression
-  = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ ApplyExpression)* {
+  = head:NextRule tail:(_ ("*" / "/" / "%") _ NextRule)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
 
 ApplyExpression
-  = expr:PrimaryExpression args:(_ PrimaryExpression)* {
+  = expr:NextRule args:(_ NextRule)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
@@ -61,4 +47,3 @@ Whitespace
 
 Newline
   = [\n\r]
-

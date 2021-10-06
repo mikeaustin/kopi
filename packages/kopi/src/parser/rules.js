@@ -95,9 +95,7 @@ const orderedNonTerminals = rules.reverse().reduce(([orderedNonTerminals, nextRu
 
 const orderedTerminals = Object.entries(terminals).map(([name, rule]) => name + rule);
 
-console.log(`
-{${functions}}
+console.log(`{${functions}}
 
 ${orderedNonTerminals.join('\n')}
-${orderedTerminals.join('\n')}
-`);
+${orderedTerminals.join('\n')}`);
