@@ -22,4 +22,11 @@ class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
-class Identifier extends Node { }
+class AstLiteral extends Node { }
+class Identifier extends Node {
+  async apply(thisArg, [value]) {
+    const evaluatedValue = await value;
+
+    return evaluatedValue[this.name].apply(evaluatedValue, []);
+  }
+}

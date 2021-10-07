@@ -23,7 +23,14 @@ class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
-class Identifier extends Node { }
+class AstLiteral extends Node { }
+class Identifier extends Node {
+  async apply(thisArg, [value]) {
+    const evaluatedValue = await value;
+
+    return evaluatedValue[this.name].apply(evaluatedValue, []);
+  }
+}
 }
 
 Block
@@ -69,7 +76,7 @@ PipeExpression
 
 TupleExpression
 
-  = head:((Identifier ":")? _ AddExpression) tail:(_ "," _ (Identifier ":")? AddExpression)+ {
+  = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? EqualityExpression)+ {
       return new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
@@ -81,7 +88,15 @@ TupleExpression
         ], [head[0] && head[0][0].name]),
       });
   }
-  / AddExpression
+  / EqualityExpression
+
+EqualityExpression
+
+  = head:AddExpression tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ AddExpression)* {
+      return tail.reduce((left, [, op, , right]) => (
+        new OperatorExpression({ op, left, right })
+      ), head);
+    }
 
 AddExpression
 
@@ -126,9 +141,11 @@ PrimaryExpression
 
   = FunctionExpression
   / ParenthesizedTuple
+  / _ "{" _ block:Block _ "}" { return block; }
   / ArrayExpression
   / NumericLiteral
   / StringLiteral
+  / AstLiteral
   / Identifier
 
 Pattern
@@ -185,7 +202,6 @@ ParenthesizedTuple
   / "("
       tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+
     ")" {
-      console.log(tail[0][5])
       return tail.length === 1 ? tail[0][5] : new TupleExpression({
         elements: tail.map(expr => expr[5]),
         fields: tail.map(expr => expr[3] &&  expr[3][0].name)
@@ -219,6 +235,24 @@ StringLiteral
 
   = _ "\"" value:[^"]* "\"" _ {
       return new StringLiteral({ value: value.join('') });
+    }
+
+AstLiteral
+
+  = "'("
+      exprs:(Newline+ Expression)+ Newline+
+    ")" {
+      return new AstLiteral({
+        value: new TupleExpression({
+          elements: exprs.map(expr => expr[1])
+        })
+      });
+    }
+  / "'" "(" expr:Statement ")" {
+      return new AstLiteral({ value: expr });
+    }
+  / "'" ident:Identifier {
+      return new AstLiteral({ value: ident });
     }
 
 Identifier

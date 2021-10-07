@@ -16,7 +16,6 @@ ParenthesizedTuple
   / "("
       tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+
     ")" {
-      console.log(tail[0][5])
       return tail.length === 1 ? tail[0][5] : new TupleExpression({
         elements: tail.map(expr => expr[5]),
         fields: tail.map(expr => expr[3] &&  expr[3][0].name)

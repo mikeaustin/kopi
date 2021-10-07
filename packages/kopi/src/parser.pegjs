@@ -451,7 +451,9 @@ AstLiteral "astnode"
   = "'("
       exprs:(Newline+ Expression)+ Newline+
     ")" {
-      return new AstLiteral({ value: new TupleExpression({ elements: exprs.map(expr => expr[1]) }) });
+      return new AstLiteral({
+        value: new TupleExpression({ elements: exprs.map(expr => expr[1]) })
+      });
     }
   / "'" "(" expr:Statement ")" {
       return new AstLiteral({ value: expr });

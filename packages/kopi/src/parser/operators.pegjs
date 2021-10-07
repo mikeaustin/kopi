@@ -1,3 +1,10 @@
+EqualityExpression
+  = head:AddExpression tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ AddExpression)* {
+      return tail.reduce((left, [, op, , right]) => (
+        new OperatorExpression({ op, left, right })
+      ), head);
+    }
+
 AddExpression
   = head:NextRule tail:(_ ("+" / "-") _ NextRule)* {
       return tail.reduce((left, [, op, , right]) => (

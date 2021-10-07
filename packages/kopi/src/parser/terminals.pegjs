@@ -10,6 +10,23 @@ StringLiteral
       return new StringLiteral({ value: value.join('') });
     }
 
+AstLiteral
+  = "'("
+      exprs:(Newline+ Expression)+ Newline+
+    ")" {
+      return new AstLiteral({
+        value: new TupleExpression({
+          elements: exprs.map(expr => expr[1])
+        })
+      });
+    }
+  / "'" "(" expr:Statement ")" {
+      return new AstLiteral({ value: expr });
+    }
+  / "'" ident:Identifier {
+      return new AstLiteral({ value: ident });
+    }
+
 Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({

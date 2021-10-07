@@ -3,17 +3,21 @@ print ""
 
 # Basic syntax and semantics tests
 
-print $ max 1, 2
+print $ max (1, 2)
 
 print $ ("first", "second").1
 
 print $ (date ()), (time ())
 
+swap = a, b => b, a
+
+print $ swap (1, 2)
+
 
 print (
-  (a, b => a + b) 2, 3
+  (a, b => a + b) (2, 3)
   2 * (3 + 4) + 1
-  match 5 (0 => 1), (n => n * n)
+  match 5 ((0 => 1), (n => n * n))
 )
 
 print (
@@ -71,7 +75,7 @@ print $ let (x = 2, y = 3) => x + y
 
 
 vecA, vecB = (Vector 1, 2), (Vector 2, 3)
-print (vecA + vecB | length | toFixed 3)
+print $ vecA + vecB | length | toFixed 3
 
 
 print $ 1..2, "a".."z" | map (a, b) => a, b

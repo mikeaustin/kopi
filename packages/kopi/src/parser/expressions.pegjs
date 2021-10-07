@@ -53,7 +53,9 @@ MemberExpression
 PrimaryExpression
   = FunctionExpression
   / ParenthesizedTuple
+  / _ "{" _ block:Block _ "}" { return block; }
   / ArrayExpression
   / NumericLiteral
   / StringLiteral
+  / AstLiteral
   / Identifier

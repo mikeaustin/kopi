@@ -28,6 +28,7 @@ async function main() {
   }, {});
 
   const orderedOperatorRules = [
+    'EqualityExpression',
     'AddExpression',
     'MultiplyExpression',
   ];
@@ -61,6 +62,7 @@ async function main() {
     'ArrayExpression',
     'NumericLiteral',
     'StringLiteral',
+    'AstLiteral',
     'Identifier',
     '_',
     'Whitespace',
