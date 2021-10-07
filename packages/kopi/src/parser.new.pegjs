@@ -8,16 +8,19 @@ class Node {
 class Block extends Node { }
 class Assignment extends Node { }
 
+class PipeExpression extends Node { }
 class OperatorExpression extends Node { }
 class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
 class ApplyExpression extends Node { }
+class RangeExpression extends Node { }
 
 class TuplePattern extends Node { }
 class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
+class StringLiteral extends Node { }
 class Identifier extends Node { }
 }
 
@@ -40,7 +43,21 @@ Assignment
     }
 
 Expression
-  = TupleExpression
+  = LowPrecedenceApplyExpression
+
+LowPrecedenceApplyExpression
+  = head:PipeExpression tail:(_ "$" _ PipeExpression)* {
+      return tail.reduce((expr, [, op, , args]) => (
+        new ApplyExpression({ expr, args })
+      ), head);
+    }
+
+PipeExpression
+  = head:TupleExpression tail:(_ "|" _ TupleExpression)* {
+      return tail.reduce((left, [, op,, right]) => (
+        new PipeExpression({ left, right })
+      ), head);
+    }
 
 TupleExpression
   = head:AddExpression tail:(_ "," _ AddExpression)+ {
@@ -68,11 +85,17 @@ MultiplyExpression
     }
 
 ApplyExpression
-  = expr:PrimaryExpression args:(_ PrimaryExpression)* {
+  = expr:RangeExpression args:(_ RangeExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
     }
+
+RangeExpression
+  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+      return new RangeExpression({ from, to });
+    }
+  / PrimaryExpression
 
 PrimaryExpression
   = "()" _ "=>" _ expr:Expression {
@@ -99,7 +122,11 @@ PrimaryExpression
         ], [head])
       });
     }
+  / from:Pattern _ ".." _ to:Pattern {
+      return new RangeExpression({ from, to });
+    }
   / NumericLiteral
+  / StringLiteral
   / Identifier
 
 Pattern
@@ -132,6 +159,11 @@ NumericLiteral
     });
   }
 
+StringLiteral
+  = _ "\"" value:[^"]* "\"" _ {
+      return new StringLiteral({ value: value.join('') });
+    }
+
 Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
@@ -145,6 +177,9 @@ _
 Whitespace
   = [ \t]
 
+Comment
+  = "#" (!Newline .)*
+
 Newline
-  = [\r?\n]
+  = Comment? [\r?\n]
 

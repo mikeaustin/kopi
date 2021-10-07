@@ -5,6 +5,11 @@ NumericLiteral
     });
   }
 
+StringLiteral
+  = _ "\"" value:[^"]* "\"" _ {
+      return new StringLiteral({ value: value.join('') });
+    }
+
 Identifier
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
@@ -18,5 +23,8 @@ _
 Whitespace
   = [ \t]
 
+Comment
+  = "#" (!Newline .)*
+
 Newline
-  = [\r?\n]
+  = Comment? [\r?\n]

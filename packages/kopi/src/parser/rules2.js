@@ -36,9 +36,12 @@ async function main() {
     'Statement',
     'Assignment',
     'Expression',
+    'LowPrecedenceApplyExpression',
+    'PipeExpression',
     'TupleExpression',
     ...orderedOperatorRules,
     'ApplyExpression',
+    'RangeExpression',
     'PrimaryExpression',
   ];
 
@@ -51,9 +54,11 @@ async function main() {
 
   const orderedTerminalRules = [
     'NumericLiteral',
+    'StringLiteral',
     'Identifier',
     '_',
     'Whitespace',
+    'Comment',
     'Newline',
   ];
 

@@ -1,6 +1,20 @@
 Expression
   = NextRule
 
+LowPrecedenceApplyExpression
+  = head:NextRule tail:(_ "$" _ NextRule)* {
+      return tail.reduce((expr, [, op, , args]) => (
+        new ApplyExpression({ expr, args })
+      ), head);
+    }
+
+PipeExpression
+  = head:NextRule tail:(_ "|" _ NextRule)* {
+      return tail.reduce((left, [, op,, right]) => (
+        new PipeExpression({ left, right })
+      ), head);
+    }
+
 TupleExpression
   = head:NextRule tail:(_ "," _ NextRule)+ {
       return new TupleExpression({
@@ -10,6 +24,12 @@ TupleExpression
         ], [head])
       });
   }
+  / NextRule
+
+RangeExpression
+  = from:NextRule _ ".." _ to:NextRule {
+      return new RangeExpression({ from, to });
+    }
   / NextRule
 
 ApplyExpression
@@ -44,5 +64,9 @@ PrimaryExpression
         ], [head])
       });
     }
+  / from:NextRule _ ".." _ to:NextRule {
+      return new RangeExpression({ from, to });
+    }
   / NumericLiteral
+  / StringLiteral
   / Identifier
