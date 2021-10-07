@@ -56,6 +56,7 @@ async function main() {
 
   const orderedTerminalRules = [
     'FunctionExpression',
+    'ParenthesizedTuple',
     'NumericLiteral',
     'StringLiteral',
     'Identifier',

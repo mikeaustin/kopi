@@ -52,18 +52,7 @@ MemberExpression
 
 PrimaryExpression
   = FunctionExpression
-  / "()" {
-      return new TupleExpression({ elements: [] });
-    }
-  / "("
-      _ tail:(Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
-    ")" {
-      return new TupleExpression({
-        elements: tail.map(expr => expr[4]),
-        fields: tail.map(expr => expr[2] &&  expr[2][0].name)
-      });
-    }
-  / "(" _ expr:Expression _ ")" { return expr; }
+  / ParenthesizedTuple
   / "[]" {
     return new ArrayExpression({ elements: [] });
   }
@@ -74,9 +63,6 @@ PrimaryExpression
           element
         ], [head])
       });
-    }
-  / from:NextRule _ ".." _ to:NextRule {
-      return new RangeExpression({ from, to });
     }
   / NumericLiteral
   / StringLiteral

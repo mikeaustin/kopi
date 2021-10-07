@@ -111,18 +111,7 @@ MemberExpression
 
 PrimaryExpression
   = FunctionExpression
-  / "()" {
-      return new TupleExpression({ elements: [] });
-    }
-  / "("
-      _ tail:(Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
-    ")" {
-      return new TupleExpression({
-        elements: tail.map(expr => expr[4]),
-        fields: tail.map(expr => expr[2] &&  expr[2][0].name)
-      });
-    }
-  / "(" _ expr:Expression _ ")" { return expr; }
+  / ParenthesizedTuple
   / "[]" {
     return new ArrayExpression({ elements: [] });
   }
@@ -133,9 +122,6 @@ PrimaryExpression
           element
         ], [head])
       });
-    }
-  / from:Pattern _ ".." _ to:Pattern {
-      return new RangeExpression({ from, to });
     }
   / NumericLiteral
   / StringLiteral
@@ -177,6 +163,20 @@ FunctionExpression
   / "()" {
       return new TupleExpression({ elements: [] });
     }
+
+ParenthesizedTuple
+  = "()" {
+      return new TupleExpression({ elements: [] });
+    }
+  / "("
+      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+
+    ")" {
+      return new TupleExpression({
+        elements: tail.map(expr => expr[5]),
+        fields: tail.map(expr => expr[3] &&  expr[3][0].name)
+      });
+    }
+  / "(" _ expr:Expression _ ")" { return expr; }
 
 NumericLiteral
   = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
