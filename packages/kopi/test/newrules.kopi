@@ -17,6 +17,11 @@ print $ (a => b => a + b) 1 2
 print $ (x, k => (x, k => k (x + 1)) (x + x, k)) (5, (x => x))
 
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
+factorial = fix factorial => n => match n (
+  0 => 1
+  n => n * factorial (n - 1)
+)
+print (factorial 170)
 
 print $ (fix f => x => x * x) 5
 
@@ -34,3 +39,11 @@ print (name: "Joe", age: 20).name
 print $ match 5 (
   x => x
 )
+
+print $ ["B, A", "D, C"] | _map (name) => (
+  name | _split "," | _map (x) => (x | trim) | xreverse | _join " "
+)
+
+swap = a, b => b, a
+
+print $ swap (1, 2)

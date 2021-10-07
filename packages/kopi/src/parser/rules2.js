@@ -48,10 +48,11 @@ async function main() {
   ];
 
   const orderedPatternRules = [
-    "Pattern",
-    "TuplePattern",
-    "PrimaryPattern",
-    "IdentifierPattern",
+    'Pattern',
+    'TuplePattern',
+    'PrimaryPattern',
+    'NumericLiteralPattern',
+    'IdentifierPattern',
   ];
 
   const orderedTerminalRules = [

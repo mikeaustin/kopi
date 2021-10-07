@@ -14,7 +14,13 @@ TuplePattern
 
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
+  / NumericLiteralPattern
   / IdentifierPattern
+
+NumericLiteralPattern
+  = number:NumericLiteral {
+      return new NumericLiteralPattern({ value: number.value });
+    }
 
 IdentifierPattern
   = ident:Identifier {
