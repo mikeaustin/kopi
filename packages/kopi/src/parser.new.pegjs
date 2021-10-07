@@ -15,6 +15,7 @@ class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
 class ApplyExpression extends Node { }
 class RangeExpression extends Node { }
+class MemberExpression extends Node { }
 
 class TuplePattern extends Node { }
 class IdentifierPattern extends Node { }
@@ -60,12 +61,16 @@ PipeExpression
     }
 
 TupleExpression
-  = head:AddExpression tail:(_ "," _ AddExpression)+ {
+  = head:((Identifier ":")? _ AddExpression) tail:(_ "," _ (Identifier ":")? AddExpression)+ {
       return new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
-          element[3]
-        ], [head])
+          element[4]
+        ], [head[2]]),
+        fields: tail.reduce((elements, element) => [
+          ...elements,
+          element[3] && element[3][0].name
+        ], [head[0] && head[0][0].name]),
       });
   }
   / AddExpression
@@ -92,10 +97,17 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+  = from:MemberExpression _ ".." _ to:MemberExpression {
       return new RangeExpression({ from, to });
     }
-  / PrimaryExpression
+  / MemberExpression
+
+MemberExpression
+  = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
+      return tail.reduce((expr, [, ident]) => (
+        new MemberExpression({ expr, member: ident?.name ?? ident.value })
+      ), head)
+    }
 
 PrimaryExpression
   = "()" _ "=>" _ expr:Expression {

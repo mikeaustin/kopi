@@ -42,6 +42,7 @@ async function main() {
     ...orderedOperatorRules,
     'ApplyExpression',
     'RangeExpression',
+    'MemberExpression',
     'PrimaryExpression',
   ];
 

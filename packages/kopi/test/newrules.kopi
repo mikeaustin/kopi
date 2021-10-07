@@ -28,3 +28,5 @@ print $ vecA + vecB | length | toFixed 3
 print $ 1..2, "a".."z" | map (a, b) => a, b
 
 print $ (1 + 1)..(f 5) | map (x) => x
+
+print (name: "Joe", age: 20).name
