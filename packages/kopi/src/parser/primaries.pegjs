@@ -25,3 +25,16 @@ ParenthesizedTuple
       });
     }
   / "(" _ expr:Expression _ ")" { return expr; }
+
+ArrayExpression
+  = "[]" {
+    return new ArrayExpression({ elements: [] });
+  }
+  / "[" _ head:AddExpression tail:(_ "," _ AddExpression)* _ "]" {
+      return new ArrayExpression({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    }

@@ -53,17 +53,7 @@ MemberExpression
 PrimaryExpression
   = FunctionExpression
   / ParenthesizedTuple
-  / "[]" {
-    return new ArrayExpression({ elements: [] });
-  }
-  / "[" _ head:AddExpression tail:(_ "," _ AddExpression)* _ "]" {
-      return new ArrayExpression({
-        elements: tail.reduce((elements, [, , , element]) => [
-          ...elements,
-          element
-        ], [head])
-      });
-    }
+  / ArrayExpression
   / NumericLiteral
   / StringLiteral
   / Identifier
