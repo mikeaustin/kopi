@@ -68,7 +68,7 @@ factorial = n => match n (
 print (factorial 170)
 
 
-# print $ let (x = 2, y = 3) => x + y
+print $ let (x = 2, y = 3) => x + y
 
 
 (0, x => x) | getMatches (0, 1)
@@ -117,14 +117,14 @@ print $ [1, (sleep 2), (1 + 2)] | _map 'toString
 
 print $ sleep 1 | toFixed 2
 
-# print $ loop exit => (x = 1) => {
-#   print x
-#   sleep 1
-#   match x (
-#     3 => exit 100
-#     n => n + 1
-#   )
-# }
+print $ loop exit => (x = 1) => {
+  print x
+  sleep 1
+  match x (
+    3 => exit 100
+    n => n + 1
+  )
+}
 
 print $ ["B, A", "D, C"] | _map (name) => (
   name | _split "," | _map 'trim | xreverse | _join " "

@@ -12,6 +12,6 @@ Statement
   / Expression
 
 Assignment
-  = pattern:Pattern _ "=" !">" _ expr:Expression {
+  = pattern:AssignmentPattern _ "=" !">" _ expr:Expression {
       return new Assignment({ pattern, expr })
     }

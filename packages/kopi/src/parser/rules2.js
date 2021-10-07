@@ -49,6 +49,10 @@ async function main() {
   ];
 
   const orderedPatternRules = [
+    'AssignmentPattern',
+    'AssignmentTuplePattern',
+    'AssignmentPrimaryPattern',
+    'AssignmentIdentifierPattern',
     'Pattern',
     'TuplePattern',
     'PrimaryPattern',

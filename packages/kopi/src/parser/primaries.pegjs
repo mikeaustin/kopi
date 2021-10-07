@@ -14,7 +14,7 @@ ParenthesizedTuple
       return new TupleExpression({ elements: [] });
     }
   / "("
-      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+
+      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
     ")" {
       return tail.length === 1 ? tail[0][5] : new TupleExpression({
         elements: tail.map(expr => expr[5]),

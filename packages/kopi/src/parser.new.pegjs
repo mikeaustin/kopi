@@ -50,7 +50,7 @@ Statement
 
 Assignment
 
-  = pattern:Pattern _ "=" !">" _ expr:Expression {
+  = pattern:AssignmentPattern _ "=" !">" _ expr:Expression {
       return new Assignment({ pattern, expr })
     }
 
@@ -148,6 +148,34 @@ PrimaryExpression
   / AstLiteral
   / Identifier
 
+AssignmentPattern
+
+  = AssignmentTuplePattern
+
+AssignmentTuplePattern
+
+  = head:AssignmentPrimaryPattern tail:(_ "," _ AssignmentPrimaryPattern)+ {
+      return new TuplePattern({
+        elements: tail.reduce((elements, element) => [
+          ...elements,
+          element[3]
+        ], [head])
+      });
+    }
+  / AssignmentPrimaryPattern
+
+AssignmentPrimaryPattern
+
+  = _ "(" pattern:AssignmentPattern ")" { return pattern; }
+  / NumericLiteralPattern
+  / AssignmentIdentifierPattern
+
+AssignmentIdentifierPattern
+
+  = ident:Identifier {
+      return new IdentifierPattern({ name: ident.name });
+    }
+
 Pattern
 
   = TuplePattern
@@ -178,8 +206,8 @@ NumericLiteralPattern
 
 IdentifierPattern
 
-  = ident:Identifier {
-      return new IdentifierPattern({ name: ident.name });
+  = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
+      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
     }
 
 FunctionExpression
@@ -200,7 +228,7 @@ ParenthesizedTuple
       return new TupleExpression({ elements: [] });
     }
   / "("
-      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+
+      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
     ")" {
       return tail.length === 1 ? tail[0][5] : new TupleExpression({
         elements: tail.map(expr => expr[5]),
