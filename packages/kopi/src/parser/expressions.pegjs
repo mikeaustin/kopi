@@ -51,18 +51,18 @@ MemberExpression
     }
 
 PrimaryExpression
-  = "()" _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params: new TuplePattern({
-        elements: [],
-        fields: []
-      }), expr });
-    }
-  / params:Pattern _ "=>" _ expr:Expression {
-      return new FunctionExpression({ params, expr });
-    }
+  = FunctionExpression
   / "()" {
-    return new TupleExpression({ elements: [] });
-  }
+      return new TupleExpression({ elements: [] });
+    }
+  / "("
+      _ tail:(Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
+    ")" {
+      return new TupleExpression({
+        elements: tail.map(expr => expr[4]),
+        fields: tail.map(expr => expr[2] &&  expr[2][0].name)
+      });
+    }
   / "(" _ expr:Expression _ ")" { return expr; }
   / "[]" {
     return new ArrayExpression({ elements: [] });
