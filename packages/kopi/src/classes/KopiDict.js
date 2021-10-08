@@ -1,6 +1,11 @@
 const util = require("util");
 const { Map } = require('immutable');
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 class KopiDict {
   constructor(entries) {
     this.immutableMap = new Map(entries);
@@ -9,7 +14,7 @@ class KopiDict {
   async toStringAsync() {
     const entries = await Promise.all(
       this.immutableMap.toArray().map(async ([key, value]) => (
-        `${key}: ${(await value)[util.inspect.custom]()}`
+        `${key}: ${inspect(await value)}`
       ))
     );
 

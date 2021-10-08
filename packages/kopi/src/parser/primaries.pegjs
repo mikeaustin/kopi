@@ -1,11 +1,11 @@
 FunctionExpression
-  = "()" _ "=>" _ expr:EqualityExpression {
+  = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
         fields: []
       }), expr });
     }
-  / params:Pattern _ "=>" _ expr:TupleExpression {
+  / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
 
@@ -42,7 +42,7 @@ ArrayExpression
     }
 
 DictExpression
-  = "{" _ head:(PrimaryExpression ":" _ ApplyExpression) tail:(_ "," _ PrimaryExpression ":" _ ApplyExpression)* _ "}" {
+  = "{" _ head:(PrimaryExpression ":" _ EqualityExpression) tail:(_ "," _ PrimaryExpression ":" _ EqualityExpression)* _ "}" {
       return new DictExpression({
         entries: tail.reduce((entries, [, , , key, , , value]) => [
           ...entries,

@@ -2,7 +2,7 @@ Expression
   = NextRule
 
 LowPrecedenceApplyExpression
-  = head:NextRule tail:(_ "$" _ NextRule)* {
+  = head:NextRule tail:(_ "$" _ Expression)* {
       return tail.reduce((expr, [, op, , args]) => (
         new ApplyExpression({ expr, args })
       ), head);

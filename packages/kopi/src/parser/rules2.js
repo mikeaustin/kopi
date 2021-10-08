@@ -40,6 +40,7 @@ async function main() {
     'Assignment',
     'Expression',
     'LowPrecedenceApplyExpression',
+    // Flip Pipe and Tuple for Array/Dict?
     'PipeExpression',
     'TupleExpression',
     ...orderedOperatorRules,

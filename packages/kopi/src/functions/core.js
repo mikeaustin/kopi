@@ -69,6 +69,8 @@ const kopi_match = (value, scope, visitors) => async (_funcs) => {
       return func.apply(undefined, [value, scope, visitors]);
     }
   }
+
+  console.log('match failed.');
 };
 
 const kopi_loop = async (fn, scope, visitors) => {
