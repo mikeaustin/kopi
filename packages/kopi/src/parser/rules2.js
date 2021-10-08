@@ -29,6 +29,7 @@ async function main() {
 
   const orderedOperatorRules = [
     'EqualityExpression',
+    'ConcatinationExpression',
     'AddExpression',
     'MultiplyExpression',
   ];

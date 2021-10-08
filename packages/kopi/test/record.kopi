@@ -9,7 +9,7 @@ print (x: 1, y: 2, z: 3)
 
 # Mode = GL_POINTS () | GL_LINES ()
 
-vector = (Vector 1, 2)
+vector = Vector (1, 2)
 
 GL_POINTS = 0
 GL_TEXTURE_2D = 1

@@ -11,7 +11,7 @@ text = value => ("text", value)
 indent = (n) => {
   loop = (n, str) => match n (
     0 => str
-    _ => loop (n - 1), (str ++ "  ")
+    _ => loop ((n - 1), (str ++ "  "))
   )
   loop (n, "")
 }
