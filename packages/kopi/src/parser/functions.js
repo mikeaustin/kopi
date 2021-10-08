@@ -18,6 +18,7 @@ class MemberExpression extends Node { }
 
 class TuplePattern extends Node { }
 class NumericLiteralPattern extends Node { }
+class StringLiteralPattern extends Node { }
 class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }

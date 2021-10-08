@@ -14,6 +14,7 @@ AssignmentTuplePattern
 AssignmentPrimaryPattern
   = _ "(" pattern:AssignmentPattern ")" { return pattern; }
   / NumericLiteralPattern
+  / StringLiteralPattern
   / AssignmentIdentifierPattern
 
 AssignmentIdentifierPattern
@@ -39,11 +40,17 @@ TuplePattern
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
   / NumericLiteralPattern
+  / StringLiteralPattern
   / IdentifierPattern
 
 NumericLiteralPattern
   = number:NumericLiteral {
       return new NumericLiteralPattern({ value: number.value });
+    }
+
+StringLiteralPattern
+  = string:StringLiteral {
+      return new StringLiteralPattern({ value: string.value });
     }
 
 IdentifierPattern
