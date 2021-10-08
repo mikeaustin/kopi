@@ -50,5 +50,5 @@ NumericLiteralPattern
 
 IdentifierPattern
   = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
-      return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+      return new IdentifierPattern({ name: ident.name, init: init && init[3] });
     }
