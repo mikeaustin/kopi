@@ -65,6 +65,7 @@ async function main() {
     'FunctionExpression',
     'ParenthesizedTuple',
     'ArrayExpression',
+    'DictExpression',
     'NumericLiteral',
     'StringLiteral',
     'AstLiteral',

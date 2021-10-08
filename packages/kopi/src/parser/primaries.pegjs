@@ -40,3 +40,14 @@ ArrayExpression
     "]" {
       return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
     }
+
+DictExpression
+  = "{" _ head:(PrimaryExpression ":" _ ApplyExpression) tail:(_ "," _ PrimaryExpression ":" _ ApplyExpression)* _ "}" {
+      return new DictExpression({
+        entries: tail.reduce((entries, [, , , key, , , value]) => [
+          ...entries,
+          [key.value, value]
+        ], [[head[0].value, head[3]]])
+      });
+    }
+  / NextRule

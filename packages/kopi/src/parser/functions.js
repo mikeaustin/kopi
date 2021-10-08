@@ -13,6 +13,7 @@ class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
 class ApplyExpression extends Node { }
+class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
 

@@ -54,6 +54,7 @@ PrimaryExpression
   / ParenthesizedTuple
   / _ "{" _ block:Block _ "}" { return block; }
   / ArrayExpression
+  / DictExpression
   / NumericLiteral
   / StringLiteral
   / AstLiteral

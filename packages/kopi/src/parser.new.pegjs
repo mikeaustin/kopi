@@ -14,6 +14,7 @@ class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
 class ApplyExpression extends Node { }
+class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
 
@@ -143,6 +144,7 @@ PrimaryExpression
   / ParenthesizedTuple
   / _ "{" _ block:Block _ "}" { return block; }
   / ArrayExpression
+  / DictExpression
   / NumericLiteral
   / StringLiteral
   / AstLiteral
@@ -261,6 +263,18 @@ ArrayExpression
     "]" {
       return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
     }
+
+DictExpression
+
+  = "{" _ head:(PrimaryExpression ":" _ ApplyExpression) tail:(_ "," _ PrimaryExpression ":" _ ApplyExpression)* _ "}" {
+      return new DictExpression({
+        entries: tail.reduce((entries, [, , , key, , , value]) => [
+          ...entries,
+          [key.value, value]
+        ], [[head[0].value, head[3]]])
+      });
+    }
+  / NumericLiteral
 
 NumericLiteral
 
