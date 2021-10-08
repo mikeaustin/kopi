@@ -369,7 +369,7 @@ function peg$parse(input, options) {
             return new NumericLiteralPattern({ value: number.value });
           },
       peg$c81 = function(ident) {
-            return new IdentifierPattern({ name: ident.name });
+            return new IdentifierPattern({ name: ident.name, init: 'foo' });
           },
       peg$c82 = function(ident, params) {
             return new FunctionPattern({ name: ident.name, params });
@@ -396,7 +396,8 @@ function peg$parse(input, options) {
           return new BooleanLiteralPattern({ value: value === 'true' ? true : false })
         },
       peg$c94 = function(ident, init) {
-            return new IdentifierPattern({ name: ident.name, init: init?.[3] });
+            console.log('IdentifierPattern', init && init[3])
+            return new IdentifierPattern({ name: ident.name, init: init && init[3] });
           },
       peg$c95 = peg$otherExpectation("typename"),
       peg$c96 = /^[_A-Z]/,

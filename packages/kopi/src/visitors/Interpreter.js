@@ -184,7 +184,7 @@ class Interpreter extends Visitors {
   }
 
   IdentifierPattern({ name, init }, scope) {
-    return new IdentifierPattern(name, this.visitNode(init, scope));
+    return new IdentifierPattern(name, init === null ? init : this.visitNode(init, scope));
   }
 
   NumericLiteralPattern({ value }) {
