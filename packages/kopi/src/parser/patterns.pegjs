@@ -2,12 +2,12 @@ AssignmentPattern
   = NextRule
 
 AssignmentTuplePattern
-  = head:NextRule tail:(_ "," _ NextRule)* {
-      return tail.length === 0 ? head : new TuplePattern({
+  = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
+      return tail.length === 0 ? head[1] : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
-          element[3]
-        ], [head])
+          element[4]
+        ], [head[1]])
       });
     }
 
