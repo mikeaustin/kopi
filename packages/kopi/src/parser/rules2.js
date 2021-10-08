@@ -41,6 +41,7 @@ async function main() {
     'Expression',
     'LowPrecedenceApplyExpression',
     // Flip Pipe and Tuple for Array/Dict?
+    // Can't: print $ 1..2, "a".."z" | map (a, b) => a, b
     'PipeExpression',
     'TupleExpression',
     ...orderedOperatorRules,
