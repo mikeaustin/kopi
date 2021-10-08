@@ -76,8 +76,8 @@ PipeExpression
 
 TupleExpression
 
-  = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? EqualityExpression)+ {
-      return new TupleExpression({
+  = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? EqualityExpression)* {
+      return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[4]
@@ -88,7 +88,6 @@ TupleExpression
         ], [head[0] && head[0][0].name]),
       });
   }
-  / EqualityExpression
 
 EqualityExpression
 
@@ -154,15 +153,14 @@ AssignmentPattern
 
 AssignmentTuplePattern
 
-  = head:AssignmentPrimaryPattern tail:(_ "," _ AssignmentPrimaryPattern)+ {
-      return new TuplePattern({
+  = head:AssignmentPrimaryPattern tail:(_ "," _ AssignmentPrimaryPattern)* {
+      return tail.length === 0 ? head : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[3]
         ], [head])
       });
     }
-  / AssignmentPrimaryPattern
 
 AssignmentPrimaryPattern
 
@@ -182,15 +180,14 @@ Pattern
 
 TuplePattern
 
-  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)+ {
-      return new TuplePattern({
+  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)* {
+      return tail.length === 0 ? head : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[3]
         ], [head])
       });
     }
-  / PrimaryPattern
 
 PrimaryPattern
 

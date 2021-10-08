@@ -16,8 +16,8 @@ PipeExpression
     }
 
 TupleExpression
-  = head:((Identifier ":")? _ NextRule) tail:(_ "," _ (Identifier ":")? NextRule)+ {
-      return new TupleExpression({
+  = head:((Identifier ":")? _ NextRule) tail:(_ "," _ (Identifier ":")? NextRule)* {
+      return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[4]
@@ -28,7 +28,6 @@ TupleExpression
         ], [head[0] && head[0][0].name]),
       });
   }
-  / NextRule
 
 ApplyExpression
   = expr:NextRule args:(_ NextRule)* {

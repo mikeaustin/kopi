@@ -2,15 +2,14 @@ AssignmentPattern
   = NextRule
 
 AssignmentTuplePattern
-  = head:NextRule tail:(_ "," _ NextRule)+ {
-      return new TuplePattern({
+  = head:NextRule tail:(_ "," _ NextRule)* {
+      return tail.length === 0 ? head : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[3]
         ], [head])
       });
     }
-  / NextRule
 
 AssignmentPrimaryPattern
   = _ "(" pattern:AssignmentPattern ")" { return pattern; }
@@ -28,15 +27,14 @@ Pattern
   = NextRule
 
 TuplePattern
-  = head:NextRule tail:(_ "," _ NextRule)+ {
-      return new TuplePattern({
+  = head:NextRule tail:(_ "," _ NextRule)* {
+      return tail.length === 0 ? head : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
           element[3]
         ], [head])
       });
     }
-  / NextRule
 
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
