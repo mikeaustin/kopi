@@ -4,7 +4,7 @@ print ""
 
 # Simple input and recursion tests
 
-account = balance => balance, (amount => account balance - amount)
+account = balance => balance, (amount => account (balance - amount))
 
 balance, withdraw = account 100
 print balance
@@ -19,7 +19,7 @@ match (input "Amount?") (
 )
 
 main = balance => {
-  print "Balance", balance
+  print $ "Balance", balance
   amount = input "Withdraw $10? (y/n)"
 
   match amount (

@@ -32,7 +32,7 @@ extend Vector (
   fire: (this) => () => "Pew! Pew! Pew!"
 )
 
-print $ (Vector 10, 20) | fire
+print $ Vector (10, 20) | fire
 
 inspect methods
 

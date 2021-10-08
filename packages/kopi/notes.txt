@@ -124,4 +124,4 @@ x => x  FunctionExpression
 1 * 1   MultiplyExpression
 {}      BlockExpression
 1..5    RangeExpression
-v.x     RangeExpression
+v.x     MemberExpression

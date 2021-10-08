@@ -1,5 +1,5 @@
 EqualityExpression
-  = head:AddExpression tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ AddExpression)* {
+  = head:NextRule tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ NextRule)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
