@@ -2,4 +2,4 @@ f = a, b => b, a
 
 print $ f (1, 2)
 
-print $ {1: String 1 ++ "x"}
+print $ { 1: String 1 ++ "x" }

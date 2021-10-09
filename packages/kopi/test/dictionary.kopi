@@ -1,5 +1,14 @@
+print {:}
+
 print $ { 1: "One", 2: "Two" }
 
-print $ 1..5 | map (n) => { 1: "One", 2: "Two" }
+print $ 1..2 | map (n) => {
+  1: "One"
+  2: "Two"
+}
+
+print $ 1..5 | map (n) => {
+  n * n
+}
 
 # print $ { 1: (x => x), 2: 2 | toFixed 2 }

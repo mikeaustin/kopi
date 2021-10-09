@@ -8,12 +8,16 @@ const inspect = value => util.inspect(value, {
 
 class KopiDict {
   constructor(entries) {
-    this.immutableMap = new Map(entries);
+    this.entries = new Map(entries);
   }
 
   async toStringAsync() {
+    if (this.entries.size === 0) {
+      return `{:}`;
+    }
+
     const entries = await Promise.all(
-      this.immutableMap.toArray().map(async ([key, value]) => (
+      this.entries.toArray().map(async ([key, value]) => (
         `${key}: ${inspect(await value)}`
       ))
     );

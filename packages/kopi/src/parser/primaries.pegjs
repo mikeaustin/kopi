@@ -38,11 +38,18 @@ ArrayExpression
   / "["
        _ exprs:(Newline+ Expression)+ Newline+ _
     "]" {
-      return new ArrayExpression({ elements: exprs.map(expr => expr[1]) });
+      return new ArrayExpression({
+        elements: exprs.map(expr => expr[1])
+      });
     }
 
 DictExpression
-  = "{" _ head:(PrimaryExpression ":" _ EqualityExpression) tail:(_ "," _ PrimaryExpression ":" _ EqualityExpression)* _ "}" {
+  = "{:}" {
+      return new DictExpression({
+        entries: []
+      });
+    }
+  / "{" _ head:(PrimaryExpression ":" _ EqualityExpression) tail:(_ "," _ PrimaryExpression ":" _ EqualityExpression)* _ "}" {
       return new DictExpression({
         entries: tail.reduce((entries, [, , , key, , , value]) => [
           ...entries,
@@ -50,4 +57,10 @@ DictExpression
         ], [[head[0].value, head[3]]])
       });
     }
-  / NextRule
+  / "{"
+       _ tail:(Newline+ PrimaryExpression ":" _ Expression)+ Newline+ _
+    "}" {
+      return new DictExpression({
+        entries: tail.map(entry => [entry[1].value, entry[4]])
+        });
+    }
