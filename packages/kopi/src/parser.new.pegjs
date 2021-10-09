@@ -195,12 +195,12 @@ Pattern
 
 TuplePattern
 
-  = head:PrimaryPattern tail:(_ "," _ PrimaryPattern)* {
-      return tail.length === 0 ? head : new TuplePattern({
+  = head:(":"? PrimaryPattern) tail:(_ "," _ ":"? PrimaryPattern)* {
+      return tail.length === 0 ? head[1] : new TuplePattern({
         elements: tail.reduce((elements, element) => [
           ...elements,
-          element[3]
-        ], [head])
+          element[4]
+        ], [head[1]])
       });
     }
 
