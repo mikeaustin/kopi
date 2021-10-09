@@ -188,7 +188,10 @@ AssignmentIdentifierPattern
 
 Pattern
 
-  = TuplePattern
+  = pattern:TuplePattern predicate:(_ "[" _ EqualityExpression _ "]" _)? {
+      pattern.predicate = predicate?.[3];
+      return pattern;
+    }
 
 TuplePattern
 

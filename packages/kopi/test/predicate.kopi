@@ -2,13 +2,13 @@ print ""
 print "== predicate ====================================="
 print ""
 
-print $ 1..10 | map n @ even n => n * n
+print $ 1..10 | map n [even n] => n * n
 
 x = 1
 
 testGuard = n => match n (
-  n @ n + x == 1 => "Zero"
-  n @ n + x == 2 => "One"
+  n [n + x == 1] => "Zero"
+  n [n + x == 2] => "One"
   _              => "Unknown"
 )
 
@@ -25,7 +25,7 @@ if = a => b => match () (
 x = 1.5
 
 print $ match () (
-  _ @ x > 1 => 1
+  _ [x > 1] => 1
   _         => x
 )
 

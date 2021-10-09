@@ -373,7 +373,7 @@ AssignmentFunctionPattern
 //
 
 Pattern
-  = pattern:TuplePattern predicate:(_ "@" _ NoFunctionApplyExpression)? {
+  = pattern:TuplePattern predicate:(_ "[" _ NoFunctionApplyExpression _ "]")? {
     pattern.predicate = predicate?.[3];
 
     return pattern;

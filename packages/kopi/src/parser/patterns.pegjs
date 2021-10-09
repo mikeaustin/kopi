@@ -22,10 +22,11 @@ AssignmentIdentifierPattern
       return new IdentifierPattern({ name: ident.name });
     }
 
-//
-
 Pattern
-  = NextRule
+  = pattern:NextRule predicate:(_ "[" _ EqualityExpression _ "]" _)? {
+      pattern.predicate = predicate?.[3];
+      return pattern;
+    }
 
 TuplePattern
   = head:NextRule tail:(_ "," _ NextRule)* {
