@@ -71,6 +71,7 @@ async function main() {
     'DictExpression',
     'NumericLiteral',
     'StringLiteral',
+    'BooleanLiteral',
     'AstLiteral',
     'Identifier',
     '_',

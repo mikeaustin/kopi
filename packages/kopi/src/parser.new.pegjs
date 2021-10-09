@@ -25,6 +25,7 @@ class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
+class BooleanLiteral extends Node { }
 class AstLiteral extends Node { }
 class Identifier extends Node {
   async apply(thisArg, [value]) {
@@ -64,7 +65,7 @@ LowPrecedenceApplyExpression
     }
 
 PipeExpression
-  = head:TupleExpression tail:(_ "|" _ TupleExpression)* {
+  = head:TupleExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
         new PipeExpression({ left, right })
       ), head);
@@ -140,6 +141,7 @@ PrimaryExpression
   / DictExpression
   / NumericLiteral
   / StringLiteral
+  / BooleanLiteral
   / AstLiteral
   / Identifier
 
@@ -282,6 +284,11 @@ StringLiteral
   = _ "\"" value:[^"]* "\"" _ {
       return new StringLiteral({ value: value.join('') });
     }
+
+BooleanLiteral
+  = _ value:("true" / "false") _ {
+    return new BooleanLiteral({ value })
+  }
 
 AstLiteral
   = "'("

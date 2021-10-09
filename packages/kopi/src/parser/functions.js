@@ -24,6 +24,7 @@ class IdentifierPattern extends Node { }
 
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
+class BooleanLiteral extends Node { }
 class AstLiteral extends Node { }
 class Identifier extends Node {
   async apply(thisArg, [value]) {

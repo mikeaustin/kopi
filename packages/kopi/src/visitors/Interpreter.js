@@ -215,6 +215,10 @@ class Interpreter extends Visitors {
     return value;
   }
 
+  BooleanLiteral({ value }) {
+    return value;
+  }
+
   AstLiteral({ value }) {
     return value;
   }

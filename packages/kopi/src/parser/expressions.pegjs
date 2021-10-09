@@ -9,7 +9,7 @@ LowPrecedenceApplyExpression
     }
 
 PipeExpression
-  = head:NextRule tail:(_ "|" _ NextRule)* {
+  = head:NextRule tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
         new PipeExpression({ left, right })
       ), head);
@@ -57,5 +57,6 @@ PrimaryExpression
   / DictExpression
   / NumericLiteral
   / StringLiteral
+  / BooleanLiteral
   / AstLiteral
   / Identifier

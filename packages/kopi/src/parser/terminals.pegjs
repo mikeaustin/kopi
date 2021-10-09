@@ -10,6 +10,11 @@ StringLiteral
       return new StringLiteral({ value: value.join('') });
     }
 
+BooleanLiteral
+  = _ value:("true" / "false") _ {
+    return new BooleanLiteral({ value })
+  }
+
 AstLiteral
   = "'("
       exprs:(Newline+ Expression)+ Newline+

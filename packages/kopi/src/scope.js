@@ -35,9 +35,6 @@ let getScope = (input) => ({
   methods: new Map(),
   extend: core.kopi_extend,
 
-  true: true,
-  false: false,
-
   print: core.kopi_print,
   write: core.kopi_write,
 
