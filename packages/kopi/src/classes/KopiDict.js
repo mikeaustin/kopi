@@ -27,6 +27,10 @@ class KopiDict {
     return `{${entries.join(', ')}}`;
   }
 
+  async set(tuple) {
+    return new KopiDict(this.entries.set(tuple.elements[0], tuple.elements[1]));
+  }
+
   async get(key) {
     return await this.entries.get(key);
   }
@@ -44,10 +48,13 @@ class KopiDict {
     let values = new Map();
 
     for (let [key, value] of this.entries) {
-      values = this.entries.set(key, func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]));
+      values = this.entries.set(
+        key,
+        func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors])
+      );
     }
 
-    return values;
+    return new KopiDict(values);
   }
 }
 

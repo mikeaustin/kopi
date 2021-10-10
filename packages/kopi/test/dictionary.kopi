@@ -12,7 +12,13 @@ print $ 1..2 | map (n) => {
 #   "Two": [(5, 6), (7, 8)]
 # }
 
-dict = { "One": 1, "Two": 2 } | map (key, value) => value * value
+dict = { "One": 1, "Two": 2 } | map (key, value) => {
+  value * value
+}
+
+print $ dict | get "One"
+
+dict = dict | set ("One", 3)
 
 print $ dict | get "One"
 
