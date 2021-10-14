@@ -32,7 +32,13 @@ class KopiDict {
   }
 
   async get(key) {
-    return await this.entries.get(key);
+    const value = await this.entries.get(key);
+
+    if (value === undefined) {
+      return KopiTuple.empty;
+    }
+
+    return value;
   }
 
   async updatex(key) {

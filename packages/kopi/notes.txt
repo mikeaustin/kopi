@@ -112,15 +112,34 @@ tuple
 [ even $ 1,  1 | toString,  "a" ++ "b",  even 1,  x => x,  (1, 2),  1 + 1,  1..5 ]
 
 
+$       LowPrecedenceApplyExpression
 |       PipeExpression
-++      ConcatinationExpression
-x => x  FunctionExpression
 1, 2    TupleExpression
-[1, 2]  ArrayExpression
-{1: 2}  DictExpression
+++      ConcatinationExpression
 1 == 1  EqualityExpression
 1 + 1   AddExpression
 1 * 1   MultiplyExpression
 {}      BlockExpression
+[1, 2]  ArrayExpression
+{1: 2}  DictExpression
 1..5    RangeExpression
 v.x     MemberExpression
+x => x  FunctionExpression
+
+$
+|
+,
+apply
+
+$
+,
+|
+apply
+
+
+Option(5)
+
+match (dict | get "Two") (
+  () => 0
+  value => value * value
+)

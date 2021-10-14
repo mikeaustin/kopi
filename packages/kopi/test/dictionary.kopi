@@ -22,6 +22,15 @@ dict = dict | set ("One", 3)
 
 print $ dict | get "One"
 
+print $ match (dict | get "Three") (
+  ()    => 100
+  value => value
+)
+
 # inspect $ {:} | updatex "One" (x) => x
 
 # print $ { 1: (x => x), 2: 2 | toFixed 2 }
+
+# print $ 5 | toFixed 2, 3 | toString
+
+# print $ [5 | toFixed 2]
