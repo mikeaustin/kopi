@@ -347,7 +347,7 @@ function peg$parse(input, options) {
       peg$c96 = "false",
       peg$c97 = peg$literalExpectation("false", false),
       peg$c98 = function(value) {
-          return new BooleanLiteral({ value })
+          return new BooleanLiteral({ value: Boolean(value) })
         },
       peg$c99 = "'(",
       peg$c100 = peg$literalExpectation("'(", false),
