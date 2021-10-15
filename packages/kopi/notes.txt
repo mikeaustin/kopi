@@ -139,7 +139,45 @@ apply
 
 Option(5)
 
-match (dict | get "Two") (
-  () => 0
-  value => value * value
+match numberOrUnit (
+  ()    => 100
+  value => value
+)
+
+decltype
+
+auto match(T value, A => B, C => D) -> {
+
+}
+
+match numberOrString (
+  Number n => ...
+  String s => ...
+)
+
+TypeVar type = Number | String
+
+match<T, R>
+
+match takes a
+
+
+Transducer
+
+1..10 | map n [even n] => n * n
+
+1..10 | map (even n) => n * n
+
+x = case (
+  _ [x > 1] => 1
+  _ [x < 0] => 0
+  _         => x
+)
+
+ArrayPattern
+
+x = match x (
+  '(> 1) => 1
+  '(< 0) => 0
+  _      => x
 )

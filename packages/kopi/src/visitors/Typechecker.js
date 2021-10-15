@@ -1,6 +1,6 @@
 const { default: Visitors } = require('./Visitors');
 
-const { UnionType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = require('../types');
+const { UnionType, BooleanType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = require('../types');
 
 class Typechecker extends Visitors {
   Block({ statements }, context) {
@@ -55,6 +55,14 @@ class Typechecker extends Visitors {
 
   IdentifierPattern({ name }) {
     return new IdentifierPatternType(name);
+  }
+
+  BooleanLiteral({ value }) {
+    if (typeof value !== 'boolean') {
+      throw Error(`Value ${value} is not a boolean.`);
+    }
+
+    return new BooleanType();
   }
 
   NumericLiteral({ value }) {

@@ -12,7 +12,7 @@ StringLiteral
 
 BooleanLiteral
   = _ value:("true" / "false") _ {
-    return new BooleanLiteral({ value })
+    return new BooleanLiteral({ value: Boolean(value) })
   }
 
 AstLiteral
