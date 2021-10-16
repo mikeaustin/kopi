@@ -43,3 +43,17 @@ print (1, 2, 3)
 print (1, 2, c: 3)
 print (1, b: 2, c: 3)
 print (a: 1, b: 2, c: 3)
+
+print ""
+
+test = x => match x (
+  []     => "[]"
+  [1, 2] => "[1, 2]"
+  [x, 2] => "[x, 2] x = " ++ String x
+  _      => "other"
+)
+
+print $ test []
+print $ test [1, 2]
+print $ test [2, 2]
+print $ test [2, 3]

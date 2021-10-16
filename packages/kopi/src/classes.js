@@ -53,6 +53,31 @@ class TuplePattern {
   }
 }
 
+class ArrayLiteralPattern {
+  constructor(elements) {
+    this.elements = elements;
+  }
+
+  getMatches(value) {
+    if (this.elements.length === 0 && value.length === 0) {
+      return true;
+    }
+
+    const matchesArray = this.elements.map((element, index) => (
+      element.getMatches(value[index] ?? KopiTuple.empty)
+    ));
+
+    if (matchesArray.length === 0 || matchesArray.some(matches => matches === null)) {
+      return null;
+    }
+
+    return matchesArray.reduce((scope, matches) => ({
+      ...scope,
+      ...matches,
+    }), {});
+  }
+}
+
 class BooleanLiteralPattern {
   constructor(value) {
     this.value = value;
@@ -159,6 +184,7 @@ module.exports = {
   KopiVector,
   KopiDict,
   TuplePattern,
+  ArrayLiteralPattern,
   BooleanLiteralPattern,
   IdentifierPattern,
   NumericLiteralPattern,

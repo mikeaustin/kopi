@@ -40,9 +40,23 @@ TuplePattern
 
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
+  / ArrayLiteralPattern
   / NumericLiteralPattern
   / StringLiteralPattern
   / IdentifierPattern
+
+ArrayLiteralPattern
+  = "[]" {
+      return new ArrayLiteralPattern({ elements: [] });
+    }
+  / "[" _ head:PrimaryPattern tail:(_ "," _ PrimaryPattern)* _ "]" {
+      return new ArrayLiteralPattern({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    }
 
 NumericLiteralPattern
   = number:NumericLiteral {

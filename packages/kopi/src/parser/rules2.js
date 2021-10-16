@@ -59,6 +59,7 @@ async function main() {
     'Pattern',
     'TuplePattern',
     'PrimaryPattern',
+    'ArrayLiteralPattern',
     'NumericLiteralPattern',
     'StringLiteralPattern',
     'IdentifierPattern',
