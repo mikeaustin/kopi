@@ -27,6 +27,29 @@ class KopiDict {
     return `{${entries.join(', ')}}`;
   }
 
+  async ['=='](that) {
+    if (!(that instanceof KopiDict)) {
+      return false;
+    }
+
+    if (this.entries.size !== that.entries.size) {
+      return false;
+    }
+
+    for (const [key, value] of this.entries) {
+      console.log(key, value);
+      if (await value !== await that.entries.get(key)) {
+        return false;
+      }
+
+      // if (!await (await element)['=='](await that.elements[index])) {
+      //   return false;
+      // }
+    }
+
+    return true;
+  }
+
   async set(tuple) {
     return new KopiDict(this.entries.set(tuple.elements[0], tuple.elements[1]));
   }
