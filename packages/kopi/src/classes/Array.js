@@ -1,5 +1,7 @@
 const util = require("util");
 
+const { default: KopiTuple } = require('./KopiTuple');
+
 const inspect = value => util.inspect(value, {
   compact: false,
   depth: Infinity
@@ -7,7 +9,7 @@ const inspect = value => util.inspect(value, {
 
 Array.prototype.toStringAsync = async function () {
   const elements = await Promise.all(
-    this.map(async element => (await element).toStringAsync())
+    this.map(async element => inspect(await element))
   );
 
   return `[${elements.join(', ')}]`;
@@ -41,6 +43,30 @@ Array.prototype._map = async function (args, scope, visitors) {
   return values;
 };
 
-Array.prototype.xreverse = async function (args, scope, visitors) {
+Array.prototype._reduce = async function ({ elements: [_func, init] }, scope, visitors) {
+  const func = await _func;
+  let value = await init;
+
+  for (const element of this) {
+    value = await func.apply(undefined, [new KopiTuple([value, element]), scope, visitors]);
+  }
+
+  return value;
+};
+
+Array.prototype._reduce2 = function (init) {
+  return async (_func, scope, visitors) => {
+    const func = await _func;
+    let value = await init;
+
+    for (const element of this) {
+      value = await func.apply(undefined, [new KopiTuple([value, element]), scope, visitors]);
+    }
+
+    return value;
+  };
+};
+
+Array.prototype._reverse = async function (args, scope, visitors) {
   return [...this].reverse();
 };

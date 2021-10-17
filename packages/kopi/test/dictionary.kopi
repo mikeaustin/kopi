@@ -27,10 +27,18 @@ print $ match (dict | get "Three") (
   value => value
 )
 
-# inspect $ {:} | updatex "One" (x) => x
+dict = {:}
+dict = dict | update ("One", ((x = 0) => x + 1))
+print dict
 
-# print $ { 1: (x => x), 2: 2 | toFixed 2 }
+dict = dict | update ("One", ((x = 0) => x + 1))
+print dict
 
-# print $ 5 | toFixed 2, 3 | toString
+dict = dict | update ("One", ((x = 0) => x + 1))
+print dict
 
-# print $ [5 | toFixed 2]
+print ""
+
+print $ "this is a test" | _split "" | _reduce ((counts, letter => (
+  counts | update (letter, ((x = 0) => x + 1))
+)), {:})

@@ -125,7 +125,7 @@ print $ loop exit => (x = 1) => {
 }
 
 print $ ["B, A", "D, C"] | _map (name) => (
-  name | _split "," | _map 'trim | xreverse | _join " "
+  name | _split "," | _map 'trim | _reverse | _join " "
 )
 
 f = x => x
