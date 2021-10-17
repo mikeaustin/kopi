@@ -27,10 +27,10 @@ Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
 
-Array.prototype._join = async function (args) {
+Array.prototype._join = async function (delimiter = "") {
   const elements = await Promise.all(this);
 
-  return elements.join(args);
+  return elements.join(delimiter);
 };
 
 Array.prototype._map = async function (args, scope, visitors) {
