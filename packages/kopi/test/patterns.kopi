@@ -57,3 +57,8 @@ print $ test []
 print $ test [1, 2]
 print $ test [2, 2]
 print $ test [2, 3]
+
+print $ match [()] (
+  [()] => "here"
+  _    => "other"
+)

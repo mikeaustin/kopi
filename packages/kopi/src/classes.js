@@ -59,15 +59,15 @@ class ArrayLiteralPattern {
   }
 
   getMatches(value) {
-    if (this.elements.length === 0 && value.length === 0) {
-      return true;
+    if (this.elements.length !== value.length) {
+      return null;
     }
 
     const matchesArray = this.elements.map((element, index) => (
-      element.getMatches(value[index] ?? KopiTuple.empty)
+      element.getMatches(value[index])
     ));
 
-    if (matchesArray.length === 0 || matchesArray.some(matches => matches === null)) {
+    if (matchesArray.some(matches => matches === null)) {
       return null;
     }
 

@@ -40,6 +40,7 @@ TuplePattern
 
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
+  / "()" { return new TuplePattern({ elements: [] }) }
   / ArrayLiteralPattern
   / NumericLiteralPattern
   / StringLiteralPattern
