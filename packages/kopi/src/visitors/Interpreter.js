@@ -14,6 +14,7 @@ const {
 } = require('../classes');
 
 const { default: Visitors } = require('./Visitors');
+const { applyOperator } = require('../utils');
 
 const inspect = value => util.inspect(value, {
   compact: false,
@@ -150,23 +151,7 @@ class Interpreter extends Visitors {
     const evaluatedLeft = await this.visitNode(left, scope, bind);
     const evaluatedRight = await this.visitNode(right, scope, bind);
 
-    if (typeof evaluatedLeft === 'number' && typeof evaluatedRight === 'number') {
-      switch (op) {
-        case '+': return evaluatedLeft + evaluatedRight;
-        case '-': return evaluatedLeft - evaluatedRight;
-        case '*': return evaluatedLeft * evaluatedRight;
-        case '/': return evaluatedLeft / evaluatedRight;
-        case '%': return evaluatedLeft % evaluatedRight;
-        case '==': return evaluatedLeft === evaluatedRight;
-        case '!=': return evaluatedLeft !== evaluatedRight;
-        case '<=': return evaluatedLeft <= evaluatedRight;
-        case '>=': return evaluatedLeft >= evaluatedRight;
-        case '<': return evaluatedLeft < evaluatedRight;
-        case '>': return evaluatedLeft > evaluatedRight;
-      }
-    }
-
-    return evaluatedLeft[op].apply(evaluatedLeft, [evaluatedRight, scope, this, bind]);
+    return applyOperator(op, evaluatedLeft, evaluatedRight, scope, this);
   }
 
   //

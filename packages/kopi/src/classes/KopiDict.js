@@ -2,6 +2,7 @@ const util = require("util");
 const { Map } = require('immutable');
 
 const { default: KopiTuple } = require('./KopiTuple');
+const { applyOperator } = require('../utils');
 
 const inspect = value => util.inspect(value, {
   compact: false,
@@ -27,7 +28,7 @@ class KopiDict {
     return `{${entries.join(', ')}}`;
   }
 
-  async ['=='](that) {
+  async ['=='](that, scope, visitors) {
     if (!(that instanceof KopiDict)) {
       return false;
     }
@@ -37,14 +38,14 @@ class KopiDict {
     }
 
     for (const [key, value] of this.entries) {
-      console.log(key, value);
-      if (await value !== await that.entries.get(key)) {
+      const left = await value;
+      const right = await that.entries.get(key);
+
+      const result = await applyOperator('==', left, right, scope, visitors);
+
+      if (!result) {
         return false;
       }
-
-      // if (!await (await element)['=='](await that.elements[index])) {
-      //   return false;
-      // }
     }
 
     return true;
