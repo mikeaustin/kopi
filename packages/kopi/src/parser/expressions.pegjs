@@ -52,9 +52,9 @@ MemberExpression
 PrimaryExpression
   = FunctionExpression
   / ParenthesizedTuple
-  / _ "{" _ block:Block _ "}" { return block; }
   / ArrayExpression
   / DictExpression
+  / _ "{" _ block:Block _ "}" { return block; }
   / NumericLiteral
   / StringLiteral
   / BooleanLiteral

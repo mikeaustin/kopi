@@ -96,6 +96,27 @@ class KopiDict {
 
     return new KopiDict(values);
   }
+
+  async _reduce({ elements: [_func, init] }, scope, visitors) {
+    const func = await _func;
+    let accum = await init;
+
+    for (const [key, value] of this.entries) {
+      accum = await func.apply(
+        undefined,
+        [
+          new KopiTuple([
+            accum,
+            new KopiTuple([key, value])
+          ]),
+          scope,
+          visitors
+        ]
+      );
+    }
+
+    return accum;
+  };
 }
 
 module.exports = {

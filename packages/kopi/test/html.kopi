@@ -2,10 +2,10 @@ print ""
 print "== html =========================================="
 print ""
 
-html = props => children => ("element", "html", props, children)
-body = props => children => ("element", "body", props, children)
-ul = props => children => ("element", "ul", props, children)
-li = props => children => ("element", "li", props, children)
+html = () => children => ("element", "html", {:}, children)
+body = (:class, :_) => children => ("element", "body", {"class": class}, children)
+ul = (:id, :class, :_) => children => ("element", "ul", {"id": id, "class": class}, children)
+li = (:class, :_) => children => ("element", "li", {"class": class}, children)
 text = value => ("text", value)
 
 indent = (n) => {
@@ -16,6 +16,10 @@ indent = (n) => {
   loop (n, "")
 }
 
+generateAttrString = (name, value) => {
+  " " ++ name ++ "='" ++ value ++ "'"
+}
+
 generateHtmlString = (node, level) => {
   match node (
     "text", value => {
@@ -23,8 +27,9 @@ generateHtmlString = (node, level) => {
     }
     "element", tag, props, children => {
       inner = children | _map child => generateHtmlString (child, level + 1)
+      attrs = props | _reduce ((accum, (key, value) => accum ++ generateAttrString(key, value)), "")
 
-      (indent level) ++ "<" ++ tag ++ ">" ++ (char 10) ++ (
+      (indent level) ++ "<" ++ tag ++ attrs ++ ">" ++ (char 10) ++ (
         inner | _join ""
       ) ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
     }
@@ -40,7 +45,7 @@ generateHtmlString = (node, level) => {
 documentTree = (
   html () [
     text "Hello"
-    ul (class: "list") [
+    ul (id: "id", class: "class") [
       li (class: "item") [(text 1)]
       li (class: "item") [(text 2)]
     ]
