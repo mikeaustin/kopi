@@ -28,20 +28,21 @@ print $ match (dict | get "Three") (
 )
 
 dict = {:}
-dict = dict | update ("One", ((x = 0) => x + 1))
+dict = dict | update "One" $ (x = 0) => x + 1
 print dict
 
-dict = dict | update ("One", ((x = 0) => x + 1))
+dict = dict | update "One" $ (x = 0) => x + 1
 print dict
 
-dict = dict | update ("One", ((x = 0) => x + 1))
+dict = dict | update "One" $ (x = 0) => x + 1
 print dict
 
 print ""
 
-print $ "this is a test" | _split "" | _reduce ((counts, letter => (
-  counts | update (letter, ((x = 0) => x + 1))
-)), {:})
+words = "it was the best of times it was the worst of times"
+print $ words | _split " " | _reduce {:} $ (counts, word) => (
+  counts | update word $ (x = 0) => x + 1
+)
 
 print ""
 

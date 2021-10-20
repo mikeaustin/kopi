@@ -43,27 +43,15 @@ Array.prototype._map = async function (args, scope, visitors) {
   return values;
 };
 
-Array.prototype._reduce = async function ({ elements: [_func, init] }, scope, visitors) {
-  const func = await _func;
-  let value = await init;
-
-  for (const element of this) {
-    value = await func.apply(undefined, [new KopiTuple([value, element]), scope, visitors]);
-  }
-
-  return value;
-};
-
-Array.prototype._reduce2 = function (init) {
-  return async (_func, scope, visitors) => {
-    const func = await _func;
-    let value = await init;
+Array.prototype._reduce = function (init) {
+  return async (func, scope, visitors) => {
+    let accum = init;
 
     for (const element of this) {
-      value = await func.apply(undefined, [new KopiTuple([value, element]), scope, visitors]);
+      accum = await func.apply(undefined, [new KopiTuple([accum, element]), scope, visitors]);
     }
 
-    return value;
+    return accum;
   };
 };
 

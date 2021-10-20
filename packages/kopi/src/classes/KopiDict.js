@@ -65,22 +65,13 @@ class KopiDict {
     return value;
   }
 
-  async update({ elements: [key, _func] }, scope, visitors) {
-    const func = await _func;
-
-    const entries = this.entries.update(key, value => (
-      func.apply(undefined, [value ?? KopiTuple.empty, scope, visitors])
-    ));
-
-    return new KopiDict(entries);
-  }
-
-  async updatex(key) {
-    console.log('here 1');
+  async update(key) {
     return (func, scope, visitors) => {
-      console.log('here 2');
-      return 0;
-      // return this.entries.update(key, (value = 0) => func.apply(undefined, [value, scope, visitors]));
+      const entries = this.entries.update(key, (value) => (
+        func.apply(undefined, [value ?? KopiTuple.empty, scope, visitors]))
+      );
+
+      return new KopiDict(entries);
     };
   }
 
@@ -97,7 +88,7 @@ class KopiDict {
     return new KopiDict(values);
   }
 
-  async _reduce({ elements: [_func, init] }, scope, visitors) {
+  async reduce({ elements: [_func, init] }, scope, visitors) {
     const func = await _func;
     let accum = await init;
 
