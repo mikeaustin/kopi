@@ -1,5 +1,7 @@
 const util = require("util");
 
+const { default: KopiTuple } = require('./KopiTuple');
+
 class KopiRange {
   constructor(from, to) {
     this.from = from;
@@ -40,6 +42,18 @@ class KopiRange {
     }
 
     return values;
+  }
+
+  async reduce(init) {
+    let accum = init;
+
+    return (func, scope, visitors) => {
+      for (let index = this.from; index <= this.to; index++) {
+        accum = func.apply(undefined, [new KopiTuple([accum, index]), scope, visitors]);
+      }
+
+      return accum;
+    };
   }
 }
 
