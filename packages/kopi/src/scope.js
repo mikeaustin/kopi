@@ -79,6 +79,7 @@ let getScope = (input) => ({
       if (value?.elements?.length === 0) {
         value = 1;
       }
+
       const nextValue = fn.apply(undefined, [value, scope, visitors]);
 
       return new KopiTuple([nextValue, () => next(nextValue)]);
