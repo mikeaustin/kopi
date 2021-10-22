@@ -52,7 +52,7 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this._immutableMap.set(tuple.getElementsArray()[0], tuple.getElementsArray()[1]));
+    return new KopiDict(this._immutableMap.set(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)));
   }
 
   async get(key) {

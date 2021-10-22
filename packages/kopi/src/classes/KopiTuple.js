@@ -31,7 +31,10 @@ class KopiTuple {
     this._fields = fields;
   }
 
-  // getElementAtIndex()
+  getElementAtIndex(index) {
+    return this._elementsArray[index];
+  }
+
   getElementsArray() {
     return this._elementsArray;
   }

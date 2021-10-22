@@ -9,7 +9,7 @@ const { compile } = require('./compiler');
 const KopiStringConstructor = (value) => new KopiString(String(value));
 KopiStringConstructor.nativeConstructor = KopiString;
 
-const Vector = (tuple) => new KopiVector(tuple.getElementsArray()[0], tuple.getElementsArray()[1]);
+const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;
 
 Number.nativeConstructor = Number;
