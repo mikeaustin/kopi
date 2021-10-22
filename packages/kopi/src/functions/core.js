@@ -21,7 +21,7 @@ const kopi_print = async (value) => {
 };
 
 const kopi_read = async (filename) => {
-  return new KopiString(await util.promisify(fs.readFile)(filename.nativeString, 'utf8'));
+  return new KopiString(await util.promisify(fs.readFile)(filename.getNativeString(), 'utf8'));
 };
 
 const kopi_char = (number) => {
@@ -49,7 +49,7 @@ const kopi_even = (number) => {
 };
 
 const kopi_max = (tuple) => {
-  return Math.max(tuple.elementsArray[0], tuple.elementsArray[1]);
+  return Math.max(tuple.getElementsArray()[0], tuple.getElementsArray()[1]);
 };
 
 const kopi_let = (func, scope, visitors) => {
@@ -59,7 +59,7 @@ const kopi_let = (func, scope, visitors) => {
 const kopi_match = (value, scope, visitors) => async (_funcs) => {
   const funcs = _funcs.apply ? new KopiTuple([_funcs]) : _funcs;
 
-  for await (func of funcs.elementsArray) {
+  for await (func of funcs.getElementsArray()) {
     const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
       ...scope,
       [func.params.name]: value
@@ -102,7 +102,7 @@ const kopi_sleep = (seconds) => {
 };
 
 const kopi_fetch = async (url) => {
-  const request = await fetch(url.nativeString);
+  const request = await fetch(url.getNativeString());
 
   return new KopiString(await request.text());
 };
@@ -119,7 +119,7 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
 const kopi_extend = (constructor) => async (methods, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
 
-  newMethods = await methods.elementsArray.reduce(async (newMethods, method, index) => ({
+  newMethods = await methods.getElementsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methods.fields[index]]: await method,
   }), scope.methods.get(nativeConstructor));

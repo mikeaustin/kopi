@@ -13,6 +13,11 @@ const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
 const { default: KopiDict } = require('./classes/KopiDict');
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
     this._elementsArray = elementsArray;
@@ -26,7 +31,7 @@ class TuplePattern {
     if (this._fieldsArray?.[0]) {
       const matchesArray = this._fieldsArray.map((field, index) => (
         this._elementsArray[index].getMatches(
-          value.elementsArray[value.fieldsArray.indexOf(field)] ?? KopiTuple.empty
+          value.getElementsArray()[value._fieldsArray.indexOf(field)] ?? KopiTuple.empty
         )
       ));
 
@@ -41,7 +46,7 @@ class TuplePattern {
     }
 
     const matchesArray = this._elementsArray.map((element, index) => (
-      element.getMatches(value.elementsArray[index] ?? KopiTuple.empty)
+      element.getMatches(value.getElementsArray()[index] ?? KopiTuple.empty)
     ));
 
     if (matchesArray.some(match => match === null)) {
@@ -138,7 +143,7 @@ class StringLiteralPattern {
   }
 
   getMatches(value) {
-    if (value.nativeString !== this._nativeString) {
+    if (!(value instanceof KopiString) || value.getNativeString() !== this._nativeString) {
       return null;
     }
 

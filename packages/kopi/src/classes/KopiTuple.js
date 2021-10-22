@@ -10,8 +10,8 @@ class KopiTuple {
 
   constructor(elementsArray = [], fields = []) {
     if (elementsArray === null) {
-      this.elementsArray = [];
-      this.fields = [];
+      this._elementsArray = [];
+      this._fields = [];
 
       return this;
     }
@@ -27,26 +27,31 @@ class KopiTuple {
       this[fields[index]] = element;
     });
 
-    this.elementsArray = elementsArray;
-    this.fields = fields;
+    this._elementsArray = elementsArray;
+    this._fields = fields;
+  }
+
+  // getElementAtIndex()
+  getElementsArray() {
+    return this._elementsArray;
   }
 
   async toStringAsync() {
-    if (this.elementsArray.length === 0) {
+    if (this._elementsArray.length === 0) {
       return '()';
     }
 
-    const elements = await Promise.all(
-      this.elementsArray.map(async element => (await (await element).toStringAsync()))
+    const elementsArray = await Promise.all(
+      this._elementsArray.map(async element => (await (await element).toStringAsync()))
     );
 
-    return `(${elements.map((element, index) => (
-      `${this.fields[index] ? `${this.fields[index]}: ` : ''}${element}`
+    return `(${elementsArray.map((element, index) => (
+      `${this._fields[index] ? `${this._fields[index]}: ` : ''}${element}`
     )).join(', ')})`;
   }
 
   [util.inspect.custom]() {
-    return `(${this.elementsArray.map(element => inspect(element)).join(', ')})`;
+    return `(${this._elementsArray.map(element => inspect(element)).join(', ')})`;
   }
 
   async ['=='](that) {
@@ -56,8 +61,8 @@ class KopiTuple {
 
     // TODO: Optimization for numbers
 
-    for (const [index, element] of this.elementsArray.entries()) {
-      if (!await (await element)['=='](await that.elementsArray[index])) {
+    for (const [index, element] of this._elementsArray.entries()) {
+      if (!await (await element)['=='](await that._elementsArray[index])) {
         return false;
       }
     }
@@ -70,7 +75,7 @@ class KopiTuple {
   }
 
   map(mapper, scope, visitors) {
-    const iters = this.elementsArray.map(element => element[Symbol.iterator]());
+    const iters = this._elementsArray.map(element => element[Symbol.iterator]());
     const values = [];
 
     let results = iters.map(iter => iter.next());

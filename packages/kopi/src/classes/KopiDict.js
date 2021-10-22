@@ -11,16 +11,16 @@ const inspect = value => util.inspect(value, {
 
 class KopiDict {
   constructor(entries) {
-    this.immutableMap = new Map(entries);
+    this._immutableMap = new Map(entries);
   }
 
   async toStringAsync() {
-    if (this.immutableMap.size === 0) {
+    if (this._immutableMap.size === 0) {
       return `{:}`;
     }
 
     const entries = await Promise.all(
-      this.immutableMap.toArray().map(async ([key, value]) => (
+      this._immutableMap.toArray().map(async ([key, value]) => (
         `${inspect(key)}: ${inspect(await value)}`
       ))
     );
@@ -33,11 +33,11 @@ class KopiDict {
       return false;
     }
 
-    if (this.immutableMap.size !== that.immutableMap.size) {
+    if (this._immutableMap.size !== that.immutableMap.size) {
       return false;
     }
 
-    for (const [key, value] of this.immutableMap) {
+    for (const [key, value] of this._immutableMap) {
       const left = await value;
       const right = await that.immutableMap.get(key);
 
@@ -52,11 +52,11 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this.immutableMap.set(tuple.elementsArray[0], tuple.elementsArray[1]));
+    return new KopiDict(this._immutableMap.set(tuple.getElementsArray()[0], tuple.getElementsArray()[1]));
   }
 
   async get(key) {
-    const value = await this.immutableMap.get(key);
+    const value = await this._immutableMap.get(key);
 
     if (value === undefined) {
       return KopiTuple.empty;
@@ -67,7 +67,7 @@ class KopiDict {
 
   async update(key) {
     return (func, scope, visitors) => {
-      const entries = this.immutableMap.update(key, (value) => (
+      const entries = this._immutableMap.update(key, (value) => (
         func.apply(undefined, [value ?? KopiTuple.empty, scope, visitors]))
       );
 
@@ -78,8 +78,8 @@ class KopiDict {
   async map(func, scope, visitors) {
     let values = new Map();
 
-    for (let [key, value] of this.immutableMap) {
-      values = this.immutableMap.set(
+    for (let [key, value] of this._immutableMap) {
+      values = this._immutableMap.set(
         key,
         func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors])
       );
@@ -88,11 +88,13 @@ class KopiDict {
     return new KopiDict(values);
   }
 
-  async reduce({ elementsArray: [_func, init] }, scope, visitors) {
+  async reduce(tuple, scope, visitors) {
+    const [_func, init] = tuple.getElementsArray();
+
     const func = await _func;
     let accum = await init;
 
-    for (const [key, value] of this.immutableMap) {
+    for (const [key, value] of this._immutableMap) {
       accum = await func.apply(
         undefined,
         [

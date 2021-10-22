@@ -1,6 +1,6 @@
-wordcount string = string | split " " | reduce (counts, word) => (
+wordcount string = string | split " " | reduce {:} (counts, word) => (
   counts | update word, (x = 0) => count + 1
-), {:}
+)
 
 match foobar
   (x, y): Point => "Point"
@@ -181,3 +181,10 @@ x = match x (
   '(< 0) => 0
   _      => x
 )
+
+
+$ lpapply
+| pipe
+, tuple
+* operator
+  apply

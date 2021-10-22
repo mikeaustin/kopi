@@ -2,11 +2,15 @@ const util = require("util");
 
 class KopiString {
   constructor(nativeString) {
-    this.nativeString = nativeString;
+    this._nativeString = nativeString;
+  }
+
+  getNativeString() {
+    return this._nativeString;
   }
 
   toString() {
-    return `${this.nativeString}`;
+    return `${this._nativeString}`;
   }
 
   toStringAsync() {
@@ -14,11 +18,11 @@ class KopiString {
   };
 
   [util.inspect.custom]() {
-    return `"${this.nativeString}"`;
+    return `"${this._nativeString}"`;
   }
 
   *[Symbol.iterator]() {
-    return this.nativeString[Symbol.iterator]();
+    return this._nativeString[Symbol.iterator]();
   }
 
   ['=='](that) {
@@ -26,7 +30,7 @@ class KopiString {
     //   return false;
     // }
 
-    return this.nativeString.valueOf() === that.nativeString.valueOf();
+    return this._nativeString.valueOf() === that._nativeString.valueOf();
   }
 
   ['!='](that) {
@@ -38,31 +42,31 @@ class KopiString {
     //   throw new Error(`Can't concat string with ${that.constructor.name}`);
     // }
 
-    return new KopiString(this.nativeString.concat(that.nativeString));
+    return new KopiString(this._nativeString.concat(that._nativeString));
   }
 
   ['<'](that) {
-    return this.nativeString < that.nativeString;
+    return this._nativeString < that._nativeString;
   }
 
   ['<='](that) {
-    return this.nativeString <= that.nativeString;
+    return this._nativeString <= that._nativeString;
   }
 
   length() {
-    return this.nativeString.length;
+    return this._nativeString.length;
   }
 
   succ() {
-    return new KopiString(String.fromCodePoint(this.nativeString.codePointAt(0) + 1));
+    return new KopiString(String.fromCodePoint(this._nativeString.codePointAt(0) + 1));
   }
 
   split(delimiter = '') {
-    return this.nativeString.split(delimiter).map(element => new KopiString(element));
+    return this._nativeString.split(delimiter).map(element => new KopiString(element));
   }
 
   trim() {
-    return new KopiString(this.nativeString.trim());
+    return new KopiString(this._nativeString.trim());
   }
 }
 

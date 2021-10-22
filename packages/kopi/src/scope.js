@@ -9,7 +9,7 @@ const { compile } = require('./compiler');
 const KopiStringConstructor = (value) => new KopiString(String(value));
 KopiStringConstructor.nativeConstructor = KopiString;
 
-const Vector = (tuple) => new KopiVector(tuple.elementsArray[0], tuple.elementsArray[1]);
+const Vector = (tuple) => new KopiVector(tuple.getElementsArray()[0], tuple.getElementsArray()[1]);
 Vector.nativeConstructor = KopiVector;
 
 Number.nativeConstructor = Number;
@@ -58,7 +58,7 @@ let getScope = (input) => ({
   // min
   max: core.kopi_max,
 
-  import: (filename, scope) => compile(filename.nativeString, scope),
+  import: (filename, scope) => compile(filename.getNativeString(), scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
@@ -76,7 +76,7 @@ let getScope = (input) => ({
   loop: core.kopi_loop,
   repeat: (func, scope, visitors) => (
     function next(value) {
-      if (value?.elementsArray?.length === 0) {
+      if (value?._elementsArray?.length === 0) {
         value = 1;
       }
 
