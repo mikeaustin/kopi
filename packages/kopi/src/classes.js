@@ -132,7 +132,7 @@ class StringLiteralPattern {
   }
 
   getMatches(value) {
-    if (value !== this.value) {
+    if (value.value !== this.value) {
       return null;
     }
 

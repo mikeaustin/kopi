@@ -7,14 +7,14 @@ source = "
   20 GOTO 10
 "
 
-program = source | trim | _split (char 13) | _map 'trim
+program = source | trim | split (char 13) | _map 'trim
 
 print program
 print ""
 
 interpret = program => {
   program | _map (line) => {
-    match (tuple $ line | _split " ") (
+    match (tuple $ line | split " ") (
       line, "PRINT", value => print $ value
       line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
       line, command        => print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line

@@ -331,8 +331,8 @@ function peg$parse(input, options) {
             return new DictExpression({
               entries: tail.reduce((entries, [, , , key, , , value]) => [
                 ...entries,
-                [key.value, value]
-              ], [[head[0].value, head[3]]])
+                [key, value]
+              ], [[head[0], head[3]]])
             });
           },
       peg$c88 = function(tail) {

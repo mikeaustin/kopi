@@ -2,6 +2,11 @@ const util = require("util");
 
 const { default: KopiTuple } = require('./KopiTuple');
 
+const inspect = value => util.inspect(value, {
+  compact: false,
+  depth: Infinity
+});
+
 class KopiRange {
   constructor(from, to) {
     this.from = from;
@@ -9,7 +14,7 @@ class KopiRange {
   }
 
   [util.inspect.custom]() {
-    return `${this.from}..${this.to}`;
+    return `${inspect(this.from)}..${inspect(this.to)}`;
   }
 
   *[Symbol.iterator]() {
@@ -48,7 +53,7 @@ class KopiRange {
     let accum = init;
 
     return (func, scope, visitors) => {
-      for (let index = this.from; index <= this.to; index++) {
+      for (let index = this.from; index['<='](this.to); index = index.succ()) {
         accum = func.apply(undefined, [new KopiTuple([accum, index]), scope, visitors]);
       }
 

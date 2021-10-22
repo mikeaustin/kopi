@@ -1,10 +1,13 @@
 const readline = require('readline');
 const { Worker } = require('worker_threads');
 
-const { KopiTuple, KopiVector } = require('./classes');
+const { KopiString, KopiTuple, KopiVector } = require('./classes');
 
 const core = require('./functions/core');
 const { compile } = require('./compiler');
+
+const KopiStringConstructor = (value) => new KopiString(String(value));
+KopiStringConstructor.nativeConstructor = KopiString;
 
 const Vector = (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]);
 Vector.nativeConstructor = KopiVector;
@@ -55,7 +58,7 @@ let getScope = (input) => ({
   // min
   max: core.kopi_max,
 
-  import: (filename, scope) => compile(filename, scope),
+  import: (filename, scope) => compile(filename.value, scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
@@ -99,7 +102,7 @@ let getScope = (input) => ({
   },
   Vector,
   Number,
-  String,
+  String: KopiStringConstructor,
 });
 
 module.exports = {

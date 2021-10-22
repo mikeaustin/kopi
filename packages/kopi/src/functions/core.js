@@ -3,7 +3,7 @@ const fs = require('fs');
 const http = require('http');
 const fetch = require('node-fetch');
 
-const { KopiTuple } = require('../classes');
+const { KopiString, KopiTuple } = require('../classes');
 
 const coroutines = require('./coroutines');
 
@@ -20,12 +20,12 @@ const kopi_print = async (val) => {
   console.log(val.toStringAsync ? await val.toStringAsync() : val.toString());
 };
 
-const kopi_read = (filename) => {
-  return util.promisify(fs.readFile)(filename, 'utf8');
+const kopi_read = async (filename) => {
+  return new KopiString(await util.promisify(fs.readFile)(filename.value, 'utf8'));
 };
 
 const kopi_char = (num) => {
-  return String.fromCodePoint(num);
+  return new KopiString(String.fromCodePoint(num));
 };
 
 const kopi_random = () => {
@@ -33,11 +33,11 @@ const kopi_random = () => {
 };
 
 const kopi_date = () => {
-  return new Date().toLocaleDateString();
+  return new KopiString(new Date().toLocaleDateString());
 };
 
 const kopi_time = () => {
-  return new Date().toLocaleTimeString();
+  return new KopiString(new Date().toLocaleTimeString());
 };
 
 const kopi_ident = (x) => {
@@ -102,9 +102,9 @@ const kopi_sleep = (secs) => {
 };
 
 const kopi_fetch = async (url) => {
-  const request = await fetch(url);
+  const request = await fetch(url.value);
 
-  return request.text();
+  return new KopiString(await request.text());
 };
 
 const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {

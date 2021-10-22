@@ -1,5 +1,6 @@
 const util = require("util");
 
+const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 
 const inspect = value => util.inspect(value, {
@@ -30,7 +31,7 @@ Array.prototype['++'] = function (that) {
 Array.prototype._join = async function (delimiter = "") {
   const elements = await Promise.all(this);
 
-  return elements.join(delimiter);
+  return new KopiString(elements.join(delimiter));
 };
 
 Array.prototype._map = async function (args, scope, visitors) {

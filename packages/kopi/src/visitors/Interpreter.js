@@ -134,7 +134,10 @@ class Interpreter extends Visitors {
   }
 
   DictExpression({ entries }, scope, bind) {
-    return new KopiDict(entries.map(([key, value]) => [key, this.visitNode(value, scope, bind)]));
+    return new KopiDict(entries.map(([key, value]) => [
+      this.visitNode(key, scope, bind),
+      this.visitNode(value, scope, bind)
+    ]));
   }
 
   RangeExpression({ from, to }, scope, bind) {
@@ -204,7 +207,7 @@ class Interpreter extends Visitors {
   }
 
   StringLiteral({ value }) {
-    return value;
+    return new KopiString(value);
   }
 
   BooleanLiteral({ value }) {
