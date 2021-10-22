@@ -32,7 +32,7 @@ class Deferred {
 let senderPromises = {};
 let receiverPromises = {};
 
-const kopi_spawn = (fn, scope, visitors) => {
+const kopi_spawn = (func, scope, visitors) => {
   const coroutineId = nextCoroutineId++;
 
   coroutinesList.push({
@@ -47,18 +47,18 @@ const kopi_spawn = (fn, scope, visitors) => {
     receiverPromises[coroutineId].resolve(event.data);
   });
 
-  fn.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
+  func.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
 
   return coroutineId;
 };
 
-const kopi_yield = async (fn, scope, visitors) => {
+const kopi_yield = async (func, scope, visitors) => {
   const coroutineId = scope._coroutineId;
 
   const data = await receiverPromises[coroutineId];
   receiverPromises[coroutineId] = new Deferred();
 
-  const value = fn.apply(undefined, [data, scope, visitors]);
+  const value = func.apply(undefined, [data, scope, visitors]);
 
   senderPromises[coroutineId].resolve(value);
 

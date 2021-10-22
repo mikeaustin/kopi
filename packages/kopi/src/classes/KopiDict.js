@@ -52,7 +52,7 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this.immutableMap.set(tuple.elements[0], tuple.elements[1]));
+    return new KopiDict(this.immutableMap.set(tuple.elementsArray[0], tuple.elementsArray[1]));
   }
 
   async get(key) {
@@ -88,7 +88,7 @@ class KopiDict {
     return new KopiDict(values);
   }
 
-  async reduce({ elements: [_func, init] }, scope, visitors) {
+  async reduce({ elementsArray: [_func, init] }, scope, visitors) {
     const func = await _func;
     let accum = await init;
 

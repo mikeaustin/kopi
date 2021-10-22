@@ -9,7 +9,7 @@ const { compile } = require('./compiler');
 const KopiStringConstructor = (value) => new KopiString(String(value));
 KopiStringConstructor.nativeConstructor = KopiString;
 
-const Vector = (tuple) => new KopiVector(tuple.elements[0], tuple.elements[1]);
+const Vector = (tuple) => new KopiVector(tuple.elementsArray[0], tuple.elementsArray[1]);
 Vector.nativeConstructor = KopiVector;
 
 Number.nativeConstructor = Number;
@@ -74,13 +74,13 @@ let getScope = (input) => ({
 
   at: (index) => async array => await array[index],
   loop: core.kopi_loop,
-  repeat: (fn, scope, visitors) => (
+  repeat: (func, scope, visitors) => (
     function next(value) {
-      if (value?.elements?.length === 0) {
+      if (value?.elementsArray?.length === 0) {
         value = 1;
       }
 
-      const nextValue = fn.apply(undefined, [value, scope, visitors]);
+      const nextValue = func.apply(undefined, [value, scope, visitors]);
 
       return new KopiTuple([nextValue, () => next(nextValue)]);
     }

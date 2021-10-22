@@ -8,36 +8,36 @@ const inspect = value => util.inspect(value, {
 class KopiTuple {
   static empty = new KopiTuple(null);
 
-  constructor(elements = [], fields = []) {
-    if (elements === null) {
-      this.elements = [];
+  constructor(elementsArray = [], fields = []) {
+    if (elementsArray === null) {
+      this.elementsArray = [];
       this.fields = [];
 
       return this;
     }
 
-    if (elements.length === 0) {
+    if (elementsArray.length === 0) {
       console.log('Use KopiTuple.empty instead of calling KopiTuple([]).');
 
       return KopiTuple.empty;
     }
 
-    elements.forEach((element, index) => {
+    elementsArray.forEach((element, index) => {
       this[index] = element;
       this[fields[index]] = element;
     });
 
-    this.elements = elements;
+    this.elementsArray = elementsArray;
     this.fields = fields;
   }
 
   async toStringAsync() {
-    if (this.elements.length === 0) {
+    if (this.elementsArray.length === 0) {
       return '()';
     }
 
     const elements = await Promise.all(
-      this.elements.map(async element => (await (await element).toStringAsync()))
+      this.elementsArray.map(async element => (await (await element).toStringAsync()))
     );
 
     return `(${elements.map((element, index) => (
@@ -46,7 +46,7 @@ class KopiTuple {
   }
 
   [util.inspect.custom]() {
-    return `(${this.elements.map(element => inspect(element)).join(', ')})`;
+    return `(${this.elementsArray.map(element => inspect(element)).join(', ')})`;
   }
 
   async ['=='](that) {
@@ -56,15 +56,13 @@ class KopiTuple {
 
     // TODO: Optimization for numbers
 
-    for (const [index, element] of this.elements.entries()) {
-      if (!await (await element)['=='](await that.elements[index])) {
+    for (const [index, element] of this.elementsArray.entries()) {
+      if (!await (await element)['=='](await that.elementsArray[index])) {
         return false;
       }
     }
 
     return true;
-
-    // return thisElements.every((element, index) => thatElements[index]['=='](element));
   }
 
   async ['!='](that) {
@@ -72,7 +70,7 @@ class KopiTuple {
   }
 
   map(mapper, scope, visitors) {
-    const iters = this.elements.map(element => element[Symbol.iterator]());
+    const iters = this.elementsArray.map(element => element[Symbol.iterator]());
     const values = [];
 
     let results = iters.map(iter => iter.next());

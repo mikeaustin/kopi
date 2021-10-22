@@ -41,7 +41,7 @@ class TuplePattern {
     }
 
     const matchesArray = this.elementsArray.map((element, index) => (
-      element.getMatches(value.elements[index] ?? KopiTuple.empty)
+      element.getMatches(value.elementsArray[index] ?? KopiTuple.empty)
     ));
 
     if (matchesArray.some(match => match === null)) {

@@ -49,7 +49,7 @@ const kopi_even = (number) => {
 };
 
 const kopi_max = (tuple) => {
-  return Math.max(tuple.elements[0], tuple.elements[1]);
+  return Math.max(tuple.elementsArray[0], tuple.elementsArray[1]);
 };
 
 const kopi_let = (func, scope, visitors) => {
@@ -59,7 +59,7 @@ const kopi_let = (func, scope, visitors) => {
 const kopi_match = (value, scope, visitors) => async (_funcs) => {
   const funcs = _funcs.apply ? new KopiTuple([_funcs]) : _funcs;
 
-  for await (func of funcs.elements) {
+  for await (func of funcs.elementsArray) {
     const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
       ...scope,
       [func.params.name]: value
@@ -119,7 +119,7 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
 const kopi_extend = (constructor) => async (methods, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
 
-  newMethods = await methods.elements.reduce(async (newMethods, method, index) => ({
+  newMethods = await methods.elementsArray.reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methods.fields[index]]: await method,
   }), scope.methods.get(nativeConstructor));
