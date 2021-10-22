@@ -15,17 +15,17 @@ const { default: KopiDict } = require('./classes/KopiDict');
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
-    this.elementsArray = elementsArray;
-    this.fieldsArray = fieldsArray;
+    this._elementsArray = elementsArray;
+    this._fieldsArray = fieldsArray;
   }
 
   getMatches(value) {
     // console.log('getMatches', this.fields);
 
     // TODO: Match one both non-fields and fields in the same tuple
-    if (this.fieldsArray?.[0]) {
-      const matchesArray = this.fields.map((field, index) => (
-        this.elementsArray[index].getMatches(
+    if (this._fieldsArray?.[0]) {
+      const matchesArray = this._fieldsArray.map((field, index) => (
+        this._elementsArray[index].getMatches(
           value.elementsArray[value.fieldsArray.indexOf(field)] ?? KopiTuple.empty
         )
       ));
@@ -40,7 +40,7 @@ class TuplePattern {
       }), {});
     }
 
-    const matchesArray = this.elementsArray.map((element, index) => (
+    const matchesArray = this._elementsArray.map((element, index) => (
       element.getMatches(value.elementsArray[index] ?? KopiTuple.empty)
     ));
 
@@ -57,15 +57,15 @@ class TuplePattern {
 
 class ArrayLiteralPattern {
   constructor(elementsArray) {
-    this.elementsArray = elementsArray;
+    this._elementsArray = elementsArray;
   }
 
   getMatches(array) {
-    if (this.elementsArray.length !== array.length) {
+    if (this._elementsArray.length !== array.length) {
       return null;
     }
 
-    const matchesArray = this.elementsArray.map((element, index) => (
+    const matchesArray = this._elementsArray.map((element, index) => (
       element.getMatches(array[index])
     ));
 
@@ -82,11 +82,11 @@ class ArrayLiteralPattern {
 
 class BooleanLiteralPattern {
   constructor(nativeBoolean) {
-    this.nativeBoolean = nativeBoolean;
+    this._nativeBoolean = nativeBoolean;
   }
 
   getMatches(boolean) {
-    if (boolean !== this.nativeBoolean) {
+    if (boolean !== this._nativeBoolean) {
       return null;
     }
 
@@ -96,8 +96,8 @@ class BooleanLiteralPattern {
 
 class IdentifierPattern {
   constructor(identifierName, defaultValue) {
-    this.identifierName = identifierName;
-    this.defaultValue = defaultValue;
+    this._identifierName = identifierName;
+    this._defaultValue = defaultValue;
   }
 
   getMatches(value, scope, visitors) {
@@ -108,23 +108,23 @@ class IdentifierPattern {
     // });
     // console.log(x);
 
-    const calculatedValue = value === KopiTuple.empty && this.defaultValue !== null
-      ? this.defaultValue
+    const calculatedValue = value === KopiTuple.empty && this._defaultValue !== null
+      ? this._defaultValue
       : value;
 
     return {
-      [this.identifierName]: calculatedValue,
+      [this._identifierName]: calculatedValue,
     };
   }
 }
 
 class NumericLiteralPattern {
   constructor(nativeNumber) {
-    this.nativeNumber = nativeNumber;
+    this._nativeNumber = nativeNumber;
   }
 
   getMatches(number) {
-    if (number !== this.nativeNumber) {
+    if (number !== this._nativeNumber) {
       return null;
     }
 
@@ -134,11 +134,11 @@ class NumericLiteralPattern {
 
 class StringLiteralPattern {
   constructor(nativeString) {
-    this.nativeString = nativeString;
+    this._nativeString = nativeString;
   }
 
   getMatches(value) {
-    if (value.nativeString !== this.nativeString) {
+    if (value.nativeString !== this._nativeString) {
       return null;
     }
 
@@ -171,13 +171,13 @@ class ConstructorPattern {
 
 class FunctionPattern {
   constructor(functionName, functionParams) {
-    this.functionName = functionName;
-    this.functionParams = functionParams;
+    this._functionName = functionName;
+    this._functionParams = functionParams;
   }
 
   getMatches(value, scope, unevaluatedValue) {
     return {
-      [this.functionName]: new KopiFunction(this.functionParams, unevaluatedValue, scope)
+      [this._functionName]: new KopiFunction(this._functionParams, unevaluatedValue, scope)
     };
   }
 }
