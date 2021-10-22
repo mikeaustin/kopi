@@ -1,12 +1,12 @@
 const util = require("util");
 
 class KopiString {
-  constructor(value) {
-    this.value = value;
+  constructor(nativeString) {
+    this.nativeString = nativeString;
   }
 
   toString() {
-    return `${this.value}`;
+    return `${this.nativeString}`;
   }
 
   toStringAsync() {
@@ -14,11 +14,11 @@ class KopiString {
   };
 
   [util.inspect.custom]() {
-    return `"${this.value}"`;
+    return `"${this.nativeString}"`;
   }
 
   *[Symbol.iterator]() {
-    return this.value[Symbol.iterator]();
+    return this.nativeString[Symbol.iterator]();
   }
 
   ['=='](that) {
@@ -26,7 +26,7 @@ class KopiString {
     //   return false;
     // }
 
-    return this.value.valueOf() === that.value.valueOf();
+    return this.nativeString.valueOf() === that.nativeString.valueOf();
   }
 
   ['!='](that) {
@@ -38,31 +38,31 @@ class KopiString {
     //   throw new Error(`Can't concat string with ${that.constructor.name}`);
     // }
 
-    return new KopiString(this.value.concat(that.value));
+    return new KopiString(this.nativeString.concat(that.nativeString));
   }
 
   ['<'](that) {
-    return this.value < that.value;
+    return this.nativeString < that.nativeString;
   }
 
   ['<='](that) {
-    return this.value <= that.value;
+    return this.nativeString <= that.nativeString;
   }
 
   length() {
-    return this.value.length;
+    return this.nativeString.length;
   }
 
   succ() {
-    return new KopiString(String.fromCodePoint(this.value.codePointAt(0) + 1));
+    return new KopiString(String.fromCodePoint(this.nativeString.codePointAt(0) + 1));
   }
 
   split(delimiter = '') {
-    return this.value.split(delimiter).map(element => new KopiString(element));
+    return this.nativeString.split(delimiter).map(element => new KopiString(element));
   }
 
   trim() {
-    return new KopiString(this.value.trim());
+    return new KopiString(this.nativeString.trim());
   }
 }
 

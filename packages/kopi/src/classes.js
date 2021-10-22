@@ -127,12 +127,12 @@ class NumericLiteralPattern {
 }
 
 class StringLiteralPattern {
-  constructor(value) {
-    this.value = value;
+  constructor(nativeString) {
+    this.nativeString = nativeString;
   }
 
   getMatches(value) {
-    if (value.value !== this.value) {
+    if (value.nativeString !== this.nativeString) {
       return null;
     }
 

@@ -58,7 +58,7 @@ let getScope = (input) => ({
   // min
   max: core.kopi_max,
 
-  import: (filename, scope) => compile(filename.value, scope),
+  import: (filename, scope) => compile(filename.nativeString, scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,

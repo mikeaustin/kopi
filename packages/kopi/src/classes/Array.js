@@ -34,11 +34,11 @@ Array.prototype._join = async function (delimiter = "") {
   return new KopiString(elements.join(delimiter));
 };
 
-Array.prototype._map = async function (args, scope, visitors) {
+Array.prototype._map = async function (func, scope, visitors) {
   const values = [];
 
   for (const element of this) {
-    values.push(await args.apply(undefined, [element, scope, visitors]));
+    values.push(await func.apply(undefined, [element, scope, visitors]));
   }
 
   return values;

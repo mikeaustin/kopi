@@ -16,16 +16,16 @@ const kopi_inspect = (value) => {
   console.log(inspect(value));
 };
 
-const kopi_print = async (val) => {
-  console.log(val.toStringAsync ? await val.toStringAsync() : val.toString());
+const kopi_print = async (value) => {
+  console.log(value.toStringAsync ? await value.toStringAsync() : value.toString());
 };
 
 const kopi_read = async (filename) => {
-  return new KopiString(await util.promisify(fs.readFile)(filename.value, 'utf8'));
+  return new KopiString(await util.promisify(fs.readFile)(filename.nativeString, 'utf8'));
 };
 
-const kopi_char = (num) => {
-  return new KopiString(String.fromCodePoint(num));
+const kopi_char = (number) => {
+  return new KopiString(String.fromCodePoint(number));
 };
 
 const kopi_random = () => {
@@ -44,16 +44,16 @@ const kopi_ident = (x) => {
   return x;
 };
 
-const kopi_even = (num) => {
-  return num % 2 === 0;
+const kopi_even = (number) => {
+  return number % 2 === 0;
 };
 
 const kopi_max = (tuple) => {
   return Math.max(tuple.elements[0], tuple.elements[1]);
 };
 
-const kopi_let = (fn, scope, visitors) => {
-  return fn.apply(undefined, [KopiTuple.empty, scope, visitors]);
+const kopi_let = (func, scope, visitors) => {
+  return func.apply(undefined, [KopiTuple.empty, scope, visitors]);
 };
 
 const kopi_match = (value, scope, visitors) => async (_funcs) => {
@@ -73,9 +73,9 @@ const kopi_match = (value, scope, visitors) => async (_funcs) => {
   console.log('match failed.');
 };
 
-const kopi_loop = async (fn, scope, visitors) => {
+const kopi_loop = async (_func, scope, visitors) => {
   const exit = (value) => { done = true; return value; };
-  const func = await fn.apply(undefined, [exit, scope, visitors]);
+  const func = await _func.apply(undefined, [exit, scope, visitors]);
 
   let done = false;
   let index = 0;
@@ -93,16 +93,16 @@ const kopi_loop = async (fn, scope, visitors) => {
   return value;
 };
 
-const kopi_write = (val) => {
-  return new Promise(resolve => process.stdout.write(val.toStringAsync(), () => resolve()));
+const kopi_write = (value) => {
+  return new Promise(resolve => process.stdout.write(value.toStringAsync(), () => resolve()));
 };
 
-const kopi_sleep = (secs) => {
-  return new Promise(resolve => setTimeout(() => resolve(secs), secs * 1000));
+const kopi_sleep = (seconds) => {
+  return new Promise(resolve => setTimeout(() => resolve(seconds), seconds * 1000));
 };
 
 const kopi_fetch = async (url) => {
-  const request = await fetch(url.value);
+  const request = await fetch(url.nativeString);
 
   return new KopiString(await request.text());
 };
