@@ -7,8 +7,8 @@
   "homepage": "https://github.com/mikeaustin/kopi",
   "main": "src/index.js",
   "scripts": {
-    "prebuild": "node src/parser/rules.js > src/parser.new.pegjs",
-    "build": "pegjs -o lib/parser.js src/parser.pegjs",
+    "prebuild": "node src/parser/rules2.js > src/parser.new.pegjs",
+    "build": "pegjs -o lib/parser.js src/parser.new.pegjs",
     "prestart": "npm run build",
     "start": "node --expose-gc --max-old-space-size=600 src/index.js",
     "test": "npm --silent start test/import.kopi"
