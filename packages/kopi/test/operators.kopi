@@ -2,14 +2,16 @@ print ""
 print "== operators ====================================="
 print ""
 
-# print $ '(+ 10) 2
-# print $ '(- 10) 2
-# print $ '(* 10) 2
-# print $ '(/ 10) 2
-# print $ '(% 2) 10
+print $ '(+ 10) 2
+print $ '(- 10) 2
+print $ '(* 10) 2
+print $ '(/ 10) 2
+print $ '(% 2) 10
 
-# print $ 1..5 | map '(* 2)
+print $ 2 * 3
 
-print $ [1, 2] ++ [3, 4, 5]
+print $ 1..5 | map '(* 2)
+
+[1, 2] ++ [3, 4, 5]
 
 print $ "Hello, " ++ "world."

@@ -13,7 +13,15 @@ class OperatorExpression extends Node { }
 class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
-class ApplyExpression extends Node { }
+class ApplyExpression extends Node {
+  async apply(thisArg, [receiver, scope, visitors]) {
+    return receiver[this.expr.name].apply(receiver, [
+      await visitors.visitNode(this.args, scope),
+      scope,
+      visitors,
+    ]);
+  }
+}
 class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
@@ -115,7 +123,13 @@ MultiplyExpression
     }
 
 ApplyExpression
-  = expr:RangeExpression args:(_ RangeExpression)* {
+  = expr:("+" / "-" / "*" / "/" / "%") _ args:(_ NumericLiteral)+ {
+    console.log('here', expr)
+      return args.reduce((expr, args) => (
+        new ApplyExpression({ expr, args: args[1] })
+      ), new Identifier({ name: expr[0] ?? expr }))
+    }
+  / expr:RangeExpression args:(_ RangeExpression)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)
