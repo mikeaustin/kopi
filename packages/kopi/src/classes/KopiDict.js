@@ -33,13 +33,13 @@ class KopiDict {
       return false;
     }
 
-    if (this._immutableMap.size !== that.immutableMap.size) {
+    if (this._immutableMap.size !== that._immutableMap.size) {
       return false;
     }
 
     for (const [key, value] of this._immutableMap) {
       const left = await value;
-      const right = await that.immutableMap.get(key);
+      const right = await that._immutableMap.get(key);
 
       const result = await applyOperator('==', left, right, scope, visitors);
 
