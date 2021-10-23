@@ -8,10 +8,10 @@ const inspect = value => util.inspect(value, {
 class KopiTuple {
   static empty = new KopiTuple(null);
 
-  constructor(elementsArray = [], fields = []) {
+  constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {
       this._elementsArray = [];
-      this._fields = [];
+      this._fieldsArray = [];
 
       return this;
     }
@@ -24,11 +24,11 @@ class KopiTuple {
 
     elementsArray.forEach((element, index) => {
       this[index] = element;
-      this[fields[index]] = element;
+      this[fieldsArray[index]] = element;
     });
 
     this._elementsArray = elementsArray;
-    this._fields = fields;
+    this._fieldsArray = fieldsArray;
   }
 
   getElementAtIndex(index) {
@@ -49,7 +49,7 @@ class KopiTuple {
     );
 
     return `(${elementsArray.map((element, index) => (
-      `${this._fields[index] ? `${this._fields[index]}: ` : ''}${element}`
+      `${this._fieldsArray[index] ? `${this._fieldsArray[index]}: ` : ''}${element}`
     )).join(', ')})`;
   }
 
