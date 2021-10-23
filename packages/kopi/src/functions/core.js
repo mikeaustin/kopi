@@ -121,7 +121,7 @@ const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind)
 
   newMethods = await methodsTuple.getElementsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
-    [methodsTuple._fieldsArray[index]]: await method,
+    [methodsTuple.getFieldNameAtIndex(index)]: await method,
   }), scope.methods.get(nativeConstructor));
 
   bind({

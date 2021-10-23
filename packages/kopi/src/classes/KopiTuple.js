@@ -31,12 +31,24 @@ class KopiTuple {
     this._fieldsArray = fieldsArray;
   }
 
+  getElementsArray() {
+    return this._elementsArray;
+  }
+
   getElementAtIndex(index) {
     return this._elementsArray[index];
   }
 
-  getElementsArray() {
-    return this._elementsArray;
+  getFieldNamesArray() {
+    return this._fieldsArray;
+  }
+
+  getFieldNameAtIndex(index) {
+    return this._fieldsArray[index];
+  }
+
+  getIndexOfFieldName(fieldName) {
+    return this._fieldsArray.indexOf(fieldName);
   }
 
   async toStringAsync() {

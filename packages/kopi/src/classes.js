@@ -29,9 +29,9 @@ class TuplePattern {
 
     // TODO: Match one both non-fields and fields in the same tuple
     if (this._fieldsArray?.[0]) {
-      const matchesArray = this._fieldsArray.map((field, index) => (
+      const matchesArray = this._fieldsArray.map((fieldName, index) => (
         this._elementsArray[index].getMatches(
-          tuple.getElementAtIndex(tuple._fieldsArray.indexOf(field)) ?? KopiTuple.empty
+          tuple.getElementAtIndex(tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty
         )
       ));
 
