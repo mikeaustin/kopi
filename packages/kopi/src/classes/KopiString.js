@@ -25,6 +25,10 @@ class KopiString {
     return this._nativeString[Symbol.iterator]();
   }
 
+  valueOf() {
+    return this._nativeString;
+  }
+
   ['=='](that) {
     // if (typeof that !== 'string') {
     //   return false;

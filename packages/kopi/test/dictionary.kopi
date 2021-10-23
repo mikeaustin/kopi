@@ -39,8 +39,10 @@ print dict
 
 print ""
 
+"abcaba" | split "" | _reduce {:} $ (a, c) => a | update c $ (n = 0) => n + 1
+
 words = "it was the best of times it was the worst of times"
-print $ words | _split " " | _reduce {:} $ (counts, word) => (
+print $ words | split " " | _reduce {:} $ (counts, word) => (
   counts | update word $ (x = 0) => x + 1
 )
 
