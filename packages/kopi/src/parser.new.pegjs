@@ -124,7 +124,6 @@ MultiplyExpression
 
 ApplyExpression
   = expr:("+" / "-" / "*" / "/" / "%") _ args:(_ NumericLiteral)+ {
-    console.log('here', expr)
       return args.reduce((expr, args) => (
         new ApplyExpression({ expr, args: args[1] })
       ), new Identifier({ name: expr[0] ?? expr }))

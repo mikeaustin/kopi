@@ -213,7 +213,6 @@ function peg$parse(input, options) {
       peg$c38 = "%",
       peg$c39 = peg$literalExpectation("%", false),
       peg$c40 = function(expr, args) {
-          console.log('here', expr)
             return args.reduce((expr, args) => (
               new ApplyExpression({ expr, args: args[1] })
             ), new Identifier({ name: expr[0] ?? expr }))
