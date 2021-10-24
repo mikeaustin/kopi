@@ -30,6 +30,10 @@ interpret = (source) => {
     (line) => tuple $ (line | trim) | split " "
   )
 
+  # lineNumbers = source | trim | split (char 10) | _reduce {:} $ (numbers, line) => (
+  #   numbers | set number index
+  # )
+
   print program
 
   loop = (data) => {
