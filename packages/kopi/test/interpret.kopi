@@ -2,24 +2,24 @@ print ""
 print "== interpret ====================================="
 print ""
 
+evaluate = (statement) => match statement (
+  line, "PRINT", value => print $ value
+  line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
+  line, command        => print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
+)
+
+interpret = (source) => {
+  program = source | trim | split (char 10) | _map (
+    (line) => tuple $ (line | trim) | split " "
+  )
+
+  program | _map (statement) => evaluate statement
+}
+
 source = "
   10 PRINT 'HELLO'
   20 GOTO 10
+  30 INPUT A$
 "
 
-program = source | trim | split (char 13) | _map 'trim
-
-print program
-print ""
-
-interpret = program => {
-  program | _map (line) => {
-    match (tuple $ line | split " ") (
-      line, "PRINT", value => print $ value
-      line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
-      line, command        => print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
-    )
-  }
-}
-
-interpret program
+interpret source
