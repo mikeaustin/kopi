@@ -2,10 +2,21 @@ print ""
 print "== interpret ====================================="
 print ""
 
+incIndex = data => (index: data.index + 1)
+setIndex = index => data => (index: index)
+
 evaluate = (statement) => match statement (
-  line, "PRINT", value => print $ value
-  line, "GOTO", goto   => print $ "GOTO " ++ goto ++ ": NOT IMPLEMENTED"
-  line, command        => print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
+  line, "PRINT", value => {
+    print $ value
+    incIndex
+  }
+  line, "GOTO", goto => {
+    setIndex ((Number goto) / 10 - 1)
+  }
+  line, command => {
+    print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
+    incIndex
+  }
 )
 
 print $ ['(* 2), '(toFixed 2)] | _reduce 5 $ (x, f) => f x
@@ -21,25 +32,26 @@ interpret = (source) => {
 
   print program
 
-  loop = (index) => {
-    match (index == '_length program) (
-      true => "done"
+  loop = (data) => {
+    match (data.index == '_length program) (
+      true => ()
       _    => {
-        evaluate program.(index)
-        loop (index + 1)
+        reducer = evaluate program.(data.index)
+        loop (reducer data)
       }
     )
   }
 
-  loop 0
+  loop (index: 0)
 
   # program | _map (statement) => evaluate statement
 }
 
 source = "
   10 PRINT 'HELLO'
-  20 GOTO 10
-  30 INPUT A$
+  20 GOTO 40
+  30 PRINT 'NOPE'
+  40 PRINT 'WORLD'
 "
 
 interpret source
