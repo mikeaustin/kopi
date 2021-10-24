@@ -332,7 +332,7 @@ StringLiteral
     }
 
 BooleanLiteral
-  = _ value:("true" / "false") Whitespace+ {
+  = _ value:("true" / "false") [^_a-zA-Z] _ {
     return new BooleanLiteral({ value: Boolean(value) })
   }
 
