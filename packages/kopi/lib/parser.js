@@ -4082,7 +4082,7 @@ function peg$parse(input, options) {
   }
 
   function peg$parseBooleanLiteral() {
-    var s0, s1, s2, s3;
+    var s0, s1, s2, s3, s4;
 
     s0 = peg$currPos;
     s1 = peg$parse_();
@@ -4104,7 +4104,16 @@ function peg$parse(input, options) {
         }
       }
       if (s2 !== peg$FAILED) {
-        s3 = peg$parse_();
+        s3 = [];
+        s4 = peg$parseWhitespace();
+        if (s4 !== peg$FAILED) {
+          while (s4 !== peg$FAILED) {
+            s3.push(s4);
+            s4 = peg$parseWhitespace();
+          }
+        } else {
+          s3 = peg$FAILED;
+        }
         if (s3 !== peg$FAILED) {
           peg$savedPos = s0;
           s1 = peg$c106(s2);

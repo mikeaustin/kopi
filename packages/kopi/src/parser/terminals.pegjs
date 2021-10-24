@@ -11,7 +11,7 @@ StringLiteral
     }
 
 BooleanLiteral
-  = _ value:("true" / "false") _ {
+  = _ value:("true" / "false") Whitespace+ {
     return new BooleanLiteral({ value: Boolean(value) })
   }
 

@@ -1,1 +1,6 @@
-if (1 < 2) 3 4
+if = expr => trueExpr => falseExpr => match expr (
+  true  => trueExpr
+  false => falseExpr
+)
+
+print $ if (1 < 2) 3 4
