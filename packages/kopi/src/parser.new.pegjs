@@ -28,6 +28,7 @@ class MemberExpression extends Node { }
 
 class TuplePattern extends Node { }
 class ArrayLiteralPattern extends Node { }
+class BooleanLiteralPattern extends Node { }
 class NumericLiteralPattern extends Node { }
 class StringLiteralPattern extends Node { }
 class IdentifierPattern extends Node { }
@@ -135,10 +136,20 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:MemberExpression _ ".." _ to:MemberExpression {
+  = from:CalculatedMemberExpression _ ".." _ to:CalculatedMemberExpression {
       return new RangeExpression({ from, to });
     }
-  / MemberExpression
+  / CalculatedMemberExpression
+
+CalculatedMemberExpression
+  = head:MemberExpression tail:(".(" _ Expression _ ")")* {
+      return tail.reduce((expr, [, , args]) => (
+        new PipeExpression({
+          left: expr,
+          right: new ApplyExpression({ expr: new Identifier({ name: '_get' }), args })
+        })
+      ), head)
+    }
 
 MemberExpression
   = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
@@ -203,6 +214,7 @@ PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
   / "()" { return new TuplePattern({ elements: [] }) }
   / ArrayLiteralPattern
+  / BooleanLiteralPattern
   / NumericLiteralPattern
   / StringLiteralPattern
   / IdentifierPattern
@@ -218,6 +230,11 @@ ArrayLiteralPattern
           element
         ], [head])
       });
+    }
+
+BooleanLiteralPattern
+  = boolean:BooleanLiteral {
+      return new BooleanLiteralPattern({ value: boolean.value })
     }
 
 NumericLiteralPattern
@@ -350,7 +367,7 @@ Whitespace
   = [ \t]
 
 Comment
-  = "#" (!Newline .)*
+  = _ "#" (!Newline .)*
 
 Newline
   = Comment? [\r?\n]

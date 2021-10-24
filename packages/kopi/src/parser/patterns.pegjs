@@ -42,6 +42,7 @@ PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
   / "()" { return new TuplePattern({ elements: [] }) }
   / ArrayLiteralPattern
+  / BooleanLiteralPattern
   / NumericLiteralPattern
   / StringLiteralPattern
   / IdentifierPattern
@@ -57,6 +58,11 @@ ArrayLiteralPattern
           element
         ], [head])
       });
+    }
+
+BooleanLiteralPattern
+  = boolean:BooleanLiteral {
+      return new BooleanLiteralPattern({ value: boolean.value })
     }
 
 NumericLiteralPattern

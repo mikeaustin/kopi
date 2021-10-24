@@ -47,6 +47,7 @@ async function main() {
     ...orderedOperatorRules,
     'ApplyExpression',
     'RangeExpression',
+    'CalculatedMemberExpression',
     'MemberExpression',
     'PrimaryExpression',
   ];
@@ -60,6 +61,7 @@ async function main() {
     'TuplePattern',
     'PrimaryPattern',
     'ArrayLiteralPattern',
+    'BooleanLiteralPattern',
     'NumericLiteralPattern',
     'StringLiteralPattern',
     'IdentifierPattern',

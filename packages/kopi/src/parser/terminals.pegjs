@@ -46,7 +46,7 @@ Whitespace
   = [ \t]
 
 Comment
-  = "#" (!Newline .)*
+  = _ "#" (!Newline .)*
 
 Newline
   = Comment? [\r?\n]

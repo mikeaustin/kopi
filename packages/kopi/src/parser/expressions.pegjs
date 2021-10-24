@@ -47,6 +47,16 @@ RangeExpression
     }
   / NextRule
 
+CalculatedMemberExpression
+  = head:NextRule tail:(".(" _ Expression _ ")")* {
+      return tail.reduce((expr, [, , args]) => (
+        new PipeExpression({
+          left: expr,
+          right: new ApplyExpression({ expr: new Identifier({ name: '_get' }), args })
+        })
+      ), head)
+    }
+
 MemberExpression
   = head:NextRule tail:("." (Identifier / NumericLiteral))* {
       return tail.reduce((expr, [, ident]) => (

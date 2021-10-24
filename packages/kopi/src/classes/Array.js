@@ -24,6 +24,14 @@ Array.prototype.toArray = function () {
   return this;
 };
 
+Array.prototype._get = function (index) {
+  return this[index];
+};
+
+Array.prototype._length = function () {
+  return this.length;
+};
+
 Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
