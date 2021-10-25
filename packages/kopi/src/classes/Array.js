@@ -55,9 +55,10 @@ Array.prototype._map = async function (func, scope, visitors) {
 Array.prototype._reduce = function (init) {
   return async (func, scope, visitors) => {
     let accum = init;
+    let index = 0;
 
     for (const element of this) {
-      accum = await func.apply(undefined, [new KopiTuple([accum, element]), scope, visitors]);
+      accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
     }
 
     return accum;

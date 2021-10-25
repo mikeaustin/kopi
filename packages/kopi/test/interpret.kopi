@@ -2,53 +2,46 @@ print ""
 print "== interpret ====================================="
 print ""
 
-incIndex = data => (index: data.index + 1)
+incrementIndex = data => (index: data.index + 1)
 setIndex = index => data => (index: index)
 
-evaluate = (statement) => match statement (
-  line, "PRINT", value => {
+evaluate = (statement, indexes) => match statement (
+  lineNo, "PRINT", value => {
     print $ value
-    incIndex
+    incrementIndex
   }
-  line, "GOTO", goto => {
-    setIndex ((Number goto) / 10 - 1)
+  lineNo, "GOTO", gotoLineNo => {
+    setIndex (indexes | get gotoLineNo)
   }
-  line, command => {
-    print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ line
-    incIndex
+  lineNo, command => {
+    print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ lineNo
+    incrementIndex
   }
 )
 
-print $ ['(* 2), '(toFixed 2)] | _reduce 5 $ (x, f) => f x
-
-pipe = fs => x => fs | _reduce x $ (x, f) => f x
-
-print $ pipe ['(* 2), '(toFixed 2)] 5
-
 interpret = (source) => {
-  program = source | trim | split (char 10) | _map (
-    (line) => tuple $ (line | trim) | split " "
+  program = source | trim | split (char 10) | _map (line) => (
+    tuple $ (line | trim) | split " "
   )
 
-  # lineNumbers = source | trim | split (char 10) | _reduce {:} $ (numbers, line) => (
-  #   numbers | set number index
-  # )
+  indexes = program | _reduce {:} $ (numbers, statement, index) => {
+    numbers | set (statement.0, index)
+  }
 
+  print indexes
   print program
 
   loop = (data) => {
     match (data.index == '_length program) (
       true => ()
       _    => {
-        reducer = evaluate program.(data.index)
+        reducer = evaluate (program.(data.index), indexes)
         loop (reducer data)
       }
     )
   }
 
   loop (index: 0)
-
-  # program | _map (statement) => evaluate statement
 }
 
 source = "

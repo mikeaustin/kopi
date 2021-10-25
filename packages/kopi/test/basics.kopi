@@ -132,3 +132,10 @@ print $ ["B, A", "D, C"] | _map (name) => (
 
 f = x => x
 print $ f ()
+
+
+print $ ['(* 2), '(toFixed 2)] | _reduce 5 $ (x, f) => f x
+
+pipe = fs => x => fs | _reduce x $ (x, f) => f x
+
+print $ pipe ['(* 2), '(toFixed 2)] 5

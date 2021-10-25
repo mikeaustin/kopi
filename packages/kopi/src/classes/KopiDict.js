@@ -52,11 +52,11 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this._immutableMap.set(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)));
+    return new KopiDict(this._immutableMap.set(await tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)));
   }
 
   async get(key) {
-    const value = await this._immutableMap.get(key);
+    const value = await this._immutableMap.get(key.valueOf());
 
     if (value === undefined) {
       return KopiTuple.empty;
