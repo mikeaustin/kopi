@@ -139,3 +139,16 @@ print $ ['(* 2), '(toFixed 2)] | _reduce 5 $ (x, f) => f x
 pipe = fs => x => fs | _reduce x $ (x, f) => f x
 
 print $ pipe ['(* 2), '(toFixed 2)] 5
+
+
+print $ 1..100 | map (n) => match (n % 3, n % 5) (
+  0, 0 => "FizzBuzz"
+  0, _ => "Fizz"
+  _, 0 => "Buzz"
+  _    => n
+)
+
+
+grayscale = (:r, :g, :b) => (r + g + b) / 3
+
+print $ grayscale (r: 1, g: 2, b: 3)

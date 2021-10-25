@@ -46,7 +46,7 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
     // TODO: pass expr directly so FunctionPattern can use it as body
-    const matches = evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
+    const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
 
     Object.entries(matches).forEach(([name, value]) => {
       if (value instanceof KopiFunction) {

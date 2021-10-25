@@ -24,16 +24,17 @@ class TuplePattern {
     this._fieldsArray = fieldsArray;
   }
 
-  getMatches(tuple) {
-    // console.log('getMatches', this.fields);
+  async getMatches(tuple) {
+    // console.log('getMatches');
 
     // TODO: Match one both non-fields and fields in the same tuple
     if (this._fieldsArray?.[0]) {
-      const matchesArray = this._fieldsArray.map((fieldName, index) => (
-        this._elementsArray[index].getMatches(
+      const matchesArray = await this._fieldsArray.reduce(async (matchesArray, fieldName, index) => ([
+        ...await matchesArray,
+        await this._elementsArray[index].getMatches(
           tuple.getElementAtIndex(tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty
         )
-      ));
+      ]));
 
       if (matchesArray.some(match => match === null)) {
         return null;
@@ -45,9 +46,10 @@ class TuplePattern {
       }), {});
     }
 
-    const matchesArray = this._elementsArray.map((element, index) => (
-      element.getMatches(tuple.getElementAtIndex(index) ?? KopiTuple.empty)
-    ));
+    const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
+      ...await matchesArray,
+      await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
+    ]), []);
 
     if (matchesArray.some(match => match === null)) {
       return null;
@@ -65,14 +67,15 @@ class ArrayLiteralPattern {
     this._elementsArray = elementsArray;
   }
 
-  getMatches(array) {
+  async getMatches(array) {
     if (this._elementsArray.length !== array.length) {
       return null;
     }
 
-    const matchesArray = this._elementsArray.map((element, index) => (
-      element.getMatches(array[index])
-    ));
+    const matchesArray = this._elementsArray.reduce(async (matchesArray, element, index) => ([
+      ...await matchesArray,
+      await element.getMatches(array[index])
+    ]), []);
 
     if (matchesArray.some(matches => matches === null)) {
       return null;

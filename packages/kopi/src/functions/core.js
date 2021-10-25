@@ -65,7 +65,7 @@ const kopi_match = (value, scope, visitors) => async (_funcs) => {
       [func.params.name]: value
     }));
 
-    if (predicatePassed && func.params.getMatches(value)) {
+    if (predicatePassed && await func.params.getMatches(value)) {
       return func.apply(undefined, [value, scope, visitors]);
     }
   }

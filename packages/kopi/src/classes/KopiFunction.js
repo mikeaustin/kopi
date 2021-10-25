@@ -15,8 +15,8 @@ class KopiFunction {
     return `<function>`;
   }
 
-  apply(thisArg, [args, scope, visitors]) {
-    const matches = this.params.getMatches(args, scope, visitors);
+  async apply(thisArg, [args, scope, visitors]) {
+    const matches = await this.params.getMatches(args, scope, visitors);
 
     if (matches === null) {
       return undefined;
@@ -29,7 +29,7 @@ class KopiFunction {
     });
   }
 
-  getMatches(args) {
+  async getMatches(args) {
     return this.params.getMatches(args);
   }
 }
