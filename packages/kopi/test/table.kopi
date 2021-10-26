@@ -1,6 +1,6 @@
-print {:}
+print [:]
 
-print $ { 1: "One", 2: "Two" }
+print $ [1: "One", 2: "Two"]
 
 # print $ 1..2 | map (n) => {
 #   1: "One"
@@ -12,11 +12,11 @@ print $ { 1: "One", 2: "Two" }
 #   "Two": [(5, 6), (7, 8)]
 # }
 
-dict = { "One": 1, "Two": 2 } | map (key, value) => {
+dict = ["One": 1, "Two": 2] | map (key, value) => {
   value * value
 }
 
-print $ dict.("One")
+print $ dict | get "One"
 
 dict = dict | set ("One", 3)
 
@@ -27,7 +27,7 @@ print $ match dict.("Three") (
   value => value
 )
 
-dict = {:}
+dict = [:]
 dict = dict | update "One" $ (x = 0) => x + 1
 print dict
 
@@ -39,15 +39,15 @@ print dict
 
 print ""
 
-print $ "abcaba" | split "" | _reduce {:} $ (a, c) => a | update c $ (n = 0) => n + 1
+print $ "abcaba" | split "" | _reduce [:] $ (a, c) => a | update c $ (n = 0) => n + 1
 
 words = "it was the best of times it was the worst of times"
-print $ words | split " " | _reduce {:} $ (counts, word) => (
+print $ words | split " " | _reduce [:] $ (counts, word) => (
   counts | update word $ (x = 0) => x + 1
 )
 
 print ""
 
-print $ {1: (2, 3)} == {1: (2, 3)}
+print $ [1: (2, 3)] == [1: (2, 3)]
 
 print { "class": "foo", "id": "bar" }

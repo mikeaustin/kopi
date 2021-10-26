@@ -28,6 +28,26 @@ Array.prototype._get = function (index) {
   return this[index];
 };
 
+Array.prototype.apply = function (thisArg, [index]) {
+  if (index < 0) {
+    index = this.length - 1 - index;
+  }
+
+  return (value, scope, visitors) => {
+    const result = [...this];
+
+    if (index.constructor.name === 'KopiRange') {
+      result.splice(index.from, index.to - index.from, ...value);
+    } else if (value.constructor.name === 'KopiFunction') {
+      result[index] = value.apply(undefined, [this[index], scope, visitors]);
+    } else {
+      result.splice(index, 0, ...value);
+    }
+
+    return result;
+  };
+};
+
 Array.prototype._length = function () {
   return this.length;
 };
