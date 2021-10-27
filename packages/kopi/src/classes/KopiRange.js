@@ -7,6 +7,20 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
+class KopiRangeWithIndex {
+  constructor(range) {
+    this._range = range;
+  }
+
+  map(func, scope, visitors) {
+    let index = 0;
+
+    return this._range.map(element => (
+      func.apply(undefined, [new KopiTuple([element, index++]), scope, visitors])
+    ));
+  }
+}
+
 class KopiRange {
   constructor(from, to) {
     this.from = from;
@@ -29,6 +43,10 @@ class KopiRange {
 
   ['++'](that) {
     return this.toArray().concat(that.toArray());
+  }
+
+  withIndex() {
+    return new KopiRangeWithIndex(this);
   }
 
   async map(func, scope, visitors) {
