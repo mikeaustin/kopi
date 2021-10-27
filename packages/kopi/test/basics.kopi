@@ -56,16 +56,16 @@ print $ (x, k => (x, k => k (x + 1)) (x + x, k)) (5, (x => x))
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
 factorial = fix factorial => n => match n (
   0 => 1
-  n => n * (factorial (n - 1))
+  n => n * factorial (n - 1)
 )
-print (factorial 170)
+print $ factorial 170
 
 
 factorial = n => match n (
   0 => 1
-  n => n * (factorial (n - 1))
+  n => n * factorial (n - 1)
 )
-print (factorial 170)
+print $ factorial 170
 
 
 print $ let (x = 2, y = 3) => x + y
@@ -74,7 +74,7 @@ print $ let (x = 2, y = 3) => x + y
 (0, x => x) | getMatches (0, 1)
 
 
-vecA, vecB = (Vector (1, 2)), (Vector (2, 3))
+vecA, vecB = Vector (1, 2), Vector (2, 3)
 print $ vecA + vecB | length | toFixed 3
 
 
@@ -92,7 +92,7 @@ print $ 1..5 | map n => {
 
 print $ 1..5 | map 'toString
 
-# print $ 1..5 | map '(* 2)
+print $ 1..5 | map '(* 2)
 
 print $ 'toString 5
 

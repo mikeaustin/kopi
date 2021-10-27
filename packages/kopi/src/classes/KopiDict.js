@@ -14,6 +14,10 @@ class KopiDict {
     this._immutableMap = new Map(entries);
   }
 
+  [util.inspect.custom] = function () {
+    return this.toStringAsync();
+  };
+
   async toStringAsync() {
     if (this._immutableMap.size === 0) {
       return `{:}`;

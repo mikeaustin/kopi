@@ -355,8 +355,8 @@ function peg$parse(input, options) {
           },
       peg$c93 = function(tail) {
             return new DictExpression({
-              entries: tail.map(entry => [entry[1].value, entry[4]])
-              });
+              entries: tail.map(entry => [entry[1], entry[4]])
+            });
           },
       peg$c94 = /^[0-9]/,
       peg$c95 = peg$classExpectation([["0", "9"]], false, false),
