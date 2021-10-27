@@ -15,7 +15,9 @@ class KopiDict {
   }
 
   [util.inspect.custom] = function () {
-    return this.toStringAsync();
+    const entries = this._immutableMap.map((value, key) => `${key}: ${inspect(value)}`);
+
+    return `{ ${entries.join(', ')} }`;
   };
 
   async toStringAsync() {
