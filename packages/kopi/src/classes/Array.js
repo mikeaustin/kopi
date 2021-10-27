@@ -25,6 +25,10 @@ Array.prototype.toArray = function () {
 };
 
 Array.prototype._get = function (index) {
+  if (index.constructor.name === 'KopiRange') {
+    return this.slice(index.from, index.to);
+  }
+
   return this[index];
 };
 
