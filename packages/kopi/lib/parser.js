@@ -2889,7 +2889,7 @@ function peg$parse(input, options) {
         if (s3 !== peg$FAILED) {
           s4 = peg$parse_();
           if (s4 !== peg$FAILED) {
-            s5 = peg$parseLowPrecedenceApplyExpression();
+            s5 = peg$parseTupleExpression();
             if (s5 !== peg$FAILED) {
               peg$savedPos = s0;
               s1 = peg$c81(s5);
@@ -2930,7 +2930,7 @@ function peg$parse(input, options) {
           if (s3 !== peg$FAILED) {
             s4 = peg$parse_();
             if (s4 !== peg$FAILED) {
-              s5 = peg$parseLowPrecedenceApplyExpression();
+              s5 = peg$parseTupleExpression();
               if (s5 !== peg$FAILED) {
                 peg$savedPos = s0;
                 s1 = peg$c82(s1, s5);
