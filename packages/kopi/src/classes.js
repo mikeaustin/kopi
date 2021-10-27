@@ -72,7 +72,7 @@ class ArrayLiteralPattern {
       return null;
     }
 
-    const matchesArray = this._elementsArray.reduce(async (matchesArray, element, index) => ([
+    const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
       await element.getMatches(array[index])
     ]), []);

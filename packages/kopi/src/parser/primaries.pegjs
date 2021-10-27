@@ -58,9 +58,9 @@ DictExpression
       });
     }
   / "{"
-       _ tail:(Newline+ PrimaryExpression ":" _ Expression)+ Newline+ _
+       _ tail:(_ Newline+ _ PrimaryExpression ":" _ Expression)+ Newline+ _
     "}" {
       return new DictExpression({
-        entries: tail.map(entry => [entry[1], entry[4]])
+        entries: tail.map(entry => [entry[3], entry[6]])
       });
     }
