@@ -1,6 +1,6 @@
 print {:}
 
-print $ { 1: "One", 2: "Two" }
+print $ { 1: "One", (1 + 1): "Two" }
 
 print $ 1..2 | map (n) => {
   1: "One"

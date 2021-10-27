@@ -133,11 +133,21 @@ class Interpreter extends Visitors {
     return elements.map(element => this.visitNode(element, scope, bind));
   }
 
-  DictExpression({ entries }, scope, bind) {
-    return new KopiDict(entries.map(([key, value]) => [
-      this.visitNode(key, scope, bind),
+  async DictExpression({ entries }, scope, bind) {
+    const evaluatedKeys = await Promise.all(entries.map(async ([key, value]) => (
+      await this.visitNode(key, scope, bind)
+    )));
+
+    const evaluatedValues = entries.map(([key, value]) => (
       this.visitNode(value, scope, bind)
-    ]));
+    ));
+
+    const evaluatedEntries = evaluatedKeys.reduce((evaluatedEntries, evaluatedKey, index) => [
+      ...evaluatedEntries,
+      [evaluatedKey, evaluatedValues[index]]
+    ], []);
+
+    return new KopiDict(evaluatedEntries);
   }
 
   RangeExpression({ from, to }, scope, bind) {
