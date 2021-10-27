@@ -72,6 +72,17 @@ Array.prototype._map = async function (func, scope, visitors) {
   return values;
 };
 
+Array.prototype._flatMap = async function (func, scope, visitors) {
+  let accum = [];
+  let index = 0;
+
+  for (const element of this) {
+    accum.push(...await func.apply(undefined, [element, scope, visitors]));
+  }
+
+  return accum;
+};
+
 Array.prototype._reduce = function (init) {
   return async (func, scope, visitors) => {
     let accum = init;

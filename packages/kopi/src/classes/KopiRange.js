@@ -34,7 +34,7 @@ class KopiRange {
   async map(func, scope, visitors) {
     const values = [];
 
-    for (let index = this.from; index <= this.to; index++) {
+    for (let index = this.from; index <= this.to; index = index.succ()) {
       // const argumentsPassed = func.params.getMatches(index);
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
@@ -47,6 +47,16 @@ class KopiRange {
     }
 
     return values;
+  }
+
+  async flatMap(func, scope, visitors) {
+    let accum = [];
+
+    for (let index = this.from; index['<='](this.to); index = index.succ()) {
+      accum.push(...await func.apply(undefined, [index, scope, visitors]));
+    }
+
+    return accum;
   }
 
   async reduce(init) {
