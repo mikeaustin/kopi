@@ -32,7 +32,7 @@ class TuplePattern {
       const matchesArray = await this._fieldsArray.reduce(async (matchesArray, fieldName, index) => ([
         ...await matchesArray,
         await this._elementsArray[index].getMatches(
-          tuple.getElementAtIndex(tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty
+          tuple.getElementAtIndex(await tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty
         )
       ]));
 
@@ -46,9 +46,11 @@ class TuplePattern {
       }), {});
     }
 
+    // console.log(tuple.getElementAtIndex(1));
+
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
+      await (await element).getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 
     if (matchesArray.some(match => match === null)) {
