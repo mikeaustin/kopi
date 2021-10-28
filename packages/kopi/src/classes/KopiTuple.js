@@ -106,31 +106,7 @@ class KopiTuple {
     return Promise.all(values);
   }
 
-  product(func = (args) => args, scope, visitors) {
-    const accum = [];
-
-    const helper = (index, values) => {
-      const iter = this._elementsArray[index][Symbol.iterator]();
-
-      let result = iter.next();
-
-      while (!result.done) {
-        if (index === this._elementsArray.length - 1) {
-          accum.push(func.apply(undefined, [new KopiTuple([...values, result.value]), scope, visitors]));
-        } else {
-          helper(index + 1, [...values, result.value]);
-        }
-
-        result = iter.next();
-      }
-    };
-
-    helper(0, []);
-
-    return accum;
-  }
-
-  async product2(func = (args) => args, scope, visitors) {
+  async product(func = (args) => args, scope, visitors) {
     const helper = async (index, values) => {
       const iter = this._elementsArray[index][Symbol.iterator]();
       const accum = [];
