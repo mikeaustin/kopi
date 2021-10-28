@@ -7,7 +7,8 @@ async function readFiles(...files) {
 
 async function main() {
   const functions = await util.promisify(fs.readFile)('./src/parser/functions.js', 'utf-8');
-  const [statements, expressions, operators, primaries, patterns, terminals] = await readFiles(
+  const [types, statements, expressions, operators, primaries, patterns, terminals] = await readFiles(
+    './src/parser/types.pegjs',
     './src/parser/statements.pegjs',
     './src/parser/expressions.pegjs',
     './src/parser/operators.pegjs',
@@ -16,7 +17,7 @@ async function main() {
     './src/parser/terminals.pegjs',
   );
 
-  const rulesString = [statements, expressions, operators, primaries, patterns, terminals].join('\n');
+  const rulesString = [types, statements, expressions, operators, primaries, patterns, terminals].join('\n');
 
   const rules = rulesString.split(/\r?\n\r?\n/).reduce((rulesString, rule) => {
     const index = rule.search(/\r?\n/);
@@ -37,6 +38,10 @@ async function main() {
   const orderedExpressionRules = [
     'Block',
     'Statement',
+    'TypeAssignment',
+    'TypeExpression',
+    'TypeApplyExpression',
+    'TupleTypeExpression',
     'Assignment',
     'Expression',
     'LowPrecedenceApplyExpression',
@@ -72,6 +77,7 @@ async function main() {
     'ParenthesizedTuple',
     'ArrayExpression',
     'DictExpression',
+    'Typename',
     'NumericLiteral',
     'StringLiteral',
     'BooleanLiteral',

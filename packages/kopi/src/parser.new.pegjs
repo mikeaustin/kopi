@@ -5,6 +5,10 @@ class Node {
   }
 }
 
+class TypeAssignment extends Node { }
+class TupleTypeExpression extends Node { }
+class TypeApplyExpression extends Node { }
+
 class Block extends Node { }
 class Assignment extends Node { }
 
@@ -33,6 +37,7 @@ class NumericLiteralPattern extends Node { }
 class StringLiteralPattern extends Node { }
 class IdentifierPattern extends Node { }
 
+class Typename extends Node { }
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
 class BooleanLiteral extends Node { }
@@ -56,8 +61,36 @@ Block
     }
 
 Statement
-  = Assignment
+  = TypeAssignment
+  / Assignment
   / Expression
+
+TypeAssignment
+  = pattern:Typename _ "=" _ expr:TypeExpression {
+      return new TypeAssignment({ pattern, expr });
+    }
+
+TypeExpression
+  = TypeApplyExpression
+
+TypeApplyExpression
+  = expr:TupleTypeExpression args:(_ TupleTypeExpression)* {
+      return args.reduce((expr, [, args]) => (
+        new TypeApplyExpression({ expr, args })
+      ), expr)
+    }
+
+TupleTypeExpression
+  = "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
+      return new TupleTypeExpression({
+        elements: tail.reduce((elements, [, , , , , element]) => [
+          ...elements,
+          element
+        ], [head[2]]),
+        fields: [],
+       });
+    }
+  / Identifier
 
 Assignment
   = pattern:AssignmentPattern _ "=" !">" _ expr:Expression {
@@ -253,13 +286,13 @@ IdentifierPattern
     }
 
 FunctionExpression
-  = "()" _ "=>" _ expr:TupleExpression {
+  = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
         fields: []
       }), expr });
     }
-  / params:Pattern _ "=>" _ expr:TupleExpression {
+  / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
 
@@ -318,6 +351,9 @@ DictExpression
         entries: tail.map(entry => [entry[3], entry[6]])
       });
     }
+
+Typename
+  = _ name:([_A-Z][_a-zA-Z0-9]*) _ { return new Typename({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral
   = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {

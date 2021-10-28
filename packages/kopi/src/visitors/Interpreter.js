@@ -57,7 +57,6 @@ class Interpreter extends Visitors {
     bind(matches);
   }
 
-
   TupleTypeExpression({ elements, fields }, scope, bind) {
     return new KopiTuple(
       elements.map(element => this.visitNode(element, scope, bind)),
@@ -69,20 +68,22 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
     const evaluatedArgs = await this.visitNode(args, scope, bind);
 
-    const _Foo = class extends KopiTuple {
+    const _Type = class extends KopiTuple {
       constructor(...args) {
         super(...args);
       }
     };
 
-    Object.defineProperty(_Foo, 'name', {
-      value: 'Hello'
-    });
+    // Object.defineProperty(_Type, 'name', {
+    //   value: 'Hello'
+    // });
 
-    const Foo = (args) => new _Foo(args.elements, args.fields);
-    Foo.nativeConstructor = _Foo;
+    const Constructor = (args) => {
+      return new _Type(args._elementsArray, args._fieldsArray);
+    };
+    Constructor.nativeConstructor = _Type;
 
-    return Foo;
+    return Constructor;
   }
 
   async PipeExpression({ left, right }, scope, bind) {

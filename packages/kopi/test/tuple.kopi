@@ -1,0 +1,7 @@
+print $ 1..2, "a".."b" | product
+
+print $ 1..2, "a".."b" | product (n, c) => c, n
+
+print $ 1..1, "a".."b", "x".."y" | product
+
+print $ 1..2, 3..4, 5..6 | product (a, b, c) => a * b + c

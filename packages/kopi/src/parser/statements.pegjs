@@ -8,7 +8,8 @@ Block
     }
 
 Statement
-  = Assignment
+  = TypeAssignment
+  / Assignment
   / Expression
 
 Assignment

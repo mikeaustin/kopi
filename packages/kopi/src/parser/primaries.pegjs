@@ -1,11 +1,11 @@
 FunctionExpression
-  = "()" _ "=>" _ expr:TupleExpression {
+  = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
         fields: []
       }), expr });
     }
-  / params:Pattern _ "=>" _ expr:TupleExpression {
+  / params:Pattern _ "=>" _ expr:Expression {
       return new FunctionExpression({ params, expr });
     }
 

@@ -4,6 +4,10 @@ class Node {
   }
 }
 
+class TypeAssignment extends Node { }
+class TupleTypeExpression extends Node { }
+class TypeApplyExpression extends Node { }
+
 class Block extends Node { }
 class Assignment extends Node { }
 
@@ -32,6 +36,7 @@ class NumericLiteralPattern extends Node { }
 class StringLiteralPattern extends Node { }
 class IdentifierPattern extends Node { }
 
+class Typename extends Node { }
 class NumericLiteral extends Node { }
 class StringLiteral extends Node { }
 class BooleanLiteral extends Node { }
