@@ -1,7 +1,3 @@
-print ""
-print "== database ======================================"
-print ""
-
 fix = f => (x => f (y => x x y)) x => f (y => x x y)
 select = fns => yield (x => match x fns)
 

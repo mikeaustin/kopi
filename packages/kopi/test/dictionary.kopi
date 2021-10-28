@@ -1,6 +1,3 @@
-print "== dictionary ===================================="
-print ""
-
 print {:}
 
 print $ { 1: "One", (1 + 1): "Two" }

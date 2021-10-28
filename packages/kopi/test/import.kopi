@@ -1,16 +1,43 @@
-import "test/basics.kopi"
-import "test/database.kopi"
-import "test/html.kopi"
-import "test/record.kopi"
-# import "test/types.kopi"
-import "test/typecheck.kopi"
-import "test/predicate.kopi"
-import "test/interpret.kopi"
-import "test/extend.kopi"
-import "test/operators.kopi"
-import "test/async.kopi"
-import "test/patterns.kopi"
-import "test/kopijson.kopi"
+#
+# App that runs all tests, used for package.json 'test' script
+#
+
+pad = (string, n) => {
+  loop = (n, accum) => match n (
+    0 => accum
+    _ => loop (n - 1, accum ++ string)
+  )
+  loop (n, "")
+}
+
+heading = (string, width) => {
+  print ""
+  print $ pad ("=", 2) ++ " " ++ string ++ " " ++ pad ("=", width - 4 - 'length string)
+  print ""
+}
+
+test = filenames => (filenames | _map (filename) => {
+  heading (filename, 80)
+  import filename
+})
+
+filenames = [
+  "basics.kopi"
+  "database.kopi"
+  "html.kopi"
+  "record.kopi"
+  "typecheck.kopi"
+  "predicate.kopi"
+  "interpret.kopi"
+  "extend.kopi"
+  "operators.kopi"
+  "async.kopi"
+  "patterns.kopi"
+  "kponjson.kopi"
+]
+
+test $ filenames | _map (filename) => "test/" ++ filename
+
 
 coroutine = (x = 1) => {
   f, g = import "test/module.kopi"

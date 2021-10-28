@@ -290,10 +290,10 @@ ArrayExpression
       });
     }
   / "["
-       _ exprs:(Newline+ Expression)+ Newline+ _
+       _ exprs:(_ Newline+ _ Expression)+ Newline+ _
     "]" {
       return new ArrayExpression({
-        elements: exprs.map(expr => expr[1])
+        elements: exprs.map(expr => expr[3])
       });
     }
 

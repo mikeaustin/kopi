@@ -1,6 +1,3 @@
-print "== kopijson ======================================"
-print ""
-
 print {
   "menu": {
     "id": "file"

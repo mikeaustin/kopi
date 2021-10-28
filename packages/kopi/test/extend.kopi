@@ -1,7 +1,3 @@
-print ""
-print "== extend ========================================"
-print ""
-
 # methods = extend type 'String
 #   capitalize: (this) => this ++ ", world!"
 # )

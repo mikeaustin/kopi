@@ -1,7 +1,3 @@
-print ""
-print "== operators ====================================="
-print ""
-
 print $ '(+ 10) 2
 print $ '(- 10) 2
 print $ '(* 10) 2

@@ -1,7 +1,3 @@
-print ""
-print "== types ========================================="
-print ""
-
 ship = position => (type: "ship", position: position)
 asteroid = position => (type: "asteroid", position: position)
 
