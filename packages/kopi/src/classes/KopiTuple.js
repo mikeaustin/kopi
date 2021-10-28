@@ -129,6 +129,29 @@ class KopiTuple {
 
     return accum;
   }
+
+  async product2(func = (args) => args, scope, visitors) {
+    const helper = async (index, values) => {
+      const iter = this._elementsArray[index][Symbol.iterator]();
+      const accum = [];
+
+      let result = iter.next();
+
+      while (!result.done) {
+        if (index === this._elementsArray.length - 1) {
+          accum.push(await func.apply(undefined, [new KopiTuple([...values, result.value]), scope, visitors]));
+        } else {
+          accum.push(...await helper(index + 1, [...values, result.value]));
+        }
+
+        result = iter.next();
+      }
+
+      return accum;
+    };
+
+    return helper(0, []);
+  }
 }
 
 module.exports = {
