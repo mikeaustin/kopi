@@ -23,26 +23,6 @@ ParenthesizedTuple
     }
   / "(" _ expr:Expression _ ")" { return expr; }
 
-ArrayExpression
-  = "[]" {
-      return new ArrayExpression({ elements: [] });
-    }
-  / "[" _ head:EqualityExpression tail:(_ "," _ EqualityExpression)* _ "]" {
-      return new ArrayExpression({
-        elements: tail.reduce((elements, [, , , element]) => [
-          ...elements,
-          element
-        ], [head])
-      });
-    }
-  / "["
-       _ exprs:(_ Newline+ _ Expression)+ Newline+ _
-    "]" {
-      return new ArrayExpression({
-        elements: exprs.map(expr => expr[3])
-      });
-    }
-
 DictExpression
   = "{:}" {
       return new DictExpression({
@@ -62,5 +42,25 @@ DictExpression
     "}" {
       return new DictExpression({
         entries: tail.map(entry => [entry[3], entry[6]])
+      });
+    }
+
+ArrayExpression
+  = "[]" {
+      return new ArrayExpression({ elements: [] });
+    }
+  / "[" _ head:EqualityExpression tail:(_ "," _ EqualityExpression)* _ "]" {
+      return new ArrayExpression({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    }
+  / "["
+       _ exprs:(_ Newline+ _ Expression)+ Newline+ _
+    "]" {
+      return new ArrayExpression({
+        elements: exprs.map(expr => expr[3])
       });
     }

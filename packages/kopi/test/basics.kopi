@@ -57,12 +57,17 @@ factorial = fix factorial => n => match n (
 )
 print $ factorial 170
 
-
 factorial = n => match n (
   0 => 1
   n => n * factorial (n - 1)
 )
 print $ factorial 170
+
+factorial = (n, accum = 1) => match n (
+  0 => 1
+  n => factorial (n - 1, n * accum)
+)
+print $ factorial (170, 1)
 
 
 print $ let (x = 2, y = 3) => x + y

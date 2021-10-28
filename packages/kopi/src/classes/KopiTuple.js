@@ -105,6 +105,30 @@ class KopiTuple {
 
     return Promise.all(values);
   }
+
+  product(func, scope, visitors) {
+    const accum = [];
+
+    const helper = (index, values) => {
+      const iter = this._elementsArray[index][Symbol.iterator]();
+
+      let result = iter.next();
+
+      while (!result.done) {
+        if (index === this._elementsArray.length - 1) {
+          accum.push([...values, result.value]);
+        } else {
+          helper(index + 1, [...values, result.value]);
+        }
+
+        result = iter.next();
+      }
+    };
+
+    helper(0, []);
+
+    return accum;
+  }
 }
 
 module.exports = {
