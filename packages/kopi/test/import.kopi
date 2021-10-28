@@ -18,7 +18,7 @@ heading = (string, width) => {
 
 test = filenames => (filenames | _map (filename) => {
   heading (filename, 80)
-  import filename
+  import ("test/" ++ filename)
 })
 
 filenames = [
@@ -38,7 +38,7 @@ filenames = [
   "kponjson.kopi"
 ]
 
-test $ filenames | _map (filename) => "test/" ++ filename
+test filenames
 
 
 coroutine = (x = 1) => {
