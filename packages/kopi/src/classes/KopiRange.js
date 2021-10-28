@@ -32,8 +32,8 @@ class KopiRange {
   }
 
   *[Symbol.iterator]() {
-    for (let i = this.from; i <= this.to; i = i.succ()) {
-      yield i;
+    for (let element = this.from; element['<='](this.to); element = element.succ()) {
+      yield element;
     }
   }
 
@@ -52,15 +52,15 @@ class KopiRange {
   async map(func, scope, visitors) {
     const values = [];
 
-    for (let index = this.from; index <= this.to; index = index.succ()) {
+    for (let element of this) {
       // const argumentsPassed = func.params.getMatches(index);
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params.name]: index
+        [func.params.name]: element
       }));
 
       if (predicatePassed) {
-        values.push(await func.apply(undefined, [index, scope, visitors]));
+        values.push(await func.apply(undefined, [element, scope, visitors]));
       }
     }
 
@@ -70,8 +70,8 @@ class KopiRange {
   async flatMap(func, scope, visitors) {
     let accum = [];
 
-    for (let index = this.from; index['<='](this.to); index = index.succ()) {
-      accum.push(...await func.apply(undefined, [index, scope, visitors]));
+    for (let element of this) {
+      accum.push(...await func.apply(undefined, [element, scope, visitors]));
     }
 
     return accum;
@@ -81,8 +81,8 @@ class KopiRange {
     let accum = init;
 
     return (func, scope, visitors) => {
-      for (let index = this.from; index['<='](this.to); index = index.succ()) {
-        accum = func.apply(undefined, [new KopiTuple([accum, index]), scope, visitors]);
+      for (let element of this) {
+        accum = func.apply(undefined, [new KopiTuple([accum, element]), scope, visitors]);
       }
 
       return accum;

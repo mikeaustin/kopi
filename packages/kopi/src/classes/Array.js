@@ -70,7 +70,7 @@ Array.prototype._map = async function (func, scope, visitors) {
   const values = [];
 
   for (const element of this) {
-    values.push(await func.apply(undefined, [element, scope, visitors]));
+    values.push(await func.apply(undefined, [await element, scope, visitors]));
   }
 
   return values;
@@ -81,7 +81,7 @@ Array.prototype._flatMap = async function (func, scope, visitors) {
   let index = 0;
 
   for (const element of this) {
-    accum.push(...await func.apply(undefined, [element, scope, visitors]));
+    accum.push(...await func.apply(undefined, [await element, scope, visitors]));
   }
 
   return accum;
@@ -93,7 +93,7 @@ Array.prototype._reduce = function (init) {
     let index = 0;
 
     for (const element of this) {
-      accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
+      accum = await func.apply(undefined, [new KopiTuple([accum, await element, index++]), scope, visitors]);
     }
 
     return accum;

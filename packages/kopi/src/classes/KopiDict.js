@@ -58,7 +58,10 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this._immutableMap.set(await tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)));
+    return new KopiDict(this._immutableMap.set(
+      await tuple.getElementAtIndex(0),
+      tuple.getElementAtIndex(1))
+    );
   }
 
   async get(key) {
@@ -110,7 +113,7 @@ class KopiDict {
         [
           new KopiTuple([
             accum,
-            new KopiTuple([key, value])
+            new KopiTuple([key, await value])
           ]),
           scope,
           visitors
