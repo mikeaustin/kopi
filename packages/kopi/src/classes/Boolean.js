@@ -1,5 +1,9 @@
+Boolean.prototype.inspectAsync = function () {
+  return `${this}`;
+};
+
 Boolean.prototype.toStringAsync = function () {
-  return this.toString();
+  return this.inspectAsync();
 };
 
 Boolean.prototype['=='] = function (that) {

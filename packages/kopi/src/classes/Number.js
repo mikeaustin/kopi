@@ -1,5 +1,15 @@
+const { default: KopiString } = require('./KopiString');
+
+Number.prototype.inspectAsync = function () {
+  return `${this}`;
+};
+
 Number.prototype.toStringAsync = function () {
-  return this.toString();
+  return this.inspectAsync();
+};
+
+Number.prototype._toString = function () {
+  return new KopiString(`${this}`);
 };
 
 Number.prototype.succ = function () {
@@ -56,4 +66,8 @@ Number.prototype['>='] = function (that) {
 
 Number.prototype['sqrt'] = function () {
   return Math.sqrt(this);
+};
+
+Number.prototype['_toFixed'] = function (args) {
+  return new KopiString(this.toFixed(args));
 };

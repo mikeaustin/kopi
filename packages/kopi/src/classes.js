@@ -2,7 +2,6 @@ const util = require("util");
 
 require('./classes/Boolean');
 require('./classes/Number');
-require('./classes/String');
 require('./classes/Array');
 require('./classes/Map');
 
@@ -12,11 +11,6 @@ const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
 const { default: KopiDict } = require('./classes/KopiDict');
-
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
@@ -45,8 +39,6 @@ class TuplePattern {
         ...matches,
       }), {});
     }
-
-    // console.log(tuple.getElementAtIndex(1));
 
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,

@@ -63,11 +63,11 @@ factorial = n => match n (
 )
 print $ factorial 170
 
-factorial = (n, accum = 1) => match n (
-  0 => 1
-  n => factorial (n - 1, n * accum)
-)
-print $ factorial (170, 1)
+# factorial = (n, accum) => match n (
+#   0 => 1
+#   n => factorial (n - 1, n * accum)
+# )
+# print $ factorial (170, 1)
 
 
 print $ let (x = 2, y = 3) => x + y
@@ -77,7 +77,7 @@ print $ let (x = 2, y = 3) => x + y
 
 
 vecA, vecB = Vector (1, 2), Vector (2, 3)
-print $ vecA + vecB | length | toFixed 3
+print $ vecA + vecB | length | _toFixed 3
 
 
 print $ 1..5 | reduce 1 $ (product, n) => product * n
@@ -92,11 +92,11 @@ print $ 1..5 | map n => {
   x
 }
 
-print $ 1..5 | map 'toString
+print $ 1..5 | map '_toString
 
 print $ 1..5 | map '(* 2)
 
-print $ 'toString 5
+print $ '_toString 5
 
 
 next = repeat (n) => n + 1
@@ -116,9 +116,9 @@ print $ match 5 (
 )
 
 
-print $ [1, (sleep 2), (1 + 2)] | _map 'toString
+print $ [1, (sleep 2), (1 + 2)] | _map '_toString
 
-print $ sleep 1 | toFixed 2
+print $ sleep 1 | _toFixed 2
 
 print $ loop exit => (x = 1) => {
   print x
@@ -129,6 +129,7 @@ print $ loop exit => (x = 1) => {
   )
 }
 
+
 print $ ["B, A", "D, C"] | _map (name) => (
   name | split "," | _map 'trim | _reverse | _join " "
 )
@@ -137,11 +138,11 @@ f = x => x
 print $ f ()
 
 
-print $ ['(* 2), '(toFixed 2)] | _reduce 5 $ (x, f) => f x
+print $ ['(* 2), '(_toFixed 2)] | _reduce 5 $ (x, f) => f x
 
 pipe = fs => x => (fs | _reduce x $ (x, f) => f x)
 
-print $ pipe ['(* 2), '(toFixed 2)] 5
+print $ pipe ['(* 2), '(_toFixed 2)] 5
 
 
 print $ 1..100 | map (n) => match (n % 3, n % 5) (

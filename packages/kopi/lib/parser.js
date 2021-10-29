@@ -5037,6 +5037,8 @@ function peg$parse(input, options) {
   }
 
 
+  const util = require("util");
+
   class Node {
     constructor(args) {
       Object.assign(this, args);
@@ -5056,6 +5058,10 @@ function peg$parse(input, options) {
   class FunctionExpression extends Node { }
   class ArrayExpression extends Node { }
   class ApplyExpression extends Node {
+    inspectAsync() {
+      return `${util.inspect(this)}`;
+    }
+
     async apply(thisArg, [receiver, scope, visitors]) {
       return receiver[this.expr.name].apply(receiver, [
         await visitors.visitNode(this.args, scope),

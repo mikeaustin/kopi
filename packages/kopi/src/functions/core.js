@@ -12,12 +12,12 @@ const inspect = value => util.inspect(value, {
   depth: Infinity
 });
 
-const kopi_inspect = (value) => {
-  console.log(inspect(value));
+const kopi_inspect = async (value) => {
+  console.log(await value.inspectAsync());
 };
 
 const kopi_print = async (value) => {
-  console.log(value.toStringAsync ? await value.toStringAsync() : value.toString());
+  console.log(await value.toStringAsync());
 };
 
 const kopi_read = async (filename) => {

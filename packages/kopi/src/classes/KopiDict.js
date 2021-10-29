@@ -4,34 +4,27 @@ const { Map } = require('immutable');
 const { default: KopiTuple } = require('./KopiTuple');
 const { applyOperator } = require('../utils');
 
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
 class KopiDict {
   constructor(entries) {
     this._immutableMap = new Map(entries);
   }
 
-  [util.inspect.custom] = function () {
-    const entries = this._immutableMap.map((value, key) => `${key}: ${inspect(value)}`);
-
-    return `{ ${entries.join(', ')} }`;
-  };
-
-  async toStringAsync() {
+  async inspectAsync() {
     if (this._immutableMap.size === 0) {
       return `{:}`;
     }
 
     const entries = await Promise.all(
       this._immutableMap.toArray().map(async ([key, value]) => (
-        `${inspect(key)}: ${inspect(await value)}`
+        `${key.inspectAsync()}: ${(await value).inspectAsync()}`
       ))
     );
 
     return `{${entries.join(', ')}}`;
+  }
+
+  toStringAsync() {
+    return this.inspectAsync();
   }
 
   async ['=='](that, scope, visitors) {

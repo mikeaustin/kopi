@@ -1,10 +1,5 @@
 const util = require("util");
 
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
 class KopiTuple {
   static empty = new KopiTuple(null);
 
@@ -31,6 +26,24 @@ class KopiTuple {
     this._fieldsArray = fieldsArray;
   }
 
+  async inspectAsync() {
+    if (this._elementsArray.length === 0) {
+      return '()';
+    }
+
+    const elementsArray = await Promise.all(
+      this._elementsArray.map(async element => (await (await element).toStringAsync()))
+    );
+
+    return `(${elementsArray.map((element, index) => (
+      `${this._fieldsArray[index] ? `${this._fieldsArray[index]}: ` : ''}${element}`
+    )).join(', ')})`;
+  }
+
+  async toStringAsync() {
+    return this.inspectAsync();
+  }
+
   getElementsArray() {
     return this._elementsArray;
   }
@@ -49,24 +62,6 @@ class KopiTuple {
 
   getIndexOfFieldName(fieldName) {
     return this._fieldsArray.indexOf(fieldName);
-  }
-
-  async toStringAsync() {
-    if (this._elementsArray.length === 0) {
-      return '()';
-    }
-
-    const elementsArray = await Promise.all(
-      this._elementsArray.map(async element => (await (await element).toStringAsync()))
-    );
-
-    return `(${elementsArray.map((element, index) => (
-      `${this._fieldsArray[index] ? `${this._fieldsArray[index]}: ` : ''}${element}`
-    )).join(', ')})`;
-  }
-
-  [util.inspect.custom]() {
-    return `(${this._elementsArray.map(element => inspect(element)).join(', ')})`;
   }
 
   async ['=='](that) {

@@ -2,11 +2,6 @@ const util = require("util");
 
 const { default: KopiTuple } = require('./KopiTuple');
 
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
 class KopiRangeWithIndex {
   constructor(range) {
     this._range = range;
@@ -27,18 +22,22 @@ class KopiRange {
     this.to = to;
   }
 
-  [util.inspect.custom]() {
-    return `${inspect(this.from)}..${inspect(this.to)}`;
+  async inspectAsync() {
+    return `${await (await this.from).inspectAsync()}..${await (await this.to).inspectAsync()}`;
+  }
+
+  async toStringAsync() {
+    return this.inspectAsync();
+  }
+
+  toArray() {
+    return Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from);
   }
 
   *[Symbol.iterator]() {
     for (let element = this.from; element['<='](this.to); element = element.succ()) {
       yield element;
     }
-  }
-
-  toArray() {
-    return Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from);
   }
 
   ['++'](that) {
@@ -71,7 +70,7 @@ class KopiRange {
     let accum = [];
 
     for (let element of this) {
-      const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+      const appliedElement = await func.apply(undefined, [await element, scope, visitors]);
 
       if (appliedElement[Symbol.iterator]) {
         accum.push(...appliedElement);

@@ -3,21 +3,16 @@ const util = require("util");
 const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
-Array.prototype.toStringAsync = async function () {
+Array.prototype.inspectAsync = async function () {
   const elements = await Promise.all(
-    this.map(async element => inspect(await element))
+    this.map(async element => (await element).inspectAsync())
   );
 
   return `[${elements.join(', ')}]`;
 };
 
-Array.prototype[util.inspect.custom] = function () {
-  return `[${this.map(element => inspect(element)).join(', ')}]`;
+Array.prototype.toStringAsync = function () {
+  return this.inspectAsync();
 };
 
 Array.prototype.toArray = function () {
@@ -60,10 +55,10 @@ Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
 
-Array.prototype._join = async function (delimiter = "") {
+Array.prototype._join = async function (delimiter = new KopiString("")) {
   const elements = await Promise.all(this);
 
-  return new KopiString(elements.join(delimiter));
+  return new KopiString(elements.map(element => element.getNativeString()).join(delimiter.getNativeString()));
 };
 
 Array.prototype._map = async function (func, scope, visitors) {

@@ -4,8 +4,12 @@ class KopiVector {
     this.y = y;
   }
 
-  toStringAsync() {
+  inspectAsync() {
     return `Vector (${this.x}, ${this.y})`;
+  }
+
+  toStringAsync() {
+    return this.inspectAsync();
   }
 
   ['+'](that) {

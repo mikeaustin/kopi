@@ -9,17 +9,13 @@ class KopiString {
     return this._nativeString;
   }
 
-  toString() {
-    return `${this._nativeString}`;
-  }
-
-  toStringAsync() {
-    return this.toString();
+  inspectAsync() {
+    return `"${this._nativeString}"`;
   };
 
-  [util.inspect.custom]() {
-    return `"${this._nativeString}"`;
-  }
+  toStringAsync() {
+    return this._nativeString;
+  };
 
   *[Symbol.iterator]() {
     return this._nativeString[Symbol.iterator]();
@@ -77,8 +73,8 @@ class KopiString {
     return new KopiString(String.fromCodePoint(this._nativeString.codePointAt(0) + 1));
   }
 
-  split(delimiter = '') {
-    return this._nativeString.split(delimiter).map(element => new KopiString(element));
+  split(delimiter = new KopiString('')) {
+    return this._nativeString.split(delimiter.getNativeString()).map(element => new KopiString(element));
   }
 
   trim() {

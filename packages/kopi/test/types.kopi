@@ -27,17 +27,17 @@ extend Point (
   length: (:x, :y) => () => (x * x + y * y) | sqrt
 )
 
-print $ point | length | toFixed 3
+print $ point | length | _toFixed 3
 
 {
   extend Point (
     length: (this) => () => 404.404
   )
 
-  print $ point | length | toFixed 3
+  print $ point | length | _toFixed 3
 }
 
-print $ point | length | toFixed 3
+print $ point | length | _toFixed 3
 
 
 Person = type (name: String, age: Int)

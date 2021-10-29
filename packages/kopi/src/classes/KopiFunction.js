@@ -7,12 +7,12 @@ class KopiFunction {
     this.closure = closure;
   }
 
-  toStringAsync() {
+  inspectAsync() {
     return `<function>`;
   }
 
-  [util.inspect.custom]() {
-    return `<function>`;
+  toStringAsync() {
+    return this.inspectAsync();
   }
 
   async apply(thisArg, [args, scope, visitors]) {
