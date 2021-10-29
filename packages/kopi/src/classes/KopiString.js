@@ -29,6 +29,18 @@ class KopiString {
     return this._nativeString;
   }
 
+  _get(index) {
+    if (index.constructor.name === 'KopiRange') {
+      return new KopiString(this._nativeString.slice(index.from, index.to));
+    }
+
+    return new KopiString(this._nativeString[index]);
+  };
+
+  toUpper() {
+    return new KopiString(this._nativeString.toUpperCase());
+  }
+
   ['=='](that) {
     // if (typeof that !== 'string') {
     //   return false;
