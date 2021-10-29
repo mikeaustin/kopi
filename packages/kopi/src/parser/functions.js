@@ -35,6 +35,7 @@ class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
 
+class FunctionPattern extends Node { }
 class TuplePattern extends Node { }
 class ArrayLiteralPattern extends Node { }
 class BooleanLiteralPattern extends Node { }

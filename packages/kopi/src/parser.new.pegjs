@@ -36,6 +36,7 @@ class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
 
+class FunctionPattern extends Node { }
 class TuplePattern extends Node { }
 class ArrayLiteralPattern extends Node { }
 class BooleanLiteralPattern extends Node { }
@@ -210,7 +211,16 @@ PrimaryExpression
   / Identifier
 
 AssignmentPattern
-  = AssignmentTuplePattern
+  = AssignmentFunctionPattern
+
+AssignmentFunctionPattern
+  = expr:Identifier _ params:AssignmentTuplePattern {
+      return new FunctionPattern({
+        name: expr.name,
+        params: params
+      });
+    }
+  / AssignmentTuplePattern
 
 AssignmentTuplePattern
   = head:(":"? AssignmentPrimaryPattern) tail:(_ "," _ ":"? AssignmentPrimaryPattern)* {

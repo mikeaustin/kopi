@@ -16,13 +16,6 @@ const {
 const { default: Visitors } = require('./Visitors');
 const { applyOperator } = require('../utils');
 
-const inspect = value => util.inspect(value, {
-  compact: false,
-  depth: Infinity
-});
-
-const parserLog = fs.createWriteStream('log/tracer');
-
 class Interpreter extends Visitors {
   Block({ statements }, scope) {
     const bind = updates => scope = ({ ...scope, ...updates });
@@ -43,10 +36,18 @@ class Interpreter extends Visitors {
 
   async Assignment({ pattern, expr }, scope, bind) {
     const evaluatedPattern = await this.visitNode(pattern, scope, bind);
-    const evaluatedExpr = await this.visitNode(expr, scope, bind);
+    let matches = null;
+
+    if (pattern.constructor.name === 'FunctionPattern') {
+      matches = await evaluatedPattern.getMatches(null, scope, expr);
+    } else {
+      const evaluatedExpr = await this.visitNode(expr, scope, bind);
+
+      matches = await evaluatedPattern.getMatches(evaluatedExpr, scope);
+    }
 
     // TODO: pass expr directly so FunctionPattern can use it as body
-    const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
+    // const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
 
     Object.entries(matches).forEach(([name, value]) => {
       if (value instanceof KopiFunction) {
@@ -205,7 +206,7 @@ class Interpreter extends Visitors {
     return new ConstructorPattern(name, pattern);
   }
 
-  FunctionPattern({ name, params }, scope) {
+  async FunctionPattern({ name, params }, scope) {
     const evaluatedParams = this.visitNode(params, scope);
 
     return new FunctionPattern(name, evaluatedParams);

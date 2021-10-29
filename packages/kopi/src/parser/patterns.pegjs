@@ -1,6 +1,15 @@
 AssignmentPattern
   = NextRule
 
+AssignmentFunctionPattern
+  = expr:Identifier _ params:NextRule {
+      return new FunctionPattern({
+        name: expr.name,
+        params: params
+      });
+    }
+  / NextRule
+
 AssignmentTuplePattern
   = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 ? head[1] : new TuplePattern({
