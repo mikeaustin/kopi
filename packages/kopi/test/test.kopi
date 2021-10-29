@@ -1,1 +1,1 @@
-print $ [1, 2, 3] | _find (x) => x > 1
+w = worker "test/worker.kopi"
