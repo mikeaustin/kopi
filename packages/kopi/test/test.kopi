@@ -1,1 +1,1 @@
-w = worker "test/worker.kopi"
+print $ [1, 2, 3] | _find (x) => x > 1

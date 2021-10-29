@@ -103,3 +103,13 @@ Array.prototype._reduce = function (init) {
 Array.prototype._reverse = async function (args, scope, visitors) {
   return [...this].reverse();
 };
+
+Array.prototype._find = async function (func, scope, visitors) {
+  for (const element of this) {
+    if (await func.apply(undefined, [await element, scope, visitors])) {
+      return await element;
+    }
+  }
+
+  return KopiTuple.empty;
+};

@@ -401,7 +401,7 @@ function peg$parse(input, options) {
       peg$c114 = /^[^_a-zA-Z]/,
       peg$c115 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"]], true, false),
       peg$c116 = function(value) {
-          return new BooleanLiteral({ value: Boolean(value) })
+          return new BooleanLiteral({ value: value === 'true' })
         },
       peg$c117 = "'(",
       peg$c118 = peg$literalExpectation("'(", false),
