@@ -2022,6 +2022,24 @@ function peg$parse(input, options) {
               s1 = peg$FAILED;
               if (peg$silentFails === 0) { peg$fail(peg$c46); }
             }
+            if (s1 === peg$FAILED) {
+              if (input.charCodeAt(peg$currPos) === 60) {
+                s1 = peg$c32;
+                peg$currPos++;
+              } else {
+                s1 = peg$FAILED;
+                if (peg$silentFails === 0) { peg$fail(peg$c33); }
+              }
+              if (s1 === peg$FAILED) {
+                if (input.charCodeAt(peg$currPos) === 62) {
+                  s1 = peg$c14;
+                  peg$currPos++;
+                } else {
+                  s1 = peg$FAILED;
+                  if (peg$silentFails === 0) { peg$fail(peg$c15); }
+                }
+              }
+            }
           }
         }
       }

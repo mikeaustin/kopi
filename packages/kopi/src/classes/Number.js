@@ -42,8 +42,16 @@ Number.prototype['<'] = function (that) {
   return this < that;
 };
 
+Number.prototype['>'] = function (that) {
+  return this > that;
+};
+
 Number.prototype['<='] = function (that) {
   return this <= that;
+};
+
+Number.prototype['>='] = function (that) {
+  return this >= that;
 };
 
 Number.prototype['sqrt'] = function () {
