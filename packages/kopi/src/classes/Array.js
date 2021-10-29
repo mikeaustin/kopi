@@ -81,7 +81,13 @@ Array.prototype._flatMap = async function (func, scope, visitors) {
   let index = 0;
 
   for (const element of this) {
-    accum.push(...await func.apply(undefined, [await element, scope, visitors]));
+    const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+
+    if (appliedElement[Symbol.iterator]) {
+      accum.push(...appliedElement);
+    } else {
+      accum.push(appliedElement);
+    }
   }
 
   return accum;

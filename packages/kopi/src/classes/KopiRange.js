@@ -71,7 +71,13 @@ class KopiRange {
     let accum = [];
 
     for (let element of this) {
-      accum.push(...await func.apply(undefined, [element, scope, visitors]));
+      const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+
+      if (appliedElement[Symbol.iterator]) {
+        accum.push(...appliedElement);
+      } else {
+        accum.push(appliedElement);
+      }
     }
 
     return accum;
