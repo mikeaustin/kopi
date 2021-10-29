@@ -2,7 +2,9 @@
 
 ### A simple, immutable, 100% asynchronous programming language.
 
-What started out as an exercise turned into a real language. Kopi has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and will support sevaral literal syntaxes (map, set). More details can be found here:
+What started out as an exercise turned into a fully functional (but small) language. Kopi has a Haskell/ML/Scala style (minimal) syntax, behaves kind of like a LISP, and is interpreted in JavaScript. It has coroutines, and supports sevaral literal syntaxes (array, map). Many languages have been the inspiration for Kopi and its functions, either directly or indirectly: JavaScript, Dylan, SmallTalk, Io, Magpie, Scala, Go, Erlang, Racket, Ruby, Python, Julia, Idris, Haskell, Elm... there's probably more.
+
+More details can be found here:
 
 https://docs.google.com/presentation/d/1NtJtgIilqQv2XBoCmybcQU_IsEcylMOcLYXkgB5dQoM/edit?usp=sharing
 
