@@ -18,3 +18,15 @@ factorial2 (n) = match n (
   n => n * factorial2 (n - 1)
 )
 print $ factorial2 5
+
+
+decorate = func => funcs => arg => match arg (
+  func
+  funcs
+)
+
+factorial = decorate f (
+  n => n * factorial (n - 1)
+)
+
+print $ factorial 5
