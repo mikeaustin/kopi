@@ -1,7 +1,7 @@
-start = (x) => {
+start (x) = {
   f, g = import "test/module.kopi"
 
-  loop = (x) => {
+  loop (x) = {
     print x
     command = input "(R)eload or (I)ncrement?"
 

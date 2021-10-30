@@ -1,6 +1,6 @@
 # Spawns coroutine that simply yields values
 generator = spawn () => {
-  loop = (x) => {
+  loop (x) = {
     sleep 1
     yield _ => x
     loop (x + 1)
@@ -12,11 +12,11 @@ generator = spawn () => {
 print $ [(sleep 1), 2, 3] | _map (n) => send generator ()
 
 # Convenience for yield + match
-select = fns => yield (x => match x fns)
+select (fns) = yield (x => match x fns)
 
 # Spawns a coroutine that yields squares
 coroutine = spawn () => {
-  loop = () => {
+  loop () = {
     sleep 1
     select (
       0 => 1

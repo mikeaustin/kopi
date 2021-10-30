@@ -2,7 +2,7 @@ AssignmentPattern
   = NextRule
 
 AssignmentFunctionPattern
-  = expr:Identifier _ params:NextRule {
+  = expr:Identifier _ params:Pattern {
       return new FunctionPattern({
         name: expr.name,
         params: params

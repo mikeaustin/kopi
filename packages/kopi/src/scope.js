@@ -92,12 +92,12 @@ let getScope = (input) => ({
     });
 
     return new Promise(resolve => {
-      rl.question(`${str} `, data => {
+      rl.question(`${str.getNativeString()} `, data => {
         if (rl !== input) {
           rl.close();
         }
 
-        resolve(data);
+        resolve(new KopiString(data));
       });
     });
   },

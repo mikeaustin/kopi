@@ -1,7 +1,7 @@
 incrementIndex = data => (index: data.index + 1)
 setIndex = index => data => (index: index)
 
-evaluate = (statement, indexes) => match statement (
+evaluate (statement, indexes) = match statement (
   lineNo, "PRINT", value => {
     print $ value
     incrementIndex
@@ -15,7 +15,7 @@ evaluate = (statement, indexes) => match statement (
   }
 )
 
-interpret = (source) => {
+interpret (source) = {
   program = source | trim | split (char 10) | _map (line) => (
     tuple $ (line | trim) | split " "
   )
@@ -27,7 +27,7 @@ interpret = (source) => {
   print indexes
   print program
 
-  loop = (data) => {
+  loop (data) = {
     match (data.index == '_length program) (
       true => ()
       _    => {

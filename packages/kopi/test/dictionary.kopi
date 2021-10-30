@@ -10,7 +10,7 @@ dict = { "One": 1, "Two": 2 } | map (key, value) => {
   value * value
 }
 
-print $ dict.("One")
+print dict.("One")
 
 dict = dict | set ("One", 3)
 
@@ -42,6 +42,6 @@ print $ words | split " " | _reduce {:} $ (counts, word) => (
 
 print ""
 
-print $ {1: (2, 3)} == {1: (2, 3)}
+print $ { 1: (2, 3) } == { 1: (2, 3) }
 
 print { "class": "foo", "id": "bar" }

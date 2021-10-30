@@ -2,7 +2,7 @@
 
 :html, :body, :text = import "test/html.kopi"
 
-template = message => generateHtmlString (
+template (message) = generateHtmlString (
   html () [
     body () [
       text "<p>This is a dynamic document</p>"
@@ -12,8 +12,8 @@ template = message => generateHtmlString (
 ), 0
 
 server = spawn () => {
-  loop = (requests) => {
-    request, _ = yield request => match request.url (
+  loop (requests) = {
+    request, _ = yield (request) => match request.url (
       "/favicon.ico" => ""
       "/"            => template ("[" ++ (String requests) ++ " requests] <a href='test.html'>Link to static document</a>")
        _             => read ("test/" ++ request.url)

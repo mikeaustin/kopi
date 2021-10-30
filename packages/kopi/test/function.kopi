@@ -1,0 +1,20 @@
+f (a, b, [c]) = a * b
+print $ f (1, 2, [3])
+
+f (n) = n * n
+print $ f 5
+
+
+factorial (n) = match n (
+  0 => 1
+  n => n * factorial (n - 1)
+)
+print $ factorial 5
+
+
+factorial 0 = 1
+factorial2 (n) = match n (
+  factorial
+  n => n * factorial2 (n - 1)
+)
+print $ factorial2 5

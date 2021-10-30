@@ -141,13 +141,14 @@ print $ ["B, A", "D, C"] | _map (name) => (
   name | split "," | _map 'trim | _reverse | _join " "
 )
 
-f = x => x
+f (x = 5) = x * x
 print $ f ()
 
 
 print $ ['(* 2), '(_toFixed 2)] | _reduce 5 $ (x, f) => f x
 
 pipe = fs => x => (fs | _reduce x $ (x, f) => f x)
+# pipe fs x = fs | _reduce x $ (x, f) => f x
 
 print $ pipe ['(* 2), '(_toFixed 2)] 5
 
@@ -160,6 +161,6 @@ print $ 1..100 | map (n) => match (n % 3, n % 5) (
 )
 
 
-grayscale = (:r, :g, :b) => (r + g + b) / 3
+grayscale (:r, :g, :b) = (r + g + b) / 3
 
 print $ grayscale (r: 1, g: 2, b: 3)

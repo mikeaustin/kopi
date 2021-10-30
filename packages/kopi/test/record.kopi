@@ -12,7 +12,7 @@ GL_TEXTURE_2D = 1
 GL_RGBA = 2
 GL_FLOAT = 3
 
-glDrawArrays = (mode, first, count) => (mode, first, count)
+glDrawArrays (mode, first, count) = (mode, first, count)
 
 print $ glDrawArrays (
   GL_POINTS
@@ -22,7 +22,7 @@ print $ glDrawArrays (
 
 print $ glDrawArrays (mode: GL_POINTS, first: 0, count: 10)
 
-glTexImage2D = (target, level, internalformat, width, height, border, format, type, data) => {
+glTexImage2D (target, level, internalformat, width, height, border, format, type, data) = {
   (target, level, internalformat, width, height, border, format, type, data)
 }
 

@@ -2,7 +2,7 @@
 # App that runs all tests, used for package.json 'test' script
 #
 
-pad = (string, n) => {
+pad (string, n) = {
   loop = (n, accum) => match n (
     0 => accum
     _ => loop (n - 1, accum ++ string)
@@ -10,16 +10,16 @@ pad = (string, n) => {
   loop (n, "")
 }
 
-heading = (string, width) => {
+heading (string, width) = {
   print ""
   print $ pad ("=", 2) ++ " " ++ string ++ " " ++ pad ("=", width - 4 - 'length string)
   print ""
 }
 
-test = filenames => (filenames | _map (filename) => {
+test (filenames) = filenames | _map (filename) => {
   heading (filename, 80)
   import ("test/" ++ filename)
-})
+}
 
 filenames = [
   "basics.kopi"
@@ -41,10 +41,10 @@ filenames = [
 test filenames
 
 
-coroutine = (x = 1) => {
+coroutine (x = 1) = {
   f, g = import "test/module.kopi"
 
-  loop = (x) => {
+  loop (x) = {
     command, _ = yield command => x
 
     match command (

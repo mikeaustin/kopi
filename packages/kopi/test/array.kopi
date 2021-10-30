@@ -9,7 +9,7 @@ print $ 1..5, 1..5 | product (a, b) => a * b
 
 array = [1, 2, 3]
 
-square = (x) => x * x
+square (x) = x * x
 
 print $ array 0 [4]
 print $ array (0 - 1) [4]
