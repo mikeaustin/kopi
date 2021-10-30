@@ -4,7 +4,7 @@ ul = (:id, :class, :_) => children => ("element", "ul", {"id": id, "class": clas
 li = (:class, :_) => children => ("element", "li", {"class": class}, children)
 text = value => ("text", value)
 
-indent = (n) => {
+indent (n) = {
   loop = (n, str) => match n (
     0 => str
     _ => loop ((n - 1), (str ++ "  "))
@@ -12,11 +12,11 @@ indent = (n) => {
   loop (n, "")
 }
 
-generateAttrString = (name, value) => {
+generateAttrString (name, value) = {
   " " ++ name ++ "='" ++ value ++ "'"
 }
 
-generateHtmlString = (node, level) => {
+generateHtmlString (node, level) = {
   match node (
     "text", value => {
       indent level ++ String value ++ char 10

@@ -6,7 +6,7 @@ const { KopiString, KopiTuple, KopiVector } = require('./classes');
 const core = require('./functions/core');
 const { compile } = require('./compiler');
 
-const KopiStringConstructor = (value) => new KopiString(String(value));
+const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
 
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
