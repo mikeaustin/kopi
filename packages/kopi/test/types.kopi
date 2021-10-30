@@ -1,5 +1,5 @@
-ship = position => (type: "ship", position: position)
-asteroid = position => (type: "asteroid", position: position)
+ship (position) = (type: "ship", position: position)
+asteroid (position) = (type: "asteroid", position: position)
 
 objects = [
   ship $ Vector (10, 20)

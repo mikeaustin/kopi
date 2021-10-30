@@ -1,8 +1,8 @@
-html = () => children => ("element", "html", {:}, children)
-body = (:class, :_) => children => ("element", "body", {"class": class}, children)
-ul = (:id, :class, :_) => children => ("element", "ul", {"id": id, "class": class}, children)
-li = (:class, :_) => children => ("element", "li", {"class": class}, children)
-text = value => ("text", value)
+html () = children => ("element", "html", {:}, children)
+body (:class, :_) = children => ("element", "body", { "class": class }, children)
+ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
+li (:class, :_) = children => ("element", "li", { "class": class }, children)
+text (value) = ("text", value)
 
 indent (n) = {
   loop = (n, str) => match n (

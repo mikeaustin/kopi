@@ -62,7 +62,7 @@ const kopi_match = (value, scope, visitors) => async (_funcs) => {
   for await (func of funcsTuple.getElementsArray()) {
     const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
       ...scope,
-      [func.params.name]: value
+      [func.params._identifierName]: value
     }));
 
     if (predicatePassed && await func.params.getMatches(value)) {

@@ -26,3 +26,9 @@ print $ match () (
 )
 
 # print $ if (_ @ x > 1 => 1) (_ => x)
+
+print $ match 1.5 (
+  n [n > 0] => 1
+  n [n < 0] => 0
+  _         => n
+)
