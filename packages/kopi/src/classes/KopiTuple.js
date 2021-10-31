@@ -32,7 +32,7 @@ class KopiTuple {
     }
 
     const elementsArray = await Promise.all(
-      this._elementsArray.map(async element => (await (await element).toStringAsync()))
+      this._elementsArray.map(async element => (await (await element).inspectAsync()))
     );
 
     return `(${elementsArray.map((element, index) => (
