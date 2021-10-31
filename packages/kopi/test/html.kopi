@@ -7,13 +7,13 @@ text (value) = ("text", value)
 indent (n) = {
   loop = (n, str) => match n (
     0 => str
-    _ => loop ((n - 1), (str ++ "  "))
+    _ => loop ((n - 1), (str "  "))
   )
   loop (n, "")
 }
 
 generateAttrString (name, value) = {
-  " " ++ name ++ "='" ++ value ++ "'"
+  " " name "='" value "'"
 }
 
 generateHtmlString (node, level) = {
@@ -25,9 +25,9 @@ generateHtmlString (node, level) = {
       inner = children | _map child => generateHtmlString (child, level + 1)
       attrs = props | reduce ((accum, (key, value) => accum ++ generateAttrString(key, value)), "")
 
-      (indent level) ++ "<" ++ tag ++ attrs ++ ">" ++ (char 10) ++ (
+      (indent level) "<" tag attrs ">" (char 10) (
         inner | _join ""
-      ) ++ (indent level) ++ "</" ++ tag ++ ">" ++ (char 10)
+      ) (indent level) "</" tag ">" (char 10)
     }
   )
 }

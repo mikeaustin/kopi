@@ -3,11 +3,11 @@
 # )
 
 extend String (
-  greet: (this) => () => "Hello, " ++ this ++ "."
+  greet: (this) => () => "Hello, " this "."
 )
 
 extend String (
-  wave: (this) => () => "Waves to " ++ this
+  wave: (this) => () => "Waves to " this
 )
 
 print $ "Joe" | greet
@@ -15,7 +15,7 @@ print $ "Joe" | wave
 
 {
   extend String (
-    greet: (this) => () => "Welcome, " ++ this
+    greet: (this) => () => "Welcome, " this
   )
 
   print $ "Joe" | greet

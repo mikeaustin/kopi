@@ -10,7 +10,7 @@ evaluate (statement, indexes) = match statement (
     setIndex (indexes | get gotoLineNo)
   }
   lineNo, command => {
-    print $ "*** UNKNOWN COMMAND '" ++ command ++ "' ON LINE " ++ lineNo
+    print $ "*** UNKNOWN COMMAND '" command "' ON LINE " lineNo
     incrementIndex
   }
 )

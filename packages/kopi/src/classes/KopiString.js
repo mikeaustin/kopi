@@ -25,6 +25,10 @@ class KopiString {
     return this._nativeString;
   }
 
+  apply(thisArg, [that]) {
+    return this['++'](that);
+  }
+
   _get(index) {
     if (index.constructor.name === 'KopiRange') {
       return new KopiString(this._nativeString.slice(index.from, index.to));
