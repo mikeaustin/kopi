@@ -67,10 +67,6 @@ class KopiDict {
     return value;
   }
 
-  async _get(key) {
-    return this.get(key);
-  }
-
   async update(key) {
     return (func, scope, visitors) => {
       const entries = this._immutableMap.update(key, (value) => (

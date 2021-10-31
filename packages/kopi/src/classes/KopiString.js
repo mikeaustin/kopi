@@ -29,7 +29,7 @@ class KopiString {
     return this['++'](that);
   }
 
-  _get(index) {
+  get(index) {
     if (index.constructor.name === 'KopiRange') {
       return new KopiString(this._nativeString.slice(index.from, index.to));
     }

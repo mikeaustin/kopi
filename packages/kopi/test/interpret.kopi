@@ -28,7 +28,7 @@ interpret (source) = {
   print program
 
   loop (data) = {
-    match (data.index == '_length program) (
+    match (data.index == 'size program) (
       true => ()
       _    => {
         reducer = evaluate (program.(data.index), indexes)

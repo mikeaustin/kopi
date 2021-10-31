@@ -254,7 +254,7 @@ function peg$parse(input, options) {
             return tail.reduce((expr, [, , args]) => (
               new PipeExpression({
                 left: expr,
-                right: new ApplyExpression({ expr: new Identifier({ name: '_get' }), args })
+                right: new ApplyExpression({ expr: new Identifier({ name: 'get' }), args })
               })
             ), head)
           },

@@ -19,9 +19,11 @@ Array.prototype.toArray = function () {
   return this;
 };
 
-Array.prototype._get = function (index) {
+Array.prototype.get = function (index) {
   if (index.constructor.name === 'KopiRange') {
     return this.slice(index.from, index.to);
+  } else if (index.constructor.name === 'KopiTuple') {
+    return index.getElementsArray().reduce((accum, index) => [...accum, this[index]], []);
   }
 
   return this[index];
@@ -47,7 +49,7 @@ Array.prototype.apply = function (thisArg, [index]) {
   };
 };
 
-Array.prototype._length = function () {
+Array.prototype.size = function () {
   return this.length;
 };
 
