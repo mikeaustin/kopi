@@ -2,6 +2,7 @@ const readline = require('readline');
 const { Worker } = require('worker_threads');
 
 const { KopiString, KopiTuple, KopiVector } = require('./classes');
+const { default: KopiIterable } = require('./traits/Iterable');
 
 const core = require('./functions/core');
 const { compile } = require('./compiler');
@@ -11,6 +12,8 @@ KopiStringConstructor.nativeConstructor = KopiString;
 
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;
+
+const KopiIterableTrait = { nativeConstructor: KopiIterable };
 
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
@@ -104,6 +107,7 @@ let getScope = (input) => ({
   Vector,
   Number,
   String: KopiStringConstructor,
+  Iterable: KopiIterableTrait,
 });
 
 module.exports = {

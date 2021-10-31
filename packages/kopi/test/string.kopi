@@ -1,5 +1,13 @@
-extend String (
+extend String () (
   capitalize: (this) => () => 'toUpper this.(0..1) ++ this.(1..10)
 )
 
-inspect $ "foo" | capitalize
+print $ "foo" | capitalize
+
+extend String (Iterable) ()
+
+# extend Iterable () (
+#   test
+# )
+
+print $ "foo" | _map (c) => 'succ c

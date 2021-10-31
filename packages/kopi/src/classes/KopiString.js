@@ -18,7 +18,9 @@ class KopiString {
   };
 
   *[Symbol.iterator]() {
-    return this._nativeString[Symbol.iterator]();
+    for (const c of this._nativeString) {
+      yield new KopiString(c);
+    }
   }
 
   valueOf() {
