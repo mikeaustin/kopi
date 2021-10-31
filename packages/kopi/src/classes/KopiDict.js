@@ -51,10 +51,9 @@ class KopiDict {
   }
 
   async set(tuple) {
-    return new KopiDict(this._immutableMap.set(
-      await tuple.getElementAtIndex(0),
-      tuple.getElementAtIndex(1))
-    );
+    const [key, value] = [await tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)];
+
+    return new KopiDict(this._immutableMap.set(key, value));
   }
 
   async get(key) {

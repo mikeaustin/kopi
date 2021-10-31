@@ -75,7 +75,6 @@ Array.prototype._map = async function (func, scope, visitors) {
 
 Array.prototype._flatMap = async function (func, scope, visitors) {
   let accum = [];
-  let index = 0;
 
   for (const element of this) {
     const appliedElement = await func.apply(undefined, [element, scope, visitors]);

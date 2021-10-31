@@ -24,6 +24,8 @@ test (filenames) = filenames | _map (filename) => {
 filenames = [
   "basics.kopi"
   "tuple.kopi"
+  "dictionary.kopi"
+  "array.kopi"
   "database.kopi"
   "html.kopi"
   "record.kopi"
