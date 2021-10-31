@@ -10,4 +10,6 @@ extend String (Iterable) ()
 #   test
 # )
 
-print $ "foo" | _map (c) => 'succ c
+inspect $ "abc" | _map (c) => 'succ c
+inspect $ "12" | _map (a) => ("ab" | _map (b) => a ++ b)
+inspect $ "12" | _flatMap (a) => "ab" | _map (b) => a ++ b

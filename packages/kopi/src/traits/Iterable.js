@@ -2,10 +2,10 @@ const { KopiString } = require('../classes');
 
 class Iterable {
   async _map(func, scope, visitors) {
-    let accum = [];
+    let accum = this.emptyValue();
 
     for (const element of this) {
-      accum.push(await func.apply(undefined, [await element, scope, visitors]));
+      accum = accum.concat(await func.apply(undefined, [await element, scope, visitors]));
     }
 
     return accum;
@@ -16,6 +16,22 @@ class Iterable {
   //     yield await func.apply(undefined, [await element, scope, visitors]);
   //   }
   // }
+
+  async _flatMap(func, scope, visitors) {
+    let accum = this.emptyValue();
+
+    for (const element of this) {
+      const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+
+      if (appliedElement[Symbol.iterator]) {
+        accum = accum.concat(appliedElement);
+      } else {
+        accum = accum.concat(appliedElement);
+      }
+    }
+
+    return accum;
+  }
 }
 
 module.exports = {

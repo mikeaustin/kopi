@@ -23,6 +23,10 @@ class KopiString {
     }
   }
 
+  emptyValue() {
+    return new KopiString('');
+  }
+
   valueOf() {
     return this._nativeString;
   }
@@ -60,6 +64,10 @@ class KopiString {
     //   throw new Error(`Can't concat string with ${that.constructor.name}`);
     // }
 
+    return new KopiString(this._nativeString.concat(that._nativeString));
+  }
+
+  concat(that) {
     return new KopiString(this._nativeString.concat(that._nativeString));
   }
 

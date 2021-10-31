@@ -49,6 +49,10 @@ Array.prototype.apply = function (thisArg, [index]) {
   };
 };
 
+Array.prototype.emptyValue = function () {
+  return [];
+};
+
 Array.prototype.size = function () {
   return this.length;
 };
