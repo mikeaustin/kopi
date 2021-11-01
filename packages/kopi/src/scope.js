@@ -9,6 +9,8 @@ const { compile } = require('./compiler');
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
+KopiStringConstructor.Newline = new KopiString('\n');
+KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;

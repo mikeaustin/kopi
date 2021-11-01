@@ -19,15 +19,15 @@ generateAttrString (name, value) = {
 generateHtmlString (node, level) = {
   match node (
     "text", value => {
-      indent level ++ String value ++ char 10
+      indent level ++ String value ++ String.Newline
     }
     "element", tag, props, children => {
       inner = children | _map child => generateHtmlString (child, level + 1)
-      attrs = props | reduce ((accum, (key, value) => accum ++ generateAttrString(key, value)), "")
+      attrs = props | reduce ((accum, (key, value) => accum ++ generateAttrString (key, value)), "")
 
-      (indent level) "<" tag attrs ">" (char 10) (
+      (indent level) "<" tag attrs ">" String.Newline (
         inner | _join ""
-      ) (indent level) "</" tag ">" (char 10)
+      ) (indent level) "</" tag ">" String.Newline
     }
   )
 }

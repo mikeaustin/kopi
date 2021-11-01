@@ -43,6 +43,14 @@ class KopiString {
     return new KopiString(this._nativeString[index]);
   };
 
+  fromCodePoint(number) {
+    return new KopiString(String.fromCodePoint(number));
+  }
+
+  codePointAt(index) {
+    return this._nativeString.codePointAt(index);
+  }
+
   toUpper() {
     return new KopiString(this._nativeString.toUpperCase());
   }

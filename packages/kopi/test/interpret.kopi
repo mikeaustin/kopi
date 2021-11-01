@@ -16,7 +16,7 @@ evaluate (statement, indexes) = match statement (
 )
 
 interpret (source) = {
-  program = source | trim | split (char 10) | _map (line) => (
+  program = source | trim | split String.NewlineRegExp | _map (line) => (
     tuple $ (line | trim) | split " "
   )
 
