@@ -89,27 +89,26 @@ class KopiDict {
     return new KopiDict(values);
   }
 
-  async reduce(tuple, scope, visitors) {
-    const [_func, init] = tuple.getElementsArray();
+  async reduce(init) {
+    return async (func, scope, visitors) => {
+      let accum = await init;
 
-    const func = await _func;
-    let accum = await init;
+      for (const [key, value] of this._immutableMap) {
+        accum = await func.apply(
+          undefined,
+          [
+            new KopiTuple([
+              accum,
+              new KopiTuple([key, await value])
+            ]),
+            scope,
+            visitors
+          ]
+        );
+      }
 
-    for (const [key, value] of this._immutableMap) {
-      accum = await func.apply(
-        undefined,
-        [
-          new KopiTuple([
-            accum,
-            new KopiTuple([key, await value])
-          ]),
-          scope,
-          visitors
-        ]
-      );
-    }
-
-    return accum;
+      return accum;
+    };
   };
 }
 

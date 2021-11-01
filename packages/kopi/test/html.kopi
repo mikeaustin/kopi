@@ -23,7 +23,7 @@ generateHtmlString (node, level) = {
     }
     "element", tag, props, children => {
       inner = children | _map child => generateHtmlString (child, level + 1)
-      attrs = props | reduce ((accum, (key, value) => accum ++ generateAttrString (key, value)), "")
+      attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
       (indent level) "<" tag attrs ">" String.Newline (
         inner | _join ""
