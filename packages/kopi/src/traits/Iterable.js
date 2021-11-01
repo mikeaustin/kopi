@@ -32,6 +32,30 @@ class Iterable {
 
     return accum;
   }
+
+  splitOn(delimiter = new KopiString('')) {
+    const delimiterRexExp = new RegExp(delimiter.valueOf());
+    const accum = [];
+    let values = [];
+
+    for (const element of this) {
+      if (delimiterRexExp.test(element.valueOf())) {
+        if (values.length > 0) {
+          accum.push(values);
+        }
+
+        values = [];
+      } else {
+        values.push(element);
+      }
+    }
+
+    if (values.length !== 0) {
+      accum.push(values);
+    }
+
+    return accum;
+  }
 }
 
 module.exports = {

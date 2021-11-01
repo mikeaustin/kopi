@@ -20,7 +20,7 @@ interpret (source) = {
     tuple $ (line | trim) | split " "
   )
 
-  indexes = program | _reduce {:} $ (numbers, statement, index) => {
+  indexes = program | _reduce {} $ (numbers, statement, index) => {
     numbers | set (statement.0, index)
   }
 

@@ -24,7 +24,7 @@ ParenthesizedTuple
   / "(" _ expr:Expression _ ")" { return expr; }
 
 DictExpression
-  = "{:}" {
+  = "{" _ "}" {
       return new DictExpression({
         entries: []
       });

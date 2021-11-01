@@ -13,3 +13,9 @@ extend String (Iterable) ()
 inspect $ "abc" | _map (c) => 'succ c
 inspect $ "12" | _map (a) => ("ab" | _map (b) => a ++ b)
 inspect $ "12" | _flatMap (a) => "ab" | _map (b) => a ++ b
+
+print $ "abc" | splitOn ","
+print $ "abc," | splitOn ","
+print $ ",abc" | splitOn ","
+print $ "abc,def" | splitOn ","
+print $ "abc,def,ghi" | splitOn ","

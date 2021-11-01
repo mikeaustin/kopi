@@ -11,7 +11,7 @@ class KopiDict {
 
   async inspectAsync() {
     if (this._immutableMap.size === 0) {
-      return `{:}`;
+      return `{}`;
     }
 
     const entries = await Promise.all(
@@ -20,7 +20,7 @@ class KopiDict {
       ))
     );
 
-    return `{${entries.join(', ')}}`;
+    return `{ ${entries.join(', ')} }`;
   }
 
   toStringAsync() {

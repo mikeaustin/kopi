@@ -1,4 +1,4 @@
-print {:}
+print {}
 
 print $ { 1: "One", (1 + 1): "Two" }
 
@@ -21,7 +21,7 @@ print $ match dict.("Three") (
   value => value
 )
 
-dict = {:}
+dict = {}
 dict = dict | update "One" $ (x = 0) => x + 1
 print dict
 
@@ -33,12 +33,12 @@ print dict
 
 print ""
 
-print $ "abcaba" | split "" | _reduce {:} $ (a, c) => {
+print $ "abcaba" | split "" | _reduce {} $ (a, c) => {
   a | update c $ (n = 0) => n + 1
 }
 
 words = "abc def ghi abc def abc"
-print $ words | split " " | _reduce {:} $ (counts, word) => (
+print $ words | split " " | _reduce {} $ (counts, word) => (
   counts | update word $ (x = 0) => x + 1
 )
 

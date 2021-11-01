@@ -1,4 +1,4 @@
-html () = children => ("element", "html", {:}, children)
+html () = children => ("element", "html", {}, children)
 body (:class, :_) = children => ("element", "body", { "class": class }, children)
 ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
 li (:class, :_) = children => ("element", "li", { "class": class }, children)

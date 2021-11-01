@@ -12,6 +12,9 @@ KopiStringConstructor.nativeConstructor = KopiString;
 KopiStringConstructor.Newline = new KopiString('\n');
 KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 
+const KopiArrayConstructor = (tuple) => tuple.getElementsArray();
+KopiArrayConstructor.nativeConstructor = Array;
+
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;
 
@@ -108,6 +111,7 @@ let getScope = (input) => ({
   },
   Vector,
   Number,
+  Array: KopiArrayConstructor,
   String: KopiStringConstructor,
   Iterable: KopiIterableTrait,
 });
