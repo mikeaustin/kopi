@@ -3,8 +3,8 @@ print $ 1..10 | map n [even n] => n * n
 x = 1
 
 testGuard = n => match n (
-  n [n + x == 1] => "Zero"
-  n [n + x == 2] => "One"
+  a [a + x == 1] => "Zero"
+  a [a + x == 2] => "One"
   _              => "Unknown"
 )
 
@@ -32,3 +32,9 @@ print $ match 1.5 (
   n [n < 0] => 0
   _         => n
 )
+
+# TODO: Predicates on pattern
+# print $ match (1, 2) (
+#   a, b [a == 1] => a + b
+#   _    => "None"
+# )
