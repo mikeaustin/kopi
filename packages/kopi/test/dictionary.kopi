@@ -47,3 +47,5 @@ print ""
 print $ { 1: (2, 3) } == { 1: (2, 3) }
 
 print { "class": "foo", "id": "bar" }
+
+print $ Dict [("a", 1), ("b", 2)]

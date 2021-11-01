@@ -1,7 +1,7 @@
 const readline = require('readline');
 const { Worker } = require('worker_threads');
 
-const { KopiString, KopiTuple, KopiVector } = require('./classes');
+const { KopiString, KopiTuple, KopiDict, KopiVector } = require('./classes');
 const { default: KopiIterable } = require('./traits/Iterable');
 
 const core = require('./functions/core');
@@ -14,6 +14,11 @@ KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 
 const KopiArrayConstructor = (tuple) => tuple.getElementsArray();
 KopiArrayConstructor.nativeConstructor = Array;
+
+const KopiDictConstructor = async (entries) => new KopiDict(
+  await Promise.all(entries.map(async (entry) => (await entry).getElementsArray()))
+);
+KopiDictConstructor.nativeConstructor = KopiDict;
 
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;
@@ -112,6 +117,7 @@ let getScope = (input) => ({
   Vector,
   Number,
   Array: KopiArrayConstructor,
+  Dict: KopiDictConstructor,
   String: KopiStringConstructor,
   Iterable: KopiIterableTrait,
 });
