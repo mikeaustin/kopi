@@ -179,6 +179,12 @@ RangeExpression
   = from:CalculatedMemberExpression _ ".." _ to:CalculatedMemberExpression {
       return new RangeExpression({ from, to });
     }
+  / from:CalculatedMemberExpression _ ".." _ {
+      return new RangeExpression({ from, to: new NumericLiteral({ value: +Infinity }) });
+    }
+  / _ ".." _ to:CalculatedMemberExpression {
+      return new RangeExpression({ from: new NumericLiteral({ value: -Infinity }), to });
+    }
   / CalculatedMemberExpression
 
 CalculatedMemberExpression

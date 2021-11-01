@@ -45,6 +45,12 @@ RangeExpression
   = from:NextRule _ ".." _ to:NextRule {
       return new RangeExpression({ from, to });
     }
+  / from:NextRule _ ".." _ {
+      return new RangeExpression({ from, to: new NumericLiteral({ value: +Infinity }) });
+    }
+  / _ ".." _ to:NextRule {
+      return new RangeExpression({ from: new NumericLiteral({ value: -Infinity }), to });
+    }
   / NextRule
 
 CalculatedMemberExpression

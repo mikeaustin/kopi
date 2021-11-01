@@ -1,5 +1,5 @@
 extend String () (
-  capitalize: (this) => () => 'toUpper this.(0..1) ++ this.(1..10)
+  capitalize: (this) => () => 'toUpper this.(0..1) ++ this.(1..)
 )
 
 print $ "foo" | capitalize
@@ -19,3 +19,6 @@ print $ "abc," | splitOn ","
 print $ ",abc" | splitOn ","
 print $ "abc,def" | splitOn ","
 print $ "abc,def,ghi" | splitOn ","
+
+print (1..)
+print (..1)
