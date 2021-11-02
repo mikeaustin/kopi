@@ -59,6 +59,7 @@ class Identifier extends Node {
 }
 
 Block
+
   = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
       return new Block({
         statements: tail.reduce((block, [, statement]) => (
@@ -68,19 +69,23 @@ Block
     }
 
 Statement
+
   = TypeAssignment
   / Assignment
   / Expression
 
 TypeAssignment
+
   = pattern:Typename _ "=" _ expr:TypeExpression {
       return new TypeAssignment({ pattern, expr });
     }
 
 TypeExpression
+
   = TypeApplyExpression
 
 TypeApplyExpression
+
   = expr:TupleTypeExpression args:(_ TupleTypeExpression)* {
       return args.reduce((expr, [, args]) => (
         new TypeApplyExpression({ expr, args })
@@ -88,6 +93,7 @@ TypeApplyExpression
     }
 
 TupleTypeExpression
+
   = "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
       return new TupleTypeExpression({
         elements: tail.reduce((elements, [, , , , , element]) => [
@@ -100,14 +106,17 @@ TupleTypeExpression
   / Identifier
 
 Assignment
+
   = pattern:AssignmentPattern _ "=" !">" _ expr:Expression {
       return new Assignment({ pattern, expr })
     }
 
 Expression
+
   = LowPrecedenceApplyExpression
 
 LowPrecedenceApplyExpression
+
   = head:PipeExpression tail:(_ "$" _ Expression)* {
       return tail.reduce((expr, [, op, , args]) => (
         new ApplyExpression({ expr, args })
@@ -115,6 +124,7 @@ LowPrecedenceApplyExpression
     }
 
 PipeExpression
+
   = head:TupleExpression tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
         new PipeExpression({ left, right })
@@ -122,6 +132,7 @@ PipeExpression
     }
 
 TupleExpression
+
   = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? _ EqualityExpression)* {
       return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
         elements: tail.reduce((elements, element) => [
@@ -136,6 +147,7 @@ TupleExpression
   }
 
 EqualityExpression
+
   = head:ConcatinationExpression tail:(_ ("==" / "!=" / "<=" / ">=" / "<" / ">") _ ConcatinationExpression)* {
       return tail.reduce((left, [, op, , right]) => (
         new OperatorExpression({ op, left, right })
@@ -143,27 +155,31 @@ EqualityExpression
     }
 
 ConcatinationExpression
-  = head:AddExpression tail:(_ "++" _ Expression)* {
-      return tail.reduce((left, [, op, , right]) => (
+
+  = head:AddExpression tail:(_ "++" _ Newline* _ Expression)* {
+      return tail.reduce((left, [, op, , , , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
 
 AddExpression
-  = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
-      return tail.reduce((left, [, op, , right]) => (
+
+  = head:MultiplyExpression tail:(_ ("+" / "-") _ Newline* _ MultiplyExpression)* {
+      return tail.reduce((left, [, op, , , , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
 
 MultiplyExpression
-  = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ ApplyExpression)* {
-      return tail.reduce((left, [, op, , right]) => (
+
+  = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ Newline* _ ApplyExpression)* {
+      return tail.reduce((left, [, op, , , , right]) => (
         new OperatorExpression({ op, left, right })
       ), head);
     }
 
 ApplyExpression
+
   = expr:("+" / "-" / "*" / "/" / "%" / "<" / ">") _ args:(_ NumericLiteral)+ {
       return args.reduce((expr, args) => (
         new ApplyExpression({ expr, args: args[1] })
@@ -176,6 +192,7 @@ ApplyExpression
     }
 
 RangeExpression
+
   = from:CalculatedMemberExpression _ ".." _ to:CalculatedMemberExpression {
       return new RangeExpression({ from, to });
     }
@@ -188,6 +205,7 @@ RangeExpression
   / CalculatedMemberExpression
 
 CalculatedMemberExpression
+
   = head:MemberExpression tail:(".(" _ Expression _ ")")* {
       return tail.reduce((expr, [, , args]) => (
         new PipeExpression({
@@ -198,6 +216,7 @@ CalculatedMemberExpression
     }
 
 MemberExpression
+
   = head:PrimaryExpression tail:("." (Identifier / NumericLiteral))* {
       return tail.reduce((expr, [, ident]) => (
         new MemberExpression({ expr, member: ident?.name ?? ident.value })
@@ -205,6 +224,7 @@ MemberExpression
     }
 
 PrimaryExpression
+
   = FunctionExpression
   / ParenthesizedTuple
   / ArrayExpression
@@ -217,9 +237,11 @@ PrimaryExpression
   / Identifier
 
 AssignmentPattern
+
   = AssignmentFunctionPattern
 
 AssignmentFunctionPattern
+
   = expr:Identifier _ params:Pattern {
       return new FunctionPattern({
         name: expr.name,
@@ -229,6 +251,7 @@ AssignmentFunctionPattern
   / AssignmentTuplePattern
 
 AssignmentTuplePattern
+
   = head:(":"? AssignmentPrimaryPattern) tail:(_ "," _ ":"? AssignmentPrimaryPattern)* {
       return tail.length === 0 ? head[1] : new TuplePattern({
         elements: tail.reduce((elements, element) => [
@@ -239,23 +262,27 @@ AssignmentTuplePattern
     }
 
 AssignmentPrimaryPattern
+
   = _ "(" pattern:AssignmentPattern ")" { return pattern; }
   / NumericLiteralPattern
   / StringLiteralPattern
   / AssignmentIdentifierPattern
 
 AssignmentIdentifierPattern
+
   = ident:Identifier {
       return new IdentifierPattern({ name: ident.name });
     }
 
 Pattern
+
   = pattern:TuplePattern predicate:(_ "[" _ EqualityExpression _ "]" _)? {
       pattern.predicate = predicate?.[3];
       return pattern;
     }
 
 TuplePattern
+
   = head:(":"? PrimaryPattern) tail:(_ "," _ ":"? PrimaryPattern)* {
       return tail.length === 0 ? head[1] : new TuplePattern({
         elements: tail.reduce((elements, element) => [
@@ -266,6 +293,7 @@ TuplePattern
     }
 
 PrimaryPattern
+
   = _ "(" pattern:Pattern ")" { return pattern; }
   / "()" { return new TuplePattern({ elements: [] }) }
   / ArrayLiteralPattern
@@ -275,6 +303,7 @@ PrimaryPattern
   / IdentifierPattern
 
 ArrayLiteralPattern
+
   = "[]" {
       return new ArrayLiteralPattern({ elements: [] });
     }
@@ -288,26 +317,31 @@ ArrayLiteralPattern
     }
 
 BooleanLiteralPattern
+
   = boolean:BooleanLiteral {
       return new BooleanLiteralPattern({ value: boolean.value })
     }
 
 NumericLiteralPattern
+
   = number:NumericLiteral {
       return new NumericLiteralPattern({ value: number.value });
     }
 
 StringLiteralPattern
+
   = string:StringLiteral {
       return new StringLiteralPattern({ value: string.value });
     }
 
 IdentifierPattern
+
   = ident:Identifier init:(_ "=" _ PrimaryExpression)? {
       return new IdentifierPattern({ name: ident.name, init: init && init[3] });
     }
 
 FunctionExpression
+
   = "()" _ "=>" _ expr:Expression {
       return new FunctionExpression({ params: new TuplePattern({
         elements: [],
@@ -319,6 +353,7 @@ FunctionExpression
     }
 
 ParenthesizedTuple
+
   = "()" {
       return new TupleExpression({ elements: [] });
     }
@@ -333,6 +368,7 @@ ParenthesizedTuple
   / "(" _ expr:Expression _ ")" { return expr; }
 
 ArrayExpression
+
   = "[]" {
       return new ArrayExpression({ elements: [] });
     }
@@ -353,6 +389,7 @@ ArrayExpression
     }
 
 DictExpression
+
   = "{" _ "}" {
       return new DictExpression({
         entries: []
@@ -375,9 +412,11 @@ DictExpression
     }
 
 Typename
+
   = _ name:([_A-Z][_a-zA-Z0-9]*) _ { return new Typename({ name: name[0] + name[1].join('') }); }
 
 NumericLiteral
+
   = _ value:([0-9]+ ("." !"." [0-9]+)?) _ {
     return new NumericLiteral({
       value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
@@ -385,16 +424,19 @@ NumericLiteral
   }
 
 StringLiteral
+
   = _ "\"" value:[^"]* "\"" _ {
       return new StringLiteral({ value: value.join('') });
     }
 
 BooleanLiteral
+
   = _ value:("true" / "false") [^_a-zA-Z] _ {
     return new BooleanLiteral({ value: value === 'true' })
   }
 
 AstLiteral
+
   = "'("
       exprs:(Newline+ Expression)+ Newline+
     ")" {
@@ -412,6 +454,7 @@ AstLiteral
     }
 
 Identifier
+
   = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
         name: name[0] + name[1].join('')
@@ -419,14 +462,18 @@ Identifier
     }
 
 _
+
   = Whitespace*
 
 Whitespace
+
   = [ \t]
 
 Comment
+
   = _ "#" (!Newline .)*
 
 Newline
+
   = Comment? [\r?\n]
 

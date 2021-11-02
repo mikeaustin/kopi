@@ -25,9 +25,9 @@ generateHtmlString (node, level) = {
       inner = children | _map child => generateHtmlString (child, level + 1)
       attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
-      (indent level) "<" tag attrs ">" String.Newline (
-        inner | _join ""
-      ) (indent level) "</" tag ">" String.Newline
+      indent level "<" tag attrs ">" String.Newline ++
+        inner | _join "" ++
+      indent level "</" tag ">" String.Newline
     }
   )
 }
@@ -42,8 +42,8 @@ documentTree = (
   html () [
     text "Hello"
     ul (id: "id", class: "class") [
-      li (class: "item") [(text 1)]
-      li (class: "item") [(text 2)]
+      li (class: "item") [text 1]
+      li (class: "item") [text 2]
     ]
   ]
 )
