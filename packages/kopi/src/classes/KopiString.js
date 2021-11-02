@@ -67,12 +67,12 @@ class KopiString {
     return !this['=='](that);
   }
 
-  ['++'](that) {
+  async ['++'](that) {
     // if (typeof that !== 'string') {
     //   throw new Error(`Can't concat string with ${that.constructor.name}`);
     // }
 
-    return new KopiString(this._nativeString.concat(that._nativeString));
+    return new KopiString(this._nativeString.concat(await that.toStringAsync()));
   }
 
   concat(that) {

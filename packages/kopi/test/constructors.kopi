@@ -35,9 +35,9 @@ makePerson (:name, :email) = Person (
 )
 
 # makeUser (nameStr, emailStr) = {
-#   match (Email emailStr) (
-#     Error error => Error "Can't create User: " error
-#     email       => User (
+#   match (Name nameStr, Email emailStr) (
+#     Errors errors => Error (message: "Can't create User: ") errors
+#     email         => User (
 #       name: name
 #       email: email
 #     )
