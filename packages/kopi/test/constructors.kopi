@@ -5,8 +5,8 @@ Error = type (message: String)
 Person = type (name: String, email: String)
 
 isValidEmail (email) = match (email | split "@") (
-  array ['size array == 2] => address
-  _ => Error (message: "Invalid email address")
+  array ['size array != 2] => Error (message: "Invalid email address")
+  _ => address
 )
 
 makePerson = (name, email) => match (isValidEmail email) (
@@ -34,7 +34,18 @@ makePerson (:name, :email) = Person (
   email: Email (value: email)
 )
 
+# makePerson (name, email) = {
+#   match (Email email) (
+#     Error error => error
+#     email       => Person (
+#       name: name
+#       email: email
+#     )
+#   )
+# }
+
 print $ makePerson (name: "Joe", email: "foo@bar.com")
+print $ makePerson ("Joe", "foo@bar.com")
 
 # make(Person)
 
