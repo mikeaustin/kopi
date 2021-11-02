@@ -2,22 +2,19 @@
 
 Error = type (message: String)
 
-Person = type (name: String, email: String)
+# Person = type (name: String, email: String)
 
-isValidEmail (email) = match (email | split "@") (
-  array ['size array != 2] => Error (message: "Invalid email address")
-  _ => address
-)
+isValidEmail (email) = (email | split "@" | size) == 2
 
-makePerson = (name, email) => match (isValidEmail email) (
-  true    => Person (name, email)
-  _       => _
-)
+# makePerson = (name, email) => match (isValidEmail email) (
+#   true    => Person (name, email)
+#   _       => _
+# )
 
-person = Person (name: "Joe", email: "foo.com")
-person = makePerson ("Joe", "foo.com")
+# person = Person (name: "Joe", email: "foo.com")
+# person = makePerson ("Joe", "foo.com")
 
-inspect person
+# inspect person
 
 
 Email = type (value: String)
@@ -27,35 +24,41 @@ makeEmail (email) = match (isValidEmail email) (
   _     => Email (value: email)
 )
 
-Person = type (name: String, email: Email)
+# Person = type (name: String, email: Email)
 
-makePerson (:name, :email) = Person (
-  name: name
-  email: Email (value: email)
-)
-
-# makeUser (nameStr, emailStr) = {
-#   match (Name nameStr, Email emailStr) (
-#     Errors errors => Error (message: "Can't create User: ") errors
-#     email         => User (
-#       name: name
-#       email: email
-#     )
+# makePerson (nameStr, emailStr) = {
+#   match (nameStr, makeEmail emailStr) (
+#     tuple ['hasErrors tuple] => Error (message: "Can't create user: " $ 'errors tuple)
+#     name, email              => Person (name: name, email: email)
 #   )
 # }
 
-print $ makePerson (name: "Joe", email: "foo@bar.com")
-print $ makePerson ("Joe", "foo@bar.com")
+# print $ makePerson (name: "Joe", email: "foo@bar.com")
+# print $ makePerson ("Joe", "foo.com")
 
 # make(Person)
 
 
-MetalResistor = type (bands: Number)
+# MetalResistor = type (bands: Number)
 
-metalResistor (n) = match n (
-  n [n < 4] => "Invalid number of resistor bands"
-  n         => MetalResistor (bands: n)
+# metalResistor (n) = match n (
+#   n [n < 4] => "Invalid number of resistor bands"
+#   n         => MetalResistor (bands: n)
+# )
+
+# inspect $ metalResistor 5
+# inspect $ metalResistor 3
+
+
+# print $ match (Error (message: "Error 1"), Error (message: "Error 2")) (
+#   tuple ['hasErrors tuple] => "Error: " ++ 'errors tuple
+#   _                        => "No errors"
+# )
+
+email = Error (message: "Error 1")
+email = makeEmail "asdf"
+
+print $ match (email, 0) (
+  tuple ['hasErrors tuple] => "111"
+  _ => "what?"
 )
-
-inspect $ metalResistor 5
-inspect $ metalResistor 3
