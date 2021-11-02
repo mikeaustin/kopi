@@ -122,11 +122,11 @@ PipeExpression
     }
 
 TupleExpression
-  = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? EqualityExpression)* {
+  = head:((Identifier ":")? _ EqualityExpression) tail:(_ "," _ (Identifier ":")? _ EqualityExpression)* {
       return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
         elements: tail.reduce((elements, element) => [
           ...elements,
-          element[4]
+          element[5]
         ], [head[2]]),
         fields: tail.reduce((elements, element) => [
           ...elements,

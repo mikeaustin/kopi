@@ -2,52 +2,49 @@
 
 Error = type (message: String)
 
-# Person = type (name: String, email: String)
+Person = type (name: String, email: String)
 
-# isValidEmail (email) = match (email | split "@") (
-#   array ['size array == 2] => address
-#   _ => Error (message: "Invalid email address")
-# )
-
-# makePerson = (name, email) => match (isValidEmail email) (
-#   true    => Person (name, email)
-#   _       => _
-# )
-
-# person = Person (name: "Joe", email: "foo.com")
-# person = makePerson ("Joe", "foo.com")
-
-# inspect person
-
-
-Email = type (value: String)
-
-makeEmail (email) = match (email | split "@") (
-  array ['size array != 2] => Error "Invalid email address"
-  _                        => Email (value: email)
+isValidEmail (email) = match (email | split "@") (
+  array ['size array == 2] => address
+  _ => Error (message: "Invalid email address")
 )
 
-Person = type (name: String, email: Email)
+makePerson = (name, email) => match (isValidEmail email) (
+  true    => Person (name, email)
+  _       => _
+)
 
-email = makeEmail "foo@bar.com"
-# inspect email
-# person = Person (name: "Joe", email: (makeEmail "foo.com"))
-person = Person (name: "Joe", email: email)
+person = Person (name: "Joe", email: "foo.com")
+person = makePerson ("Joe", "foo.com")
 
 inspect person
 
 
+Email = type (value: String)
+
+makeEmail (email) = match (isValidEmail email) (
+  false => Error (message: "Invalid email address")
+  _     => Email (value: email)
+)
+
+Person = type (name: String, email: Email)
+
+makePerson (:name, :email) = Person (
+  name: name
+  email: Email (value: email)
+)
+
+print $ makePerson (name: "Joe", email: "foo@bar.com")
+
 # make(Person)
 
 
-# MetalResistor = type (bands: Number)
+MetalResistor = type (bands: Number)
 
-# metalResistor (n) = match n (
-#   n [n < 4] => "Invalid number of resistor bands"
-#   n         => MetalResistor (bands: n)
-# )
+metalResistor (n) = match n (
+  n [n < 4] => "Invalid number of resistor bands"
+  n         => MetalResistor (bands: n)
+)
 
-# inspect $ metalResistor 5
-# inspect $ metalResistor 3
-
-# print $ (a: 1, b: (makeEmail "foo.com"))
+inspect $ metalResistor 5
+inspect $ metalResistor 3

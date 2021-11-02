@@ -198,7 +198,7 @@ function peg$parse(input, options) {
             return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
               elements: tail.reduce((elements, element) => [
                 ...elements,
-                element[4]
+                element[5]
               ], [head[2]]),
               fields: tail.reduce((elements, element) => [
                 ...elements,
@@ -1372,10 +1372,16 @@ function peg$parse(input, options) {
               s7 = null;
             }
             if (s7 !== peg$FAILED) {
-              s8 = peg$parseEqualityExpression();
+              s8 = peg$parse_();
               if (s8 !== peg$FAILED) {
-                s4 = [s4, s5, s6, s7, s8];
-                s3 = s4;
+                s9 = peg$parseEqualityExpression();
+                if (s9 !== peg$FAILED) {
+                  s4 = [s4, s5, s6, s7, s8, s9];
+                  s3 = s4;
+                } else {
+                  peg$currPos = s3;
+                  s3 = peg$FAILED;
+                }
               } else {
                 peg$currPos = s3;
                 s3 = peg$FAILED;
@@ -1436,10 +1442,16 @@ function peg$parse(input, options) {
                 s7 = null;
               }
               if (s7 !== peg$FAILED) {
-                s8 = peg$parseEqualityExpression();
+                s8 = peg$parse_();
                 if (s8 !== peg$FAILED) {
-                  s4 = [s4, s5, s6, s7, s8];
-                  s3 = s4;
+                  s9 = peg$parseEqualityExpression();
+                  if (s9 !== peg$FAILED) {
+                    s4 = [s4, s5, s6, s7, s8, s9];
+                    s3 = s4;
+                  } else {
+                    peg$currPos = s3;
+                    s3 = peg$FAILED;
+                  }
                 } else {
                   peg$currPos = s3;
                   s3 = peg$FAILED;
