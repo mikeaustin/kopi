@@ -29,6 +29,10 @@ class Interpreter extends Visitors {
     const evaluatedPattern = await this.visitNode(pattern, scope, bind);
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
+    Object.defineProperty(evaluatedExpr.nativeConstructor, 'name', {
+      value: evaluatedPattern
+    });
+
     bind({
       [evaluatedPattern]: evaluatedExpr
     });
@@ -171,11 +175,13 @@ class Interpreter extends Visitors {
 
   //
 
-  TuplePattern({ elements, fields }, scope) {
+  async TuplePattern({ elements, fields }, scope) {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      elements.map(element => this.visitNode(element, scope)),
+      await Promise.all(
+        elements.map(async element => this.visitNode(await element, scope))
+      ),
       fields
     );
   }

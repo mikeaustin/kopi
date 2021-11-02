@@ -64,6 +64,28 @@ class KopiTuple {
     return this._fieldsArray.indexOf(fieldName);
   }
 
+  async hasErrors() {
+    for await (const element of this._elementsArray) {
+      if (element.constructor.name === 'Error') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  async errors() {
+    const messages = [];
+
+    for await (const element of this._elementsArray) {
+      if (element.constructor.name === 'Error') {
+        messages.push(element.message);
+      }
+    }
+
+    return messages;
+  }
+
   async ['=='](that) {
     if (!(that instanceof KopiTuple)) {
       return false;
