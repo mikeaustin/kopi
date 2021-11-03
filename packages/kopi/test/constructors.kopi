@@ -1,64 +1,36 @@
 # Smart Constructors
 
-Error = type (message: String)
-
-# Person = type (name: String, email: String)
-
 isValidEmail (email) = (email | split "@" | size) == 2
 
-# makePerson = (name, email) => match (isValidEmail email) (
-#   true    => Person (name, email)
-#   _       => _
-# )
-
-# person = Person (name: "Joe", email: "foo.com")
-# person = makePerson ("Joe", "foo.com")
-
-# inspect person
-
-
+Error = type (message: String)
 Email = type (value: String)
+Person = type (name: String, email: Email)
 
 makeEmail (email) = match (isValidEmail email) (
   false => Error (message: "Invalid email address")
   _     => Email (value: email)
 )
 
-# Person = type (name: String, email: Email)
+makePerson (nameStr, emailStr) = {
+  match (nameStr, makeEmail emailStr) (
+    tuple ['hasErrors tuple] => Error (message: "Can't create User: " ++ 'errors tuple)
+    name, email              => Person (name: name, email: email)
+    _ => _
+  )
+}
 
-# makePerson (nameStr, emailStr) = {
-#   match (nameStr, makeEmail emailStr) (
-#     tuple ['hasErrors tuple] => Error (message: "Can't create user: " $ 'errors tuple)
-#     name, email              => Person (name: name, email: email)
-#   )
-# }
-
-# print $ makePerson (name: "Joe", email: "foo@bar.com")
-# print $ makePerson ("Joe", "foo.com")
+print $ makePerson (name: "Joe", email: "foo@bar.com")
+print $ makePerson ("Joe", "foo.com")
 
 # make(Person)
 
 
-# MetalResistor = type (bands: Number)
+MetalResistor = type (bands: Number)
 
-# metalResistor (n) = match n (
-#   n [n < 4] => "Invalid number of resistor bands"
-#   n         => MetalResistor (bands: n)
-# )
-
-# inspect $ metalResistor 5
-# inspect $ metalResistor 3
-
-
-# print $ match (Error (message: "Error 1"), Error (message: "Error 2")) (
-#   tuple ['hasErrors tuple] => "Error: " ++ 'errors tuple
-#   _                        => "No errors"
-# )
-
-email = Error (message: "Error 1")
-email = makeEmail "asdf"
-
-print $ match (email, 0) (
-  tuple ['hasErrors tuple] => "111"
-  _ => "what?"
+metalResistor (n) = match n (
+  n [n < 4] => "Invalid number of resistor bands"
+  n         => MetalResistor (bands: n)
 )
+
+inspect $ metalResistor 5
+inspect $ metalResistor 3
