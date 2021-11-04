@@ -7,6 +7,8 @@ const { default: KopiIterable } = require('./traits/Iterable');
 const core = require('./functions/core');
 const { compile } = require('./compiler');
 
+const { default: kopi_ls } = require('../test/terminal');
+
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
 KopiStringConstructor.Newline = new KopiString('\n');
@@ -38,6 +40,7 @@ class KopiWorker {
 }
 
 let getScope = (input) => ({
+  ls: kopi_ls,
   worker: (filename) => {
     return new KopiWorker(filename);
   },

@@ -3,10 +3,14 @@ const util = require("util");
 const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 
-Array.prototype.inspectAsync = async function () {
+Array.prototype.inspectAsync = async function ({ formatted = false } = {}) {
   const elements = await Promise.all(
     this.map(async element => (await element).inspectAsync()),
   );
+
+  if (formatted) {
+    return '[\n' + elements.map(element => `  ${element}`).join(',\n') + '\n]';
+  }
 
   return `[${elements.join(', ')}]`;
 };

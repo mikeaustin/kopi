@@ -1,4 +1,4 @@
-print {
+inspect {
   "menu": {
     "id": "file"
     "value": "File"
@@ -14,7 +14,7 @@ print {
 
 print ""
 
-print {
+inspect {
   "widget": {
     "debug": "on"
     "window": {

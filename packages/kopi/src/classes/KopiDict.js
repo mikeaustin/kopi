@@ -16,7 +16,7 @@ class KopiDict {
 
     const entries = await Promise.all(
       this._immutableMap.toArray().map(async ([key, value]) => (
-        `${key.inspectAsync()}: ${(await value).inspectAsync()}`
+        `${key.inspectAsync()}: ${await (await value).inspectAsync()}`
       )),
     );
 

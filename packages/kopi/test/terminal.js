@@ -1,24 +1,59 @@
-class LS {
-  inspect () {
-    return ["file1", "file2"]
-  }
+const util = require('util');
+const fs = require('fs');
 
-  apply(args) {
+const { KopiString, KopiDict } = require('../src/classes');
+
+const kopi_ls = {
+  async inspectAsync() {
+    const dir = await util.promisify(fs.readdir)('.');
+
+    return dir.map((filename) => new KopiString(filename)).inspectAsync({ formatted: true });
+  },
+
+  apply(thisArg, [args]) {
     return {
-      inspect() {
-        return [
-          { "name": "file1", "size": 243 }
-          { "name": "file2", "size": 342 }
-        ]
-      }
+      async inspectAsync() {
+        const dir = await fs.promises.opendir('./');
+        const files = [];
 
-      apply(filename) {
-        return {
-          inspect() {
-            console.log("longFileListFilename")
-          }
+        for await (const dirent of dir) {
+          const stats = await fs.promises.stat(dirent.name);
+
+          let formattedDate = new Date(stats.mtimeMs).toLocaleDateString();
+          let formattedTime = new Date(stats.mtimeMs).toLocaleTimeString();
+
+          files.push(new KopiDict(
+            Object.entries({
+              name: new KopiString(dirent.name),
+              date: new KopiString(formattedDate + ' ' + formattedTime)
+            }).map(([key, value]) => [new KopiString(key), value])
+          ));
         }
+
+        return files.inspectAsync({ formatted: true });
+      },
+
+      apply(thisArg, [filename]) {
+        return {
+          async inspectAsync() {
+            const stats = await fs.promises.stat(filename.getNativeString());
+
+            let formattedDate = new Date(stats.mtimeMs).toLocaleDateString();
+            let formattedTime = new Date(stats.mtimeMs).toLocaleTimeString();
+
+            return new KopiDict(
+              Object.entries({
+                name: filename,
+                date: new KopiString(formattedDate + ' ' + formattedTime)
+              }).map(([key, value]) => [new KopiString(key), value])
+            ).inspectAsync();
+          }
+        };
       }
-    }
+    };
   }
-}
+};
+
+module.exports = {
+  default: kopi_ls
+};

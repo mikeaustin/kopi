@@ -7,7 +7,6 @@ const parser = require('../lib/parser');
 const { compile } = require('./compiler');
 
 const { default: interpreter } = require('./visitors/Interpreter');
-const { default: typechecker } = require('./visitors/Typechecker');
 const { default: getScope } = require('./scope');
 
 Function.prototype.toStringAsync = function () {
@@ -44,12 +43,7 @@ async function main() {
         const value = await interpreter.visitNode(astNode, scope, bind);
 
         if (value !== undefined) {
-          const formattedValue = util.inspect(value, {
-            compact: false,
-            depth: Infinity,
-          });
-
-          console.log(formattedValue);
+          console.log(await value.inspectAsync());
         }
       }
     } catch (error) {
