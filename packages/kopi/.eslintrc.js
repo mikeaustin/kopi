@@ -21,11 +21,11 @@ module.exports = {
     'indent': [
       'error',
       2,
-      // { 'switchCase': 4 },
+      { 'SwitchCase': 1 },
     ],
     'linebreak-style': [
       'error',
-      process.platform === 'win32' ? 'windows' : 'unix'
+      process.platform === 'win32' ? 'windows' : 'unix',
     ],
     'quotes': [
       'error',

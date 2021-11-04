@@ -13,11 +13,11 @@ function peg$subclass(child, parent) {
 }
 
 function peg$SyntaxError(message, expected, found, location) {
-  this.message  = message;
+  this.message = message;
   this.expected = expected;
-  this.found    = found;
+  this.found = found;
   this.location = location;
-  this.name     = "SyntaxError";
+  this.name = "SyntaxError";
 
   if (typeof Error.captureStackTrace === "function") {
     Error.captureStackTrace(this, peg$SyntaxError);
@@ -26,37 +26,37 @@ function peg$SyntaxError(message, expected, found, location) {
 
 peg$subclass(peg$SyntaxError, Error);
 
-peg$SyntaxError.buildMessage = function(expected, found) {
+peg$SyntaxError.buildMessage = function (expected, found) {
   var DESCRIBE_EXPECTATION_FNS = {
-        literal: function(expectation) {
-          return "\"" + literalEscape(expectation.text) + "\"";
-        },
+    literal: function (expectation) {
+      return "\"" + literalEscape(expectation.text) + "\"";
+    },
 
-        "class": function(expectation) {
-          var escapedParts = "",
-              i;
+    "class": function (expectation) {
+      var escapedParts = "",
+        i;
 
-          for (i = 0; i < expectation.parts.length; i++) {
-            escapedParts += expectation.parts[i] instanceof Array
-              ? classEscape(expectation.parts[i][0]) + "-" + classEscape(expectation.parts[i][1])
-              : classEscape(expectation.parts[i]);
-          }
+      for (i = 0; i < expectation.parts.length; i++) {
+        escapedParts += expectation.parts[i] instanceof Array
+          ? classEscape(expectation.parts[i][0]) + "-" + classEscape(expectation.parts[i][1])
+          : classEscape(expectation.parts[i]);
+      }
 
-          return "[" + (expectation.inverted ? "^" : "") + escapedParts + "]";
-        },
+      return "[" + (expectation.inverted ? "^" : "") + escapedParts + "]";
+    },
 
-        any: function(expectation) {
-          return "any character";
-        },
+    any: function (expectation) {
+      return "any character";
+    },
 
-        end: function(expectation) {
-          return "end of input";
-        },
+    end: function (expectation) {
+      return "end of input";
+    },
 
-        other: function(expectation) {
-          return expectation.description;
-        }
-      };
+    other: function (expectation) {
+      return expectation.description;
+    }
+  };
 
   function hex(ch) {
     return ch.charCodeAt(0).toString(16).toUpperCase();
@@ -65,13 +65,13 @@ peg$SyntaxError.buildMessage = function(expected, found) {
   function literalEscape(s) {
     return s
       .replace(/\\/g, '\\\\')
-      .replace(/"/g,  '\\"')
+      .replace(/"/g, '\\"')
       .replace(/\0/g, '\\0')
       .replace(/\t/g, '\\t')
       .replace(/\n/g, '\\n')
       .replace(/\r/g, '\\r')
-      .replace(/[\x00-\x0F]/g,          function(ch) { return '\\x0' + hex(ch); })
-      .replace(/[\x10-\x1F\x7F-\x9F]/g, function(ch) { return '\\x'  + hex(ch); });
+      .replace(/[\x00-\x0F]/g, function (ch) { return '\\x0' + hex(ch); })
+      .replace(/[\x10-\x1F\x7F-\x9F]/g, function (ch) { return '\\x' + hex(ch); });
   }
 
   function classEscape(s) {
@@ -79,13 +79,13 @@ peg$SyntaxError.buildMessage = function(expected, found) {
       .replace(/\\/g, '\\\\')
       .replace(/\]/g, '\\]')
       .replace(/\^/g, '\\^')
-      .replace(/-/g,  '\\-')
+      .replace(/-/g, '\\-')
       .replace(/\0/g, '\\0')
       .replace(/\t/g, '\\t')
       .replace(/\n/g, '\\n')
       .replace(/\r/g, '\\r')
-      .replace(/[\x00-\x0F]/g,          function(ch) { return '\\x0' + hex(ch); })
-      .replace(/[\x10-\x1F\x7F-\x9F]/g, function(ch) { return '\\x'  + hex(ch); });
+      .replace(/[\x00-\x0F]/g, function (ch) { return '\\x0' + hex(ch); })
+      .replace(/[\x10-\x1F\x7F-\x9F]/g, function (ch) { return '\\x' + hex(ch); });
   }
 
   function describeExpectation(expectation) {
@@ -94,7 +94,7 @@ peg$SyntaxError.buildMessage = function(expected, found) {
 
   function describeExpected(expected) {
     var descriptions = new Array(expected.length),
-        i, j;
+      i, j;
 
     for (i = 0; i < expected.length; i++) {
       descriptions[i] = describeExpectation(expected[i]);
@@ -138,324 +138,326 @@ function peg$parse(input, options) {
 
   var peg$FAILED = {},
 
-      peg$startRuleFunctions = { Block: peg$parseBlock },
-      peg$startRuleFunction  = peg$parseBlock,
+    peg$startRuleFunctions = { Block: peg$parseBlock },
+    peg$startRuleFunction = peg$parseBlock,
 
-      peg$c0 = function(head, tail) {
-            return new Block({
-              statements: tail.reduce((block, [, statement]) => (
-                statement ? [...block, statement] : block
-              ), [head])
-            });
-          },
-      peg$c1 = "=",
-      peg$c2 = peg$literalExpectation("=", false),
-      peg$c3 = function(pattern, expr) {
-            return new TypeAssignment({ pattern, expr });
-          },
-      peg$c4 = function(expr, args) {
-            return args.reduce((expr, [, args]) => (
-              new TypeApplyExpression({ expr, args })
-            ), expr)
-          },
-      peg$c5 = "(",
-      peg$c6 = peg$literalExpectation("(", false),
-      peg$c7 = ":",
-      peg$c8 = peg$literalExpectation(":", false),
-      peg$c9 = ",",
-      peg$c10 = peg$literalExpectation(",", false),
-      peg$c11 = ")",
-      peg$c12 = peg$literalExpectation(")", false),
-      peg$c13 = function(head, tail) {
-            return new TupleTypeExpression({
-              elements: tail.reduce((elements, [, , , , , element]) => [
-                ...elements,
-                element
-              ], [head[2]]),
-              fields: [],
-             });
-          },
-      peg$c14 = ">",
-      peg$c15 = peg$literalExpectation(">", false),
-      peg$c16 = function(pattern, expr) {
-            return new Assignment({ pattern, expr })
-          },
-      peg$c17 = "$",
-      peg$c18 = peg$literalExpectation("$", false),
-      peg$c19 = function(head, tail) {
-            return tail.reduce((expr, [, op, , args]) => (
-              new ApplyExpression({ expr, args })
-            ), head);
-          },
-      peg$c20 = "|",
-      peg$c21 = peg$literalExpectation("|", false),
-      peg$c22 = function(head, tail) {
-            return tail.reduce((left, [, op,, right]) => (
-              new PipeExpression({ left, right })
-            ), head);
-          },
-      peg$c23 = function(head, tail) {
-            return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
-              elements: tail.reduce((elements, element) => [
-                ...elements,
-                element[5]
-              ], [head[2]]),
-              fields: tail.reduce((elements, element) => [
-                ...elements,
-                element[3] && element[3][0].name
-              ], [head[0] && head[0][0].name]),
-            });
-        },
-      peg$c24 = "==",
-      peg$c25 = peg$literalExpectation("==", false),
-      peg$c26 = "!=",
-      peg$c27 = peg$literalExpectation("!=", false),
-      peg$c28 = "<=",
-      peg$c29 = peg$literalExpectation("<=", false),
-      peg$c30 = ">=",
-      peg$c31 = peg$literalExpectation(">=", false),
-      peg$c32 = "<",
-      peg$c33 = peg$literalExpectation("<", false),
-      peg$c34 = function(head, tail) {
-            return tail.reduce((left, [, op, , right]) => (
-              new OperatorExpression({ op, left, right })
-            ), head);
-          },
-      peg$c35 = "++",
-      peg$c36 = peg$literalExpectation("++", false),
-      peg$c37 = function(head, tail) {
-            return tail.reduce((left, [, op, , , , right]) => (
-              new OperatorExpression({ op, left, right })
-            ), head);
-          },
-      peg$c38 = "+",
-      peg$c39 = peg$literalExpectation("+", false),
-      peg$c40 = "-",
-      peg$c41 = peg$literalExpectation("-", false),
-      peg$c42 = "*",
-      peg$c43 = peg$literalExpectation("*", false),
-      peg$c44 = "/",
-      peg$c45 = peg$literalExpectation("/", false),
-      peg$c46 = "%",
-      peg$c47 = peg$literalExpectation("%", false),
-      peg$c48 = function(expr, args) {
-            return args.reduce((expr, args) => (
-              new ApplyExpression({ expr, args: args[1] })
-            ), new Identifier({ name: expr[0] ?? expr }))
-          },
-      peg$c49 = function(expr, args) {
-            return args.reduce((expr, [, args]) => (
-              new ApplyExpression({ expr, args })
-            ), expr)
-          },
-      peg$c50 = "..",
-      peg$c51 = peg$literalExpectation("..", false),
-      peg$c52 = function(from, to) {
-            return new RangeExpression({ from, to });
-          },
-      peg$c53 = function(from) {
-            return new RangeExpression({ from, to: new NumericLiteral({ value: +Infinity }) });
-          },
-      peg$c54 = function(to) {
-            return new RangeExpression({ from: new NumericLiteral({ value: -Infinity }), to });
-          },
-      peg$c55 = ".(",
-      peg$c56 = peg$literalExpectation(".(", false),
-      peg$c57 = function(head, tail) {
-            return tail.reduce((expr, [, , args]) => (
-              new PipeExpression({
-                left: expr,
-                right: new ApplyExpression({ expr: new Identifier({ name: 'get' }), args })
-              })
-            ), head)
-          },
-      peg$c58 = ".",
-      peg$c59 = peg$literalExpectation(".", false),
-      peg$c60 = function(head, tail) {
-            return tail.reduce((expr, [, ident]) => (
-              new MemberExpression({ expr, member: ident?.name ?? ident.value })
-            ), head)
-          },
-      peg$c61 = "{",
-      peg$c62 = peg$literalExpectation("{", false),
-      peg$c63 = "}",
-      peg$c64 = peg$literalExpectation("}", false),
-      peg$c65 = function(block) { return block; },
-      peg$c66 = function(expr, params) {
-            return new FunctionPattern({
-              name: expr.name,
-              params: params
-            });
-          },
-      peg$c67 = function(head, tail) {
-            return tail.length === 0 ? head[1] : new TuplePattern({
-              elements: tail.reduce((elements, element) => [
-                ...elements,
-                element[4]
-              ], [head[1]])
-            });
-          },
-      peg$c68 = function(pattern) { return pattern; },
-      peg$c69 = function(ident) {
-            return new IdentifierPattern({ name: ident.name });
-          },
-      peg$c70 = "[",
-      peg$c71 = peg$literalExpectation("[", false),
-      peg$c72 = "]",
-      peg$c73 = peg$literalExpectation("]", false),
-      peg$c74 = function(pattern, predicate) {
-            pattern.predicate = predicate?.[3];
-            return pattern;
-          },
-      peg$c75 = "()",
-      peg$c76 = peg$literalExpectation("()", false),
-      peg$c77 = function() { return new TuplePattern({ elements: [] }) },
-      peg$c78 = "[]",
-      peg$c79 = peg$literalExpectation("[]", false),
-      peg$c80 = function() {
-            return new ArrayLiteralPattern({ elements: [] });
-          },
-      peg$c81 = function(head, tail) {
-            return new ArrayLiteralPattern({
-              elements: tail.reduce((elements, [, , , element]) => [
-                ...elements,
-                element
-              ], [head])
-            });
-          },
-      peg$c82 = function(boolean) {
-            return new BooleanLiteralPattern({ value: boolean.value })
-          },
-      peg$c83 = function(number) {
-            return new NumericLiteralPattern({ value: number.value });
-          },
-      peg$c84 = function(string) {
-            return new StringLiteralPattern({ value: string.value });
-          },
-      peg$c85 = function(ident, init) {
-            return new IdentifierPattern({ name: ident.name, init: init && init[3] });
-          },
-      peg$c86 = "=>",
-      peg$c87 = peg$literalExpectation("=>", false),
-      peg$c88 = function(expr) {
-            return new FunctionExpression({ params: new TuplePattern({
-              elements: [],
-              fields: []
-            }), expr });
-          },
-      peg$c89 = function(params, expr) {
-            return new FunctionExpression({ params, expr });
-          },
-      peg$c90 = function() {
-            return new TupleExpression({ elements: [] });
-          },
-      peg$c91 = function(tail) {
-            return tail.length === 1 && tail[0][3] === null ? tail[0][5] : new TupleExpression({
-              elements: tail.map(expr => expr[5]),
-              fields: tail.map(expr => expr[3] &&  expr[3][0].name)
-            });
-          },
-      peg$c92 = function(expr) { return expr; },
-      peg$c93 = function() {
-            return new ArrayExpression({ elements: [] });
-          },
-      peg$c94 = function(head, tail) {
-            return new ArrayExpression({
-              elements: tail.reduce((elements, [, , , element]) => [
-                ...elements,
-                element
-              ], [head])
-            });
-          },
-      peg$c95 = function(exprs) {
-            return new ArrayExpression({
-              elements: exprs.map(expr => expr[3])
-            });
-          },
-      peg$c96 = function() {
-            return new DictExpression({
-              entries: []
-            });
-          },
-      peg$c97 = function(head, tail) {
-            return new DictExpression({
-              entries: tail.reduce((entries, [, , , key, , , value]) => [
-                ...entries,
-                [key, value]
-              ], [[head[0], head[3]]])
-            });
-          },
-      peg$c98 = function(tail) {
-            return new DictExpression({
-              entries: tail.map(entry => [entry[3], entry[6]])
-            });
-          },
-      peg$c99 = /^[_A-Z]/,
-      peg$c100 = peg$classExpectation(["_", ["A", "Z"]], false, false),
-      peg$c101 = /^[_a-zA-Z0-9]/,
-      peg$c102 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"], ["0", "9"]], false, false),
-      peg$c103 = function(name) { return new Typename({ name: name[0] + name[1].join('') }); },
-      peg$c104 = /^[0-9]/,
-      peg$c105 = peg$classExpectation([["0", "9"]], false, false),
-      peg$c106 = function(value) {
-          return new NumericLiteral({
-            value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
-          });
-        },
-      peg$c107 = "\"",
-      peg$c108 = peg$literalExpectation("\"", false),
-      peg$c109 = /^[^"]/,
-      peg$c110 = peg$classExpectation(["\""], true, false),
-      peg$c111 = function(value) {
-            return new StringLiteral({ value: value.join('') });
-          },
-      peg$c112 = "true",
-      peg$c113 = peg$literalExpectation("true", false),
-      peg$c114 = "false",
-      peg$c115 = peg$literalExpectation("false", false),
-      peg$c116 = /^[_a-zA-Z]/,
-      peg$c117 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"]], false, false),
-      peg$c118 = function(value) {
-          return new BooleanLiteral({ value: value === 'true' })
-        },
-      peg$c119 = "'(",
-      peg$c120 = peg$literalExpectation("'(", false),
-      peg$c121 = function(exprs) {
-            return new AstLiteral({
-              value: new TupleExpression({
-                elements: exprs.map(expr => expr[1])
-              })
-            });
-          },
-      peg$c122 = "'",
-      peg$c123 = peg$literalExpectation("'", false),
-      peg$c124 = function(expr) {
-            return new AstLiteral({ value: expr });
-          },
-      peg$c125 = function(ident) {
-            return new AstLiteral({ value: ident });
-          },
-      peg$c126 = function(name) {
-            return new Identifier({
-              name: name[0] + name[1].join('')
-            });
-          },
-      peg$c127 = /^[ \t]/,
-      peg$c128 = peg$classExpectation([" ", "\t"], false, false),
-      peg$c129 = "#",
-      peg$c130 = peg$literalExpectation("#", false),
-      peg$c131 = peg$anyExpectation(),
-      peg$c132 = /^[\r?\n]/,
-      peg$c133 = peg$classExpectation(["\r", "?", "\n"], false, false),
+    peg$c0 = function (head, tail) {
+      return new Block({
+        statements: tail.reduce((block, [, statement]) => (
+          statement ? [...block, statement] : block
+        ), [head])
+      });
+    },
+    peg$c1 = "=",
+    peg$c2 = peg$literalExpectation("=", false),
+    peg$c3 = function (pattern, expr) {
+      return new TypeAssignment({ pattern, expr });
+    },
+    peg$c4 = function (expr, args) {
+      return args.reduce((expr, [, args]) => (
+        new TypeApplyExpression({ expr, args })
+      ), expr);
+    },
+    peg$c5 = "(",
+    peg$c6 = peg$literalExpectation("(", false),
+    peg$c7 = ":",
+    peg$c8 = peg$literalExpectation(":", false),
+    peg$c9 = ",",
+    peg$c10 = peg$literalExpectation(",", false),
+    peg$c11 = ")",
+    peg$c12 = peg$literalExpectation(")", false),
+    peg$c13 = function (head, tail) {
+      return new TupleTypeExpression({
+        elements: tail.reduce((elements, [, , , , , element]) => [
+          ...elements,
+          element
+        ], [head[2]]),
+        fields: [],
+      });
+    },
+    peg$c14 = ">",
+    peg$c15 = peg$literalExpectation(">", false),
+    peg$c16 = function (pattern, expr) {
+      return new Assignment({ pattern, expr });
+    },
+    peg$c17 = "$",
+    peg$c18 = peg$literalExpectation("$", false),
+    peg$c19 = function (head, tail) {
+      return tail.reduce((expr, [, op, , args]) => (
+        new ApplyExpression({ expr, args })
+      ), head);
+    },
+    peg$c20 = "|",
+    peg$c21 = peg$literalExpectation("|", false),
+    peg$c22 = function (head, tail) {
+      return tail.reduce((left, [, op, , right]) => (
+        new PipeExpression({ left, right })
+      ), head);
+    },
+    peg$c23 = function (head, tail) {
+      return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
+        elements: tail.reduce((elements, element) => [
+          ...elements,
+          element[5]
+        ], [head[2]]),
+        fields: tail.reduce((elements, element) => [
+          ...elements,
+          element[3] && element[3][0].name
+        ], [head[0] && head[0][0].name]),
+      });
+    },
+    peg$c24 = "==",
+    peg$c25 = peg$literalExpectation("==", false),
+    peg$c26 = "!=",
+    peg$c27 = peg$literalExpectation("!=", false),
+    peg$c28 = "<=",
+    peg$c29 = peg$literalExpectation("<=", false),
+    peg$c30 = ">=",
+    peg$c31 = peg$literalExpectation(">=", false),
+    peg$c32 = "<",
+    peg$c33 = peg$literalExpectation("<", false),
+    peg$c34 = function (head, tail) {
+      return tail.reduce((left, [, op, , right]) => (
+        new OperatorExpression({ op, left, right })
+      ), head);
+    },
+    peg$c35 = "++",
+    peg$c36 = peg$literalExpectation("++", false),
+    peg$c37 = function (head, tail) {
+      return tail.reduce((left, [, op, , , , right]) => (
+        new OperatorExpression({ op, left, right })
+      ), head);
+    },
+    peg$c38 = "+",
+    peg$c39 = peg$literalExpectation("+", false),
+    peg$c40 = "-",
+    peg$c41 = peg$literalExpectation("-", false),
+    peg$c42 = "*",
+    peg$c43 = peg$literalExpectation("*", false),
+    peg$c44 = "/",
+    peg$c45 = peg$literalExpectation("/", false),
+    peg$c46 = "%",
+    peg$c47 = peg$literalExpectation("%", false),
+    peg$c48 = function (expr, args) {
+      return args.reduce((expr, args) => (
+        new ApplyExpression({ expr, args: args[1] })
+      ), new Identifier({ name: expr[0] ?? expr }));
+    },
+    peg$c49 = function (expr, args) {
+      return args.reduce((expr, [, args]) => (
+        new ApplyExpression({ expr, args })
+      ), expr);
+    },
+    peg$c50 = "..",
+    peg$c51 = peg$literalExpectation("..", false),
+    peg$c52 = function (from, to) {
+      return new RangeExpression({ from, to });
+    },
+    peg$c53 = function (from) {
+      return new RangeExpression({ from, to: new NumericLiteral({ value: +Infinity }) });
+    },
+    peg$c54 = function (to) {
+      return new RangeExpression({ from: new NumericLiteral({ value: -Infinity }), to });
+    },
+    peg$c55 = ".(",
+    peg$c56 = peg$literalExpectation(".(", false),
+    peg$c57 = function (head, tail) {
+      return tail.reduce((expr, [, , args]) => (
+        new PipeExpression({
+          left: expr,
+          right: new ApplyExpression({ expr: new Identifier({ name: 'get' }), args })
+        })
+      ), head);
+    },
+    peg$c58 = ".",
+    peg$c59 = peg$literalExpectation(".", false),
+    peg$c60 = function (head, tail) {
+      return tail.reduce((expr, [, ident]) => (
+        new MemberExpression({ expr, member: ident?.name ?? ident.value })
+      ), head);
+    },
+    peg$c61 = "{",
+    peg$c62 = peg$literalExpectation("{", false),
+    peg$c63 = "}",
+    peg$c64 = peg$literalExpectation("}", false),
+    peg$c65 = function (block) { return block; },
+    peg$c66 = function (expr, params) {
+      return new FunctionPattern({
+        name: expr.name,
+        params: params
+      });
+    },
+    peg$c67 = function (head, tail) {
+      return tail.length === 0 ? head[1] : new TuplePattern({
+        elements: tail.reduce((elements, element) => [
+          ...elements,
+          element[4]
+        ], [head[1]])
+      });
+    },
+    peg$c68 = function (pattern) { return pattern; },
+    peg$c69 = function (ident) {
+      return new IdentifierPattern({ name: ident.name });
+    },
+    peg$c70 = "[",
+    peg$c71 = peg$literalExpectation("[", false),
+    peg$c72 = "]",
+    peg$c73 = peg$literalExpectation("]", false),
+    peg$c74 = function (pattern, predicate) {
+      pattern.predicate = predicate?.[3];
+      return pattern;
+    },
+    peg$c75 = "()",
+    peg$c76 = peg$literalExpectation("()", false),
+    peg$c77 = function () { return new TuplePattern({ elements: [] }); },
+    peg$c78 = "[]",
+    peg$c79 = peg$literalExpectation("[]", false),
+    peg$c80 = function () {
+      return new ArrayLiteralPattern({ elements: [] });
+    },
+    peg$c81 = function (head, tail) {
+      return new ArrayLiteralPattern({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    },
+    peg$c82 = function (boolean) {
+      return new BooleanLiteralPattern({ value: boolean.value });
+    },
+    peg$c83 = function (number) {
+      return new NumericLiteralPattern({ value: number.value });
+    },
+    peg$c84 = function (string) {
+      return new StringLiteralPattern({ value: string.value });
+    },
+    peg$c85 = function (ident, init) {
+      return new IdentifierPattern({ name: ident.name, init: init && init[3] });
+    },
+    peg$c86 = "=>",
+    peg$c87 = peg$literalExpectation("=>", false),
+    peg$c88 = function (expr) {
+      return new FunctionExpression({
+        params: new TuplePattern({
+          elements: [],
+          fields: []
+        }), expr
+      });
+    },
+    peg$c89 = function (params, expr) {
+      return new FunctionExpression({ params, expr });
+    },
+    peg$c90 = function () {
+      return new TupleExpression({ elements: [] });
+    },
+    peg$c91 = function (tail) {
+      return tail.length === 1 && tail[0][3] === null ? tail[0][5] : new TupleExpression({
+        elements: tail.map(expr => expr[5]),
+        fields: tail.map(expr => expr[3] && expr[3][0].name)
+      });
+    },
+    peg$c92 = function (expr) { return expr; },
+    peg$c93 = function () {
+      return new ArrayExpression({ elements: [] });
+    },
+    peg$c94 = function (head, tail) {
+      return new ArrayExpression({
+        elements: tail.reduce((elements, [, , , element]) => [
+          ...elements,
+          element
+        ], [head])
+      });
+    },
+    peg$c95 = function (exprs) {
+      return new ArrayExpression({
+        elements: exprs.map(expr => expr[3])
+      });
+    },
+    peg$c96 = function () {
+      return new DictExpression({
+        entries: []
+      });
+    },
+    peg$c97 = function (head, tail) {
+      return new DictExpression({
+        entries: tail.reduce((entries, [, , , key, , , value]) => [
+          ...entries,
+          [key, value]
+        ], [[head[0], head[3]]])
+      });
+    },
+    peg$c98 = function (tail) {
+      return new DictExpression({
+        entries: tail.map(entry => [entry[3], entry[6]])
+      });
+    },
+    peg$c99 = /^[_A-Z]/,
+    peg$c100 = peg$classExpectation(["_", ["A", "Z"]], false, false),
+    peg$c101 = /^[_a-zA-Z0-9]/,
+    peg$c102 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"], ["0", "9"]], false, false),
+    peg$c103 = function (name) { return new Typename({ name: name[0] + name[1].join('') }); },
+    peg$c104 = /^[0-9]/,
+    peg$c105 = peg$classExpectation([["0", "9"]], false, false),
+    peg$c106 = function (value) {
+      return new NumericLiteral({
+        value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`)
+      });
+    },
+    peg$c107 = "\"",
+    peg$c108 = peg$literalExpectation("\"", false),
+    peg$c109 = /^[^"]/,
+    peg$c110 = peg$classExpectation(["\""], true, false),
+    peg$c111 = function (value) {
+      return new StringLiteral({ value: value.join('') });
+    },
+    peg$c112 = "true",
+    peg$c113 = peg$literalExpectation("true", false),
+    peg$c114 = "false",
+    peg$c115 = peg$literalExpectation("false", false),
+    peg$c116 = /^[_a-zA-Z]/,
+    peg$c117 = peg$classExpectation(["_", ["a", "z"], ["A", "Z"]], false, false),
+    peg$c118 = function (value) {
+      return new BooleanLiteral({ value: value === 'true' });
+    },
+    peg$c119 = "'(",
+    peg$c120 = peg$literalExpectation("'(", false),
+    peg$c121 = function (exprs) {
+      return new AstLiteral({
+        value: new TupleExpression({
+          elements: exprs.map(expr => expr[1])
+        })
+      });
+    },
+    peg$c122 = "'",
+    peg$c123 = peg$literalExpectation("'", false),
+    peg$c124 = function (expr) {
+      return new AstLiteral({ value: expr });
+    },
+    peg$c125 = function (ident) {
+      return new AstLiteral({ value: ident });
+    },
+    peg$c126 = function (name) {
+      return new Identifier({
+        name: name[0] + name[1].join('')
+      });
+    },
+    peg$c127 = /^[ \t]/,
+    peg$c128 = peg$classExpectation([" ", "\t"], false, false),
+    peg$c129 = "#",
+    peg$c130 = peg$literalExpectation("#", false),
+    peg$c131 = peg$anyExpectation(),
+    peg$c132 = /^[\r?\n]/,
+    peg$c133 = peg$classExpectation(["\r", "?", "\n"], false, false),
 
-      peg$currPos          = 0,
-      peg$savedPos         = 0,
-      peg$posDetailsCache  = [{ line: 1, column: 1 }],
-      peg$maxFailPos       = 0,
-      peg$maxFailExpected  = [],
-      peg$silentFails      = 0,
+    peg$currPos = 0,
+    peg$savedPos = 0,
+    peg$posDetailsCache = [{ line: 1, column: 1 }],
+    peg$maxFailPos = 0,
+    peg$maxFailExpected = [],
+    peg$silentFails = 0,
 
-      peg$result;
+    peg$result;
 
   if ("startRule" in options) {
     if (!(options.startRule in peg$startRuleFunctions)) {
@@ -474,7 +476,7 @@ function peg$parse(input, options) {
   }
 
   function expected(description, location) {
-    location = location !== void 0 ? location : peg$computeLocation(peg$savedPos, peg$currPos)
+    location = location !== void 0 ? location : peg$computeLocation(peg$savedPos, peg$currPos);
 
     throw peg$buildStructuredError(
       [peg$otherExpectation(description)],
@@ -484,7 +486,7 @@ function peg$parse(input, options) {
   }
 
   function error(message, location) {
-    location = location !== void 0 ? location : peg$computeLocation(peg$savedPos, peg$currPos)
+    location = location !== void 0 ? location : peg$computeLocation(peg$savedPos, peg$currPos);
 
     throw peg$buildSimpleError(message, location);
   }
@@ -522,7 +524,7 @@ function peg$parse(input, options) {
 
       details = peg$posDetailsCache[p];
       details = {
-        line:   details.line,
+        line: details.line,
         column: details.column
       };
 
@@ -544,17 +546,17 @@ function peg$parse(input, options) {
 
   function peg$computeLocation(startPos, endPos) {
     var startPosDetails = peg$computePosDetails(startPos),
-        endPosDetails   = peg$computePosDetails(endPos);
+      endPosDetails = peg$computePosDetails(endPos);
 
     return {
       start: {
         offset: startPos,
-        line:   startPosDetails.line,
+        line: startPosDetails.line,
         column: startPosDetails.column
       },
       end: {
         offset: endPos,
-        line:   endPosDetails.line,
+        line: endPosDetails.line,
         column: endPosDetails.column
       }
     };
@@ -5378,5 +5380,5 @@ function peg$parse(input, options) {
 
 module.exports = {
   SyntaxError: peg$SyntaxError,
-  parse:       peg$parse
+  parse: peg$parse
 };
