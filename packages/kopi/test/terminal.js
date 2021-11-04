@@ -1,12 +1,15 @@
 class LS {
   inspect () {
-    console.log("fileList")
+    return ["file1", "file2"]
   }
 
   apply(args) {
     return {
       inspect() {
-        console.log("longFileList")
+        return [
+          { "name": "file1", "size": 243 }
+          { "name": "file2", "size": 342 }
+        ]
       }
 
       apply(filename) {
