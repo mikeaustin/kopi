@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 
 class KopiFunction {
   constructor(params, expr, closure) {
@@ -8,7 +8,7 @@ class KopiFunction {
   }
 
   inspectAsync() {
-    return `<function>`;
+    return '<function>';
   }
 
   toStringAsync() {
@@ -25,7 +25,7 @@ class KopiFunction {
     return visitors.visitNode(this.expr, {
       ...this.closure,
       ...matches,
-      _coroutineId: scope._coroutineId
+      _coroutineId: scope._coroutineId,
     });
   }
 

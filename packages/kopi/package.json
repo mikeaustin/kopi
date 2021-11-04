@@ -14,6 +14,8 @@
     "test": "npm --silent start test/import.kopi"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.26.1",
     "immutable": "^4.0.0-rc.15",
     "node-fetch": "^2.6.0",
     "pegjs": "^0.10.0"

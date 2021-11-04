@@ -11,16 +11,16 @@ const { default: typechecker } = require('./visitors/Typechecker');
 const { default: getScope } = require('./scope');
 
 Function.prototype.toStringAsync = function () {
-  return `<function>`;
+  return '<function>';
 };
 
 Function.prototype[util.inspect.custom] = function () {
-  return `<function>`;
+  return '<function>';
 };
 
 const input = process.argv.length === 2 ? readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 }) : null;
 
 let scope = getScope(input);
@@ -46,7 +46,7 @@ async function main() {
         if (value !== undefined) {
           const formattedValue = util.inspect(value, {
             compact: false,
-            depth: Infinity
+            depth: Infinity,
           });
 
           console.log(formattedValue);

@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 const { Map } = require('immutable');
 
 const { default: KopiTuple } = require('./KopiTuple');
@@ -11,13 +11,13 @@ class KopiDict {
 
   async inspectAsync() {
     if (this._immutableMap.size === 0) {
-      return `{}`;
+      return '{}';
     }
 
     const entries = await Promise.all(
       this._immutableMap.toArray().map(async ([key, value]) => (
         `${key.inspectAsync()}: ${(await value).inspectAsync()}`
-      ))
+      )),
     );
 
     return `{ ${entries.join(', ')} }`;
@@ -69,7 +69,7 @@ class KopiDict {
   async update(key) {
     return (func, scope, visitors) => {
       const entries = this._immutableMap.update(key, (value) => (
-        func.apply(undefined, [value ?? KopiTuple.empty, scope, visitors]))
+        func.apply(undefined, [value ?? KopiTuple.empty, scope, visitors])),
       );
 
       return new KopiDict(entries);
@@ -82,7 +82,7 @@ class KopiDict {
     for (let [key, value] of this._immutableMap) {
       values = this._immutableMap.set(
         key,
-        func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors])
+        func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
       );
     }
 
@@ -99,19 +99,19 @@ class KopiDict {
           [
             new KopiTuple([
               accum,
-              new KopiTuple([key, await value])
+              new KopiTuple([key, await value]),
             ]),
             scope,
-            visitors
-          ]
+            visitors,
+          ],
         );
       }
 
       return accum;
     };
-  };
+  }
 }
 
 module.exports = {
-  default: KopiDict
-};;
+  default: KopiDict,
+};

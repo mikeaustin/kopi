@@ -9,7 +9,7 @@ const coroutines = require('./coroutines');
 
 const inspect = value => util.inspect(value, {
   compact: false,
-  depth: Infinity
+  depth: Infinity,
 });
 
 const kopi_inspect = async (value) => {
@@ -127,7 +127,7 @@ const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, vis
       .filter(name => name !== 'constructor')
       .reduce((obj, name) => ({
         ...obj,
-        [name]: (thisArg) => (args) => trait.nativeConstructor.prototype[name].apply(thisArg, [args, scope, visitors])
+        [name]: (thisArg) => (args) => trait.nativeConstructor.prototype[name].apply(thisArg, [args, scope, visitors]),
       }), traitMethods)
   ), {});
 
@@ -137,7 +137,7 @@ const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, vis
   }), scope.methods.get(nativeConstructor) ?? {});
 
   bind({
-    methods: new Map(scope.methods).set(nativeConstructor, { ...traitMethods, ...newMethods })
+    methods: new Map(scope.methods).set(nativeConstructor, { ...traitMethods, ...newMethods }),
   });
 };
 

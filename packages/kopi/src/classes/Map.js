@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 
 Map.prototype.inspectAsync = function () {
   return `${util.inspect(this)}`;

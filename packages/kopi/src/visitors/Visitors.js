@@ -13,5 +13,5 @@ class Visitors {
 }
 
 module.exports = {
-  default: Visitors
+  default: Visitors,
 };

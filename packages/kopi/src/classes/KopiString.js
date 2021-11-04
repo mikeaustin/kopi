@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 
 class KopiString {
   constructor(nativeString) {
@@ -11,11 +11,11 @@ class KopiString {
 
   inspectAsync() {
     return `"${this._nativeString}"`;
-  };
+  }
 
   toStringAsync() {
     return this._nativeString;
-  };
+  }
 
   *[Symbol.iterator]() {
     for (const c of this._nativeString) {
@@ -41,7 +41,7 @@ class KopiString {
     }
 
     return new KopiString(this._nativeString[index]);
-  };
+  }
 
   fromCodePoint(number) {
     return new KopiString(String.fromCodePoint(number));

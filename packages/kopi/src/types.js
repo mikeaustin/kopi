@@ -1,6 +1,6 @@
 class AnyType {
   get name() {
-    return `Any`;
+    return 'Any';
   }
 
   isSupertypeOf(type) {
@@ -10,7 +10,7 @@ class AnyType {
 
 class NoneType extends AnyType {
   get name() {
-    return `None`;
+    return 'None';
   }
 
   isSupertypeOf(type) {
@@ -27,7 +27,7 @@ class UnionType extends AnyType {
 
   get name() {
     if (this.types.length === 0) {
-      return `None`;
+      return 'None';
     }
 
     return `${this.types.map(type => type.name).join(' | ')}`;
@@ -44,7 +44,7 @@ class UnionType extends AnyType {
 
 class BooleanType extends AnyType {
   get name() {
-    return `Boolean`;
+    return 'Boolean';
   }
 
   isSupertypeOf(type) {
@@ -54,7 +54,7 @@ class BooleanType extends AnyType {
 
 class NumberType extends AnyType {
   get name() {
-    return `Number`;
+    return 'Number';
   }
 
   isSupertypeOf(type) {
@@ -64,7 +64,7 @@ class NumberType extends AnyType {
 
 class StringType extends AnyType {
   get name() {
-    return `String`;
+    return 'String';
   }
 
   isSupertypeOf(type) {
@@ -82,7 +82,7 @@ class FunctionType {
   }
 
   get name() {
-    return `Function`;
+    return 'Function';
   }
 
   isSupertypeOf(type) {
@@ -102,7 +102,7 @@ class IdentifierPatternType {
     }
 
     return {
-      [this.name]: type
+      [this.name]: type,
     };
   }
 }

@@ -16,7 +16,7 @@ const KopiArrayConstructor = (tuple) => tuple.getElementsArray();
 KopiArrayConstructor.nativeConstructor = Array;
 
 const KopiDictConstructor = async (entries) => new KopiDict(
-  await Promise.all(entries.map(async (entry) => (await entry).getElementsArray()))
+  await Promise.all(entries.map(async (entry) => (await entry).getElementsArray())),
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
 
@@ -31,8 +31,8 @@ String.nativeConstructor = String;
 class KopiWorker {
   constructor(filename) {
     this.filename = filename;
-    this.worker = new Worker(`./src/worker.js`, {
-      workerData: filename
+    this.worker = new Worker('./src/worker.js', {
+      workerData: filename,
     });
   }
 }
@@ -101,7 +101,7 @@ let getScope = (input) => ({
   input: (str) => {
     const rl = input ?? readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     return new Promise(resolve => {

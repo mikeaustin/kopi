@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 
 require('./classes/Boolean');
 require('./classes/Number');
@@ -26,8 +26,8 @@ class TuplePattern {
       const matchesArray = await this._fieldsArray.reduce(async (matchesArray, fieldName, index) => ([
         ...await matchesArray,
         await this._elementsArray[index].getMatches(
-          tuple.getElementAtIndex(await tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty
-        )
+          tuple.getElementAtIndex(await tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty,
+        ),
       ]));
 
       if (matchesArray.some(match => match === null)) {
@@ -68,7 +68,7 @@ class ArrayLiteralPattern {
 
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      await element.getMatches(await array[index])
+      await element.getMatches(await array[index]),
     ]), []);
 
     if (matchesArray.some(matches => matches === null)) {
@@ -179,7 +179,7 @@ class FunctionPattern {
 
   getMatches(value, scope, unevaluatedValue) {
     return {
-      [this._functionName]: new KopiFunction(this._functionParams, unevaluatedValue, scope)
+      [this._functionName]: new KopiFunction(this._functionParams, unevaluatedValue, scope),
     };
   }
 }

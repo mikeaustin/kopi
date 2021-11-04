@@ -1,5 +1,5 @@
-const util = require("util");
-const fs = require("fs");
+const util = require('util');
+const fs = require('fs');
 
 const { KopiString, KopiTuple, KopiRange, KopiFunction, KopiDict } = require('../classes');
 const {
@@ -10,7 +10,7 @@ const {
   NumericLiteralPattern,
   StringLiteralPattern,
   ConstructorPattern,
-  FunctionPattern
+  FunctionPattern,
 } = require('../classes');
 
 const { default: Visitors } = require('./Visitors');
@@ -30,11 +30,11 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
     Object.defineProperty(evaluatedExpr.nativeConstructor, 'name', {
-      value: evaluatedPattern
+      value: evaluatedPattern,
     });
 
     bind({
-      [evaluatedPattern]: evaluatedExpr
+      [evaluatedPattern]: evaluatedExpr,
     });
   }
 
@@ -65,7 +65,7 @@ class Interpreter extends Visitors {
   TupleTypeExpression({ elements, fields }, scope, bind) {
     return new KopiTuple(
       elements.map(element => this.visitNode(element, scope, bind)),
-      fields
+      fields,
     );
   }
 
@@ -131,7 +131,7 @@ class Interpreter extends Visitors {
 
     return new KopiTuple(
       elements.map(element => this.visitNode(element, scope, bind)),
-      fields
+      fields,
     );
   }
 
@@ -150,7 +150,7 @@ class Interpreter extends Visitors {
 
     const evaluatedEntries = evaluatedKeys.reduce((evaluatedEntries, evaluatedKey, index) => [
       ...evaluatedEntries,
-      [evaluatedKey, evaluatedValues[index]]
+      [evaluatedKey, evaluatedValues[index]],
     ], []);
 
     return new KopiDict(evaluatedEntries);
@@ -180,13 +180,13 @@ class Interpreter extends Visitors {
 
     return new TuplePattern(
       elements.map(element => this.visitNode(element, scope)),
-      fields
+      fields,
     );
   }
 
   ArrayLiteralPattern({ elements }, scope) {
     return new ArrayLiteralPattern(
-      elements.map(element => this.visitNode(element, scope))
+      elements.map(element => this.visitNode(element, scope)),
     );
   }
 

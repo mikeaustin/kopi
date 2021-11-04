@@ -1,4 +1,4 @@
-const util = require("util");
+const util = require('util');
 
 const { default: KopiTuple } = require('./KopiTuple');
 
@@ -55,7 +55,7 @@ class KopiRange {
       // const argumentsPassed = func.params.getMatches(index);
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params.name]: element
+        [func.params.name]: element,
       }));
 
       if (predicatePassed) {

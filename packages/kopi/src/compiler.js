@@ -10,7 +10,7 @@ const {
   AnyType, NoneType, UnionType,
   BooleanType, NumberType, StringType,
   FunctionType,
-  IdentifierPatternType
+  IdentifierPatternType,
 } = require('./types');
 
 class TypeVar {
@@ -58,7 +58,7 @@ const context = {
       new NumberType(),
       new StringType(),
     ])),
-    new NoneType()
+    new NoneType(),
   ),
   true: new BooleanType(),
   false: new BooleanType(),

@@ -1,8 +1,6 @@
-const util = require("util");
+const util = require('util');
 
 class KopiTuple {
-  static empty = new KopiTuple(null);
-
   constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {
       this._elementsArray = [];
@@ -32,7 +30,7 @@ class KopiTuple {
     }
 
     const elementsArray = await Promise.all(
-      this._elementsArray.map(async element => (await (await element).inspectAsync()))
+      this._elementsArray.map(async element => (await (await element).inspectAsync())),
     );
 
     return `(${elementsArray.map((element, index) => (
@@ -114,7 +112,7 @@ class KopiTuple {
 
     while (results.every(result => !result.done)) {
       values.push(
-        mapper.apply(undefined, [new KopiTuple(results.map(result => result.value)), scope, visitors])
+        mapper.apply(undefined, [new KopiTuple(results.map(result => result.value)), scope, visitors]),
       );
 
       results = iters.map(iter => iter.next());
@@ -146,6 +144,8 @@ class KopiTuple {
     return helper(0, []);
   }
 }
+
+KopiTuple.empty = new KopiTuple(null);
 
 module.exports = {
   default: KopiTuple,

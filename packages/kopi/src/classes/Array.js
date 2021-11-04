@@ -5,7 +5,7 @@ const { default: KopiTuple } = require('./KopiTuple');
 
 Array.prototype.inspectAsync = async function () {
   const elements = await Promise.all(
-    this.map(async element => (await element).inspectAsync())
+    this.map(async element => (await element).inspectAsync()),
   );
 
   return `[${elements.join(', ')}]`;
@@ -61,7 +61,7 @@ Array.prototype['++'] = function (that) {
   return this.concat(that.toArray());
 };
 
-Array.prototype._join = async function (delimiter = new KopiString("")) {
+Array.prototype._join = async function (delimiter = new KopiString('')) {
   const elements = await Promise.all(this);
 
   return new KopiString(elements.map(element => element.getNativeString()).join(delimiter.getNativeString()));

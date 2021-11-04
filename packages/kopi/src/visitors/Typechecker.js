@@ -67,7 +67,7 @@ class Typechecker extends Visitors {
 
   NumericLiteral({ value }) {
     if (typeof value !== 'number') {
-      throw Error(`Value is not a number.`);
+      throw Error('Value is not a number.');
     }
 
     return new NumberType();
@@ -75,7 +75,7 @@ class Typechecker extends Visitors {
 
   StringLiteral({ value }) {
     if (typeof value !== 'string') {
-      throw Error(`Value is not a string.`);
+      throw Error('Value is not a string.');
     }
 
     return new StringType();
