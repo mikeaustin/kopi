@@ -390,7 +390,7 @@ StringLiteral
     }
 
 BooleanLiteral
-  = _ value:("true" / "false") [^_a-zA-Z] _ {
+  = _ value:("true" / "false") ![_a-zA-Z] _ {
     return new BooleanLiteral({ value: value === 'true' })
   }
 
