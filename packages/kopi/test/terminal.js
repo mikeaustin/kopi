@@ -25,8 +25,8 @@ const kopi_ls = {
           files.push(new KopiDict(
             Object.entries({
               name: new KopiString(dirent.name),
-              date: new KopiString(formattedDate + ' ' + formattedTime)
-            }).map(([key, value]) => [new KopiString(key), value])
+              date: new KopiString(formattedDate + ' ' + formattedTime),
+            }).map(([key, value]) => [new KopiString(key), value]),
           ));
         }
 
@@ -44,16 +44,16 @@ const kopi_ls = {
             return new KopiDict(
               Object.entries({
                 name: filename,
-                date: new KopiString(formattedDate + ' ' + formattedTime)
-              }).map(([key, value]) => [new KopiString(key), value])
+                date: new KopiString(formattedDate + ' ' + formattedTime),
+              }).map(([key, value]) => [new KopiString(key), value]),
             ).inspectAsync();
-          }
+          },
         };
-      }
+      },
     };
-  }
+  },
 };
 
 module.exports = {
-  default: kopi_ls
+  default: kopi_ls,
 };
