@@ -29,11 +29,11 @@ extend Array () (
   sum: (this) => () => (this | _reduce 0 $ (accum, n) => accum + n)
 )
 
-sum (this) () = this | _reduce 0 $ (accum, n) => accum + n
+# sum (this) () = this | _reduce 0 $ (accum, n) => accum + n
 
-extend Array () (
-  sum: sum
-)
+# extend Array () (
+#   sum: sum
+# )
 
 print $ Array (1, 2, 3)
 
