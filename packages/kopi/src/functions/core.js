@@ -56,17 +56,19 @@ const kopi_let = (func, scope, visitors) => {
   return func.apply(undefined, [KopiTuple.empty, scope, visitors]);
 };
 
-const kopi_match = (value, scope, visitors) => async (_funcs) => {
+const kopi_match = (value) => async (_funcs, scope, visitors) => {
   const funcsTuple = _funcs.apply ? new KopiTuple([_funcs]) : _funcs;
 
-  for await (func of funcsTuple.getElementsArray()) {
+  for await (const func of funcsTuple.getElementsArray()) {
+    const matches = await func.params.getMatches(value);
+
     const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
       ...scope,
-      [func.params._identifierName]: value
+      ...matches,
     }));
 
-    if (predicatePassed && await func.params.getMatches(value)) {
-      return func.apply(undefined, [value, scope, visitors]);
+    if (predicatePassed && matches) {
+      return func.apply(undefined, [value, { ...scope, ...matches }, visitors]);
     }
   }
 

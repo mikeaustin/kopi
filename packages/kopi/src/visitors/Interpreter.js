@@ -175,13 +175,11 @@ class Interpreter extends Visitors {
 
   //
 
-  async TuplePattern({ elements, fields }, scope) {
+  TuplePattern({ elements, fields }, scope) {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      await Promise.all(
-        elements.map(async element => this.visitNode(await element, scope))
-      ),
+      elements.map(element => this.visitNode(element, scope)),
       fields
     );
   }
