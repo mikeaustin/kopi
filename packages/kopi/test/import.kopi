@@ -12,12 +12,12 @@ pad (string, n) = {
 
 heading (string, width) = {
   print ""
-  print $ pad ("=", 2) $ " " string " " $ pad ("=", width - 4 - 'length string)
+  print $ pad ("=", 2) ++ " " string " " ++ pad ("=", width - 4 - 'length string)
   print ""
 }
 
 test (filenames) = filenames | _map (filename) => {
-  heading (filename, 80)
+  heading (filename, width: 80)
   import ("test/" filename)
 }
 
