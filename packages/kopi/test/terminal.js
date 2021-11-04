@@ -5,7 +5,7 @@ const { KopiString, KopiDict } = require('../src/classes');
 
 const kopi_ls = {
   async inspectAsync() {
-    const dir = await util.promisify(fs.readdir)('.');
+    const dir = await fs.promises.readdir('.');
 
     return dir.map((filename) => new KopiString(filename)).inspectAsync({ formatted: true });
   },

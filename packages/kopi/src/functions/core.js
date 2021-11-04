@@ -21,7 +21,7 @@ const kopi_print = async (value) => {
 };
 
 const kopi_read = async (filename) => {
-  return new KopiString(await util.promisify(fs.readFile)(filename.getNativeString(), 'utf8'));
+  return new KopiString(await fs.promises.readFile(filename.getNativeString(), 'utf8'));
 };
 
 const kopi_char = (number) => {

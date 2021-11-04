@@ -2,11 +2,11 @@ const util = require('util');
 const fs = require('fs');
 
 async function readFiles(...files) {
-  return Promise.all(files.map(file => util.promisify(fs.readFile)(file, 'utf-8')));
+  return Promise.all(files.map(file => fs.promises.readFile(file, 'utf-8')));
 }
 
 async function main() {
-  const functions = await util.promisify(fs.readFile)('./src/parser/functions.js', 'utf-8');
+  const functions = await fs.promises.readFile('./src/parser/functions.js', 'utf-8');
   const [types, statements, expressions, operators, primaries, patterns, terminals] = await readFiles(
     './src/parser/types.pegjs',
     './src/parser/statements.pegjs',

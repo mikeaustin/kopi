@@ -65,7 +65,7 @@ const context = {
 };
 
 const compile = async (filename, scope) => {
-  const source = await util.promisify(fs.readFile)(filename, 'utf8');
+  const source = await fs.promises.readFile(filename, 'utf8');
 
   try {
     const astRootNode = parser.parse(source);
