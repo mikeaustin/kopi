@@ -1,5 +1,7 @@
 const util = require('util');
 
+// const { KopiArray } = require('./KopiArray');
+
 class KopiString {
   constructor(nativeString) {
     this._nativeString = nativeString;

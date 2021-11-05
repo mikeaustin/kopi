@@ -1,4 +1,5 @@
-const { KopiString } = require('../classes');
+const { default: KopiString } = require('../classes/KopiString');
+const { default: KopiTuple } = require('../classes/KopiTuple');
 
 class Iterable {
   async _map(func, scope, visitors) {
@@ -33,6 +34,19 @@ class Iterable {
     return accum;
   }
 
+  _reduce(init) {
+    return async (func, scope, visitors) => {
+      let accum = init;
+      let index = 0;
+
+      for (const element of this) {
+        accum = await func.apply(undefined, [new KopiTuple([accum, await element, index++]), scope, visitors]);
+      }
+
+      return accum;
+    };
+  }
+
   splitOn(delimiter = new KopiString('')) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
@@ -59,5 +73,5 @@ class Iterable {
 }
 
 module.exports = {
-  default: Iterable
+  default: Iterable,
 };
