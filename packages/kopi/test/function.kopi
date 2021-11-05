@@ -1,4 +1,4 @@
-f (a, b, [c]) = a * b
+f (a, b, [c]) = a * b + c
 print $ f (1, 2, [3])
 
 f (n) = n * n
