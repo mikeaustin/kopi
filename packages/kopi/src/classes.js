@@ -63,13 +63,13 @@ class ArrayLiteralPattern {
   }
 
   async getMatches(array) {
-    if (this._elementsArray.length !== array.length) {
+    if (this._elementsArray.length !== array._elementsArray.length) {
       return null;
     }
 
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      await element.getMatches(await array[index]),
+      await element.getMatches(await array._elementsArray[index]),
     ]), []);
 
     if (matchesArray.some(matches => matches === null)) {

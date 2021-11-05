@@ -1,7 +1,7 @@
 const util = require('util');
 const fs = require('fs');
 
-const { KopiString, KopiTuple, KopiRange, KopiFunction, KopiDict } = require('../classes');
+const { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } = require('../classes');
 const {
   TuplePattern,
   ArrayLiteralPattern,
@@ -136,7 +136,9 @@ class Interpreter extends Visitors {
   }
 
   ArrayExpression({ elements }, scope, bind) {
-    return elements.map(element => this.visitNode(element, scope, bind));
+    return new KopiArray(
+      elements.map(element => this.visitNode(element, scope, bind)),
+    );
   }
 
   async DictExpression({ entries }, scope, bind) {

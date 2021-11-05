@@ -24,6 +24,10 @@ class KopiArray {
     return this.inspectAsync();
   }
 
+  getElementsArray() {
+    return this._elementsArray;
+  }
+
   [Symbol.iterator]() {
     return this._elementsArray[Symbol.iterator]();
   }
