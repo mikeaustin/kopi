@@ -1,8 +1,5 @@
 const util = require('util');
 
-const { default: KopiTuple } = require('./KopiTuple');
-const { default: Iterable } = require('../traits/Iterable');
-
 class KopiArray {
   constructor(elementsArray = []) {
     elementsArray.forEach((element, index) => {
@@ -38,9 +35,12 @@ class KopiArray {
 
   get(index) {
     if (index.constructor.name === 'KopiRange') {
-      return this._elementsArray.slice(index.from, index.to);
+      return new KopiArray(this._elementsArray.slice(index.from, index.to));
     } else if (index.constructor.name === 'KopiTuple') {
-      return index.getElementsArray().reduce((accum, index) => [...accum, this._elementsArray[index]], []);
+      return new KopiArray(index.getElementsArray().reduce((accum, index) => [
+        ...accum,
+        this._elementsArray[index],
+      ], []));
     }
 
     return this._elementsArray[index];
@@ -122,12 +122,14 @@ class KopiArray {
   }
 }
 
-KopiArray.prototype.map = Iterable.prototype.map;
-KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
-KopiArray.prototype.reduce = Iterable.prototype.reduce;
-
 module.exports = {
   default: KopiArray,
 };
 
 const { default: KopiString } = require('./KopiString');
+const { default: KopiTuple } = require('./KopiTuple');
+const { default: Iterable } = require('../traits/Iterable');
+
+KopiArray.prototype.map = Iterable.prototype.map;
+KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
+KopiArray.prototype.reduce = Iterable.prototype.reduce;

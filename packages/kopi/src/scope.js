@@ -58,7 +58,7 @@ let getScope = (input) => ({
     global.gc();
   },
   inspect: core.kopi_inspect,
-  tuple: (array) => new KopiTuple(array),
+  tuple: (array) => new KopiTuple(array.getElementsArray()),
   methods: new Map(),
   extend: core.kopi_extend,
 

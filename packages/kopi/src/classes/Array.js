@@ -1,126 +1,126 @@
 const util = require('util');
 
-const { default: KopiTuple } = require('./KopiTuple');
+// const { default: KopiTuple } = require('./KopiTuple');
 
-Array.prototype.inspectAsync = async function ({ formatted = false } = {}) {
-  const elements = await Promise.all(
-    this.map(async element => (await element).inspectAsync()),
-  );
+// Array.prototype.inspectAsync = async function ({ formatted = false } = {}) {
+//   const elements = await Promise.all(
+//     this.map(async element => (await element).inspectAsync()),
+//   );
 
-  if (formatted) {
-    return '[\n' + elements.map(element => `  ${element}`).join(',\n') + '\n]';
-  }
+//   if (formatted) {
+//     return '[\n' + elements.map(element => `  ${element}`).join(',\n') + '\n]';
+//   }
 
-  return `[${elements.join(', ')}]`;
-};
+//   return `[${elements.join(', ')}]`;
+// };
 
-Array.prototype.toStringAsync = function () {
-  return this.inspectAsync();
-};
+// Array.prototype.toStringAsync = function () {
+//   return this.inspectAsync();
+// };
 
-Array.prototype.toArray = function () {
-  return this;
-};
+// Array.prototype.toArray = function () {
+//   return this;
+// };
 
-Array.prototype.get = function (index) {
-  if (index.constructor.name === 'KopiRange') {
-    return this.slice(index.from, index.to);
-  } else if (index.constructor.name === 'KopiTuple') {
-    return index.getElementsArray().reduce((accum, index) => [...accum, this[index]], []);
-  }
+// Array.prototype.get = function (index) {
+//   if (index.constructor.name === 'KopiRange') {
+//     return this.slice(index.from, index.to);
+//   } else if (index.constructor.name === 'KopiTuple') {
+//     return index.getElementsArray().reduce((accum, index) => [...accum, this[index]], []);
+//   }
 
-  return this[index];
-};
+//   return this[index];
+// };
 
-Array.prototype.apply = function (thisArg, [index]) {
-  if (index < 0) {
-    index = this.length - 1 - index;
-  }
+// Array.prototype.apply = function (thisArg, [index]) {
+//   if (index < 0) {
+//     index = this.length - 1 - index;
+//   }
 
-  return (value, scope, visitors) => {
-    const result = [...this];
+//   return (value, scope, visitors) => {
+//     const result = [...this];
 
-    if (index.constructor.name === 'KopiRange') {
-      result.splice(index.from, index.to - index.from, ...value);
-    } else if (value.constructor.name === 'KopiFunction') {
-      result[index] = value.apply(undefined, [this[index], scope, visitors]);
-    } else {
-      result.splice(index, 0, ...value);
-    }
+//     if (index.constructor.name === 'KopiRange') {
+//       result.splice(index.from, index.to - index.from, ...value);
+//     } else if (value.constructor.name === 'KopiFunction') {
+//       result[index] = value.apply(undefined, [this[index], scope, visitors]);
+//     } else {
+//       result.splice(index, 0, ...value);
+//     }
 
-    return result;
-  };
-};
+//     return result;
+//   };
+// };
 
-Array.prototype.emptyValue = function () {
-  return [];
-};
+// Array.prototype.emptyValue = function () {
+//   return [];
+// };
 
-Array.prototype.size = function () {
-  return this.length;
-};
+// Array.prototype.size = function () {
+//   return this.length;
+// };
 
-Array.prototype['++'] = function (that) {
-  return this.concat(that.toArray());
-};
+// Array.prototype['++'] = function (that) {
+//   return this.concat(that.toArray());
+// };
 
-Array.prototype._join = async function (delimiter = new KopiString('')) {
-  const elements = await Promise.all(this);
+// Array.prototype._join = async function (delimiter = new KopiString('')) {
+//   const elements = await Promise.all(this);
 
-  return new KopiString(elements.map(element => element.getNativeString()).join(delimiter.getNativeString()));
-};
+//   return new KopiString(elements.map(element => element.getNativeString()).join(delimiter.getNativeString()));
+// };
 
-Array.prototype._map = async function (func, scope, visitors) {
-  const values = [];
+// Array.prototype._map = async function (func, scope, visitors) {
+//   const values = [];
 
-  for (const element of this) {
-    values.push(await func.apply(undefined, [await element, scope, visitors]));
-  }
+//   for (const element of this) {
+//     values.push(await func.apply(undefined, [await element, scope, visitors]));
+//   }
 
-  return values;
-};
+//   return values;
+// };
 
-Array.prototype._flatMap = async function (func, scope, visitors) {
-  let accum = [];
+// Array.prototype._flatMap = async function (func, scope, visitors) {
+//   let accum = [];
 
-  for (const element of this) {
-    const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+//   for (const element of this) {
+//     const appliedElement = await func.apply(undefined, [element, scope, visitors]);
 
-    if (appliedElement[Symbol.iterator]) {
-      accum.push(...appliedElement);
-    } else {
-      accum.push(appliedElement);
-    }
-  }
+//     if (appliedElement[Symbol.iterator]) {
+//       accum.push(...appliedElement);
+//     } else {
+//       accum.push(appliedElement);
+//     }
+//   }
 
-  return accum;
-};
+//   return accum;
+// };
 
-Array.prototype._reduce = function (init) {
-  return async (func, scope, visitors) => {
-    let accum = init;
-    let index = 0;
+// Array.prototype._reduce = function (init) {
+//   return async (func, scope, visitors) => {
+//     let accum = init;
+//     let index = 0;
 
-    for (const element of this) {
-      accum = await func.apply(undefined, [new KopiTuple([accum, await element, index++]), scope, visitors]);
-    }
+//     for (const element of this) {
+//       accum = await func.apply(undefined, [new KopiTuple([accum, await element, index++]), scope, visitors]);
+//     }
 
-    return accum;
-  };
-};
+//     return accum;
+//   };
+// };
 
-Array.prototype._reverse = async function (args, scope, visitors) {
-  return [...this].reverse();
-};
+// Array.prototype._reverse = async function (args, scope, visitors) {
+//   return [...this].reverse();
+// };
 
-Array.prototype._find = async function (func, scope, visitors) {
-  for (const element of this) {
-    if (await func.apply(undefined, [await element, scope, visitors])) {
-      return await element;
-    }
-  }
+// Array.prototype._find = async function (func, scope, visitors) {
+//   for (const element of this) {
+//     if (await func.apply(undefined, [await element, scope, visitors])) {
+//       return await element;
+//     }
+//   }
 
-  return KopiTuple.empty;
-};
+//   return KopiTuple.empty;
+// };
 
 const { default: KopiString } = require('./KopiString');

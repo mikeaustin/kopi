@@ -104,7 +104,7 @@ class KopiTuple {
     return !await this['=='](that);
   }
 
-  map(mapper, scope, visitors) {
+  async map(mapper, scope, visitors) {
     const iters = this._elementsArray.map(element => element[Symbol.iterator]());
     const values = [];
 
@@ -118,7 +118,7 @@ class KopiTuple {
       results = iters.map(iter => iter.next());
     }
 
-    return Promise.all(values);
+    return new KopiArray(await Promise.all(values));
   }
 
   async product(func = (args) => args, scope, visitors) {
@@ -138,7 +138,7 @@ class KopiTuple {
         result = iter.next();
       }
 
-      return accum;
+      return new KopiArray(accum);
     };
 
     return helper(0, []);
@@ -150,3 +150,5 @@ KopiTuple.empty = new KopiTuple(null);
 module.exports = {
   default: KopiTuple,
 };
+
+const { default: KopiArray } = require('./KopiArray');

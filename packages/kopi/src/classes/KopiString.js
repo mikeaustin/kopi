@@ -96,7 +96,9 @@ class KopiString {
   }
 
   split(delimiter = new KopiString('')) {
-    return this._nativeString.split(delimiter.getNativeString()).map(element => new KopiString(element));
+    return new KopiArray(
+      this._nativeString.split(delimiter.getNativeString()).map(element => new KopiString(element)),
+    );
   }
 
   trim() {
@@ -108,4 +110,4 @@ module.exports = {
   default: KopiString,
 };
 
-const { KopiArray } = require('./KopiArray');
+const { default: KopiArray } = require('./KopiArray');

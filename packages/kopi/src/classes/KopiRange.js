@@ -1,7 +1,5 @@
 const util = require('util');
 
-const { default: KopiTuple } = require('./KopiTuple');
-
 class KopiRangeWithIndex {
   constructor(range) {
     this._range = range;
@@ -63,7 +61,7 @@ class KopiRange {
       }
     }
 
-    return values;
+    return new KopiArray(values);
   }
 
   async flatMap(func, scope, visitors) {
@@ -79,7 +77,7 @@ class KopiRange {
       }
     }
 
-    return accum;
+    return new KopiArray(accum);
   }
 
   async reduce(init) {
@@ -98,3 +96,6 @@ class KopiRange {
 module.exports = {
   default: KopiRange,
 };
+
+const { default: KopiTuple } = require('./KopiTuple');
+const { default: KopiArray } = require('./KopiArray');
