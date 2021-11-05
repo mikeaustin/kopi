@@ -8,7 +8,7 @@ class KopiRangeWithIndex {
   map(func, scope, visitors) {
     let index = 0;
 
-    return this._range.map(element => (
+    return this._range.map((element) => (
       func.apply(undefined, [new KopiTuple([element, index++]), scope, visitors])
     ));
   }
@@ -29,7 +29,9 @@ class KopiRange {
   }
 
   toArray() {
-    return Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from);
+    return new KopiArray(
+      Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from),
+    );
   }
 
   *[Symbol.iterator]() {

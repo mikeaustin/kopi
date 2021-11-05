@@ -2,7 +2,6 @@ const util = require('util');
 
 require('./classes/Boolean');
 require('./classes/Number');
-require('./classes/Array');
 require('./classes/Map');
 
 const { default: KopiString } = require('./classes/KopiString');
@@ -31,7 +30,7 @@ class TuplePattern {
         ),
       ]));
 
-      if (matchesArray.some(match => match === null)) {
+      if (matchesArray.some((match) => match === null)) {
         return null;
       }
 
@@ -46,7 +45,7 @@ class TuplePattern {
       await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 
-    if (matchesArray.some(match => match === null)) {
+    if (matchesArray.some((match) => match === null)) {
       return null;
     }
 
@@ -72,7 +71,7 @@ class ArrayLiteralPattern {
       await element.getMatches(await array._elementsArray[index]),
     ]), []);
 
-    if (matchesArray.some(matches => matches === null)) {
+    if (matchesArray.some((matches) => matches === null)) {
       return null;
     }
 

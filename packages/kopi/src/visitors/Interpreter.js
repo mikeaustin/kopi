@@ -18,7 +18,7 @@ const { applyOperator } = require('../utils');
 
 class Interpreter extends Visitors {
   Block({ statements }, scope) {
-    const bind = updates => scope = ({ ...scope, ...updates });
+    const bind = (updates) => scope = ({ ...scope, ...updates });
 
     return statements.reduce(async (result, statement) => (
       await result, this.visitNode(statement, scope, bind)
@@ -64,7 +64,7 @@ class Interpreter extends Visitors {
 
   TupleTypeExpression({ elements, fields }, scope, bind) {
     return new KopiTuple(
-      elements.map(element => this.visitNode(element, scope, bind)),
+      elements.map((element) => this.visitNode(element, scope, bind)),
       fields,
     );
   }
@@ -130,14 +130,14 @@ class Interpreter extends Visitors {
     }
 
     return new KopiTuple(
-      elements.map(element => this.visitNode(element, scope, bind)),
+      elements.map((element) => this.visitNode(element, scope, bind)),
       fields,
     );
   }
 
   ArrayExpression({ elements }, scope, bind) {
     return new KopiArray(
-      elements.map(element => this.visitNode(element, scope, bind)),
+      elements.map((element) => this.visitNode(element, scope, bind)),
     );
   }
 
@@ -181,14 +181,14 @@ class Interpreter extends Visitors {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      elements.map(element => this.visitNode(element, scope)),
+      elements.map((element) => this.visitNode(element, scope)),
       fields,
     );
   }
 
   ArrayLiteralPattern({ elements }, scope) {
     return new ArrayLiteralPattern(
-      elements.map(element => this.visitNode(element, scope)),
+      elements.map((element) => this.visitNode(element, scope)),
     );
   }
 

@@ -24,7 +24,7 @@ const input = process.argv.length === 2 ? readline.createInterface({
 
 let scope = getScope(input);
 
-const bind = updates => scope = ({ ...scope, ...updates });
+const bind = (updates) => scope = ({ ...scope, ...updates });
 
 async function main() {
   if (process.argv.length > 2) {

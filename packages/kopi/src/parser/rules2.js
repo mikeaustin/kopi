@@ -2,7 +2,7 @@ const util = require('util');
 const fs = require('fs');
 
 async function readFiles(...files) {
-  return Promise.all(files.map(file => fs.promises.readFile(file, 'utf-8')));
+  return Promise.all(files.map((file) => fs.promises.readFile(file, 'utf-8')));
 }
 
 async function main() {
@@ -24,7 +24,7 @@ async function main() {
 
     return {
       ...rulesString,
-      [rule.slice(0, index)]: rule.slice(index + 1)
+      [rule.slice(0, index)]: rule.slice(index + 1),
     };
   }, {});
 
@@ -104,7 +104,7 @@ async function main() {
     '{\n' +
     functions +
     '}\n\n' +
-    orderedRulesString.join('\n\n')
+    orderedRulesString.join('\n\n'),
   );
 }
 

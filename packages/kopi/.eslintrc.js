@@ -42,5 +42,9 @@ module.exports = {
       'error',
       'always-multiline',
     ],
+    'arrow-parens': [
+      'error',
+      'always',
+    ],
   },
 };

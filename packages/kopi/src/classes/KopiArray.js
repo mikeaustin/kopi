@@ -11,7 +11,7 @@ class KopiArray {
 
   async inspectAsync() {
     const elementsArray = await Promise.all(
-      this._elementsArray.map(async element => (await (await element).inspectAsync())),
+      this._elementsArray.map(async (element) => (await (await element).inspectAsync())),
     );
 
     return `[${elementsArray.join(', ')}]`;
@@ -62,7 +62,7 @@ class KopiArray {
     const elementsArray = await Promise.all(this._elementsArray);
 
     return new KopiString(
-      elementsArray.map(element => element.getNativeString()).join(delimiter.getNativeString()),
+      elementsArray.map((element) => element.getNativeString()).join(delimiter.getNativeString()),
     );
   }
 

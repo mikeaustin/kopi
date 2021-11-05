@@ -30,7 +30,7 @@ class KopiTuple {
     }
 
     const elementsArray = await Promise.all(
-      this._elementsArray.map(async element => (await (await element).inspectAsync())),
+      this._elementsArray.map(async (element) => (await (await element).inspectAsync())),
     );
 
     return `(${elementsArray.map((element, index) => (
@@ -105,17 +105,17 @@ class KopiTuple {
   }
 
   async map(mapper, scope, visitors) {
-    const iters = this._elementsArray.map(element => element[Symbol.iterator]());
+    const iters = this._elementsArray.map((element) => element[Symbol.iterator]());
     const values = [];
 
-    let results = iters.map(iter => iter.next());
+    let results = iters.map((iter) => iter.next());
 
-    while (results.every(result => !result.done)) {
+    while (results.every((result) => !result.done)) {
       values.push(
-        mapper.apply(undefined, [new KopiTuple(results.map(result => result.value)), scope, visitors]),
+        mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors]),
       );
 
-      results = iters.map(iter => iter.next());
+      results = iters.map((iter) => iter.next());
     }
 
     return new KopiArray(await Promise.all(values));

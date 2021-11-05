@@ -97,7 +97,7 @@ class KopiString {
 
   split(delimiter = new KopiString('')) {
     return new KopiArray(
-      this._nativeString.split(delimiter.getNativeString()).map(element => new KopiString(element)),
+      this._nativeString.split(delimiter.getNativeString()).map((element) => new KopiString(element)),
     );
   }
 
