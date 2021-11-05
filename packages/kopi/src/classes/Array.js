@@ -1,6 +1,5 @@
-const util = require("util");
+const util = require('util');
 
-const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 
 Array.prototype.inspectAsync = async function ({ formatted = false } = {}) {
@@ -123,3 +122,5 @@ Array.prototype._find = async function (func, scope, visitors) {
 
   return KopiTuple.empty;
 };
+
+const { default: KopiString } = require('./KopiString');

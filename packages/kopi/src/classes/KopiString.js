@@ -1,7 +1,5 @@
 const util = require('util');
 
-// const { KopiArray } = require('./KopiArray');
-
 class KopiString {
   constructor(nativeString) {
     this._nativeString = nativeString;
@@ -109,3 +107,5 @@ class KopiString {
 module.exports = {
   default: KopiString,
 };
+
+const { KopiArray } = require('./KopiArray');

@@ -7,6 +7,7 @@ require('./classes/Map');
 
 const { default: KopiString } = require('./classes/KopiString');
 const { default: KopiTuple } = require('./classes/KopiTuple');
+const { default: KopiArray } = require('./classes/KopiArray');
 const { default: KopiRange } = require('./classes/KopiRange');
 const { default: KopiFunction } = require('./classes/KopiFunction');
 const { default: KopiVector } = require('./classes/KopiVector');
@@ -187,6 +188,7 @@ class FunctionPattern {
 module.exports = {
   KopiString,
   KopiTuple,
+  KopiArray,
   KopiRange,
   KopiFunction,
   KopiVector,

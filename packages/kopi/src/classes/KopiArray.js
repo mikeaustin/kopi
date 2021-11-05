@@ -1,6 +1,5 @@
 const util = require('util');
 
-const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 const { default: Iterable } = require('../traits/Iterable');
 
@@ -87,3 +86,5 @@ KopiArray.prototype.reduce = Iterable.prototype.reduce;
 module.exports = {
   default: KopiArray,
 };
+
+const { default: KopiString } = require('./KopiString');
