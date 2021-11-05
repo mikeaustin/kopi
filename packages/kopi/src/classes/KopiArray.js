@@ -17,7 +17,7 @@ class KopiArray {
       this._elementsArray.map(async element => (await (await element).inspectAsync())),
     );
 
-    return `[${elementsArray.map(element => element.toStringAsync()).join(', ')}]`;
+    return `[${elementsArray.join(', ')}]`;
   }
 
   toStringAsync() {
@@ -54,21 +54,60 @@ class KopiArray {
     return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
   }
 
-  async join(delimiter = new KopiString('')) {
+  async _join(delimiter = new KopiString('')) {
     const elementsArray = await Promise.all(this._elementsArray);
 
     return new KopiString(
-      elementsArray.map(element => element.getNativeString()).join(delimiter.getNativeString())
+      elementsArray.map(element => element.getNativeString()).join(delimiter.getNativeString()),
     );
   }
 
-  async reverse(args, scope, visitors) {
+  async _map(func, scope, visitors) {
+    const values = [];
+
+    for await (const element of this) {
+      values.push(await func.apply(undefined, [element, scope, visitors]));
+    }
+
+    return new KopiArray(values);
+  }
+
+  async _flatMap(func, scope, visitors) {
+    let accum = [];
+
+    for await (const element of this) {
+      const appliedElement = await func.apply(undefined, [element, scope, visitors]);
+
+      if (appliedElement[Symbol.iterator]) {
+        accum.push(...appliedElement);
+      } else {
+        accum.push(appliedElement);
+      }
+    }
+
+    return new KopiArray(accum);
+  }
+
+  _reduce(init) {
+    return async (func, scope, visitors) => {
+      let accum = init;
+      let index = 0;
+
+      for await (const element of this) {
+        accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
+      }
+
+      return accum;
+    };
+  }
+
+  async _reverse(args, scope, visitors) {
     return new KopiArray(
       [...this._elementsArray].reverse(),
     );
   }
 
-  async find(func, scope, visitors) {
+  async _find(func, scope, visitors) {
     for await (const element of this._elementsArray) {
       if (await func.apply(undefined, [element, scope, visitors])) {
         return element;
