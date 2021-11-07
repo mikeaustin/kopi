@@ -1,13 +1,19 @@
-const readline = require('readline');
-const { Worker } = require('worker_threads');
+import readline from 'readline';
+// const { Worker } = require('worker_threads');
 
-const { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } = require('./classes');
-const { default: KopiIterable } = require('./traits/Iterable');
+import _classes from './classes.js';
+import _Iterable from './traits/Iterable.js';
 
-const core = require('./functions/core');
-const { compile } = require('./compiler');
+import core from './functions/core.js';
+import { compile } from './compiler.mjs';
 
-const { default: kopi_ls } = require('../test/terminal');
+import _terminal from '../test/terminal.js';
+
+const { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } = _classes;
+const { default: KopiIterable } = _Iterable;
+
+const { default: kopi_ls } = _terminal;
+
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
@@ -38,14 +44,14 @@ const KopiIterableTrait = { nativeConstructor: KopiIterable };
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
-class KopiWorker {
-  constructor(filename) {
-    this.filename = filename;
-    this.worker = new Worker('./src/worker.js', {
-      workerData: filename,
-    });
-  }
-}
+// class KopiWorker {
+//   constructor(filename) {
+//     this.filename = filename;
+//     this.worker = new Worker('./src/worker.js', {
+//       workerData: filename,
+//     });
+//   }
+// }
 
 let getScope = (input) => ({
   ls: kopi_ls,
@@ -133,6 +139,4 @@ let getScope = (input) => ({
   Iterable: KopiIterableTrait,
 });
 
-module.exports = {
-  default: getScope,
-};
+export default getScope;

@@ -1,17 +1,29 @@
-const util = require('util');
-const fs = require('fs');
+import util from 'util';
+import fs from 'fs';
 
-const parser = require('../lib/parser');
+import parser from '../lib/parser.js';
 
-const { default: interpreter } = require('./visitors/Interpreter');
-const { default: typechecker } = require('./visitors/Typechecker');
+import _interpreter from './visitors/Interpreter.js';
+import _typechecker from './visitors/Typechecker.js';
+
+import _types from './types.js';
+
+const { default: interpreter } = _interpreter;
+const { default: typechecker } = _typechecker;
+
+// const {
+//   AnyType, NoneType, UnionType,
+//   BooleanType, NumberType, StringType,
+//   FunctionType,
+//   IdentifierPatternType,
+// } = require('./types');
 
 const {
   AnyType, NoneType, UnionType,
   BooleanType, NumberType, StringType,
   FunctionType,
   IdentifierPatternType,
-} = require('./types');
+} = _types;
 
 class TypeVar {
   constructor(type) {
@@ -80,6 +92,6 @@ const compile = async (filename, scope) => {
   }
 };
 
-module.exports = {
+export {
   compile,
 };

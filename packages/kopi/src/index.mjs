@@ -4,13 +4,12 @@ import util from 'util';
 import readline from 'readline';
 
 import parser from '../lib/parser.js';
-import { compile } from './compiler.js';
+import { compile } from './compiler.mjs';
 
 import _interpreter from './visitors/Interpreter.js';
-import _getScope from './scope.js';
+import getScope from './scope.mjs';
 
 const { default: interpreter } = _interpreter;
-const { default: getScope } = _getScope;
 
 Function.prototype.toStringAsync = function () {
   return '<function>';
