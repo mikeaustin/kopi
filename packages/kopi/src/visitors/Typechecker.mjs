@@ -1,10 +1,14 @@
-const { default: Visitors } = require('./Visitors');
+import _Visitors from './Visitors.js';
 
-const { UnionType, BooleanType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = require('../types');
+import _types from '../types.js';
+
+const { default: Visitors } = _Visitors;
+
+const { UnionType, BooleanType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = _types;
 
 class Typechecker extends Visitors {
   Block({ statements }, context) {
-    const bind = updates => context = ({ ...context, ...updates });
+    const bind = (updates) => context = ({ ...context, ...updates });
 
     return statements.reduce((result, statement) => (
       this.visitNode(statement, context, bind)
@@ -90,6 +94,4 @@ class Typechecker extends Visitors {
   }
 }
 
-module.exports = {
-  default: new Typechecker(),
-};
+export default new Typechecker();

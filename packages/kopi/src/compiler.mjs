@@ -4,11 +4,9 @@ import fs from 'fs';
 import parser from '../lib/parser.js';
 
 import interpreter from './visitors/Interpreter.mjs';
-import _typechecker from './visitors/Typechecker.js';
+import typechecker from './visitors/Typechecker.mjs';
 
 import _types from './types.js';
-
-const { default: typechecker } = _typechecker;
 
 // const {
 //   AnyType, NoneType, UnionType,
