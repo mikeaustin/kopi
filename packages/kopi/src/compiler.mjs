@@ -3,12 +3,11 @@ import fs from 'fs';
 
 import parser from '../lib/parser.js';
 
-import _interpreter from './visitors/Interpreter.js';
+import interpreter from './visitors/Interpreter.mjs';
 import _typechecker from './visitors/Typechecker.js';
 
 import _types from './types.js';
 
-const { default: interpreter } = _interpreter;
 const { default: typechecker } = _typechecker;
 
 // const {

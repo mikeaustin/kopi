@@ -1,7 +1,12 @@
-const util = require('util');
-const fs = require('fs');
+import util from 'util';
+import fs from 'fs';
 
-const { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } = require('../classes');
+import _classes from '../classes.js';
+
+import _Visitors from './Visitors.js';
+import _utils from '../utils.js';
+
+const { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } = _classes;
 const {
   TuplePattern,
   ArrayLiteralPattern,
@@ -11,10 +16,10 @@ const {
   StringLiteralPattern,
   ConstructorPattern,
   FunctionPattern,
-} = require('../classes');
+} = _classes;
 
-const { default: Visitors } = require('./Visitors');
-const { applyOperator } = require('../utils');
+const { default: Visitors } = _Visitors;
+const { applyOperator } = _utils;
 
 class Interpreter extends Visitors {
   Block({ statements }, scope) {
@@ -245,6 +250,4 @@ class Interpreter extends Visitors {
   }
 }
 
-module.exports = {
-  default: new Interpreter(),
-};
+export default new Interpreter();

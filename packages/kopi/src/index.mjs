@@ -6,10 +6,8 @@ import readline from 'readline';
 import parser from '../lib/parser.js';
 import { compile } from './compiler.mjs';
 
-import _interpreter from './visitors/Interpreter.js';
+import interpreter from './visitors/Interpreter.mjs';
 import getScope from './scope.mjs';
-
-const { default: interpreter } = _interpreter;
 
 Function.prototype.toStringAsync = function () {
   return '<function>';
