@@ -14,6 +14,7 @@ class Iterable {
       if (predicatePassed) {
         accum = accum.append(await func.apply(undefined, [await element, scope, visitors]));
       }
+      // accum = accum.concat(await func.apply(undefined, [element, scope, visitors]));
     }
 
     return accum;
@@ -28,7 +29,7 @@ class Iterable {
   async flatMap(func, scope, visitors) {
     let accum = this.emptyValue();
 
-    for (const element of this) {
+    for await (const element of this) {
       const appliedElement = await func.apply(undefined, [element, scope, visitors]);
 
       if (appliedElement[Symbol.iterator]) {
@@ -46,26 +47,46 @@ class Iterable {
       let accum = init;
       let index = 0;
 
-      for (const element of this) {
-        accum = await func.apply(undefined, [new KopiTuple([accum, await element, index++]), scope, visitors]);
+      for await (const element of this) {
+        accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
       }
 
       return accum;
     };
   }
 
-  splitOn(delimiter = new KopiString('')) {
+  async splitOn(delimiter = new KopiString('')) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
     let values = [];
 
-    for (const element of this) {
+    for await (const element of this) {
       if (delimiterRexExp.test(element.valueOf())) {
         if (values.length > 0) {
           accum.push(values);
         }
 
         values = [];
+      } else {
+        values.push(element);
+      }
+    }
+
+    if (values.length !== 0) {
+      accum.push(values);
+    }
+
+    return accum;
+  }
+
+  async splitEvery(count) {
+    const accum = [];
+    let values = [];
+    let index = 0;
+
+    for await (const element of this) {
+      if (index++ % count === 0) {
+        accum.push(values);
       } else {
         values.push(element);
       }
