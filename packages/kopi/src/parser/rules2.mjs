@@ -1,5 +1,5 @@
-const util = require('util');
-const fs = require('fs');
+import util from 'util';
+import fs from 'fs';
 
 async function readFiles(...files) {
   return Promise.all(files.map((file) => fs.promises.readFile(file, 'utf-8')));

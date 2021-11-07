@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 
-const util = require('util');
-const readline = require('readline');
+import util from 'util';
+import readline from 'readline';
 
-const parser = require('../lib/parser');
-const { compile } = require('./compiler');
+import parser from '../lib/parser.js';
+import { compile } from './compiler.js';
 
-const { default: interpreter } = require('./visitors/Interpreter');
-const { default: getScope } = require('./scope');
+import _interpreter from './visitors/Interpreter.js';
+import _getScope from './scope.js';
+
+const { default: interpreter } = _interpreter;
+const { default: getScope } = _getScope;
 
 Function.prototype.toStringAsync = function () {
   return '<function>';
