@@ -4,14 +4,9 @@ import http from 'http';
 import fetch from 'node-fetch';
 
 import _classes from '../classes.js';
-import coroutines from './coroutines.js';
+import * as coroutines from './coroutines.mjs';
 
 const { KopiString, KopiTuple } = _classes;
-
-const inspect = (value) => util.inspect(value, {
-  compact: false,
-  depth: Infinity,
-});
 
 const kopi_inspect = async (value) => {
   console.log(await value.inspectAsync());

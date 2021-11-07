@@ -1,6 +1,10 @@
-const { EventEmitter } = require('stream');
+import _stream from 'stream';
 
-const { KopiTuple } = require('../classes');
+import _classes from '../classes.js';
+
+const { EventEmitter } = _stream;
+
+const { KopiTuple } = _classes;
 
 const coroutineEventEmitter = new EventEmitter();
 
@@ -83,7 +87,7 @@ const kopi_tasks = () => {
   });
 };
 
-module.exports = {
+export {
   kopi_spawn,
   kopi_yield,
   kopi_send,

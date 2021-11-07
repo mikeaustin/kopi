@@ -20,16 +20,8 @@ KopiStringConstructor.nativeConstructor = KopiString;
 KopiStringConstructor.Newline = new KopiString('\n');
 KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 
-// const KopiArrayConstructor = (tuple) => tuple.getElementsArray();
-// KopiArrayConstructor.nativeConstructor = Array;
-
 const KopiArrayConstructor = (tuple) => new KopiArray(tuple.getElementsArray());
 KopiArrayConstructor.nativeConstructor = KopiArray;
-
-// const KopiDictConstructor = async (entries) => new KopiDict(
-//   await Promise.all(entries.map(async (entry) => (await entry).getElementsArray())),
-// );
-// KopiDictConstructor.nativeConstructor = KopiDict;
 
 const KopiDictConstructor = async (entries) => new KopiDict(
   await Promise.all(entries.getElementsArray().map(async (entry) => (await entry).getElementsArray())),
