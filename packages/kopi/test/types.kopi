@@ -6,7 +6,7 @@ objects = [
   asteroid $ Vector (20, 30)
 ]
 
-print $ objects | _map object => match object (
+print $ objects | map object => match object (
   "ship", position     => ship $ position + Vector (10, 10)
   "asteroid", position => asteroid $ position + Vector (1, 1)
 )

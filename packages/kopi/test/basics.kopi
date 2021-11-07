@@ -123,7 +123,7 @@ print $ match 5 (
 )
 
 
-print $ [1, (sleep 2), (1 + 2)] | _map '_toString
+print $ [1, (sleep 2), (1 + 2)] | map '_toString
 
 print $ sleep 1 | _toFixed 2
 
@@ -137,18 +137,18 @@ print $ loop exit => (x = 1) => {
 }
 
 
-print $ ["B, A", "D, C"] | _map (name) => (
-  name | split "," | _map 'trim | _reverse | _join " "
+print $ ["B, A", "D, C"] | map (name) => (
+  name | split "," | map 'trim | reverse | join " "
 )
 
 f (x = 5) = x * x
 print $ f ()
 
 
-print $ ['(* 2), '(_toFixed 2)] | _reduce 5 $ (x, f) => f x
+print $ ['(* 2), '(_toFixed 2)] | reduce 5 $ (x, f) => f x
 
-pipe = fs => x => (fs | _reduce x $ (x, f) => f x)
-# pipe fs x = fs | _reduce x $ (x, f) => f x
+pipe = fs => x => (fs | reduce x $ (x, f) => f x)
+# pipe fs x = fs | reduce x $ (x, f) => f x
 
 print $ pipe ['(* 2), '(_toFixed 2)] 5
 

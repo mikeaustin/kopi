@@ -16,11 +16,11 @@ evaluate (statement, indexes) = match statement (
 )
 
 interpret (source) = {
-  program = source | trim | split String.NewlineRegExp | _map (line) => (
+  program = source | trim | split String.NewlineRegExp | map (line) => (
     tuple $ (line | trim) | split " "
   )
 
-  indexes = program | _reduce {} $ (numbers, statement, index) => {
+  indexes = program | reduce {} $ (numbers, statement, index) => {
     numbers | set (statement.0, index)
   }
 

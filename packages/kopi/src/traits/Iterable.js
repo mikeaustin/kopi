@@ -2,7 +2,7 @@ const { default: KopiString } = require('../classes/KopiString');
 const { default: KopiTuple } = require('../classes/KopiTuple');
 
 class Iterable {
-  async _map(func, scope, visitors) {
+  async map(func, scope, visitors) {
     let accum = this.emptyValue();
 
     for (const element of this) {
@@ -12,13 +12,13 @@ class Iterable {
     return accum;
   }
 
-  // async *_map(func, scope, visitors) {
+  // async *map(func, scope, visitors) {
   //   for (const element of this) {
   //     yield await func.apply(undefined, [await element, scope, visitors]);
   //   }
   // }
 
-  async _flatMap(func, scope, visitors) {
+  async flatMap(func, scope, visitors) {
     let accum = this.emptyValue();
 
     for (const element of this) {
@@ -34,7 +34,7 @@ class Iterable {
     return accum;
   }
 
-  _reduce(init) {
+  reduce(init) {
     return async (func, scope, visitors) => {
       let accum = init;
       let index = 0;

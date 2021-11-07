@@ -16,7 +16,7 @@ heading (string, width) = {
   print ""
 }
 
-test (filenames) = filenames | _map (filename) => {
+test (filenames) = filenames | map (filename) => {
   heading (filename, width: 80)
   import ("test/" filename)
 }

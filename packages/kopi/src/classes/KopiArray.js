@@ -58,7 +58,7 @@ class KopiArray {
     return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
   }
 
-  async _join(delimiter = new KopiString('')) {
+  async join(delimiter = new KopiString('')) {
     const elementsArray = await Promise.all(this._elementsArray);
 
     return new KopiString(
@@ -66,7 +66,7 @@ class KopiArray {
     );
   }
 
-  async _map(func, scope, visitors) {
+  async map(func, scope, visitors) {
     const values = [];
 
     for await (const element of this) {
@@ -76,7 +76,7 @@ class KopiArray {
     return new KopiArray(values);
   }
 
-  async _flatMap(func, scope, visitors) {
+  async flatMap(func, scope, visitors) {
     let accum = [];
 
     for await (const element of this) {
@@ -92,7 +92,7 @@ class KopiArray {
     return new KopiArray(accum);
   }
 
-  _reduce(init) {
+  reduce(init) {
     return async (func, scope, visitors) => {
       let accum = init;
       let index = 0;
@@ -105,13 +105,13 @@ class KopiArray {
     };
   }
 
-  async _reverse(args, scope, visitors) {
+  async reverse(args, scope, visitors) {
     return new KopiArray(
       [...this._elementsArray].reverse(),
     );
   }
 
-  async _find(func, scope, visitors) {
+  async find(func, scope, visitors) {
     for await (const element of this._elementsArray) {
       if (await func.apply(undefined, [element, scope, visitors])) {
         return element;
@@ -130,6 +130,6 @@ const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 const { default: Iterable } = require('../traits/Iterable');
 
-KopiArray.prototype.map = Iterable.prototype.map;
-KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
-KopiArray.prototype.reduce = Iterable.prototype.reduce;
+// KopiArray.prototype.map = Iterable.prototype.map;
+// KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
+// KopiArray.prototype.reduce = Iterable.prototype.reduce;

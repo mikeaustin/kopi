@@ -22,11 +22,11 @@ generateHtmlString (node, level) = {
       indent level ++ String value ++ String.Newline
     }
     "element", tag, props, children => {
-      inner = children | _map child => generateHtmlString (child, level + 1)
+      inner = children | map child => generateHtmlString (child, level + 1)
       attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
       indent level "<" tag attrs ">" String.Newline ++
-        inner | _join "" ++
+        inner | join "" ++
       indent level "</" tag ">" String.Newline
     }
   )
