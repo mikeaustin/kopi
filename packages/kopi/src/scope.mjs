@@ -4,7 +4,7 @@ import readline from 'readline';
 import _classes from './classes.js';
 import _Iterable from './traits/Iterable.js';
 
-import core from './functions/core.js';
+import * as core from './functions/core.mjs';
 import { compile } from './compiler.mjs';
 
 import _terminal from '../test/terminal.js';

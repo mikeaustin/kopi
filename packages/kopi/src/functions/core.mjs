@@ -1,13 +1,14 @@
-const util = require('util');
-const fs = require('fs');
-const http = require('http');
-const fetch = require('node-fetch');
+import util from 'util';
+import fs from 'fs';
+import http from 'http';
+import fetch from 'node-fetch';
 
-const { KopiString, KopiTuple } = require('../classes');
+import _classes from '../classes.js';
+import coroutines from './coroutines.js';
 
-const coroutines = require('./coroutines');
+const { KopiString, KopiTuple } = _classes;
 
-const inspect = value => util.inspect(value, {
+const inspect = (value) => util.inspect(value, {
   compact: false,
   depth: Infinity,
 });
@@ -96,11 +97,11 @@ const kopi_loop = async (_func, scope, visitors) => {
 };
 
 const kopi_write = (value) => {
-  return new Promise(resolve => process.stdout.write(value.toStringAsync(), () => resolve()));
+  return new Promise((resolve) => process.stdout.write(value.toStringAsync(), () => resolve()));
 };
 
 const kopi_sleep = (seconds) => {
-  return new Promise(resolve => setTimeout(() => resolve(seconds), seconds * 1000));
+  return new Promise((resolve) => setTimeout(() => resolve(seconds), seconds * 1000));
 };
 
 const kopi_fetch = async (url) => {
@@ -141,7 +142,12 @@ const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, vis
   });
 };
 
-module.exports = {
+const kopi_spawn = coroutines.kopi_spawn;
+const kopi_yield = coroutines.kopi_yield;
+const kopi_send = coroutines.kopi_send;
+const kopi_tasks = coroutines.kopi_tasks;
+
+export {
   kopi_inspect,
   kopi_print,
   kopi_read,
@@ -159,9 +165,9 @@ module.exports = {
   kopi_sleep,
   kopi_fetch,
   kopi_listen,
-  kopi_spawn: coroutines.kopi_spawn,
-  kopi_yield: coroutines.kopi_yield,
-  kopi_send: coroutines.kopi_send,
-  kopi_tasks: coroutines.kopi_tasks,
+  kopi_spawn,
+  kopi_yield,
+  kopi_send,
+  kopi_tasks,
   kopi_extend,
 };
