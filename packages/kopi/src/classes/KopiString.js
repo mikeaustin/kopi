@@ -35,6 +35,10 @@ class KopiString {
     return this['++'](that);
   }
 
+  append(that) {
+    return new KopiString(this._nativeString.concat([that._nativeString]));
+  }
+
   get(index) {
     if (index.constructor.name === 'KopiRange') {
       return new KopiString(this._nativeString.slice(index.from, index.to));

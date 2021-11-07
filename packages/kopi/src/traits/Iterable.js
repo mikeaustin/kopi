@@ -5,8 +5,15 @@ class Iterable {
   async map(func, scope, visitors) {
     let accum = this.emptyValue();
 
-    for (const element of this) {
-      accum = accum.concat(await func.apply(undefined, [await element, scope, visitors]));
+    for await (const element of this) {
+      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+        ...scope,
+        [func.params.name]: element,
+      }));
+
+      if (predicatePassed) {
+        accum = accum.append(await func.apply(undefined, [await element, scope, visitors]));
+      }
     }
 
     return accum;
@@ -25,9 +32,9 @@ class Iterable {
       const appliedElement = await func.apply(undefined, [element, scope, visitors]);
 
       if (appliedElement[Symbol.iterator]) {
-        accum = accum.concat(appliedElement);
+        accum = accum.append(appliedElement);
       } else {
-        accum = accum.concat(appliedElement);
+        accum = accum.append(appliedElement);
       }
     }
 

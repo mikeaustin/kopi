@@ -54,6 +54,15 @@ class KopiArray {
     return this._elementsArray.length;
   }
 
+  concat(that) {
+    console.log('that', that);
+    return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
+  }
+
+  append(that) {
+    return new KopiArray(this._elementsArray.concat([that]));
+  }
+
   ['++'](that) {
     return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
   }
@@ -64,45 +73,6 @@ class KopiArray {
     return new KopiString(
       elementsArray.map((element) => element.getNativeString()).join(delimiter.getNativeString()),
     );
-  }
-
-  async map(func, scope, visitors) {
-    const values = [];
-
-    for await (const element of this) {
-      values.push(await func.apply(undefined, [element, scope, visitors]));
-    }
-
-    return new KopiArray(values);
-  }
-
-  async flatMap(func, scope, visitors) {
-    let accum = [];
-
-    for await (const element of this) {
-      const appliedElement = await func.apply(undefined, [element, scope, visitors]);
-
-      if (appliedElement[Symbol.iterator]) {
-        accum.push(...appliedElement);
-      } else {
-        accum.push(appliedElement);
-      }
-    }
-
-    return new KopiArray(accum);
-  }
-
-  reduce(init) {
-    return async (func, scope, visitors) => {
-      let accum = init;
-      let index = 0;
-
-      for await (const element of this) {
-        accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
-      }
-
-      return accum;
-    };
   }
 
   async reverse(args, scope, visitors) {
@@ -130,6 +100,7 @@ const { default: KopiString } = require('./KopiString');
 const { default: KopiTuple } = require('./KopiTuple');
 const { default: Iterable } = require('../traits/Iterable');
 
-// KopiArray.prototype.map = Iterable.prototype.map;
-// KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
-// KopiArray.prototype.reduce = Iterable.prototype.reduce;
+KopiArray.prototype.map = Iterable.prototype.map;
+KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
+KopiArray.prototype.reduce = Iterable.prototype.reduce;
+KopiArray.prototype.splitOn = Iterable.prototype.splitOn;
