@@ -1,5 +1,3 @@
-const util = require('util');
-
 class KopiArray {
   constructor(elementsArray = []) {
     elementsArray.forEach((element, index) => {

@@ -5,19 +5,24 @@
   "license": "ISC",
   "author": "Mike Austin <mike.austin.1024@gmail.com>",
   "homepage": "https://github.com/mikeaustin/kopi",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
   "scripts": {
     "prebuild": "node src/parser/rules2.mjs > src/parser.new.pegjs",
     "build": "pegjs -o lib/parser.js src/parser.new.pegjs",
     "prestart": "npm run build",
-    "start": "node --expose-gc --max-old-space-size=600 src/index.mjs",
-    "test": "npm --silent start test/import.kopi"
+    "start": "node --expose-gc --max-old-space-size=600 src/main.mjs",
+    "test": "npm --silent start test/import.kopi",
+    "webpack": "webpack --mode development",
+    "serve": "webpack serve --mode development --static dist --open"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.26.1",
     "immutable": "^4.0.0-rc.15",
     "node-fetch": "^2.6.0",
-    "pegjs": "^0.10.0"
+    "pegjs": "^0.10.0",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
   }
 }

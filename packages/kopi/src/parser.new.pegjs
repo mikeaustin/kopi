@@ -1,6 +1,4 @@
 {
-const util = require("util");
-
 class Node {
   constructor(args) {
     Object.assign(this, args);
@@ -20,9 +18,9 @@ class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
 class ApplyExpression extends Node {
-  inspectAsync() {
-    return `${util.inspect(this)}`;
-  }
+  // inspectAsync() {
+  //   return `${util.inspect(this)}`;
+  // }
 
   async apply(thisArg, [receiver, scope, visitors]) {
     return receiver[this.expr.name].apply(receiver, [

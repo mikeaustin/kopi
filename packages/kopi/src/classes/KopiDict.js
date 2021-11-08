@@ -1,4 +1,3 @@
-const util = require('util');
 const { Map } = require('immutable');
 
 const { default: KopiTuple } = require('./KopiTuple');

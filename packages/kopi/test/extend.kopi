@@ -30,7 +30,7 @@ extend Vector () (
 
 print $ Vector (10, 20) | fire
 
-inspect methods
+# inspect methods
 
 # Under the hood, it's just updating and using 'methods'
 #

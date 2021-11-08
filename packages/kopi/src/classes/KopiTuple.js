@@ -1,5 +1,3 @@
-const util = require('util');
-
 class KopiTuple {
   constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {

@@ -1,5 +1,3 @@
-const util = require('util');
-
 class KopiRangeWithIndex {
   constructor(range) {
     this._range = range;

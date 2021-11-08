@@ -1,5 +1,3 @@
-const util = require('util');
-
 class KopiString {
   constructor(nativeString) {
     this._nativeString = nativeString;

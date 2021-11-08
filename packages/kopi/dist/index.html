@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <style type="text/css">
+      * {
+        font: 14px/1.5em 'Courier New';
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex: 1;
+      }
+
+      #source {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        outline: none;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      #output {
+        flex: 1;
+        padding: 15px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <textarea id="source">2 + 3
+10
+</textarea>
+    <div id="output">
+    </div>
+    <script type="text/javascript" src="./main.js"></script>
+  </body>
+
+</html>

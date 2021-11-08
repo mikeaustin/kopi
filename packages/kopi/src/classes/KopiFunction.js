@@ -1,5 +1,3 @@
-const util = require('util');
-
 class KopiFunction {
   constructor(params, expr, closure) {
     this.params = params;

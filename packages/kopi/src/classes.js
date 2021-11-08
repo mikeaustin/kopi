@@ -1,5 +1,3 @@
-const util = require('util');
-
 require('./classes/Boolean');
 require('./classes/Number');
 require('./classes/Map');
