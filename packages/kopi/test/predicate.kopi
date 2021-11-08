@@ -30,7 +30,7 @@ print $ match () (
 print $ match 1.5 (
   n [n > 0] => 1
   n [n < 0] => 0
-  _         => n
+  n         => n
 )
 
 # TODO: Predicates on pattern
