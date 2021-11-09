@@ -17,5 +17,9 @@ print $ ",abc" | splitOn ","
 print $ "abc,def" | splitOn ","
 print $ "abc,def,ghi" | splitOn ","
 
+print $ "abcdefghi" | splitEvery 3
+print $ "abcdefghi" | splitEvery 2
+print $ "ab" | splitEvery 3
+
 print (1..)
 print (..1)

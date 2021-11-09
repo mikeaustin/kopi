@@ -15,7 +15,6 @@ class Iterable {
       if (predicatePassed) {
         accum = accum.append(await func.apply(undefined, [await element, scope, visitors]));
       }
-      // accum = accum.concat(await func.apply(undefined, [element, scope, visitors]));
     }
 
     return accum;
@@ -83,22 +82,26 @@ class Iterable {
 
   async splitEvery(count) {
     const accum = [];
-    let values = [];
+
+    let values = this.emptyValue();
     let index = 0;
 
     for await (const element of this) {
-      if (index++ % count === 0) {
+      if (values.size() > 0 && index % count === 0) {
         accum.push(values);
-      } else {
-        values.push(element);
+
+        values = this.emptyValue();
       }
+
+      values = values.append(element);
+      index += 1;
     }
 
     if (values.length !== 0) {
       accum.push(values);
     }
 
-    return accum;
+    return new KopiArray(accum);
   }
 }
 
