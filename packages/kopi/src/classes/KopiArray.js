@@ -78,16 +78,6 @@ class KopiArray {
       [...this._elementsArray].reverse(),
     );
   }
-
-  async find(func, scope, visitors) {
-    for await (const element of this._elementsArray) {
-      if (await func.apply(undefined, [element, scope, visitors])) {
-        return element;
-      }
-    }
-
-    return KopiTuple.empty;
-  }
 }
 
 module.exports = {
@@ -101,4 +91,5 @@ const { default: Iterable } = require('../traits/Iterable');
 KopiArray.prototype.map = Iterable.prototype.map;
 KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
 KopiArray.prototype.reduce = Iterable.prototype.reduce;
+KopiArray.prototype.find = Iterable.prototype.find;
 KopiArray.prototype.splitOn = Iterable.prototype.splitOn;

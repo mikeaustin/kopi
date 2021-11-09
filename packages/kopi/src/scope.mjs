@@ -33,12 +33,14 @@ const KopiIterableMixin = new KopiTuple([
   _Iterable.map,
   _Iterable.flatMap,
   _Iterable.reduce,
+  _Iterable.find,
   _Iterable.splitOn,
   _Iterable.splitEvery,
 ], [
   'map',
   'flatMap',
   'reduce',
+  'find',
   'splitOn',
   'splitEvery',
 ]);

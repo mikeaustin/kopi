@@ -55,6 +55,16 @@ class Iterable {
     };
   }
 
+  async find(func, scope, visitors) {
+    for await (const element of this) {
+      if (await func.apply(undefined, [element, scope, visitors])) {
+        return element;
+      }
+    }
+
+    return KopiTuple.empty;
+  }
+
   async splitOn(delimiter = new KopiString('')) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
@@ -110,6 +120,7 @@ module.exports = {
   map: (thisArg) => (args, scope, visitors) => Iterable.prototype.map.apply(thisArg, [args, scope, visitors]),
   flatMap: (thisArg) => (args, scope, visitors) => Iterable.prototype.flatMap.apply(thisArg, [args, scope, visitors]),
   reduce: (thisArg) => (args, scope, visitors) => Iterable.prototype.reduce.apply(thisArg, [args, scope, visitors]),
+  find: (thisArg) => (args, scope, visitors) => Iterable.prototype.find.apply(thisArg, [args, scope, visitors]),
   splitOn: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitOn.apply(thisArg, [args, scope, visitors]),
   splitEvery: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.apply(thisArg, [args, scope, visitors]),
 };

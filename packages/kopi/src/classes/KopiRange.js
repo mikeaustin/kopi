@@ -32,6 +32,10 @@ class KopiRange {
     );
   }
 
+  emptyValue() {
+    return new KopiArray();
+  }
+
   *[Symbol.iterator]() {
     for (let element = this.from; element['<='](this.to); element = element.succ()) {
       yield element;
@@ -45,52 +49,6 @@ class KopiRange {
   withIndex() {
     return new KopiRangeWithIndex(this);
   }
-
-  async map(func, scope, visitors) {
-    const values = [];
-
-    for (let element of this) {
-      // const argumentsPassed = func.params.getMatches(index);
-      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
-        ...scope,
-        [func.params._identifierName]: element,
-      }));
-
-      if (predicatePassed) {
-        values.push(await func.apply(undefined, [element, scope, visitors]));
-      }
-    }
-
-    return new KopiArray(values);
-  }
-
-  async flatMap(func, scope, visitors) {
-    let accum = [];
-
-    for (let element of this) {
-      const appliedElement = await func.apply(undefined, [await element, scope, visitors]);
-
-      if (appliedElement[Symbol.iterator]) {
-        accum.push(...appliedElement);
-      } else {
-        accum.push(appliedElement);
-      }
-    }
-
-    return new KopiArray(accum);
-  }
-
-  async reduce(init) {
-    let accum = init;
-
-    return (func, scope, visitors) => {
-      for (let element of this) {
-        accum = func.apply(undefined, [new KopiTuple([accum, element]), scope, visitors]);
-      }
-
-      return accum;
-    };
-  }
 }
 
 module.exports = {
@@ -99,3 +57,9 @@ module.exports = {
 
 const { default: KopiTuple } = require('./KopiTuple');
 const { default: KopiArray } = require('./KopiArray');
+const { default: Iterable } = require('../traits/Iterable');
+
+KopiRange.prototype.map = Iterable.prototype.map;
+KopiRange.prototype.flatMap = Iterable.prototype.flatMap;
+KopiRange.prototype.reduce = Iterable.prototype.reduce;
+KopiRange.prototype.splitOn = Iterable.prototype.splitOn;
