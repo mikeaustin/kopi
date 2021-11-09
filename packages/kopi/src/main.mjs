@@ -9,11 +9,11 @@ import { compile } from './compiler.mjs';
 import interpreter from './visitors/Interpreter.mjs';
 import getScope from './scope.mjs';
 
-Function.prototype.toStringAsync = function () {
+Function.prototype.inspectAsync = function () {
   return '<function>';
 };
 
-Function.prototype[util.inspect.custom] = function () {
+Function.prototype.toStringAsync = function () {
   return '<function>';
 };
 

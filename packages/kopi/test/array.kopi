@@ -25,13 +25,13 @@ square (x) = x * x
 # print $ array 0..1 []
 # print $ (array 1 square) 2 square
 
-extend Array () (
+extend Array (
   sum: (this) => () => (this | reduce 0 $ (accum, n) => accum + n)
 )
 
 # sum (this) () = this | reduce 0 $ (accum, n) => accum + n
 
-# extend Array () (
+# extend Array (
 #   sum: sum
 # )
 

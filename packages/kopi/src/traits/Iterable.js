@@ -1,5 +1,6 @@
 const { default: KopiString } = require('../classes/KopiString');
 const { default: KopiTuple } = require('../classes/KopiTuple');
+const { default: KopiArray } = require('../classes/KopiArray');
 
 class Iterable {
   async map(func, scope, visitors) {
@@ -58,25 +59,26 @@ class Iterable {
   async splitOn(delimiter = new KopiString('')) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
-    let values = [];
+
+    let values = this.emptyValue();
 
     for await (const element of this) {
       if (delimiterRexExp.test(element.valueOf())) {
-        if (values.length > 0) {
+        if (values.size() > 0) {
           accum.push(values);
         }
 
-        values = [];
+        values = this.emptyValue();
       } else {
-        values.push(element);
+        values = values.append(element);
       }
     }
 
-    if (values.length !== 0) {
+    if (values.size() !== 0) {
       accum.push(values);
     }
 
-    return accum;
+    return new KopiArray(accum);
   }
 
   async splitEvery(count) {
@@ -102,4 +104,9 @@ class Iterable {
 
 module.exports = {
   default: Iterable,
+  map: (thisArg) => (args, scope, visitors) => Iterable.prototype.map.apply(thisArg, [args, scope, visitors]),
+  flatMap: (thisArg) => (args, scope, visitors) => Iterable.prototype.flatMap.apply(thisArg, [args, scope, visitors]),
+  reduce: (thisArg) => (args, scope, visitors) => Iterable.prototype.reduce.apply(thisArg, [args, scope, visitors]),
+  splitOn: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitOn.apply(thisArg, [args, scope, visitors]),
+  splitEvery: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.apply(thisArg, [args, scope, visitors]),
 };

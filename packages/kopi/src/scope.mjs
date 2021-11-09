@@ -10,10 +10,8 @@ import { compile } from './compiler.mjs';
 import _terminal from '../test/terminal.js';
 
 const { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } = _classes;
-const { default: KopiIterable } = _Iterable;
 
 const { default: kopi_ls } = _terminal;
-
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
@@ -31,7 +29,19 @@ KopiDictConstructor.nativeConstructor = KopiDict;
 const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
 Vector.nativeConstructor = KopiVector;
 
-const KopiIterableTrait = { nativeConstructor: KopiIterable };
+const KopiIterableMixin = new KopiTuple([
+  _Iterable.map,
+  _Iterable.flatMap,
+  _Iterable.reduce,
+  _Iterable.splitOn,
+  _Iterable.splitEvery,
+], [
+  'map',
+  'flatMap',
+  'reduce',
+  'splitOn',
+  'splitEvery',
+]);
 
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
@@ -94,7 +104,7 @@ let getScope = (input) => ({
   send: core.kopi_send,
   tasks: core.kopi_tasks,
 
-  at: (index) => async array => await array[index],
+  at: (index) => async (array) => await array[index],
   loop: core.kopi_loop,
   repeat: (func, scope, visitors) => (
     function next(value) {
@@ -113,8 +123,8 @@ let getScope = (input) => ({
       output: process.stdout,
     });
 
-    return new Promise(resolve => {
-      rl.question(`${str.getNativeString()} `, data => {
+    return new Promise((resolve) => {
+      rl.question(`${str.getNativeString()} `, (data) => {
         if (rl !== input) {
           rl.close();
         }
@@ -128,7 +138,7 @@ let getScope = (input) => ({
   Array: KopiArrayConstructor,
   Dict: KopiDictConstructor,
   String: KopiStringConstructor,
-  Iterable: KopiIterableTrait,
+  Iterable: KopiIterableMixin,
 });
 
 export default getScope;

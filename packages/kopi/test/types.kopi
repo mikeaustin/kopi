@@ -23,14 +23,14 @@ point = Point (x: 1, y: 1)
 
 print $ point.x, point.y
 
-extend Point () (
+extend Point (
   length: (:x, :y) => () => (x * x + y * y) | sqrt
 )
 
 print $ point | length | _toFixed 3
 
 {
-  extend Point () (
+  extend Point (
     length: (this) => () => 404.404
   )
 

@@ -113,18 +113,8 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
   port: port,
 });
 
-const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, visitors, bind) => {
-  const traitsTuple = traits.constructor.name !== 'KopiTuple' ? new KopiTuple([traits]) : traits;
+const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
-
-  const traitMethods = traitsTuple.getElementsArray().reduce((traitMethods, trait) => (
-    Object.getOwnPropertyNames(trait.nativeConstructor.prototype)
-      .filter(name => name !== 'constructor')
-      .reduce((obj, name) => ({
-        ...obj,
-        [name]: (thisArg) => (args) => trait.nativeConstructor.prototype[name].apply(thisArg, [args, scope, visitors]),
-      }), traitMethods)
-  ), {});
 
   const newMethods = await methodsTuple.getElementsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
@@ -132,7 +122,7 @@ const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, vis
   }), scope.methods.get(nativeConstructor) ?? {});
 
   bind({
-    methods: new Map(scope.methods).set(nativeConstructor, { ...traitMethods, ...newMethods }),
+    methods: new Map(scope.methods).set(nativeConstructor, { ...newMethods }),
   });
 };
 

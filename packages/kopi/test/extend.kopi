@@ -2,11 +2,11 @@
 #   capitalize: (this) => this ++ ", world!"
 # )
 
-extend String () (
+extend String (
   greet: (this) => () => "Hello, " this "."
 )
 
-extend String () (
+extend String (
   wave: (this) => () => "Waves to " this
 )
 
@@ -14,7 +14,7 @@ print $ "Joe" | greet
 print $ "Joe" | wave
 
 {
-  extend String () (
+  extend String (
     greet: (this) => () => "Welcome, " this
   )
 
@@ -24,7 +24,7 @@ print $ "Joe" | wave
 print $ "Joe" | greet
 
 
-extend Vector () (
+extend Vector (
   fire: (this) => () => "Pew! Pew! Pew!"
 )
 

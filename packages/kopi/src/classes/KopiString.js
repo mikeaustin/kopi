@@ -21,6 +21,10 @@ class KopiString {
     }
   }
 
+  size() {
+    return this._nativeString.length;
+  }
+
   emptyValue() {
     return new KopiString('');
   }
