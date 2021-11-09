@@ -1,18 +1,18 @@
-import readline from 'readline';
+// import readline from 'readline';
 // const { Worker } = require('worker_threads');
 
 import _classes from './classes.js';
 import _Iterable from './traits/Iterable.js';
 
 import * as core from './functions/core.mjs';
-import { compile } from './compiler.mjs';
+// import { compile } from './compiler.mjs';
 
-import _terminal from '../test/terminal.js';
+// import _terminal from '../test/terminal.js';
 
 const { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } = _classes;
 const { default: KopiIterable } = _Iterable;
 
-const { default: kopi_ls } = _terminal;
+// const { default: kopi_ls } = _terminal;
 
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
@@ -46,10 +46,10 @@ String.nativeConstructor = String;
 // }
 
 let getScope = (input) => ({
-  ls: kopi_ls,
-  worker: (filename) => {
-    return new KopiWorker(filename);
-  },
+  // ls: kopi_ls,
+  // worker: (filename) => {
+  //   return new KopiWorker(filename);
+  // },
   union: (args) => args,
   test: (func, scope, visitors) => func.apply(undefined, [5, scope, visitors]),
   gc: () => {
@@ -73,26 +73,26 @@ let getScope = (input) => ({
   random: core.kopi_random,
   date: core.kopi_date,
   time: core.kopi_time,
-  read: core.kopi_read,
+  // read: core.kopi_read,
 
   even: core.kopi_even,
   // odd
   // min
   max: core.kopi_max,
 
-  import: (filename, scope) => compile(filename.getNativeString(), scope),
+  // import: (filename, scope) => compile(filename.getNativeString(), scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
-  fetch: core.kopi_fetch,
-  listen: core.kopi_listen,
+  // fetch: core.kopi_fetch,
+  // listen: core.kopi_listen,
   exit: (code) => process.exit(code),
 
   sleep: core.kopi_sleep,
-  spawn: core.kopi_spawn,
-  yield: core.kopi_yield,
-  send: core.kopi_send,
-  tasks: core.kopi_tasks,
+  // spawn: core.kopi_spawn,
+  // yield: core.kopi_yield,
+  // send: core.kopi_send,
+  // tasks: core.kopi_tasks,
 
   at: (index) => async array => await array[index],
   loop: core.kopi_loop,

@@ -1,9 +1,9 @@
-import fs from 'fs';
-import http from 'http';
-import fetch from 'node-fetch';
+// import fs from 'fs';
+// import http from 'http';
+// import fetch from 'node-fetch';
 
 import _classes from '../classes.js';
-import * as coroutines from './coroutines.mjs';
+// import * as coroutines from './coroutines.mjs';
 
 const { KopiString, KopiTuple } = _classes;
 
@@ -15,9 +15,9 @@ const kopi_print = async (value) => {
   console.log(await value.toStringAsync());
 };
 
-const kopi_read = async (filename) => {
-  return new KopiString(await fs.promises.readFile(filename.getNativeString(), 'utf8'));
-};
+// const kopi_read = async (filename) => {
+//   return new KopiString(await fs.promises.readFile(filename.getNativeString(), 'utf8'));
+// };
 
 const kopi_char = (number) => {
   return new KopiString(String.fromCodePoint(number));
@@ -98,20 +98,20 @@ const kopi_sleep = (seconds) => {
   return new Promise((resolve) => setTimeout(() => resolve(seconds), seconds * 1000));
 };
 
-const kopi_fetch = async (url) => {
-  const request = await fetch(url.getNativeString());
+// const kopi_fetch = async (url) => {
+//   const request = await fetch(url.getNativeString());
 
-  return new KopiString(await request.text());
-};
+//   return new KopiString(await request.text());
+// };
 
-const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {
-  const value = await coroutines.kopi_send(co)(request);
+// const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {
+//   const value = await coroutines.kopi_send(co)(request);
 
-  response.writeHead(200);
-  response.end(value);
-}).listen({
-  port: port,
-});
+//   response.writeHead(200);
+//   response.end(value);
+// }).listen({
+//   port: port,
+// });
 
 const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, visitors, bind) => {
   const traitsTuple = traits.constructor.name !== 'KopiTuple' ? new KopiTuple([traits]) : traits;
@@ -136,15 +136,15 @@ const kopi_extend = (constructor) => (traits) => async (methodsTuple, scope, vis
   });
 };
 
-const kopi_spawn = coroutines.kopi_spawn;
-const kopi_yield = coroutines.kopi_yield;
-const kopi_send = coroutines.kopi_send;
-const kopi_tasks = coroutines.kopi_tasks;
+// const kopi_spawn = coroutines.kopi_spawn;
+// const kopi_yield = coroutines.kopi_yield;
+// const kopi_send = coroutines.kopi_send;
+// const kopi_tasks = coroutines.kopi_tasks;
 
 export {
   kopi_inspect,
   kopi_print,
-  kopi_read,
+  // kopi_read,
   kopi_char,
   kopi_random,
   kopi_date,
@@ -157,11 +157,11 @@ export {
   kopi_loop,
   kopi_write,
   kopi_sleep,
-  kopi_fetch,
-  kopi_listen,
-  kopi_spawn,
-  kopi_yield,
-  kopi_send,
-  kopi_tasks,
+  // kopi_fetch,
+  // kopi_listen,
+  // kopi_spawn,
+  // kopi_yield,
+  // kopi_send,
+  // kopi_tasks,
   kopi_extend,
 };

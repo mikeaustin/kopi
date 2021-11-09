@@ -9,22 +9,42 @@
     <style type="text/css">
       * {
         font: 14px/1.5em 'Courier New';
-        margin: 0;
-        padding: 0;
       }
 
       body {
         min-height: 100vh;
         display: flex;
         flex: 1;
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
+        height: 30px;
       }
 
       #source {
+        display: flex;
+        flex-direction: column;
         flex: 1;
-        padding: 15px;
-        border: none;
-        outline: none;
         border-right: 1px solid #d8d8d8;
+      }
+
+      .button-list {
+        padding: 10px 15px;
+        background: #d8d8d8;
+      }
+
+      #source textarea {
+        flex: 1;
+        border: none;
+        border-radius: 0;
+        outline: none;
+        padding: 15px;
+      }
+
+      .output {
+        flex: 1;
       }
 
       #output {
@@ -33,13 +53,33 @@
       }
 
     </style>
+    <script type="text/javascript">
+      async function loadExample(name) {
+        const sourceElement = document.querySelector('#source textarea');
+
+        sourceElement.value = await (await fetch(`examples/${name}`)).text();
+        sourceElement.dispatchEvent(new Event('change'));
+      }
+    </script>
   </head>
 
   <body>
-    <textarea id="source">2 + 3
-10
-</textarea>
-    <div id="output">
+    <div id="source">
+      <div class="button-list">
+        <button onclick="loadExample('basics.kopi')">Kopi Basics</button>
+        <button onclick="loadExample('tuples.kopi')">Types and More</button>
+        <button onclick="loadExample('html.kopi')">HTML Generator</button>
+        <button onclick="loadExample('interpret.kopi')">BASIC Interpreter</button>
+      </div>
+      <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </textarea>
+    </div>
+    <div class="output">
+      <div class="button-list" style="font-size: 30px; line-height: 1em">
+        Output
+      </div>
+      <div id="output">
+      </div>
     </div>
     <script type="text/javascript" src="./main.js"></script>
   </body>

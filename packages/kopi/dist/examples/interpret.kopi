@@ -1,0 +1,50 @@
+incrementIndex = data => (index: data.index + 1)
+setIndex = index => data => (index: index)
+
+evaluate (statement, indexes) = match statement (
+  lineNo, "PRINT", value => {
+    print $ value
+    incrementIndex
+  }
+  lineNo, "GOTO", gotoLineNo => {
+    setIndex (indexes | get gotoLineNo)
+  }
+  lineNo, command => {
+    print $ "*** UNKNOWN COMMAND '" command "' ON LINE " lineNo
+    incrementIndex
+  }
+)
+
+interpret (source) = {
+  program = source | trim | split String.NewlineRegExp | map (line) => (
+    tuple $ (line | trim) | split " "
+  )
+
+  indexes = program | reduce {} $ (numbers, statement, index) => {
+    numbers | set (statement.0, index)
+  }
+
+  print indexes
+  print program
+
+  loop (data) = {
+    match (data.index == 'size program) (
+      true => ()
+      _    => {
+        reducer = evaluate (program.(data.index), indexes)
+        loop (reducer data)
+      }
+    )
+  }
+
+  loop (index: 0)
+}
+
+source = "
+  10 PRINT 'HELLO'
+  20 GOTO 40
+  30 PRINT 'NOPE'
+  40 PRINT 'WORLD'
+"
+
+interpret source
