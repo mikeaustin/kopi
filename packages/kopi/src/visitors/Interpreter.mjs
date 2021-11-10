@@ -95,9 +95,14 @@ class Interpreter extends Visitors {
 
   async PipeExpression({ left, right }, scope, bind) {
     const evaluatedExpr = await this.visitNode(left, scope, bind);
-    const evaluatedArgs = await this.visitNode(right.args, scope, bind);
+    const evaluatedArgs = right.constructor.name === 'ApplyExpression'
+      ? await this.visitNode(right.args, scope, bind)
+      : undefined;
+    const methodName = right.constructor.name === 'ApplyExpression'
+      ? right.expr.name
+      : right.name;
 
-    const extensionMethod = scope.methods.get(evaluatedExpr.constructor)?.[right.name ?? right.expr.name];
+    const extensionMethod = scope.methods.get(evaluatedExpr.constructor)?.[methodName];
 
     if (extensionMethod) {
       const func = await extensionMethod.apply(undefined, [evaluatedExpr, scope, this, bind]);
@@ -107,9 +112,7 @@ class Interpreter extends Visitors {
 
     const value = evaluatedExpr[right.name ?? right.expr.name];
 
-    return typeof value === 'function' || typeof value === 'object' && 'apply' in value
-      ? value.apply(evaluatedExpr, [evaluatedArgs, scope, this, bind])
-      : value;
+    return value.apply(evaluatedExpr, [evaluatedArgs, scope, this, bind]);
   }
 
   async ApplyExpression({ expr, args }, scope, bind) {
