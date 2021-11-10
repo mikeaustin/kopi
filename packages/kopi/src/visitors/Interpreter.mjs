@@ -94,25 +94,25 @@ class Interpreter extends Visitors {
   }
 
   async PipeExpression({ left, right }, scope, bind) {
+    const isApplyExpression = right.constructor.name === 'ApplyExpression';
+
     const evaluatedExpr = await this.visitNode(left, scope, bind);
-    const evaluatedArgs = right.constructor.name === 'ApplyExpression'
+    const evaluatedArgs = isApplyExpression
       ? await this.visitNode(right.args, scope, bind)
       : undefined;
-    const methodName = right.constructor.name === 'ApplyExpression'
+    const methodName = isApplyExpression
       ? right.expr.name
       : right.name;
 
     const extensionMethod = scope.methods.get(evaluatedExpr.constructor)?.[methodName];
+    const thisArg = extensionMethod
+      ? undefined
+      : evaluatedExpr;
+    const func = extensionMethod
+      ? await extensionMethod.apply(undefined, [evaluatedExpr, scope, this, bind])
+      : evaluatedExpr[methodName];
 
-    if (extensionMethod) {
-      const func = await extensionMethod.apply(undefined, [evaluatedExpr, scope, this, bind]);
-
-      return func.apply(undefined, [evaluatedArgs, scope, this, bind]);
-    }
-
-    const value = evaluatedExpr[right.name ?? right.expr.name];
-
-    return value.apply(evaluatedExpr, [evaluatedArgs, scope, this, bind]);
+    return func.apply(thisArg, [evaluatedArgs, scope, this, bind]);
   }
 
   async ApplyExpression({ expr, args }, scope, bind) {

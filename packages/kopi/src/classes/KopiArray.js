@@ -57,8 +57,8 @@ class KopiArray {
     return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
   }
 
-  append(that) {
-    return new KopiArray(this._elementsArray.concat([that]));
+  append(...that) {
+    return new KopiArray(this._elementsArray.concat([...that]));
   }
 
   ['++'](that) {

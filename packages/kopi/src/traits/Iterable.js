@@ -33,7 +33,7 @@ class Iterable {
       const appliedElement = await func.apply(undefined, [element, scope, visitors]);
 
       if (appliedElement[Symbol.iterator]) {
-        accum = accum.append(appliedElement);
+        accum = accum.append(...appliedElement);
       } else {
         accum = accum.append(appliedElement);
       }
