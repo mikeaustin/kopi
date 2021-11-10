@@ -13,7 +13,7 @@ f = (x) => x
 
 print (even (f 5))
 
-even (test x => x)
+# even (test x => x)
 
 even (ident n)
 
