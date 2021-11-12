@@ -19,12 +19,18 @@ const { default: Visitors } = _Visitors;
 const { applyOperator } = _utils;
 
 class Interpreter extends Visitors {
-  Block({ statements }, scope) {
+  async Block({ statements }, scope) {
     const bind = (updates) => scope = ({ ...scope, ...updates });
 
-    return statements.reduce(async (result, statement) => (
+    global.methods.push(new Map());
+
+    const result = await statements.reduce(async (result, statement) => (
       await result, this.visitNode(statement, scope, bind)
     ), undefined);
+
+    global.methods.pop();
+
+    return result;
   }
 
   async TypeAssignment({ pattern, expr }, scope, bind) {
@@ -104,7 +110,7 @@ class Interpreter extends Visitors {
       ? right.expr.name
       : right.name;
 
-    const extensionMethod = scope.methods.get(evaluatedExpr.constructor)?.[methodName];
+    const extensionMethod = global.methods[global.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
     const thisArg = extensionMethod
       ? undefined
       : evaluatedExpr;

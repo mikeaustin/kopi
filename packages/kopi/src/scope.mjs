@@ -57,6 +57,8 @@ String.nativeConstructor = String;
 //   }
 // }
 
+global.methods = [new Map()];
+
 let getScope = (input) => ({
   ls: kopi_ls,
   worker: (filename) => {
@@ -69,7 +71,6 @@ let getScope = (input) => ({
   },
   inspect: core.kopi_inspect,
   tuple: (array) => new KopiTuple(array.getElementsArray()),
-  methods: new Map(),
   extend: core.kopi_extend,
 
   print: core.kopi_print,

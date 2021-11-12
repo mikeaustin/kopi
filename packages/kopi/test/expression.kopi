@@ -1,14 +1,12 @@
 Const = type (value: Int)
 AddOp = type (left: Const, right: Const)
 
-# Const eval is not defined yet
+extend Const (
+  eval: (this) => () => this.value
+)
 
 extend AddOp (
   eval: (this) => () => (this.left | eval) + (this.right | eval)
-)
-
-extend Const (
-  eval: (this) => () => this.value
 )
 
 program = AddOp (
@@ -17,3 +15,41 @@ program = AddOp (
 )
 
 print $ program | eval
+
+
+# Introduce a new type 'Var'
+
+environment = {
+  "a": 3
+  "b": 7
+}
+
+Var = type (name: String)
+
+extend Var (
+  eval: (this) => () => environment.(this.name)
+)
+
+program = AddOp (
+  left: Var (name: "a")
+  right: Var (name: "b")
+)
+
+print $ program | eval
+
+
+# Introduce a new operation 'print'
+
+extend Const (
+  print: (this) => () => String this.value
+)
+
+extend AddOp (
+  print: (this) => () => (this.left | print) " + " (this.right | print)
+)
+
+extend Var (
+  print: (this) => () => this.name
+)
+
+print $ program | print

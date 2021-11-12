@@ -115,15 +115,14 @@ const kopi_listen = (port) => (co) => http.createServer(async (request, response
 
 const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
+  const methods = global.methods[global.methods.length - 1];
 
   const newMethods = await methodsTuple.getElementsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methodsTuple.getFieldNameAtIndex(index)]: await method,
-  }), scope.methods.get(nativeConstructor) ?? {});
+  }), methods.get(nativeConstructor) ?? {});
 
-  bind({
-    methods: new Map(scope.methods).set(nativeConstructor, { ...newMethods }),
-  });
+  global.methods[global.methods.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
 };
 
 const kopi_spawn = coroutines.kopi_spawn;
