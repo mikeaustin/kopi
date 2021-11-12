@@ -1,14 +1,19 @@
 Const = type (value: Int)
 AddOp = type (left: Const, right: Const)
 
-extend Const (
-  eval: (this) => () => print this.value
-)
+# Const eval is not defined yet
 
 extend AddOp (
-  eval: (this) => () => print $ 'eval this.left + 'eval this.right
+  eval: (this) => () => (this.left | eval) + (this.right | eval)
 )
 
-print $ Const (value: 2) | eval
+extend Const (
+  eval: (this) => () => this.value
+)
 
-# print $ 'eval AddOp(left: Const (value: 2), right: Const (value: 2))
+program = AddOp (
+  left: Const (value: 2)
+  right: Const (value: 3)
+)
+
+print $ program | eval
