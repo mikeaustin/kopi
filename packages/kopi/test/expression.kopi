@@ -1,0 +1,14 @@
+Const = type (value: Int)
+AddOp = type (left: Const, right: Const)
+
+extend Const (
+  eval: (this) => () => print this.value
+)
+
+extend AddOp (
+  eval: (this) => () => print $ 'eval this.left + 'eval this.right
+)
+
+print $ Const (value: 2) | eval
+
+# print $ 'eval AddOp(left: Const (value: 2), right: Const (value: 2))

@@ -188,3 +188,97 @@ $ lpapply
 , tuple
 * operator
   apply
+
+
+
+
+Iterable	Symbol.iterator
+Equatable	== !=
+Comparable	compare < <= >= > min max clamp
+Stringable	toStringAsync()
+Serializable	
+Enumerable	succ pred
+Mappable	map
+Numeric
+Bounded		minBound, maxBound
+
+Date.fromString
+
+
+Read Show Eq Ord Enum Bounded
+
+
+x^2 + y^2
+5.5 | ceil
+
+map		filter zip
+includes
+
+every
+some
+exists
+none
+
+partition	split into two arrays
+
+count
+sort
+group
+
+take
+drop
+
+element, index = find (e) => e > 5
+
+1..10 | splitBy (n) => even n
+
+
+Printable = (
+  print: (This) => () => ()
+)
+
+Person = Person (name: String, age: Int)
+
+extend Person (Printable) (
+  print: (this) => () => print this
+)
+
+person | print
+person | Printable.print
+
+
+extend Person () (
+  hello: (this) => () => print $ "Hello " this.name
+)
+
+
+traits.types	traits.get(Iterable).String.map
+methods.types	methods.get(String).get(Iterable).map
+
+If there is only one trait defined for method, no need for namespacing
+
+resolveTrait() {
+  if (traits.size() === 1) {
+    for (const trait in traits) { return trait; }
+  }
+}
+
+
+scope.mjs:
+
+  methods: new Map(),
+
+core.mjs:
+
+  kopi_extend()
+
+Interpreter.mjs:
+
+  PipeExpression
+
+
+extend String () (
+  ...
+)
+
+(scope.methods.get(String).get(KopiTuple) ?? new Map()).capitalize = () => 'here';
