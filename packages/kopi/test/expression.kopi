@@ -41,15 +41,15 @@ print $ program | eval
 # Introduce a new operation 'print'
 
 extend Const (
-  print: (this) => () => String this.value
+  source: (this) => () => String this.value
 )
 
 extend AddOp (
-  print: (this) => () => (this.left | print) " + " (this.right | print)
+  source: (this) => () => (this.left | source) " + " (this.right | source)
 )
 
 extend Var (
-  print: (this) => () => this.name
+  source: (this) => () => this.name
 )
 
-print $ program | print
+print $ program | source
