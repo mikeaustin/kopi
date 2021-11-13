@@ -38,7 +38,7 @@ program = AddOp (
 print $ program | eval
 
 
-# Introduce a new operation 'print'
+# Introduce a new operation 'source'
 
 extend Const (
   source: (this) => () => String this.value
@@ -48,8 +48,46 @@ extend AddOp (
   source: (this) => () => (this.left | source) " + " (this.right | source)
 )
 
+addOpSource = (this) => () => (this.left | source) " + " (this.right | source)
+
 extend Var (
   source: (this) => () => this.name
+)
+
+print $ program | source
+
+
+# Intorudce a new type 'MultOp'
+
+MultOp = type (left: Const, right: Const)
+
+extend MultOp (
+  eval: (this) => () => (this.left | eval) * (this.right | eval)
+  source: (this) => () => (this.left | source) " * " (this.right | source)
+)
+
+multOpSource = (this) => () => (this.left | source) " * " (this.right | source)
+
+program = AddOp (
+  left: MultOp (
+    left: Var (name: "a")
+    right: Const (value: 6)
+  )
+  right: Var (name: "b")
+)
+
+print $ program | eval
+print $ program | source
+
+
+# Decorate math operations with parenthesis
+
+extend AddOp (
+  source: (this) => () => "(" (addOpSource this ()) ")"
+)
+
+extend MultOp (
+  source: (this) => () => "(" (multOpSource this ()) ")"
 )
 
 print $ program | source
