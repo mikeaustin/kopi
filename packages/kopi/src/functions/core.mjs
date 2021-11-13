@@ -2,10 +2,8 @@ import fs from 'fs';
 import http from 'http';
 import fetch from 'node-fetch';
 
-import _classes from '../classes.js';
+import { KopiString, KopiTuple } from '../classes.mjs';
 import * as coroutines from './coroutines.mjs';
-
-const { KopiString, KopiTuple } = _classes;
 
 const kopi_inspect = async (value) => {
   console.log(await value.inspectAsync());

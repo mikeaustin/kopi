@@ -1,4 +1,3 @@
-import util from 'util';
 import fs from 'fs';
 
 import parser from '../lib/parser.js';

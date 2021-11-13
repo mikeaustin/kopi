@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import util from 'util';
 import readline from 'readline';
 
 import parser from '../lib/parser.js';

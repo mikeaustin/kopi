@@ -1,7 +1,6 @@
-const util = require('util');
-const fs = require('fs');
+import fs from 'fs';
 
-const { KopiString, KopiDict } = require('../src/classes');
+import { KopiString, KopiDict } from '../src/classes.mjs';
 
 const kopi_ls = {
   async inspectAsync() {
@@ -54,6 +53,4 @@ const kopi_ls = {
   },
 };
 
-module.exports = {
-  default: kopi_ls,
-};
+export default kopi_ls;

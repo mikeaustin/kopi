@@ -1,17 +1,13 @@
 import readline from 'readline';
 // const { Worker } = require('worker_threads');
 
-import _classes from './classes.js';
+import { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } from './classes.mjs';
 import _Iterable from './traits/Iterable.js';
 
 import * as core from './functions/core.mjs';
 import { compile } from './compiler.mjs';
 
-import _terminal from '../test/terminal.js';
-
-const { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } = _classes;
-
-const { default: kopi_ls } = _terminal;
+import kopi_ls from '../test/terminal.mjs';
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;

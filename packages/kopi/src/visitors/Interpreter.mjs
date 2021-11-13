@@ -1,10 +1,8 @@
-import _classes from '../classes.js';
-
 import _Visitors from './Visitors.js';
 import _utils from '../utils.js';
 
-const { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } = _classes;
-const {
+import { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } from '../classes.mjs';
+import {
   TuplePattern,
   ArrayLiteralPattern,
   BooleanLiteralPattern,
@@ -13,7 +11,7 @@ const {
   StringLiteralPattern,
   ConstructorPattern,
   FunctionPattern,
-} = _classes;
+} from '../classes.mjs';
 
 const { default: Visitors } = _Visitors;
 const { applyOperator } = _utils;
