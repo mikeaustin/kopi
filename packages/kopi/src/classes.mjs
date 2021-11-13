@@ -1,14 +1,22 @@
-require('./classes/Boolean');
-require('./classes/Number');
-require('./classes/Map');
+import './classes/Boolean.js';
+import './classes/Number.js';
+import './classes/Map.js';
 
-const { default: KopiString } = require('./classes/KopiString');
-const { default: KopiTuple } = require('./classes/KopiTuple');
-const { default: KopiArray } = require('./classes/KopiArray');
-const { default: KopiRange } = require('./classes/KopiRange');
-const { default: KopiFunction } = require('./classes/KopiFunction');
-const { default: KopiVector } = require('./classes/KopiVector');
-const { default: KopiDict } = require('./classes/KopiDict');
+import _KopiString from './classes/KopiString.js';
+import _KopiTuple from './classes/KopiTuple.js';
+import _KopiArray from './classes/KopiArray.js';
+import _KopiRange from './classes/KopiRange.js';
+import _KopiFunction from './classes/KopiFunction.js';
+import _KopiVector from './classes/KopiVector.js';
+import _KopiDict from './classes/KopiDict.js';
+
+const { default: KopiString } = _KopiString;
+const { default: KopiTuple } = _KopiTuple;
+const { default: KopiArray } = _KopiArray;
+const { default: KopiRange } = _KopiRange;
+const { default: KopiFunction } = _KopiFunction;
+const { default: KopiVector } = _KopiVector;
+const { default: KopiDict } = _KopiDict;
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
@@ -182,7 +190,7 @@ class FunctionPattern {
   }
 }
 
-module.exports = {
+export {
   KopiString,
   KopiTuple,
   KopiArray,

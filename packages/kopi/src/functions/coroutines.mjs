@@ -1,10 +1,9 @@
 import _stream from 'stream';
 
-import _classes from '../classes.js';
+import { KopiTuple } from '../classes.mjs';
 
 const { EventEmitter } = _stream;
 
-const { KopiTuple } = _classes;
 
 const coroutineEventEmitter = new EventEmitter();
 

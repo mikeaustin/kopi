@@ -1,3 +1,6 @@
 node_modules
 
 /lib/parser.js
+/packages/kopi/src/parser.new.pegjs
+/packages/kopi/lib/parser.js
+/packages/kopi/dist/main.js
