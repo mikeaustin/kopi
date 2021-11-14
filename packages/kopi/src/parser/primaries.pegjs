@@ -9,12 +9,17 @@ FunctionExpression
       return new FunctionExpression({ params, expr });
     }
 
+OperatorIdentifier
+  = op:"+" {
+      return new Identifier({ name: op })
+    }
+
 ParenthesizedTuple
   = "()" {
       return new TupleExpression({ elements: [] });
     }
   / "("
-      tail:(_ Newline+ _ (Identifier ":")? _ Expression)+ Newline+ _
+      tail:(_ Newline+ _ ((Identifier / OperatorIdentifier) ":")? _ Expression)+ Newline+ _
     ")" {
       return tail.length === 1 && tail[0][3] === null ? tail[0][5] : new TupleExpression({
         elements: tail.map(expr => expr[5]),

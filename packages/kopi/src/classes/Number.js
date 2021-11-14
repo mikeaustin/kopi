@@ -16,6 +16,10 @@ Number.prototype.succ = function () {
   return this + 1;
 };
 
+Number.prototype.apply = function (thisArg, [func, scope, visitors]) {
+  return func.apply(undefined, [this, scope, visitors]);
+};
+
 Number.prototype['+'] = function (that) {
   return this + that;
 };

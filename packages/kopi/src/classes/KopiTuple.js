@@ -31,7 +31,9 @@ class KopiTuple {
       this._elementsArray.map(async (element) => (await (await element).inspectAsync())),
     );
 
-    return `(${elementsArray.map((element, index) => (
+    const typeName = this.constructor.name !== 'KopiTuple' ? `${this.constructor.name} ` : '';
+
+    return `${typeName}(${elementsArray.map((element, index) => (
       `${this._fieldsArray[index] ? `${this._fieldsArray[index]}: ` : ''}${element}`
     )).join(', ')})`;
   }

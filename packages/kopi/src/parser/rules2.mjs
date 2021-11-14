@@ -82,6 +82,7 @@ async function main() {
     'StringLiteral',
     'BooleanLiteral',
     'AstLiteral',
+    'OperatorIdentifier',
     'Identifier',
     '_',
     'Whitespace',

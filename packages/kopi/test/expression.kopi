@@ -82,12 +82,17 @@ print $ program | source
 
 # Decorate math operations with parenthesis
 
+# source = AddOp.methods.source
+# source = methods.(AddOp).source
+
+print $ methods ()
+
 extend AddOp (
-  source: (this) => () => "(" (addOpSource this ()) ")"
+  source: (this) => () => "(" ++ addOpSource this () ++ ")"
 )
 
 extend MultOp (
-  source: (this) => () => "(" (multOpSource this ()) ")"
+  source: (this) => () => "(" ++ multOpSource this () ++ ")"
 )
 
 print $ program | source

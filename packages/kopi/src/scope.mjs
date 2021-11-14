@@ -56,6 +56,7 @@ String.nativeConstructor = String;
 global.methods = [new Map()];
 
 let getScope = (input) => ({
+  methods: () => global.methods[global.methods.length - 1],
   ls: kopi_ls,
   worker: (filename) => {
     return new KopiWorker(filename);
