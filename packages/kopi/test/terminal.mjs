@@ -36,12 +36,16 @@ class Table {
     const headers = (await this.array.getElementsArray()[0])._fieldsArray;
     const elements = await this.array.getElementsArray().reduce(async (elements, element) => [
       ...await elements,
-      await (await element).getElementsArray().reduce(async (elements, field) => (
-        `${await elements}${await (await field).toStringAsync().padEnd(25)}`
-      ), '')
+      await (await element).getElementsArray().reduce(async (fields, field) => [
+        ...await fields,
+        await (await field).toStringAsync()
+      ], [])
     ], []);
 
-    return headers.join(' ') + '\n' + elements.join('\n');
+    return headers.map(header => header.padEnd(25)).join('') + '\n' + elements.reduce((elements, element) => [
+      ...elements,
+      element.map((field) => `${field.padEnd(25)}`).join('')
+    ], []).join('\n');
   }
 }
 
