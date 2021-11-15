@@ -11,6 +11,8 @@ const compile = async (sourceElement, outputElement) => {
     const astRootNode = parser.parse(sourceElement.value.trim());
     await interpreter.visitNode(astRootNode, scope);
   } catch (error) {
+    console.error(error);
+
     outputElement.innerHTML = error.message;
   }
 };

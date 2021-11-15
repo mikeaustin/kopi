@@ -1,13 +1,7 @@
-import readline from 'readline';
-// const { Worker } = require('worker_threads');
-
 import { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } from './classes.mjs';
 import _Iterable from './traits/Iterable.js';
 
 import * as core from './functions/core.mjs';
-import { compile } from './compiler.mjs';
-
-import kopi_ls from '../test/terminal.mjs';
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
@@ -44,27 +38,14 @@ const KopiIterableMixin = new KopiTuple([
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
-// class KopiWorker {
-//   constructor(filename) {
-//     this.filename = filename;
-//     this.worker = new Worker('./src/worker.js', {
-//       workerData: filename,
-//     });
-//   }
-// }
-
-global.methods = [new Map()];
+globalThis.methods = [new Map()];
 
 let getScope = (input) => ({
-  methods: () => global.methods[global.methods.length - 1],
-  ls: kopi_ls,
-  worker: (filename) => {
-    return new KopiWorker(filename);
-  },
+  methods: () => globalThis.methods[globalThis.methods.length - 1],
   union: (args) => args,
   test: (func, scope, visitors) => func.apply(undefined, [5, scope, visitors]),
   gc: () => {
-    global.gc();
+    globalThis.gc();
   },
   inspect: core.kopi_inspect,
   tuple: (array) => new KopiTuple(array.getElementsArray()),
@@ -83,26 +64,17 @@ let getScope = (input) => ({
   random: core.kopi_random,
   date: core.kopi_date,
   time: core.kopi_time,
-  read: core.kopi_read,
 
   even: core.kopi_even,
   // odd
   // min
   max: core.kopi_max,
 
-  import: (filename, scope) => compile(filename.getNativeString(), scope),
   export: (values) => values,
   let: core.kopi_let,
   match: core.kopi_match,
-  fetch: core.kopi_fetch,
-  listen: core.kopi_listen,
-  exit: (code) => process.exit(code),
 
   sleep: core.kopi_sleep,
-  spawn: core.kopi_spawn,
-  yield: core.kopi_yield,
-  send: core.kopi_send,
-  tasks: core.kopi_tasks,
 
   at: (index) => async (array) => await array[index],
   loop: core.kopi_loop,
@@ -117,22 +89,6 @@ let getScope = (input) => ({
       return new KopiTuple([nextValue, () => next(nextValue)]);
     }
   ),
-  input: (str) => {
-    const rl = input ?? readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    return new Promise((resolve) => {
-      rl.question(`${str.getNativeString()} `, (data) => {
-        if (rl !== input) {
-          rl.close();
-        }
-
-        resolve(new KopiString(data));
-      });
-    });
-  },
   Vector,
   Number,
   Array: KopiArrayConstructor,

@@ -7,13 +7,6 @@ import typechecker from './visitors/Typechecker.mjs';
 
 import _types from './types.js';
 
-// const {
-//   AnyType, NoneType, UnionType,
-//   BooleanType, NumberType, StringType,
-//   FunctionType,
-//   IdentifierPatternType,
-// } = require('./types');
-
 const {
   AnyType, NoneType, UnionType,
   BooleanType, NumberType, StringType,

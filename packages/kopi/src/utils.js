@@ -15,7 +15,7 @@ async function applyOperator(op, left, right, scope, visitors) {
     }
   }
 
-  const extensionMethod = global.methods[global.methods.length - 1].get(left.constructor)?.[op];
+  const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(left.constructor)?.[op];
 
   if (extensionMethod) {
     const func = await extensionMethod.apply(undefined, [left, scope, visitors]);
@@ -35,15 +35,7 @@ async function asyncMap([iterable, func], scope, visitors) {
   }
 
   return accum;
-};
-
-async function main() {
-  console.log(
-    await asyncMap([[Promise.resolve(1), Promise.resolve(2)], (x) => x * x])
-  );
 }
-
-// main();
 
 module.exports = {
   applyOperator,

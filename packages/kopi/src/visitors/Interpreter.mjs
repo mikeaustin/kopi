@@ -20,13 +20,13 @@ class Interpreter extends Visitors {
   async Block({ statements }, scope) {
     const bind = (updates) => scope = ({ ...scope, ...updates });
 
-    global.methods.push(new Map());
+    globalThis.methods.push(new Map());
 
     const result = await statements.reduce(async (result, statement) => (
       await result, this.visitNode(statement, scope, bind)
     ), undefined);
 
-    global.methods.pop();
+    globalThis.methods.pop();
 
     return result;
   }
@@ -85,10 +85,6 @@ class Interpreter extends Visitors {
       }
     };
 
-    // Object.defineProperty(_Type, 'name', {
-    //   value: 'Hello'
-    // });
-
     const Constructor = (args) => {
       return new _Type(args._elementsArray, args._fieldsArray);
     };
@@ -108,7 +104,7 @@ class Interpreter extends Visitors {
       ? right.expr.name
       : right.name;
 
-    const extensionMethod = global.methods[global.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
+    const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
     const thisArg = extensionMethod
       ? undefined
       : evaluatedExpr;
