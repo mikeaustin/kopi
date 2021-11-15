@@ -85,6 +85,8 @@ const compile = async (filename, scope) => {
     return interpreter.visitNode(astRootNode, scope);
   } catch (error) {
     console.error(error.name === 'SyntaxError' ? `SyntaxError on line ${error.location.start.line}: ${error.message}` : error);
+
+    process.exit(1);
   }
 };
 

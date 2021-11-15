@@ -10,7 +10,7 @@ FunctionExpression
     }
 
 OperatorIdentifier
-  = op:"+" {
+  = op:("+" / "-" / "*" / "/" / "%" / "<" / "<=" / ">=" / ">") {
       return new Identifier({ name: op })
     }
 
