@@ -7,10 +7,14 @@ class KopiArray {
     this._elementsArray = elementsArray;
   }
 
-  async inspectAsync() {
+  async inspectAsync({ formatted = false } = {}) {
     const elementsArray = await Promise.all(
       this._elementsArray.map(async (element) => (await (await element).inspectAsync())),
     );
+
+    if (formatted) {
+      return '[\n' + elementsArray.map(element => `  ${element}`).join('\n') + '\n]';
+    }
 
     return `[${elementsArray.join(', ')}]`;
   }
