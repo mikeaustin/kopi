@@ -1,0 +1,54 @@
+factorial (n) = match n (
+  0 => 1
+  n => n * factorial (n - 1)
+)
+
+print $ factorial 170
+
+
+print $ [1, 2, 3].(0)
+print $ [1, 2, 3].(0..2)
+print $ [1, 2, 3].(0, 2, 1)
+
+
+print $ 1..4, "a".."z" | map (n, c) => String n ++ c
+
+
+print $ ["B, A", "D, C"] | map (name) => (
+  name | split "," | map 'trim | reverse | join " "
+)
+
+words = "abc def ghi abc def abc"
+print $ words | split " " | reduce {} $ (counts, word) => (
+  counts | update word $ (x = 0) => x + 1
+)
+
+
+extend String (
+  capitalize: (this) => () => 'toUpper this.(0..1) ++ this.(1..)
+)
+
+print $ "hello, world." | capitalize
+
+
+print $ 1..10 | map (n) [even n] => n * n
+
+
+Point = type (x: Int, y: Int)
+point = Point (x: 1, y: 1)
+
+extend Point (
+  length: (:x, :y) => () => (x * x + y * y) | sqrt
+)
+
+print $ point | length
+
+
+print {
+  "menu": {
+    "title": "File"
+    "items": [
+      { "title": "New" }
+    ]
+  }
+}
