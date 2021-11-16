@@ -61,26 +61,6 @@
         border-radius: 0;
         outline: none;
         padding: 15px;
-        color: hsla(0, 0%, 0%, 0.1);
-        caret-color: black;
-      }
-
-      #format {
-        position: absolute;
-        flex: 1;
-        border: none;
-        border-radius: 0;
-        outline: none;
-        padding: 15px;
-        overflow-y: auto;
-        height: 100%;
-      }
-
-      #format,
-      #format * {
-        font: 14px/1.5em 'Menlo', monospace;
-        white-space: pre;
-        pointer-events: none;
       }
 
       .output {
@@ -90,7 +70,6 @@
       #output {
         flex: 1;
         padding: 15px;
-        white-space: pre;
       }
     </style>
     <script type="text/javascript">
@@ -111,11 +90,8 @@
         <button onclick="loadExample('interpret.kopi')">BASIC</button>
         <button onclick="loadExample('units.kopi')">Units</button>
       </div>
-      <div style="display: flex; flex: 1">
-        <div id="format">asdf</div>
-        <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </textarea>
-      </div>
+      <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </textarea>
     </div>
     <div class="output">
       <div class="button-list" style="font-size: 30px; line-height: 1em">
