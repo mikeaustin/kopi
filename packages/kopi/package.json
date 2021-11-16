@@ -14,6 +14,7 @@
     "start": "node --expose-gc --max-old-space-size=600 src/main.mjs",
     "test": "npm --silent start test/import.kopi",
     "webpack": "npm run build && webpack --mode development",
+    "preserve": "npm run build",
     "serve": "webpack serve --mode development --static dist --open"
   },
   "devDependencies": {

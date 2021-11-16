@@ -1,3 +1,7 @@
+#
+# Define Imperial unit type and operations
+#
+
 Imperial = type (value: Int)
 
 extend Imperial (
@@ -11,7 +15,9 @@ in (n) = Imperial (value: n / 12)
 print $ 4 ft + 6 in
 
 
-# Add Metric unit
+#
+# Add Metric unit and operations
+#
 
 Metric = type (value: Int)
 
@@ -25,7 +31,34 @@ extend Imperial (
 extend Metric (
   toMetric: (this) => () => this
   toImperial: (this) => () => Imperial (value: this.value / 2.54)
-  +: (this) => (that) => Imperial (value: this.value + (that | toMetric).value)
+  +: (this) => (that) => Metric (value: this.value + (that | toMetric).value)
 )
 
 print $ 4 ft + 12.7 cm
+print $ 12.7 cm + 4 ft
+
+
+#
+# Add more operations to both unit types
+#
+
+# extend Imperial (
+#   *: (this) => (that) => Imperial (value: this.value * (that | toImperial).value)
+# )
+
+# extend Metric (
+#   *: (this) => (that) => Metric (value: this.value * (that | toMetric).value)
+# )
+
+multHOF (constructor, toUnit) = (this) => (that) => constructor (value: this.value * (toUnit that).value)
+
+extend Imperial (
+  *: multHOF (constructor: Imperial, toUnit: (this) => this | toImperial)
+)
+
+extend Metric (
+  *: multHOF (constructor: Metric, toUnit: (this) => this | toMetric)
+)
+
+print $ 2 ft * 4 ft
+print $ 2 m * 20 cm

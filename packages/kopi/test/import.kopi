@@ -34,9 +34,11 @@ filenames = [
   "predicate.kopi"
   "interpret.kopi"
   "extend.kopi"
+  "extend2.kopi"
   "operators.kopi"
   "async.kopi"
   "patterns.kopi"
+  "units.kopi"
   "kponjson.kopi"
 ]
 
