@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono&display=swap"
+      rel="stylesheet">
     <style type="text/css">
       * {
-        font: 14px/1.5em 'Courier New';
+        font: 14px/1.5em 'Roboto', sans-serif;
+        color: #404040;
+      }
+
+      textarea,
+      #output {
+        font: 14px/1.5em 'Roboto Mono', monospace;
+        /* color: black; */
       }
 
       body {
@@ -20,6 +31,12 @@
 
       button {
         height: 30px;
+        background: white;
+        border: none;
+        border-radius: 1000px;
+        padding: 0 15px;
+        margin-right: 10px;
+        font-weight: 500;
       }
 
       #source {
@@ -30,6 +47,7 @@
       }
 
       .button-list {
+        display: flex;
         padding: 10px 15px;
         background: #d8d8d8;
       }
@@ -63,10 +81,11 @@
   <body>
     <div id="source">
       <div class="button-list">
-        <button onclick="loadExample('basics.kopi')">Kopi Basics</button>
-        <button onclick="loadExample('tuples.kopi')">Types and More</button>
-        <button onclick="loadExample('html.kopi')">HTML Generator</button>
-        <button onclick="loadExample('interpret.kopi')">BASIC Interpreter</button>
+        <button onclick="loadExample('basics.kopi')">Basics</button>
+        <button onclick="loadExample('tuples.kopi')">Types</button>
+        <button onclick="loadExample('html.kopi')">HTML</button>
+        <button onclick="loadExample('interpret.kopi')">BASIC</button>
+        <button onclick="loadExample('units.kopi')">Units</button>
       </div>
       <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </textarea>

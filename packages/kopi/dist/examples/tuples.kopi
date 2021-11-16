@@ -2,7 +2,7 @@ number = 5
 string = "hi"
 tuple = (1, "x")
 record = (x: 5)
-range = 1..5
+range = 10..50
 array = [1, 2, 3]
 dict = { "a": 1 }
 
