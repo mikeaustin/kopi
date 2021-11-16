@@ -3,7 +3,7 @@ factorial (n) = match n (
   n => n * factorial (n - 1)
 )
 
-print $ factorial 170
+print $ factorial 5
 
 
 print $ [1, 2, 3].(0)
