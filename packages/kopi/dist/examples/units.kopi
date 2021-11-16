@@ -1,0 +1,31 @@
+Imperial = type (value: Int)
+
+extend Imperial (
+  toImperial: (this) => () => this
+  +: (this) => (that) => Imperial (value: this.value + (that | toImperial).value)
+)
+
+ft (n) = Imperial (value: n)
+in (n) = Imperial (value: n / 12)
+
+print $ 4 ft + 6 in
+
+
+# Add Metric unit
+
+Metric = type (value: Int)
+
+m (n) = Metric (value: n)
+cm (n) = Metric (value: n / 10)
+
+extend Imperial (
+  toMetric: (this) => () => Metric (value: this.value * 2.54)
+)
+
+extend Metric (
+  toMetric: (this) => () => this
+  toImperial: (this) => () => Imperial (value: this.value / 2.54)
+  +: (this) => (that) => Imperial (value: this.value + (that | toMetric).value)
+)
+
+print $ 4 ft + 12.7 cm

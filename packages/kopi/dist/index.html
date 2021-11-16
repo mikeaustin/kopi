@@ -1,47 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono&display=swap"
+      rel="stylesheet">
     <style type="text/css">
       * {
-        font: 14px/1.5em 'Courier New';
-        margin: 0;
-        padding: 0;
+        font: 14px/1.5em 'Roboto', sans-serif;
+        font: 14px/1.5em 'Helvetica Neue', sans-serif;
+        color: #404040;
+      }
+
+      textarea,
+      #output {
+        font: 14px/1.5em 'Roboto Mono', monospace;
+        font: 14px/1.5em 'Menlo', monospace;
+        /* color: black; */
       }
 
       body {
         min-height: 100vh;
         display: flex;
         flex: 1;
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
+        height: 30px;
+        line-height: 30px;
+        background: white;
+        border: none;
+        border-radius: 1000px;
+        padding: 0 15px;
+        margin-right: 10px;
+        font-weight: 500;
       }
 
       #source {
+        display: flex;
+        flex-direction: column;
         flex: 1;
-        padding: 15px;
-        border: none;
-        outline: none;
         border-right: 1px solid #d8d8d8;
+      }
+
+      .button-list {
+        display: flex;
+        padding: 10px 15px;
+        background: #d8d8d8;
+      }
+
+      #source textarea {
+        flex: 1;
+        border: none;
+        border-radius: 0;
+        outline: none;
+        padding: 15px;
+      }
+
+      .output {
+        flex: 1;
       }
 
       #output {
         flex: 1;
         padding: 15px;
       }
-
     </style>
-  </head>
+    <script type="text/javascript">
+      async function loadExample(name) {
+        const sourceElement = document.querySelector('#source textarea');
 
+        sourceElement.value = await (await fetch(`examples/${name}`)).text();
+        sourceElement.dispatchEvent(new Event('change'));
+      }
+    </script>
+  </head>
   <body>
-    <textarea id="source">2 + 3
-10
-</textarea>
-    <div id="output">
+    <div id="source">
+      <div class="button-list">
+        <button onclick="loadExample('basics.kopi')">Basics</button>
+        <button onclick="loadExample('tuples.kopi')">Types</button>
+        <button onclick="loadExample('html.kopi')">HTML</button>
+        <button onclick="loadExample('interpret.kopi')">BASIC</button>
+        <button onclick="loadExample('units.kopi')">Units</button>
+      </div>
+      <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </textarea>
+    </div>
+    <div class="output">
+      <div class="button-list" style="font-size: 30px; line-height: 1em">
+        Output
+      </div>
+      <div id="output">
+      </div>
     </div>
     <script type="text/javascript" src="./main.js"></script>
   </body>
-
 </html>

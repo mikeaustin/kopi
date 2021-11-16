@@ -7,6 +7,7 @@ import { compile } from './compiler.mjs';
 
 import interpreter from './visitors/Interpreter.mjs';
 import getScope from './scope.mjs';
+import nodeScope from './node.mjs';
 
 Function.prototype.inspectAsync = function () {
   return '<function>';
@@ -21,7 +22,7 @@ const input = process.argv.length === 2 ? readline.createInterface({
   output: process.stdout,
 }) : null;
 
-let scope = getScope(input);
+let scope = { ...getScope(input), ...nodeScope(input) };
 
 const bind = (updates) => scope = ({ ...scope, ...updates });
 

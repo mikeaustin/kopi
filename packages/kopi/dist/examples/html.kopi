@@ -1,0 +1,60 @@
+html () = children => ("element", "html", {}, children)
+body (:class, :_) = children => ("element", "body", { "class": class }, children)
+ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
+li (:class, :_) = children => ("element", "li", { "class": class }, children)
+text (value) = ("text", value)
+
+indent (n) = {
+  loop = (n, str) => match n (
+    0 => str
+    _ => loop (n - 1, str "  ")
+  )
+  loop (n, "")
+}
+
+generateAttrString (name, value) = {
+  " " name "='" value "'"
+}
+
+generateHtmlString (node, level) = {
+  match node (
+    "text", value => {
+      indent level ++ String value ++ String.Newline
+    }
+    "element", tag, props, children => {
+      inner = children | map child => generateHtmlString (child, level + 1)
+      attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
+
+      indent level "<" tag attrs ">" String.Newline ++
+        inner | join "" ++
+      indent level "</" tag ">" String.Newline
+    }
+  )
+}
+
+"
+  {spaces}<{tag}>
+    {children | map (child) => generateHtmlString (child, level + 1)}
+  {spaces}</{tag}>
+"
+
+documentTree = (
+  html () [
+    text "Hello"
+    ul (id: "id", class: "class") [
+      li (class: "item") [text 1]
+      li (class: "item") [text 2]
+    ]
+  ]
+)
+
+htmlString = generateHtmlString (documentTree, 0)
+
+print htmlString
+
+export (
+  generateHtmlString: generateHtmlString
+  html: html
+  body: body
+  text: text
+)

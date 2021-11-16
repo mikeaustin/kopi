@@ -1,9 +1,4 @@
-import fs from 'fs';
-import http from 'http';
-import fetch from 'node-fetch';
-
 import { KopiString, KopiTuple } from '../classes.mjs';
-import * as coroutines from './coroutines.mjs';
 
 const kopi_inspect = async (value) => {
   console.log(await value.inspectAsync());
@@ -11,10 +6,6 @@ const kopi_inspect = async (value) => {
 
 const kopi_print = async (value) => {
   console.log(await value.toStringAsync());
-};
-
-const kopi_read = async (filename) => {
-  return new KopiString(await fs.promises.readFile(filename.getNativeString(), 'utf8'));
 };
 
 const kopi_char = (number) => {
@@ -80,7 +71,7 @@ const kopi_loop = async (_func, scope, visitors) => {
     value = await func.apply(undefined, [value, scope, visitors]);
 
     if (++index % 1000 === 0) {
-      global.gc();
+      globalThis.gc();
       await kopi_sleep(0);
     }
   }
@@ -96,42 +87,21 @@ const kopi_sleep = (seconds) => {
   return new Promise((resolve) => setTimeout(() => resolve(seconds), seconds * 1000));
 };
 
-const kopi_fetch = async (url) => {
-  const request = await fetch(url.getNativeString());
-
-  return new KopiString(await request.text());
-};
-
-const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {
-  const value = await coroutines.kopi_send(co)(request);
-
-  response.writeHead(200);
-  response.end(value);
-}).listen({
-  port: port,
-});
-
 const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
-  const methods = global.methods[global.methods.length - 1];
+  const methods = globalThis.methods[globalThis.methods.length - 1];
 
   const newMethods = await methodsTuple.getElementsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methodsTuple.getFieldNameAtIndex(index)]: await method,
   }), methods.get(nativeConstructor) ?? {});
 
-  global.methods[global.methods.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
+  globalThis.methods[globalThis.methods.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
 };
-
-const kopi_spawn = coroutines.kopi_spawn;
-const kopi_yield = coroutines.kopi_yield;
-const kopi_send = coroutines.kopi_send;
-const kopi_tasks = coroutines.kopi_tasks;
 
 export {
   kopi_inspect,
   kopi_print,
-  kopi_read,
   kopi_char,
   kopi_random,
   kopi_date,
@@ -144,11 +114,5 @@ export {
   kopi_loop,
   kopi_write,
   kopi_sleep,
-  kopi_fetch,
-  kopi_listen,
-  kopi_spawn,
-  kopi_yield,
-  kopi_send,
-  kopi_tasks,
   kopi_extend,
 };
