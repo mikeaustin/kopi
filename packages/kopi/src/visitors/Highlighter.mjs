@@ -45,10 +45,16 @@ class Highlighter extends Visitors {
     return (
       indent(level) + '<span class="operator-expression">' +
       this.visitNode(left, level + 1) +
-      indent(level + 1) + '<span class="operator">' +
-      indent(level + 2) + op +
-      indent(level + 1) + '</span>' +
+      indent(level + 1) + '<span class="operator">' + op + '</span>' +
       this.visitNode(right, level + 1) +
+      indent(level) + '</span>'
+    );
+  }
+
+  ParenthesesExpression({ expr }, level) {
+    return (
+      indent(level) + '<span class="parentheses-expression">' +
+      this.visitNode(expr, level + 2) +
       indent(level) + '</span>'
     );
   }
@@ -83,9 +89,7 @@ class Highlighter extends Visitors {
 
   Identifier({ name }, level) {
     return (
-      indent(level) + '<span class="identifier">' +
-      indent(level + 1) + name +
-      indent(level) + '</span>'
+      indent(level) + '<span class="identifier">' + name + '</span>'
     );
   }
 }

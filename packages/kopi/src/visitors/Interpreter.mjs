@@ -180,6 +180,10 @@ class Interpreter extends Visitors {
     return applyOperator(op, evaluatedLeft, evaluatedRight, scope, this);
   }
 
+  async ParenthesesExpression({ expr }, scope, bind) {
+    return this.visitNode(expr, scope, bind);
+  }
+
   //
 
   TuplePattern({ elements, fields }, scope) {
