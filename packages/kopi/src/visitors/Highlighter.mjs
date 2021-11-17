@@ -5,23 +5,26 @@ const { default: Visitors } = _Visitors;
 const indent = (level) => '\n' + ''.padEnd(level * 2);
 
 class Highlighter extends Visitors {
-  Block({ statements }, context) {
-    const bind = (updates) => context = ({ ...context, ...updates });
-
-    return statements.reduce((result, statement) => (
-      this.visitNode(statement, context, bind)
-    ), undefined);
+  Block({ statements }, level) {
+    return (
+      indent(level) + '<ul>' +
+      statements.map((statement) => (
+        indent(level + 1) + '<li>' +
+        this.visitNode(statement, level + 2) +
+        indent(level + 1) + '</li>'
+      )).join('') +
+      indent(level) + '</ul>'
+    );
   }
 
-  Assignment({ pattern, expr }, context, bind) {
-    const evaluatedPattern = this.visitNode(pattern, context);
-    const evaluatedExpr = this.visitNode(expr, context);
-
-    // console.log('Assignment', { evaluatedPattern, evaluatedExpr });
-
-    const matches = evaluatedPattern.getTypeMatches(evaluatedExpr, context);
-
-    bind(matches);
+  Assignment({ pattern, expr }, level) {
+    return (
+      indent(level) + '<span class="assignment-statement">' +
+      this.visitNode(pattern, level + 1) +
+      indent(level + 1) + '<span class="assignment">=</span>' +
+      this.visitNode(expr, level + 1) +
+      indent(level) + '</span>'
+    );
   }
 
   ApplyExpression({ expr, args }, level) {
@@ -54,13 +57,15 @@ class Highlighter extends Visitors {
   ParenthesesExpression({ expr }, level) {
     return (
       indent(level) + '<span class="parentheses-expression">' +
-      this.visitNode(expr, level + 2) +
+      this.visitNode(expr, level + 1) +
       indent(level) + '</span>'
     );
   }
 
-  IdentifierPattern({ name }) {
-    return new IdentifierPatternType(name);
+  IdentifierPattern({ name }, level) {
+    return (
+      indent(level) + '<span class="identifier-pattern">' + name + '</span>'
+    );
   }
 
   BooleanLiteral({ value }) {
@@ -71,12 +76,8 @@ class Highlighter extends Visitors {
     return new BooleanType();
   }
 
-  NumericLiteral({ value }) {
-    if (typeof value !== 'number') {
-      throw Error('Value is not a number.');
-    }
-
-    return new NumberType();
+  NumericLiteral({ value }, level) {
+    return indent(level) + '<span class="numeric-literal">' + String(value) + '</span>';
   }
 
   StringLiteral({ value }) {
