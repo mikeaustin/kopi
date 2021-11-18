@@ -32,6 +32,7 @@ class ApplyExpression extends Node {
 class DictExpression extends Node { }
 class RangeExpression extends Node { }
 class MemberExpression extends Node { }
+class ParenthesesExpression extends Node { }
 
 class FunctionPattern extends Node { }
 class TuplePattern extends Node { }

@@ -57,6 +57,10 @@ class Typechecker extends Visitors {
     return new FunctionType(evaluatedParams, new AnyType(), expr, context);
   }
 
+  ParenthesesExpression({ expr }, context) {
+    return this.visitNode(expr, context);
+  }
+
   IdentifierPattern({ name }) {
     return new IdentifierPatternType(name);
   }
