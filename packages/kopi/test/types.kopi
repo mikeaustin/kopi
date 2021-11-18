@@ -2,13 +2,13 @@ ship (position) = (type: "ship", position: position)
 asteroid (position) = (type: "asteroid", position: position)
 
 objects = [
-  ship $ Vector (10, 20)
-  asteroid $ Vector (20, 30)
+  ship $ Vector [10, 20]
+  asteroid $ Vector [20, 30]
 ]
 
 print $ objects | map object => match object (
-  "ship", position     => ship $ position + Vector (10, 10)
-  "asteroid", position => asteroid $ position + Vector (1, 1)
+  "ship", position     => ship $ position + Vector [10, 10]
+  "asteroid", position => asteroid $ position + Vector [1, 1]
 )
 
 # f = 0 => "Zero"

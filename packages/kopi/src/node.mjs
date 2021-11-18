@@ -22,9 +22,6 @@ const KopiDictConstructor = async (entries) => new KopiDict(
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
 
-const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
-Vector.nativeConstructor = KopiVector;
-
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 

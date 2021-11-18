@@ -16,7 +16,7 @@ const KopiDictConstructor = async (entries) => new KopiDict(
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
 
-const Vector = (tuple) => new KopiVector(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
+const Vector = (array) => new KopiVector(array.getElementsArray());
 Vector.nativeConstructor = KopiVector;
 
 const KopiIterableMixin = new KopiTuple([

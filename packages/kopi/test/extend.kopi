@@ -22,20 +22,3 @@ print $ "Joe" | wave
 }
 
 print $ "Joe" | greet
-
-
-extend Vector (
-  fire: (this) => () => "Pew! Pew! Pew!"
-)
-
-print $ Vector (10, 20) | fire
-
-# inspect methods
-
-# Under the hood, it's just updating and using 'methods'
-#
-# methods = extend methods String (
-#   greet: (this) => "Hello, " ++ this
-# )
-#
-# methods.get("Joe".nativeConstructor).greet("Joe")
