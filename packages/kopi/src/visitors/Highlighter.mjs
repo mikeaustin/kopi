@@ -7,23 +7,33 @@ const indent = (level) => '\n' + ''.padEnd(level * 2);
 class Highlighter extends Visitors {
   Block({ statements }, level) {
     return (
-      indent(level) + '<ul>' +
+      indent(level) + '<block>' +
       statements.map((statement) => (
-        indent(level + 1) + '<li>' +
+        indent(level + 1) + '<statement>' +
         this.visitNode(statement, level + 2) +
-        indent(level + 1) + '</li>'
+        indent(level + 1) + '</statement>'
       )).join('') +
-      indent(level) + '</ul>'
+      indent(level) + '</block>'
     );
   }
 
   Assignment({ pattern, expr }, level) {
     return (
-      indent(level) + '<span class="assignment-statement">' +
+      indent(level) + '<assignment-statement>' +
       this.visitNode(pattern, level + 1) +
-      indent(level + 1) + '<span class="assignment">=</span>' +
+      indent(level + 1) + '<assignment>=</assignment>' +
       this.visitNode(expr, level + 1) +
-      indent(level) + '</span>'
+      indent(level) + '</assignment-statement>'
+    );
+  }
+
+  PipeExpression({ left, right }, level) {
+    return (
+      indent(level) + '<pipe-expression>' +
+      this.visitNode(left, level + 1) +
+      indent(level + 1) + '<pipe>|</pipe>' +
+      this.visitNode(right, level + 1) +
+      indent(level) + '</pipe-expression>'
     );
   }
 
@@ -32,39 +42,50 @@ class Highlighter extends Visitors {
     const evaluatedArgs = this.visitNode(args, level + 1);
 
     return (
-      indent(level) + '<span class="apply-expression">' +
+      indent(level) + '<apply-expression>' +
       evaluatedExpr + evaluatedArgs +
-      indent(level) + '</span>'
+      indent(level) + '</apply-expression>'
     );
   }
 
-  FunctionExpression({ params, expr }, context) {
-    const evaluatedParams = this.visitNode(params, context);
+  xFunctionExpression({ params, expr }, level) {
+    return (
+      this.visitNode(params, level) +
+      indent(level + 1) + '=>' +
+      this.visitNode(expr, level)
+    );
+  }
 
-    return new FunctionType(evaluatedParams, new AnyType(), expr, context);
+  FunctionExpression({ params, expr }, level) {
+    return (
+      indent(level) + '<function-expression>' +
+      this.visitNode(params, level) +
+      indent(level) + '<arrow class="symbol">=></arrow>' +
+      this.visitNode(expr, level)
+    );
   }
 
   OperatorExpression({ op, left, right }, level) {
     return (
-      indent(level) + '<span class="operator-expression">' +
+      indent(level) + '<operator-expression>' +
       this.visitNode(left, level + 1) +
-      indent(level + 1) + '<span class="operator">' + op + '</span>' +
+      indent(level + 1) + '<operator>' + op + '</operator>' +
       this.visitNode(right, level + 1) +
-      indent(level) + '</span>'
+      indent(level) + '</operator-expression>'
     );
   }
 
   ParenthesesExpression({ expr }, level) {
     return (
-      indent(level) + '<span class="parentheses-expression">' +
+      indent(level) + '<parentheses-expression>' +
       this.visitNode(expr, level + 1) +
-      indent(level) + '</span>'
+      indent(level) + '</parentheses-expression>'
     );
   }
 
   IdentifierPattern({ name }, level) {
     return (
-      indent(level) + '<span class="identifier-pattern">' + name + '</span>'
+      indent(level) + '<identifier-pattern class="pattern">' + name + '</identifier-pattern>'
     );
   }
 
@@ -77,7 +98,7 @@ class Highlighter extends Visitors {
   }
 
   NumericLiteral({ value }, level) {
-    return indent(level) + '<span class="numeric-literal">' + String(value) + '</span>';
+    return indent(level) + '<numeric-literal>' + String(value) + '</numeric-literal>';
   }
 
   StringLiteral({ value }) {
@@ -90,7 +111,7 @@ class Highlighter extends Visitors {
 
   Identifier({ name }, level) {
     return (
-      indent(level) + '<span class="identifier">' + name + '</span>'
+      indent(level) + '<identifier>' + name + '</identifier>'
     );
   }
 }

@@ -15,16 +15,31 @@ async function main() {
 
     console.log(
       `<style>
-        .parentheses-expression::before {
+        * {
+          font: 14px/1.5em 'Menlo', monospace;
+        }
+
+        block, statement {
+          display: block;
+        }
+
+        parentheses-expression::before {
           content: '(';
         }
-        .parentheses-expression::after {
+
+        parentheses-expression::after {
           content: ')';
         }
+
+        apply-expression > identifier {
+          font-weight: bold;
+        }
+
+        numeric-literal {
+          color: red;
+        }
       </style>` +
-      indent(0) + '<div>' +
-      Highlighter.visitNode(astRootNode, 1) +
-      indent(0) + '</div>',
+      Highlighter.visitNode(astRootNode, 0),
     );
   } catch (error) {
     console.error(
