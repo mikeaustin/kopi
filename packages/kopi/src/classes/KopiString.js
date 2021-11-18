@@ -97,8 +97,8 @@ class KopiString {
     return this._nativeString.length;
   }
 
-  succ() {
-    return new KopiString(String.fromCodePoint(this._nativeString.codePointAt(0) + 1));
+  succ(count = 1) {
+    return new KopiString(String.fromCodePoint(this._nativeString.codePointAt(0) + count));
   }
 
   split(delimiter = new KopiString('')) {

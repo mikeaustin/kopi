@@ -12,8 +12,8 @@ Number.prototype._toString = function () {
   return new KopiString(`${this}`);
 };
 
-Number.prototype.succ = function () {
-  return this + 1;
+Number.prototype.succ = function (count = 1) {
+  return this + count;
 };
 
 Number.prototype.apply = function (thisArg, [func, scope, visitors]) {
