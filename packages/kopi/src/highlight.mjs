@@ -5,8 +5,6 @@ import fs from 'fs';
 import parser from '../lib/parser.js';
 import Highlighter from './visitors/Highlighter.mjs';
 
-const indent = (level) => '\n' + ''.padEnd(level * 2);
-
 async function main() {
   const source = await fs.promises.readFile(process.argv[2], 'utf8');
 
@@ -36,7 +34,15 @@ async function main() {
         }
 
         numeric-literal {
-          color: red;
+          color: #c92a2a;
+        }
+
+        identifier-pattern {
+          color: #1c7ed6;
+        }
+
+        field-name {
+          font-style: italic;
         }
       </style>` +
       Highlighter.visitNode(astRootNode, 0),

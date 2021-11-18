@@ -1,4 +1,11 @@
 even (this * that)
-x = 5
+x = 5.0
 10 | sin
 (x) => x * x
+(one: 1 , two: 2)
+one: 1 , two: 2
+a, b = 1, 2
+extend String (
+  capitalize: (this) => () => this.(0)
+  capitalize: (this) => () => this.(0)
+)

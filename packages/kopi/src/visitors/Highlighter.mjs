@@ -2,7 +2,9 @@ import _Visitors from './Visitors.js';
 
 const { default: Visitors } = _Visitors;
 
-const indent = (level) => '\n' + ''.padEnd(level * 2);
+// const indent = (level) => '\n' + ''.padEnd(level * 2);
+const indent = (level) => '';
+const spaces = (level) => ''.padEnd(level * 2 * 6, '&nbsp;');
 
 class Highlighter extends Visitors {
   Block({ statements }, level) {
@@ -21,7 +23,7 @@ class Highlighter extends Visitors {
     return (
       indent(level) + '<assignment-statement>' +
       this.visitNode(pattern, level + 1) +
-      indent(level + 1) + '<assignment>=</assignment>' +
+      indent(level + 1) + '<assignment> = </assignment>' +
       this.visitNode(expr, level + 1) +
       indent(level) + '</assignment-statement>'
     );
@@ -31,7 +33,7 @@ class Highlighter extends Visitors {
     return (
       indent(level) + '<pipe-expression>' +
       this.visitNode(left, level + 1) +
-      indent(level + 1) + '<pipe>|</pipe>' +
+      indent(level + 1) + '<pipe> | </pipe>' +
       this.visitNode(right, level + 1) +
       indent(level) + '</pipe-expression>'
     );
@@ -43,25 +45,33 @@ class Highlighter extends Visitors {
 
     return (
       indent(level) + '<apply-expression>' +
-      evaluatedExpr + evaluatedArgs +
+      evaluatedExpr + ' ' + evaluatedArgs +
       indent(level) + '</apply-expression>'
     );
   }
 
-  xFunctionExpression({ params, expr }, level) {
+  TupleExpression({ elements, fields, multiline }, level) {
+    if (elements.length === 0) {
+      return '()';
+    }
+
     return (
-      this.visitNode(params, level) +
-      indent(level + 1) + '=>' +
-      this.visitNode(expr, level)
+      (multiline ? '<br />' : '') +
+      elements.map((element, index) => (
+        indent(level) + (multiline ? spaces(1) : '') + (fields[index] ? '<field-name>' + fields[index] + '</field-name>' : '') +
+        indent(level) + (fields[index] ? '<colon>: </colon>' : '') + this.visitNode(element, level)
+      )).join(indent(level) + (multiline ? '<br />' : '<comma>, </comma>')) +
+      (multiline ? '<br />' : '')
     );
   }
 
   FunctionExpression({ params, expr }, level) {
     return (
       indent(level) + '<function-expression>' +
-      this.visitNode(params, level) +
-      indent(level) + '<arrow class="symbol">=></arrow>' +
-      this.visitNode(expr, level)
+      this.visitNode(params, level + 1) +
+      indent(level + 1) + '<arrow class="symbol"> => </arrow>' +
+      this.visitNode(expr, level + 1) +
+      indent(level) + '</function-expression>'
     );
   }
 
@@ -69,18 +79,28 @@ class Highlighter extends Visitors {
     return (
       indent(level) + '<operator-expression>' +
       this.visitNode(left, level + 1) +
-      indent(level + 1) + '<operator>' + op + '</operator>' +
+      indent(level + 1) + '<operator> ' + op + ' </operator>' +
       this.visitNode(right, level + 1) +
       indent(level) + '</operator-expression>'
     );
   }
 
-  ParenthesesExpression({ expr }, level) {
+  ParenthesesExpression({ expr, multiline }, level) {
     return (
-      indent(level) + '<parentheses-expression>' +
-      this.visitNode(expr, level + 1) +
+      indent(level) + '<parentheses-expression>' + (multiline ? '<br />' : '') +
+      this.visitNode(expr, level + 1) + (multiline ? '<br />' : '') +
       indent(level) + '</parentheses-expression>'
     );
+  }
+
+  TuplePattern({ elements }, level) {
+    if (elements.length === 0) {
+      return '()';
+    }
+
+    return elements.map((element) => (
+      this.visitNode(element, level)
+    )).join('<comma>, </comma>');
   }
 
   IdentifierPattern({ name }, level) {
