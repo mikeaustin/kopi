@@ -26,7 +26,9 @@ ParenthesizedTuple
         fields: tail.map(expr => expr[3] &&  expr[3][0].name)
       });
     }
-  / "(" _ expr:Expression _ ")" { return expr; }
+  / "(" _ expr:Expression _ ")" {
+      return new ParenthesesExpression({ expr });
+    }
 
 DictExpression
   = "{" _ "}" {

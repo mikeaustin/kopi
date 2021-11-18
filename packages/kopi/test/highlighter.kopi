@@ -1,0 +1,4 @@
+even (this * that)
+x = 5
+10 | sin
+(x) => x * x
