@@ -85,6 +85,10 @@ class Highlighter extends Visitors {
     );
   }
 
+  RangeExpression({ from, to }, level) {
+    return indent(level) + `${this.visitNode(from, level)}..${this.visitNode(to, level)}`;
+  }
+
   ParenthesesExpression({ expr, multiline }, level) {
     return (
       indent(level) + '<parentheses-expression>' + (multiline ? '<br />' : '') +

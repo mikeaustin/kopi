@@ -9,3 +9,4 @@ extend String (
   capitalize: (this) => () => this.(0)
   capitalize: (this) => () => this.(0)
 )
+1..5
