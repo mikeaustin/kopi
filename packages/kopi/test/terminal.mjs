@@ -25,6 +25,14 @@ class ByteSize {
   ['+'](that) {
     return this.size + that.size;
   }
+
+  ['*'](that) {
+    if (typeof that === 'number') {
+      return new ByteSize(this.size * that);
+    }
+
+    return this.size * that.size;
+  }
 }
 
 class Table {
@@ -38,14 +46,30 @@ class Table {
       ...await elements,
       await (await element).getElementsArray().reduce(async (fields, field) => [
         ...await fields,
-        await (await field).toStringAsync()
-      ], [])
+        await (await field).toStringAsync(),
+      ], []),
     ], []);
 
-    return headers.map(header => header.padEnd(25)).join('') + '\n' + elements.reduce((elements, element) => [
-      ...elements,
-      element.map((field) => `${field.padEnd(25)}`).join('')
-    ], []).join('\n');
+    const widths = elements.reduce((widths, element) => (
+      [...widths, element.map((field) => field.length)]
+    ), []);
+
+    console.log(widths);
+
+    const widths2 = widths.reduce((acc, fields) => (
+      fields.map((field, index) => Math.max(field + 2, acc[index]), [0, 0, 0])
+    ));
+
+    console.log(widths2);
+
+    return (
+      headers.map((header, index) => header.toUpperCase().padEnd(widths2[index])).join('') + '\n' +
+      headers.map((_, index) => '='.padEnd(widths2[index] - 2, '=')).join('  ') + '\n' +
+      elements.reduce((elements, element) => [
+        ...elements,
+        element.map((field, index) => `${field.padEnd(widths2[index])}`).join(''),
+      ], []).join('\n')
+    );
   }
 }
 
@@ -54,14 +78,14 @@ const kopi_ls = {
     const dir = await fs.promises.readdir('.');
 
     return new KopiArray(
-      dir.map((filename) => new KopiString(filename))
+      dir.map((filename) => new KopiString(filename)),
     ).inspectAsync({ formatted: true });
   },
 
   async map(func, scope, visitors) {
     const dir = await fs.promises.readdir('.');
     const files = new KopiArray(
-      dir.map((filename) => new KopiString(filename))
+      dir.map((filename) => new KopiString(filename)),
     );
 
     return files.map((file) => func.apply(undefined, [file, scope, visitors]));
@@ -85,16 +109,21 @@ const kopi_ls = {
           let formattedDate = new Date(stats.mtimeMs).toLocaleDateString();
           let formattedTime = new Date(stats.mtimeMs).toLocaleTimeString();
 
-          files.push(new KopiDict(
-            Object.entries({
-              name: new KopiString(dirent.name),
-              size: new ByteSize(stats.size),
-              date: new KopiString(formattedDate + ' ' + formattedTime),
-            }).map(([key, value]) => [new KopiString(key), value]),
+          const entries = {
+            name: new KopiString(dirent.name),
+            size: new ByteSize(stats.size),
+            date: new KopiString(formattedDate + ' ' + formattedTime),
+          };
+
+          files.push(new KopiTuple(
+            Object.values(entries),
+            Object.keys(entries),
           ));
         }
 
-        return new KopiArray(files).inspectAsync({ formatted: true });
+        return new Table(
+          new KopiArray(files),
+        ).inspectAsync();
       },
 
       async map(func, scope, visitors) {
@@ -120,7 +149,7 @@ const kopi_ls = {
         }
 
         return new Table(new KopiArray(
-          files.map((file) => func.apply(undefined, [file, scope, visitors]))
+          files.map((file) => func.apply(undefined, [file, scope, visitors])),
         ));
       },
 
