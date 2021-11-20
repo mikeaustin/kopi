@@ -51,23 +51,15 @@ class Table {
     ], []);
 
     const widths = elements.reduce((widths, element) => (
-      [...widths, element.map((field) => field.length)]
-    ), []);
-
-    console.log(widths);
-
-    const widths2 = widths.reduce((acc, fields) => (
-      fields.map((field, index) => Math.max(field + 2, acc[index]), [0, 0, 0])
-    ));
-
-    console.log(widths2);
+      element.map((field, index) => Math.max(field.length + 2, widths[index]))
+    ), Array(elements[0].length).fill(0));
 
     return (
-      headers.map((header, index) => header.toUpperCase().padEnd(widths2[index])).join('') + '\n' +
-      headers.map((_, index) => '='.padEnd(widths2[index] - 2, '=')).join('  ') + '\n' +
+      headers.map((header, index) => header.toUpperCase().padEnd(widths[index])).join('') + '\n' +
+      headers.map((_, index) => '='.padEnd(widths[index] - 2, '=')).join('  ') + '\n' +
       elements.reduce((elements, element) => [
         ...elements,
-        element.map((field, index) => `${field.padEnd(widths2[index])}`).join(''),
+        element.map((field, index) => `${field.padEnd(widths[index])}`).join(''),
       ], []).join('\n')
     );
   }
