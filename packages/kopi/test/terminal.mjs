@@ -153,11 +153,19 @@ const kopi_ls = {
             let formattedDate = new Date(stats.mtimeMs).toLocaleDateString();
             let formattedTime = new Date(stats.mtimeMs).toLocaleTimeString();
 
-            return new KopiDict(
-              Object.entries({
-                name: filename,
-                date: new KopiString(formattedDate + ' ' + formattedTime),
-              }).map(([key, value]) => [new KopiString(key), value]),
+            const entries = {
+              name: filename,
+              size: new ByteSize(stats.size),
+              date: new KopiString(formattedDate + ' ' + formattedTime),
+            };
+
+            return new Table(
+              new KopiArray([
+                new KopiTuple(
+                  Object.values(entries),
+                  Object.keys(entries),
+                ),
+              ]),
             ).inspectAsync();
           },
         };
