@@ -26,6 +26,7 @@ filenames = [
   "tuple.kopi"
   "dictionary.kopi"
   "array.kopi"
+  "math.kopi"
   "database.kopi"
   "html.kopi"
   "record.kopi"

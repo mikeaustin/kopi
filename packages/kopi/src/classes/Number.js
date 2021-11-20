@@ -40,6 +40,8 @@ Number.prototype['%'] = function (that) {
   return this % that;
 };
 
+//
+
 Number.prototype['=='] = function (that) {
   if (typeof that !== 'number') {
     return false;
@@ -68,8 +70,48 @@ Number.prototype['>='] = function (that) {
   return this >= that;
 };
 
+//
+
+Number.prototype['abs'] = function () {
+  return Math.abs(this);
+};
+
+Number.prototype['log'] = function () {
+  return Math.log(this);
+};
+
+Number.prototype['exp'] = function () {
+  return Math.exp(this);
+};
+
+Number.prototype['floor'] = function () {
+  return Math.floor(this);
+};
+
+Number.prototype['ceil'] = function () {
+  return Math.ceil(this);
+};
+
+Number.prototype['round'] = function () {
+  return Math.round(this);
+};
+
 Number.prototype['sqrt'] = function () {
   return Math.sqrt(this);
+};
+
+//
+
+Number.prototype['sin'] = function () {
+  return Math.sin(this);
+};
+
+Number.prototype['cos'] = function () {
+  return Math.cos(this);
+};
+
+Number.prototype['tan'] = function () {
+  return Math.tan(this);
 };
 
 Number.prototype['_toFixed'] = function (args) {

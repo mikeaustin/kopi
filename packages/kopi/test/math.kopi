@@ -1,0 +1,29 @@
+print $ 'sin 1 + 'cos 2
+
+print $ 'abs (0 - 3)
+
+radians (degrees) = degrees * (Number.PI / 180.0)
+
+print $ radians 90
+
+randomInt (range) = 'floor (random () * (range.to - range.from + 1)) + range.from
+
+print $ randomInt 0..5
+
+randomReal (range) = (random () * (range.to - range.from)) + range.from
+
+print $ randomReal 0..5
+
+# Int.random 0..5
+# Float.random 0..5
+# Int.PI
+
+x = 1
+y = 2
+
+angle = radians 180
+
+x = x * 'cos angle - y * 'sin angle
+y = y * 'cos angle + x * 'sin angle 
+
+print $ x, y

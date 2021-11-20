@@ -8,6 +8,9 @@ KopiStringConstructor.nativeConstructor = KopiString;
 KopiStringConstructor.Newline = new KopiString('\n');
 KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 
+Number.PI = Math.PI;
+Number.E = Math.E;
+
 const KopiArrayConstructor = (tuple) => new KopiArray(tuple.getElementsArray());
 KopiArrayConstructor.nativeConstructor = KopiArray;
 
