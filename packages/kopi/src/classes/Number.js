@@ -117,3 +117,7 @@ Number.prototype['tan'] = function () {
 Number.prototype['_toFixed'] = function (args) {
   return new KopiString(this.toFixed(args));
 };
+
+Number.prototype['_toLocaleString'] = function (args) {
+  return new KopiString(this.toLocaleString());
+};

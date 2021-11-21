@@ -27,17 +27,12 @@ interpret (source) = {
   print indexes
   print program
 
-  loop (data) = {
+  loop (data = (index: 0)) => {
     match (data.index == 'size program) (
       true => ()
-      _    => {
-        reducer = evaluate (program.(data.index), indexes)
-        loop (reducer data)
-      }
+      _    => (evaluate (program.(data.index), indexes) data)
     )
   }
-
-  loop (index: 0)
 }
 
 source = "

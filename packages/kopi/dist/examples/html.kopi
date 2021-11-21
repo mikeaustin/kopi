@@ -5,11 +5,10 @@ li (:class, :_) = children => ("element", "li", { "class": class }, children)
 text (value) = ("text", value)
 
 indent (n) = {
-  loop = (n, str) => match n (
-    0 => str
-    _ => loop (n - 1, str "  ")
+  loop (n = n, str = "") => match n (
+    0 => break str
+    _ => (n - 1, str "  ")
   )
-  loop (n, "")
 }
 
 generateAttrString (name, value) = {

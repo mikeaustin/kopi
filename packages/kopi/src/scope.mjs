@@ -81,6 +81,7 @@ let getScope = (input) => ({
 
   at: (index) => async (array) => await array[index],
   loop: core.kopi_loop,
+  break: core.kopi_loop.break,
   repeat: (func, scope, visitors) => (
     function next(value) {
       if (value?._elementsArray?.length === 0) {

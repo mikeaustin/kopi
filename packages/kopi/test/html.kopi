@@ -8,15 +8,7 @@ button (:class, :onClick) = children => {
 text (value) = ("text", value)
 
 indent (n) = {
-  loop = (n, str) => match n (
-    0 => str
-    _ => loop (n - 1, str "  ")
-  )
-  loop (n, "")
-}
-
-indent2 (n) = {
-  repeat (n = n, str = "") => match n (
+  loop (n = n, str = "") => match n (
     0 => break str
     _ => (n - 1, str "  ")
   )

@@ -59,25 +59,35 @@ const kopi_match = (value) => async (_funcs, scope, visitors) => {
   console.log('match failed.');
 };
 
-const kopi_loop = async (_func, scope, visitors) => {
-  const exit = (value) => { done = true; return value; };
-  const func = await _func.apply(undefined, [exit, scope, visitors]);
-
-  let done = false;
-  let index = 0;
+const kopi_loop = async (func, scope, visitors) => {
   let value = KopiTuple.empty;
 
-  while (!done) {
+  for (let index = 0; ; ++index) {
     value = await func.apply(undefined, [value, scope, visitors]);
 
-    if (++index % 1000 === 0) {
+    if (value.constructor.name === 'Exit') {
+      return value.value;
+    }
+
+    if (index % 1000 === 0) {
       globalThis.gc();
+
       await kopi_sleep(0);
     }
   }
-
-  return value;
 };
+
+class Exit {
+  constructor(value) {
+    this.value = value;
+  }
+
+  inspectAsync() {
+    return 'Break';
+  }
+}
+
+kopi_loop.break = (value) => new Exit(value);
 
 const kopi_write = (value) => {
   return new Promise((resolve) => process.stdout.write(value.toStringAsync(), () => resolve()));

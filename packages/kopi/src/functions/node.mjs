@@ -19,10 +19,13 @@ const kopi_fetch = async (url) => {
 };
 
 const kopi_listen = (port) => (co) => http.createServer(async (request, response) => {
-  const value = await coroutines.kopi_send(co)(request);
+  const value = await coroutines.kopi_send(co)(new KopiTuple(
+    [new KopiString(request.url)],
+    ['url'],
+  ));
 
   response.writeHead(200);
-  response.end(value);
+  response.end(value.getNativeString());
 }).listen({
   port: port,
 });

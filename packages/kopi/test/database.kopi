@@ -2,39 +2,37 @@ fix = f => (x => f (y => x x y)) x => f (y => x x y)
 select = fns => yield (x => match x fns)
 
 database = () => {
-  loop = (value) => {
-    _, value = yield command => match command (
+  loop (value = 0) => {
+    _, result = yield command => match command (
       "get"             => value
       "set", newValue   => newValue
       "update", updater => updater value
     )
-    loop value
+    result
   }
-  loop 0
 }
 
 database = () => {
-  loop = (value) => {
+  loop (value = 0) => {
     _, result = select (
       "get"             => value
       "set", newValue   => newValue
       "update", updater => updater value
     )
-    loop result
+    result
   }
-  loop 0
 }
 
-database = () => {
-  let $ fix loop => (value = 0) => {
-    _, result = select (
-      "get"             => value
-      "set", newValue   => newValue
-      "update", updater => updater value
-    )
-    loop result
-  }
-}
+# database = () => {
+#   let $ fix loop => (value = 0) => {
+#     _, result = select (
+#       "get"             => value
+#       "set", newValue   => newValue
+#       "update", updater => updater value
+#     )
+#     loop result
+#   }
+# }
 
 db = spawn database
 
