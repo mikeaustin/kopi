@@ -2,6 +2,9 @@ html () = children => ("element", "html", {}, children)
 body (:class, :_) = children => ("element", "body", { "class": class }, children)
 ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
 li (:class, :_) = children => ("element", "li", { "class": class }, children)
+button (:class, :onClick) = children => {
+  ("element", "button", { "class": class, "onClick": onClick }, children)
+}
 text (value) = ("text", value)
 
 indent (n) = {
@@ -10,6 +13,13 @@ indent (n) = {
     _ => loop (n - 1, str "  ")
   )
   loop (n, "")
+}
+
+indent2 (n) = {
+  repeat (n = n, str = "") => match n (
+    0 => break str
+    _ => (n - 1, str "  ")
+  )
 }
 
 generateAttrString (name, value) = {
@@ -41,6 +51,9 @@ generateHtmlString (node, level) = {
 documentTree = (
   html () [
     text "Hello"
+    button (onClick: () => 5) [
+      text "Press Me"
+    ]
     ul (id: "id", class: "class") [
       li (class: "item") [text 1]
       li (class: "item") [text 2]
