@@ -15,6 +15,13 @@ indent (n) = {
   loop (n, "")
 }
 
+indent2 (n) = {
+  repeat (n = n, str = "") => match n (
+    0 => break str
+    _ => (n - 1, str "  ")
+  )
+}
+
 generateAttrString (name, value) = {
   " " name "='" value "'"
 }
