@@ -1,0 +1,28 @@
+position = Vector [10, 10]
+velocity = Vector [0.1, 0.1]
+gravity = Vector [0.0, 0.1]
+
+# loop (position = (Vector [10, 10]), velocity = 1) => {
+#    print $ (char 27) "[" position.(1) ";" position.(0) "H"
+#   print position
+
+#   sleep 1
+
+#   ((position + velocity), velocity + 1)
+#    (position + velocity, velocity * 0.99)
+# }
+
+print $ (char 27) "[2J"
+
+loop (position = (Vector [10, 10]), velocity = (Vector [1, 1])) => {
+  print $ (char 27) "[" ('_toFixed position.(1)) ";" ('_toFixed position.(0)) "HO"
+
+  sleep 0.1
+
+  velocity = match (position.(1) > 40) (
+    true  => Vector [velocity.(0), velocity.(1)]
+    false => velocity
+  )
+
+  (position + velocity + gravity, velocity * 0.99)
+}

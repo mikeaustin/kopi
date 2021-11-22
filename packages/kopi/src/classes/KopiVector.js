@@ -1,7 +1,7 @@
 class KopiVector {
   constructor(elements = []) {
-    this.buffer = new ArrayBuffer(elements.length * 4);
-    this.view = new Uint32Array(this.buffer, 0, elements.length);
+    this.buffer = new ArrayBuffer(elements.length * 8);
+    this.view = new Float64Array(this.buffer, 0, elements.length);
 
     for (let index = 0; index < this.view.length; ++index) {
       this.view[index] = elements[index];
@@ -17,14 +17,29 @@ class KopiVector {
   }
 
   ['+'](that) {
-    const buffer = new ArrayBuffer(this.view.length * 4);
-    const view = new Uint32Array(buffer, 0, this.view.length);
+    const buffer = new ArrayBuffer(this.view.length * 8);
+    const view = new Float64Array(buffer, 0, this.view.length);
 
     for (let i = 0; i < this.view.length; ++i) {
       view[i] = this.view[i] + that.view[i];
     }
 
     return new KopiVector(view);
+  }
+
+  ['*'](that) {
+    const buffer = new ArrayBuffer(this.view.length * 8);
+    const view = new Float64Array(buffer, 0, this.view.length);
+
+    for (let i = 0; i < this.view.length; ++i) {
+      view[i] = this.view[i] * that;
+    }
+
+    return new KopiVector(view);
+  }
+
+  get(index) {
+    return this.view[index];
   }
 
   size() {
