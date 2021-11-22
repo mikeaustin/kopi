@@ -15,11 +15,15 @@ const KopiArrayConstructor = (tuple) => new KopiArray(tuple.getElementsArray());
 KopiArrayConstructor.nativeConstructor = KopiArray;
 
 const KopiDictConstructor = async (entries) => new KopiDict(
-  await Promise.all(entries.getElementsArray().map(async (entry) => (await entry).getElementsArray())),
+  await Promise.all(
+    entries.getElementsArray().map(async (entry) => (await entry).getElementsArray())
+  ),
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
 
-const Vector = (array) => new KopiVector(array.getElementsArray());
+const Vector = async (array) => new KopiVector(
+  await Promise.all(array.getElementsArray()),
+);
 Vector.nativeConstructor = KopiVector;
 
 const KopiIterableMixin = new KopiTuple([

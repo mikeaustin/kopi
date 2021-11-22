@@ -8,6 +8,14 @@ class KopiVector {
     }
   }
 
+  get x() {
+    return this.view[0];
+  }
+
+  get y() {
+    return this.view[1];
+  }
+
   inspectAsync() {
     return `Vector [${this.view.map((element) => element.toString()).join(', ')}]`;
   }

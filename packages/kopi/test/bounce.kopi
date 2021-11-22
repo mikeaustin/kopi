@@ -1,28 +1,29 @@
-position = Vector [10, 10]
-velocity = Vector [0.1, 0.1]
 gravity = Vector [0.0, 0.1]
+esc = (char 27)
 
-# loop (position = (Vector [10, 10]), velocity = 1) => {
-#    print $ (char 27) "[" position.(1) ";" position.(0) "H"
-#   print position
+print $ esc "[2J" esc "[?25l"
 
-#   sleep 1
-
-#   ((position + velocity), velocity + 1)
-#    (position + velocity, velocity * 0.99)
-# }
-
-print $ (char 27) "[2J"
-
-loop (position = (Vector [10, 10]), velocity = (Vector [1, 1])) => {
-  print $ (char 27) "[" ('_toFixed position.(1)) ";" ('_toFixed position.(0)) "HO"
-
-  sleep 0.1
-
-  velocity = match (position.(1) > 40) (
-    true  => Vector [velocity.(0), velocity.(1)]
-    false => velocity
+loop (position = Vector [40, 1], velocity = Vector [1, 0]) => {
+  newVelocity = match () (
+    _ [position.y + velocity.y > 20] => Vector [velocity.x, 0 - velocity.y]
+    _ [position.x + velocity.x > 80] => Vector [0 - velocity.x, velocity.y]
+    _ [position.x + velocity.x < 0]  => Vector [0 - velocity.x, velocity.y]
+    _                                => velocity
   )
 
-  (position + velocity + gravity, velocity * 0.99)
+  newPosition = match () (
+    _ [position.y + velocity.y > 20] => Vector [position.x, position.y - (position.y - 20) + 1]
+    _ [position.x + velocity.x > 80] => Vector [position.x - (position.x - 80), position.y]
+    _ [position.x + velocity.x < 0]  => Vector [1 - position.x, position.y]
+    _                                => position
+  )
+
+  positionX = '_toFixed newPosition.(0)
+  positionY = '_toFixed newPosition.(1)
+
+  print $ esc "[2J" esc "[" positionY ";" positionX "H" "●"
+
+  sleep (1 / 30)
+
+  (newPosition + newVelocity, newVelocity + gravity)
 }
