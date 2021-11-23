@@ -69,7 +69,7 @@ const kopi_yield = async (func, scope, visitors) => {
 };
 
 const kopi_send = (coroutineId) => async (data) => {
-  return new Promise(resolve => setImmediate(async () => {
+  return new Promise((resolve) => setImmediate(async () => {
     coroutineEventEmitter.emit(coroutineId, { data });
 
     const value = await senderPromises[coroutineId];
@@ -81,7 +81,7 @@ const kopi_send = (coroutineId) => async (data) => {
 
 const kopi_tasks = () => {
   console.log('Id\tStarted');
-  coroutinesList.forEach(coroutine => {
+  coroutinesList.forEach((coroutine) => {
     console.log(`${coroutine.id}\r\t${new Date(coroutine.started).toLocaleString()}`);
   });
 };
