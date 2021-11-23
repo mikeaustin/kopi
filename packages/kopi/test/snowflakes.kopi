@@ -4,24 +4,8 @@ print $ "[?25l"
 positions = Vector $ 1..10 | flatMap (n) => [random () * 80, 0]
 velocities = Vector $ 1..10 | flatMap (n) => [random () / 2 - 0.5, random ()]
 
-print $ 0..(2 * 9)
-print $ (0 .. (9)) | each (index) => print index
-exit ()
-
 loop (positions = positions) => {
   print $ esc "[2J"
-
-  0..(9 * 2) 2 | each (index) => {
-    positionX = positions.(index)
-    positionX = positions.(index + 1)
-    velocityX = velocities.(index)
-    velocityY = velocities.(index + 1)
-
-    stringX = '_toFixed (positionX % 80)
-    stringY = '_toFixed (positionY % 20)
-
-    print $ esc "[" stringY ";" stringX "H" "❄︎"
-  }
 
   0..9 | each (index) => {
     positionX = positions.(index * 2)
@@ -32,7 +16,7 @@ loop (positions = positions) => {
     stringX = '_toFixed (positionX % 80)
     stringY = '_toFixed (positionY % 20)
 
-    # print $ esc "[" stringY ";" stringX "H" "❄︎"
+    print $ esc "[" stringY ";" stringX "H" "❄︎"
   }
 
   sleep (1 / 30)

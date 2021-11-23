@@ -6,6 +6,8 @@ Imperial = type (value: Int)
 
 extend Imperial (
   toImperial: (this) => () => this
+  succ: (this) => () => this.value + 1
+  <=: (this) => (that) => this.value <= that
   +: (this) => (that) => Imperial (value: this.value + (that | toImperial).value)
 )
 
@@ -23,6 +25,7 @@ Metric = type (value: Int)
 
 m (n) = Metric (value: n)
 cm (n) = Metric (value: n / 10)
+km (n) = Metric (value: n * 1000)
 
 extend Imperial (
   toMetric: (this) => () => Metric (value: this.value * 2.54)
@@ -30,7 +33,9 @@ extend Imperial (
 
 extend Metric (
   toMetric: (this) => () => this
+  succ: (this) => () => this.value + 1
   toImperial: (this) => () => Imperial (value: this.value / 2.54)
+  <=: (this) => (that) => this.value <= that
   +: (this) => (that) => Metric (value: this.value + (that | toMetric).value)
 )
 
@@ -62,3 +67,8 @@ extend Metric (
 
 print $ 2 ft * 4 ft
 print $ 2 m * 20 cm
+
+
+# (1 km)..(3 km) (1 m) | each (a) => {
+#   print a
+# }
