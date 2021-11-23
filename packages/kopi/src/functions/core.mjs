@@ -60,13 +60,13 @@ const kopi_match = (value) => async (_funcs, scope, visitors) => {
 };
 
 const kopi_loop = async (func, scope, visitors) => {
-  let value = KopiTuple.empty;
+  let result = KopiTuple.empty;
 
   for (let index = 0; ; ++index) {
-    value = await func.apply(undefined, [value, scope, visitors]);
+    result = await func.apply(undefined, [result, scope, visitors]);
 
-    if (value.constructor.name === 'Exit') {
-      return value.value;
+    if (result.constructor.name === 'Exit') {
+      return result.value;
     }
 
     if (index % 100000 === 0) {
