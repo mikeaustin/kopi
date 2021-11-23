@@ -23,5 +23,4 @@ server = spawn () => {
 
 listen 8080 server
 
-# print $ send server 1
-# print $ send server 2
+print $ send server (url: "/")
