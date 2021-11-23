@@ -97,6 +97,9 @@ let getScope = (input) => ({
       return new KopiTuple([nextValue, () => next(nextValue)]);
     }
   ),
+  spawn: core.kopi_spawn,
+  yield: core.kopi_yield,
+  send: core.kopi_send,
   Vector,
   Number,
   Array: KopiArrayConstructor,

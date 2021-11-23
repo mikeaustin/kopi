@@ -1,5 +1,7 @@
 import { KopiString, KopiTuple } from '../classes.mjs';
 
+import * as coroutines from './coroutines.mjs';
+
 const kopi_inspect = async (value) => {
   console.log(await value.inspectAsync());
 };
@@ -109,6 +111,11 @@ const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind)
   globalThis.methods[globalThis.methods.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
 };
 
+const kopi_spawn = coroutines.kopi_spawn;
+const kopi_yield = coroutines.kopi_yield;
+const kopi_send = coroutines.kopi_send;
+const kopi_tasks = coroutines.kopi_tasks;
+
 export {
   kopi_inspect,
   kopi_print,
@@ -125,4 +132,7 @@ export {
   kopi_write,
   kopi_sleep,
   kopi_extend,
+  kopi_spawn,
+  kopi_yield,
+  kopi_send,
 };
