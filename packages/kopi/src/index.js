@@ -38,7 +38,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     compile(sourceElement, outputElement);
   });
 
+  let timeout = null;
+
   sourceElement.addEventListener('input', async () => {
-    compile(sourceElement, outputElement);
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      compile(sourceElement, outputElement);
+    }, 1000);
   });
 });

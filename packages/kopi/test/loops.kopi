@@ -12,6 +12,13 @@ xloop = (x) => {
 
 # xloop 1
 
+spawn () => {
+  loop () => {
+    print $ "here"
+    sleep 1
+  }
+}
+
 loop (x = 1) => {
   match (x % 100000) (
     0 => {

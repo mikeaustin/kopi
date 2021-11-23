@@ -1,15 +1,14 @@
-start (x) = {
-  f, g = import "test/module.kopi"
+loop (x = 1) => {
+  (:f, :g) = import "test/module.kopi"
+
+  print "Loaded module.kopi"
 
   loop (x = x) => {
     print x
-    command = input "(R)eload or (I)ncrement?"
 
-    match command (
-      "r" => start (x)
+    match (input "(R)eload or (I)ncrement?") (
+      "r" => break (x)
       "i" => (g x)
     )
   }
 }
-
-start 1

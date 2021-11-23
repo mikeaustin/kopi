@@ -12,6 +12,7 @@
     "build": "pegjs -o lib/parser.js src/parser.new.pegjs",
     "prestart": "npm run build",
     "start": "node --expose-gc --max-old-space-size=600 src/main.mjs",
+    "start-small": "node --max-old-space-size=10 src/main.mjs",
     "test": "npm --silent start test/import.kopi",
     "webpack": "npm run build && webpack --mode development",
     "preserve": "npm run build",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.26.1",
+    "events": "^3.3.0",
     "immutable": "^4.0.0-rc.15",
     "node-fetch": "^2.6.0",
     "pegjs": "^0.10.0",

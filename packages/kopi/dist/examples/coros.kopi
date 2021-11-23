@@ -1,0 +1,45 @@
+# Spawns a coroutine that yields squares
+coroutine = spawn () => {
+  loop (x = 1) => {
+    yield (x) => match x (
+      0 => 1
+      n => (x, n * n)
+    )
+    x + 1
+  }
+}
+
+print $ 1..3 | map (n) => send coroutine n
+
+
+# Convenience function for yield + match
+select = fns => yield (x => match x fns)
+
+# Spawns a coroutine that sets and gets a value
+database = spawn () => {
+  loop (value = 0) => {
+    _, result = select (
+      "get"             => value
+      "set", newValue   => newValue
+      "update", updater => updater value
+    )
+    result
+  }
+}
+
+print $ send database "get"
+send database $ "set", 5
+print $ send database "get"
+send database $ "set", 10
+print $ send database "get"
+send database $ "update", (x => x * 2)
+print $ send database "get"
+
+
+spawn () => {
+  loop (x = 1) => {
+    print x
+    sleep 1
+    x + 1
+  }
+}
