@@ -3,6 +3,21 @@ const { default: KopiTuple } = require('../classes/KopiTuple');
 const { default: KopiArray } = require('../classes/KopiArray');
 
 class Iterable {
+  async each(func, scope, visitors) {
+    for await (const element of this) {
+      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+        ...scope,
+        [func.params._identifierName]: element,
+      }));
+
+      if (predicatePassed) {
+        await func.apply(undefined, [await element, scope, visitors]);
+      }
+    }
+
+    return KopiTuple.empty;
+  }
+
   async map(func, scope, visitors) {
     let accum = this.emptyValue();
 

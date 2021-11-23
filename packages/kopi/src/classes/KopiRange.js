@@ -64,6 +64,7 @@ const { default: KopiTuple } = require('./KopiTuple');
 const { default: KopiArray } = require('./KopiArray');
 const { default: Iterable } = require('../traits/Iterable');
 
+KopiRange.prototype.each = Iterable.prototype.each;
 KopiRange.prototype.map = Iterable.prototype.map;
 KopiRange.prototype.flatMap = Iterable.prototype.flatMap;
 KopiRange.prototype.reduce = Iterable.prototype.reduce;
