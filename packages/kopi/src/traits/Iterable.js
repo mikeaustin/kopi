@@ -129,6 +129,26 @@ class Iterable {
     return new KopiArray(accum);
   }
 
+  async *chunk(count) {
+    let values = this.emptyValue();
+    let index = 0;
+
+    for await (const element of this) {
+      if (values.size() > 0 && index % count === 0) {
+        yield values;
+
+        values = this.emptyValue();
+      }
+
+      values = values.append(element);
+      index += 1;
+    }
+
+    if (values.length !== 0) {
+      yield values;
+    }
+  }
+
   async count(func = (value) => true, scope, visitors) {
     let accum = 0;
 

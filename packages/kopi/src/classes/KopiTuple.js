@@ -1,3 +1,27 @@
+class KopiSequence {
+  constructor(sequence) {
+    this.sequence = sequence;
+  }
+
+  async inspectAsync() {
+    const values = [];
+
+    for await (const element of this.sequence) {
+      values.push(element);
+    }
+
+    return new KopiArray(values).inspectAsync();
+  }
+
+  emptyValue() {
+    return new KopiArray();
+  }
+
+  [Symbol.asyncIterator]() {
+    return this.sequence[Symbol.asyncIterator]();
+  }
+}
+
 class KopiTuple {
   constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {
@@ -112,13 +136,27 @@ class KopiTuple {
 
     while (results.every((result) => !result.done)) {
       values.push(
-        mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors]),
+        mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors])
       );
 
       results = iters.map((iter) => iter.next());
     }
 
     return new KopiArray(await Promise.all(values));
+  }
+
+  async map2(mapper, scope, visitors) {
+    return new KopiSequence((async function* map() {
+      const iters = this._elementsArray.map((element) => element[Symbol.iterator]());
+
+      let results = iters.map((iter) => iter.next());
+
+      while (results.every((result) => !result.done)) {
+        yield mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors]);
+
+        results = iters.map((iter) => iter.next());
+      }
+    }).apply(this));
   }
 
   async product(func = (args) => args, scope, visitors) {
@@ -152,3 +190,12 @@ module.exports = {
 };
 
 const { default: KopiArray } = require('./KopiArray');
+const { default: Iterable } = require('../traits/Iterable');
+
+KopiSequence.prototype.map = Iterable.prototype.map;
+KopiSequence.prototype.flatMap = Iterable.prototype.flatMap;
+KopiSequence.prototype.reduce = Iterable.prototype.reduce;
+KopiSequence.prototype.find = Iterable.prototype.find;
+KopiSequence.prototype.splitOn = Iterable.prototype.splitOn;
+KopiSequence.prototype.splitEvery = Iterable.prototype.splitEvery;
+KopiSequence.prototype.count = Iterable.prototype.count;

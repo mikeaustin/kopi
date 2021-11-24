@@ -20,6 +20,13 @@ loop (positions = positions) => {
     print $ esc "[" stringY ";" stringX "H" "●"
   }
 
+  # (positions, velocities) | chunk 2 ([posX, posY], [velX, velY]) => {
+  #   stringX = '_toFixed (posX % 80)
+  #   stringY = '_toFixed (posY % 20)
+
+  #   print $ esc "[" stringY ";" stringX "H" "●"
+  # }
+
   sleep (1 / 30)
 
   (positions + velocities)
