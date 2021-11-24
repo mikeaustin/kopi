@@ -1,27 +1,29 @@
+gravity = Vector [0.0, 0.1]
 esc = (char 27)
+
 print $ esc "[?25l"
 
-positions = Vector $ 1..10 | flatMap (n) => [random () * 80, 0]
-velocities = Vector $ 1..10 | flatMap (n) => [(random () - 0.5) / 2, random () / 2 + 0.5]
+loop (position = Vector [40, 1], velocity = Vector [1, 0]) => {
+  newVelocity = match () (
+    _ [position.y + velocity.y > 20] => Vector [velocity.x, 0 - velocity.y]
+    _ [position.x + velocity.x > 80] => Vector [0 - velocity.x, velocity.y]
+    _ [position.x + velocity.x < 0]  => Vector [0 - velocity.x, velocity.y]
+    _                                => velocity
+  )
 
-loop (positions = positions) => {
-  print $ esc "[2J"
+  newPosition = match () (
+    _ [position.y + velocity.y > 20] => Vector [position.x, position.y - (position.y - 20) + 1]
+    _ [position.x + velocity.x > 80] => Vector [position.x - (position.x - 80), position.y]
+    _ [position.x + velocity.x < 0]  => Vector [1 - position.x, position.y]
+    _                                => position
+  )
 
-  0..9 | each (index) => {
-    positionX = positions.(index * 2)
-    positionY = positions.(index * 2 + 1)
-    velocityX = velocities.(index * 2)
-    velocityY = velocities.(index * 2 + 1)
+  positionX = '_toFixed newPosition.(0)
+  positionY = '_toFixed newPosition.(1)
 
-    stringX = '_toFixed (positionX % 80)
-    stringY = '_toFixed (positionY % 20)
-
-    print $ esc "[" stringY ";" stringX "H" "●"
-
-    newPosition
-  }
+  print $ esc "[2J" esc "[" positionY ";" positionX "H" "●"
 
   sleep (1 / 30)
 
-  (positions + velocities)
+  (newPosition + newVelocity, newVelocity + gravity)
 }

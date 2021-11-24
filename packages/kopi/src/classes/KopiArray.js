@@ -13,7 +13,7 @@ class KopiArray {
     );
 
     if (formatted) {
-      return '[\n' + elementsArray.map(element => `  ${element}`).join('\n') + '\n]';
+      return '[\n' + elementsArray.map((element) => `  ${element}`).join('\n') + '\n]';
     }
 
     return `[${elementsArray.join(', ')}]`;
@@ -57,7 +57,6 @@ class KopiArray {
   }
 
   concat(that) {
-    console.log('that', that);
     return new KopiArray(this._elementsArray.concat(that.toArray()._elementsArray));
   }
 

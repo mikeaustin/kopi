@@ -1,8 +1,8 @@
 esc = (char 27)
-print $ "[?25l"
+print $ esc "[?25l"
 
 positions = Vector $ 1..10 | flatMap (n) => [random () * 80, 0]
-velocities = Vector $ 1..10 | flatMap (n) => [random () / 2 - 0.5, random ()]
+velocities = Vector $ 1..10 | flatMap (n) => [(random () - 0.5) / 2, random () / 2 + 0.5]
 
 loop (positions = positions) => {
   print $ esc "[2J"
@@ -16,7 +16,7 @@ loop (positions = positions) => {
     stringX = '_toFixed (positionX % 80)
     stringY = '_toFixed (positionY % 20)
 
-    print $ esc "[" stringY ";" stringX "H" "❄︎"
+    print $ esc "[" stringY ";" stringX "H" "●"
   }
 
   sleep (1 / 30)
