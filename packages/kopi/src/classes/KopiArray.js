@@ -97,3 +97,5 @@ KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
 KopiArray.prototype.reduce = Iterable.prototype.reduce;
 KopiArray.prototype.find = Iterable.prototype.find;
 KopiArray.prototype.splitOn = Iterable.prototype.splitOn;
+KopiArray.prototype.splitEvery = Iterable.prototype.splitEvery;
+KopiArray.prototype.count = Iterable.prototype.count;

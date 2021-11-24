@@ -128,7 +128,20 @@ class Iterable {
 
     return new KopiArray(accum);
   }
+
+  async count(func = (value) => true, scope, visitors) {
+    let accum = 0;
+
+    for await (const element of this) {
+      if (await func.apply(undefined, [element, scope, visitors])) {
+        accum += 1;
+      }
+    }
+
+    return accum;
+  }
 }
+
 
 module.exports = {
   default: Iterable,
@@ -138,4 +151,5 @@ module.exports = {
   find: (thisArg) => (args, scope, visitors) => Iterable.prototype.find.apply(thisArg, [args, scope, visitors]),
   splitOn: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitOn.apply(thisArg, [args, scope, visitors]),
   splitEvery: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.apply(thisArg, [args, scope, visitors]),
+  count: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.count(thisArg, [args, scope, visitors]),
 };

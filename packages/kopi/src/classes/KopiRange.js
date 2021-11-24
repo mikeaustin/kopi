@@ -69,3 +69,4 @@ KopiRange.prototype.map = Iterable.prototype.map;
 KopiRange.prototype.flatMap = Iterable.prototype.flatMap;
 KopiRange.prototype.reduce = Iterable.prototype.reduce;
 KopiRange.prototype.splitOn = Iterable.prototype.splitOn;
+KopiRange.prototype.count = Iterable.prototype.count;

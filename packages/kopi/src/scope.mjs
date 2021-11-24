@@ -33,6 +33,7 @@ const KopiIterableMixin = new KopiTuple([
   _Iterable.find,
   _Iterable.splitOn,
   _Iterable.splitEvery,
+  _Iterable.count,
 ], [
   'map',
   'flatMap',
@@ -40,6 +41,7 @@ const KopiIterableMixin = new KopiTuple([
   'find',
   'splitOn',
   'splitEvery',
+  'count',
 ]);
 
 Number.nativeConstructor = Number;
