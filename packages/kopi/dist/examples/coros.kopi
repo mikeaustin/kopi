@@ -36,10 +36,15 @@ send database $ "update", (x => x * 2)
 print $ send database "get"
 
 
+# Spawns a coroutine that prints 1 through 5
 spawn () => {
   loop (x = 1) => {
     print x
     sleep 1
-    x + 1
+
+    match x (
+      5 => break x
+      _ => x + 1
+    )
   }
 }
