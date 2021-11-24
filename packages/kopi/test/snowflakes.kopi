@@ -1,13 +1,14 @@
 esc = (char 27)
 print $ esc "[?25l"
+count = 10
 
-positions = Vector $ 1..10 | flatMap (n) => [random () * 80, 0]
-velocities = Vector $ 1..10 | flatMap (n) => [(random () - 0.5) / 2, random () / 2 + 0.5]
+positions = Vector $ 1..count | flatMap (n) => [random () * 80, 0]
+velocities = Vector $ 1..count | flatMap (n) => [random () / 2, random () / 2 + 0.5]
 
 loop (positions = positions) => {
   print $ esc "[2J"
 
-  0..9 | each (index) => {
+  0..(count - 1) | each (index) => {
     positionX = positions.(index * 2)
     positionY = positions.(index * 2 + 1)
     velocityX = velocities.(index * 2)

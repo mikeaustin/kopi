@@ -19,22 +19,38 @@ class KopiRange {
     this.by = by;
   }
 
+  resolve() {
+    return Promise.all([this.from, this.to, this.by]);
+  }
+
   async inspectAsync() {
-    return `${await (await this.from).inspectAsync()}..${await (await this.to).inspectAsync()}${this.by > 1 ? ` @ ${this.by}` : ''}`;
+    const [from, to, by] = await this.resolve();
+
+    return `${await (from).inspectAsync()}..${await (to).inspectAsync()}${by > 1 ? ` @ ${by}` : ''}`;
   }
 
   async toStringAsync() {
     return this.inspectAsync();
   }
 
-  toArray() {
+  async toArray() {
+    const [from, to, by] = await this.resolve();
+
     return new KopiArray(
-      Array.from({ length: this.to - this.from + 1 }, (_, index) => index + this.from),
+      Array.from({ length: (to - from) / by + 1 }, (_, index) => index * by + from),
     );
   }
 
   emptyValue() {
     return new KopiArray();
+  }
+
+  async *[Symbol.asyncIterator]() {
+    const [from, to, by] = await this.resolve();
+
+    for (let element = from; element['<='](to); element = element.succ(by)) {
+      yield element;
+    }
   }
 
   *[Symbol.iterator]() {
@@ -43,8 +59,10 @@ class KopiRange {
     }
   }
 
-  apply(thisArg, [by]) {
-    return new KopiRange(this.from, this.to, by);
+  async apply(thisArg, [by]) {
+    const [from, to] = await this.resolve();
+
+    return new KopiRange(from, to, await by);
   }
 
   ['++'](that) {
