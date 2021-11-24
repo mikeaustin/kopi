@@ -60,6 +60,10 @@ class Interpreter extends Visitors {
     // const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
 
     Object.entries(matches).forEach(([name, value]) => {
+      if (value.incrementReferenceCount) {
+        value.incrementReferenceCount();
+      }
+
       if (value instanceof KopiFunction) {
         value.closure[name] = value;
       }

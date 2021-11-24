@@ -2,10 +2,15 @@ class KopiVector {
   constructor(elements = []) {
     this.buffer = new ArrayBuffer(elements.length * 8);
     this.view = new Float64Array(this.buffer, 0, elements.length);
+    this.referenceCount = 0;
 
     for (let index = 0; index < this.view.length; ++index) {
       this.view[index] = elements[index];
     }
+  }
+
+  incrementReferenceCount() {
+    this.referenceCount = this.referenceCount + 1;
   }
 
   get x() {
@@ -25,6 +30,14 @@ class KopiVector {
   }
 
   ['+'](that) {
+    if (this.referenceCount === 1) {
+      for (let i = 0; i < this.view.length; ++i) {
+        this.view[i] += that.view[i];
+      }
+
+      return this;
+    }
+
     const buffer = new ArrayBuffer(this.view.length * 8);
     const view = new Float64Array(buffer, 0, this.view.length);
 
