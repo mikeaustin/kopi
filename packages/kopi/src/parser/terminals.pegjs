@@ -33,7 +33,7 @@ AstLiteral
     }
 
 Identifier
-  = _ name:([_a-zA-Z][_a-zA-Z0-9]*) _ {
+  = _ name:([_@a-zA-Z][_a-zA-Z0-9]*) _ {
       return new Identifier({
         name: name[0] + name[1].join('')
       });
