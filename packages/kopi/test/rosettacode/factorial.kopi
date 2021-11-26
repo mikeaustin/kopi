@@ -1,0 +1,21 @@
+factorial (n) = match n (
+  0 => 1
+  n => factorial (n - 1)
+)
+
+
+factorial (n, acc = 1) = match n (
+  0 => acc
+  n => factorial (n - 1, acc * n)
+)
+
+factorial (n) = {
+  loop (n = n, acc = 1) => match n (
+    0 => break acc
+    1 => (n - 1, acc * n)
+  )
+)
+
+factorial (n) = {
+  1..n | reduce 1 $ (acc, n) => acc * n
+}
