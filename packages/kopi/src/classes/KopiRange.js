@@ -13,7 +13,7 @@ class KopiRangeWithIndex {
 }
 
 class KopiRange {
-  constructor(from, to, by = 1) {
+  constructor(from, to, by = from > to ? -1 : 1) {
     this.from = from;
     this.to = to;
     this.by = by;
@@ -26,7 +26,7 @@ class KopiRange {
   async inspectAsync() {
     const [from, to, by] = await this.resolve();
 
-    return `${await (from).inspectAsync()}..${await (to).inspectAsync()}${by > 1 ? ` @ ${by}` : ''}`;
+    return `${await (from).inspectAsync()}..${await (to).inspectAsync()}${by === 1 ? '' : ` @ ${by}`}`;
   }
 
   async toStringAsync() {
@@ -47,14 +47,17 @@ class KopiRange {
 
   async *[Symbol.asyncIterator]() {
     const [from, to, by] = await this.resolve();
+    const op = from > to ? '>=' : '<=';
 
-    for (let element = from; element['<='](to); element = element.succ(by)) {
+    for (let element = from; element[op](to); element = element.succ(by)) {
       yield element;
     }
   }
 
   *[Symbol.iterator]() {
-    for (let element = this.from; element['<='](this.to); element = element.succ(this.by)) {
+    const op = this.from > this.to ? '>=' : '<=';
+
+    for (let element = this.from; element[op](this.to); element = element.succ(this.by)) {
       yield element;
     }
   }
