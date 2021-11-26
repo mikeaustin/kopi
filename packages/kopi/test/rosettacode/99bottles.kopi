@@ -1,0 +1,26 @@
+99..1 | each (n) => print $
+  (String n) " bottles of beer on the wall" ++
+  (String n) " bottles of beer" ++
+  "Take one down, pass it around" ++
+  (String (n - 1)) " bottles of beer on the wall"
+
+
+99..1 | each (n) => {
+  print $ (String n) “ bottles of beer on the wall”
+  print $ (String n) “ bottles of beer”
+  print $ “Take one down, pass it around”
+  print $ (String (n - 1)) “ bottles of beer on the wall”
+}
+
+
+bottles (n) = match n (
+  1 => (String 1) " bottle "
+  n => (String n) " bottles "
+)
+
+99..1 | each (n) => {
+  print $ (bottles n) "of beer on the wall"
+  print $ (bottles n) "of beer"
+  print $ "Take one down, pass it around"
+  print $ (bottles (n - 1)) "of beer on the wall"
+}
