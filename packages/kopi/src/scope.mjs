@@ -16,7 +16,7 @@ KopiArrayConstructor.nativeConstructor = KopiArray;
 
 const KopiDictConstructor = async (entries) => new KopiDict(
   await Promise.all(
-    entries.getElementsArray().map(async (entry) => (await entry).getElementsArray())
+    entries.getElementsArray().map(async (entry) => (await entry).getElementsArray()),
   ),
 );
 KopiDictConstructor.nativeConstructor = KopiDict;

@@ -4,6 +4,8 @@ class Node {
   }
 }
 
+const operatorDefaults = { ['+']: 0, ['*']: 1 };
+
 class TypeAssignment extends Node { }
 class TupleTypeExpression extends Node { }
 class TypeApplyExpression extends Node { }
@@ -21,7 +23,11 @@ class ApplyExpression extends Node {
   //   return `${util.inspect(this)}`;
   // }
 
-  async apply(thisArg, [receiver, scope, visitors]) {
+  async apply(thisArg, [_receiver, scope, visitors]) {
+    const receiver = _receiver._elementsArray?.length === 0
+      ? operatorDefaults[this.expr.name]
+      : await _receiver;
+
     return receiver[this.expr.name].apply(receiver, [
       await visitors.visitNode(this.args, scope),
       scope,
@@ -49,7 +55,9 @@ class BooleanLiteral extends Node { }
 class AstLiteral extends Node { }
 class Identifier extends Node {
   async apply(thisArg, [value]) {
-    const evaluatedValue = await value;
+    const evaluatedValue = value._elementsArray?.length === 0
+      ? operatorDefaults[this.name]
+      : await value;
 
     return evaluatedValue[this.name].apply(evaluatedValue, []);
   }

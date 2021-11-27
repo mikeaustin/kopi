@@ -3,3 +3,18 @@ words = "abc def ghi abc def abc"
 print $ words | split " " | reduce {} $ (counts, word) => {
   counts | update word $ (count = 0) => count + 1
 }
+
+
+print $ words | split " " | reduce {} $ (counts, word) => {
+  counts | update word $ '(+ 1)
+}
+
+
+incrementUpdate = (acc, x) => acc | update x $ '(+ 1)
+
+print $ words | split " " | reduce {} $ incrementUpdate
+
+
+update = (func) => (acc, x) => acc | update x $ func
+
+print $ words | split " " | reduce {} $ update '(+ 1)
