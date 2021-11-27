@@ -1,3 +1,5 @@
-words | split " " | reduce {} $ (counts, word) => {
-  words | update word $ 0 (count) => count + 1
+words = "abc def ghi abc def abc"
+
+print $ words | split " " | reduce {} $ (counts, word) => {
+  counts | update word $ (count = 0) => count + 1
 }
