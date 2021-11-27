@@ -29,7 +29,7 @@ interpret (source) = {
 
   loop (data = (index: 0)) => {
     match (data.index == 'size program) (
-      true => ()
+      true => break ()
       _    => (evaluate (program.(data.index), indexes) data)
     )
   }
