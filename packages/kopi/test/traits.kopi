@@ -1,4 +1,4 @@
-@Comparable = (:compare, :lessThan = (this) => (that) => 'compare this that < 0) => (
+@Comparable = (:compare, :lessThan = (this) => (that) => (this | compare that) < 0) => (
   compare: compare
   lessThan: lessThan
 )
@@ -14,3 +14,5 @@ extend Point $ @Comparable (
 )
 
 print $ Point (x: 10, y: 20) | compare (Point (x: 30, y: 40))
+print $ Point (x: 10, y: 20) | lessThan (Point (x: 20, y: 30))
+print $ Point (x: 30, y: 20) | lessThan (Point (x: 20, y: 30))
