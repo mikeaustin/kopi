@@ -85,6 +85,6 @@ StringLiteralPattern
     }
 
 IdentifierPattern
-  = ident:Identifier init:(_ "=" _ EqualityExpression)? {
-      return new IdentifierPattern({ name: ident.name, init: init && init[3] });
+  = ident:Identifier init:(_ "=" !">" _ EqualityExpression)? {
+      return new IdentifierPattern({ name: ident.name, init: init && init[4] });
     }

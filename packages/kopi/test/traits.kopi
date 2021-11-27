@@ -1,0 +1,16 @@
+@Comparable = (:compare, :lessThan = (this) => (that) => 'compare this that < 0) => (
+  compare: compare
+  lessThan: lessThan
+)
+
+Point = type (x: Int, y: Int)
+
+extend Point $ @Comparable (
+  compare: (this) => (that) => match () (
+    _ [this.x < that.x] => (0 - 1)
+    _ [this.x > that.x] => (0 + 1)
+    _                   => 0
+  )
+)
+
+print $ Point (x: 10, y: 20) | compare (Point (x: 30, y: 40))
