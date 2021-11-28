@@ -1,0 +1,5 @@
+print $ 1..100 | reduce {} $ (doors, n) => {
+  n..100 n | reduce doors $ (doors, n) => {
+    doors | update n $ (open = (0 - 1)) => (0 - open)
+  }
+}
