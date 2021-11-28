@@ -3,3 +3,21 @@ print $ 1..100 | reduce {} $ (doors, n) => {
     doors | update n $ (open = (0 - 1)) => (0 - open)
   }
 }
+
+# print $ 1..100 | reduce (doors = {}, n) => {
+#   n..100 n | reduce (doors = doors, n) => {
+#     doors | update n $ (open = false) => !open
+#   }
+# }
+
+# doors = 1..100 | reduce [] $ (acc, n) => (acc | append false)
+
+# doors = 1..100 | toArray () => false
+
+doors = 1..100 | map () => false
+
+1..100 | reduce doors $ (doors, n) => {
+  n..100 n | reduce doors $ (doors, n) => {
+    doors | set n $ !doors.(n)
+  }
+}
