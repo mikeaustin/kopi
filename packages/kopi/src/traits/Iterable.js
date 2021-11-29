@@ -70,6 +70,17 @@ class Iterable {
     };
   }
 
+  async reduce2(func, scope, visitors) {
+    let accum = KopiTuple.empty;
+    let index = 0;
+
+    for await (const element of this) {
+      accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
+    }
+
+    return accum;
+  }
+
   async find(func, scope, visitors) {
     for await (const element of this) {
       if (await func.apply(undefined, [element, scope, visitors])) {
