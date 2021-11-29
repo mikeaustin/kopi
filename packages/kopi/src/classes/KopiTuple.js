@@ -86,6 +86,10 @@ class KopiTuple {
     return this._fieldsArray.indexOf(fieldName);
   }
 
+  getElementWithFieldName(fieldName) {
+    return this._elementsArray[this._fieldsArray.indexOf(fieldName)];
+  }
+
   async hasErrors() {
     for await (const element of this._elementsArray) {
       if (element.constructor.name === 'Error') {

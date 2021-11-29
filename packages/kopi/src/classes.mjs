@@ -25,30 +25,11 @@ class TuplePattern {
   }
 
   async getMatches(tuple) {
-    // console.log('TuplePattern.getMatches()');
-
-    // TODO: Match one both non-fields and fields in the same tuple
-    if (this._fieldsArray?.[0]) {
-      const matchesArray = await this._fieldsArray.reduce(async (matchesArray, fieldName, index) => ([
-        ...await matchesArray,
-        await this._elementsArray[index].getMatches(
-          tuple.getElementAtIndex(await tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty,
-        ),
-      ]));
-
-      if (matchesArray.some((match) => match === null)) {
-        return null;
-      }
-
-      return matchesArray.reduce((scope, matches) => ({
-        ...scope,
-        ...matches,
-      }), {});
-    }
-
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
+      this._fieldsArray[index] !== null
+        ? await element.getMatches(await tuple.getElementWithFieldName(this._fieldsArray[index]) ?? KopiTuple.empty)
+        : await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 
     if (matchesArray.some((match) => match === null)) {
