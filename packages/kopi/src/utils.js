@@ -1,4 +1,4 @@
-async function applyOperator(op, left, right, scope, visitors) {
+async function applyBinaryOperator(op, left, right, scope, visitors) {
   if (typeof left === 'number' && typeof right === 'number') {
     switch (op) {
       case 'negate': return -right;
@@ -55,7 +55,7 @@ async function asyncMap([iterable, func], scope, visitors) {
 }
 
 module.exports = {
-  applyOperator,
+  applyBinaryOperator,
   applyUnaryOperator,
   asyncMap,
 };

@@ -1,7 +1,7 @@
 const { Map } = require('immutable');
 
 const { default: KopiTuple } = require('./KopiTuple');
-const { applyOperator } = require('../utils');
+const { applyBinaryOperator } = require('../utils');
 
 class KopiDict {
   constructor(entries) {
@@ -39,7 +39,7 @@ class KopiDict {
       const left = await value;
       const right = await that._immutableMap.get(key);
 
-      const result = await applyOperator('==', left, right, scope, visitors);
+      const result = await applyBinaryOperator('==', left, right, scope, visitors);
 
       if (!result) {
         return false;

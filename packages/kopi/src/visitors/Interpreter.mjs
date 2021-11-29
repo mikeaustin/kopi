@@ -14,7 +14,7 @@ import {
 } from '../classes.mjs';
 
 const { default: Visitors } = _Visitors;
-const { applyOperator, applyUnaryOperator } = _utils;
+const { applyBinaryOperator, applyUnaryOperator } = _utils;
 
 class Interpreter extends Visitors {
   async Block({ statements }, scope) {
@@ -181,7 +181,7 @@ class Interpreter extends Visitors {
     const evaluatedLeft = await this.visitNode(left, scope, bind);
     const evaluatedRight = await this.visitNode(right, scope, bind);
 
-    return applyOperator(op, evaluatedLeft, evaluatedRight, scope, this);
+    return applyBinaryOperator(op, evaluatedLeft, evaluatedRight, scope, this);
   }
 
   async UnaryExpression({ op, right }, scope, bind) {
