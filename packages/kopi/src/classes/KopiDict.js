@@ -79,7 +79,7 @@ class KopiDict {
     let values = new Map();
 
     for (let [key, value] of this._immutableMap) {
-      values = this._immutableMap.set(
+      values = values.set(
         key,
         func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
       );

@@ -35,6 +35,16 @@ class KopiArray {
     return this;
   }
 
+  set(index) {
+    return (value) => {
+      const elementsArray = [...this._elementsArray];
+
+      elementsArray[index] = value;
+
+      return new KopiArray(elementsArray);
+    };
+  }
+
   get(index) {
     if (index.constructor.name === 'KopiRange') {
       return new KopiArray(this._elementsArray.slice(index.from, index.to));
