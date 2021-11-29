@@ -14,10 +14,10 @@ print $ 1..100 | reduce {} $ (doors, n) => {
 
 # doors = 1..100 | toArray () => false
 
-doors = 1..100 | map () => false
+# doors = 1..100 | map () => false
 
-1..100 | reduce doors $ (doors, n) => {
-  n..100 n | reduce doors $ (doors, n) => {
-    doors | set n $ !doors.(n)
-  }
-}
+# 1..100 | reduce doors $ (doors, n) => {
+#   n..100 n | reduce doors $ (doors, n) => {
+#     doors | set n $ !doors.(n)
+#   }
+# }
