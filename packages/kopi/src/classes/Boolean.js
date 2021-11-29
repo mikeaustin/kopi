@@ -6,6 +6,10 @@ Boolean.prototype.toStringAsync = function () {
   return this.inspectAsync();
 };
 
+Boolean.prototype.not = function (that) {
+  return !this.valueOf();
+};
+
 Boolean.prototype['=='] = function (that) {
   if (typeof that !== 'boolean') {
     return false;

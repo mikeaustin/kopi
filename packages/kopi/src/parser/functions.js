@@ -15,6 +15,7 @@ class Assignment extends Node { }
 
 class PipeExpression extends Node { }
 class OperatorExpression extends Node { }
+class UnaryExpression extends Node { }
 class TupleExpression extends Node { }
 class FunctionExpression extends Node { }
 class ArrayExpression extends Node { }
