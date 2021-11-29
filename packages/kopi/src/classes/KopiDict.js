@@ -79,10 +79,17 @@ class KopiDict {
     let values = new Map();
 
     for (let [key, value] of this._immutableMap) {
-      values = values.set(
-        key,
-        func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
-      );
+      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+        ...scope,
+        ...await func.params.getMatches(new KopiTuple([key, await value])),
+      }));
+
+      if (predicatePassed) {
+        values = values.set(
+          key,
+          func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
+        );
+      }
     }
 
     return new KopiDict(values);

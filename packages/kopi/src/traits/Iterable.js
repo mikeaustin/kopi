@@ -7,7 +7,7 @@ class Iterable {
     for await (const element of this) {
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params._identifierName]: element,
+        ...await func.params.getMatches(await element),
       }));
 
       if (predicatePassed) {
@@ -24,7 +24,7 @@ class Iterable {
     for await (const element of this) {
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params._identifierName]: element,
+        ...await func.params.getMatches(element),
       }));
 
       if (predicatePassed) {

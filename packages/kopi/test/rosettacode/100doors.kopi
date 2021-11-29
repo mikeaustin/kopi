@@ -1,26 +1,25 @@
 doors = 1..16 | reduce {} $ (doors, n) => {
   n..16 n | reduce doors $ (doors, n) => {
-    doors | update n $ (open = -1) => -open
-  }
-}
-
-print $ doors | map (n, c) => c
-
-
-print $ 1..16 | reduce {} $ (doors, n) => {
-  n..16 n | reduce doors $ (doors, n) => {
     doors | update n $ (open = false) => !open
   }
 }
 
+print $ doors | map (n, open) [open] => open
+
+print ""
 
 doors = 1..100 | map () => false
 
-print $ 0..99 | reduce doors $ (doors, n) => {
+doors = 0..99 | reduce doors $ (doors, n) => {
   n..99 (n + 1) | reduce doors $ (doors, n) => {
     doors | set n $ !doors.(n)
   }
 }
+
+print $ doors | reduce [] $ (doors, n, index) => match n (
+  true => doors ++ [index + 1]
+  _    => doors
+)
 
 # print $ 1..100 | reduce (doors = {}, n) => {
 #   n..100 n | reduce (doors = doors, n) => {
