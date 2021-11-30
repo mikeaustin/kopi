@@ -13,11 +13,11 @@ AssignmentFunctionPattern
 AssignmentTuplePattern
   = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 && head[0] === null ? head[1] : new TuplePattern({
-        elements: tail.reduce((elements, element) => [
+        fields: tail.reduce((elements, element) => [
           ...elements,
           element[4]
         ], [head[1]]),
-        fields: tail.reduce((fields, field) => [
+        fieldNames: tail.reduce((fields, field) => [
           ...fields,
           field[3] && field[4].name
         ], [head[0] && head[1].name])
@@ -44,11 +44,11 @@ Pattern
 TuplePattern
   = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 && head[0] === null ? head[1] : new TuplePattern({
-        elements: tail.reduce((elements, element) => [
+        fields: tail.reduce((elements, element) => [
           ...elements,
           element[4]
         ], [head[1]]),
-        fields: tail.reduce((fields, field) => [
+        fieldNames: tail.reduce((fields, field) => [
           ...fields,
           field[3] && field[4].name
         ], [head[0] && head[1].name])
@@ -57,7 +57,7 @@ TuplePattern
 
 PrimaryPattern
   = _ "(" pattern:Pattern ")" { return pattern; }
-  / "()" { return new TuplePattern({ elements: [] }) }
+  / "()" { return new TuplePattern({ fields: [] }) }
   / ArrayLiteralPattern
   / BooleanLiteralPattern
   / NumericLiteralPattern

@@ -200,12 +200,12 @@ class Interpreter extends Visitors {
 
   //
 
-  TuplePattern({ elements, fields }, scope) {
+  TuplePattern({ fields, fieldNames }, scope) {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      elements.map((element) => this.visitNode(element, scope)),
-      fields,
+      fields.map((element) => this.visitNode(element, scope)),
+      fieldNames,
     );
   }
 
