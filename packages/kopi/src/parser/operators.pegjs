@@ -25,3 +25,9 @@ MultiplyExpression
         new OperatorExpression({ op, left, right })
       ), head);
     }
+
+UnaryExpression
+  = op:("-" / "!") right:NextRule {
+      return new UnaryExpression({ op, right });
+    }
+    / NextRule

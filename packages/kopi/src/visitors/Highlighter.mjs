@@ -50,16 +50,16 @@ class Highlighter extends Visitors {
     );
   }
 
-  TupleExpression({ elements, fields, multiline }, level) {
-    if (elements.length === 0) {
+  TupleExpression({ fields, fieldNames, multiline }, level) {
+    if (fields.length === 0) {
       return '()';
     }
 
     return (
       (multiline ? '<br />' : '') +
-      elements.map((element, index) => (
-        indent(level) + (multiline ? spaces(1) : '') + (fields[index] ? '<field-name>' + fields[index] + '</field-name>' : '') +
-        indent(level) + (fields[index] ? '<colon>: </colon>' : '') + this.visitNode(element, level)
+      fields.map((element, index) => (
+        indent(level) + (multiline ? spaces(1) : '') + (fieldNames[index] ? '<field-name>' + fieldNames[index] + '</field-name>' : '') +
+        indent(level) + (fieldNames[index] ? '<colon>: </colon>' : '') + this.visitNode(element, level)
       )).join(indent(level) + (multiline ? '<br />' : '<comma>, </comma>')) +
       (multiline ? '<br />' : '')
     );

@@ -14,7 +14,7 @@ import {
 } from '../classes.mjs';
 
 const { default: Visitors } = _Visitors;
-const { applyOperator } = _utils;
+const { applyBinaryOperator, applyUnaryOperator } = _utils;
 
 class Interpreter extends Visitors {
   async Block({ statements }, scope) {
@@ -90,7 +90,7 @@ class Interpreter extends Visitors {
     };
 
     const Constructor = (args) => {
-      return new _Type(args._elementsArray, args._fieldsArray);
+      return new _Type(args.getFieldsArray(), args.getFieldNamesArray());
     };
     Constructor.nativeConstructor = _Type;
 
@@ -133,14 +133,14 @@ class Interpreter extends Visitors {
     return new KopiFunction(evaluatedParams, expr, scope);
   }
 
-  async TupleExpression({ elements, fields }, scope, bind) {
-    if (elements.length === 0) {
+  async TupleExpression({ fields, fieldNames }, scope, bind) {
+    if (fields.length === 0) {
       return KopiTuple.empty;
     }
 
     return new KopiTuple(
-      elements.map((element) => this.visitNode(element, scope, bind)),
-      fields,
+      fields.map((element) => this.visitNode(element, scope, bind)),
+      fieldNames,
     );
   }
 
@@ -181,7 +181,17 @@ class Interpreter extends Visitors {
     const evaluatedLeft = await this.visitNode(left, scope, bind);
     const evaluatedRight = await this.visitNode(right, scope, bind);
 
-    return applyOperator(op, evaluatedLeft, evaluatedRight, scope, this);
+    return applyBinaryOperator(op, evaluatedLeft, evaluatedRight, scope, this);
+  }
+
+  async UnaryExpression({ op, right }, scope, bind) {
+    const evaluatedRight = await this.visitNode(right, scope, bind);
+
+    const opMethod = op === '-'
+      ? 'negate' : op === '!'
+        ? 'not' : undefined;
+
+    return applyUnaryOperator(opMethod, evaluatedRight, scope, this);
   }
 
   async ParenthesesExpression({ expr }, scope, bind) {

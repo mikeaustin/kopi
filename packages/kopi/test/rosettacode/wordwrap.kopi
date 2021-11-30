@@ -1,0 +1,24 @@
+words = "The quick brown fox jumped over the lazy dog."
+
+words | splitOn " " | reduce ("", 0) $ ((text, length), word) => {
+  let (size = 'size word) => match (length + size > wrap) (
+    true => (text ++ String.Newline ++ word, 0)
+    false => (text ++ " " ++ word, length + size)
+  )
+)
+
+words = "The quick brown fox jumped over the lazy dog."
+
+words | split " " | reduce ((text = "", length = 0), word) => {
+  match (length + 'size word) (
+    length [length > wrap] => (text String.Newline word, 0)
+    length                 => (text " " word, length)
+  )
+}
+
+words | split " " | reduce ("", 0) $ (text, length), word => {
+  match (length + 'size word) (
+    length [length > wrap] => (text String.Newline word, 0)
+    length                 => (text " " word, length)
+  )
+}

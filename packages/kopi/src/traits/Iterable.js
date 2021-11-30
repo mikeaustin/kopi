@@ -7,7 +7,7 @@ class Iterable {
     for await (const element of this) {
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params._identifierName]: element,
+        ...await func.params.getMatches(await element),
       }));
 
       if (predicatePassed) {
@@ -24,7 +24,7 @@ class Iterable {
     for await (const element of this) {
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
         ...scope,
-        [func.params._identifierName]: element,
+        ...await func.params.getMatches(element),
       }));
 
       if (predicatePassed) {
@@ -68,6 +68,17 @@ class Iterable {
 
       return accum;
     };
+  }
+
+  async reduce2(func, scope, visitors) {
+    let accum = KopiTuple.empty;
+    let index = 0;
+
+    for await (const element of this) {
+      accum = await func.apply(undefined, [new KopiTuple([accum, element, index++]), scope, visitors]);
+    }
+
+    return accum;
   }
 
   async find(func, scope, visitors) {

@@ -16,15 +16,15 @@ OperatorIdentifier
 
 ParenthesizedTuple
   = "()" {
-      return new TupleExpression({ elements: [] });
+      return new TupleExpression({ fields: [] });
     }
   / "("
       tail:(_ Newline+ _ ((Identifier / OperatorIdentifier) ":")? _ Expression)+ Newline+ _
     ")" {
       return new ParenthesesExpression({
         expr: tail.length === 1 && tail[0][3] === null ? tail[0][5] : new TupleExpression({
-          elements: tail.map(expr => expr[5]),
-          fields: tail.map(expr => expr[3] &&  expr[3][0].name),
+          fields: tail.map(expr => expr[5]),
+          fieldNames: tail.map(expr => expr[3] &&  expr[3][0].name),
           multiline: true,
         }),
       });

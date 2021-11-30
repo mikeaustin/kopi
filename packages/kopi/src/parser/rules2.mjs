@@ -32,6 +32,7 @@ async function main() {
     'ConcatinationExpression',
     'AddExpression',
     'MultiplyExpression',
+    'UnaryExpression',
   ];
 
   const orderedExpressionRules = [

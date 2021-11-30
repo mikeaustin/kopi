@@ -11,6 +11,14 @@ print (b, c, d)
 
 print (b, c, d)
 
+print $ ((:d, :c, :b) => (b, c, d)) (a: "a", b: "b", c: "c", d: "d")
+
+:b = (a: "a", b: "b", c: "c", d: "d")
+:c = (a: "a", b: "b", c: "c", d: "d")
+:d = (a: "a", b: "b", c: "c", d: "d")
+
+print (b, c, d)
+
 print ""
 
 print (

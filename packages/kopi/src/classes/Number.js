@@ -24,6 +24,10 @@ Number.prototype['+'] = function (that) {
   return this + that;
 };
 
+Number.prototype.negate = function (that) {
+  return -this;
+};
+
 Number.prototype['-'] = function (that) {
   return this - that;
 };

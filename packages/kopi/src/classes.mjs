@@ -20,35 +20,16 @@ const { default: KopiDict } = _KopiDict;
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
-    this._elementsArray = elementsArray;
-    this._fieldsArray = fieldsArray;
+    this._patternElementsArray = elementsArray;
+    this._patternFieldNamesArray = fieldsArray;
   }
 
   async getMatches(tuple) {
-    // console.log('TuplePattern.getMatches()');
-
-    // TODO: Match one both non-fields and fields in the same tuple
-    if (this._fieldsArray?.[0]) {
-      const matchesArray = await this._fieldsArray.reduce(async (matchesArray, fieldName, index) => ([
-        ...await matchesArray,
-        await this._elementsArray[index].getMatches(
-          tuple.getElementAtIndex(await tuple.getIndexOfFieldName(fieldName)) ?? KopiTuple.empty,
-        ),
-      ]));
-
-      if (matchesArray.some((match) => match === null)) {
-        return null;
-      }
-
-      return matchesArray.reduce((scope, matches) => ({
-        ...scope,
-        ...matches,
-      }), {});
-    }
-
-    const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
+    const matchesArray = await this._patternElementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
+      this._patternFieldNamesArray[index] !== null
+        ? await element.getMatches(await tuple.getFieldWithName(this._patternFieldNamesArray[index]) ?? KopiTuple.empty)
+        : await element.getMatches(await tuple.getFieldAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 
     if (matchesArray.some((match) => match === null)) {

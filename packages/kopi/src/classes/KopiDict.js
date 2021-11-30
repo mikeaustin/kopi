@@ -1,7 +1,7 @@
 const { Map } = require('immutable');
 
 const { default: KopiTuple } = require('./KopiTuple');
-const { applyOperator } = require('../utils');
+const { applyBinaryOperator } = require('../utils');
 
 class KopiDict {
   constructor(entries) {
@@ -39,7 +39,7 @@ class KopiDict {
       const left = await value;
       const right = await that._immutableMap.get(key);
 
-      const result = await applyOperator('==', left, right, scope, visitors);
+      const result = await applyBinaryOperator('==', left, right, scope, visitors);
 
       if (!result) {
         return false;
@@ -50,7 +50,7 @@ class KopiDict {
   }
 
   async set(tuple) {
-    const [key, value] = [await tuple.getElementAtIndex(0), tuple.getElementAtIndex(1)];
+    const [key, value] = [await tuple.getFieldAtIndex(0), tuple.getFieldAtIndex(1)];
 
     return new KopiDict(this._immutableMap.set(key, value));
   }
@@ -79,10 +79,17 @@ class KopiDict {
     let values = new Map();
 
     for (let [key, value] of this._immutableMap) {
-      values = this._immutableMap.set(
-        key,
-        func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
-      );
+      const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
+        ...scope,
+        ...await func.params.getMatches(new KopiTuple([key, await value])),
+      }));
+
+      if (predicatePassed) {
+        values = values.set(
+          key,
+          func.apply(undefined, [new KopiTuple([key, await value]), scope, visitors]),
+        );
+      }
     }
 
     return new KopiDict(values);

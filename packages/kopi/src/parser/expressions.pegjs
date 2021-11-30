@@ -18,11 +18,11 @@ PipeExpression
 TupleExpression
   = head:((Identifier ":")? _ NextRule) tail:(_ "," _ (Identifier ":")? _ NextRule)* {
       return tail.length === 0 && head[0] === null ? head[2] : new TupleExpression({
-        elements: tail.reduce((elements, element) => [
+        fields: tail.reduce((elements, element) => [
           ...elements,
           element[5]
         ], [head[2]]),
-        fields: tail.reduce((elements, element) => [
+        fieldNames: tail.reduce((elements, element) => [
           ...elements,
           element[3] && element[3][0].name
         ], [head[0] && head[0][0].name]),
@@ -30,12 +30,7 @@ TupleExpression
   }
 
 ApplyExpression
-  = ident:OperatorIdentifier _ args:(_ NumericLiteral)+ {
-      return args.reduce((expr, args) => (
-        new ApplyExpression({ expr, args: args[1] })
-      ), new Identifier({ name: ident.name }))
-    }
-  / expr:NextRule args:(_ NextRule)* {
+  = expr:NextRule args:(_ NextRule)* {
       return args.reduce((expr, [, args]) => (
         new ApplyExpression({ expr, args })
       ), expr)

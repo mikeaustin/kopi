@@ -11,12 +11,12 @@ KopiStringConstructor.NewlineRegExp = new KopiString(/\r?\n/);
 Number.PI = Math.PI;
 Number.E = Math.E;
 
-const KopiArrayConstructor = (tuple) => new KopiArray(tuple.getElementsArray());
+const KopiArrayConstructor = (tuple) => new KopiArray(tuple.getFieldsArray());
 KopiArrayConstructor.nativeConstructor = KopiArray;
 
 const KopiDictConstructor = async (entries) => new KopiDict(
   await Promise.all(
-    entries.getElementsArray().map(async (entry) => (await entry).getElementsArray())
+    entries.getElementsArray().map(async (entry) => (await entry).getFieldsArray()),
   ),
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
@@ -90,7 +90,7 @@ let getScope = (input) => ({
   break: core.kopi_loop.break,
   repeat: (func, scope, visitors) => (
     function next(value) {
-      if (value?._elementsArray?.length === 0) {
+      if (value === KopiTuple.empty) {
         value = 1;
       }
 

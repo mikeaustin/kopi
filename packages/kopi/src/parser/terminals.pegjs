@@ -16,16 +16,23 @@ BooleanLiteral
   }
 
 AstLiteral
-  = "'("
+  = "'(" ident:OperatorIdentifier _ args:(_ NumericLiteral)+ ")" {
+      return new AstLiteral({
+        value: args.reduce((expr, args) => (
+          new ApplyExpression({ expr, args: args[1] })
+        ), new Identifier({ name: ident.name }))
+      });
+    }
+  / "'("
       exprs:(Newline+ Expression)+ Newline+
     ")" {
       return new AstLiteral({
         value: new TupleExpression({
-          elements: exprs.map(expr => expr[1])
+          fields: exprs.map(expr => expr[1])
         })
       });
     }
-  / "'" "(" expr:Statement ")" {
+  / "'(" expr:Statement ")" {
       return new AstLiteral({ value: expr });
     }
   / "'" ident:Identifier {

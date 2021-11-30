@@ -1,66 +1,12 @@
-wordcount string = string | split " " | reduce {:} (counts, word) => (
-  counts | update word, (x = 0) => count + 1
-)
-
 match foobar
   (x, y): Point => "Point"
   Point (x, y)  => "Point"
 end
 
-employeeNames = ['a,b', 'c,d']
-employeeNames | sort (a, b) => a > b | map (name) => do
-  name | split "," | map (name) => (name | strip) | reverse | join " "
-end
-
-
-1..10 | map (n @ even n) => n * n
-
-1..10 | map (n) @ even n => n * n
-
-
 grayscale = color => match color (
   RGB (r, g, b) => (r + g + b) / 3
   HSL (h, s, l) => l
 )
-
-
-[1 + 1, "a" ++ "b", even 1, x => x]
-
-[
-  even $ 1,
-  1 | toString,
-  "a" ++ "b",
-  even 1,
-  x => x,
-  (1, 2),
-  1 + 1,
-  1..5
-]
-
-
-print $ 1..10 | map (even n) => n * n
-
-print $ 1..10 | map (n) @ even n => n * n
-
-x = z > 1 ? 1 : x
-
-x = if z > 1 then 1 else x
-
-x = match x (
-  x @ x > 1 => 1
-)
-
-x = match () (
-  _ @ x > y => 0
-  _         => 1
-)
-
-x = match () (
-  @ x > y => 0
-  @       => 1
-)
-
-x = match () _ [x > y] => 0, _ [] => 1
 
 
 match age (
@@ -85,30 +31,6 @@ File.read "notes.txt"
 Net.fetch "https://google.com"
 
 
-
-$
-==
-++
-+ | -
-* | /
-apply
-!
-
-Currying requires left-associative application
-
-1, 2 + 1    (1, (2 + 1))
-
-f x         (f x)
-
-f x + f y   (f x) + (f y)
-
-
-
-operators
-apply
-tuple
-
-
 [ even $ 1,  1 | toString,  "a" ++ "b",  even 1,  x => x,  (1, 2),  1 + 1,  1..5 ]
 
 
@@ -126,70 +48,17 @@ $       LowPrecedenceApplyExpression
 v.x     MemberExpression
 x => x  FunctionExpression
 
-$
-|
-,
-apply
-
-$
-,
-|
-apply
-
-
-Option(5)
-
-match numberOrUnit (
-  ()    => 100
-  value => value
-)
-
-decltype
-
-auto match(T value, A => B, C => D) -> {
-
-}
-
-match numberOrString (
-  Number n => ...
-  String s => ...
-)
 
 TypeVar type = Number | String
 
 match<T, R>
 
-match takes a
-
-
-Transducer
-
-1..10 | map n [even n] => n * n
-
-1..10 | map (even n) => n * n
-
-x = case (
-  _ [x > 1] => 1
-  _ [x < 0] => 0
-  _         => x
-)
-
-ArrayPattern
 
 x = match x (
   '(> 1) => 1
   '(< 0) => 0
   _      => x
 )
-
-
-$ lpapply
-| pipe
-, tuple
-* operator
-  apply
-
-
 
 
 Iterable	Symbol.iterator
@@ -204,12 +73,10 @@ Bounded		minBound, maxBound
 
 Date.fromString
 
-
 Read Show Eq Ord Enum Bounded
 
 
 x^2 + y^2
-5.5 | ceil
 
 map		filter zip
 includes
@@ -231,54 +98,3 @@ drop
 element, index = find (e) => e > 5
 
 1..10 | splitBy (n) => even n
-
-
-Printable = (
-  print: (This) => () => ()
-)
-
-Person = Person (name: String, age: Int)
-
-extend Person (Printable) (
-  print: (this) => () => print this
-)
-
-person | print
-person | Printable.print
-
-
-extend Person () (
-  hello: (this) => () => print $ "Hello " this.name
-)
-
-
-traits.types	traits.get(Iterable).String.map
-methods.types	methods.get(String).get(Iterable).map
-
-If there is only one trait defined for method, no need for namespacing
-
-resolveTrait() {
-  if (traits.size() === 1) {
-    for (const trait in traits) { return trait; }
-  }
-}
-
-
-scope.mjs:
-
-  methods: new Map(),
-
-core.mjs:
-
-  kopi_extend()
-
-Interpreter.mjs:
-
-  PipeExpression
-
-
-extend String () (
-  ...
-)
-
-(scope.methods.get(String).get(KopiTuple) ?? new Map()).capitalize = () => 'here';

@@ -41,10 +41,10 @@ class Table {
   }
 
   async inspectAsync() {
-    const headers = (await this.array.getElementsArray()[0])._fieldsArray;
-    const elements = await this.array.getElementsArray().reduce(async (elements, element) => [
+    const headers = (await this.array.getFieldsArray()[0]).getFieldNamesArray();
+    const elements = await this.array.getFieldsArray().reduce(async (elements, element) => [
       ...await elements,
-      await (await element).getElementsArray().reduce(async (fields, field) => [
+      await (await element).getFieldsArray().reduce(async (fields, field) => [
         ...await fields,
         await (await field).toStringAsync(),
       ], []),
