@@ -133,14 +133,14 @@ class Interpreter extends Visitors {
     return new KopiFunction(evaluatedParams, expr, scope);
   }
 
-  async TupleExpression({ elements, fields }, scope, bind) {
+  async TupleExpression({ elements, fieldNames }, scope, bind) {
     if (elements.length === 0) {
       return KopiTuple.empty;
     }
 
     return new KopiTuple(
       elements.map((element) => this.visitNode(element, scope, bind)),
-      fields,
+      fieldNames,
     );
   }
 

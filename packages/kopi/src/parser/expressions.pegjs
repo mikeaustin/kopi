@@ -22,7 +22,7 @@ TupleExpression
           ...elements,
           element[5]
         ], [head[2]]),
-        fields: tail.reduce((elements, element) => [
+        fieldNames: tail.reduce((elements, element) => [
           ...elements,
           element[3] && element[3][0].name
         ], [head[0] && head[0][0].name]),
