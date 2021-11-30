@@ -25,7 +25,7 @@ class ApplyExpression extends Node {
   // }
 
   async apply(thisArg, [_receiver, scope, visitors]) {
-    const receiver = _receiver._elementsArray?.length === 0
+    const receiver = _receiver.getElementsArray?.()?.length === 0
       ? operatorDefaults[this.expr.name]
       : await _receiver;
 
@@ -56,7 +56,7 @@ class BooleanLiteral extends Node { }
 class AstLiteral extends Node { }
 class Identifier extends Node {
   async apply(thisArg, [value]) {
-    const evaluatedValue = value._elementsArray?.length === 0
+    const evaluatedValue = value.getElementsArray?.()?.length === 0
       ? operatorDefaults[this.name]
       : await value;
 
