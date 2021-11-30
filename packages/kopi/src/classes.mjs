@@ -21,14 +21,14 @@ const { default: KopiDict } = _KopiDict;
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
     this._elementsArray = elementsArray;
-    this._fieldsArray = fieldsArray;
+    this._fieldNamesArray = fieldsArray;
   }
 
   async getMatches(tuple) {
     const matchesArray = await this._elementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
-      this._fieldsArray[index] !== null
-        ? await element.getMatches(await tuple.getElementWithFieldName(this._fieldsArray[index]) ?? KopiTuple.empty)
+      this._fieldNamesArray[index] !== null
+        ? await element.getMatches(await tuple.getElementWithFieldName(this._fieldNamesArray[index]) ?? KopiTuple.empty)
         : await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 

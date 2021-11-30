@@ -26,7 +26,7 @@ class KopiTuple {
   constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {
       this._elementsArray = [];
-      this._fieldsArray = [];
+      this._fieldNamesArray = [];
 
       return this;
     }
@@ -43,7 +43,7 @@ class KopiTuple {
     });
 
     this._elementsArray = elementsArray;
-    this._fieldsArray = fieldsArray;
+    this._fieldNamesArray = fieldsArray;
   }
 
   async inspectAsync() {
@@ -58,7 +58,7 @@ class KopiTuple {
     const typeName = this.constructor.name !== 'KopiTuple' ? `${this.constructor.name} ` : '';
 
     return `${typeName}(${elementsArray.map((element, index) => (
-      `${this._fieldsArray[index] ? `${this._fieldsArray[index]}: ` : ''}${element}`
+      `${this._fieldNamesArray[index] ? `${this._fieldNamesArray[index]}: ` : ''}${element}`
     )).join(', ')})`;
   }
 
@@ -75,19 +75,19 @@ class KopiTuple {
   }
 
   getFieldNamesArray() {
-    return this._fieldsArray;
+    return this._fieldNamesArray;
   }
 
   getFieldNameAtIndex(index) {
-    return this._fieldsArray[index];
+    return this._fieldNamesArray[index];
   }
 
   getIndexOfFieldName(fieldName) {
-    return this._fieldsArray.indexOf(fieldName);
+    return this._fieldNamesArray.indexOf(fieldName);
   }
 
   getElementWithFieldName(fieldName) {
-    return this._elementsArray[this._fieldsArray.indexOf(fieldName)];
+    return this._elementsArray[this._fieldNamesArray.indexOf(fieldName)];
   }
 
   async hasErrors() {
