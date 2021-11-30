@@ -28,7 +28,7 @@ AstLiteral
     ")" {
       return new AstLiteral({
         value: new TupleExpression({
-          elements: exprs.map(expr => expr[1])
+          fields: exprs.map(expr => expr[1])
         })
       });
     }
