@@ -45,7 +45,7 @@ const kopi_let = (func, scope, visitors) => {
 const kopi_match = (value) => async (_funcs, scope, visitors) => {
   const funcsTuple = _funcs.apply ? new KopiTuple([_funcs]) : _funcs;
 
-  for await (const func of funcsTuple.getElementsArray()) {
+  for await (const func of funcsTuple.getFieldsArray()) {
     const matches = await func.params.getMatches(value);
 
     const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
@@ -103,7 +103,7 @@ const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind)
   const { nativeConstructor } = constructor;
   const methods = globalThis.methods[globalThis.methods.length - 1];
 
-  const newMethods = await methodsTuple.getElementsArray().reduce(async (newMethods, method, index) => ({
+  const newMethods = await methodsTuple.getFieldsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methodsTuple.getFieldNameAtIndex(index)]: await method,
   }), methods.get(nativeConstructor) ?? {});

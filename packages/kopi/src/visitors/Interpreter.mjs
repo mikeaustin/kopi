@@ -90,7 +90,7 @@ class Interpreter extends Visitors {
     };
 
     const Constructor = (args) => {
-      return new _Type(args.getElementsArray(), args.getFieldNamesArray());
+      return new _Type(args.getFieldsArray(), args.getFieldNamesArray());
     };
     Constructor.nativeConstructor = _Type;
 

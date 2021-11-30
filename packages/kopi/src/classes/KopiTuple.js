@@ -25,7 +25,7 @@ class KopiSequence {
 class KopiTuple {
   constructor(elementsArray = [], fieldsArray = []) {
     if (elementsArray === null) {
-      this._elementsArray = [];
+      this._fieldsArray = [];
       this._fieldNamesArray = [];
 
       return this;
@@ -42,17 +42,17 @@ class KopiTuple {
       this[fieldsArray[index]] = element;
     });
 
-    this._elementsArray = elementsArray;
+    this._fieldsArray = elementsArray;
     this._fieldNamesArray = fieldsArray;
   }
 
   async inspectAsync() {
-    if (this._elementsArray.length === 0) {
+    if (this._fieldsArray.length === 0) {
       return '()';
     }
 
     const elementsArray = await Promise.all(
-      this._elementsArray.map(async (element) => (await (await element).inspectAsync())),
+      this._fieldsArray.map(async (element) => (await (await element).inspectAsync())),
     );
 
     const typeName = this.constructor.name !== 'KopiTuple' ? `${this.constructor.name} ` : '';
@@ -66,12 +66,12 @@ class KopiTuple {
     return this.inspectAsync();
   }
 
-  getElementsArray() {
-    return this._elementsArray;
+  getFieldsArray() {
+    return this._fieldsArray;
   }
 
   getElementAtIndex(index) {
-    return this._elementsArray[index];
+    return this._fieldsArray[index];
   }
 
   getFieldNamesArray() {
@@ -87,11 +87,11 @@ class KopiTuple {
   }
 
   getElementWithFieldName(fieldName) {
-    return this._elementsArray[this._fieldNamesArray.indexOf(fieldName)];
+    return this._fieldsArray[this._fieldNamesArray.indexOf(fieldName)];
   }
 
   async hasErrors() {
-    for await (const element of this._elementsArray) {
+    for await (const element of this._fieldsArray) {
       if (element.constructor.name === 'Error') {
         return true;
       }
@@ -103,7 +103,7 @@ class KopiTuple {
   async errors() {
     const messages = [];
 
-    for await (const element of this._elementsArray) {
+    for await (const element of this._fieldsArray) {
       if (element.constructor.name === 'Error') {
         messages.push(element.message);
       }
@@ -119,8 +119,8 @@ class KopiTuple {
 
     // TODO: Optimization for numbers
 
-    for (const [index, element] of this._elementsArray.entries()) {
-      if (!await (await element)['=='](await that._elementsArray[index])) {
+    for (const [index, element] of this._fieldsArray.entries()) {
+      if (!await (await element)['=='](await that._fieldsArray[index])) {
         return false;
       }
     }
@@ -133,7 +133,7 @@ class KopiTuple {
   }
 
   async map(mapper, scope, visitors) {
-    const iters = this._elementsArray.map((element) => element[Symbol.iterator]());
+    const iters = this._fieldsArray.map((element) => element[Symbol.iterator]());
     const values = [];
 
     let results = iters.map((iter) => iter.next());
@@ -151,7 +151,7 @@ class KopiTuple {
 
   async map2(mapper, scope, visitors) {
     return new KopiSequence((async function* map() {
-      const iters = this._elementsArray.map((element) => element[Symbol.iterator]());
+      const iters = this._fieldsArray.map((element) => element[Symbol.iterator]());
 
       let results = iters.map((iter) => iter.next());
 
@@ -165,13 +165,13 @@ class KopiTuple {
 
   async product(func = (args) => args, scope, visitors) {
     const helper = async (index, values) => {
-      const iter = this._elementsArray[index][Symbol.iterator]();
+      const iter = this._fieldsArray[index][Symbol.iterator]();
       const accum = [];
 
       let result = iter.next();
 
       while (!result.done) {
-        if (index === this._elementsArray.length - 1) {
+        if (index === this._fieldsArray.length - 1) {
           accum.push(await func.apply(undefined, [new KopiTuple([...values, result.value]), scope, visitors]));
         } else {
           accum.push(...await helper(index + 1, [...values, result.value]));
