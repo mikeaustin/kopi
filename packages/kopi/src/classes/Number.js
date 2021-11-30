@@ -20,12 +20,20 @@ Number.prototype.apply = function (thisArg, [func, scope, visitors]) {
   return func.apply(undefined, [this, scope, visitors]);
 };
 
-Number.prototype['+'] = function (that) {
-  return this + that;
-};
-
 Number.prototype.negate = function (that) {
   return -this;
+};
+
+Number.prototype.even = function (that) {
+  return this.valueOf() % 2 === 0;
+};
+
+Number.prototype.odd = function (that) {
+  return this.valueOf() % 2 !== 0;
+};
+
+Number.prototype['+'] = function (that) {
+  return this + that;
 };
 
 Number.prototype['-'] = function (that) {

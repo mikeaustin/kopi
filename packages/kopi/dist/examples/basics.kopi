@@ -31,7 +31,7 @@ extend String (
 print $ "hello, world." | capitalize
 
 
-print $ 1..10 | map (n) [even n] => n * n
+print $ 1..10 | map (n) ['even n] => n * n
 
 
 Point = type (x: Int, y: Int)
