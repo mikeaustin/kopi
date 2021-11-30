@@ -139,7 +139,7 @@ class Interpreter extends Visitors {
     }
 
     return new KopiTuple(
-      fields.map((element) => this.visitNode(element, scope, bind)),
+      fields.map((field) => this.visitNode(field, scope, bind)),
       fieldNames,
     );
   }
@@ -204,7 +204,7 @@ class Interpreter extends Visitors {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      fields.map((element) => this.visitNode(element, scope)),
+      fields.map((field) => this.visitNode(field, scope)),
       fieldNames,
     );
   }

@@ -13,13 +13,13 @@ AssignmentFunctionPattern
 AssignmentTuplePattern
   = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 && head[0] === null ? head[1] : new TuplePattern({
-        fields: tail.reduce((elements, element) => [
-          ...elements,
-          element[4]
-        ], [head[1]]),
-        fieldNames: tail.reduce((fields, field) => [
+        fields: tail.reduce((fields, field) => [
           ...fields,
-          field[3] && field[4].name
+          field[4]
+        ], [head[1]]),
+        fieldNames: tail.reduce((fieldNames, fieldName) => [
+          ...fieldNames,
+          fieldName[3] && fieldName[4].name
         ], [head[0] && head[1].name])
       });
     }
@@ -44,13 +44,13 @@ Pattern
 TuplePattern
   = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 && head[0] === null ? head[1] : new TuplePattern({
-        fields: tail.reduce((elements, element) => [
-          ...elements,
-          element[4]
-        ], [head[1]]),
-        fieldNames: tail.reduce((fields, field) => [
+        fields: tail.reduce((fields, field) => [
           ...fields,
-          field[3] && field[4].name
+          field[4]
+        ], [head[1]]),
+        fieldNames: tail.reduce((fieldNames, fieldName) => [
+          ...fieldNames,
+          fieldName[3] && fieldName[4].name
         ], [head[0] && head[1].name])
       });
     }
