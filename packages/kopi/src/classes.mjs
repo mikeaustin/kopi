@@ -28,8 +28,8 @@ class TuplePattern {
     const matchesArray = await this._patternElementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
       this._patternFieldNamesArray[index] !== null
-        ? await element.getMatches(await tuple.getElementWithFieldName(this._patternFieldNamesArray[index]) ?? KopiTuple.empty)
-        : await element.getMatches(await tuple.getElementAtIndex(index) ?? KopiTuple.empty),
+        ? await element.getMatches(await tuple.getFieldWithName(this._patternFieldNamesArray[index]) ?? KopiTuple.empty)
+        : await element.getMatches(await tuple.getFieldAtIndex(index) ?? KopiTuple.empty),
     ]), []);
 
     if (matchesArray.some((match) => match === null)) {

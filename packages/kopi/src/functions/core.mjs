@@ -35,7 +35,7 @@ const kopi_even = (number) => {
 };
 
 const kopi_max = (tuple) => {
-  return Math.max(tuple.getElementAtIndex(0), tuple.getElementAtIndex(1));
+  return Math.max(tuple.getFieldAtIndex(0), tuple.getFieldAtIndex(1));
 };
 
 const kopi_let = (func, scope, visitors) => {

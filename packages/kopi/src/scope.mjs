@@ -90,8 +90,7 @@ let getScope = (input) => ({
   break: core.kopi_loop.break,
   repeat: (func, scope, visitors) => (
     function next(value) {
-      console.log(value);
-      if (value?.getFieldsArray?.()?.length === 0) {
+      if (value === KopiTuple.empty) {
         value = 1;
       }
 

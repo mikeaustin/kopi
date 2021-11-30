@@ -1,13 +1,13 @@
 class KopiSequence {
   constructor(sequence) {
-    this.sequence = sequence;
+    this._sequence = sequence;
   }
 
   async inspectAsync() {
     const values = [];
 
-    for await (const element of this.sequence) {
-      values.push(element);
+    for await (const field of this._sequence) {
+      values.push(field);
     }
 
     return new KopiArray(values).inspectAsync();
@@ -18,47 +18,47 @@ class KopiSequence {
   }
 
   [Symbol.asyncIterator]() {
-    return this.sequence[Symbol.asyncIterator]();
+    return this._sequence[Symbol.asyncIterator]();
   }
 }
 
 class KopiTuple {
-  constructor(elementsArray = [], fieldsArray = []) {
-    if (elementsArray === null) {
+  constructor(fieldsArray = [], fieldNamessArray = []) {
+    if (fieldsArray === null) {
       this._fieldsArray = [];
       this._fieldNamesArray = [];
 
       return this;
     }
 
-    if (elementsArray.length === 0) {
+    if (fieldsArray.length === 0) {
       console.log('Use KopiTuple.empty instead of calling KopiTuple([]).');
 
       return KopiTuple.empty;
     }
 
-    elementsArray.forEach((element, index) => {
-      this[index] = element;
-      this[fieldsArray[index]] = element;
+    fieldsArray.forEach((field, index) => {
+      this[index] = field;
+      this[fieldNamessArray[index]] = field;
     });
 
-    this._fieldsArray = elementsArray;
-    this._fieldNamesArray = fieldsArray;
+    this._fieldsArray = fieldsArray;
+    this._fieldNamesArray = fieldNamessArray;
   }
 
   async inspectAsync() {
-    if (this._fieldsArray.length === 0) {
+    if (this === KopiTuple.empty) {
       return '()';
     }
 
-    const elementsArray = await Promise.all(
-      this._fieldsArray.map(async (element) => (await (await element).inspectAsync())),
+    const fieldsArray = await Promise.all(
+      this._fieldsArray.map(async (field) => (await (await field).inspectAsync())),
     );
 
     const typeName = this.constructor.name !== 'KopiTuple' ? `${this.constructor.name} ` : '';
 
-    return `${typeName}(${elementsArray.map((element, index) => (
-      `${this._fieldNamesArray[index] ? `${this._fieldNamesArray[index]}: ` : ''}${element}`
+    return `${typeName}(${fieldsArray.map((field, index) => (
+      `${this._fieldNamesArray[index] ? `${this._fieldNamesArray[index]}: ` : ''}${field}`
     )).join(', ')})`;
   }
 
@@ -70,7 +70,7 @@ class KopiTuple {
     return this._fieldsArray;
   }
 
-  getElementAtIndex(index) {
+  getFieldAtIndex(index) {
     return this._fieldsArray[index];
   }
 
@@ -86,13 +86,13 @@ class KopiTuple {
     return this._fieldNamesArray.indexOf(fieldName);
   }
 
-  getElementWithFieldName(fieldName) {
+  getFieldWithName(fieldName) {
     return this._fieldsArray[this._fieldNamesArray.indexOf(fieldName)];
   }
 
   async hasErrors() {
-    for await (const element of this._fieldsArray) {
-      if (element.constructor.name === 'Error') {
+    for await (const field of this._fieldsArray) {
+      if (field.constructor.name === 'Error') {
         return true;
       }
     }
@@ -103,9 +103,9 @@ class KopiTuple {
   async errors() {
     const messages = [];
 
-    for await (const element of this._fieldsArray) {
-      if (element.constructor.name === 'Error') {
-        messages.push(element.message);
+    for await (const field of this._fieldsArray) {
+      if (field.constructor.name === 'Error') {
+        messages.push(field.message);
       }
     }
 
@@ -119,8 +119,8 @@ class KopiTuple {
 
     // TODO: Optimization for numbers
 
-    for (const [index, element] of this._fieldsArray.entries()) {
-      if (!await (await element)['=='](await that._fieldsArray[index])) {
+    for (const [index, field] of this._fieldsArray.entries()) {
+      if (!await (await field)['=='](await that._fieldsArray[index])) {
         return false;
       }
     }
@@ -133,7 +133,7 @@ class KopiTuple {
   }
 
   async map(mapper, scope, visitors) {
-    const iters = this._fieldsArray.map((element) => element[Symbol.iterator]());
+    const iters = this._fieldsArray.map((field) => field[Symbol.iterator]());
     const values = [];
 
     let results = iters.map((iter) => iter.next());
@@ -151,7 +151,7 @@ class KopiTuple {
 
   async map2(mapper, scope, visitors) {
     return new KopiSequence((async function* map() {
-      const iters = this._fieldsArray.map((element) => element[Symbol.iterator]());
+      const iters = this._fieldsArray.map((field) => field[Symbol.iterator]());
 
       let results = iters.map((iter) => iter.next());
 
