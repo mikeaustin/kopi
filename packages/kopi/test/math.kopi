@@ -27,3 +27,11 @@ x = x * 'cos angle - y * 'sin angle
 y = y * 'cos angle + x * 'sin angle 
 
 print $ x, y
+
+print $ 'abs (-2)
+print $ 'log 2
+print $ 'exp 2
+print $ 'sqrt 9
+print $ 'sin 1
+print $ 'cos 1
+print $ 'tan 1

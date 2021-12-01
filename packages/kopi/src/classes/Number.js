@@ -32,26 +32,6 @@ Number.prototype.odd = function (that) {
   return this.valueOf() % 2 !== 0;
 };
 
-Number.prototype['+'] = function (that) {
-  return this + that;
-};
-
-Number.prototype['-'] = function (that) {
-  return this - that;
-};
-
-Number.prototype['*'] = function (that) {
-  return this * that;
-};
-
-Number.prototype['/'] = function (that) {
-  return this / that;
-};
-
-Number.prototype['%'] = function (that) {
-  return this % that;
-};
-
 //
 
 Number.prototype['=='] = function (that) {
@@ -84,48 +64,6 @@ Number.prototype['>='] = function (that) {
 
 //
 
-Number.prototype['abs'] = function () {
-  return Math.abs(this);
-};
-
-Number.prototype['log'] = function () {
-  return Math.log(this);
-};
-
-Number.prototype['exp'] = function () {
-  return Math.exp(this);
-};
-
-Number.prototype['floor'] = function () {
-  return Math.floor(this);
-};
-
-Number.prototype['ceil'] = function () {
-  return Math.ceil(this);
-};
-
-Number.prototype['round'] = function () {
-  return Math.round(this);
-};
-
-Number.prototype['sqrt'] = function () {
-  return Math.sqrt(this);
-};
-
-//
-
-Number.prototype['sin'] = function () {
-  return Math.sin(this);
-};
-
-Number.prototype['cos'] = function () {
-  return Math.cos(this);
-};
-
-Number.prototype['tan'] = function () {
-  return Math.tan(this);
-};
-
 Number.prototype['_toFixed'] = function (args) {
   return new KopiString(this.toFixed(args));
 };
@@ -133,3 +71,24 @@ Number.prototype['_toFixed'] = function (args) {
 Number.prototype['_toLocaleString'] = function (args) {
   return new KopiString(this.toLocaleString());
 };
+
+const { default: Numeric } = require('../traits/Numeric');
+
+Number.prototype['+'] = Numeric.prototype['+'];
+Number.prototype['-'] = Numeric.prototype['-'];
+Number.prototype['*'] = Numeric.prototype['*'];
+Number.prototype['/'] = Numeric.prototype['/'];
+Number.prototype['%'] = Numeric.prototype['%'];
+
+Number.prototype.abs = Numeric.prototype.abs;
+Number.prototype.log = Numeric.prototype.log;
+Number.prototype.exp = Numeric.prototype.exp;
+Number.prototype.sqrt = Numeric.prototype.sqrt;
+
+Number.prototype.floor = Numeric.prototype.floor;
+Number.prototype.ceil = Numeric.prototype.ceil;
+Number.prototype.round = Numeric.prototype.round;
+
+Number.prototype.sin = Numeric.prototype.sin;
+Number.prototype.cos = Numeric.prototype.cos;
+Number.prototype.tan = Numeric.prototype.tan;
