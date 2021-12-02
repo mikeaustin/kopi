@@ -103,7 +103,7 @@ class Interpreter extends Visitors {
     const evaluatedExpr = await this.visitNode(left, scope, bind);
     const evaluatedArgs = isApplyExpression
       ? await this.visitNode(right.args, scope, bind)
-      : undefined;
+      : KopiTuple.empty;
     const methodName = isApplyExpression
       ? right.expr.name
       : right.name;

@@ -91,7 +91,7 @@ class Iterable {
     return KopiTuple.empty;
   }
 
-  async splitOn(delimiter = new KopiString('')) {
+  async splitOn(delimiter) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
 

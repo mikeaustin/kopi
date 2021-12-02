@@ -139,7 +139,11 @@ class KopiTuple {
     }).apply(this));
   }
 
-  async product(func = (args) => args, scope, visitors) {
+  async product(func, scope, visitors) {
+    if (func === KopiTuple.empty) {
+      func = (args) => args, scope, visitors;
+    }
+
     const helper = async (index, values) => {
       const iter = this._fieldsArray[index][Symbol.iterator]();
       const accum = [];

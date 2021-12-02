@@ -25,6 +25,10 @@ class TuplePattern {
   }
 
   async getMatches(tuple) {
+    if (!(tuple instanceof KopiTuple)) {
+      return null;
+    }
+
     const matchesArray = await this._patternElementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
       this._patternFieldNamesArray[index] !== null
