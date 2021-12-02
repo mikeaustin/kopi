@@ -5,14 +5,11 @@ import parser from '../lib/parser.js';
 import interpreter from './visitors/Interpreter.mjs';
 import typechecker from './visitors/Typechecker.mjs';
 
-import _types from './types.js';
-
-const {
+import {
   AnyType, NoneType, UnionType,
-  BooleanType, NumberType, StringType,
-  FunctionType,
+  BooleanType, NumberType, StringType, FunctionType,
   IdentifierPatternType,
-} = _types;
+} from './types.mjs';
 
 class TypeVar {
   constructor(type) {
