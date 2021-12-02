@@ -47,7 +47,13 @@ async function main() {
         }
       }
     } catch (error) {
-      console.error(error.name === 'SyntaxError' ? error.message : error);
+      if (error.name === 'SyntaxError') {
+        console.error(`*** ${error.name}: ${error.message}\n  [Line ${error.location.start.line}]`);
+      } else if (error.name === 'RuntimeError') {
+        console.error('***', error.stack);
+      } else {
+        console.error(`*** JavaScript ${error.stack}`);
+      }
     }
 
     input.prompt();

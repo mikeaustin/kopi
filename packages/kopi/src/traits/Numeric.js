@@ -1,6 +1,10 @@
 class Numeric {
   ['+'](that) {
-    return this + that;
+    if (that.constructor !== this.constructor) {
+      throw new Error(`Can't apply operator '+' on ${this} and ${that}`);
+    }
+
+    return this.valueOf() + that.valueOf();
   }
 
   ['-'](that) {
