@@ -34,6 +34,10 @@ Number.prototype.odd = function (that) {
 
 //
 
+Number.prototype.compare = function (that) {
+  return 0;
+};
+
 Number.prototype['=='] = function (that) {
   if (typeof that !== 'number') {
     return false;
@@ -73,6 +77,7 @@ Number.prototype['_toLocaleString'] = function (args) {
 };
 
 const { default: Numeric } = require('../traits/Numeric');
+const { default: Comparable } = require('../traits/Comparable');
 
 Number.prototype['+'] = Numeric.prototype['+'];
 Number.prototype['-'] = Numeric.prototype['-'];
@@ -92,3 +97,5 @@ Number.prototype.round = Numeric.prototype.round;
 Number.prototype.sin = Numeric.prototype.sin;
 Number.prototype.cos = Numeric.prototype.cos;
 Number.prototype.tan = Numeric.prototype.tan;
+
+// Number.prototype['<'] = Numeric(Number.prototype.compare);

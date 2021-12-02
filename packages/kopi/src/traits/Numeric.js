@@ -1,7 +1,3 @@
-const { default: KopiString } = require('../classes/KopiString');
-const { default: KopiTuple } = require('../classes/KopiTuple');
-const { default: KopiArray } = require('../classes/KopiArray');
-
 class Numeric {
   ['+'](that) {
     return this + that;
