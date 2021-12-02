@@ -1,6 +1,4 @@
-import _Visitors from './Visitors.js';
-
-const { default: Visitors } = _Visitors;
+import Visitors from './Visitors.mjs';
 
 // const indent = (level) => '\n' + ''.padEnd(level * 2);
 const indent = (level) => '';

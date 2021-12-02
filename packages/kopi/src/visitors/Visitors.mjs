@@ -12,6 +12,4 @@ class Visitors {
   }
 }
 
-module.exports = {
-  default: Visitors,
-};
+export default Visitors;

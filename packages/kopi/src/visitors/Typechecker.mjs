@@ -1,8 +1,6 @@
-import _Visitors from './Visitors.js';
+import Visitors from './Visitors.mjs';
 
 import _types from '../types.js';
-
-const { default: Visitors } = _Visitors;
 
 const { UnionType, BooleanType, NumberType, StringType, FunctionType, IdentifierPatternType, AnyType } = _types;
 

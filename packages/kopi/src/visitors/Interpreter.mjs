@@ -1,4 +1,4 @@
-import _Visitors from './Visitors.js';
+import Visitors from './Visitors.mjs';
 import { applyBinaryOperator, applyUnaryOperator } from '../utils.mjs';
 
 import prettyPrinter from './PrettyPrinter.mjs';
@@ -15,8 +15,6 @@ import {
 } from '../classes.mjs';
 
 import RuntimeError from './RuntimeError.mjs';
-
-const { default: Visitors } = _Visitors;
 
 class Interpreter extends Visitors {
   async Block({ statements }, scope) {
