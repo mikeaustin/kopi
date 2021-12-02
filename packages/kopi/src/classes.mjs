@@ -5,7 +5,7 @@ import './classes/Map.js';
 import _KopiString from './classes/KopiString.js';
 import _KopiTuple from './classes/KopiTuple.js';
 import _KopiArray from './classes/KopiArray.js';
-import _KopiRange from './classes/KopiRange.js';
+import KopiRange from './classes/KopiRange.mjs';
 import KopiFunction from './classes/KopiFunction.mjs';
 import KopiVector from './classes/KopiVector.mjs';
 import KopiDict from './classes/KopiDict.mjs';
@@ -13,7 +13,6 @@ import KopiDict from './classes/KopiDict.mjs';
 const { default: KopiString } = _KopiString;
 const { default: KopiTuple } = _KopiTuple;
 const { default: KopiArray } = _KopiArray;
-const { default: KopiRange } = _KopiRange;
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {

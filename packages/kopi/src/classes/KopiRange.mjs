@@ -1,3 +1,11 @@
+import _KopiTuple from './KopiTuple.js';
+import _KopiArray from './KopiArray.js';
+import _Iterable from '../traits/Iterable.js';
+
+const { default: KopiTuple } = _KopiTuple;
+const { default: KopiArray } = _KopiArray;
+const { default: Iterable } = _Iterable;
+
 class KopiRangeWithIndex {
   constructor(range) {
     this._range = range;
@@ -77,14 +85,6 @@ class KopiRange {
   }
 }
 
-module.exports = {
-  default: KopiRange,
-};
-
-const { default: KopiTuple } = require('./KopiTuple');
-const { default: KopiArray } = require('./KopiArray');
-const { default: Iterable } = require('../traits/Iterable');
-
 KopiRange.prototype.each = Iterable.prototype.each;
 KopiRange.prototype.map = Iterable.prototype.map;
 KopiRange.prototype.flatMap = Iterable.prototype.flatMap;
@@ -92,3 +92,5 @@ KopiRange.prototype.reduce = Iterable.prototype.reduce;
 KopiRange.prototype.reduce2 = Iterable.prototype.reduce2;
 KopiRange.prototype.splitOn = Iterable.prototype.splitOn;
 KopiRange.prototype.count = Iterable.prototype.count;
+
+export default KopiRange;
