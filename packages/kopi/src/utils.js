@@ -25,6 +25,10 @@ async function applyBinaryOperator(op, left, right, scope, visitors) {
 
   }
 
+  if (!left[op]) {
+    throw Error(`Operator '${op}' not found on value ${await left.inspectAsync()}`);
+  }
+
   return left[op].apply(left, [right, scope, visitors]);
 }
 
