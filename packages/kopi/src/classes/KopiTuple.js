@@ -115,9 +115,16 @@ class KopiTuple {
     let results = iters.map((iter) => iter.next());
 
     while (results.every((result) => !result.done)) {
-      values.push(
-        mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors])
-      );
+      const predicatePassed = !(mapper?.params?.predicate && !await visitors.visitNode(mapper.params.predicate, {
+        ...scope,
+        ...await mapper.params.getMatches(new KopiTuple(results.map((result) => result.value))),
+      }));
+
+      if (predicatePassed) {
+        values.push(
+          mapper.apply(undefined, [new KopiTuple(results.map((result) => result.value)), scope, visitors]),
+        );
+      }
 
       results = iters.map((iter) => iter.next());
     }

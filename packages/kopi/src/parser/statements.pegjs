@@ -14,5 +14,5 @@ Statement
 
 Assignment
   = pattern:AssignmentPattern _ "=" !">" _ expr:Expression {
-      return new Assignment({ pattern, expr })
+      return new Assignment({ pattern, expr, location: location() })
     }

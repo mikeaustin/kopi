@@ -75,9 +75,15 @@ const compile = async (filename, scope) => {
       typechecker.visitNode(astRootNode, context);
     }
 
-    return interpreter.visitNode(astRootNode, scope);
+    return await interpreter.visitNode(astRootNode, scope);
   } catch (error) {
-    console.error(error.name === 'SyntaxError' ? `SyntaxError on line ${error.location.start.line}: ${error.message}` : error);
+    if (error.name === 'SyntaxError') {
+      console.error(`*** ${error.name}: ${error.message}\n  ${filename} [Line ${error.location.start.line}]`);
+    } else if (error.name === 'RuntimeError') {
+      console.error('***', error.stack);
+    } else {
+      console.error(`*** JavaScript ${error.stack}`);
+    }
 
     process.exit(1);
   }
