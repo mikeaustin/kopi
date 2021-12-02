@@ -88,6 +88,4 @@ class KopiVector {
   }
 }
 
-module.exports = {
-  default: KopiVector,
-};
+export default KopiVector;
