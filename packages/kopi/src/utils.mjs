@@ -45,6 +45,10 @@ async function applyUnaryOperator(op, right, scope, visitors) {
     }
   }
 
+  if (!right[op]) {
+    throw Error(`Operator '${op}' not found on value ${await right.inspectAsync()}`);
+  }
+
   return right[op].apply(right, [undefined, scope, visitors]);
 }
 
@@ -58,7 +62,7 @@ async function asyncMap([iterable, func], scope, visitors) {
   return accum;
 }
 
-module.exports = {
+export {
   applyBinaryOperator,
   applyUnaryOperator,
   asyncMap,

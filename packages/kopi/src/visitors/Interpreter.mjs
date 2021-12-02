@@ -1,5 +1,5 @@
 import _Visitors from './Visitors.js';
-import _utils from '../utils.js';
+import { applyBinaryOperator, applyUnaryOperator } from '../utils.mjs';
 
 import prettyPrinter from './PrettyPrinter.mjs';
 import { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } from '../classes.mjs';
@@ -17,7 +17,6 @@ import {
 import RuntimeError from './RuntimeError.mjs';
 
 const { default: Visitors } = _Visitors;
-const { applyBinaryOperator, applyUnaryOperator } = _utils;
 
 class Interpreter extends Visitors {
   async Block({ statements }, scope) {
