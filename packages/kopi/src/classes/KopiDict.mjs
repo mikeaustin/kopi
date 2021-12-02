@@ -1,8 +1,7 @@
 import { Map } from 'immutable';
 
-import _KopiTuple from './KopiTuple.js';
+import KopiTuple from './KopiTuple.mjs';
 
-const { default: KopiTuple } = _KopiTuple;
 // const { applyBinaryOperator } = require('../utils');
 
 async function applyBinaryOperator(op, left, right, scope, visitors) {

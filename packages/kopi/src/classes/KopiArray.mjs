@@ -1,3 +1,7 @@
+import KopiString from './KopiString.mjs';
+import KopiTuple from './KopiTuple.mjs';
+import Iterable from '../traits/Iterable.mjs';
+
 class KopiArray {
   constructor(elementsArray = []) {
     elementsArray.forEach((element, index) => {
@@ -99,14 +103,6 @@ class KopiArray {
   }
 }
 
-module.exports = {
-  default: KopiArray,
-};
-
-const { default: KopiString } = require('./KopiString');
-const { default: KopiTuple } = require('./KopiTuple');
-const { default: Iterable } = require('../traits/Iterable');
-
 KopiArray.prototype.map = Iterable.prototype.map;
 KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
 KopiArray.prototype.reduce = Iterable.prototype.reduce;
@@ -114,3 +110,5 @@ KopiArray.prototype.find = Iterable.prototype.find;
 KopiArray.prototype.splitOn = Iterable.prototype.splitOn;
 KopiArray.prototype.splitEvery = Iterable.prototype.splitEvery;
 KopiArray.prototype.count = Iterable.prototype.count;
+
+export default KopiArray;

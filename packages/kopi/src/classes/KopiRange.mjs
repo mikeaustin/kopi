@@ -1,10 +1,6 @@
-import _KopiTuple from './KopiTuple.js';
-import _KopiArray from './KopiArray.js';
-import _Iterable from '../traits/Iterable.js';
-
-const { default: KopiTuple } = _KopiTuple;
-const { default: KopiArray } = _KopiArray;
-const { default: Iterable } = _Iterable;
+import KopiTuple from './KopiTuple.mjs';
+import KopiArray from './KopiArray.mjs';
+import Iterable from '../traits/Iterable.mjs';
 
 class KopiRangeWithIndex {
   constructor(range) {

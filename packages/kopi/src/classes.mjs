@@ -1,18 +1,14 @@
 import './classes/Boolean.js';
-import './classes/Number.js';
+import './classes/Number.mjs';
 import './classes/Map.js';
 
-import _KopiString from './classes/KopiString.js';
-import _KopiTuple from './classes/KopiTuple.js';
-import _KopiArray from './classes/KopiArray.js';
+import KopiString from './classes/KopiString.mjs';
+import KopiTuple from './classes/KopiTuple.mjs';
+import KopiArray from './classes/KopiArray.mjs';
 import KopiRange from './classes/KopiRange.mjs';
 import KopiFunction from './classes/KopiFunction.mjs';
 import KopiVector from './classes/KopiVector.mjs';
 import KopiDict from './classes/KopiDict.mjs';
-
-const { default: KopiString } = _KopiString;
-const { default: KopiTuple } = _KopiTuple;
-const { default: KopiArray } = _KopiArray;
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {

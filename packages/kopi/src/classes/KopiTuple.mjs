@@ -1,3 +1,6 @@
+import KopiArray from './KopiArray.mjs';
+import KopiSequence from './KopiSequence.mjs';
+
 class KopiTuple {
   constructor(fieldsArray = [], fieldNamessArray = []) {
     if (fieldsArray === null) {
@@ -176,9 +179,4 @@ class KopiTuple {
 
 KopiTuple.empty = new KopiTuple(null);
 
-module.exports = {
-  default: KopiTuple,
-};
-
-const { default: KopiArray } = require('./KopiArray');
-const { default: KopiSequence } = require('./KopiSequence');
+export default KopiTuple;

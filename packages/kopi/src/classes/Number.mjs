@@ -1,4 +1,9 @@
-const { default: KopiString } = require('./KopiString');
+import KopiString from './KopiString.mjs';
+import _Comparable from '../traits/Comparable.js';
+import _Numeric from '../traits/Numeric.js';
+
+const { default: Comparable } = _Comparable;
+const { default: Numeric } = _Numeric;
 
 Number.prototype.inspectAsync = function () {
   return `${this}`;
@@ -75,9 +80,6 @@ Number.prototype['_toFixed'] = function (args) {
 Number.prototype['_toLocaleString'] = function (args) {
   return new KopiString(this.toLocaleString());
 };
-
-const { default: Numeric } = require('../traits/Numeric');
-const { default: Comparable } = require('../traits/Comparable');
 
 Number.prototype['+'] = Numeric.prototype['+'];
 Number.prototype['-'] = Numeric.prototype['-'];
