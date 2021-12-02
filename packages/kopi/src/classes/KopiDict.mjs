@@ -1,6 +1,8 @@
-const { Map } = require('immutable');
+import { Map } from 'immutable';
 
-const { default: KopiTuple } = require('./KopiTuple');
+import _KopiTuple from './KopiTuple.js';
+
+const { default: KopiTuple } = _KopiTuple;
 // const { applyBinaryOperator } = require('../utils');
 
 async function applyBinaryOperator(op, left, right, scope, visitors) {
@@ -152,6 +154,4 @@ class KopiDict {
   }
 }
 
-module.exports = {
-  default: KopiDict,
-};
+export default KopiDict;
