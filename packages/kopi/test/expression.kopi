@@ -1,3 +1,5 @@
+# Define 'Const' and 'AddOp' types with operation 'eval'
+
 Const = type (value: Int)
 AddOp = type (left: Const, right: Const)
 
@@ -84,8 +86,6 @@ print $ program | source
 
 # source = AddOp.methods.source
 # source = methods.(AddOp).source
-
-print $ methods ()
 
 extend AddOp (
   source: (this) => () => "(" ++ addOpSource this () ++ ")"
