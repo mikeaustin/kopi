@@ -6,10 +6,6 @@ print @Boolean
 
 print @Days
 
-@Days | each (day) => {
-  print day
-}
-
 print @Days.0
 print @Days.Sun
 

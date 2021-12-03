@@ -88,7 +88,7 @@ class KopiTuple {
       }
     }
 
-    return messages;
+    return new KopiArray(messages);
   }
 
   async ['=='](that) {
