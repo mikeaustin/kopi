@@ -1,6 +1,6 @@
-import './classes/Boolean.js';
+import './classes/Boolean.mjs';
 import './classes/Number.mjs';
-import './classes/Map.js';
+import './classes/Map.mjs';
 
 import KopiString from './classes/KopiString.mjs';
 import KopiTuple from './classes/KopiTuple.mjs';

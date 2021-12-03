@@ -26,7 +26,7 @@ class PrettyPrinter extends Visitors {
       fields.map((element, index) => (
         (fieldNames[index] ? fieldNames[index] : '') +
         (fieldNames[index] ? ': ' : '') + this.visitNode(element, level)
-      )).join(indent(', '))
+      )).join(', ')
     );
   }
 
@@ -35,7 +35,7 @@ class PrettyPrinter extends Visitors {
       '[' +
       elements.map((element) => (
         this.visitNode(element, level)
-      )).join(indent(', ')) +
+      )).join(', ') +
       ']'
     );
   }
@@ -59,6 +59,10 @@ class PrettyPrinter extends Visitors {
     return (
       this.visitNode(params, level + 1) + ' => ' + this.visitNode(expr, level + 1)
     );
+  }
+
+  RangeExpression({ from, to }, level) {
+    return `${this.visitNode(from)}..${this.visitNode(to)}`;
   }
 
   ParenthesesExpression({ expr }) {
