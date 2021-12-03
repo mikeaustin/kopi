@@ -123,13 +123,13 @@ print $ match 5 (
 )
 
 
-print $ [1, (sleep 2), (1 + 2)] | map '_toString
+print $ [1, (sleep 0.2), (0.1 + 0.2)] | map '_toString
 
-print $ sleep 1 | _toFixed 2
+print $ sleep 0.1 | _toFixed 2
 
 print $ loop (x = 1) => {
   print x
-  sleep 1
+  sleep 0.1
   match x (
     3 => break 100
     n => n + 1

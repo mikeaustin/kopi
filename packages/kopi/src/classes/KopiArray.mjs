@@ -103,6 +103,7 @@ class KopiArray {
   }
 }
 
+KopiArray.prototype.each = Iterable.prototype.each;
 KopiArray.prototype.map = Iterable.prototype.map;
 KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
 KopiArray.prototype.reduce = Iterable.prototype.reduce;

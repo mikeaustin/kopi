@@ -1,7 +1,8 @@
 import { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } from './classes.mjs';
-import Iterable from './traits/Iterable.mjs';
+import * as Iterable from './traits/Iterable.mjs';
 
 import * as core from './functions/core.mjs';
+import { KopiEnum } from './classes.mjs';
 
 const KopiStringConstructor = (value) => new KopiString(value.toStringAsync());
 KopiStringConstructor.nativeConstructor = KopiString;
@@ -20,6 +21,9 @@ const KopiDictConstructor = async (entries) => new KopiDict(
   ),
 );
 KopiDictConstructor.nativeConstructor = KopiDict;
+
+const KopiEnumConstructor = (tuple) => new KopiEnum(tuple.getFieldsArray(), tuple.getFieldNamesArray());
+KopiEnumConstructor.nativeConstructor = KopiEnum;
 
 const Vector = async (array) => new KopiVector(
   await Promise.all(array.getElementsArray()),
@@ -104,9 +108,10 @@ let getScope = (input) => ({
   send: core.kopi_send,
   Vector,
   Number,
+  String: KopiStringConstructor,
   Array: KopiArrayConstructor,
   Dict: KopiDictConstructor,
-  String: KopiStringConstructor,
+  Enum: KopiEnumConstructor,
   Iterable: KopiIterableMixin,
 });
 

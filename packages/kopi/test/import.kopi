@@ -39,6 +39,7 @@ filenames = [
   "async.kopi"
   "patterns.kopi"
   "units.kopi"
+  "enumeration.kopi"
   "kponjson.kopi"
 ]
 

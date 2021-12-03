@@ -2,7 +2,7 @@ import KopiArray from './KopiArray.mjs';
 import KopiSequence from './KopiSequence.mjs';
 
 class KopiTuple {
-  constructor(fieldsArray = [], fieldNamessArray = []) {
+  constructor(fieldsArray = [], fieldNamesArray = []) {
     if (fieldsArray === null) {
       this._fieldsArray = [];
       this._fieldNamesArray = [];
@@ -18,11 +18,11 @@ class KopiTuple {
 
     fieldsArray.forEach((field, index) => {
       this[index] = field;
-      this[fieldNamessArray[index]] = field;
+      this[fieldNamesArray[index]] = field;
     });
 
     this._fieldsArray = fieldsArray;
-    this._fieldNamesArray = fieldNamessArray;
+    this._fieldNamesArray = fieldNamesArray;
   }
 
   async inspectAsync() {
