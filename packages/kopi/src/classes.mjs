@@ -1,22 +1,14 @@
-import './classes/Boolean.js';
-import './classes/Number.js';
-import './classes/Map.js';
+import './classes/Boolean.mjs';
+import './classes/Number.mjs';
+import './classes/Map.mjs';
 
-import _KopiString from './classes/KopiString.js';
-import _KopiTuple from './classes/KopiTuple.js';
-import _KopiArray from './classes/KopiArray.js';
-import _KopiRange from './classes/KopiRange.js';
-import _KopiFunction from './classes/KopiFunction.js';
-import _KopiVector from './classes/KopiVector.js';
-import _KopiDict from './classes/KopiDict.js';
-
-const { default: KopiString } = _KopiString;
-const { default: KopiTuple } = _KopiTuple;
-const { default: KopiArray } = _KopiArray;
-const { default: KopiRange } = _KopiRange;
-const { default: KopiFunction } = _KopiFunction;
-const { default: KopiVector } = _KopiVector;
-const { default: KopiDict } = _KopiDict;
+import KopiString from './classes/KopiString.mjs';
+import KopiTuple from './classes/KopiTuple.mjs';
+import KopiArray from './classes/KopiArray.mjs';
+import KopiRange from './classes/KopiRange.mjs';
+import KopiFunction from './classes/KopiFunction.mjs';
+import KopiVector from './classes/KopiVector.mjs';
+import KopiDict from './classes/KopiDict.mjs';
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
@@ -25,6 +17,10 @@ class TuplePattern {
   }
 
   async getMatches(tuple) {
+    if (!(tuple instanceof KopiTuple)) {
+      return null;
+    }
+
     const matchesArray = await this._patternElementsArray.reduce(async (matchesArray, element, index) => ([
       ...await matchesArray,
       this._patternFieldNamesArray[index] !== null

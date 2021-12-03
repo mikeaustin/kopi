@@ -1,3 +1,7 @@
+import KopiString from './KopiString.mjs';
+import KopiTuple from './KopiTuple.mjs';
+import Iterable from '../traits/Iterable.mjs';
+
 class KopiArray {
   constructor(elementsArray = []) {
     elementsArray.forEach((element, index) => {
@@ -45,15 +49,21 @@ class KopiArray {
     };
   }
 
-  get(index) {
-    if (index.constructor.name === 'KopiRange') {
-      return new KopiArray(this._elementsArray.slice(index.from, index.to));
-    } else if (index.constructor.name === 'KopiTuple') {
-      return new KopiArray(index.getFieldsArray().reduce((accum, index) => [
+  get(indexOrRangeOrTuple) {
+    if (indexOrRangeOrTuple.constructor.name === 'KopiRange') {
+      const range = indexOrRangeOrTuple;
+
+      return new KopiArray(this._elementsArray.slice(range.from, range.to));
+    } else if (indexOrRangeOrTuple.constructor.name === 'KopiTuple') {
+      const tuple = indexOrRangeOrTuple;
+
+      return new KopiArray(tuple.getFieldsArray().reduce((accum, indexOrRangeOrTuple) => [
         ...accum,
-        this._elementsArray[index],
+        this._elementsArray[indexOrRangeOrTuple],
       ], []));
     }
+
+    const index = indexOrRangeOrTuple;
 
     return this._elementsArray[index];
   }
@@ -93,14 +103,6 @@ class KopiArray {
   }
 }
 
-module.exports = {
-  default: KopiArray,
-};
-
-const { default: KopiString } = require('./KopiString');
-const { default: KopiTuple } = require('./KopiTuple');
-const { default: Iterable } = require('../traits/Iterable');
-
 KopiArray.prototype.map = Iterable.prototype.map;
 KopiArray.prototype.flatMap = Iterable.prototype.flatMap;
 KopiArray.prototype.reduce = Iterable.prototype.reduce;
@@ -108,3 +110,5 @@ KopiArray.prototype.find = Iterable.prototype.find;
 KopiArray.prototype.splitOn = Iterable.prototype.splitOn;
 KopiArray.prototype.splitEvery = Iterable.prototype.splitEvery;
 KopiArray.prototype.count = Iterable.prototype.count;
+
+export default KopiArray;

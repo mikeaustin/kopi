@@ -30,7 +30,7 @@ class UnionType extends AnyType {
       return 'None';
     }
 
-    return `${this.types.map(type => type.name).join(' | ')}`;
+    return `${this.types.map((type) => type.name).join(' | ')}`;
   }
 
   isSupertypeOf(type) {
@@ -38,7 +38,7 @@ class UnionType extends AnyType {
       return false;
     }
 
-    return this.types.some(_type => type instanceof _type.constructor);
+    return this.types.some((_type) => type instanceof _type.constructor);
   }
 }
 
@@ -107,7 +107,7 @@ class IdentifierPatternType {
   }
 }
 
-module.exports = {
+export {
   AnyType,
   NoneType,
   UnionType,

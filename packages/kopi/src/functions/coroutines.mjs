@@ -48,7 +48,10 @@ const kopi_spawn = (func, scope, visitors) => {
     receiverPromises[coroutineId].resolve(event.data);
   });
 
-  func.apply(undefined, [KopiTuple.empty, { ...scope, _coroutineId: coroutineId }, visitors]);
+  func.apply(undefined, [KopiTuple.empty, {
+    ...scope,
+    _coroutineId: coroutineId,
+  }, visitors]);
 
   return coroutineId;
 };

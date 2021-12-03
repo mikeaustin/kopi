@@ -5,14 +5,11 @@ import parser from '../lib/parser.js';
 import interpreter from './visitors/Interpreter.mjs';
 import typechecker from './visitors/Typechecker.mjs';
 
-import _types from './types.js';
-
-const {
+import {
   AnyType, NoneType, UnionType,
-  BooleanType, NumberType, StringType,
-  FunctionType,
+  BooleanType, NumberType, StringType, FunctionType,
   IdentifierPatternType,
-} = _types;
+} from './types.mjs';
 
 class TypeVar {
   constructor(type) {
@@ -75,9 +72,15 @@ const compile = async (filename, scope) => {
       typechecker.visitNode(astRootNode, context);
     }
 
-    return interpreter.visitNode(astRootNode, scope);
+    return await interpreter.visitNode(astRootNode, scope);
   } catch (error) {
-    console.error(error.name === 'SyntaxError' ? `SyntaxError on line ${error.location.start.line}: ${error.message}` : error);
+    if (error.name === 'SyntaxError') {
+      console.error(`*** ${error.name}: ${error.message}\n  ${filename} [Line ${error.location.start.line}]`);
+    } else if (error.name === 'RuntimeError') {
+      console.error('***', error.stack);
+    } else {
+      console.error(`*** JavaScript ${error.stack}`);
+    }
 
     process.exit(1);
   }

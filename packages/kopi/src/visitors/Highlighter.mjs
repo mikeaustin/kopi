@@ -1,6 +1,4 @@
-import _Visitors from './Visitors.js';
-
-const { default: Visitors } = _Visitors;
+import Visitors from './Visitors.mjs';
 
 // const indent = (level) => '\n' + ''.padEnd(level * 2);
 const indent = (level) => '';
@@ -97,12 +95,12 @@ class Highlighter extends Visitors {
     );
   }
 
-  TuplePattern({ elements }, level) {
-    if (elements.length === 0) {
+  TuplePattern({ fields }, level) {
+    if (fields.length === 0) {
       return '()';
     }
 
-    return elements.map((element) => (
+    return fields.map((element) => (
       this.visitNode(element, level)
     )).join('<comma>, </comma>');
   }

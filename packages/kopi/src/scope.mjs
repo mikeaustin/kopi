@@ -1,5 +1,5 @@
 import { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } from './classes.mjs';
-import _Iterable from './traits/Iterable.js';
+import Iterable from './traits/Iterable.mjs';
 
 import * as core from './functions/core.mjs';
 
@@ -27,13 +27,13 @@ const Vector = async (array) => new KopiVector(
 Vector.nativeConstructor = KopiVector;
 
 const KopiIterableMixin = new KopiTuple([
-  _Iterable.map,
-  _Iterable.flatMap,
-  _Iterable.reduce,
-  _Iterable.find,
-  _Iterable.splitOn,
-  _Iterable.splitEvery,
-  _Iterable.count,
+  Iterable.map,
+  Iterable.flatMap,
+  Iterable.reduce,
+  Iterable.find,
+  Iterable.splitOn,
+  Iterable.splitEvery,
+  Iterable.count,
 ], [
   'map',
   'flatMap',

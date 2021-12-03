@@ -32,6 +32,4 @@ class KopiFunction {
   }
 }
 
-module.exports = {
-  default: KopiFunction,
-};
+export default KopiFunction;

@@ -2,7 +2,6 @@ import readline from 'readline';
 // const { Worker } = require('worker_threads');
 
 import { KopiString, KopiTuple, KopiArray, KopiDict, KopiVector } from './classes.mjs';
-import _Iterable from './traits/Iterable.js';
 
 import * as node from './functions/node.mjs';
 import { compile } from './compiler.mjs';

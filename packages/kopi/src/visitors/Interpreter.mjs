@@ -1,6 +1,7 @@
-import _Visitors from './Visitors.js';
-import _utils from '../utils.js';
+import Visitors from './Visitors.mjs';
+import { applyBinaryOperator, applyUnaryOperator } from '../utils.mjs';
 
+import prettyPrinter from './PrettyPrinter.mjs';
 import { KopiString, KopiTuple, KopiArray, KopiRange, KopiFunction, KopiDict } from '../classes.mjs';
 import {
   TuplePattern,
@@ -13,8 +14,7 @@ import {
   FunctionPattern,
 } from '../classes.mjs';
 
-const { default: Visitors } = _Visitors;
-const { applyBinaryOperator, applyUnaryOperator } = _utils;
+import RuntimeError from './RuntimeError.mjs';
 
 class Interpreter extends Visitors {
   async Block({ statements }, scope) {
@@ -44,32 +44,48 @@ class Interpreter extends Visitors {
     });
   }
 
-  async Assignment({ pattern, expr }, scope, bind) {
-    const evaluatedPattern = await this.visitNode(pattern, scope, bind);
-    let matches = null;
+  async Assignment({ pattern, expr, location }, scope, bind) {
+    try {
+      const evaluatedPattern = await this.visitNode(pattern, scope, bind);
+      let matches = null;
 
-    if (pattern.constructor.name === 'FunctionPattern') {
-      matches = await evaluatedPattern.getMatches(null, scope, expr);
-    } else {
-      const evaluatedExpr = await this.visitNode(expr, scope, bind);
+      if (pattern.constructor.name === 'FunctionPattern') {
+        matches = await evaluatedPattern.getMatches(null, scope, expr);
+      } else {
+        const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
-      matches = await evaluatedPattern.getMatches(evaluatedExpr, scope);
+        matches = await evaluatedPattern.getMatches(evaluatedExpr, scope);
+      }
+
+      if (matches === null) {
+        throw new RuntimeError(
+          'Pattern match failed',
+          'file',
+          location.start.line,
+        );
+      }
+
+      // TODO: pass expr directly so FunctionPattern can use it as body
+      // const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
+
+      Object.entries(matches).forEach(([name, value]) => {
+        if (value.incrementReferenceCount) {
+          value.incrementReferenceCount();
+        }
+
+        if (value instanceof KopiFunction) {
+          value.closure[name] = value;
+        }
+      });
+
+      bind(matches);
+    } catch (error) {
+      throw new error.constructor(
+        `${error.message}\n  in assignment expression '${prettyPrinter.Assignment({ pattern, expr })}'`,
+        'file',
+        location.start.line,
+      );
     }
-
-    // TODO: pass expr directly so FunctionPattern can use it as body
-    // const matches = await evaluatedPattern.getMatches(evaluatedExpr, scope, expr);
-
-    Object.entries(matches).forEach(([name, value]) => {
-      if (value.incrementReferenceCount) {
-        value.incrementReferenceCount();
-      }
-
-      if (value instanceof KopiFunction) {
-        value.closure[name] = value;
-      }
-    });
-
-    bind(matches);
   }
 
   TupleTypeExpression({ elements, fields }, scope, bind) {
@@ -80,8 +96,8 @@ class Interpreter extends Visitors {
   }
 
   async TypeApplyExpression({ expr, args }, scope, bind) {
-    const evaluatedExpr = await this.visitNode(expr, scope, bind);
-    const evaluatedArgs = await this.visitNode(args, scope, bind);
+    // const evaluatedExpr = await this.visitNode(expr, scope, bind);
+    // const evaluatedArgs = await this.visitNode(args, scope, bind);
 
     const _Type = class extends KopiTuple {
       constructor(...args) {
@@ -97,33 +113,57 @@ class Interpreter extends Visitors {
     return Constructor;
   }
 
-  async PipeExpression({ left, right }, scope, bind) {
+  async PipeExpression({ left, right, location }, scope, bind) {
     const isApplyExpression = right.constructor.name === 'ApplyExpression';
 
-    const evaluatedExpr = await this.visitNode(left, scope, bind);
-    const evaluatedArgs = isApplyExpression
-      ? await this.visitNode(right.args, scope, bind)
-      : undefined;
-    const methodName = isApplyExpression
-      ? right.expr.name
-      : right.name;
+    try {
+      const evaluatedExpr = await this.visitNode(left, scope, bind);
+      const evaluatedArgs = isApplyExpression
+        ? await this.visitNode(right.args, scope, bind)
+        : KopiTuple.empty;
+      const methodName = isApplyExpression
+        ? right.expr.name
+        : right.name;
 
-    const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
-    const thisArg = extensionMethod
-      ? undefined
-      : evaluatedExpr;
-    const func = extensionMethod
-      ? await extensionMethod.apply(undefined, [evaluatedExpr, scope, this, bind])
-      : evaluatedExpr[methodName];
+      const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
+      const thisArg = extensionMethod
+        ? undefined
+        : evaluatedExpr;
+      const func = extensionMethod
+        ? await extensionMethod.apply(undefined, [evaluatedExpr, scope, this, bind])
+        : evaluatedExpr[methodName];
 
-    return func.apply(thisArg, [evaluatedArgs, scope, this, bind]);
+      if (!func) {
+        throw new RuntimeError(
+          `Method '${methodName}' not found in current scope`,
+          'file',
+          location.start.line,
+        );
+      }
+
+      return func.apply(thisArg, [evaluatedArgs, scope, this, bind]);
+    } catch (error) {
+      throw new error.constructor(
+        `${error.message}\n  in pipe expression '${prettyPrinter.PipeExpression({ left, right })}' [Line ${location.start.line}]`,
+        'file',
+        error.lineNumber,
+      );
+    }
   }
 
-  async ApplyExpression({ expr, args }, scope, bind) {
-    const evaluatedArgs = await this.visitNode(args, scope, bind);
-    const evaluatedExpr = await this.visitNode(expr, scope, bind);
+  async ApplyExpression({ expr, args, location }, scope, bind) {
+    try {
+      const evaluatedArgs = await this.visitNode(args, scope, bind);
+      const evaluatedExpr = await this.visitNode(expr, scope, bind);
 
-    return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this, bind]);
+      return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this, bind]);
+    } catch (error) {
+      throw new error.constructor(
+        `${error.message}\n  in apply expression '${prettyPrinter.ApplyExpression({ expr, args })}' [Line ${location?.start?.line}]`,
+        'file',
+        error.lineNumber,
+      );
+    }
   }
 
   async FunctionExpression({ params, expr }, scope, bind) {
@@ -139,7 +179,7 @@ class Interpreter extends Visitors {
     }
 
     return new KopiTuple(
-      fields.map((element) => this.visitNode(element, scope, bind)),
+      fields.map((field) => this.visitNode(field, scope, bind)),
       fieldNames,
     );
   }
@@ -178,10 +218,18 @@ class Interpreter extends Visitors {
   }
 
   async OperatorExpression({ op, left, right }, scope, bind) {
-    const evaluatedLeft = await this.visitNode(left, scope, bind);
-    const evaluatedRight = await this.visitNode(right, scope, bind);
+    try {
+      const evaluatedLeft = await this.visitNode(left, scope, bind);
+      const evaluatedRight = await this.visitNode(right, scope, bind);
 
-    return applyBinaryOperator(op, evaluatedLeft, evaluatedRight, scope, this);
+      return applyBinaryOperator(op, evaluatedLeft, evaluatedRight, scope, this);
+    } catch (error) {
+      throw new RuntimeError(
+        `${error.message}\n  in operator expression '${prettyPrinter.visitNode(left)} ${op} ${prettyPrinter.visitNode(right)}'`,
+        'file',
+        error.lineNumber,
+      );
+    }
   }
 
   async UnaryExpression({ op, right }, scope, bind) {
@@ -200,12 +248,12 @@ class Interpreter extends Visitors {
 
   //
 
-  TuplePattern({ elements, fields }, scope) {
+  TuplePattern({ fields, fieldNames }, scope) {
     // console.log('TuplePattern', fields);
 
     return new TuplePattern(
-      elements.map((element) => this.visitNode(element, scope)),
-      fields,
+      fields.map((field) => this.visitNode(field, scope)),
+      fieldNames,
     );
   }
 
@@ -263,7 +311,15 @@ class Interpreter extends Visitors {
     return name;
   }
 
-  Identifier({ name }, scope) {
+  Identifier({ name, location }, scope) {
+    if (!(name in scope)) {
+      throw new RuntimeError(
+        `Variable '${name}' not found in current scope`,
+        'file',
+        location.start.line,
+      );
+    }
+
     return scope[name];
   }
 }

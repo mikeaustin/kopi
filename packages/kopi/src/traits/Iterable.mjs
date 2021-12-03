@@ -1,6 +1,5 @@
-const { default: KopiString } = require('../classes/KopiString');
-const { default: KopiTuple } = require('../classes/KopiTuple');
-const { default: KopiArray } = require('../classes/KopiArray');
+import KopiTuple from '../classes/KopiTuple.mjs';
+import KopiArray from '../classes/KopiArray.mjs';
 
 class Iterable {
   async each(func, scope, visitors) {
@@ -91,7 +90,7 @@ class Iterable {
     return KopiTuple.empty;
   }
 
-  async splitOn(delimiter = new KopiString('')) {
+  async splitOn(delimiter) {
     const delimiterRexExp = new RegExp(delimiter.valueOf());
     const accum = [];
 
@@ -173,14 +172,22 @@ class Iterable {
   }
 }
 
+const map = (thisArg) => (args, scope, visitors) => Iterable.prototype.map.apply(thisArg, [args, scope, visitors]);
+const flatMap = (thisArg) => (args, scope, visitors) => Iterable.prototype.flatMap.apply(thisArg, [args, scope, visitors]);
+const reduce = (thisArg) => (args, scope, visitors) => Iterable.prototype.reduce.apply(thisArg, [args, scope, visitors]);
+const find = (thisArg) => (args, scope, visitors) => Iterable.prototype.find.apply(thisArg, [args, scope, visitors]);
+const splitOn = (thisArg) => (args, scope, visitors) => Iterable.prototype.splitOn.apply(thisArg, [args, scope, visitors]);
+const splitEvery = (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.apply(thisArg, [args, scope, visitors]);
+const count = (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.count(thisArg, [args, scope, visitors]);
 
-module.exports = {
-  default: Iterable,
-  map: (thisArg) => (args, scope, visitors) => Iterable.prototype.map.apply(thisArg, [args, scope, visitors]),
-  flatMap: (thisArg) => (args, scope, visitors) => Iterable.prototype.flatMap.apply(thisArg, [args, scope, visitors]),
-  reduce: (thisArg) => (args, scope, visitors) => Iterable.prototype.reduce.apply(thisArg, [args, scope, visitors]),
-  find: (thisArg) => (args, scope, visitors) => Iterable.prototype.find.apply(thisArg, [args, scope, visitors]),
-  splitOn: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitOn.apply(thisArg, [args, scope, visitors]),
-  splitEvery: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.apply(thisArg, [args, scope, visitors]),
-  count: (thisArg) => (args, scope, visitors) => Iterable.prototype.splitEvery.count(thisArg, [args, scope, visitors]),
+export default Iterable;
+
+export {
+  map,
+  flatMap,
+  reduce,
+  find,
+  splitOn,
+  splitEvery,
+  count,
 };

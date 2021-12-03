@@ -25,6 +25,10 @@ async function applyBinaryOperator(op, left, right, scope, visitors) {
 
   }
 
+  if (!left[op]) {
+    throw Error(`Operator '${op}' not found on value ${await left.inspectAsync()}`);
+  }
+
   return left[op].apply(left, [right, scope, visitors]);
 }
 
@@ -41,6 +45,10 @@ async function applyUnaryOperator(op, right, scope, visitors) {
     }
   }
 
+  if (!right[op]) {
+    throw Error(`Operator '${op}' not found on value ${await right.inspectAsync()}`);
+  }
+
   return right[op].apply(right, [undefined, scope, visitors]);
 }
 
@@ -54,7 +62,7 @@ async function asyncMap([iterable, func], scope, visitors) {
   return accum;
 }
 
-module.exports = {
+export {
   applyBinaryOperator,
   applyUnaryOperator,
   asyncMap,

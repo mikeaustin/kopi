@@ -1,7 +1,42 @@
-const { Map } = require('immutable');
+import { Map } from 'immutable';
 
-const { default: KopiTuple } = require('./KopiTuple');
-const { applyBinaryOperator } = require('../utils');
+import KopiTuple from './KopiTuple.mjs';
+
+// const { applyBinaryOperator } = require('../utils');
+
+async function applyBinaryOperator(op, left, right, scope, visitors) {
+  if (typeof left === 'number' && typeof right === 'number') {
+    switch (op) {
+      case 'negate': return -right;
+      case '+': return left + right;
+      case '-': return left - right;
+      case '*': return left * right;
+      case '/': return left / right;
+      case '%': return left % right;
+      case '==': return left === right;
+      case '!=': return left !== right;
+      case '<=': return left <= right;
+      case '>=': return left >= right;
+      case '<': return left < right;
+      case '>': return left > right;
+    }
+  }
+
+  const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(left.constructor)?.[op];
+
+  if (extensionMethod) {
+    const func = await extensionMethod.apply(undefined, [left, scope, visitors]);
+
+    return func.apply(undefined, [right, scope, visitors]);
+
+  }
+
+  if (!left[op]) {
+    throw Error(`Operator '${op}' not found on value ${await left.inspectAsync()}`);
+  }
+
+  return left[op].apply(left, [right, scope, visitors]);
+}
 
 class KopiDict {
   constructor(entries) {
@@ -118,6 +153,4 @@ class KopiDict {
   }
 }
 
-module.exports = {
-  default: KopiDict,
-};
+export default KopiDict;

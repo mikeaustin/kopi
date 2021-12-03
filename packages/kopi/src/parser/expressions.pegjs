@@ -4,14 +4,14 @@ Expression
 LowPrecedenceApplyExpression
   = head:NextRule tail:(_ "$" _ Newline* _ Expression)* {
       return tail.reduce((expr, [, op, , , , args]) => (
-        new ApplyExpression({ expr, args })
+        new ApplyExpression({ expr, args, location: location() })
       ), head);
     }
 
 PipeExpression
   = head:NextRule tail:(_ "|" _ ApplyExpression)* {
       return tail.reduce((left, [, op,, right]) => (
-        new PipeExpression({ left, right })
+        new PipeExpression({ left, right, location: location() })
       ), head);
     }
 
@@ -32,7 +32,7 @@ TupleExpression
 ApplyExpression
   = expr:NextRule args:(_ NextRule)* {
       return args.reduce((expr, [, args]) => (
-        new ApplyExpression({ expr, args })
+        new ApplyExpression({ expr, args, location: location() })
       ), expr)
     }
 
@@ -53,7 +53,11 @@ CalculatedMemberExpression
       return tail.reduce((expr, [, , args]) => (
         new PipeExpression({
           left: expr,
-          right: new ApplyExpression({ expr: new Identifier({ name: 'get' }), args })
+          right: new ApplyExpression({
+            expr: new Identifier({ name: 'get' }),
+            args,
+            location: location(),
+          })
         })
       ), head)
     }

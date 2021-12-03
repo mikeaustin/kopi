@@ -1,3 +1,5 @@
+import KopiArray from './KopiArray.mjs';
+
 class KopiString {
   constructor(nativeString) {
     this._nativeString = nativeString;
@@ -112,8 +114,4 @@ class KopiString {
   }
 }
 
-module.exports = {
-  default: KopiString,
-};
-
-const { default: KopiArray } = require('./KopiArray');
+export default KopiString;
