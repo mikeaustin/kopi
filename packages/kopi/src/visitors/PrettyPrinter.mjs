@@ -103,6 +103,10 @@ class PrettyPrinter extends Visitors {
     return value;
   }
 
+  AstLiteral({ value }, level) {
+    return `'(${value})`;
+  }
+
   Identifier({ name }, level) {
     return (
       name

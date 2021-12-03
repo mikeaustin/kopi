@@ -67,9 +67,7 @@ class KopiRange {
   }
 
   async apply(thisArg, [by]) {
-    const [from, to] = await this.resolve();
-
-    return new KopiRange(from, to, await by);
+    return new KopiRange(this.from, this.to, by);
   }
 
   ['++'](that) {

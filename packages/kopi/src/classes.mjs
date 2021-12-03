@@ -9,6 +9,7 @@ import KopiRange from './classes/KopiRange.mjs';
 import KopiFunction from './classes/KopiFunction.mjs';
 import KopiVector from './classes/KopiVector.mjs';
 import KopiDict from './classes/KopiDict.mjs';
+import KopiEnum from './classes/KopiEnum.mjs';
 
 class TuplePattern {
   constructor(elementsArray, fieldsArray) {
@@ -175,6 +176,7 @@ export {
   KopiFunction,
   KopiVector,
   KopiDict,
+  KopiEnum,
   TuplePattern,
   ArrayLiteralPattern,
   BooleanLiteralPattern,

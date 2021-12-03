@@ -18,7 +18,11 @@ class Iterable {
   }
 
   async map(func, scope, visitors) {
-    let accum = this.emptyValue();
+    let accum = this.emptyValue?.();
+
+    if (!(accum?.append)) {
+      throw new Error('Type using Iterable trait is missing emptyValue() or value append() method');
+    }
 
     for await (const element of this) {
       const predicatePassed = !(func?.params?.predicate && !await visitors.visitNode(func.params.predicate, {
@@ -97,7 +101,8 @@ class Iterable {
     let values = this.emptyValue();
 
     for await (const element of this) {
-      if (delimiterRexExp.test(element.valueOf())) {
+      // if (delimiterRexExp.test(element.valueOf())) {
+      if (element.valueOf() === delimiter) {
         if (values.size() > 0) {
           accum.push(values);
         }

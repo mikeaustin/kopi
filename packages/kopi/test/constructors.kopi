@@ -15,7 +15,6 @@ makePerson (nameStr, emailStr) = {
   match (nameStr, makeEmail emailStr) (
     tuple ['hasErrors tuple] => Error (message: "Can't create User: " ++ 'errors tuple)
     name, email              => Person (name: name, email: email)
-    _ => _
   )
 }
 

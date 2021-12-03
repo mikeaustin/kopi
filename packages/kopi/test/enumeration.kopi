@@ -1,0 +1,16 @@
+@Boolean = Enum (No: 0, Yes: 1)
+
+print @Boolean
+
+@Days = Enum (Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6)
+
+print @Days
+
+print @Days.0
+print @Days.Sun
+
+print $ @Days.0 == @Days.Sun
+
+print $ @Days.Sun | succ
+
+print $ @Days | splitOn @Days.Wed

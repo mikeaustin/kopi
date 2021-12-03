@@ -23,8 +23,10 @@ test (filenames) = filenames | map (filename) => {
 filenames = [
   "basics.kopi"
   "tuple.kopi"
+  "string.kopi"
   "dictionary.kopi"
   "array.kopi"
+  "expression.kopi"
   "math.kopi"
   "database.kopi"
   "html.kopi"
@@ -34,11 +36,11 @@ filenames = [
   "predicate.kopi"
   "interpret.kopi"
   "extend.kopi"
-  "extend2.kopi"
   "operators.kopi"
   "async.kopi"
   "patterns.kopi"
   "units.kopi"
+  "enumeration.kopi"
   "kponjson.kopi"
 ]
 
