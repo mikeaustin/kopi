@@ -40,10 +40,12 @@ generateHtmlString (node, level) = {
 documentTree = (
   html () [
     text "Hello"
-    ul (id: "id", class: "class") [
-      li (class: "item") [text 1]
-      li (class: "item") [text 2]
-    ]
+    ul (id: "id", class: "class") $ 1..5 | map (n) => (
+      match ('even n) (
+        true  => li (class: "even") [text n]
+        false => li (class: "odd") [text 0]
+      )
+    )
   ]
 )
 
