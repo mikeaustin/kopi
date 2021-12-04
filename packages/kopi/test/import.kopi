@@ -48,7 +48,7 @@ test filenames
 
 
 coroutine (x = 1) = {
-  f, g = import "test/module.kopi"
+  (:f, :g) = import "test/module.kopi"
 
   loop (x = x) => {
     command, _ = yield command => x
