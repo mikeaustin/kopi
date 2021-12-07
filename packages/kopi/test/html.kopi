@@ -1,11 +1,13 @@
-html () = children => ("element", "html", {}, children)
-body (:class, :_) = children => ("element", "body", { "class": class }, children)
-ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
-li (:class, :_) = children => ("element", "li", { "class": class }, children)
-button (:class, :onClick) = children => {
-  ("element", "button", { "class": class, "onClick": onClick }, children)
+html () = children => {
+  (type: "element", tag: "html", attrs: {}, children: children)
 }
-text (value) = ("text", value)
+body (:class, :_) = children => (type: "element", tag: "body", attrs: { "class": class }, children: children)
+ul (:id, :class, :_) = children => (type: "element", tag: "ul", attrs: { "id": id, "class": class }, children: children)
+li (:class, :_) = children => (type: "element", tag: "li", attrs: { "class": class }, children: children)
+button (:class, :onClick) = children => {
+  (type: "element", tag: "button", attrs: { "class": class, "onClick": onClick }, children: children)
+}
+text (value) = (type: "text", value: value)
 
 indent (n) = {
   loop (n = n, str = "") => match n (
@@ -61,4 +63,5 @@ export (
   html: html
   body: body
   text: text
+  button: button
 )

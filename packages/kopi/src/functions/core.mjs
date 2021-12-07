@@ -101,14 +101,14 @@ const kopi_sleep = (seconds) => {
 
 const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind) => {
   const { nativeConstructor } = constructor;
-  const methods = globalThis.methods[globalThis.methods.length - 1];
+  const methods = globalThis.methodsStack[globalThis.methodsStack.length - 1];
 
   const newMethods = await methodsTuple.getFieldsArray().reduce(async (newMethods, method, index) => ({
     ...await newMethods,
     [methodsTuple.getFieldNameAtIndex(index)]: await method,
   }), methods.get(nativeConstructor) ?? {});
 
-  globalThis.methods[globalThis.methods.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
+  globalThis.methodsStack[globalThis.methodsStack.length - 1] = new Map(methods).set(nativeConstructor, newMethods);
 };
 
 const kopi_spawn = coroutines.kopi_spawn;
