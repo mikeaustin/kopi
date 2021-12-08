@@ -19,8 +19,10 @@ html () = children => Html (element: Element (tag: "html", attrs: {}, children: 
 text (value) = Text (value: value)
 
 
-extend Element (
-  render: (:tag, :attrs, :children) => (level) => {
+@Element = (
+  render: (this) => (level) => {
+    (:tag, :attrs, :children) = this | element
+
     inner = children | map (child) => (child | render (level + 1))
     attrs = attrs | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
@@ -30,17 +32,18 @@ extend Element (
   }
 )
 
-extend Html (
-  render: (:element) => (level) => {
-    element | render (level)
-  }
-)
-
 extend Text (
   render: (:value) => (level) => {
     indent level ++ String value ++ String.Newline
   }
 )
+
+
+extend Html (
+  element: (this) => () => this.element
+)
+
+extend Html (@Element)
 
 
 documentTree = (

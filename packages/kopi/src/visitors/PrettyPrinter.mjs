@@ -99,6 +99,10 @@ class PrettyPrinter extends Visitors {
 
   //
 
+  DictExpression({ entries }) {
+    return `{ ${entries} }`;
+  }
+
   NumericLiteral({ value }, level) {
     return String(value);
   }
