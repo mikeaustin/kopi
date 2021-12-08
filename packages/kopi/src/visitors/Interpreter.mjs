@@ -142,7 +142,7 @@ class Interpreter extends Visitors {
         // console.log(globalThis.methodsStack);
 
         throw new RuntimeError(
-          `Method '${methodName}' not found in current scope`,
+          `Method '${methodName}' for type ${await evaluatedExpr.constructor.name} not found in current scope`,
           'file',
           location.start.line,
         );

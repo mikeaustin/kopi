@@ -1,12 +1,23 @@
 html () = children => {
   (type: "element", tag: "html", attrs: {}, children: children)
 }
-body (:class, :_) = children => (type: "element", tag: "body", attrs: { "class": class }, children: children)
-ul (:id, :class, :_) = children => (type: "element", tag: "ul", attrs: { "id": id, "class": class }, children: children)
-li (:class, :_) = children => (type: "element", tag: "li", attrs: { "class": class }, children: children)
+
+body (:class, :_) = children => {
+  (type: "element", tag: "body", attrs: { "class": class }, children: children)
+}
+
+ul (:id, :class, :_) = children => {
+  (type: "element", tag: "ul", attrs: { "id": id, "class": class }, children: children)
+}
+
+li (:class, :_) = children => {
+  (type: "element", tag: "li", attrs: { "class": class }, children: children)
+}
+
 button (:class, :onClick) = children => {
   (type: "element", tag: "button", attrs: { "class": class, "onClick": onClick }, children: children)
 }
+
 text (value) = (type: "text", value: value)
 
 indent (n) = {
@@ -22,12 +33,12 @@ generateAttrString (name, value) = {
 
 generateHtmlString (node, level) = {
   match node (
-    "text", value => {
+    type: "text", :value => {
       indent level ++ String value ++ String.Newline
     }
-    "element", tag, props, children => {
+    type: "element", :tag, :attrs, :children => {
       inner = children | map child => generateHtmlString (child, level + 1)
-      attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
+      attrs = attrs | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
       indent level "<" tag attrs ">" String.Newline ++
         inner | join "" ++
