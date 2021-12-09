@@ -45,19 +45,9 @@ TuplePattern
   = "("
       tail:(_ Newline+ _ ":"? NextRule)+ Newline+ _
     ")" {
-      console.log(1, tail.reduce((fields, field) => [
-          ...fields,
-          field[4]
-        ]))
       return new TuplePattern({
-        fields: tail.reduce((fields, field) => [
-          ...fields,
-          field[4]
-        ]),
-        fieldNames: tail.reduce((fieldNames, fieldName) => [
-          ...fieldNames,
-          fieldName[3] && fieldName[4].name
-        ])
+        fields: tail.map((field) => field[4]),
+        fieldNames: tail.map((fieldName) => fieldName[3] && fieldName[4].name)
       });
     }
   / head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
