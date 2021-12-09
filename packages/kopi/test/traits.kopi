@@ -1,18 +1,31 @@
-@Comparable = (:compare, :lessThan = (this) => (that) => (this | compare that) < 0) => (
+# @Comparable = (
+#   :compare
+#   :lessThan = (this) => (that) => (this | compare that) < 0
+# ) => (
+#   compare: compare
+#   lessThan: lessThan
+# )
+
+# Metric = type (value: Int)
+
+# extend Metric $ @Comparable (
+#   compare: (this) => (that) => match () (
+#     _ [this.value < that.value] => (0 - 1)
+#     _ [this.value > that.value] => (0 + 1)
+#     _                           => 0
+#   )
+# )
+
+# print $ Metric (value: 10) | compare (Metric (value: 30))
+# print $ Metric (value: 10) | lessThan (Metric (value: 20))
+# print $ Metric (value: 30) | lessThan (Metric (value: 20))
+
+foo = (
+  :compare
+  :lessThan
+) => (
   compare: compare
   lessThan: lessThan
 )
 
-Point = type (x: Int, y: Int)
-
-extend Point $ @Comparable (
-  compare: (this) => (that) => match () (
-    _ [this.x < that.x] => (0 - 1)
-    _ [this.x > that.x] => (0 + 1)
-    _                   => 0
-  )
-)
-
-print $ Point (x: 10, y: 20) | compare (Point (x: 30, y: 40))
-print $ Point (x: 10, y: 20) | lessThan (Point (x: 20, y: 30))
-print $ Point (x: 30, y: 20) | lessThan (Point (x: 20, y: 30))
+print $ foo (compare: 5, lessThan: 10)
