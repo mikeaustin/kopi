@@ -34,7 +34,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.kopi",
-					"match": "\\b(do|end|case|of|return)\\b"
+					"match": "(?<!\\w)@[_a-zA-Z0-9]*(?!\\w)"
 				}
 			]
 		},
