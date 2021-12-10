@@ -27,7 +27,7 @@ MultiplyExpression
     }
 
 UnaryExpression
-  = op:("-" / "!") right:NextRule {
+  = op:("-" / "!") right:UnaryExpression {
       return new UnaryExpression({ op, right });
     }
     / NextRule
