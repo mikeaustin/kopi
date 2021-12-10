@@ -7,14 +7,14 @@
   function visit(node) {
     return visitors[node.type](node);
   }
-  
+
   const visitors = {
     OperatorExpression({ op, left, right }) {
       if (op === "+") return visit(left) + visit(right);
       if (op === "*") return visit(left) * visit(right);
       if (op === "^") return visit(left) ** visit(right);
     },
-    
+
     NumericLiteral({ value }) {
       return value;
     }
@@ -25,7 +25,7 @@ Program
   = expr:Expression {
       return visit(expr);
     }
-  
+
 Expression
   = AddExpression
 
@@ -44,7 +44,7 @@ MultiplyExpression
     }
 
 ExponentExpression
-  = left:PrimaryExpression "^" right:Expression {
+  = left:PrimaryExpression "^" right:ExponentExpression {
       return ({ type: "OperatorExpression", op: "^", left, right });
     }
     / PrimaryExpression
@@ -62,4 +62,3 @@ NumericLiteral "integer"
 
 _ "whitespace"
   = [ \t]*
-  
