@@ -3,10 +3,10 @@
 //
 
 {
-    const operators = {
-      ['+']: (left, right) => left + right,
-      ['-']: (left, right) => left - right
-    };
+  const operators = {
+    ['+']: (left, right) => left + right,
+    ['-']: (left, right) => left - right
+  };
 }
 
 AddExpression
@@ -15,8 +15,8 @@ AddExpression
     }
 
 Integer
-  = [0-9]+ {
-    return Number(text());
+  = value:[0-9]+ {
+    return Number(value);
   }
 
 _ "whitespace"

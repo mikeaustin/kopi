@@ -5,14 +5,14 @@
 // Accepts expressions such as "2 * (3 + 4)" and computes their value.
 
 {
-  function visit(node) {
-    return visitors[node.type](node);
-  }
-
   const operators = {
     ['+']: (left, right) => visit(left) + visit(right),
     ['*']: (left, right) => visit(left) * visit(right),
     ['^']: (left, right) => visit(left) ** visit(right),
+  }
+  
+  function visit(node) {
+    return visitors[node.type](node);
   }
 
   const visitors = {

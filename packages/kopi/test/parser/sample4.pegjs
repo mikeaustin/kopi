@@ -18,22 +18,22 @@
   }
 }
 
+Expression
+  = AddExpression
+
 AddExpression
-  = left:Integer _ "+" _ right:Integer {
+  = left:NumericLiteral _ "+" _ right:NumericLiteral {
       return ({
-        type: "AddExpression",
-        left: left,
-        right: right
+        type: "AddExpression", left: left, right: right
       });
     }
 
-Integer
-  = [0-9]+ {
-    return ({
-      type: "Integer",
-      value: Number(text())
-    });
-  }
+NumericLiteral
+  = value:[0-9]+ {
+      return ({
+        type: "NumericLiteral", value: Number(value)
+      });
+    }
 
 _ "whitespace"
   = [ \t]*

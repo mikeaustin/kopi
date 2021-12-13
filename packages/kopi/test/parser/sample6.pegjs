@@ -23,6 +23,14 @@
   }
 }
 
+Program
+  = expr:Expression {
+      return visit(expr);
+    }
+
+Expression
+  = AddExpression
+
 AddExpression
   = left:NumericLiteral _ op:("+" / "-") _ right:NumericLiteral {
       return ({
