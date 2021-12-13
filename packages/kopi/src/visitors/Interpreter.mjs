@@ -94,6 +94,10 @@ class Interpreter extends Visitors {
   }
 
   TupleTypeExpression({ elements, fields }, scope, bind) {
+    if (elements.length === 0) {
+      return KopiTuple.empty;
+    }
+
     return new KopiTuple(
       elements.map((element) => this.visitNode(element, scope, bind)),
       fields,

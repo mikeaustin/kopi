@@ -14,7 +14,13 @@ TypeApplyExpression
     }
 
 TupleTypeExpression
-  = "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
+  = "()" {
+      return new TupleTypeExpression({
+        elements: [],
+        fields: [],
+      });
+    }
+  / "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
       return new TupleTypeExpression({
         elements: tail.reduce((elements, [, , , , , element]) => [
           ...elements,

@@ -10,7 +10,7 @@ class KopiTuple {
       return this;
     }
 
-    if (fieldsArray.length === 0) {
+    if (this.constructor === KopiTuple && fieldsArray.length === 0) {
       console.log('Use KopiTuple.empty instead of calling KopiTuple([]).');
 
       return KopiTuple.empty;
