@@ -1,8 +1,3 @@
-fix = f => (x => f (y => x x y)) x => f (y => x x y)
-
-f = g => x => g x
-g = f => x => f x
-
 e = (
   :f = (:m, :a) => m (f: f, a: a) * a (f: f, m: m)
   :m = (:f, :a) => f (m: m, a: a) / a (f: f, m: m)
@@ -35,3 +30,25 @@ extend Equation $ @Equation (
 )
 
 print $ Equation () | f
+
+
+fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+fix2 = (f, g) => let (
+  f2 = fix (f2 => f f2 (fix (g2 => g f2 g2)))
+  g2 = fix (g2 => g (fix (f2 => f f2 g2)) g2)
+) => f2, g2
+
+even, odd = fix2 (
+  even => odd => n => match n (
+    0 => true
+    n => odd (n - 1)
+  )
+  even => odd => n => match n (
+    0 => false
+    n => even (n - 1)
+  )
+)
+
+print $ even 5
+print $ even 6
