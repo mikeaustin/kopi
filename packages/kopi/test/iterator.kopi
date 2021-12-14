@@ -1,0 +1,39 @@
+Range = type (from: Int, to: Int)
+
+RandomIterator = type (range: Range, current: Int)
+
+extend Range (
+  iterator: (this) => () => {
+    RandomIterator (this, this.from)
+  }
+  map: (this) => (func) => {
+    loop (n = this.from, acc = []) => match () (
+      _ [n == this.to] => break acc
+      _                => (n + 1, acc ++ [func n])
+    )
+  }
+  map2: (this) => (func) => {
+    loop (iter = (this | iterator), acc = []) => match () (
+      _ [iter.current == this.to] => break acc
+      _                           => ((iter | next), acc ++ [func iter.current])
+    )
+  }
+)
+
+extend RandomIterator (
+  next: (this) => () => RandomIterator (this, 'succ this.current)
+)
+
+
+iter = Range (1, 5) | iterator
+
+print iter.current
+
+iter = iter | next
+
+print iter.current
+
+
+print $ Range (1, 5) | map (n) => n * n
+
+print $ Range (1, 5) | map2 (n) => n * n

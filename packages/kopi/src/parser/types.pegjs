@@ -26,7 +26,10 @@ TupleTypeExpression
           ...elements,
           element
         ], [head[2]]),
-        fields: [],
+        fields: tail.reduce((fields, [, , , [field], , element]) => [
+          ...fields,
+          field.name
+        ], [head[0][0].name]),
        });
     }
   / Identifier

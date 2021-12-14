@@ -114,8 +114,8 @@ class Interpreter extends Visitors {
       }
     };
 
-    const Constructor = (args) => {
-      return new _Type(args.getFieldsArray(), args.getFieldNamesArray());
+    const Constructor = (constructorArgs) => {
+      return new _Type(constructorArgs.getFieldsArray(), args.fields);
     };
     Constructor.nativeConstructor = _Type;
 
