@@ -66,11 +66,17 @@ const compile = async (filename, scope) => {
   const source = await fs.promises.readFile(filename, 'utf8');
 
   try {
+    console.log('Parsing...');
+
     const astRootNode = parser.parse(source);
 
     if (source.startsWith('# enable: typechecking')) {
+      console.log('Typechecking...');
+
       typechecker.visitNode(astRootNode, context);
     }
+
+    console.log('Interpreting...');
 
     return await interpreter.visitNode(astRootNode, scope);
   } catch (error) {

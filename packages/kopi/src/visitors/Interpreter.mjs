@@ -20,13 +20,14 @@ class Interpreter extends Visitors {
   async Block({ statements }, scope) {
     const bind = (updates) => scope = ({ ...scope, ...updates });
 
-    globalThis.methods.push(new Map());
+    const methods = globalThis.methodsStack[globalThis.methodsStack.length - 1];
+    globalThis.methodsStack.push(new Map(methods));
 
     const result = await statements.reduce(async (result, statement) => (
       await result, this.visitNode(statement, scope, bind)
     ), undefined);
 
-    globalThis.methods.pop();
+    globalThis.methodsStack.pop();
 
     return result;
   }
@@ -80,6 +81,10 @@ class Interpreter extends Visitors {
 
       bind(matches);
     } catch (error) {
+      if (!(error instanceof RuntimeError)) {
+        throw error;
+      }
+
       throw new error.constructor(
         `${error.message}\n  in assignment expression '${prettyPrinter.Assignment({ pattern, expr })}'`,
         'file',
@@ -89,6 +94,10 @@ class Interpreter extends Visitors {
   }
 
   TupleTypeExpression({ elements, fields }, scope, bind) {
+    if (elements.length === 0) {
+      return KopiTuple.empty;
+    }
+
     return new KopiTuple(
       elements.map((element) => this.visitNode(element, scope, bind)),
       fields,
@@ -105,8 +114,8 @@ class Interpreter extends Visitors {
       }
     };
 
-    const Constructor = (args) => {
-      return new _Type(args.getFieldsArray(), args.getFieldNamesArray());
+    const Constructor = (constructorArgs) => {
+      return new _Type(constructorArgs.getFieldsArray(), args.fields);
     };
     Constructor.nativeConstructor = _Type;
 
@@ -125,7 +134,7 @@ class Interpreter extends Visitors {
         ? right.expr.name
         : right.name;
 
-      const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(evaluatedExpr.constructor)?.[methodName];
+      const extensionMethod = globalThis.methodsStack[globalThis.methodsStack.length - 1].get(evaluatedExpr.constructor)?.[methodName];
       const thisArg = extensionMethod
         ? undefined
         : evaluatedExpr;
@@ -134,8 +143,10 @@ class Interpreter extends Visitors {
         : evaluatedExpr[methodName];
 
       if (!func) {
+        // console.log(globalThis.methodsStack);
+
         throw new RuntimeError(
-          `Method '${methodName}' not found in current scope`,
+          `Method '${methodName}' for type ${await evaluatedExpr.constructor.name} not found in current scope`,
           'file',
           location.start.line,
         );
@@ -143,6 +154,10 @@ class Interpreter extends Visitors {
 
       return func.apply(thisArg, [evaluatedArgs, scope, this, bind]);
     } catch (error) {
+      if (!(error instanceof RuntimeError)) {
+        throw error;
+      }
+
       throw new error.constructor(
         `${error.message}\n  in pipe expression '${prettyPrinter.PipeExpression({ left, right })}' [Line ${location.start.line}]`,
         'file',
@@ -158,6 +173,10 @@ class Interpreter extends Visitors {
 
       return evaluatedExpr.apply(undefined, [evaluatedArgs, scope, this, bind]);
     } catch (error) {
+      if (!(error instanceof RuntimeError)) {
+        throw error;
+      }
+
       throw new error.constructor(
         `${error.message}\n  in apply expression '${prettyPrinter.ApplyExpression({ expr, args })}' [Line ${location?.start?.line}]`,
         'file',
@@ -224,6 +243,10 @@ class Interpreter extends Visitors {
 
       return applyBinaryOperator(op, evaluatedLeft, evaluatedRight, scope, this);
     } catch (error) {
+      if (!(error instanceof RuntimeError)) {
+        throw error;
+      }
+
       throw new RuntimeError(
         `${error.message}\n  in operator expression '${prettyPrinter.visitNode(left)} ${op} ${prettyPrinter.visitNode(right)}'`,
         'file',

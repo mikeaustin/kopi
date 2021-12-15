@@ -40,6 +40,10 @@ class PrettyPrinter extends Visitors {
     );
   }
 
+  MemberExpression({ expr, member }) {
+    return `${this.visitNode(expr)}.${this.visitNode(member)}`;
+  }
+
   ApplyExpression({ expr, args }, level) {
     const evaluatedExpr = this.visitNode(expr, level + 1);
     const evaluatedArgs = this.visitNode(args, level + 1);
@@ -94,6 +98,10 @@ class PrettyPrinter extends Visitors {
   }
 
   //
+
+  DictExpression({ entries }) {
+    return `{ ${entries} }`;
+  }
 
   NumericLiteral({ value }, level) {
     return String(value);

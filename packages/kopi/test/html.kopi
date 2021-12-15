@@ -1,11 +1,24 @@
-html () = children => ("element", "html", {}, children)
-body (:class, :_) = children => ("element", "body", { "class": class }, children)
-ul (:id, :class, :_) = children => ("element", "ul", { "id": id, "class": class }, children)
-li (:class, :_) = children => ("element", "li", { "class": class }, children)
-button (:class, :onClick) = children => {
-  ("element", "button", { "class": class, "onClick": onClick }, children)
+html () = children => {
+  (type: "element", tag: "html", attrs: {}, children: children)
 }
-text (value) = ("text", value)
+
+body (:class, :_) = children => {
+  (type: "element", tag: "body", attrs: { "class": class }, children: children)
+}
+
+ul (:id, :class, :_) = children => {
+  (type: "element", tag: "ul", attrs: { "id": id, "class": class }, children: children)
+}
+
+li (:class, :_) = children => {
+  (type: "element", tag: "li", attrs: { "class": class }, children: children)
+}
+
+button (:class, :onClick) = children => {
+  (type: "element", tag: "button", attrs: { "class": class, "onClick": onClick }, children: children)
+}
+
+text (value) = (type: "text", value: value)
 
 indent (n) = {
   loop (n = n, str = "") => match n (
@@ -20,12 +33,12 @@ generateAttrString (name, value) = {
 
 generateHtmlString (node, level) = {
   match node (
-    "text", value => {
+    type: "text", :value => {
       indent level ++ String value ++ String.Newline
     }
-    "element", tag, props, children => {
+    type: "element", :tag, :attrs, :children => {
       inner = children | map child => generateHtmlString (child, level + 1)
-      attrs = props | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
+      attrs = attrs | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
 
       indent level "<" tag attrs ">" String.Newline ++
         inner | join "" ++
@@ -43,13 +56,12 @@ generateHtmlString (node, level) = {
 documentTree = (
   html () [
     text "Hello"
-    button (onClick: () => 5) [
-      text "Press Me"
-    ]
-    ul (id: "id", class: "class") [
-      li (class: "item") [text 1]
-      li (class: "item") [text 2]
-    ]
+    ul (id: "id", class: "class") $ 1..5 | map (n) => (
+      match ('even n) (
+        true => li (class: "even") [text n]
+        false => li (class: "odd") [text 0]
+      )
+    )
   ]
 )
 
@@ -62,4 +74,5 @@ export (
   html: html
   body: body
   text: text
+  button: button
 )

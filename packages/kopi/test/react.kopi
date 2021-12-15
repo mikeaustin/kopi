@@ -1,0 +1,27 @@
+:generateHtmlString, :html, :body, :text, :button = import "test/html.kopi"
+
+incrementCount (data) = (count: data.count + 1)
+
+App = type (count: Int)
+
+onClick = (this) => (event) => {
+  # send state $ "update", (count => count + 1)
+  incrementCount
+}
+
+extend App (
+  render: (this) => () => {
+    body () [
+      text this.count
+      button (onClick: onClick this) [text "Increment"]
+    ]
+  }
+)
+
+app = App (count: 0)
+
+data = app | render
+
+onClick = data.children.1.attrs | get "onClick"
+
+print $ onClick app (count: 0)

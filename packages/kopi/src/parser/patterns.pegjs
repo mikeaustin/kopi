@@ -42,7 +42,15 @@ Pattern
     }
 
 TuplePattern
-  = head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
+  = "("
+      tail:(_ Newline+ _ ":"? NextRule)+ Newline+ _
+    ")" {
+      return new TuplePattern({
+        fields: tail.map((field) => field[4]),
+        fieldNames: tail.map((fieldName) => fieldName[3] && fieldName[4].name)
+      });
+    }
+  / head:(":"? NextRule) tail:(_ "," _ ":"? NextRule)* {
       return tail.length === 0 && head[0] === null ? head[1] : new TuplePattern({
         fields: tail.reduce((fields, field) => [
           ...fields,

@@ -14,13 +14,22 @@ TypeApplyExpression
     }
 
 TupleTypeExpression
-  = "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
+  = "()" {
+      return new TupleTypeExpression({
+        elements: [],
+        fields: [],
+      });
+    }
+  / "(" _ head:((Identifier ":") _ Typename) tail:(_ "," _ (Identifier ":") _ Typename)* _ ")" {
       return new TupleTypeExpression({
         elements: tail.reduce((elements, [, , , , , element]) => [
           ...elements,
           element
         ], [head[2]]),
-        fields: [],
+        fields: tail.reduce((fields, [, , , [field], , element]) => [
+          ...fields,
+          field.name
+        ], [head[0][0].name]),
        });
     }
   / Identifier

@@ -33,8 +33,6 @@ String.nativeConstructor = String;
 //   }
 // }
 
-globalThis.methods = [new Map()];
-
 let getScope = (input) => ({
   ls: kopi_ls,
   // worker: (filename) => {

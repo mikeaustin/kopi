@@ -1,0 +1,54 @@
+e = (
+  :f = (:m, :a) => m (f: f, a: a) * a (f: f, m: m)
+  :m = (:f, :a) => f (m: m, a: a) / a (f: f, m: m)
+  :a = (:f, :m) => f (m: m, a: a) / m (f: f, a: a)
+) => {
+  (
+    f: f (m: m, a: a)
+    m: m (f: f, a: a)
+    a: a (f: f, m: m)
+  )
+}
+
+# print $ e (m: () => 5, a: () => 2)
+
+Equation = type ()
+
+@Equation = (
+  :f = (this) => () => (this | m) * (this | a)
+  :m = (this) => () => (this | f) / (this | a)
+  :a = (this) => () => (this | f) / (this | m)
+) => (
+  f: f
+  m: m
+  a: a
+)
+
+extend Equation $ @Equation (
+  m: (this) => () => 5
+  a: (this) => () => 2
+)
+
+print $ Equation () | f
+
+
+fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+fix2 = (f, g) => let (
+  f2 = fix (f2 => f f2 (fix (g2 => g f2 g2)))
+  g2 = fix (g2 => g (fix (f2 => f f2 g2)) g2)
+) => f2, g2
+
+even, odd = fix2 (
+  even => odd => n => match n (
+    0 => true
+    n => odd (n - 1)
+  )
+  even => odd => n => match n (
+    0 => false
+    n => even (n - 1)
+  )
+)
+
+print $ even 5
+print $ even 6

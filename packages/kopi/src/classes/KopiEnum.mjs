@@ -44,8 +44,12 @@ class KopiEnum extends KopiTuple {
     return new KopiArray();
   }
 
-  lowerBound() {
-    return new (EnumField(0, this));
+  first() {
+    return this[0];
+  }
+
+  last() {
+    return this[this._fieldsArray.length - 1];
   }
 
   *[Symbol.iterator]() {

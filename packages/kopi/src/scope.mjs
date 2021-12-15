@@ -51,10 +51,10 @@ const KopiIterableMixin = new KopiTuple([
 Number.nativeConstructor = Number;
 String.nativeConstructor = String;
 
-globalThis.methods = [new Map()];
+globalThis.methodsStack = [new Map()];
 
 let getScope = (input) => ({
-  methods: () => globalThis.methods[globalThis.methods.length - 1],
+  methods: () => globalThis.methodsStack[globalThis.methodsStack.length - 1],
   union: (args) => args,
   test: (func, scope, visitors) => func.apply(undefined, [5, scope, visitors]),
   gc: () => {

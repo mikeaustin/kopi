@@ -1,0 +1,57 @@
+indent (n) = {
+  loop (n = n, str = "") => match n (
+    0 => break str
+    _ => (n - 1, str "  ")
+  )
+}
+
+generateAttrString (name, value) = {
+  " " name "='" value "'"
+}
+
+
+Element = type (tag: String, attrs: Dict, children: Array)
+
+Html = type (element: Element)
+Text = type (value: String)
+
+html () = children => Html (element: Element (tag: "html", attrs: {}, children: children))
+text (value) = Text (value: value)
+
+
+@Element = (:element) => (
+  render: (this) => (level) => {
+    (:tag, :attrs, :children) = element this ()
+
+    inner = children | map (child) => (child | render (level + 1))
+    attrs = attrs | reduce "" $ accum, (key, value) => accum ++ generateAttrString (key, value)
+
+    indent level "<" tag attrs ">" String.Newline ++
+      inner | join "" ++
+    indent level "</" tag ">" String.Newline
+  }
+)
+
+extend Text (
+  render: (:value) => (level) => {
+    indent level ++ String value ++ String.Newline
+  }
+)
+
+
+# extend Html (
+#   element: (this) => () => this.element
+# )
+
+extend Html $ @Element (
+  element: (this) => () => this.element
+)
+
+
+documentTree = (
+  html () [
+    text "Hello"
+  ]
+)
+
+print $ documentTree | render (0)

@@ -16,7 +16,7 @@ async function applyBinaryOperator(op, left, right, scope, visitors) {
     }
   }
 
-  const extensionMethod = globalThis.methods[globalThis.methods.length - 1].get(left.constructor)?.[op];
+  const extensionMethod = globalThis.methodsStack[globalThis.methodsStack.length - 1].get(left.constructor)?.[op];
 
   if (extensionMethod) {
     const func = await extensionMethod.apply(undefined, [left, scope, visitors]);
