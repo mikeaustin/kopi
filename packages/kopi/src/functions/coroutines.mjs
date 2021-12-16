@@ -1,6 +1,7 @@
 import _events from 'events';
 
 import { KopiTuple } from '../classes.mjs';
+import KopiSequence from '../classes/KopiSequence.mjs';
 
 const { EventEmitter } = _events;
 
@@ -96,12 +97,6 @@ class Timer {
 
     inner(1000);
 
-    // setInterval(() => {
-    //   deferred.resolve(Date.now());
-
-    //   deferred = new Deferred();
-    // }, 1000);
-
     for (; ;) {
       yield deferred;
     }
@@ -111,6 +106,18 @@ class Timer {
     for await (const value of this) {
       func.apply(undefined, [value, scope, visitors]);
     }
+  }
+
+  async take(count) {
+    return new KopiSequence((async function* take() {
+      for await (const value of this) {
+        if (count-- === 0) {
+          return value;
+        }
+
+        yield value;
+      }
+    }).apply(this));
   }
 }
 
