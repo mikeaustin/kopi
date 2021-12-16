@@ -106,6 +106,7 @@ let getScope = (input) => ({
   spawn: core.kopi_spawn,
   yield: core.kopi_yield,
   send: core.kopi_send,
+  Timer: core.kopi_timer,
   Vector,
   Number,
   String: KopiStringConstructor,

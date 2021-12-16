@@ -39,7 +39,7 @@ const timer = async function* () {
   }, 1000);
 
   for (; ;) {
-    yield await deferred;
+    yield deferred;
   }
 };
 
@@ -72,16 +72,16 @@ const toArray = async (iterable) => {
 };
 
 const main = async () => {
-  console.log(
-    await toArray(
-      map((x) => x * x)(
-        filter((x) => x % 2 === 0)(
-          // range(1, 10),
-          timer(),
-        ),
-      ),
+  const stream = map((x) => x / 1000)(
+    filter((x) => x % 2 === 0)(
+      // range(1, 10),
+      timer(),
     ),
   );
+
+  for await (const value of stream) {
+    console.log('-----', value);
+  }
 };
 
 main();

@@ -80,6 +80,46 @@ const kopi_send = (coroutineId) => async (data) => {
   }));
 };
 
+class Timer {
+  async *[Symbol.asyncIterator]() {
+    let deferred = new Deferred();
+
+    const inner = (ms) => {
+      setTimeout(() => {
+        deferred.resolve(Date.now());
+
+        deferred = new Deferred();
+
+        inner(ms);
+      }, ms - new Date().getMilliseconds());
+    };
+
+    inner(1000);
+
+    // setInterval(() => {
+    //   deferred.resolve(Date.now());
+
+    //   deferred = new Deferred();
+    // }, 1000);
+
+    for (; ;) {
+      yield deferred;
+    }
+  }
+
+  async each(func, scope, visitors) {
+    for await (const value of this) {
+      func.apply(undefined, [value, scope, visitors]);
+    }
+  }
+}
+
+const kopi_timer = function () {
+  return new Timer();
+};
+
+kopi_timer.nativeConstructor = Timer;
+
 const kopi_tasks = () => {
   console.log('Id\tStarted');
   coroutinesList.forEach((coroutine) => {
@@ -91,5 +131,6 @@ export {
   kopi_spawn,
   kopi_yield,
   kopi_send,
+  kopi_timer,
   kopi_tasks,
 };
