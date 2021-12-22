@@ -61,26 +61,18 @@ const map = (func) => async function* (iterable) {
   }
 };
 
-const toArray = async (iterable) => {
-  const array = [];
-
-  for await (const value of iterable) {
-    array.push(value);
-  }
-
-  return array;
-};
-
 const main = async () => {
-  const stream = map((x) => x / 1000)(
-    filter((x) => x % 2 === 0)(
-      // range(1, 10),
-      timer(),
-    ),
+  const stream = (
+    map((x) => x / 1000)(
+      filter((x) => x % 2 === 0)(
+        // range(1, 10),
+        timer(),
+      ),
+    )
   );
 
   for await (const value of stream) {
-    console.log('-----', value);
+    console.log('=', value);
   }
 };
 
