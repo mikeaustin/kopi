@@ -114,6 +114,7 @@ const kopi_extend = (constructor) => async (methodsTuple, scope, visitors, bind)
 const kopi_spawn = coroutines.kopi_spawn;
 const kopi_yield = coroutines.kopi_yield;
 const kopi_send = coroutines.kopi_send;
+const kopi_timer = coroutines.kopi_timer;
 const kopi_tasks = coroutines.kopi_tasks;
 
 export {
@@ -135,4 +136,5 @@ export {
   kopi_spawn,
   kopi_yield,
   kopi_send,
+  kopi_timer,
 };

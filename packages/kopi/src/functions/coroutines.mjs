@@ -1,6 +1,7 @@
 import _events from 'events';
 
 import { KopiTuple } from '../classes.mjs';
+import KopiSequence from '../classes/KopiSequence.mjs';
 
 const { EventEmitter } = _events;
 
@@ -80,6 +81,52 @@ const kopi_send = (coroutineId) => async (data) => {
   }));
 };
 
+class Timer {
+  async *[Symbol.asyncIterator]() {
+    let deferred = new Deferred();
+
+    const inner = (ms) => {
+      setTimeout(() => {
+        deferred.resolve(Date.now());
+
+        deferred = new Deferred();
+
+        inner(ms);
+      }, ms - new Date().getMilliseconds());
+    };
+
+    inner(1000);
+
+    for (; ;) {
+      yield deferred;
+    }
+  }
+
+  async each(func, scope, visitors) {
+    for await (const value of this) {
+      func.apply(undefined, [value, scope, visitors]);
+    }
+  }
+
+  async take(count) {
+    return new KopiSequence((async function* take() {
+      for await (const value of this) {
+        if (count-- === 0) {
+          return value;
+        }
+
+        yield value;
+      }
+    }).apply(this));
+  }
+}
+
+const kopi_timer = function () {
+  return new Timer();
+};
+
+kopi_timer.nativeConstructor = Timer;
+
 const kopi_tasks = () => {
   console.log('Id\tStarted');
   coroutinesList.forEach((coroutine) => {
@@ -91,5 +138,6 @@ export {
   kopi_spawn,
   kopi_yield,
   kopi_send,
+  kopi_timer,
   kopi_tasks,
 };
