@@ -4,7 +4,7 @@
 //
 
 AddExpression
-  = left:NumericLiteral _ "+" _ right:NumericLiteral {
+  = left:NumericLiteral "+" right:NumericLiteral {
       return left + right;
     }
 
@@ -12,6 +12,3 @@ NumericLiteral
   = value:[0-9]+ {
       return Number(value);
     }
-
-_ "whitespace"
-  = [ \t]*

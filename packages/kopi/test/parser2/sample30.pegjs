@@ -1,11 +1,16 @@
 //
-// These rules allow us to parse 1 + 2 with or without spaces
+// These rules allow us to parse 2 + 3 with or without spaces
+// The end result is the sum of the two numbers
 //
 
+Program
+  = expr:AddExpression {
+      return expr;
+    }
+
 AddExpression
-  = left:NumericLiteral _ op:("+" / "-") _ right:NumericLiteral {
-      if (op === '+') return left + right;
-      if (op === '-') return left - right;
+  = left:NumericLiteral _ "+" _ right:NumericLiteral {
+      return left + right;
     }
 
 NumericLiteral

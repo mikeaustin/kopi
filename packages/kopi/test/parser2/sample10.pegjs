@@ -1,13 +1,9 @@
 //
-// These rules allow us to parse 1+2 with no spaces between
+// These rules allow us to parse a number, such as "5"
+// The end result is the sum of the two numbers
 //
-
-AddExpression
-  = left:NumericLiteral "+" right:NumericLiteral {
-      return left + right;
-    }
 
 NumericLiteral
   = value:[0-9]+ {
-    return Number(value);
-  }
+      return Number(value);
+    }
