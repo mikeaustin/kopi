@@ -4,22 +4,24 @@
 //
 
 {
-  const environment = {
-    x: 5
-  };
+  class Function {
+    constructor(param, body, closure) {
+      this.param = param;
+      this.body = body;
+      this.closure = closure;
+    }
 
-  function Function(param, body, closure) {
-    this.param = param;
-    this.body = body;
-    this.closure = closure;
-
-    this.apply = (thisArg, [arg, _]) => {
+    apply(thisArg, [arg, _]) {
       return visit(this.body, {
         ...this.closure,
         [this.param.name]: arg
       })
     }
   }
+
+  const environment = {
+    x: 5
+  };
 
   const operators = {
     ['+']: (left, right) => left + right,
