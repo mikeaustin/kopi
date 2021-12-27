@@ -4,6 +4,7 @@
 // Parses syntax into an AST, then interprets the AST directly.
 // Accepts expressions such as "2 * (3 + 4)" and computes their value.
 //
+// (x => x * x) 5
 // (f => f 5) (x => x * x)
 
 {
