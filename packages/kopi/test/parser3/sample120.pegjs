@@ -5,23 +5,19 @@
 
 {
   class Function {
-    constructor(param, body, closure) {
-      this.param = param;
-      this.body = body;
-      this.closure = closure;
+    constructor(parameter, expression, environment) {
+      this.parameter = parameter;
+      this.expression = expression;
+      this.environment = environment;
     }
 
-    apply(thisArg, [arg, _]) {
-      return visit(this.body, {
-        ...this.closure,
-        [this.param.name]: arg
+    apply(thisArg, [argument, _]) {
+      return visit(this.expression, {
+        ...this.environment,
+        [this.parameter.name]: argument
       })
     }
   }
-
-  const environment = {
-    x: 5
-  };
 
   const operators = {
     ['+']: (left, right) => left + right,
@@ -31,22 +27,22 @@
   }
 
   const visitors = {
-    OperatorExpression: ({ op, left, right }, environment) => {
+    OperatorExpression: ({ operator, left, right }, environment) => {
       const evaluatedLeft = visit(left, environment);
       const evaluatedRight = visit(right, environment);
 
-      return operators[op](evaluatedLeft, evaluatedRight, environment);
+      return operators[operator](evaluatedLeft, evaluatedRight, environment);
     },
 
-    ApplyExpression({ expr, arg }, environment) {
-      const evaluatedExpr = visit(expr, environment);
-      const evaluatedArgs = visit(arg, environment);
+    ApplyExpression({ expression, argument }, environment) {
+      const evaluatedExpr = visit(expression, environment);
+      const evaluatedArgs = visit(argument, environment);
 
       return evaluatedExpr.apply(undefined, [evaluatedArgs, environment]);
     },
 
-    FunctionExpression({ param, body }, environment) {
-      return new Function(param, body, environment);
+    FunctionExpression({ parameter, expression }, environment) {
+      return new Function(parameter, expression, environment);
     },
 
     NumericLiteral: ({ value }, _) => {
@@ -64,15 +60,17 @@
 }
 
 Program
-  = expr:AddExpression {
-      return visit(expr);
+  = expression:AddExpression {
+      const environment = {};
+
+      return visit(expression, environment);
     }
 
 AddExpression
-  = left:MultiplyExpression _ op:("+" / "-") _ right:MultiplyExpression {
+  = left:MultiplyExpression _ operator:("+" / "-") _ right:MultiplyExpression {
       return ({
         type: "OperatorExpression",
-        op: op,
+        operator: operator,
         left: left,
         right: right
       });
@@ -80,10 +78,10 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = left:ApplyExpression _ op:("*" / "/") _ right:ApplyExpression {
+  = left:ApplyExpression _ operator:("*" / "/") _ right:ApplyExpression {
       return ({
         type: "OperatorExpression",
-        op: op,
+        operator: operator,
         left: left,
         right: right
       });
@@ -91,28 +89,28 @@ MultiplyExpression
   / ApplyExpression
 
 ApplyExpression
-  = expr:PrimaryExpression args:(_ PrimaryExpression)* {
-      return args.reduce((expr, [, arg]) => ({
+  = expression:PrimaryExpression args:(_ PrimaryExpression)* {
+      return args.reduce((expression, [, argument]) => ({
         type: "ApplyExpression",
-        expr,
-        arg
-      }), expr);
+        expression,
+        argument
+      }), expression);
     }
 
 PrimaryExpression
-  = "(" expr:AddExpression ")" {
-    return expr;
+  = "(" expression:AddExpression ")" {
+    return expression;
   }
   / FunctionExpression
   / NumericLiteral
   / Identifier
 
 FunctionExpression
-  = param:Identifier _ "=>" _ body:AddExpression {
+  = parameter:Identifier _ "=>" _ expression:AddExpression {
       return ({
         type: "FunctionExpression",
-        param,
-        body
+        parameter,
+        expression
       });
     }
 
