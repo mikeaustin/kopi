@@ -19,26 +19,26 @@
     }
   }
 
-  const operators = {
-    ['+']: (left, right) => left + right,
-    ['-']: (left, right) => left - right,
-    ['*']: (left, right) => left * right,
-    ['/']: (left, right) => left / right,
+  const operatorFunctions = {
+    ['+']: (leftValue, rightValue) => leftValue + rightValue,
+    ['-']: (leftValue, rightValue) => leftValue - rightValue,
+    ['*']: (leftValue, rightValue) => leftValue * rightValue,
+    ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
   const visitors = {
-    OperatorExpression: ({ operator, left, right }, environment) => {
-      const evaluatedLeft = visit(left, environment);
-      const evaluatedRight = visit(right, environment);
+    OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
+      const leftValue = visit(leftExpression, environment);
+      const rightValue = visit(rightExpression, environment);
 
-      return operators[operator](evaluatedLeft, evaluatedRight, environment);
+      return operatorFunctions[operator](leftValue, rightValue, environment);
     },
 
     ApplyExpression({ expression, argument }, environment) {
-      const evaluatedExpr = visit(expression, environment);
-      const evaluatedArgs = visit(argument, environment);
+      const expressionValue = visit(expression, environment);
+      const argumentValue = visit(argument, environment);
 
-      return evaluatedExpr.apply(undefined, [evaluatedArgs, environment]);
+      return expressionValue.apply(undefined, [argumentValue, environment]);
     },
 
     FunctionExpression({ parameter, expression }, environment) {
@@ -67,23 +67,23 @@ Program
     }
 
 AddExpression
-  = left:MultiplyExpression _ operator:("+" / "-") _ right:MultiplyExpression {
+  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
       return ({
         type: "OperatorExpression",
         operator: operator,
-        left: left,
-        right: right
+        leftExpression: leftExpression,
+        rightExpression: rightExpression
       });
     }
   / MultiplyExpression
 
 MultiplyExpression
-  = left:ApplyExpression _ operator:("*" / "/") _ right:ApplyExpression {
+  = leftExpression:ApplyExpression _ operator:("*" / "/") _ rightExpression:ApplyExpression {
       return ({
         type: "OperatorExpression",
         operator: operator,
-        left: left,
-        right: right
+        leftExpression: leftExpression,
+        rightExpression: rightExpression
       });
     }
   / ApplyExpression
