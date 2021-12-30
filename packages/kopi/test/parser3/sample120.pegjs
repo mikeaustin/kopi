@@ -12,7 +12,7 @@
     }
 
     apply(thisArg, [argument, _]) {
-      return visit(this.expression, {
+      return evaluate(this.expression, {
         ...this.environment,
         [this.parameter.name]: argument
       })
@@ -26,17 +26,17 @@
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const visitors = {
+  const interpreterVisitors = {
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
-      const leftValue = visit(leftExpression, environment);
-      const rightValue = visit(rightExpression, environment);
+      const leftValue = evaluate(leftExpression, environment);
+      const rightValue = evaluate(rightExpression, environment);
 
       return operatorFunctions[operator](leftValue, rightValue, environment);
     },
 
     ApplyExpression({ expression, argument }, environment) {
-      const expressionValue = visit(expression, environment);
-      const argumentValue = visit(argument, environment);
+      const expressionValue = evaluate(expression, environment);
+      const argumentValue = evaluate(argument, environment);
 
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
@@ -54,8 +54,8 @@
     }
   }
 
-  function visit(node, environment) {
-    return visitors[node.type](node, environment);
+  function evaluate(astNode, environment) {
+    return interpreterVisitors[astNode.type](astNode, environment);
   }
 }
 
@@ -63,7 +63,7 @@ Program
   = expression:AddExpression {
       const environment = {};
 
-      return visit(expression, environment);
+      return evaluate(expression, environment);
     }
 
 AddExpression
