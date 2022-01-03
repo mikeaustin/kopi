@@ -1,0 +1,9 @@
+11a12,15
+> 
+>   function visit(node) {
+>     return visitors[node.type](node);
+>   }
+16c20
+<       return visitors["NumericLiteral"](expr);
+---
+>       return visit(expr);

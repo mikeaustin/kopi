@@ -1,0 +1,19 @@
+7a8,11
+>     AddExpression: ({ left, right }) => {
+>       return visit(left) + visit(right);
+>     },
+> 
+19c23
+<   = expr:NumericLiteral {
+---
+>   = expr:AddExpression {
+22a27,35
+> AddExpression
+>   = left:NumericLiteral "+" right:NumericLiteral {
+>       return ({
+>         type: "AddExpression",
+>         left: left,
+>         right: right
+>       });
+>     }
+> 
