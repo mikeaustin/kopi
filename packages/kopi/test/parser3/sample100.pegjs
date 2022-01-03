@@ -4,10 +4,6 @@
 //
 
 {
-  const environment = {
-    x: 5
-  };
-
   const operators = {
     ['+']: (left, right) => left + right,
     ['-']: (left, right) => left - right,
@@ -34,7 +30,9 @@
   }
 
   function visit(node) {
-    return visitors[node.type](node);
+    const environment = {};
+
+    return visitors[node.type](node, environment);
   }
 }
 

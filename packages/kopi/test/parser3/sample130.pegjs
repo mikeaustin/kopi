@@ -27,6 +27,10 @@
   }
 
   const interpreterVisitors = {
+    Assignment: ({ variable, expression }) => {
+      alert('here')
+    },
+
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
@@ -60,11 +64,24 @@
 }
 
 Program
-  = expression:AddExpression {
+  = expression:Statement {
       const environment = {};
 
       return evaluate(expression, environment);
     }
+
+Statement
+  = Assignment
+  / AddExpression
+
+Assignment
+  = identifier:Identifier _ "=" _ expression:AddExpression {
+    return ({
+      type: "Assignment",
+      variable: identifier.name,
+      expression: expression
+    });
+  }
 
 AddExpression
   = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
