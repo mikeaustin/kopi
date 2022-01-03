@@ -4,10 +4,6 @@
 //
 
 {
-  const environment = {
-    x: 5
-  };
-
   function Function(param, body, closure) {
     this.param = param;
     this.body = body;
@@ -50,6 +46,8 @@
   }
 
   function visit(node) {
+    const environment = {};
+
     return visitors[node.type](node);
   }
 }

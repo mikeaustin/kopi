@@ -1,0 +1,30 @@
+12c12
+<   }
+---
+>   };
+18a19,22
+>     FunctionExpression({ param, body }, environment) {
+>       return new Function(param, body, environment);
+>     },
+> 
+20a25,28
+>     },
+> 
+>     Identifier: ({ name }, env) => {
+>       return environment[name];
+25c33,35
+<     return visitors[node.type](node);
+---
+>     const environment = {};
+> 
+>     return visitors[node.type](node, environment);
+60a71
+>   / Identifier
+69a81,87
+> Identifier "identifier"
+>   = [a-z]+ {
+>       return ({
+>         type: "Identifier", name: text()
+>       })
+>     }
+> 

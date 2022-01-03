@@ -1,0 +1,21 @@
+6a7,11
+>   const operators = {
+>     ['+']: (left, right) => left + right,
+>     ['-']: (left, right) => left - right,
+>   }
+> 
+8,9c13,14
+<     AddExpression: ({ left, right }) => {
+<       return visit(left) + visit(right);
+---
+>     OperatorExpression: ({ op, left, right }) => {
+>       return operators[op](visit(left), visit(right));
+28c33
+<   = left:NumericLiteral _ "+" _ right:NumericLiteral {
+---
+>   = left:NumericLiteral _ op:("+" / "-") _ right:NumericLiteral {
+30c35,36
+<         type: "AddExpression",
+---
+>         type: "OperatorExpression",
+>         op: op,
