@@ -28,7 +28,11 @@
 
   const interpreterVisitors = {
     Assignment: ({ variable, expression }) => {
-      alert('here')
+      return {
+        type: 'Assignment',
+        variable: variable,
+        expression: expression
+      }
     },
 
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
