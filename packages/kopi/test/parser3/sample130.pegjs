@@ -58,8 +58,8 @@
     }
   }
 
-  function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+  function evaluate(node, environment) {
+    return interpreterVisitors[node.type](node, environment);
   }
 }
 
@@ -72,43 +72,50 @@ Program
 
 Statement
   = Assignment
-  / AddExpression
+  / Expression
 
 Assignment
   = identifier:Identifier _ "=" _ expression:AddExpression {
-    return ({
-      type: "Assignment",
+    return {
+      type: 'Assignment',
       variable: identifier.name,
       expression: expression
-    });
+    };
   }
 
+Expression
+  = AddExpression
+
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
-      return ({
-        type: "OperatorExpression",
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
+      return {
+        type: 'OperatorExpression',
         operator: operator,
         leftExpression: leftExpression,
         rightExpression: rightExpression
-      });
+      };
     }
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
-      return ({
-        type: "OperatorExpression",
+  = leftExpression:FunctionApplicationExpression _
+    operator:("*" / "/") _
+    rightExpression:FunctionApplicationExpression {
+      return {
+        type: 'OperatorExpression',
         operator: operator,
         leftExpression: leftExpression,
         rightExpression: rightExpression
-      });
+      };
     }
   / FunctionApplicationExpression
 
 FunctionApplicationExpression
   = expression:PrimaryExpression args:(_ PrimaryExpression)* {
       return args.reduce((expression, [, argument]) => ({
-        type: "FunctionApplicationExpression",
+        type: 'FunctionApplicationExpression',
         expression,
         argument
       }), expression);
@@ -124,27 +131,27 @@ PrimaryExpression
 
 FunctionExpression
   = parameter:Identifier _ "=>" _ expression:AddExpression {
-      return ({
-        type: "FunctionExpression",
+      return {
+        type: 'FunctionExpression',
         parameter,
         expression
-      });
+      };
     }
 
 NumericLiteral
   = value:[0-9]+ {
-      return ({
-        type: "NumericLiteral",
-        value: Number(value)
-      });
+      return {
+        type: 'NumericLiteral',
+        value: Number(value.join(''))
+      };
     }
 
 Identifier "identifier"
   = [a-z]+ {
-      return ({
-        type: "Identifier",
+      return {
+        type: 'Identifier',
         name: text()
-      })
+      };
     }
 
 _ "whitespace"

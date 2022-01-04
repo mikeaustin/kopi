@@ -3,21 +3,9 @@
 // The end result is the value of the parsed number
 //
 
-{
-  const interpreterVisitors = {
-    NumericLiteral: ({ value }) => {
-      return value;
-    }
-  }
-
-  function evaluate(node) {
-    return interpreterVisitors[node.type](node);
-  }
-}
-
 Program
   = expression:Expression {
-      return evaluate(expression);
+      return expression;
     }
 
 Expression

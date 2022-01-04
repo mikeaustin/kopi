@@ -5,5 +5,5 @@
 
 NumericLiteral
   = value:[0-9]+ {
-      return Number(value);
+      return Number(value.join(''));
     }
