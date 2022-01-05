@@ -1,7 +1,9 @@
 //
 // Parses syntax into an AST, then interprets it directly.
-// Accepts expressions such as "(x => 2 * x) (3 + 4)".
-//
+// Accepts multi-line expressions such as:
+//   a = 1
+//   f = b => a + b
+//   f 5
 
 {
   class Function {
