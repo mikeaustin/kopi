@@ -4,6 +4,7 @@
 //   a = 1
 //   f = b => a + b
 //   f 5
+//
 
 {
   class Function {
