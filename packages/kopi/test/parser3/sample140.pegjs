@@ -2,7 +2,7 @@
 // Parses syntax into an AST, then interprets it directly.
 // Accepts multi-line expressions such as:
 //   a = 1
-//   f = b => a + b
+//   f = b => (a + b) * 2
 //   f 5
 //
 
