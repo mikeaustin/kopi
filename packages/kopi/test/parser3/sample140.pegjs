@@ -11,10 +11,10 @@
       this.environment = environment;
     }
 
-    apply(thisArg, [argument, _]) {
+    apply(thisArg, [argumentValue]) {
       return evaluate(this.expression, {
         ...this.environment,
-        [this.parameter.name]: argument
+        [this.parameter.name]: argumentValue
       })
     }
   }
@@ -23,16 +23,22 @@
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
-    ['/']: (leftValue, rightValue) => leftValue / rightValue,
+    ['/']: (leftValue, rightValue) => leftValue / rightValue
   }
 
   const interpreterVisitors = {
     Block: ({ statements }, environment) => {
-      // const bind = (bindings) => environment = ({ ...environment, ...bindings });
+      const bindVariables = (bindings) => environment = ({ ...environment, ...bindings });
 
       return statements.reduce((_, expression) => (
-        evaluate(expression, environment)
+        evaluate(expression, environment, bindVariables)
       ), undefined);
+    },
+
+    Assignment: ({ variable, expression }, environment, bindVariables) => {
+      bindVariables({
+        [variable]: evaluate(expression, environment, bindVariables)
+      });
     },
 
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
@@ -53,7 +59,7 @@
       return new Function(parameter, expression, environment);
     },
 
-    NumericLiteral: ({ value }, _) => {
+    NumericLiteral: ({ value }) => {
       return value;
     },
 
@@ -62,8 +68,8 @@
     }
   }
 
-  function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+  function evaluate(node, environment, bindVariables) {
+    return interpreterVisitors[node.type](node, environment, bindVariables);
   }
 }
 
@@ -75,7 +81,7 @@ Program
     }
 
 Block
-  = Newline* head:Expression? tail:(Newline+ Expression)* Newline* {
+  = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
       return {
         type: 'Block',
         statements: tail.reduce((statements, [, statement]) => (
@@ -83,6 +89,19 @@ Block
         ), [head])
       };
     }
+
+Statement
+  = Assignment
+  / Expression
+
+Assignment
+  = identifier:Identifier _ "=" _ expression:Expression {
+    return {
+      type: 'Assignment',
+      variable: identifier.name,
+      expression: expression
+    };
+  }
 
 Expression
   = AddExpression
@@ -120,8 +139,8 @@ FunctionApplicationExpression
 
 PrimaryExpression
   = "(" expression:AddExpression ")" {
-    return expression;
-  }
+      return expression;
+    }
   / FunctionExpression
   / NumericLiteral
   / Identifier
