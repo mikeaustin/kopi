@@ -27,10 +27,12 @@
   }
 
   const interpreterVisitors = {
-    Block: ({ statements }, environment) => {
-      return statements.reduce((_, expression) => (
-        evaluate(expression, environment)
-      ), undefined);
+    Assignment: ({ variable, expression }) => {
+      return {
+        type: 'Assignment',
+        variable: variable,
+        expression: expression
+      }
     },
 
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
@@ -60,35 +62,38 @@
     }
   }
 
-  function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+  function evaluate(node, environment) {
+    return interpreterVisitors[node.type](node, environment);
   }
 }
 
 Program
-  = block:Block {
+  = expression:Statement {
       const environment = {};
 
-      return evaluate(block, environment);
+      return evaluate(expression, environment);
     }
 
-Block
-  = Newline* head:Expression? tail:(Newline+ Expression)* Newline* {
-      // const bind = (bindings) => environment = ({ ...environment, ...bindings });
+Statement
+  = Assignment
+  / Expression
 
-      return {
-        type: 'Block',
-        statements: tail.reduce((statements, [, statement]) => (
-          [...statements, statement]
-        ), [head])
-      };
-    }
+Assignment
+  = identifier:Identifier _ "=" _ expression:AddExpression {
+    return {
+      type: 'Assignment',
+      variable: identifier.name,
+      expression: expression
+    };
+  }
 
 Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -99,7 +104,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
+  = leftExpression:FunctionApplicationExpression _
+    operator:("*" / "/") _
+    rightExpression:FunctionApplicationExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -148,11 +155,8 @@ Identifier "identifier"
       return {
         type: 'Identifier',
         name: text()
-      }
+      };
     }
 
 _ "whitespace"
   = [ \t]*
-
-Newline
-  = [\r?\n]
