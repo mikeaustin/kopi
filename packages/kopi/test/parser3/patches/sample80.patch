@@ -1,0 +1,20 @@
+9a10,11
+>     ['*']: (left, right) => left * right,
+>     ['/']: (left, right) => left / right,
+33c35
+<   = left:NumericLiteral _ op:("+" / "-") _ right:NumericLiteral {
+---
+>   = left:MultiplyExpression _ op:("+" / "-") _ right:MultiplyExpression {
+40a43,54
+>   / MultiplyExpression
+> 
+> MultiplyExpression
+>   = left:NumericLiteral _ op:("*" / "/") _ right:NumericLiteral {
+>       return ({
+>         type: "OperatorExpression",
+>         op: op,
+>         left: left,
+>         right: right
+>       });
+>     }
+>   / NumericLiteral

@@ -1,0 +1,8 @@
+28c28
+<   = left:NumericLiteral "+" right:NumericLiteral {
+---
+>   = left:NumericLiteral _ "+" _ right:NumericLiteral {
+42a43,45
+> 
+> _ "whitespace"
+>   = [ \t]*

@@ -4,16 +4,19 @@
 //
 
 {
-  const operators = {
-    ['+']: (left, right) => left + right,
-    ['-']: (left, right) => left - right,
-    ['*']: (left, right) => left * right,
-    ['/']: (left, right) => left / right,
+  const operatorFunctions = {
+    ['+']: (leftValue, rightValue) => leftValue + rightValue,
+    ['-']: (leftValue, rightValue) => leftValue - rightValue,
+    ['*']: (leftValue, rightValue) => leftValue * rightValue,
+    ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const visitors = {
-    OperatorExpression: ({ op, left, right }) => {
-      return operators[op](visit(left), visit(right));
+  const interpreterVisitors = {
+    OperatorExpression: ({ operator, leftExpression, rightExpression }) => {
+      const leftValue = evaluate(leftExpression, environment);
+      const rightValue = evaluate(rightExpression, environment);
+
+      return operatorFunctions[operator](leftValue, rightValue, environment);
     },
 
     NumericLiteral: ({ value }) => {
@@ -21,50 +24,53 @@
     }
   }
 
-  function visit(node) {
-    return visitors[node.type](node);
+  function evaluate(node) {
+    return interpreterVisitors[node.type](node);
   }
 }
 
 Program
-  = expr:AddExpression {
-      return visit(expr);
+  = expression:Expression {
+      return evaluate(expression);
     }
 
+Expression
+  = AddExpression
+
 AddExpression
-  = left:MultiplyExpression _ op:("+" / "-") _ right:MultiplyExpression {
-      return ({
-        type: "OperatorExpression",
-        op: op,
-        left: left,
-        right: right
-      });
+  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+      return {
+        type: 'OperatorExpression',
+        operator: operator,
+        leftExpression: leftExpression,
+        rightExpression: rightExpression
+      };
     }
   / MultiplyExpression
 
 MultiplyExpression
-  = left:PrimaryExpression _ op:("*" / "/") _ right:PrimaryExpression {
-      return ({
-        type: "OperatorExpression",
-        op: op,
-        left: left,
-        right: right
-      });
+  = leftExpression:PrimaryExpression _ operator:("*" / "/") _ rightExpression:PrimaryExpression {
+      return {
+        type: 'OperatorExpression',
+        operator: operator,
+        leftExpression: leftExpression,
+        rightExpression: rightExpression
+      };
     }
   / PrimaryExpression
 
 PrimaryExpression
-  = "(" expr:AddExpression ")" {
-    return expr;
+  = "(" expression:AddExpression ")" {
+    return expression;
   }
   / NumericLiteral
 
 NumericLiteral
   = value:[0-9]+ {
-      return ({
-        type: "NumericLiteral",
-        value: Number(value)
-      });
+      return {
+        type: 'NumericLiteral',
+        value: Number(value.join(''))
+      };
     }
 
 _ "whitespace"

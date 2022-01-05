@@ -1,0 +1,6 @@
+5a6,10
+> Program
+>   = expr:NumericLiteral {
+>       return expr;
+>     }
+> 

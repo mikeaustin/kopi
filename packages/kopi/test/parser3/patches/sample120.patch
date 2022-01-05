@@ -1,0 +1,143 @@
+3c3
+< // Accepts expressions such as "(x => 2 * x)".
+---
+> // Accepts expressions such as "(x => 2 * x) (3 + 4)".
+7,15c7,17
+<   function Function(param, body, closure) {
+<     this.param = param;
+<     this.body = body;
+<     this.closure = closure;
+< 
+<     this.apply = (thisArg, [arg, environment]) => {
+<       return visit(this.body, {
+<         ...this.closure,
+<         [this.param.name]: arg
+---
+>   class Function {
+>     constructor(parameter, expression, environment) {
+>       this.parameter = parameter;
+>       this.expression = expression;
+>       this.environment = environment;
+>     }
+> 
+>     apply(thisArg, [argument, _]) {
+>       return evaluate(this.expression, {
+>         ...this.environment,
+>         [this.parameter.name]: argument
+20,24c22,26
+<   const operators = {
+<     ['+']: (left, right) => left + right,
+<     ['-']: (left, right) => left - right,
+<     ['*']: (left, right) => left * right,
+<     ['/']: (left, right) => left / right,
+---
+>   const operatorFunctions = {
+>     ['+']: (leftValue, rightValue) => leftValue + rightValue,
+>     ['-']: (leftValue, rightValue) => leftValue - rightValue,
+>     ['*']: (leftValue, rightValue) => leftValue * rightValue,
+>     ['/']: (leftValue, rightValue) => leftValue / rightValue,
+27,30c29,39
+<   const visitors = {
+<     OperatorExpression: ({ op, left, right }, environment) => {
+<       const evaluatedLeft = visit(left, environment);
+<       const evaluatedRight = visit(right, environment);
+---
+>   const interpreterVisitors = {
+>     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
+>       const leftValue = evaluate(leftExpression, environment);
+>       const rightValue = evaluate(rightExpression, environment);
+> 
+>       return operatorFunctions[operator](leftValue, rightValue, environment);
+>     },
+> 
+>     FunctionApplicationExpression({ expression, argument }, environment) {
+>       const expressionValue = evaluate(expression, environment);
+>       const argumentValue = evaluate(argument, environment);
+32c41
+<       return operators[op](evaluatedLeft, evaluatedRight, environment);
+---
+>       return expressionValue.apply(undefined, [argumentValue, environment]);
+35,36c44,45
+<     FunctionExpression({ param, body }, environment) {
+<       return new Function(param, body, environment);
+---
+>     FunctionExpression({ parameter, expression }, environment) {
+>       return new Function(parameter, expression, environment);
+39c48
+<     NumericLiteral: ({ value }) => {
+---
+>     NumericLiteral: ({ value }, _) => {
+48,51c57,58
+<   function visit(node) {
+<     const environment = {};
+< 
+<     return visitors[node.type](node);
+---
+>   function evaluate(astNode, environment) {
+>     return interpreterVisitors[astNode.type](astNode, environment);
+56,57c63,66
+<   = expr:AddExpression {
+<       return visit(expr);
+---
+>   = expression:AddExpression {
+>       const environment = {};
+> 
+>       return evaluate(expression, environment);
+61c70
+<   = left:MultiplyExpression _ op:("+" / "-") _ right:MultiplyExpression {
+---
+>   = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+64,66c73,75
+<         op: op,
+<         left: left,
+<         right: right
+---
+>         operator: operator,
+>         leftExpression: leftExpression,
+>         rightExpression: rightExpression
+72c81
+<   = left:PrimaryExpression _ op:("*" / "/") _ right:PrimaryExpression {
+---
+>   = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
+75,77c84,86
+<         op: op,
+<         left: left,
+<         right: right
+---
+>         operator: operator,
+>         leftExpression: leftExpression,
+>         rightExpression: rightExpression
+80c89,98
+<   / PrimaryExpression
+---
+>   / FunctionApplicationExpression
+> 
+> FunctionApplicationExpression
+>   = expression:PrimaryExpression args:(_ PrimaryExpression)* {
+>       return args.reduce((expression, [, argument]) => ({
+>         type: "FunctionApplicationExpression",
+>         expression,
+>         argument
+>       }), expression);
+>     }
+83,84c101,102
+<   = "(" expr:AddExpression ")" {
+<     return expr;
+---
+>   = "(" expression:AddExpression ")" {
+>     return expression;
+91,92c109,114
+<   = param:Identifier _ "=>" _ body:AddExpression {
+<       return ({ type: "FunctionExpression", param, body });
+---
+>   = parameter:Identifier _ "=>" _ expression:AddExpression {
+>       return ({
+>         type: "FunctionExpression",
+>         parameter,
+>         expression
+>       });
+106c128,129
+<         type: "Identifier", name: text()
+---
+>         type: "Identifier",
+>         name: text()

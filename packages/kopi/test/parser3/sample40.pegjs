@@ -4,7 +4,7 @@
 //
 
 {
-  const visitors = {
+  const interpreterVisitors = {
     NumericLiteral: ({ value }) => {
       return value;
     }
@@ -12,14 +12,17 @@
 }
 
 Program
-  = expr:NumericLiteral {
-      return visitors["NumericLiteral"](expr);
+  = expression:Expression {
+      return interpreterVisitors['NumericLiteral'](expression);
     }
+
+Expression
+  = NumericLiteral
 
 NumericLiteral
   = value:[0-9]+ {
-      return ({
-        type: "NumericLiteral",
-        value: Number(value)
-      });
+      return {
+        type: 'NumericLiteral',
+        value: Number(value.join(''))
+      };
     }

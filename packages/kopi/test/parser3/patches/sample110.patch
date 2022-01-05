@@ -1,0 +1,47 @@
+3c3
+< // Accepts expressions such as "2 * (3 + 4)".
+---
+> // Accepts expressions such as "(x => 2 * x)".
+6a7,19
+>   function Function(param, body, closure) {
+>     this.param = param;
+>     this.body = body;
+>     this.closure = closure;
+> 
+>     this.apply = (thisArg, [arg, environment]) => {
+>       return visit(this.body, {
+>         ...this.closure,
+>         [this.param.name]: arg
+>       })
+>     }
+>   }
+> 
+12c25
+<   };
+---
+>   }
+15,16c28,32
+<     OperatorExpression: ({ op, left, right }) => {
+<       return operators[op](visit(left), visit(right));
+---
+>     OperatorExpression: ({ op, left, right }, environment) => {
+>       const evaluatedLeft = visit(left, environment);
+>       const evaluatedRight = visit(right, environment);
+> 
+>       return operators[op](evaluatedLeft, evaluatedRight, environment);
+27c43
+<     Identifier: ({ name }, env) => {
+---
+>     Identifier: ({ name }, environment) => {
+35c51
+<     return visitors[node.type](node, environment);
+---
+>     return visitors[node.type](node);
+69a86
+>   / FunctionExpression
+72a90,94
+> FunctionExpression
+>   = param:Identifier _ "=>" _ body:AddExpression {
+>       return ({ type: "FunctionExpression", param, body });
+>     }
+> 

@@ -1,0 +1,7 @@
+8c8,11
+<       return Number(value);
+---
+>       return ({
+>         type: "NumericLiteral",
+>         value: Number(value)
+>       });

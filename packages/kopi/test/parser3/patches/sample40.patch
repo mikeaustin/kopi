@@ -1,0 +1,13 @@
+5a6,13
+> {
+>   const visitors = {
+>     NumericLiteral: ({ value }) => {
+>       return value;
+>     }
+>   }
+> }
+> 
+8c16
+<       return expr;
+---
+>       return visitors["NumericLiteral"](expr);

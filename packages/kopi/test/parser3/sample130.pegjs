@@ -27,6 +27,14 @@
   }
 
   const interpreterVisitors = {
+    Block: ({ statements }, environment) => {
+      // const bind = (bindings) => environment = ({ ...environment, ...bindings });
+
+      return statements.reduce((_, expression) => (
+        evaluate(expression, environment)
+      ), undefined);
+    },
+
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
@@ -60,10 +68,20 @@
 }
 
 Program
-  = expression:Expression {
+  = block:Block {
       const environment = {};
 
-      return evaluate(expression, environment);
+      return evaluate(block, environment);
+    }
+
+Block
+  = Newline* head:Expression? tail:(Newline+ Expression)* Newline* {
+      return {
+        type: 'Block',
+        statements: tail.reduce((statements, [, statement]) => (
+          [...statements, statement]
+        ), [head])
+      };
     }
 
 Expression
@@ -135,3 +153,6 @@ Identifier "identifier"
 
 _ "whitespace"
   = [ \t]*
+
+Newline
+  = [\r?\n]

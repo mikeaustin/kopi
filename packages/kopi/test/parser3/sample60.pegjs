@@ -4,9 +4,9 @@
 //
 
 {
-  const visitors = {
-    AddExpression: ({ left, right }) => {
-      return visit(left) + visit(right);
+  const interpreterVisitors = {
+    AddExpression: ({ leftExpression, rightExpression }) => {
+      return evaluate(leftExpression) + evaluate(rightExpression);
     },
 
     NumericLiteral: ({ value }) => {
@@ -14,31 +14,34 @@
     }
   }
 
-  function visit(node) {
-    return visitors[node.type](node);
+  function evaluate(node) {
+    return interpreterVisitors[node.type](node);
   }
 }
 
 Program
-  = expr:AddExpression {
-      return visit(expr);
+  = expression:Expression {
+      return evaluate(expression);
     }
 
+Expression
+  = AddExpression
+
 AddExpression
-  = left:NumericLiteral _ "+" _ right:NumericLiteral {
-      return ({
-        type: "AddExpression",
-        left: left,
-        right: right
-      });
+  = leftExpression:NumericLiteral _ "+" _ rightExpression:NumericLiteral {
+      return {
+        type: 'AddExpression',
+        leftExpression: leftExpression,
+        rightExpression: rightExpression
+      };
     }
 
 NumericLiteral
   = value:[0-9]+ {
-      return ({
-        type: "NumericLiteral",
-        value: Number(value)
-      });
+      return {
+        type: 'NumericLiteral',
+        value: Number(value.join(''))
+      };
     }
 
 _ "whitespace"

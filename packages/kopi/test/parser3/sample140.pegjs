@@ -1,7 +1,9 @@
 //
 // Parses syntax into an AST, then interprets it directly.
-// Accepts expressions such as "(x => 2 * x) (3 + 4)".
-//
+// Accepts multi-line expressions such as:
+//   a = 1
+//   f = b => a + b
+//   f 5
 
 {
   class Function {
@@ -11,10 +13,10 @@
       this.environment = environment;
     }
 
-    apply(thisArg, [argument, _]) {
+    apply(thisArg, [argumentValue]) {
       return evaluate(this.expression, {
         ...this.environment,
-        [this.parameter.name]: argument
+        [this.parameter.name]: argumentValue
       })
     }
   }
@@ -23,10 +25,24 @@
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
-    ['/']: (leftValue, rightValue) => leftValue / rightValue,
+    ['/']: (leftValue, rightValue) => leftValue / rightValue
   }
 
   const interpreterVisitors = {
+    Block: ({ statements }, environment) => {
+      const bindVariables = (bindings) => environment = ({ ...environment, ...bindings });
+
+      return statements.reduce((_, expression) => (
+        evaluate(expression, environment, bindVariables)
+      ), undefined);
+    },
+
+    Assignment: ({ variable, expression }, environment, bindVariables) => {
+      bindVariables({
+        [variable]: evaluate(expression, environment, bindVariables)
+      });
+    },
+
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
@@ -45,7 +61,7 @@
       return new Function(parameter, expression, environment);
     },
 
-    NumericLiteral: ({ value }, _) => {
+    NumericLiteral: ({ value }) => {
       return value;
     },
 
@@ -54,17 +70,40 @@
     }
   }
 
-  function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+  function evaluate(node, environment, bindVariables) {
+    return interpreterVisitors[node.type](node, environment, bindVariables);
   }
 }
 
 Program
-  = expression:Expression {
+  = block:Block {
       const environment = {};
 
-      return evaluate(expression, environment);
+      return evaluate(block, environment);
     }
+
+Block
+  = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
+      return {
+        type: 'Block',
+        statements: tail.reduce((statements, [, statement]) => (
+          [...statements, statement]
+        ), [head])
+      };
+    }
+
+Statement
+  = Assignment
+  / Expression
+
+Assignment
+  = identifier:Identifier _ "=" _ expression:Expression {
+    return {
+      type: 'Assignment',
+      variable: identifier.name,
+      expression: expression
+    };
+  }
 
 Expression
   = AddExpression
@@ -102,8 +141,8 @@ FunctionApplicationExpression
 
 PrimaryExpression
   = "(" expression:AddExpression ")" {
-    return expression;
-  }
+      return expression;
+    }
   / FunctionExpression
   / NumericLiteral
   / Identifier
@@ -135,3 +174,6 @@ Identifier "identifier"
 
 _ "whitespace"
   = [ \t]*
+
+Newline
+  = [\r?\n]

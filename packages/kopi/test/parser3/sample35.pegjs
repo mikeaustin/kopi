@@ -3,6 +3,14 @@
 // The end result is the value of the parsed number
 //
 
+Program
+  = expression:Expression {
+      return expression;
+    }
+
+Expression
+  = NumericLiteral
+
 NumericLiteral
   = value:[0-9]+ {
       return {

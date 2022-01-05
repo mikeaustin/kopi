@@ -27,6 +27,14 @@
   }
 
   const interpreterVisitors = {
+    Assignment: ({ variable, expression }) => {
+      return {
+        type: 'Assignment',
+        variable: variable,
+        expression: expression
+      }
+    },
+
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
@@ -54,23 +62,38 @@
     }
   }
 
-  function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+  function evaluate(node, environment) {
+    return interpreterVisitors[node.type](node, environment);
   }
 }
 
 Program
-  = expression:Expression {
+  = expression:Statement {
       const environment = {};
 
       return evaluate(expression, environment);
     }
 
+Statement
+  = Assignment
+  / Expression
+
+Assignment
+  = identifier:Identifier _ "=" _ expression:AddExpression {
+    return {
+      type: 'Assignment',
+      variable: identifier.name,
+      expression: expression
+    };
+  }
+
 Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -81,7 +104,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
+  = leftExpression:FunctionApplicationExpression _
+    operator:("*" / "/") _
+    rightExpression:FunctionApplicationExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -130,7 +155,7 @@ Identifier "identifier"
       return {
         type: 'Identifier',
         name: text()
-      }
+      };
     }
 
 _ "whitespace"

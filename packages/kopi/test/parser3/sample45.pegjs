@@ -5,10 +5,6 @@
 
 {
   const interpreterVisitors = {
-    AddExpression: ({ leftExpression, rightExpression }) => {
-      return evaluate(leftExpression) + evaluate(rightExpression);
-    },
-
     NumericLiteral: ({ value }) => {
       return value;
     }
@@ -25,16 +21,7 @@ Program
     }
 
 Expression
-  = AddExpression
-
-AddExpression
-  = leftExpression:NumericLiteral "+" rightExpression:NumericLiteral {
-      return {
-        type: 'AddExpression',
-        leftExpression: leftExpression,
-        rightExpression: rightExpression
-      };
-    }
+  = NumericLiteral
 
 NumericLiteral
   = value:[0-9]+ {
