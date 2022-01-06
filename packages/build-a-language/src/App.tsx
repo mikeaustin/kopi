@@ -20,12 +20,15 @@ function App() {
             <Spacer size="medium" />
             <Button title="Press Me" />
           </List>
+          <Spacer size="small" />
           <Text>Hello</Text>
+          <Spacer size="small" />
           <List horizontal>
             <Button title="Press Me" />
             <Spacer size="medium" />
             <Button title="Press Me" />
           </List>
+          <Spacer size="small" />
           <List divider>
             <Text fontSize="large">One</Text>
             <Text fontSize="large">Two</Text>

@@ -9,6 +9,7 @@ import justifyContentStyles from '../../styles/justifyContent.module.scss';
 import alignItemsStyles from '../../styles/alignItems.module.scss';
 import paddingStyles from '../../styles/padding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
+import borderRadiusStyles from '../../styles/borderRadius.module.scss';
 
 type ViewProps = {
   tag?: string | React.ComponentType<any>;
@@ -20,6 +21,7 @@ type ViewProps = {
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
+  borderRadius?: boolean | 'xsmall';
 };
 
 const View = ({
@@ -32,6 +34,7 @@ const View = ({
   alignItems,
   padding,
   background,
+  borderRadius,
 }: ViewProps) => {
   const Component = tag;
 
@@ -43,6 +46,7 @@ const View = ({
     alignItems && alignItemsStyles[alignItems],
     padding && paddingStyles[padding],
     background && backgroundColorStyles[background],
+    (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
     className,
   );
 
