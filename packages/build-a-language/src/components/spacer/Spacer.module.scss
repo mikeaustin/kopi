@@ -1,0 +1,23 @@
+@value horizontal from "../view/View.module.scss";
+
+.container {
+  align-self: stretch;
+
+  &.small {
+    min-height: 8px;
+  }
+
+  &.medium {
+    min-height: 16px;
+  }
+}
+
+.horizontal .container {
+  &.small {
+    min-width: 8px;
+  }
+
+  &.medium {
+    min-width: 16px;
+  }
+}

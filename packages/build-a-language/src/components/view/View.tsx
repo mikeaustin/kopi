@@ -10,6 +10,18 @@ import alignItemsStyles from '../../styles/alignItems.module.scss';
 import paddingStyles from '../../styles/padding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
 
+type ViewProps = {
+  tag?: string | React.ComponentType<any>;
+  children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
+  className?: string;
+  flex?: boolean;
+  horizontal?: boolean;
+  justifyContent?: 'flex-start' | 'center' | 'flex-end';
+  alignItems?: 'flex-start' | 'center' | 'flex-end';
+  padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  background?: Color;
+};
+
 const View = ({
   tag = 'div',
   children,
@@ -20,17 +32,7 @@ const View = ({
   alignItems,
   padding,
   background,
-}: {
-  tag?: string | React.ComponentType<any>;
-  children?: React.ReactNode;
-  className?: string;
-  flex?: boolean;
-  horizontal?: boolean;
-  justifyContent?: 'flex-start' | 'center' | 'flex-end';
-  alignItems?: 'flex-start' | 'center' | 'flex-end';
-  padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
-  background?: Color;
-}) => {
+}: ViewProps) => {
   const Component = tag;
 
   const containerClassName = classNames(
@@ -52,3 +54,7 @@ const View = ({
 };
 
 export default View;
+
+export type {
+  ViewProps
+};
