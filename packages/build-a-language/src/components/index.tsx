@@ -48,16 +48,23 @@ const View = ({
   );
 };
 
+type Gray = 'gray-0' | 'gray-1' | 'gray-2' | 'gray-3' | 'gray-4' | 'gray-5' | 'gray-6' | 'gray-7' | 'gray-8' | 'gray-9';
+type Red = 'red-0' | 'red-1' | 'red-2' | 'red-3' | 'red-4' | 'red-5' | 'red-6' | 'red-7' | 'red-8' | 'red-9';
+type Pink = 'pink-0' | 'pink-1' | 'pink-2' | 'pink-3' | 'pink-4' | 'pink-5' | 'pink-6' | 'pink-7' | 'pink-8' | 'pink-9';
+type Green = 'green-0' | 'green-1' | 'green-2' | 'green-3' | 'green-4' | 'green-5' | 'green-6' | 'green-7' | 'green-8' | 'green-9';
+
 const Text = ({
   children,
   textParent,
   fontWeight,
   textColor,
+  textColor2,
 }: {
   children: React.ReactNode;
   textParent?: boolean;
   fontWeight?: 'bold';
-  textColor?: 'red';
+  textColor?: Gray | Red | Pink | Green;
+  textColor2?: ['red' | 'blue', 1 | 7];
 }) => {
   const containerClassName = classNames(
     fontWeight && fontWeightStyles[fontWeight],

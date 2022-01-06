@@ -9,7 +9,7 @@ function App() {
       <View alignItems="center" padding="medium">
         <Text fontWeight="bold">
           Header{' '}
-          <Text textColor="red">Header</Text>
+          <Text textColor="red-7" textColor2={['red', 7]}>Header</Text>
         </Text>
       </View>
       <Divider />
