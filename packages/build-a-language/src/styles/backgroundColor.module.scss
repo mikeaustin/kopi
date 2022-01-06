@@ -1,0 +1,9 @@
+@import 'open-color';
+
+@each $color-list, $name in $oc-color-list {
+  @each $level, $color in $color-list {
+    .#{$name}-#{$level} {
+      background-color: $color;
+    }
+  }
+}
