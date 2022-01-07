@@ -1,3 +1,6 @@
+type White = 'white';
+type Black = 'black';
+
 type Gray = 'gray-0' | 'gray-1' | 'gray-2' | 'gray-3' | 'gray-4' | 'gray-5' | 'gray-6' | 'gray-7' | 'gray-8' | 'gray-9';
 type Red = 'red-0' | 'red-1' | 'red-2' | 'red-3' | 'red-4' | 'red-5' | 'red-6' | 'red-7' | 'red-8' | 'red-9';
 type Pink = 'pink-0' | 'pink-1' | 'pink-2' | 'pink-3' | 'pink-4' | 'pink-5' | 'pink-6' | 'pink-7' | 'pink-8' | 'pink-9';
@@ -12,6 +15,6 @@ type Lime = 'lime-0' | 'lime-1' | 'lime-2' | 'lime-3' | 'lime-4' | 'lime-5' | 'l
 type Yellow = 'yellow-0' | 'yellow-1' | 'yellow-2' | 'yellow-3' | 'yellow-4' | 'yellow-5' | 'yellow-6' | 'yellow-7' | 'yellow-8' | 'yellow-9';
 type Orange = 'orange-0' | 'orange-1' | 'orange-2' | 'orange-3' | 'orange-4' | 'orange-5' | 'orange-6' | 'orange-7' | 'orange-8' | 'orange-9';
 
-type Color = Gray | Red | Pink | Grape | Violet | Indigo | Blue | Cyan | Teal | Green | Lime | Yellow | Orange;
+type Color = White | Black | Gray | Red | Pink | Grape | Violet | Indigo | Blue | Cyan | Teal | Green | Lime | Yellow | Orange;
 
 export default Color;

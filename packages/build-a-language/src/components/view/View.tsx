@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PointerEventHandler } from 'react';
 import classNames from 'classnames';
 
 import Color from '../color';
@@ -23,10 +23,13 @@ type ViewProps = {
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
-  borderRadius?: boolean | 'xsmall' | 'max';
+  borderRadius?: boolean | 'xsmall' | 'small' | 'max';
+  onPointerDown?: PointerEventHandler;
+  onPointerMove?: PointerEventHandler;
+  onPointerUp?: PointerEventHandler;
 };
 
-const View = ({
+const View = React.forwardRef(({
   tag = 'div',
   style,
   disabled,
@@ -39,8 +42,11 @@ const View = ({
   padding,
   background,
   borderRadius,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
   ...props
-}: ViewProps) => {
+}: ViewProps, ref) => {
   const Component = tag;
 
   const containerClassName = classNames(
@@ -56,11 +62,20 @@ const View = ({
   );
 
   return (
-    <Component className={containerClassName} disabled={disabled} style={style} {...props}>
+    <Component
+      ref={ref}
+      className={containerClassName}
+      disabled={disabled}
+      style={style}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      {...props}
+    >
       {children}
     </Component>
   );
-};
+});
 
 export default View;
 
