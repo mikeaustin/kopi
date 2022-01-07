@@ -27,7 +27,7 @@ const Button = ({
   );
 
   const textColor = primary && solid
-    ? 'gray-2'
+    ? 'gray-0'
     : primary || link
       ? 'primary'
       : undefined;

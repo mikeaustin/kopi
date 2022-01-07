@@ -90,6 +90,16 @@ function App() {
                 <Spacer size="small" />
                 <Button disabled primary solid title="Primary Solid" />
               </View>
+              <Spacer size="small" />
+              <View horizontal justifyContent="center" alignItems="center">
+                <Button title="Default" borderRadius="max" />
+                <Spacer size="small" />
+                <Button solid title="Solid" borderRadius="max" />
+                <Spacer size="small" />
+                <Button primary title="Primary" borderRadius="max" />
+                <Spacer size="small" />
+                <Button primary solid title="Primary Solid" borderRadius="max" />
+              </View>
             </View>
           </View>
         </View>

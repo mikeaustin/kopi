@@ -26,7 +26,7 @@ const Text = ({
     styles.container,
     (fontSize && fontSizeStyles[fontSize]) || (!textParent && fontSizeStyles.small),
     fontWeight && fontWeightStyles[fontWeight],
-    textColor && textColorStyles[textColor],
+    (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['gray-7']),
   );
 
   const Component = textParent ? 'span' : 'div';

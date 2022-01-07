@@ -11,14 +11,18 @@
     cursor: pointer;
   }
 
-  &:active {
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:active:not(:disabled) {
     background: $oc-gray-3;
   }
 
   &.link {
     box-shadow: none;
 
-    &:active {
+    &:active:not(:disabled) {
       background-color: var(--primary-color-light);
     }
   }
@@ -26,7 +30,7 @@
   &.solid {
     background-color: $oc-gray-3;
 
-    &:active {
+    &:active:not(:disabled) {
       background-color: $oc-gray-4;
     }
   }
@@ -34,7 +38,7 @@
   &.primary {
     box-shadow: inset 0 0 0 1px var(--primary-color);
 
-    &:active {
+    &:active:not(:disabled) {
       background-color: var(--primary-color-light);
     }
   }
@@ -43,7 +47,8 @@
     background-color: var(--primary-color);
 
     &:active:not(:disabled) {
-      background-color: var(--primary-color-dark);
+      // background-color: var(--primary-color-dark);
+      background-color: #{var(--primary-color-name)}-#{var(--primary-color-level)};
     }
   }
 }

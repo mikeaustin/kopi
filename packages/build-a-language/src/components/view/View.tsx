@@ -22,7 +22,7 @@ type ViewProps = {
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
-  borderRadius?: boolean | 'xsmall';
+  borderRadius?: boolean | 'xsmall' | 'max';
 };
 
 const View = ({
