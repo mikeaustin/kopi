@@ -80,6 +80,8 @@ function App() {
   const handleWindowStartDrag = (windowElement: HTMLElement, firstMouse: { clientX: number, clientY: number; }) => {
     windowElementRef.current = windowElement;
     firstMouseRef.current = firstMouse;
+
+    windowElement.style.willChange = 'left, top';
   };
 
   const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
@@ -90,6 +92,10 @@ function App() {
   };
 
   const handleWindowEndDrag = (windowElement: HTMLElement) => {
+    if (windowElementRef.current) {
+      windowElementRef.current.style.willChange = '';
+    }
+
     windowElementRef.current = undefined;
   };
 
@@ -101,44 +107,45 @@ function App() {
           <Text textColor="red-7">Header</Text>
         </Text>
       </View>
-      <View flex onPointerMove={handlePointerMove}>
-        <Spacer size="large" />
-        <Window
-          style={{ left: 16, top: 78 }}
-          onWindowStartDrag={handleWindowStartDrag}
-          onWindowEndDrag={handleWindowEndDrag}
-        >
-          <View justifyContent="center" padding="medium">
-            <View horizontal>
-              <FontSizes />
+      <View flex style={{ overflow: 'hidden' }} onPointerMove={handlePointerMove}>
+        <View style={{ position: 'fixed', overflow: 'hidden', top: 0, right: -10000, bottom: 0, left: 0 }}>
+          <Window
+            style={{ left: 16, top: 78 }}
+            onWindowStartDrag={handleWindowStartDrag}
+            onWindowEndDrag={handleWindowEndDrag}
+          >
+            <View justifyContent="center" padding="medium">
+              <View horizontal>
+                <FontSizes />
+                <Divider spacerSize="medium" />
+                <Buttons />
+              </View>
               <Divider spacerSize="medium" />
-              <Buttons />
+              <View>
+                <Text style={{ maxWidth: 'fit-content' }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                  ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                  eu fugiat nulla pariatur.
+                </Text>
+              </View>
+              <Divider spacerSize="medium" />
+              <View horizontal>
+                <Text fontSize="large" style={{ flex: 1, maxWidth: 'fit-content' }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                </Text>
+                <Spacer size="medium" />
+                <Text fontSize="medium" style={{ flex: 1, maxWidth: 'fit-content' }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
+                </Text>
+                <Spacer size="medium" />
+                <Text style={{ flex: 1, maxWidth: 'fit-content' }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
+                </Text>
+              </View>
             </View>
-            <Divider spacerSize="medium" />
-            <View>
-              <Text style={{ maxWidth: 'fit-content' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                eu fugiat nulla pariatur.
-              </Text>
-            </View>
-            <Divider spacerSize="medium" />
-            <View horizontal>
-              <Text fontSize="large" style={{ flex: 1, maxWidth: 'fit-content' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              </Text>
-              <Spacer size="medium" />
-              <Text fontSize="medium" style={{ flex: 1, maxWidth: 'fit-content' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
-              </Text>
-              <Spacer size="medium" />
-              <Text style={{ flex: 1, maxWidth: 'fit-content' }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
-              </Text>
-            </View>
-          </View>
-        </Window>
+          </Window>
+        </View>
       </View>
     </View>
   );
