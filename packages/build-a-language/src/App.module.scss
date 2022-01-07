@@ -1,6 +1,11 @@
+@import 'open-color';
+
+:root {
+  --primary-color: #{$oc-blue-5};
+  --primary-color-light: #{$oc-blue-1};
+  --primary-color-dark: #{$oc-blue-6};
+}
+
 .App {
-  background-color: #282c34;
   min-height: 100vh;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }

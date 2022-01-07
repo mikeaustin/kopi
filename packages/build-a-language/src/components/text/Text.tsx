@@ -20,7 +20,7 @@ const Text = ({
   textParent?: boolean;
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   fontWeight?: 'bold';
-  textColor?: Color;
+  textColor?: Color | 'primary';
 }) => {
   const containerClassName = classNames(
     styles.container,
@@ -34,9 +34,17 @@ const Text = ({
   return (
     <Component className={containerClassName}>
       {React.Children.map(children, child => {
-        return React.isValidElement(child) ? React.cloneElement(child, {
-          textParent: true,
-        }) : child;
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, {
+            textParent: true,
+          });
+        } else if (typeof child === 'string') {
+          return child.split('\\n').map((value, index) => (
+            <>{index > 0 && <br />}{value}</>
+          ));
+        } else {
+          return child;
+        }
       })}
     </Component>
   );

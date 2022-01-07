@@ -16,7 +16,7 @@ function App() {
       <View flex horizontal>
         <View flex justifyContent="center" alignItems="center" padding="medium">
           <List>
-            <Button title="Press Me" />
+            <Button title="Multiline\nPrimary Solid" />
             <Spacer size="medium" />
             <Button title="Press Me" />
           </List>
@@ -36,18 +36,62 @@ function App() {
           </List>
         </View>
         <Divider />
-        <View flex justifyContent="center" alignItems="center" padding="medium">
-          <Spacer size="small" background="gray-7" />
-          <Text fontSize="xsmall">Extra Small</Text>
-          <Spacer size="small" background="gray-7" />
-          <Text fontSize="small">Small</Text>
-          <Spacer size="small" background="gray-7" />
-          <Text fontSize="medium">Medium</Text>
-          <Spacer size="small" background="gray-7" />
-          <Text fontSize="large">Large</Text>
-          <Spacer size="small" background="gray-7" />
-          <Text fontSize="xlarge">Extra Large</Text>
-          <Spacer size="small" background="gray-7" />
+        <View horizontal alignItems="center" padding="medium">
+          <View horizontal>
+            <View flex justifyContent="center" alignItems="center">
+              <Spacer size="small" background="gray-1" />
+              <Text fontSize="xlarge">XLarge (36px)</Text>
+              <Spacer size="small" background="gray-1" />
+              <Text fontSize="large">Large (24px)</Text>
+              <Spacer size="small" background="gray-1" />
+              <Text fontSize="medium">Medium (18px)</Text>
+              <Spacer size="small" background="gray-1" />
+              <Text fontSize="small">Small (14px)</Text>
+              <Spacer size="small" background="gray-1" />
+              <Text fontSize="xsmall">XSmall (12px)</Text>
+              <Spacer size="small" background="gray-1" />
+            </View>
+            <Spacer size="medium" />
+            <Divider />
+            <Spacer size="medium" />
+            <View>
+              <View horizontal justifyContent="center" alignItems="center">
+                <Button link title="Link" />
+                <Spacer size="small" />
+                <Button title="Default" />
+                <Spacer size="small" />
+                <Button solid title="Solid" />
+                <Spacer size="small" />
+                <Button primary title="Primary" />
+                <Spacer size="small" />
+                <Button primary solid title="Primary Solid" />
+              </View>
+              <Spacer size="small" />
+              <View horizontal justifyContent="center" alignItems="center">
+                <Button link title="Multiline\nLink" />
+                <Spacer size="small" />
+                <Button title="Multiline\nDefault" />
+                <Spacer size="small" />
+                <Button solid title="Multiline\nSolid" />
+                <Spacer size="small" />
+                <Button primary title="Multiline\nPrimary" />
+                <Spacer size="small" />
+                <Button primary solid title="Multiline\nPrimary Solid" />
+              </View>
+              <Spacer size="small" />
+              <View horizontal justifyContent="center" alignItems="center">
+                <Button disabled link title="Link" />
+                <Spacer size="small" />
+                <Button disabled title="Default" />
+                <Spacer size="small" />
+                <Button disabled solid title="Solid" />
+                <Spacer size="small" />
+                <Button disabled primary title="Primary" />
+                <Spacer size="small" />
+                <Button disabled primary solid title="Primary Solid" />
+              </View>
+            </View>
+          </View>
         </View>
       </View>
     </View>

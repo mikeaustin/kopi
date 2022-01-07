@@ -1,13 +1,40 @@
 import React from 'react';
+import classNames from 'classnames';
 
-import { View, Text } from '../index';
+// import { View, Text } from '../index';
+import View, { type ViewProps } from '../view';
+import Text from '../text';
 
-import buttonStyles from './Button.module.scss';
+import styles from './Button.module.scss';
 
-const Button = ({ title }: { title: string; }) => {
+const Button = ({
+  title,
+  primary,
+  solid,
+  link,
+  ...props
+}: {
+  title: string;
+  primary?: boolean;
+  solid?: boolean;
+  link?: boolean;
+} & ViewProps) => {
+  const containerClassName = classNames(
+    styles.container,
+    primary && styles.primary,
+    solid && styles.solid,
+    link && styles.link,
+  );
+
+  const textColor = primary && solid
+    ? 'gray-2'
+    : primary || link
+      ? 'primary'
+      : undefined;
+
   return (
-    <View tag="button" background="blue-6" borderRadius className={buttonStyles.container}>
-      <Text fontWeight="bold" textColor="blue-0">{title}</Text>
+    <View tag="button" borderRadius className={containerClassName} {...props}>
+      <Text fontWeight="bold" textColor={textColor}>{title}</Text>
     </View>
   );
 };

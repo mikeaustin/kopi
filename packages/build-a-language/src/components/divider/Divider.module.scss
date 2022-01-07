@@ -1,7 +1,9 @@
+@import 'open-color';
+
 .container {
   min-width: 1px;
   min-height: 1px;
   justify-self: stretch;
   align-self: stretch;
-  background: gray;
+  background: $oc-gray-3;
 }
