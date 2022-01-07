@@ -11,12 +11,14 @@ import textColorStyles from '../../styles/textColor.module.scss';
 
 const Text = ({
   children,
+  style,
   textParent,
   fontSize,
   fontWeight,
   textColor,
 }: {
   children: React.ReactNode;
+  style?: React.CSSProperties;
   textParent?: boolean;
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   fontWeight?: 'bold';
@@ -32,7 +34,7 @@ const Text = ({
   const Component = textParent ? 'span' : 'div';
 
   return (
-    <Component className={containerClassName}>
+    <Component className={containerClassName} style={style}>
       {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {

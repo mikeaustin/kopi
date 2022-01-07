@@ -36,7 +36,7 @@ function App() {
           </List>
         </View>
         <Divider />
-        <View horizontal alignItems="center" padding="medium">
+        <View justifyContent="center" padding="medium">
           <View horizontal>
             <View flex justifyContent="center" alignItems="center">
               <Spacer size="small" background="gray-1" />
@@ -51,9 +51,7 @@ function App() {
               <Text fontSize="xsmall">XSmall (12px)</Text>
               <Spacer size="small" background="gray-1" />
             </View>
-            <Spacer size="medium" />
-            <Divider />
-            <Spacer size="medium" />
+            <Divider spacerSize="medium" />
             <View>
               <View horizontal justifyContent="center" alignItems="center">
                 <Button link title="Link" />
@@ -101,6 +99,12 @@ function App() {
                 <Button primary solid title="Primary Solid" borderRadius="max" />
               </View>
             </View>
+          </View>
+          <Divider spacerSize="medium" />
+          <View>
+            <Text style={{ maxWidth: 'fit-content' }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </Text>
           </View>
         </View>
       </View>

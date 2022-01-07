@@ -13,6 +13,7 @@ import borderRadiusStyles from '../../styles/borderRadius.module.scss';
 
 type ViewProps = {
   tag?: string | React.ComponentType<any>;
+  style?: React.CSSProperties;
   disabled?: boolean;
   children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
   className?: string;
@@ -27,6 +28,7 @@ type ViewProps = {
 
 const View = ({
   tag = 'div',
+  style,
   disabled,
   children,
   className,
@@ -54,7 +56,7 @@ const View = ({
   );
 
   return (
-    <Component className={containerClassName} disabled={disabled} {...props}>
+    <Component className={containerClassName} disabled={disabled} style={style} {...props}>
       {children}
     </Component>
   );
