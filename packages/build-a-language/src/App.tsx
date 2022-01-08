@@ -88,7 +88,7 @@ const SampleWindow = ({ ...props }) => {
         </View>
         <Divider spacerSize="medium" />
         <View>
-          <Text style={{ maxWidth: 'fit-content' }}>
+          <Text fitContent>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
@@ -97,15 +97,15 @@ const SampleWindow = ({ ...props }) => {
         </View>
         <Divider spacerSize="medium" />
         <View horizontal>
-          <Text fontSize="large" style={{ flex: 1, maxWidth: 'fit-content' }}>
+          <Text fitContent fontSize="large" style={{ flex: 1 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit...
           </Text>
           <Spacer size="medium" />
-          <Text fontSize="medium" style={{ flex: 1, maxWidth: 'fit-content' }}>
+          <Text fitContent fontSize="medium" style={{ flex: 1 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
           </Text>
           <Spacer size="medium" />
-          <Text style={{ flex: 1, maxWidth: 'fit-content' }}>
+          <Text fitContent style={{ flex: 1 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
           </Text>
         </View>

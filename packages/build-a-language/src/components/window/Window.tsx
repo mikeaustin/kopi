@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';
@@ -19,6 +19,12 @@ const Window = ({
   onWindowEndDrag?: any;
 } & ViewProps) => {
   const windowRef = useRef<HTMLElement>();
+
+  useEffect(() => {
+    if (windowRef.current) {
+      windowRef.current.style.width = `${windowRef.current.offsetWidth}px`;
+    }
+  }, []);
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
     event.preventDefault();
