@@ -1,6 +1,7 @@
 @import 'open-color';
 
 .container {
+  position: relative;
   border: none;
   outline: none;
   background: none;
@@ -19,6 +20,21 @@
     background: $oc-gray-3;
   }
 
+  // &:focus {
+  //   box-shadow: inset 0 0 0 2px $oc-gray-4;
+  // }
+
+  &:focus::before {
+    content: '';
+    position: absolute;
+    border-radius: 1.5px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px dashed $oc-gray-4;
+  }
+
   &.link {
     box-shadow: none;
 
@@ -34,6 +50,10 @@
     &:active:enabled {
       background-color: $oc-gray-4;
     }
+
+    &:focus::before {
+      border: 1px dashed $oc-gray-5;
+    }
   }
 
   &.primary {
@@ -41,6 +61,10 @@
 
     &:active:enabled {
       background-color: var(--primary-color-light);
+    }
+
+    &:focus::before {
+      border: 1px dashed var(--primary-color-light);
     }
   }
 
@@ -51,6 +75,10 @@
     &:active:enabled {
       background-color: var(--primary-color-dark);
       // background-color: #{var(--primary-color-name)}-#{var(--primary-color-level)};
+    }
+
+    &:focus::before {
+      border: 1px dashed var(--primary-color-dark);
     }
   }
 }
