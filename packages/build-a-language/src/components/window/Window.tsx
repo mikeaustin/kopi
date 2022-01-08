@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';

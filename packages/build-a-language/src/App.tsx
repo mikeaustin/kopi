@@ -1,7 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
+
+import { View, Text, Button, Spacer, Divider, List } from './components';
+
+import Desktop from './components/desktop';
+import Window from './components/window';
 
 import styles from './App.module.scss';
-import { View, Text, Button, Spacer, Divider, List, Window } from './components';
 
 const FontSizes = () => {
   return (
@@ -73,80 +77,55 @@ const Buttons = () => {
   );
 };
 
+const SampleWindow = ({ ...props }) => {
+  return (
+    <Window style={{ left: 16, top: 16 }} {...props}>
+      <View justifyContent="center" padding="medium">
+        <View horizontal>
+          <FontSizes />
+          <Divider spacerSize="medium" />
+          <Buttons />
+        </View>
+        <Divider spacerSize="medium" />
+        <View>
+          <Text style={{ maxWidth: 'fit-content' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur.
+          </Text>
+        </View>
+        <Divider spacerSize="medium" />
+        <View horizontal>
+          <Text fontSize="large" style={{ flex: 1, maxWidth: 'fit-content' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+          </Text>
+          <Spacer size="medium" />
+          <Text fontSize="medium" style={{ flex: 1, maxWidth: 'fit-content' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
+          </Text>
+          <Spacer size="medium" />
+          <Text style={{ flex: 1, maxWidth: 'fit-content' }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
+          </Text>
+        </View>
+      </View>
+    </Window>
+  );
+};
+
 function App() {
-  const windowElementRef = useRef<HTMLElement>();
-  const firstMouseRef = useRef<{ clientX: number, clientY: number; }>();
-
-  const handleWindowStartDrag = (windowElement: HTMLElement, firstMouse: { clientX: number, clientY: number; }) => {
-    windowElementRef.current = windowElement;
-    firstMouseRef.current = firstMouse;
-
-    windowElement.style.willChange = 'left, top';
-  };
-
-  const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current && firstMouseRef.current) {
-      windowElementRef.current.style.left = `${event.nativeEvent.clientX - firstMouseRef.current.clientX}px`;
-      windowElementRef.current.style.top = `${event.nativeEvent.clientY - firstMouseRef.current.clientY}px`;
-    }
-  };
-
-  const handleWindowEndDrag = (windowElement: HTMLElement) => {
-    if (windowElementRef.current) {
-      windowElementRef.current.style.willChange = '';
-    }
-
-    windowElementRef.current = undefined;
-  };
-
   return (
     <View className={styles.App}>
-      <View background="gray-8" alignItems="center" padding="medium">
-        <Text fontSize="xlarge" fontWeight="bold">
+      <View background="gray-9" alignItems="center" padding="medium">
+        <Text fontSize="xlarge" fontWeight="bold" textColor="gray-3">
           Header{' '}
           <Text textColor="red-7">Header</Text>
         </Text>
       </View>
-      <View flex style={{ overflow: 'hidden' }} onPointerMove={handlePointerMove}>
-        <View style={{ position: 'fixed', overflow: 'hidden', top: 0, right: -10000, bottom: 0, left: 0 }}>
-          <Window
-            style={{ left: 16, top: 78 }}
-            onWindowStartDrag={handleWindowStartDrag}
-            onWindowEndDrag={handleWindowEndDrag}
-          >
-            <View justifyContent="center" padding="medium">
-              <View horizontal>
-                <FontSizes />
-                <Divider spacerSize="medium" />
-                <Buttons />
-              </View>
-              <Divider spacerSize="medium" />
-              <View>
-                <Text style={{ maxWidth: 'fit-content' }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                  ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                  eu fugiat nulla pariatur.
-                </Text>
-              </View>
-              <Divider spacerSize="medium" />
-              <View horizontal>
-                <Text fontSize="large" style={{ flex: 1, maxWidth: 'fit-content' }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-                </Text>
-                <Spacer size="medium" />
-                <Text fontSize="medium" style={{ flex: 1, maxWidth: 'fit-content' }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...
-                </Text>
-                <Spacer size="medium" />
-                <Text style={{ flex: 1, maxWidth: 'fit-content' }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...
-                </Text>
-              </View>
-            </View>
-          </Window>
-        </View>
-      </View>
+      <Desktop>
+        <SampleWindow />
+      </Desktop>
     </View>
   );
 }
