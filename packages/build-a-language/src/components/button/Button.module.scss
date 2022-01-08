@@ -35,6 +35,10 @@
     border: 1px dashed $oc-gray-4;
   }
 
+  &:focus.rounded:before {
+    border-radius: 1000px;
+  }
+
   &.link {
     box-shadow: none;
 

@@ -65,13 +65,13 @@ const Buttons = () => {
       </View>
       <Spacer size="small" />
       <View horizontal justifyContent="center" alignItems="center">
-        <Button title="Default" borderRadius="max" />
+        <Button rounded title="Default" />
         <Spacer size="small" />
-        <Button solid title="Solid" borderRadius="max" />
+        <Button rounded solid title="Solid" />
         <Spacer size="small" />
-        <Button primary title="Primary" borderRadius="max" />
+        <Button rounded primary title="Primary" />
         <Spacer size="small" />
-        <Button primary solid title="Primary Solid" borderRadius="max" />
+        <Button rounded primary solid title="Primary Solid" />
       </View>
     </View>
   );

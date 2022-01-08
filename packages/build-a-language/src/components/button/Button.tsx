@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 
-// import { View, Text } from '../index';
 import View, { type ViewProps } from '../view';
 import Text from '../text';
 
@@ -12,18 +11,21 @@ const Button = ({
   primary,
   solid,
   link,
+  rounded,
   ...props
 }: {
   title: string;
   primary?: boolean;
   solid?: boolean;
   link?: boolean;
+  rounded?: boolean;
 } & ViewProps) => {
   const containerClassName = classNames(
     styles.container,
     primary && styles.primary,
     solid && styles.solid,
     link && styles.link,
+    rounded && styles.rounded,
   );
 
   const textColor = primary && solid
@@ -33,7 +35,7 @@ const Button = ({
       : undefined;
 
   return (
-    <View tag="button" borderRadius className={containerClassName} {...props}>
+    <View tag="button" borderRadius={rounded ? 'max' : true} className={containerClassName} {...props}>
       <Text fontWeight="bold" textColor={textColor}>{title}</Text>
     </View>
   );

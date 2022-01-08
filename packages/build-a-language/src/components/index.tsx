@@ -4,7 +4,6 @@ import Button from './button';
 import Spacer from './spacer';
 import Divider from './divider';
 import List from './list';
-import Window from './window';
 
 export {
   View,
@@ -13,5 +12,4 @@ export {
   Spacer,
   Divider,
   List,
-  Window,
 };
