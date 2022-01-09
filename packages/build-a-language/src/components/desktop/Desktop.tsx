@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { View } from '../../components';
 
@@ -7,8 +7,15 @@ const Desktop = ({
 }: {
   children?: React.ReactElement | (React.ReactElement)[];
 }) => {
+  const desktopElementRef = useRef<HTMLElement>();
   const windowElementRef = useRef<HTMLElement>();
   const firstMouseRef = useRef<{ clientX: number, clientY: number; }>();
+
+  useEffect(() => {
+    document.addEventListener('pointerup', () => {
+      windowElementRef.current = undefined;
+    });
+  }, []);
 
   const handleWindowStartDrag = (windowElement: HTMLElement, firstMouse: { clientX: number, clientY: number; }) => {
     windowElementRef.current = windowElement;
@@ -18,11 +25,11 @@ const Desktop = ({
   };
 
   const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current && firstMouseRef.current) {
-      // windowElementRef.current.style.left = `${event.nativeEvent.clientX - firstMouseRef.current.clientX}px`;
-      // windowElementRef.current.style.top = `${event.nativeEvent.clientY - firstMouseRef.current.clientY}px`;
-      windowElementRef.current.style.left = windowElementRef.current.offsetLeft + event.nativeEvent.movementX + 'px';
-      windowElementRef.current.style.top = windowElementRef.current.offsetTop + event.nativeEvent.movementY + 'px';
+    if (desktopElementRef.current && windowElementRef.current && firstMouseRef.current) {
+      const boundingClientRect = desktopElementRef.current.getBoundingClientRect();
+
+      windowElementRef.current.style.left = `${event.nativeEvent.pageX - firstMouseRef.current.clientX - boundingClientRect.left}px`;
+      windowElementRef.current.style.top = `${event.nativeEvent.pageY - firstMouseRef.current.clientY - boundingClientRect.top}px`;
     }
   };
 
@@ -35,7 +42,12 @@ const Desktop = ({
   };
 
   return (
-    <View flex style={{ position: 'relative', overflow: 'hidden' }} onPointerMove={handlePointerMove}>
+    <View
+      ref={desktopElementRef}
+      flex
+      style={{ position: 'relative', overflow: 'hidden' }}
+      onPointerMove={handlePointerMove}
+    >
       <View style={{ position: 'absolute', top: 0, right: -10000, bottom: -10000, left: 0 }}>
         {React.Children.map(children, (child) => (
           React.isValidElement(child) && React.cloneElement(child, {

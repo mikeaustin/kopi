@@ -18,23 +18,23 @@ const Window = ({
   onWindowStartDrag?: any;
   onWindowEndDrag?: any;
 } & ViewProps) => {
-  const windowRef = useRef<HTMLElement>();
+  const windowElementRef = useRef<HTMLElement>();
 
   useEffect(() => {
-    if (windowRef.current) {
-      windowRef.current.style.width = `${windowRef.current.offsetWidth}px`;
+    if (windowElementRef.current) {
+      windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
     }
   }, []);
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
     event.preventDefault();
 
-    if (windowRef.current) {
-      const boundingClientRect = windowRef.current.getBoundingClientRect();
+    if (windowElementRef.current) {
+      const boundingClientRect = windowElementRef.current.getBoundingClientRect();
 
-      onWindowStartDrag(windowRef.current, {
-        clientX: event.nativeEvent.clientX - boundingClientRect.left,
-        clientY: event.nativeEvent.clientY - boundingClientRect.top,
+      onWindowStartDrag(windowElementRef.current, {
+        clientX: event.nativeEvent.pageX - boundingClientRect.left,
+        clientY: event.nativeEvent.pageY - boundingClientRect.top,
       });
     }
   };
@@ -42,11 +42,11 @@ const Window = ({
   const handleTitlePointerUp = (event: React.SyntheticEvent<any, PointerEvent>) => {
     event.preventDefault();
 
-    onWindowEndDrag(windowRef.current);
+    onWindowEndDrag(windowElementRef.current);
   };
 
   return (
-    <View ref={windowRef} borderRadius="small" className={styles.container} style={style}>
+    <View ref={windowElementRef} borderRadius="small" className={styles.container} style={style}>
       <View
         padding="small"
         alignItems="center"
