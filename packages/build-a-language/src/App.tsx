@@ -123,9 +123,12 @@ function App() {
           <Text textColor="red-7">Header</Text>
         </Text>
       </View>
-      <Desktop>
-        <SampleWindow />
-      </Desktop>
+      <View flex horizontal>
+        <Desktop>
+          <SampleWindow />
+          <SampleWindow style={{ left: 32, top: 64 }} />
+        </Desktop>
+      </View>
     </View>
   );
 }

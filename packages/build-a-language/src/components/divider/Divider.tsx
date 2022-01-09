@@ -1,15 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import Color from '../color';
+
 import dividerStyles from './Divider.module.scss';
 
 import View from '../view';
 import Spacer from '../spacer';
 
 const Divider = ({
-  spacerSize
+  spacerSize,
+  color,
 }: {
   spacerSize?: 'small' | 'medium' | 'large';
+  color?: Color;
 }) => {
   const containerClassName = classNames(
     dividerStyles.container,
@@ -18,7 +22,7 @@ const Divider = ({
   return (
     <>
       {spacerSize && (<Spacer size={spacerSize} />)}
-      <View className={containerClassName} />
+      <View background={color ?? 'gray-3'} className={containerClassName} />
       {spacerSize && (<Spacer size={spacerSize} />)}
     </>
   );
