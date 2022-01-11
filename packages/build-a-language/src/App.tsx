@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, Text, Button, Spacer, Divider, List } from './components';
+import { View, Text, Input, Button, Spacer, Divider, List } from './components';
 
 import Desktop from './components/desktop';
 import Window from './components/window';

@@ -25,7 +25,7 @@ const Text = React.forwardRef(({
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   fontWeight?: 'bold';
   textColor?: Color | 'primary';
-}, ref) => {
+} & JSX.IntrinsicElements['div'], ref) => {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

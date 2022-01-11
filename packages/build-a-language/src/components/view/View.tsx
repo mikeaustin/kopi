@@ -1,4 +1,4 @@
-import React, { PointerEventHandler } from 'react';
+import React, { KeyboardEventHandler, PointerEventHandler } from 'react';
 import classNames from 'classnames';
 
 import Color from '../color';
@@ -27,6 +27,7 @@ type ViewProps = {
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;
+  onKeyDown?: KeyboardEventHandler;
 };
 
 const View = React.forwardRef(({
@@ -45,6 +46,7 @@ const View = React.forwardRef(({
   onPointerDown,
   onPointerMove,
   onPointerUp,
+  onKeyDown,
   ...props
 }: ViewProps, ref) => {
   const Component = tag;
@@ -70,6 +72,7 @@ const View = React.forwardRef(({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
+      onKeyDown={onKeyDown}
       {...props}
     >
       {children}

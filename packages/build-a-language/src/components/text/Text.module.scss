@@ -1,4 +1,9 @@
 .container {
+  outline: none;
+
+  :global(p) {
+    margin: 0;
+  }
 }
 
 .fitContent {
