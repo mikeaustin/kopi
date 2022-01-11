@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useImperativeHandle } from 'react';
 import classNames from 'classnames';
 
 import Color from '../color';
@@ -9,15 +9,7 @@ import fontSizeStyles from '../../styles/fontSize.module.scss';
 import fontWeightStyles from '../../styles/fontWeight.module.scss';
 import textColorStyles from '../../styles/textColor.module.scss';
 
-const Text = React.forwardRef(({
-  children,
-  style,
-  textParent,
-  fitContent,
-  fontSize,
-  fontWeight,
-  textColor,
-}: {
+type TextProps = {
   children: React.ReactNode;
   style?: React.CSSProperties;
   textParent?: boolean;
@@ -25,8 +17,21 @@ const Text = React.forwardRef(({
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   fontWeight?: 'bold';
   textColor?: Color | 'primary';
-} & JSX.IntrinsicElements['div'], ref) => {
+} & React.HTMLProps<HTMLDivElement>;
+
+const Text = React.forwardRef<HTMLDivElement, TextProps>(({
+  children,
+  style,
+  textParent,
+  fitContent,
+  fontSize,
+  fontWeight,
+  textColor,
+  ...props
+}: TextProps, ref) => {
   const textRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => textRef.current as HTMLDivElement);
 
   useEffect(() => {
     if (textRef.current && fitContent) {
@@ -60,7 +65,7 @@ const Text = React.forwardRef(({
   const Component = textParent ? 'span' : 'div';
 
   return (
-    <Component ref={textRef} className={containerClassName} style={style}>
+    <Component ref={textRef} className={containerClassName} style={style} {...props}>
       {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {

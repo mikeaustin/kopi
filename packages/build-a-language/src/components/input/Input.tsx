@@ -10,7 +10,7 @@ const Input = ({
   ...props
 }: {
 } & ViewProps) => {
-  const textElementRef = useRef<HTMLDivElement>();
+  const textElementRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string>('');
 
   useEffect(() => {
@@ -48,10 +48,9 @@ const Input = ({
   return (
     <View padding="small" onKeyDown={handleKeyDown} style={{ width: 300, height: 200 }}>
       <Text ref={textElementRef} tabIndex={0}>
-        {value}
-        {/* {value.split('\n').map((line, index) => (
-        <p key={index}>{line}</p>
-      ))} */}
+        {value.split('\n').map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
       </Text>
     </View>
   );

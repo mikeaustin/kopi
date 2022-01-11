@@ -79,7 +79,7 @@ const Buttons = () => {
 
 const SampleWindow = ({ ...props }) => {
   return (
-    <Window style={{ left: 16, top: 16 }} {...props}>
+    <Window title="Examples" style={{ left: 16, top: 16 }} {...props}>
       <View justifyContent="center" padding="medium">
         <View horizontal>
           <FontSizes />
@@ -126,7 +126,9 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <SampleWindow style={{ left: 32, top: 64 }} />
+          <Window title="Editor">
+            <Input />
+          </Window>
         </Desktop>
       </View>
     </View>

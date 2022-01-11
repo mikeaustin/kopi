@@ -8,12 +8,14 @@ import styles from './Window.module.scss';
 
 const Window = ({
   children,
+  title,
   style,
   onWindowStartDrag,
   onWindowEndDrag,
   ...props
 }: {
   children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
+  title?: string;
   style?: React.CSSProperties;
   onWindowStartDrag?: any;
   onWindowEndDrag?: any;
@@ -55,7 +57,7 @@ const Window = ({
         onPointerDown={handleTitlePointerDown}
         onPointerUp={handleTitlePointerUp}
       >
-        <Text fontWeight="bold">Examples</Text>
+        <Text fontWeight="bold">{title}</Text>
       </View>
       <Divider />
       <View background="white" {...props}>
