@@ -1,10 +1,17 @@
+@import 'open-color';
+
 .container {
   flex: 1;
+  position: relative;
   outline: none;
 
   :global(p) {
     margin: 0;
   }
+}
+
+.flex {
+  flex: 1;
 }
 
 .fitContent {

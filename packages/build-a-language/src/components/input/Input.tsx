@@ -4,12 +4,17 @@ import classNames from 'classnames';
 import View, { type ViewProps } from '../view';
 import Text from '../text';
 
+import styles from './Input.module.scss';
+
 const metaKeys = ['Shift', 'Control', 'Alt', 'Meta'];
+
+type InputProps = {
+};
 
 const Input = ({
   ...props
 }: {
-} & ViewProps) => {
+} & InputProps) => {
   const textElementRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string>('');
 
@@ -46,8 +51,8 @@ const Input = ({
   };
 
   return (
-    <View padding="small" onKeyDown={handleKeyDown} style={{ width: 300, height: 200 }}>
-      <Text ref={textElementRef} tabIndex={0}>
+    <View flex padding="medium" /* tabIndex={0} */ className={styles.container} onKeyDown={handleKeyDown}>
+      <Text ref={textElementRef} flex>
         {value.split('\n').map((line, index) => (
           <p key={index}>{line}</p>
         ))}

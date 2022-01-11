@@ -1,0 +1,15 @@
+@import 'open-color';
+
+.container {
+  &:focus:before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    border-radius: 1.5px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px dashed $oc-gray-4;
+  }
+}

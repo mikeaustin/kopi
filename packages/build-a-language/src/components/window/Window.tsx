@@ -60,7 +60,7 @@ const Window = ({
         <Text fontWeight="bold">{title}</Text>
       </View>
       <Divider />
-      <View background="white" {...props}>
+      <View flex background="white" {...props}>
         {children}
       </View>
     </View>

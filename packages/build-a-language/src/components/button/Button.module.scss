@@ -27,6 +27,7 @@
   &:focus:not(:active)::before {
     content: '';
     position: absolute;
+    pointer-events: none;
     border-radius: 1.5px;
     top: 3px;
     right: 3px;

@@ -126,7 +126,7 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window title="Editor">
+          <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
             <Input />
           </Window>
         </Desktop>
