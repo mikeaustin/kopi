@@ -14,7 +14,8 @@ const Window = ({
   onWindowEndDrag,
   ...props
 }: {
-  children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
+  // children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
+  children?: Exclude<React.ReactNode, string>;
   title?: string;
   style?: React.CSSProperties;
   onWindowStartDrag?: any;

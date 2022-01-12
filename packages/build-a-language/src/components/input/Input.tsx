@@ -51,7 +51,7 @@ const Input = ({
   };
 
   return (
-    <View flex padding="medium" /* tabIndex={0} */ className={styles.container} onKeyDown={handleKeyDown}>
+    <View flex padding="medium" tabIndex={0} className={styles.container} onKeyDown={handleKeyDown}>
       <Text ref={textElementRef} flex>
         {value.split('\n').map((line, index) => (
           <p key={index}>{line}</p>
