@@ -10,9 +10,7 @@ const List = ({
   divider,
   ...props
 }: {
-  // children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
-  // children?: React.ReactNode;
-  children?: Exclude<React.ReactNode, string>;
+  children?: Exclude<React.ReactNode, React.ReactText>;
   divider?: boolean;
 } & ViewProps) => {
   return (

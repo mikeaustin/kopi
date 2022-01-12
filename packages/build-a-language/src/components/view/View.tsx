@@ -15,8 +15,7 @@ type ViewProps = {
   tag?: string | React.ComponentType<any>;
   style?: React.CSSProperties;
   disabled?: boolean;
-  // children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
-  children?: Exclude<React.ReactNode, string | React.ReactElement<any, string>>;
+  children?: Exclude<React.ReactNode, React.ReactText>;
   foo?: React.ReactChild;
   bar?: React.ReactText;
   className?: string;

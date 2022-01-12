@@ -51,12 +51,14 @@ const Input = ({
   };
 
   return (
-    <View flex padding="medium" tabIndex={0} className={styles.container} onKeyDown={handleKeyDown}>
-      <Text ref={textElementRef} flex>
-        {value.split('\n').map((line, index) => (
-          <p key={index}>{line}</p>
-        ))}
-      </Text>
+    <View flex tabIndex={0} className={styles.container} onKeyDown={handleKeyDown}>
+      <View flex padding="medium" className={styles.content}>
+        <Text ref={textElementRef} flex>
+          {value.split('\n').map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </Text>
+      </View>
     </View>
   );
 };

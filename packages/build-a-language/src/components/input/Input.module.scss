@@ -1,7 +1,13 @@
 @import 'open-color';
 
 .container {
-  &:focus:before {
+  position: relative;
+
+  .content {
+    overflow: auto;
+  }
+
+  &:focus &.content:before {
     content: '';
     position: absolute;
     pointer-events: none;

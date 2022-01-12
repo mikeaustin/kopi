@@ -41,7 +41,6 @@ const Buttons = () => {
       </View>
       <Spacer size="small" />
       <View horizontal justifyContent="center" alignItems="center">
-        jj
         <Button link title="Multiline\nLink" />
         <Spacer size="small" />
         <Button title="Multiline\nDefault" />
