@@ -4,6 +4,7 @@ import { View, Text, Input, Button, Spacer, Divider, List } from './components';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
+import Editor from './components/editor';
 
 import styles from './App.module.scss';
 
@@ -128,6 +129,9 @@ function App() {
           <SampleWindow />
           <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
             <Input initialValue={'const x = 1;'} />
+          </Window>
+          <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
+            <Editor />
           </Window>
         </Desktop>
       </View>

@@ -53,14 +53,14 @@ const Window = ({
       <View
         padding="small"
         alignItems="center"
-        background="gray-2"
+        background="gray-3"
         style={{ cursor: 'default' }}
         onPointerDown={handleTitlePointerDown}
         onPointerUp={handleTitlePointerUp}
       >
         <Text fontWeight="bold">{title}</Text>
       </View>
-      <Divider />
+      <Divider color="gray-4" />
       <View flex background="white" {...props}>
         {children}
       </View>
