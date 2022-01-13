@@ -127,10 +127,7 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
-            <Input initialValue={'const x = 1;'} />
-          </Window>
-          <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
+          <Window title="Editor" style={{ left: 824, top: 16, width: 600, height: 424 }}>
             <Editor />
           </Window>
         </Desktop>

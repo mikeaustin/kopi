@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 
-import javascriptMod from './javascript.js';
-import pegjsMod from './pegjs.js';
+import javascriptMod from './languages/javascript.js';
+import pegjsMod from './languages/pegjs.js';
 
 import View from '../view';
 
@@ -13,7 +13,7 @@ pegjsMod(CodeMirror);
 const Editor = () => {
   const containerRef = useRef<HTMLTextAreaElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (containerRef.current) {
       var editor = CodeMirror.fromTextArea(containerRef.current, {
         lineNumbers: true,
@@ -22,13 +22,16 @@ const Editor = () => {
 
       editor.setSize("100%", "100%");
     }
+
+    return () => {
+      editor.toTextArea();
+    };
   }, []);
 
   return (
-    <textarea ref={containerRef} style={{ flex: 1 }}>
+    <View tag="textarea" ref={containerRef} flex>
       const x = 1;
-
-    </textarea>
+    </View>
   );
 };
 
