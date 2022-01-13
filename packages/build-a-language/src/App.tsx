@@ -127,7 +127,7 @@ function App() {
         <Desktop>
           <SampleWindow />
           <Window title="Editor" style={{ left: 32, top: 62, width: 600, height: 400 }}>
-            <Input />
+            <Input initialValue={'const x = 1;'} />
           </Window>
         </Desktop>
       </View>

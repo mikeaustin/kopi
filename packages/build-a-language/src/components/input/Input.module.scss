@@ -2,12 +2,20 @@
 
 .container {
   position: relative;
+  --cursor-position-x: 0px;
 
   .content {
     overflow: auto;
   }
 
-  &:focus &.content:before {
+  .content::after {
+    content: '|';
+    position: absolute;
+    left: calc(var(--cursor-position-x) + 12px);
+    top: 12px;
+  }
+
+  &:focus .content:before {
     content: '';
     position: absolute;
     pointer-events: none;
