@@ -14,6 +14,7 @@ type TextProps = {
   style?: React.CSSProperties;
   textParent?: boolean;
   flex?: boolean,
+  noSelect?: boolean;
   fitContent?: boolean;
   fontSize?: 'tiny' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   fontWeight?: 'thing' | 'extra-light' | 'light' | 'medium' | 'semi-bold' | 'bold';
@@ -25,6 +26,7 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>(({
   style,
   textParent,
   flex,
+  noSelect,
   fitContent,
   fontSize,
   fontWeight,
@@ -60,6 +62,7 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>(({
     styles.container,
     flex && styles.flex,
     textParent && styles.textParent,
+    noSelect && styles.noSelect,
     fitContent && styles.fitContent,
     (fontSize && fontSizeStyles[fontSize]) || (!textParent && fontSizeStyles.small),
     fontWeight && fontWeightStyles[fontWeight],

@@ -138,7 +138,7 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
   };
 
   return (
-    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onClick={handleClick}>
+    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onMouseDown={handleClick}>
       <Text fontSize="medium" fontWeight="semi-bold">{title}</Text>
       <Spacer size="medium" />
       <Text>{subtitle}</Text>

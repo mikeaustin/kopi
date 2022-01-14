@@ -45,8 +45,6 @@ const Window = ({
   };
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    // event.preventDefault();
-
     if (windowElementRef.current) {
       const boundingClientRect = windowElementRef.current.getBoundingClientRect();
 
@@ -75,11 +73,11 @@ const Window = ({
         padding="small"
         alignItems="center"
         background="gray-3"
-        style={{ cursor: 'default' }}
+        // style={{ cursor: 'default' }}
         onPointerDown={handleTitlePointerDown}
         onPointerUp={handleTitlePointerUp}
       >
-        <Text fontWeight="bold">{title}</Text>
+        <Text fontWeight="bold" noSelect>{title}</Text>
       </View>
       <Divider color="gray-4" />
       <View flex background="white" style={{ position: 'relative' }} {...props}>
