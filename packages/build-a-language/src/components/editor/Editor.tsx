@@ -2,11 +2,13 @@ import React, { useRef, useState, useEffect } from 'react';
 import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 
+import * as javascriptMod2 from 'codemirror/mode/javascript/javascript.js';
 import javascriptMod from './languages/javascript.js';
 import pegjsMod from './languages/pegjs.js';
 
 import View from '../view';
 
+console.log('>>>', javascriptMod2);
 javascriptMod(CodeMirror);
 pegjsMod(CodeMirror);
 
@@ -46,14 +48,15 @@ const Editor = ({
   }, [onChange]);
 
   useEffect(() => {
-    console.log('here');
     if (editorRef.current) {
       editorRef.current.setValue(defaultValue);
     }
   }, [defaultValue]);
 
   return (
-    <View tag="textarea" ref={containerRef} flex defaultValue={defaultValue.trim()} />
+    <View flex>
+      <View tag="textarea" ref={containerRef} flex defaultValue={defaultValue.trim()} />
+    </View>
   );
 };
 

@@ -1,5 +1,9 @@
 import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
 
+const title = 'NumericLiteral';
+
+const subtitle = 'Blah blah balh';
+
 const content = (
   <>
     <View horizontal alignItems="center">
@@ -59,6 +63,8 @@ const language = `
 `.trim();
 
 export {
+  title,
+  subtitle,
   content,
   grammar,
   language,

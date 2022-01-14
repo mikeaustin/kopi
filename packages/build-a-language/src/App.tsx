@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List } from './components';
@@ -124,27 +124,39 @@ const pages = [
   page2,
 ];
 
+const Heading = ({ title, subtitle }) => {
+  return (
+    <View padding="medium">
+      <Text fontSize="medium" fontWeight="bold">{title}</Text>
+      <Spacer size="small" />
+      <Text>{subtitle}</Text>
+    </View>
+  );
+};
+
 function App() {
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
+  const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
   const [grammar, setGrammar] = useState(pages[currentPage].grammar);
   const [language, setLanguage] = useState(pages[currentPage].language);
   const [value, setValue] = useState('');
 
-  const handleGrammarChange = (grammar: string) => {
+  const handleGrammarChange = useCallback((grammar: string) => {
     setGrammar(grammar);
-  };
+  }, []);
 
-  const handleLanguageChange = (language: string) => {
+  const handleLanguageChange = useCallback((language: string) => {
     setLanguage(language);
-  };
+  }, []);
 
-  const handlePreviousPageClick = () => {
+  const handlePreviousPageClick = useCallback(() => {
     setCurrentPage((currentPage) => currentPage > 0 ? currentPage - 1 : currentPage);
-  };
+  }, []);
 
-  const handleNextPageClick = () => {
+  const handleNextPageClick = useCallback(() => {
     setCurrentPage((currentPage) => currentPage < pages.length - 1 ? currentPage + 1 : currentPage);
-  };
+  }, []);
 
   useEffect(() => {
     try {
@@ -157,14 +169,14 @@ function App() {
   }, [grammar, language]);
 
   useEffect(() => {
-    setGrammar(pages[currentPage].grammar);
-    setLanguage(pages[currentPage].language);
+    setLoadedGrammar(pages[currentPage].grammar);
+    setLoadedLanguage(pages[currentPage].language);
   }, [currentPage]);
 
   return (
     <View className={styles.App}>
       <View background="gray-9" alignItems="center" padding="medium">
-        <Text fontSize="xlarge" fontWeight="bold" textColor="gray-3">
+        <Text fontSize="large" fontWeight="bold" textColor="gray-3">
           Header{' '}
           <Text textColor="red-7">Header</Text>
         </Text>
@@ -172,32 +184,58 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window horizontal title="Editor" style={{ left: 32, top: 62, width: 1280, height: 800 }}>
-            <View flex>
-              <View flex padding="large" background="gray-0">
-                {pages[currentPage].content}
-                <Spacer flex />
-                <View horizontal justifyContent="center">
-                  <Button primary title="Back" onClick={handlePreviousPageClick} />
-                  <Spacer size="small" />
-                  <Button primary solid title="Next" onClick={handleNextPageClick} />
+          <Window horizontal title="Editor" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
+            <View style={{ flex: '0 0 250px' }}>
+              {pages.map((page, index) => (
+                <>
+                  {index > 0 && <Divider />}
+                  <Heading title={page.title} subtitle={page.subtitle} />
+                </>
+              ))}
+              <Divider />
+            </View>
+            <Divider />
+            <View flex horizontal>
+              <View flex>
+                <View flex padding="large" background="gray-0">
+                  {pages[currentPage].content}
+                  <Spacer flex />
+                  <View horizontal justifyContent="center">
+                    <Button primary title="Back" onClick={handlePreviousPageClick} />
+                    <Spacer size="small" />
+                    <Button primary solid title="Next" onClick={handleNextPageClick} />
+                  </View>
                 </View>
               </View>
               <Divider />
-              <View horizontal style={{ minHeight: 100 }}>
-                <View flex>
-                  <Editor defaultValue={language} onChange={handleLanguageChange} />
+              <View flex>
+                <View horizontal style={{ minHeight: 100 }}>
+                  <View flex>
+                    <View padding="small" background="gray-0">
+                      <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
+                    </View>
+                    <Divider />
+                    <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
+                  </View>
+                  <Divider />
+                  <View flex>
+                    <View padding="small" background="gray-0">
+                      <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
+                    </View>
+                    <Divider />
+                    <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+                  </View>
                 </View>
-                <View flex>
-                  <Text textColor="gray-6" style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+                <Divider />
+                <View padding="small" background="gray-0">
+                  <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
                 </View>
+                <Divider />
+                <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
               </View>
             </View>
-            <Divider />
-            <View flex>
-              <Editor defaultValue={grammar} onChange={handleGrammarChange} />
-            </View>
           </Window>
+
         </Desktop>
       </View>
     </View>

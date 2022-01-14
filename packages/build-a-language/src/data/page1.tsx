@@ -1,9 +1,13 @@
 import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
 
+const title = 'Start';
+
+const subtitle = 'Blah blah balh';
+
 const content = (
   <>
     <View horizontal alignItems="center">
-      <Text flex fontSize="large">Let's Build a Programming Language</Text>
+      <Text flex fontSize="large" fontWeight="bold">Let's Build a Programming Language</Text>
     </View>
     <Spacer size="large" />
     <Text fontSize="medium">You might think that you'd need to be a ninja-level coder, with a bunch of tools and libraries by your side to create a programming language. In reality, if you just want to build a very simple, very basic language to learn how it's done, it's not that difficult.</Text>
@@ -26,6 +30,8 @@ const language = `
 `.trim();
 
 export {
+  title,
+  subtitle,
   content,
   grammar,
   language,
