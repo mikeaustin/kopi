@@ -15,17 +15,16 @@ import * as page3 from './data/page3';
 
 const FontSizes = () => {
   return (
-    <View flex justifyContent="center" alignItems="center">
+    <View justifyContent="center">
       <Spacer size="small" background="gray-1" />
-      <Text fontSize="xlarge">XLarge (36px)</Text>
-      <Spacer size="small" background="gray-1" />
-      <Text fontSize="large">Large (24px)</Text>
-      <Spacer size="small" background="gray-1" />
-      <Text fontSize="medium">Medium (18px)</Text>
-      <Spacer size="small" background="gray-1" />
-      <Text fontSize="small">Small (14px)</Text>
-      <Spacer size="small" background="gray-1" />
-      <Text fontSize="xsmall">XSmall (12px)</Text>
+      <List spacerSize="small" spacerColor="gray-1" alignItems="center">
+        <Text fontSize="xlarge" style={{ position: 'relative' }}>XLarge (36px)</Text>
+        <Text fontSize="large" style={{ position: 'relative' }}>Large (24px)</Text>
+        <Text fontSize="medium" style={{ position: 'relative' }}>Medium (18px)</Text>
+        <Text fontSize="small" style={{ position: 'relative' }}>Small (14px)</Text>
+        <Text fontSize="xsmall" style={{ position: 'relative' }}>XSmall (12px)</Text>
+        <Text fontSize="tiny">TINY (11px)</Text>
+      </List>
       <Spacer size="small" background="gray-1" />
     </View>
   );
@@ -231,12 +230,9 @@ function App() {
                       <Spacer size="small" />
                       <Text fontWeight="semi-bold">Introduction</Text>
                     </View>
-
                     <View horizontal flex justifyContent="center" alignItems="flex-end">
                       <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
-                      {/* <Spacer size="small" /> */}
                     </View>
-
                     <View flex alignItems="flex-end">
                       <View horizontal justifyContent="flex-end">
                         <Button primary solid title="Next" onClick={handleNextPageClick} />
