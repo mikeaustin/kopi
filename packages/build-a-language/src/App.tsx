@@ -124,9 +124,19 @@ const pages = [
   page2,
 ];
 
-const Heading = ({ title, subtitle }) => {
+const Heading = ({ title, subtitle, index, selected, onSelect }: {
+  title: string;
+  subtitle?: string;
+  index?: number;
+  selected?: boolean;
+  onSelect?: any;
+}) => {
+  const handleClick = () => {
+    onSelect(index);
+  };
+
   return (
-    <View padding="medium">
+    <View padding="medium" background={selected ? 'blue-0' : undefined} onClick={handleClick}>
       <Text fontSize="medium" fontWeight="bold">{title}</Text>
       <Spacer size="small" />
       <Text>{subtitle}</Text>
@@ -158,6 +168,10 @@ function App() {
     setCurrentPage((currentPage) => currentPage < pages.length - 1 ? currentPage + 1 : currentPage);
   }, []);
 
+  const handlePageSelect = (page: number) => {
+    setCurrentPage(page);
+  };
+
   useEffect(() => {
     try {
       const parser = Peggy.generate(grammar);
@@ -185,12 +199,18 @@ function App() {
         <Desktop>
           <SampleWindow />
           <Window horizontal title="Editor" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
-            <View style={{ flex: '0 0 250px' }}>
+            <View tag="ul" style={{ flex: '0 0 250px' }}>
               {pages.map((page, index) => (
-                <>
+                <View key={index} tag="li">
                   {index > 0 && <Divider />}
-                  <Heading title={page.title} subtitle={page.subtitle} />
-                </>
+                  <Heading
+                    title={page.title}
+                    subtitle={page.subtitle}
+                    index={index}
+                    selected={index === currentPage}
+                    onSelect={handlePageSelect}
+                  />
+                </View>
               ))}
               <Divider />
             </View>

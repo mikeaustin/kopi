@@ -45,7 +45,7 @@ const Window = ({
   };
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     if (windowElementRef.current) {
       const boundingClientRect = windowElementRef.current.getBoundingClientRect();

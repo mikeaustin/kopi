@@ -7,7 +7,7 @@ const subtitle = 'Blah blah balh';
 const content = (
   <>
     <View horizontal alignItems="center">
-      <Text flex fontSize="large">Let's Build a Programming Language</Text>
+      <Text flex fontSize="large" fontWeight="bold">Let's Build a Programming Language</Text>
     </View>
   </>
 );
