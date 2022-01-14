@@ -10,6 +10,10 @@
   &.medium {
     min-height: 16px;
   }
+
+  &.large {
+    min-height: 24px;
+  }
 }
 
 .horizontal .container {
@@ -19,5 +23,9 @@
 
   &.medium {
     min-width: 16px;
+  }
+
+  &.large {
+    min-width: 24px;
   }
 }

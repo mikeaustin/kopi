@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import CodeMirror from 'codemirror';
+import React, { useRef, useState, useEffect } from 'react';
+import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 
 import javascriptMod from './languages/javascript.js';
@@ -10,28 +10,50 @@ import View from '../view';
 javascriptMod(CodeMirror);
 pegjsMod(CodeMirror);
 
-const Editor = () => {
+const Editor = ({
+  defaultValue = '',
+  onChange,
+}: {
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+}) => {
   const containerRef = useRef<HTMLTextAreaElement>(null);
+  const editorRef = useRef<EditorFromTextArea>();
 
   useEffect(() => {
     if (containerRef.current) {
-      var editor = CodeMirror.fromTextArea(containerRef.current, {
+      editorRef.current = CodeMirror.fromTextArea(containerRef.current, {
         lineNumbers: true,
         mode: 'pegjs'
       });
 
-      editor.setSize("100%", "100%");
-    }
+      editorRef.current.setSize("100%", "100%");
 
-    return () => {
-      editor.toTextArea();
-    };
-  }, []);
+      console.log(editorRef.current);
+
+      editorRef.current.on('change', (instance) => {
+        if (onChange) {
+          onChange(instance.getValue());
+        }
+      });
+
+      const editor = editorRef.current;
+
+      return () => {
+        editor.toTextArea();
+      };
+    }
+  }, [onChange]);
+
+  useEffect(() => {
+    console.log('here');
+    if (editorRef.current) {
+      editorRef.current.setValue(defaultValue);
+    }
+  }, [defaultValue]);
 
   return (
-    <View tag="textarea" ref={containerRef} flex>
-      const x = 1;
-    </View>
+    <View tag="textarea" ref={containerRef} flex defaultValue={defaultValue.trim()} />
   );
 };
 

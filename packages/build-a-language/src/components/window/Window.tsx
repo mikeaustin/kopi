@@ -29,6 +29,21 @@ const Window = ({
     }
   }, []);
 
+  const handleWindowMouseDown = () => {
+    if (windowElementRef.current) {
+      const parentElement = windowElementRef.current?.parentElement;
+
+      if (windowElementRef.current !== parentElement?.lastChild) {
+        const windowElement = windowElementRef.current;
+
+        setTimeout(() => {
+          windowElementRef.current?.remove();
+          parentElement?.appendChild(windowElement);
+        });
+      }
+    }
+  };
+
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
     event.preventDefault();
 
@@ -49,7 +64,13 @@ const Window = ({
   };
 
   return (
-    <View ref={windowElementRef} borderRadius="small" className={styles.container} style={style}>
+    <View
+      ref={windowElementRef}
+      borderRadius="small"
+      className={styles.container}
+      style={{ ...style, zIndex: 1 }}
+      onMouseDown={handleWindowMouseDown}
+    >
       <View
         padding="small"
         alignItems="center"
@@ -61,7 +82,7 @@ const Window = ({
         <Text fontWeight="bold">{title}</Text>
       </View>
       <Divider color="gray-4" />
-      <View flex background="white" {...props}>
+      <View flex background="white" style={{ position: 'relative' }} {...props}>
         {children}
       </View>
     </View>

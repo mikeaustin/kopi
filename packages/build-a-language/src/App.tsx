@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List } from './components';
 
@@ -7,6 +8,9 @@ import Window from './components/window';
 import Editor from './components/editor';
 
 import styles from './App.module.scss';
+
+import * as page1 from './data/page1';
+import * as page2 from './data/page2';
 
 const FontSizes = () => {
   return (
@@ -115,7 +119,48 @@ const SampleWindow = ({ ...props }) => {
   );
 };
 
+const pages = [
+  page1,
+  page2,
+];
+
 function App() {
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [grammar, setGrammar] = useState(pages[currentPage].grammar);
+  const [language, setLanguage] = useState(pages[currentPage].language);
+  const [value, setValue] = useState('');
+
+  const handleGrammarChange = (grammar: string) => {
+    setGrammar(grammar);
+  };
+
+  const handleLanguageChange = (language: string) => {
+    setLanguage(language);
+  };
+
+  const handlePreviousPageClick = () => {
+    setCurrentPage((currentPage) => currentPage > 0 ? currentPage - 1 : currentPage);
+  };
+
+  const handleNextPageClick = () => {
+    setCurrentPage((currentPage) => currentPage < pages.length - 1 ? currentPage + 1 : currentPage);
+  };
+
+  useEffect(() => {
+    try {
+      const parser = Peggy.generate(grammar);
+
+      setValue(parser.parse(language));
+    } catch (error: any) {
+      setValue(error.message);
+    }
+  }, [grammar, language]);
+
+  useEffect(() => {
+    setGrammar(pages[currentPage].grammar);
+    setLanguage(pages[currentPage].language);
+  }, [currentPage]);
+
   return (
     <View className={styles.App}>
       <View background="gray-9" alignItems="center" padding="medium">
@@ -127,8 +172,31 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window title="Editor" style={{ left: 824, top: 16, width: 600, height: 424 }}>
-            <Editor />
+          <Window horizontal title="Editor" style={{ left: 32, top: 62, width: 1280, height: 800 }}>
+            <View flex>
+              <View flex padding="large" background="gray-0">
+                {pages[currentPage].content}
+                <Spacer flex />
+                <View horizontal justifyContent="center">
+                  <Button primary title="Back" onClick={handlePreviousPageClick} />
+                  <Spacer size="small" />
+                  <Button primary solid title="Next" onClick={handleNextPageClick} />
+                </View>
+              </View>
+              <Divider />
+              <View horizontal style={{ minHeight: 100 }}>
+                <View flex>
+                  <Editor defaultValue={language} onChange={handleLanguageChange} />
+                </View>
+                <View flex>
+                  <Text textColor="gray-6" style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+                </View>
+              </View>
+            </View>
+            <Divider />
+            <View flex>
+              <Editor defaultValue={grammar} onChange={handleGrammarChange} />
+            </View>
           </Window>
         </Desktop>
       </View>
