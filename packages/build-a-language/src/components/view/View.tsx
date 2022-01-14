@@ -8,6 +8,8 @@ import viewStyles from './View.module.scss';
 import justifyContentStyles from '../../styles/justifyContent.module.scss';
 import alignItemsStyles from '../../styles/alignItems.module.scss';
 import paddingStyles from '../../styles/padding.module.scss';
+import verticalPaddingStyles from '../../styles/verticalPadding.module.scss';
+import horizontalPaddingStyles from '../../styles/horizontalPadding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
 import borderRadiusStyles from '../../styles/borderRadius.module.scss';
 
@@ -24,6 +26,8 @@ type ViewProps = {
   justifyContent?: 'flex-start' | 'center' | 'flex-end';
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  verticalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  horizontalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
   borderRadius?: boolean | 'xsmall' | 'small' | 'max';
   onPointerDown?: PointerEventHandler;
@@ -43,6 +47,8 @@ const View = React.forwardRef(({
   justifyContent,
   alignItems,
   padding,
+  verticalPadding,
+  horizontalPadding,
   background,
   borderRadius,
   onPointerDown,
@@ -60,6 +66,8 @@ const View = React.forwardRef(({
     justifyContent && justifyContentStyles[justifyContent],
     alignItems && alignItemsStyles[alignItems],
     padding && paddingStyles[padding],
+    verticalPadding && verticalPaddingStyles[verticalPadding],
+    horizontalPadding && horizontalPaddingStyles[horizontalPadding],
     background && backgroundColorStyles[background],
     (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
     className,

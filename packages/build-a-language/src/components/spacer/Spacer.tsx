@@ -6,7 +6,7 @@ import View, { type ViewProps } from '../view';
 import styles from './Spacer.module.scss';
 
 type SpacerProps = {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
 };
 
 const Spacer = ({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Peggy from 'peggy';
 
-import { View, Text, Input, Button, Spacer, Divider, List } from './components';
+import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
@@ -11,6 +11,7 @@ import styles from './App.module.scss';
 
 import * as page1 from './data/page1';
 import * as page2 from './data/page2';
+import * as page3 from './data/page3';
 
 const FontSizes = () => {
   return (
@@ -122,6 +123,7 @@ const SampleWindow = ({ ...props }) => {
 const pages = [
   page1,
   page2,
+  page3,
 ];
 
 const Heading = ({ title, subtitle, index, selected, onSelect }: {
@@ -136,11 +138,11 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
   };
 
   return (
-    <View padding="medium" background={selected ? 'blue-0' : undefined} onClick={handleClick}>
-      <Text fontSize="medium" fontWeight="bold">{title}</Text>
-      <Spacer size="small" />
+    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onClick={handleClick}>
+      <Text fontSize="medium" fontWeight="semi-bold">{title}</Text>
+      <Spacer size="medium" />
       <Text>{subtitle}</Text>
-    </View>
+    </Clickable>
   );
 };
 
@@ -176,9 +178,9 @@ function App() {
     try {
       const parser = Peggy.generate(grammar);
 
-      setValue(parser.parse(language));
+      setValue(JSON.stringify(parser.parse(language), undefined, 2));
     } catch (error: any) {
-      setValue(error.message);
+      setValue(error.toString());
     }
   }, [grammar, language]);
 
@@ -198,7 +200,7 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window horizontal title="Editor" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
+          <Window horizontal title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
             <View tag="ul" style={{ flex: '0 0 250px' }}>
               {pages.map((page, index) => (
                 <View key={index} tag="li">
@@ -217,13 +219,31 @@ function App() {
             <Divider />
             <View flex horizontal>
               <View flex>
-                <View flex padding="large" background="gray-0">
+                <View flex padding="medium" horizontalPadding="large" background="gray-0">
+                  <Spacer size="medium" />
                   {pages[currentPage].content}
                   <Spacer flex />
                   <View horizontal justifyContent="center">
-                    <Button primary title="Back" onClick={handlePreviousPageClick} />
-                    <Spacer size="small" />
-                    <Button primary solid title="Next" onClick={handleNextPageClick} />
+                    <View flex>
+                      <View horizontal justifyContent="flex-start">
+                        <Button primary title="Back" onClick={handlePreviousPageClick} />
+                      </View>
+                      <Spacer size="small" />
+                      <Text fontWeight="semi-bold">Introduction</Text>
+                    </View>
+
+                    <View horizontal flex justifyContent="center" alignItems="flex-end">
+                      <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
+                      {/* <Spacer size="small" /> */}
+                    </View>
+
+                    <View flex alignItems="flex-end">
+                      <View horizontal justifyContent="flex-end">
+                        <Button primary solid title="Next" onClick={handleNextPageClick} />
+                      </View>
+                      <Spacer size="small" />
+                      <Text fontWeight="semi-bold">Syntax and Grammar</Text>
+                    </View>
                   </View>
                 </View>
               </View>

@@ -16,7 +16,7 @@ type TextProps = {
   flex?: boolean,
   fitContent?: boolean;
   fontSize?: 'tiny' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
-  fontWeight?: 'medium' | 'semi-bold' | 'bold';
+  fontWeight?: 'thing' | 'extra-light' | 'light' | 'medium' | 'semi-bold' | 'bold';
   textColor?: Color | 'primary';
 } & React.HTMLProps<HTMLDivElement>;
 

@@ -2,13 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import CodeMirror, { EditorFromTextArea } from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 
-import * as javascriptMod2 from 'codemirror/mode/javascript/javascript.js';
 import javascriptMod from './languages/javascript.js';
 import pegjsMod from './languages/pegjs.js';
 
 import View from '../view';
 
-console.log('>>>', javascriptMod2);
 javascriptMod(CodeMirror);
 pegjsMod(CodeMirror);
 
@@ -30,8 +28,6 @@ const Editor = ({
       });
 
       editorRef.current.setSize("100%", "100%");
-
-      console.log(editorRef.current);
 
       editorRef.current.on('change', (instance) => {
         if (onChange) {

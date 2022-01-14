@@ -14,6 +14,10 @@
   &.large {
     min-height: 24px;
   }
+
+  &.xlarge {
+    min-height: 32px;
+  }
 }
 
 .horizontal .container {
@@ -27,5 +31,9 @@
 
   &.large {
     min-width: 24px;
+  }
+
+  &.xlarge {
+    min-width: 32px;
   }
 }

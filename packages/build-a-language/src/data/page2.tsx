@@ -1,49 +1,24 @@
 import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
 
-const title = 'NumericLiteral';
+const title = 'Syntax and Grammar';
 
-const subtitle = 'Blah blah balh';
+const subtitle = 'Learn the building blocks of a programming language.';
 
 const content = (
   <>
     <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="bold">Let's Build a Programming Language</Text>
+      <Text flex fontSize="large" fontWeight="bold">Let’s Build a Programming Language</Text>
     </View>
+    <Spacer size="medium" />
+    <Text fontSize="medium" fontWeight="bold">Syntax and Grammar</Text>
+    <Spacer size="xlarge" />
   </>
 );
 
 const grammar = `
-{
-  const interpreterVisitors = {
-    AddExpression: ({ leftExpression, rightExpression }) => {
-      return evaluate(leftExpression) + evaluate(rightExpression);
-    },
-
-    NumericLiteral: ({ value }) => {
-      return value;
-    }
-  }
-
-  function evaluate(node) {
-    return interpreterVisitors[node.type](node);
-  }
-}
-
 Program
-  = expression:Expression {
-      return evaluate(expression);
-    }
-
-Expression
-  = AddExpression
-
-AddExpression
-  = leftExpression:NumericLiteral _ "+" _ rightExpression:NumericLiteral {
-      return {
-        type: 'AddExpression',
-        leftExpression: leftExpression,
-        rightExpression: rightExpression
-      };
+  = expression:NumericLiteral {
+      return expression;
     }
 
 NumericLiteral
@@ -53,13 +28,10 @@ NumericLiteral
         value: Number(value.join(''))
       };
     }
-
-_ "whitespace"
-  = [ \\t]*
 `.trim();
 
 const language = `
-2 + 3
+2
 `.trim();
 
 export {
