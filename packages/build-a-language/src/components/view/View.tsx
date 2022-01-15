@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import Color from '../color';
 
-import viewStyles from './View.module.scss';
+import styles from './View.module.scss';
 
 import justifyContentStyles from '../../styles/justifyContent.module.scss';
 import alignItemsStyles from '../../styles/alignItems.module.scss';
@@ -30,6 +30,7 @@ type ViewProps = {
   horizontalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
   borderRadius?: boolean | 'xsmall' | 'small' | 'max';
+  hidden?: boolean;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;
@@ -51,6 +52,7 @@ const View = React.forwardRef(({
   horizontalPadding,
   background,
   borderRadius,
+  hidden,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -60,9 +62,9 @@ const View = React.forwardRef(({
   const Component = tag;
 
   const containerClassName = classNames(
-    viewStyles.container,
-    flex && viewStyles.flex,
-    horizontal && viewStyles.horizontal,
+    styles.container,
+    flex && styles.flex,
+    horizontal && styles.horizontal,
     justifyContent && justifyContentStyles[justifyContent],
     alignItems && alignItemsStyles[alignItems],
     padding && paddingStyles[padding],
@@ -70,6 +72,7 @@ const View = React.forwardRef(({
     horizontalPadding && horizontalPaddingStyles[horizontalPadding],
     background && backgroundColorStyles[background],
     (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
+    hidden && styles.hidden,
     className,
   );
 

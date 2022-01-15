@@ -225,26 +225,68 @@ function App() {
                   <Spacer flex />
                   <View horizontal justifyContent="center">
                     <View flex>
+                      <Text flex fontWeight="semi-bold">{pages[currentPage - 1]?.title}</Text>
+                    </View>
+                    <View flex alignItems="flex-end">
+                      <Text flex fontWeight="semi-bold">{pages[currentPage + 1]?.title}</Text>
+                    </View>
+                  </View>
+                  <Spacer size="small" />
+                  <Spacer size="xsmall" />
+                  <View horizontal justifyContent="center">
+                    <View flex horizontal>
+                      <Button
+                        primary
+                        title="Back"
+                        leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
+                        style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
+                        hidden={currentPage < 1}
+                        onClick={handlePreviousPageClick}
+                      />
+                    </View>
+                    <View flex justifyContent="center" alignItems="center">
+                      <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
+                    </View>
+                    <View flex horizontal justifyContent="flex-end">
+                      <Button
+                        primary
+                        solid
+                        title="Next"
+                        rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
+                        hidden={currentPage + 1 > pages.length - 1}
+                        onClick={handleNextPageClick}
+                      />
+                    </View>
+                  </View>
+
+                  {/* <View horizontal justifyContent="center">
+                    <View flex>
                       {currentPage > 0 && (
                         <>
+                          <Text fontWeight="semi-bold">{pages[currentPage - 1].title}</Text>
+                          <Spacer size="small" />
+                          <Spacer size="xsmall" />
                           <View horizontal justifyContent="flex-start">
                             <Button
                               primary
                               title="Back"
                               leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
-                              onClick={handlePreviousPageClick} />
+                              onClick={handlePreviousPageClick}
+                            />
                           </View>
-                          <Spacer size="small" />
-                          <Text fontWeight="semi-bold">{pages[currentPage - 1].title}</Text>
                         </>
                       )}
                     </View>
-                    <View horizontal flex justifyContent="center" alignItems="flex-end">
+                    <View flex justifyContent="flex-end" alignItems="center">
                       <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
+                      <Spacer size="small" />
                     </View>
                     <View flex alignItems="flex-end">
                       {currentPage < pages.length - 1 && (
                         <>
+                          <Text fontWeight="semi-bold">{pages[currentPage + 1].title}</Text>
+                          <Spacer size="small" />
+                          <Spacer size="xsmall" />
                           <View horizontal justifyContent="flex-end">
                             <Button
                               primary
@@ -254,12 +296,10 @@ function App() {
                               onClick={handleNextPageClick}
                             />
                           </View>
-                          <Spacer size="small" />
-                          <Text fontWeight="semi-bold">{pages[currentPage + 1].title}</Text>
                         </>
                       )}
                     </View>
-                  </View>
+                  </View> */}
                 </View>
               </View>
               <Divider />
