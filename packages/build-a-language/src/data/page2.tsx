@@ -7,10 +7,10 @@ const subtitle = 'Learn the building blocks of a programming language.';
 const content = (
   <>
     <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="bold">Let’s Build a Programming Language</Text>
+      <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
     </View>
     <Spacer size="medium" />
-    <Text fontSize="medium" fontWeight="bold">Syntax and Grammar</Text>
+    <Text fontSize="medium" fontWeight="semi-bold">Syntax and Grammar</Text>
     <Spacer size="xlarge" />
   </>
 );

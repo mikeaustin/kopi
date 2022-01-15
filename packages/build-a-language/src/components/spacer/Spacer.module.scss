@@ -3,6 +3,10 @@
 .container {
   align-self: stretch;
 
+  &.xsmall {
+    min-height: 4px;
+  }
+
   &.small {
     min-height: 8px;
   }
@@ -21,6 +25,10 @@
 }
 
 .horizontal > .container {
+  &.xsmall {
+    min-width: 4px;
+  }
+
   &.small {
     min-width: 8px;
   }

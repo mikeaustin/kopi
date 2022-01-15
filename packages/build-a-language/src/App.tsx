@@ -12,6 +12,7 @@ import styles from './App.module.scss';
 import * as page1 from './data/page1';
 import * as page2 from './data/page2';
 import * as page3 from './data/page3';
+import * as page4 from './data/page4';
 
 const FontSizes = () => {
   return (
@@ -123,6 +124,7 @@ const pages = [
   page1,
   page2,
   page3,
+  page4,
 ];
 
 const Heading = ({ title, subtitle, index, selected, onSelect }: {
@@ -138,7 +140,7 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
 
   return (
     <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onMouseDown={handleClick}>
-      <Text fontSize="medium" fontWeight="semi-bold">{title}</Text>
+      <Text fontSize="medium" fontWeight="semi-bold">{`${index !== undefined ? index + 1 : ''}. ${title}`}</Text>
       <Spacer size="medium" />
       <Text>{subtitle}</Text>
     </Clickable>
@@ -218,27 +220,44 @@ function App() {
             <Divider />
             <View flex horizontal>
               <View flex>
-                <View flex padding="medium" horizontalPadding="large" background="gray-0">
-                  <Spacer size="medium" />
+                <View flex padding="large" horizontalPadding="large" background="gray-0">
                   {pages[currentPage].content}
                   <Spacer flex />
                   <View horizontal justifyContent="center">
                     <View flex>
-                      <View horizontal justifyContent="flex-start">
-                        <Button primary title="Back" onClick={handlePreviousPageClick} />
-                      </View>
-                      <Spacer size="small" />
-                      <Text fontWeight="semi-bold">Introduction</Text>
+                      {currentPage > 0 && (
+                        <>
+                          <View horizontal justifyContent="flex-start">
+                            <Button
+                              primary
+                              title="Back"
+                              leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
+                              onClick={handlePreviousPageClick} />
+                          </View>
+                          <Spacer size="small" />
+                          <Text fontWeight="semi-bold">{pages[currentPage - 1].title}</Text>
+                        </>
+                      )}
                     </View>
                     <View horizontal flex justifyContent="center" alignItems="flex-end">
                       <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
                     </View>
                     <View flex alignItems="flex-end">
-                      <View horizontal justifyContent="flex-end">
-                        <Button primary solid title="Next" onClick={handleNextPageClick} />
-                      </View>
-                      <Spacer size="small" />
-                      <Text fontWeight="semi-bold">Syntax and Grammar</Text>
+                      {currentPage < pages.length - 1 && (
+                        <>
+                          <View horizontal justifyContent="flex-end">
+                            <Button
+                              primary
+                              solid
+                              title="Next"
+                              rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
+                              onClick={handleNextPageClick}
+                            />
+                          </View>
+                          <Spacer size="small" />
+                          <Text fontWeight="semi-bold">{pages[currentPage + 1].title}</Text>
+                        </>
+                      )}
                     </View>
                   </View>
                 </View>
@@ -271,7 +290,6 @@ function App() {
               </View>
             </View>
           </Window>
-
         </Desktop>
       </View>
     </View>

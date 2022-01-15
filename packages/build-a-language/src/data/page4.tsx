@@ -1,6 +1,6 @@
 import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
 
-const title = 'Abstract Syntax Tree';
+const title = 'Parser Rules';
 
 const subtitle = 'Learn what parser rules are and how to create and use them.';
 
@@ -10,7 +10,7 @@ const content = (
       <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
     </View>
     <Spacer size="medium" />
-    <Text fontSize="medium" fontWeight="semi-bold">Abstract Syntax Tree</Text>
+    <Text fontSize="medium" fontWeight="semi-bold">Parser Rules</Text>
     <Spacer size="xlarge" />
   </>
 );

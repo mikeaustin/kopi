@@ -4,6 +4,14 @@
   color: var(--primary-color);
 }
 
+.white {
+  color: white;
+}
+
+.black {
+  color: black;
+}
+
 @each $color-list, $name in $oc-color-list {
   @each $level, $color in $color-list {
     .#{$name}-#{$level} {

@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import View, { type ViewProps } from '../view';
 import Text from '../text';
+import Spacer from '../spacer';
 
 import styles from './Button.module.scss';
 
@@ -12,6 +13,8 @@ const Button = ({
   solid,
   link,
   rounded,
+  leftIcon,
+  rightIcon,
   ...props
 }: {
   title: string;
@@ -19,6 +22,8 @@ const Button = ({
   solid?: boolean;
   link?: boolean;
   rounded?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 } & ViewProps) => {
   const containerClassName = classNames(
     styles.container,
@@ -35,8 +40,20 @@ const Button = ({
       : undefined;
 
   return (
-    <View tag="button" borderRadius={rounded ? 'max' : true} className={containerClassName} {...props}>
+    <View tag="button" horizontal borderRadius={rounded ? 'max' : true} className={containerClassName} {...props}>
+      {leftIcon && (
+        <>
+          {leftIcon}
+          <Spacer size="small" />
+        </>
+      )}
       <Text fontWeight="bold" textColor={textColor}>{title}</Text>
+      {rightIcon && (
+        <>
+          <Spacer size="small" />
+          {rightIcon}
+        </>
+      )}
     </View>
   );
 };

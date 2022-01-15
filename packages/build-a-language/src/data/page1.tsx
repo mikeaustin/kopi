@@ -7,10 +7,10 @@ const subtitle = 'Introduction to learning how to create a programming language.
 const content = (
   <>
     <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="bold">Let’s Build a Programming Language</Text>
+      <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
     </View>
     <Spacer size="medium" />
-    <Text fontSize="medium" fontWeight="bold">
+    <Text fontSize="medium" fontWeight="semi-bold">
       Introduction
     </Text>
     <Spacer size="xlarge" />
@@ -21,10 +21,11 @@ const content = (
     <Text fontSize="medium">
       This tutorial will guide you through the steps of creating a simple programming language, interactively.
       Even if you're not a developer, you can follow along and try the examples.
+
     </Text>
     <Spacer size="large" />
     <Text fontSize="medium">
-      In the next section, <Text fontWeight="semi-bold">Syntax and Grammar</Text>, we'll talk about the building blocks of creating a language.
+      In the next section, <Text fontWeight="semi-bold">Syntax and Grammar</Text>, we’ll talk about the building blocks of creating a language.
     </Text>
   </>
 );
