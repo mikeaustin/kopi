@@ -6,11 +6,11 @@ const subtitle = 'Introduction to learning how to create a programming language.
 
 const content = (
   <>
-    <View horizontal alignItems="center">
+    {/* <View horizontal alignItems="center">
       <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
     </View>
-    <Spacer size="medium" />
-    <Text fontSize="medium" fontWeight="semi-bold">
+    <Spacer size="medium" /> */}
+    <Text fontSize="large" fontWeight="semi-bold">
       Introduction
     </Text>
     <Spacer size="xlarge" />

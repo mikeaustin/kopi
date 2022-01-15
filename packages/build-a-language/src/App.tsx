@@ -201,132 +201,98 @@ function App() {
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window horizontal title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
-            <View tag="ul" style={{ flex: '0 0 250px' }}>
-              {pages.map((page, index) => (
-                <View key={index} tag="li">
-                  {index > 0 && <Divider />}
-                  <Heading
-                    title={page.title}
-                    subtitle={page.subtitle}
-                    index={index}
-                    selected={index === currentPage}
-                    onSelect={handlePageSelect}
-                  />
-                </View>
-              ))}
-              <Divider />
+          <Window title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
+            <View padding="medium">
+              <Text fontSize="medium" fontWeight="semi-bold">
+                Let’s Build a Programming Language
+              </Text>
             </View>
             <Divider />
             <View flex horizontal>
-              <View flex>
-                <View flex padding="large" horizontalPadding="large" background="gray-0">
-                  {pages[currentPage].content}
-                  <Spacer flex />
-                  <View horizontal justifyContent="center">
-                    <View flex>
-                      <Text flex fontWeight="semi-bold">{pages[currentPage - 1]?.title}</Text>
-                    </View>
-                    <View flex alignItems="flex-end">
-                      <Text flex fontWeight="semi-bold">{pages[currentPage + 1]?.title}</Text>
-                    </View>
+              <View tag="ul" style={{ flex: '0 0 250px' }}>
+                {pages.map((page, index) => (
+                  <View key={index} tag="li">
+                    {index > 0 && <Divider />}
+                    <Heading
+                      title={page.title}
+                      subtitle={page.subtitle}
+                      index={index}
+                      selected={index === currentPage}
+                      onSelect={handlePageSelect}
+                    />
                   </View>
-                  <Spacer size="small" />
-                  <Spacer size="xsmall" />
-                  <View horizontal justifyContent="center">
-                    <View flex horizontal>
-                      <Button
-                        primary
-                        title="Back"
-                        leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
-                        style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
-                        hidden={currentPage < 1}
-                        onClick={handlePreviousPageClick}
-                      />
-                    </View>
-                    <View flex justifyContent="center" alignItems="center">
-                      <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
-                    </View>
-                    <View flex horizontal justifyContent="flex-end">
-                      <Button
-                        primary
-                        solid
-                        title="Next"
-                        rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
-                        hidden={currentPage + 1 > pages.length - 1}
-                        onClick={handleNextPageClick}
-                      />
-                    </View>
-                  </View>
-
-                  {/* <View horizontal justifyContent="center">
-                    <View flex>
-                      {currentPage > 0 && (
-                        <>
-                          <Text fontWeight="semi-bold">{pages[currentPage - 1].title}</Text>
-                          <Spacer size="small" />
-                          <Spacer size="xsmall" />
-                          <View horizontal justifyContent="flex-start">
-                            <Button
-                              primary
-                              title="Back"
-                              leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
-                              onClick={handlePreviousPageClick}
-                            />
-                          </View>
-                        </>
-                      )}
-                    </View>
-                    <View flex justifyContent="flex-end" alignItems="center">
-                      <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
-                      <Spacer size="small" />
-                    </View>
-                    <View flex alignItems="flex-end">
-                      {currentPage < pages.length - 1 && (
-                        <>
-                          <Text fontWeight="semi-bold">{pages[currentPage + 1].title}</Text>
-                          <Spacer size="small" />
-                          <Spacer size="xsmall" />
-                          <View horizontal justifyContent="flex-end">
-                            <Button
-                              primary
-                              solid
-                              title="Next"
-                              rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
-                              onClick={handleNextPageClick}
-                            />
-                          </View>
-                        </>
-                      )}
-                    </View>
-                  </View> */}
-                </View>
+                ))}
+                <Divider />
               </View>
               <Divider />
-              <View flex>
-                <View horizontal style={{ minHeight: 100 }}>
-                  <View flex>
-                    <View padding="small" background="gray-0">
-                      <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
+              <View flex horizontal>
+                <View flex>
+                  <View flex padding="large" horizontalPadding="large" background="gray-0">
+                    {pages[currentPage].content}
+                    <Spacer flex />
+                    <View horizontal justifyContent="center">
+                      <View flex>
+                        <Text flex fontWeight="semi-bold">{pages[currentPage - 1]?.title}</Text>
+                      </View>
+                      <View flex alignItems="flex-end">
+                        <Text flex fontWeight="semi-bold">{pages[currentPage + 1]?.title}</Text>
+                      </View>
+                    </View>
+                    <Spacer size="small" />
+                    <Spacer size="xsmall" />
+                    <View horizontal justifyContent="center">
+                      <View flex horizontal>
+                        <Button
+                          primary
+                          title="Back"
+                          leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
+                          style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
+                          hidden={currentPage < 1}
+                          onClick={handlePreviousPageClick}
+                        />
+                      </View>
+                      <View flex justifyContent="center" alignItems="center">
+                        <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
+                      </View>
+                      <View flex horizontal justifyContent="flex-end">
+                        <Button
+                          primary
+                          solid
+                          title="Next"
+                          rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
+                          hidden={currentPage + 1 > pages.length - 1}
+                          onClick={handleNextPageClick}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <Divider />
+                <View flex>
+                  <View horizontal style={{ minHeight: 100 }}>
+                    <View flex>
+                      <View padding="small" background="gray-0">
+                        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
+                      </View>
+                      <Divider />
+                      <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
                     </View>
                     <Divider />
-                    <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
+                    <View flex>
+                      <View padding="small" background="gray-0">
+                        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
+                      </View>
+                      <Divider />
+                      <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+                    </View>
                   </View>
                   <Divider />
-                  <View flex>
-                    <View padding="small" background="gray-0">
-                      <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
-                    </View>
-                    <Divider />
-                    <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+                  <View padding="small" background="gray-0">
+                    <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
                   </View>
+                  <Divider />
+                  <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
                 </View>
-                <Divider />
-                <View padding="small" background="gray-0">
-                  <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
-                </View>
-                <Divider />
-                <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
               </View>
             </View>
           </Window>
