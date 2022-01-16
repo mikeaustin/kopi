@@ -1,0 +1,19 @@
+@import 'open-color';
+
+.container {
+  :global(p) {
+    margin: 0;
+  }
+}
+
+.flex {
+  flex: 1;
+}
+
+.fitContent {
+  position: absolute;
+}
+
+.noSelect {
+  user-select: none;
+}

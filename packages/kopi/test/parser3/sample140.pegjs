@@ -15,7 +15,7 @@
     }
 
     apply(thisArg, [argumentValue]) {
-      return evaluate(this.expression, {
+      return evaluateNode(this.expression, {
         ...this.environment,
         [this.parameter.name]: argumentValue
       })
@@ -34,26 +34,26 @@
       const bindVariables = (bindings) => environment = ({ ...environment, ...bindings });
 
       return statements.reduce((_, expression) => (
-        evaluate(expression, environment, bindVariables)
+        evaluateNode(expression, environment, bindVariables)
       ), undefined);
     },
 
     Assignment: ({ variable, expression }, environment, bindVariables) => {
       bindVariables({
-        [variable]: evaluate(expression, environment, bindVariables)
+        [variable]: evaluateNode(expression, environment, bindVariables)
       });
     },
 
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
-      const leftValue = evaluate(leftExpression, environment);
-      const rightValue = evaluate(rightExpression, environment);
+      const leftValue = evaluateNode(leftExpression, environment);
+      const rightValue = evaluateNode(rightExpression, environment);
 
       return operatorFunctions[operator](leftValue, rightValue, environment);
     },
 
     FunctionApplicationExpression({ expression, argument }, environment) {
-      const expressionValue = evaluate(expression, environment);
-      const argumentValue = evaluate(argument, environment);
+      const expressionValue = evaluateNode(expression, environment);
+      const argumentValue = evaluateNode(argument, environment);
 
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
@@ -71,26 +71,23 @@
     }
   }
 
-  function evaluate(node, environment, bindVariables) {
+  function evaluateNode(node, environment, bindVariables) {
     return interpreterVisitors[node.type](node, environment, bindVariables);
   }
 }
 
 Program
-  = block:Block {
-      const environment = {};
-
-      return evaluate(block, environment);
-    }
-
-Block
   = Newline* head:Statement? tail:(Newline+ Statement)* Newline* {
-      return {
+      const statements = {
         type: 'Block',
         statements: tail.reduce((statements, [, statement]) => (
           [...statements, statement]
         ), [head])
       };
+
+      const environment = {};
+
+      return evaluateNode(statements, environment);
     }
 
 Statement
@@ -135,8 +132,8 @@ FunctionApplicationExpression
   = expression:PrimaryExpression args:(_ PrimaryExpression)* {
       return args.reduce((expression, [, argument]) => ({
         type: 'FunctionApplicationExpression',
-        expression,
-        argument
+        expression: expression,
+        argument: argument
       }), expression);
     }
 
@@ -152,8 +149,8 @@ FunctionExpression
   = parameter:Identifier _ "=>" _ expression:AddExpression {
       return {
         type: 'FunctionExpression',
-        parameter,
-        expression
+        parameter: parameter,
+        expression: expression
       };
     }
 

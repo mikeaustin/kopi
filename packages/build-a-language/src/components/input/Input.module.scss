@@ -1,0 +1,29 @@
+@import 'open-color';
+
+.container {
+  position: relative;
+  --cursor-position-x: 0px;
+
+  .content {
+    overflow: auto;
+  }
+
+  .content::after {
+    content: '|';
+    position: absolute;
+    left: calc(var(--cursor-position-x) + 12px);
+    top: 12px;
+  }
+
+  &:focus .content:before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    border-radius: 1.5px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px dashed $oc-gray-4;
+  }
+}

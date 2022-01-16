@@ -1,0 +1,88 @@
+@import 'open-color';
+
+.container {
+  position: relative;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 8px 16px;
+  box-shadow: inset 0 0 0 1px $oc-gray-3;
+
+  &:enabled {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:active:enabled {
+    background: $oc-gray-3;
+  }
+
+  // &:focus {
+  //   box-shadow: inset 0 0 0 2px $oc-gray-4;
+  // }
+
+  &:focus:not(:active)::before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    border-radius: 1.5px;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px dashed $oc-gray-4;
+  }
+
+  &:focus.rounded:before {
+    border-radius: 1000px;
+  }
+
+  &.link {
+    box-shadow: none;
+
+    &:active:enabled {
+      background-color: var(--primary-color-light);
+    }
+  }
+
+  &.solid {
+    background-color: $oc-gray-3;
+    box-shadow: none;
+
+    &:active:enabled {
+      background-color: $oc-gray-4;
+    }
+
+    &:focus::before {
+      border: 1px dashed $oc-gray-5;
+    }
+  }
+
+  &.primary {
+    box-shadow: inset 0 0 0 1px var(--primary-color);
+
+    &:active:enabled {
+      background-color: var(--primary-color-1);
+    }
+
+    &:focus::before {
+      border: 1px dashed var(--primary-color-3);
+    }
+  }
+
+  &.solid.primary {
+    background-color: var(--primary-color);
+    box-shadow: none;
+
+    &:active:enabled {
+      background-color: var(--primary-color-7);
+    }
+
+    &:focus::before {
+      border: 1px dashed var(--primary-color-8);
+    }
+  }
+}

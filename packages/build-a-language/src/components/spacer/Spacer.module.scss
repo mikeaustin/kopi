@@ -1,0 +1,47 @@
+@value horizontal from "../view/View.module.scss";
+
+.container {
+  align-self: stretch;
+
+  &.xsmall {
+    min-height: 4px;
+  }
+
+  &.small {
+    min-height: 8px;
+  }
+
+  &.medium {
+    min-height: 16px;
+  }
+
+  &.large {
+    min-height: 24px;
+  }
+
+  &.xlarge {
+    min-height: 32px;
+  }
+}
+
+.horizontal > .container {
+  &.xsmall {
+    min-width: 4px;
+  }
+
+  &.small {
+    min-width: 8px;
+  }
+
+  &.medium {
+    min-width: 16px;
+  }
+
+  &.large {
+    min-width: 24px;
+  }
+
+  &.xlarge {
+    min-width: 32px;
+  }
+}
