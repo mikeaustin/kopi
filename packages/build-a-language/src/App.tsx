@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import ReactMarkdown from 'react-markdown';
-import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
-import Tutorial from './windows/tutorial/Tutorial';
+import Tutorial from './applications/tutorial/Tutorial';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
-import Editor from './components/editor';
 
 import styles from './App.module.scss';
 
