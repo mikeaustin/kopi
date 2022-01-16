@@ -4,16 +4,7 @@ const title = 'Abstract Syntax Tree';
 
 const subtitle = 'Learn what parser rules are and how to create and use them.';
 
-const content = (
-  <>
-    <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
-    </View>
-    <Spacer size="medium" />
-    <Text fontSize="medium" fontWeight="semi-bold">Abstract Syntax Tree</Text>
-    <Spacer size="xlarge" />
-  </>
-);
+const markdown = ``;
 
 const grammar = `
 {
@@ -68,7 +59,7 @@ const language = `
 export {
   title,
   subtitle,
-  content,
+  markdown,
   grammar,
   language,
 };

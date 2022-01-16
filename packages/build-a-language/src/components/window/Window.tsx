@@ -14,7 +14,6 @@ const Window = ({
   onWindowEndDrag,
   ...props
 }: {
-  // children?: undefined | false | React.ReactElement | (undefined | false | React.ReactElement)[];
   children?: Exclude<React.ReactNode, string>;
   title?: string;
   style?: React.CSSProperties;
@@ -65,6 +64,7 @@ const Window = ({
     <View
       ref={windowElementRef}
       borderRadius="small"
+      dropShadow
       className={styles.container}
       style={{ ...style, zIndex: 1 }}
       onMouseDown={handleWindowMouseDown}

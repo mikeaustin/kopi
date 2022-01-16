@@ -4,16 +4,7 @@ const title = 'Syntax and Grammar';
 
 const subtitle = 'Learn the building blocks of a programming language.';
 
-const content = (
-  <>
-    {/* <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
-    </View> */}
-    {/* <Spacer size="medium" /> */}
-    <Text fontSize="large" fontWeight="semi-bold">Syntax and Grammar</Text>
-    <Spacer size="xlarge" />
-  </>
-);
+const markdown = ``;
 
 const grammar = `
 Program
@@ -37,7 +28,7 @@ const language = `
 export {
   title,
   subtitle,
-  content,
+  markdown,
   grammar,
   language,
 };

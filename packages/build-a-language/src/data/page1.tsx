@@ -4,31 +4,15 @@ const title = 'Introduction';
 
 const subtitle = 'Introduction to learning how to create a programming language.';
 
-const content = (
-  <>
-    {/* <View horizontal alignItems="center">
-      <Text flex fontSize="large" fontWeight="semi-bold">Let’s Build a Programming Language</Text>
-    </View>
-    <Spacer size="medium" /> */}
-    <Text fontSize="large" fontWeight="semi-bold">
-      Introduction
-    </Text>
-    <Spacer size="xlarge" />
-    <Text fontSize="medium">
-      You might think that you’d need to be a ninja-level coder, with a bunch of tools and libraries by your side to create a programming language. In reality, if you just want to build a very simple, very basic language to learn how it’s done, it’s not that difficult.
-    </Text>
-    <Spacer size="large" />
-    <Text fontSize="medium">
-      This tutorial will guide you through the steps of creating a simple programming language, interactively.
-      Even if you're not a developer, you can follow along and try the examples.
+const markdown = `
+# Introduction
 
-    </Text>
-    <Spacer size="large" />
-    <Text fontSize="medium">
-      In the next section, <Text fontWeight="semi-bold">Syntax and Grammar</Text>, we’ll talk about the building blocks of creating a language.
-    </Text>
-  </>
-);
+You might think that you’d need to be a ninja-level coder, with a bunch of tools and libraries by your side to create a programming language. In reality, if you just want to build a very simple, very basic language to learn how it’s done, it’s not that difficult.
+
+This tutorial will guide you through the steps of creating a simple programming language, interactively. Even if you're not a developer, you can follow along and try the examples.
+
+In the next section, **Syntax and Grammar**, we’ll talk about the building blocks of creating a language.
+`;
 
 const grammar = `
 NumericLiteral
@@ -44,7 +28,7 @@ const language = `
 export {
   title,
   subtitle,
-  content,
+  markdown,
   grammar,
   language,
 };

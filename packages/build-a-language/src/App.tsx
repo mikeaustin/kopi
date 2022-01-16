@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
 import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
@@ -192,24 +193,23 @@ function App() {
 
   return (
     <View className={styles.App}>
-      <View background="gray-9" alignItems="center" padding="medium">
-        <Text fontSize="large" fontWeight="bold" textColor="gray-3">
-          Header{' '}
-          <Text textColor="red-7">Header</Text>
+      <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
+        <Text fontSize="medium" fontWeight="bold">
+          Header
         </Text>
       </View>
       <View flex horizontal>
         <Desktop>
           <SampleWindow />
-          <Window title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 62, width: 1600, height: 800 }}>
+          <Window title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 32, width: 1620, height: 840 }}>
             <View padding="medium">
-              <Text fontSize="medium" fontWeight="semi-bold">
+              <Text fontSize="large" fontWeight="semi-bold">
                 Let’s Build a Programming Language
               </Text>
             </View>
             <Divider />
             <View flex horizontal>
-              <View tag="ul" style={{ flex: '0 0 250px' }}>
+              <View tag="ul" style={{ flex: '0 0 300px' }}>
                 {pages.map((page, index) => (
                   <View key={index} tag="li">
                     {index > 0 && <Divider />}
@@ -228,14 +228,25 @@ function App() {
               <View flex horizontal>
                 <View flex>
                   <View flex padding="large" horizontalPadding="large" background="gray-0">
-                    {pages[currentPage].content}
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ node, children }) => (
+                          <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
+                        ),
+                        p: ({ node, children }) => (
+                          <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
+                        ),
+                      }}
+                    >
+                      {pages[currentPage].markdown}
+                    </ReactMarkdown>
                     <Spacer flex />
                     <View horizontal justifyContent="center">
                       <View flex>
-                        <Text flex fontWeight="semi-bold">{pages[currentPage - 1]?.title}</Text>
+                        <Text flex fontSize="medium" fontWeight="light">{pages[currentPage - 1]?.title}</Text>
                       </View>
                       <View flex alignItems="flex-end">
-                        <Text flex fontWeight="semi-bold">{pages[currentPage + 1]?.title}</Text>
+                        <Text flex fontSize="medium" fontWeight="light">{pages[currentPage + 1]?.title}</Text>
                       </View>
                     </View>
                     <Spacer size="small" />

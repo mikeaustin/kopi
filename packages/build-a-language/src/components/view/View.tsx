@@ -31,6 +31,7 @@ type ViewProps = {
   background?: Color;
   borderRadius?: boolean | 'xsmall' | 'small' | 'max';
   hidden?: boolean;
+  dropShadow?: boolean;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;
@@ -53,6 +54,7 @@ const View = React.forwardRef(({
   background,
   borderRadius,
   hidden,
+  dropShadow,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -73,6 +75,7 @@ const View = React.forwardRef(({
     background && backgroundColorStyles[background],
     (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
     hidden && styles.hidden,
+    dropShadow && styles.dropShadow,
     className,
   );
 
