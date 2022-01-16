@@ -77,8 +77,8 @@ const Tutorial = ({ pages }) => {
         </Text>
       </View>
       <Divider /> */}
-      <View flex horizontal>
-        <View tag="ul" style={{ flex: '0 0 300px' }}>
+      <View flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
+        <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
           {pages.map((page, index) => (
             <View key={index} tag="li">
               {index > 0 && <Divider />}
@@ -94,9 +94,9 @@ const Tutorial = ({ pages }) => {
           <Divider />
         </View>
         <Divider />
-        <View flex horizontal>
-          <View flex>
-            <View flex padding="large" horizontalPadding="large" background="gray-0">
+        <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1280 ? '100%' : 0}`, scrollSnapType: 'x mandatory' }}>
+          <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
+            <View flex padding="large" horizontalPadding="large" >
               <ReactMarkdown
                 components={{
                   h1: ({ node, children }) => (
@@ -120,7 +120,9 @@ const Tutorial = ({ pages }) => {
                   </Text>
                 </View>
                 <View flex alignItems="flex-end">
-                  <Text flex fontSize="medium" fontWeight="light">Next: {pages[currentPage + 1]?.title}</Text>
+                  <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1}>
+                    Next: {pages[currentPage + 1]?.title}
+                  </Text>
                 </View>
               </View>
               <Spacer size="small" />
@@ -153,7 +155,7 @@ const Tutorial = ({ pages }) => {
             </View>
           </View>
           <Divider />
-          <View flex>
+          <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
             <View horizontal style={{ minHeight: 100 }}>
               <View flex>
                 <View padding="small" background="gray-0">

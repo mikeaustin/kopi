@@ -140,7 +140,15 @@ function App() {
           <Window title="Examples" style={{ left: 16, top: 16 }}>
             <Examples />
           </Window>
-          <Window title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 32, width: 1620, height: 840 }}>
+          <Window
+            title="Tutorial: Let’s Build a Programming Language"
+            style={{
+              left: 8,
+              top: 8,
+              width: Math.min(window.innerWidth - 16, 1680),
+              height: Math.min(window.innerHeight - 16 - 47, 900),
+            }}
+          >
             <Tutorial pages={pages} />
           </Window>
         </Desktop>
