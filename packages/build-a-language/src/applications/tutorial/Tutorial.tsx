@@ -71,12 +71,12 @@ const Tutorial = ({ pages }) => {
 
   return (
     <>
-      <View padding="medium">
+      {/* <View padding="medium">
         <Text fontSize="large" fontWeight="semi-bold">
           Let’s Build a Programming Language
         </Text>
       </View>
-      <Divider />
+      <Divider /> */}
       <View flex horizontal>
         <View tag="ul" style={{ flex: '0 0 300px' }}>
           {pages.map((page, index) => (
@@ -100,6 +100,9 @@ const Tutorial = ({ pages }) => {
               <ReactMarkdown
                 components={{
                   h1: ({ node, children }) => (
+                    <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
+                  ),
+                  h2: ({ node, children }) => (
                     <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
                   ),
                   p: ({ node, children }) => (
@@ -112,10 +115,12 @@ const Tutorial = ({ pages }) => {
               <Spacer flex />
               <View horizontal justifyContent="center">
                 <View flex>
-                  <Text flex fontSize="medium" fontWeight="light">{pages[currentPage - 1]?.title}</Text>
+                  <Text flex fontSize="medium" fontWeight="light" hidden={currentPage < 1}>
+                    Previous: {pages[currentPage - 1]?.title}
+                  </Text>
                 </View>
                 <View flex alignItems="flex-end">
-                  <Text flex fontSize="medium" fontWeight="light">{pages[currentPage + 1]?.title}</Text>
+                  <Text flex fontSize="medium" fontWeight="light">Next: {pages[currentPage + 1]?.title}</Text>
                 </View>
               </View>
               <Spacer size="small" />
@@ -124,7 +129,7 @@ const Tutorial = ({ pages }) => {
                 <View flex horizontal>
                   <Button
                     primary
-                    title="Back"
+                    title="Go Back"
                     leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
                     style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
                     hidden={currentPage < 1}
@@ -132,13 +137,13 @@ const Tutorial = ({ pages }) => {
                   />
                 </View>
                 <View flex justifyContent="center" alignItems="center">
-                  <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
+                  <Text fontSize="large" fontWeight="extra-light">{currentPage + 1} / {pages.length}</Text>
                 </View>
                 <View flex horizontal justifyContent="flex-end">
                   <Button
                     primary
                     solid
-                    title="Next"
+                    title="Continue"
                     rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
                     hidden={currentPage + 1 > pages.length - 1}
                     onClick={handleNextPageClick}
