@@ -4,6 +4,8 @@ import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
+import Tutorial from './windows/tutorial/Tutorial';
+
 import Desktop from './components/desktop';
 import Window from './components/window';
 import Editor from './components/editor';
@@ -84,9 +86,9 @@ const Buttons = () => {
   );
 };
 
-const SampleWindow = ({ ...props }) => {
+const Examples = ({ ...props }) => {
   return (
-    <Window title="Examples" style={{ left: 16, top: 16 }} {...props}>
+    <>
       <View justifyContent="center" padding="medium">
         <View horizontal>
           <FontSizes />
@@ -117,7 +119,7 @@ const SampleWindow = ({ ...props }) => {
           </Text>
         </View>
       </View>
-    </Window>
+    </>
   );
 };
 
@@ -128,69 +130,7 @@ const pages = [
   page4,
 ];
 
-const Heading = ({ title, subtitle, index, selected, onSelect }: {
-  title: string;
-  subtitle?: string;
-  index?: number;
-  selected?: boolean;
-  onSelect?: any;
-}) => {
-  const handleClick = () => {
-    onSelect(index);
-  };
-
-  return (
-    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onMouseDown={handleClick}>
-      <Text fontSize="medium" fontWeight="semi-bold">{`${index !== undefined ? index + 1 : ''}. ${title}`}</Text>
-      <Spacer size="medium" />
-      <Text>{subtitle}</Text>
-    </Clickable>
-  );
-};
-
 function App() {
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
-  const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
-  const [grammar, setGrammar] = useState(pages[currentPage].grammar);
-  const [language, setLanguage] = useState(pages[currentPage].language);
-  const [value, setValue] = useState('');
-
-  const handleGrammarChange = useCallback((grammar: string) => {
-    setGrammar(grammar);
-  }, []);
-
-  const handleLanguageChange = useCallback((language: string) => {
-    setLanguage(language);
-  }, []);
-
-  const handlePreviousPageClick = useCallback(() => {
-    setCurrentPage((currentPage) => currentPage > 0 ? currentPage - 1 : currentPage);
-  }, []);
-
-  const handleNextPageClick = useCallback(() => {
-    setCurrentPage((currentPage) => currentPage < pages.length - 1 ? currentPage + 1 : currentPage);
-  }, []);
-
-  const handlePageSelect = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
-    try {
-      const parser = Peggy.generate(grammar);
-
-      setValue(JSON.stringify(parser.parse(language), undefined, 2));
-    } catch (error: any) {
-      setValue(error.toString());
-    }
-  }, [grammar, language]);
-
-  useEffect(() => {
-    setLoadedGrammar(pages[currentPage].grammar);
-    setLoadedLanguage(pages[currentPage].language);
-  }, [currentPage]);
-
   return (
     <View className={styles.App}>
       <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
@@ -200,112 +140,11 @@ function App() {
       </View>
       <View flex horizontal>
         <Desktop>
-          <SampleWindow />
+          <Window title="Examples" style={{ left: 16, top: 16 }}>
+            <Examples />
+          </Window>
           <Window title="Tutorial: Let’s Build a Programming Language" style={{ left: 32, top: 32, width: 1620, height: 840 }}>
-            <View padding="medium">
-              <Text fontSize="large" fontWeight="semi-bold">
-                Let’s Build a Programming Language
-              </Text>
-            </View>
-            <Divider />
-            <View flex horizontal>
-              <View tag="ul" style={{ flex: '0 0 300px' }}>
-                {pages.map((page, index) => (
-                  <View key={index} tag="li">
-                    {index > 0 && <Divider />}
-                    <Heading
-                      title={page.title}
-                      subtitle={page.subtitle}
-                      index={index}
-                      selected={index === currentPage}
-                      onSelect={handlePageSelect}
-                    />
-                  </View>
-                ))}
-                <Divider />
-              </View>
-              <Divider />
-              <View flex horizontal>
-                <View flex>
-                  <View flex padding="large" horizontalPadding="large" background="gray-0">
-                    <ReactMarkdown
-                      components={{
-                        h1: ({ node, children }) => (
-                          <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
-                        ),
-                        p: ({ node, children }) => (
-                          <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
-                        ),
-                      }}
-                    >
-                      {pages[currentPage].markdown}
-                    </ReactMarkdown>
-                    <Spacer flex />
-                    <View horizontal justifyContent="center">
-                      <View flex>
-                        <Text flex fontSize="medium" fontWeight="light">{pages[currentPage - 1]?.title}</Text>
-                      </View>
-                      <View flex alignItems="flex-end">
-                        <Text flex fontSize="medium" fontWeight="light">{pages[currentPage + 1]?.title}</Text>
-                      </View>
-                    </View>
-                    <Spacer size="small" />
-                    <Spacer size="xsmall" />
-                    <View horizontal justifyContent="center">
-                      <View flex horizontal>
-                        <Button
-                          primary
-                          title="Back"
-                          leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
-                          style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
-                          hidden={currentPage < 1}
-                          onClick={handlePreviousPageClick}
-                        />
-                      </View>
-                      <View flex justifyContent="center" alignItems="center">
-                        <Text fontWeight="light" fontSize="large">{currentPage + 1} / {pages.length}</Text>
-                      </View>
-                      <View flex horizontal justifyContent="flex-end">
-                        <Button
-                          primary
-                          solid
-                          title="Next"
-                          rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
-                          hidden={currentPage + 1 > pages.length - 1}
-                          onClick={handleNextPageClick}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <Divider />
-                <View flex>
-                  <View horizontal style={{ minHeight: 100 }}>
-                    <View flex>
-                      <View padding="small" background="gray-0">
-                        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
-                      </View>
-                      <Divider />
-                      <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
-                    </View>
-                    <Divider />
-                    <View flex>
-                      <View padding="small" background="gray-0">
-                        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
-                      </View>
-                      <Divider />
-                      <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
-                    </View>
-                  </View>
-                  <Divider />
-                  <View padding="small" background="gray-0">
-                    <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
-                  </View>
-                  <Divider />
-                  <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
-                </View>
-              </View>
-            </View>
+            <Tutorial pages={pages} />
           </Window>
         </Desktop>
       </View>
