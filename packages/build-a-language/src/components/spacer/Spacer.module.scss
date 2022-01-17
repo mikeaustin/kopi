@@ -4,44 +4,44 @@
   align-self: stretch;
 
   &.xsmall {
-    min-height: 4px;
+    min-height: 5px;
   }
 
   &.small {
-    min-height: 8px;
+    min-height: 10px;
   }
 
   &.medium {
-    min-height: 16px;
+    min-height: 15px;
   }
 
   &.large {
-    min-height: 24px;
+    min-height: 25px;
   }
 
   &.xlarge {
-    min-height: 32px;
+    min-height: 30px;
   }
 }
 
 .horizontal > .container {
   &.xsmall {
-    min-width: 4px;
+    min-width: 5px;
   }
 
   &.small {
-    min-width: 8px;
+    min-width: 10px;
   }
 
   &.medium {
-    min-width: 16px;
+    min-width: 15px;
   }
 
   &.large {
-    min-width: 24px;
+    min-width: 25px;
   }
 
   &.xlarge {
-    min-width: 32px;
+    min-width: 30px;
   }
 }
