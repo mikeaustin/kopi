@@ -132,7 +132,7 @@ const Tutorial = ({ pages }) => {
                 </View>
               </View>
               <Spacer size="small" />
-              <Spacer size="xsmall" />
+              <Spacer size="tiny" />
               <View horizontal justifyContent="center">
                 <View flex horizontal>
                   <Button
