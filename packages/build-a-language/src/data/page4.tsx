@@ -5,7 +5,6 @@ const title = 'Parser Rules';
 const subtitle = 'Learn what parser rules are and how to create and use them.';
 
 const markdown = `
-## Parser Rules
 `;
 
 const grammar = `

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useImperativeHandle } from 'react';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';
@@ -6,7 +6,7 @@ import Divider from '../divider';
 
 import styles from './Window.module.scss';
 
-const Window = ({
+const Window = React.forwardRef(({
   children,
   title,
   style,
@@ -19,8 +19,10 @@ const Window = ({
   style?: React.CSSProperties;
   onWindowStartDrag?: any;
   onWindowEndDrag?: any;
-} & ViewProps) => {
+} & ViewProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
+
+  useImperativeHandle(ref, () => windowElementRef.current);
 
   useEffect(() => {
     if (windowElementRef.current) {
@@ -85,6 +87,6 @@ const Window = ({
       </View>
     </View>
   );
-};
+});
 
 export default Window;

@@ -26,6 +26,21 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
   );
 };
 
+const markdownComponents = {
+  h1: ({ node, children }) => (
+    <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 24 }}>{children}</Text>
+  ),
+  h2: ({ node, children }) => (
+    <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
+  ),
+  p: ({ node, children }) => (
+    <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
+  ),
+  strong: ({ node, children }) => (
+    <Text textParent fontWeight="bold">{children}</Text>
+  ),
+};
+
 const Tutorial = ({ pages }) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
@@ -71,12 +86,6 @@ const Tutorial = ({ pages }) => {
 
   return (
     <>
-      {/* <View padding="medium">
-        <Text fontSize="large" fontWeight="semi-bold">
-          Let’s Build a Programming Language
-        </Text>
-      </View>
-      <Divider /> */}
       <View flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
         <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
           {pages.map((page, index) => (
@@ -97,22 +106,12 @@ const Tutorial = ({ pages }) => {
         <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1280 ? '100%' : 0}`, scrollSnapType: 'x mandatory' }}>
           <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
             <View flex padding="large" horizontalPadding="large" >
-              <ReactMarkdown
-                components={{
-                  h1: ({ node, children }) => (
-                    <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 24 }}>{children}</Text>
-                  ),
-                  h2: ({ node, children }) => (
-                    <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
-                  ),
-                  p: ({ node, children }) => (
-                    <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
-                  ),
-                  strong: ({ node, children }) => (
-                    <Text textParent fontWeight="bold">{children}</Text>
-                  ),
-                }}
-              >
+              <View horizontal>
+                <Text flex fontSize="large" fontWeight="semi-bold">{pages[currentPage].title}</Text>
+                <Text fontSize="large" fontWeight="light">{currentPage + 1} / {pages.length}</Text>
+              </View>
+              <Spacer size="xlarge" />
+              <ReactMarkdown components={markdownComponents}>
                 {pages[currentPage].markdown}
               </ReactMarkdown>
               <Spacer flex />
@@ -140,9 +139,6 @@ const Tutorial = ({ pages }) => {
                     hidden={currentPage < 1}
                     onClick={handlePreviousPageClick}
                   />
-                </View>
-                <View flex justifyContent="center" alignItems="center">
-                  <Text fontSize="large" fontWeight="extra-light">{currentPage + 1} / {pages.length}</Text>
                 </View>
                 <View flex horizontal justifyContent="flex-end">
                   <Button

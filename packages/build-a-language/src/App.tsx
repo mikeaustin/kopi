@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
@@ -128,6 +128,21 @@ const pages = [
 ];
 
 function App() {
+  const windowElementRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    window.screen.orientation.addEventListener('change', (event) => {
+      setTimeout(() => {
+        if (windowElementRef.current) {
+          console.log('here', windowElementRef.current.style.width, window.innerWidth);
+
+          windowElementRef.current.style.width = Math.min(window.innerWidth - 16, 1680) + 'px';
+          windowElementRef.current.style.height = Math.min(window.innerHeight - 16 - 47, 900) + 'px';
+        }
+      }, 100);
+    });
+  }, []);
+
   return (
     <View className={styles.App}>
       <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
@@ -141,6 +156,7 @@ function App() {
             <Examples />
           </Window>
           <Window
+            ref={windowElementRef}
             title="Tutorial: Let’s Build a Programming Language"
             style={{
               left: 8,
