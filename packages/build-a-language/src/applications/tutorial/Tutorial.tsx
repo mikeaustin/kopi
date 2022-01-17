@@ -102,7 +102,9 @@ const Tutorial = ({ pages }) => {
           ))}
           <Divider />
         </View>
+
         <Divider />
+
         <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1280 ? '100%' : 0}`, scrollSnapType: 'x mandatory' }}>
           <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
             <View flex padding="large" horizontalPadding="large" >
@@ -115,6 +117,8 @@ const Tutorial = ({ pages }) => {
                 {pages[currentPage].markdown}
               </ReactMarkdown>
               <Spacer flex />
+              <Divider />
+              <Spacer size="medium" />
               <View horizontal justifyContent="center">
                 <View flex>
                   <Text flex fontSize="medium" fontWeight="light" hidden={currentPage < 1}>
@@ -153,7 +157,9 @@ const Tutorial = ({ pages }) => {
               </View>
             </View>
           </View>
+
           <Divider />
+
           <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
             <View horizontal style={{ minHeight: 100 }}>
               <View flex>

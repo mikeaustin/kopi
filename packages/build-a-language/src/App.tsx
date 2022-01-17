@@ -131,11 +131,9 @@ function App() {
   const windowElementRef = useRef<HTMLDivElement>();
 
   useEffect(() => {
-    window.screen.orientation.addEventListener('change', (event) => {
+    window.addEventListener('orientationchange', (event) => {
       setTimeout(() => {
         if (windowElementRef.current) {
-          console.log('here', windowElementRef.current.style.width, window.innerWidth);
-
           windowElementRef.current.style.width = Math.min(window.innerWidth - 16, 1680) + 'px';
           windowElementRef.current.style.height = Math.min(window.innerHeight - 16 - 47, 900) + 'px';
         }
