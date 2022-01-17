@@ -130,7 +130,7 @@ const Tutorial = ({ pages }) => {
                     </Text>
                   </View>
                   <View flex alignItems="flex-end">
-                    <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1}>
+                    <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1} style={{ textAlign: 'right' }}>
                       Next: {pages[currentPage + 1]?.title}
                     </Text>
                   </View>
