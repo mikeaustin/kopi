@@ -4,7 +4,9 @@ const title = 'Abstract Syntax Tree';
 
 const subtitle = 'Learn what parser rules are and how to create and use them.';
 
-const markdown = ``;
+const markdown = `
+## Abstract Syntax Tree
+`;
 
 const grammar = `
 {

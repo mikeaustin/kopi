@@ -4,7 +4,9 @@ const title = 'Syntax and Grammar';
 
 const subtitle = 'Learn the building blocks of a programming language.';
 
-const markdown = ``;
+const markdown = `
+## Syntax and Grammar
+`;
 
 const grammar = `
 Program

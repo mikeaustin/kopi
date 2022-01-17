@@ -100,13 +100,16 @@ const Tutorial = ({ pages }) => {
               <ReactMarkdown
                 components={{
                   h1: ({ node, children }) => (
-                    <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
+                    <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 24 }}>{children}</Text>
                   ),
                   h2: ({ node, children }) => (
                     <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
                   ),
                   p: ({ node, children }) => (
                     <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
+                  ),
+                  strong: ({ node, children }) => (
+                    <Text textParent fontWeight="bold">{children}</Text>
                   ),
                 }}
               >
