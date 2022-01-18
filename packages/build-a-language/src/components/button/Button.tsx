@@ -9,6 +9,7 @@ import styles from './Button.module.scss';
 
 const Button = ({
   title,
+  size = 'small',
   primary,
   solid,
   link,
@@ -18,6 +19,7 @@ const Button = ({
   ...props
 }: {
   title: string;
+  size?: 'xsmall' | 'small' | 'medium';
   primary?: boolean;
   solid?: boolean;
   link?: boolean;
@@ -40,14 +42,22 @@ const Button = ({
       : undefined;
 
   return (
-    <View tag="button" horizontal borderRadius={rounded ? 'max' : true} className={containerClassName} {...props}>
+    <View
+      tag="button"
+      horizontal
+      horizontalPadding={size === 'xsmall' ? 'small' : 'medium'}
+      verticalPadding={'small'}
+      borderRadius={rounded ? 'max' : true}
+      className={containerClassName}
+      {...props}
+    >
       {leftIcon && (
         <>
           {leftIcon}
           <Spacer size="small" />
         </>
       )}
-      <Text fontWeight="bold" textColor={textColor}>{title}</Text>
+      <Text fontSize={size} fontWeight="bold" textColor={textColor}>{title}</Text>
       {rightIcon && (
         <>
           <Spacer size="small" />

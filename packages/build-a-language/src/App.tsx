@@ -6,6 +6,7 @@ import Tutorial from './applications/tutorial/Tutorial';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
+import Calendar from './components/calendar';
 
 import styles from './App.module.scss';
 
@@ -152,6 +153,9 @@ function App() {
         <Desktop>
           <Window title="Examples" style={{ left: 16, top: 16 }}>
             <Examples />
+          </Window>
+          <Window title="Calendar" style={{ left: 30, top: 30 }}>
+            <Calendar />
           </Window>
           <Window
             ref={windowElementRef}
