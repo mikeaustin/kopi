@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Peggy from 'peggy';
 
@@ -54,6 +54,7 @@ type TutorialProps = {
 };
 
 const Tutorial = ({ pages }: TutorialProps) => {
+  const containerElementRef = useRef<HTMLDivElement>();
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
   const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
@@ -75,11 +76,24 @@ const Tutorial = ({ pages }: TutorialProps) => {
 
   const handleNextPageClick = useCallback(() => {
     setCurrentPage((currentPage) => currentPage < pages.length - 1 ? currentPage + 1 : currentPage);
-  }, []);
+  }, [pages.length]);
 
   const handlePageSelect = (page: number) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    window.addEventListener('orientationchange', (event) => {
+      setTimeout(() => {
+        if (containerElementRef.current?.parentElement?.parentElement) {
+          console.log(containerElementRef.current?.parentElement?.parentElement);
+
+          containerElementRef.current.parentElement.parentElement.style.width = Math.min(window.innerWidth - 16, 1680) + 'px';
+          containerElementRef.current.parentElement.parentElement.style.height = Math.min(window.innerHeight - 16 - 47, 900) + 'px';
+        }
+      }, 100);
+    });
+  }, []);
 
   useEffect(() => {
     try {
@@ -98,7 +112,7 @@ const Tutorial = ({ pages }: TutorialProps) => {
 
   return (
     <>
-      <View flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
+      <View ref={containerElementRef} flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
         <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
           {pages.map((page, index) => (
             <View key={index} tag="li">
@@ -114,9 +128,7 @@ const Tutorial = ({ pages }: TutorialProps) => {
           ))}
           <Divider />
         </View>
-
         <Divider />
-
         <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1280 ? '100%' : 0}`, scrollSnapType: 'x mandatory' }}>
           <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
             <View flex>

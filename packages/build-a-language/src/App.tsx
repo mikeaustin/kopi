@@ -84,7 +84,7 @@ const Buttons = () => {
   );
 };
 
-const Examples = ({ ...props }) => {
+const Examples = () => {
   return (
     <>
       <View justifyContent="center" padding="medium">
@@ -129,19 +129,6 @@ const pages: Pages[] = [
 ];
 
 function App() {
-  const windowElementRef = useRef<HTMLDivElement>();
-
-  useEffect(() => {
-    window.addEventListener('orientationchange', (event) => {
-      setTimeout(() => {
-        if (windowElementRef.current) {
-          windowElementRef.current.style.width = Math.min(window.innerWidth - 16, 1680) + 'px';
-          windowElementRef.current.style.height = Math.min(window.innerHeight - 16 - 47, 900) + 'px';
-        }
-      }, 100);
-    });
-  }, []);
-
   return (
     <View className={styles.App}>
       <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
@@ -158,7 +145,6 @@ function App() {
             <Calendar />
           </Window>
           <Window
-            ref={windowElementRef}
             title="Tutorial: Let’s Build a Programming Language"
             style={{
               left: 8,
