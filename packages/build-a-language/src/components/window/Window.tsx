@@ -75,7 +75,7 @@ const Window = React.forwardRef(({
         padding="small"
         alignItems="center"
         background="gray-3"
-        // style={{ cursor: 'default' }}
+        style={{ marginBottom: -1 }}
         onPointerDown={handleTitlePointerDown}
         onPointerUp={handleTitlePointerUp}
       >
