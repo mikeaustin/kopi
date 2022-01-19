@@ -7,6 +7,7 @@ import Tutorial, { type Pages } from './applications/tutorial/Tutorial';
 import Desktop from './components/desktop';
 import Window from './components/window';
 import Calendar from './components/calendar';
+import Preferences from './applications/preferences';
 
 import styles from './App.module.scss';
 
@@ -129,6 +130,10 @@ const pages: Pages[] = [
 ];
 
 function App() {
+  const handleSetBackground = (url: string) => {
+
+  };
+
   return (
     <View className={styles.App}>
       <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
@@ -154,6 +159,9 @@ function App() {
             }}
           >
             <Tutorial pages={pages} />
+          </Window>
+          <Window title="Preferences">
+            <Preferences onSetBackground={handleSetBackground} />
           </Window>
         </Desktop>
       </View>
