@@ -31,9 +31,10 @@ const Desktop = ({
   };
 
   const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    // event.preventDefault();
 
     if (desktopElementRef.current && windowElementRef.current && firstMouseRef.current) {
+      event.preventDefault();
+
       const boundingClientRect = desktopElementRef.current.getBoundingClientRect();
 
       windowElementRef.current.style.left = `${event.nativeEvent.pageX - firstMouseRef.current.clientX - boundingClientRect.left}px`;
