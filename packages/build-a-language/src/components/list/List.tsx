@@ -17,7 +17,7 @@ const List = ({
 }: {
   children?: Exclude<React.ReactNode, React.ReactText>;
   divider?: boolean;
-  spacerSize?: 'small' | 'medium' | 'large';
+  spacerSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   spacerColor?: Color;
 } & ViewProps) => {
   return (
