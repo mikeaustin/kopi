@@ -27,21 +27,33 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
 };
 
 const markdownComponents = {
-  h1: ({ node, children }) => (
+  h1: ({ children }: { children: React.ReactNode; }) => (
     <Text fontSize="xlarge" fontWeight="semi-bold" style={{ paddingBottom: 24 }}>{children}</Text>
   ),
-  h2: ({ node, children }) => (
+  h2: ({ children }: { children: React.ReactNode; }) => (
     <Text fontSize="large" fontWeight="semi-bold" style={{ paddingBottom: 32 }}>{children}</Text>
   ),
-  p: ({ node, children }) => (
+  p: ({ children }: { children: React.ReactNode; }) => (
     <Text fontSize="medium" style={{ paddingBottom: 24 }}>{children}</Text>
   ),
-  strong: ({ node, children }) => (
+  strong: ({ children }: { children: React.ReactNode; }) => (
     <Text textParent fontWeight="bold">{children}</Text>
   ),
 };
 
-const Tutorial = ({ pages }) => {
+type Pages = {
+  title: string;
+  subtitle: string;
+  markdown: string;
+  grammar: string;
+  language: string;
+};
+
+type TutorialProps = {
+  pages: Pages[];
+};
+
+const Tutorial = ({ pages }: TutorialProps) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
   const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
@@ -196,3 +208,8 @@ const Tutorial = ({ pages }) => {
 };
 
 export default Tutorial;
+
+export type {
+  TutorialProps,
+  Pages,
+};

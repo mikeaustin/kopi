@@ -42,7 +42,7 @@ const Calendar = () => {
       </View>
       <View flex padding="small" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
         {Array.from({ length: firstDayInMonth() }, (_, index) => (
-          <View />
+          <View key={index} />
         ))}
         {Array.from({ length: daysInMonth() }, (_, index) => (
           <View

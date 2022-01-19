@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
-import Tutorial from './applications/tutorial/Tutorial';
+import Tutorial, { type Pages } from './applications/tutorial/Tutorial';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
@@ -121,7 +121,7 @@ const Examples = ({ ...props }) => {
   );
 };
 
-const pages = [
+const pages: Pages[] = [
   page1,
   page2,
   page3,

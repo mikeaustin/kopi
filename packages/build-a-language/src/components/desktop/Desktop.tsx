@@ -17,6 +17,12 @@ const Desktop = ({
     });
   }, []);
 
+  const handlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if (event.target === desktopElementRef.current) {
+      event.preventDefault();
+    }
+  };
+
   const handleWindowStartDrag = (windowElement: HTMLElement, firstMouse: { clientX: number, clientY: number; }) => {
     windowElementRef.current = windowElement;
     firstMouseRef.current = firstMouse;
@@ -25,6 +31,8 @@ const Desktop = ({
   };
 
   const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    // event.preventDefault();
+
     if (desktopElementRef.current && windowElementRef.current && firstMouseRef.current) {
       const boundingClientRect = desktopElementRef.current.getBoundingClientRect();
 
@@ -46,6 +54,7 @@ const Desktop = ({
       ref={desktopElementRef}
       flex
       style={{ position: 'relative' }}
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
     >
       {React.Children.map(children, (child) => (
