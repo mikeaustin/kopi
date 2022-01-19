@@ -45,17 +45,15 @@ const Desktop = ({
     <View
       ref={desktopElementRef}
       flex
-      style={{ position: 'relative', overflow: 'hidden' }}
+      style={{ position: 'relative' }}
       onPointerMove={handlePointerMove}
     >
-      <View style={{ position: 'absolute', top: 0, right: -10000, bottom: -10000, left: 0 }}>
-        {React.Children.map(children, (child) => (
-          React.isValidElement(child) && React.cloneElement(child, {
-            onWindowStartDrag: handleWindowStartDrag,
-            onWindowEndDrag: handleWindowEndDrag,
-          })
-        ))}
-      </View>
+      {React.Children.map(children, (child) => (
+        React.isValidElement(child) && React.cloneElement(child, {
+          onWindowStartDrag: handleWindowStartDrag,
+          onWindowEndDrag: handleWindowEndDrag,
+        })
+      ))}
     </View>
   );
 };
