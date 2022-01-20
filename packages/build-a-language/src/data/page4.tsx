@@ -1,5 +1,3 @@
-import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
-
 const title = 'Parser Rules';
 
 const subtitle = 'Learn what parser rules are and how to create and use them.';

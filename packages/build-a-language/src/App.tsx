@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';

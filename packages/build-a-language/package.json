@@ -48,6 +48,9 @@
     ]
   },
   "devDependencies": {
-    "@types/codemirror": "^5.60.5"
+    "@types/codemirror": "^5.60.5",
+    "stylelint": "^14.2.0",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-config-standard-scss": "^3.0.0"
   }
 }

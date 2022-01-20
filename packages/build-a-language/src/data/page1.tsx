@@ -1,5 +1,3 @@
-import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
-
 const title = 'Introduction';
 
 const subtitle = 'Introduction to learning how to create a programming language.';

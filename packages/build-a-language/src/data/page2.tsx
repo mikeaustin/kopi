@@ -1,5 +1,3 @@
-import { View, Text, Input, Button, Spacer, Divider, List } from '../components';
-
 const title = 'Syntax and Grammar';
 
 const subtitle = 'Learn the building blocks of a programming language.';
