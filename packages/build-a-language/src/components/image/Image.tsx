@@ -2,6 +2,8 @@ import React from 'react';
 
 import { View } from '../../components';
 
+import { type ViewProps } from '../../components/view';
+
 import styles from './Image.module.scss';
 
 type ImageProps = {
@@ -9,13 +11,14 @@ type ImageProps = {
   width: number | string;
   height: number | string;
   style?: React.CSSProperties;
-};
+} & ViewProps;
 
 const Image = ({
   src,
   width,
   height,
   style,
+  ...props
 }: ImageProps) => {
   const imageStyle = {
     width,
@@ -24,7 +27,7 @@ const Image = ({
   };
 
   return (
-    <View tag="img" src={src} className={styles.container} style={imageStyle} />
+    <View tag="img" src={src} className={styles.container} style={imageStyle} {...props} />
   );
 };
 
