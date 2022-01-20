@@ -23,11 +23,11 @@ const FontSizes = () => {
     <View justifyContent="center">
       <Spacer size="small" background="gray-1" />
       <List spacerSize="small" spacerColor="gray-1" alignItems="center">
-        <Text fontSize="xlarge" style={{ position: 'relative' }}>XLarge (36px)</Text>
-        <Text fontSize="large" style={{ position: 'relative' }}>Large (24px)</Text>
-        <Text fontSize="medium" style={{ position: 'relative' }}>Medium (18px)</Text>
-        <Text fontSize="small" style={{ position: 'relative' }}>Small (14px)</Text>
-        <Text fontSize="xsmall" style={{ position: 'relative' }}>XSmall (12px)</Text>
+        <Text fontSize="xlarge" style={{ position: 'relative', whiteSpace: 'nowrap' }}>XLarge (30px)</Text>
+        <Text fontSize="large" style={{ position: 'relative', whiteSpace: 'nowrap' }}>Large (24px)</Text>
+        <Text fontSize="medium" style={{ position: 'relative', whiteSpace: 'nowrap' }}>Medium (18px)</Text>
+        <Text fontSize="small" style={{ position: 'relative', whiteSpace: 'nowrap' }}>Small (14px)</Text>
+        <Text fontSize="xsmall" style={{ position: 'relative', whiteSpace: 'nowrap' }}>XSmall (12px)</Text>
         <Text fontSize="tiny">TINY (11px)</Text>
       </List>
       <Spacer size="small" background="gray-1" />
