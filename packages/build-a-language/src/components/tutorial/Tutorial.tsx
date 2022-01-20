@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Peggy from 'peggy';
 
-import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from '../../components';
+import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from '..';
 
-import Editor from '../../components/editor';
+import Editor from '../editor';
 
 const Heading = ({ title, subtitle, index, selected, onSelect }: {
   title: string;
@@ -43,7 +43,7 @@ const markdownComponents = {
   ),
 };
 
-type Pages = {
+type Page = {
   title: string;
   subtitle: string;
   markdown: string;
@@ -52,7 +52,67 @@ type Pages = {
 };
 
 type TutorialProps = {
-  pages: Pages[];
+  pages: Page[];
+};
+
+const Content = (pages: Page[]) => {
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
+  const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
+  const [grammar, setGrammar] = useState(pages[currentPage].grammar);
+  const [language, setLanguage] = useState(pages[currentPage].language);
+  const [value, setValue] = useState('');
+
+  const handleGrammarChange = useCallback((grammar: string) => {
+    setGrammar(grammar);
+  }, []);
+
+  const handleLanguageChange = useCallback((language: string) => {
+    setLanguage(language);
+  }, []);
+
+  useEffect(() => {
+    try {
+      const parser = Peggy.generate(grammar);
+
+      setValue(JSON.stringify(parser.parse(language), undefined, 2));
+    } catch (error: any) {
+      setValue(error.toString());
+    }
+  }, [grammar, language]);
+
+  useEffect(() => {
+    setLoadedGrammar(pages[currentPage].grammar);
+    setLoadedLanguage(pages[currentPage].language);
+  }, [currentPage, pages]);
+
+  return (
+    <>
+      <View horizontal style={{ minHeight: 100 }}>
+        <View flex>
+          <View padding="small" background="gray-0">
+            <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
+          </View>
+          <Divider />
+          <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
+        </View>
+        <Divider />
+        <View flex>
+          <View padding="small" background="gray-0">
+            <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
+          </View>
+          <Divider />
+          <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
+        </View>
+      </View>
+      <Divider />
+      <View padding="small" background="gray-0">
+        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
+      </View>
+      <Divider />
+      <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
+    </>
+  );
 };
 
 const Tutorial = ({ pages }: TutorialProps) => {
@@ -225,5 +285,5 @@ export default Tutorial;
 
 export type {
   TutorialProps,
-  Pages,
+  Page,
 };

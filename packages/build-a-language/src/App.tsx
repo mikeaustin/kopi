@@ -4,7 +4,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from './components';
 
-import Tutorial, { type Pages } from './applications/tutorial/Tutorial';
+import BuildALanguageTutorial from './applications/build-a-language-tutorial';
+import LearnToCodeTutorial from './applications/learn-to-code-tutorial';
 
 import Desktop from './components/desktop';
 import Window from './components/window';
@@ -13,10 +14,6 @@ import Preferences from './applications/preferences';
 
 import styles from './App.module.scss';
 
-import * as page1 from './data/page1';
-import * as page2 from './data/page2';
-import * as page3 from './data/page3';
-import * as page4 from './data/page4';
 
 const FontSizes = () => {
   return (
@@ -124,13 +121,6 @@ const Examples = () => {
   );
 };
 
-const pages: Pages[] = [
-  page1,
-  page2,
-  page3,
-  page4,
-];
-
 function App() {
   const [backgroundUrl, setBackgroundUrl] = useState('./images/d1e91a4058a8a1082da711095b4e0163.jpg');
 
@@ -165,7 +155,18 @@ function App() {
               height: Math.min(window.innerHeight - 16 - 47, 900),
             }}
           >
-            <Tutorial pages={pages} />
+            <BuildALanguageTutorial />
+          </Window>
+          <Window
+            title="Tutorial: Learn to Code"
+            style={{
+              left: 8,
+              top: 8,
+              width: Math.min(window.innerWidth - 16, 1680),
+              height: Math.min(window.innerHeight - 16 - 47, 900),
+            }}
+          >
+            <LearnToCodeTutorial />
           </Window>
         </Desktop>
       </View>
