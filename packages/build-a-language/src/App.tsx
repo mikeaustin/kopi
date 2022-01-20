@@ -147,11 +147,14 @@ function App() {
       </View>
       <View flex horizontal>
         <Desktop>
-          <Window title="Examples" style={{ left: 16, top: 16 }}>
+          <Window title="Examples" style={{ left: 15, top: 15 }}>
             <Examples />
           </Window>
           <Window title="Calendar" style={{ left: 30, top: 30 }}>
             <Calendar />
+          </Window>
+          <Window title="Preferences" style={{ left: 45, top: 45, width: 500 }}>
+            <Preferences onSetBackground={handleSetBackground} />
           </Window>
           <Window
             title="Tutorial: Let’s Build a Programming Language"
@@ -163,9 +166,6 @@ function App() {
             }}
           >
             <Tutorial pages={pages} />
-          </Window>
-          <Window title="Preferences" style={{ width: 500 }}>
-            <Preferences onSetBackground={handleSetBackground} />
           </Window>
         </Desktop>
       </View>
