@@ -16,6 +16,7 @@ import borderRadiusStyles from '../../styles/borderRadius.module.scss';
 type ViewProps = {
   tag?: string | React.ComponentType<any>;
   style?: React.CSSProperties;
+  src?: string;
   disabled?: boolean;
   children?: Exclude<React.ReactNode, React.ReactText>;
   foo?: React.ReactChild;
@@ -41,6 +42,7 @@ type ViewProps = {
 const View = React.forwardRef(({
   tag = 'div',
   style,
+  src,
   disabled,
   children,
   className,
@@ -85,6 +87,7 @@ const View = React.forwardRef(({
       className={containerClassName}
       disabled={disabled}
       style={style}
+      src={src}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

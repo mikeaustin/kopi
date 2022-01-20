@@ -130,12 +130,14 @@ const pages: Pages[] = [
 ];
 
 function App() {
-  const handleSetBackground = (url: string) => {
+  const [backgroundUrl, setBackgroundUrl] = useState('./images/d1e91a4058a8a1082da711095b4e0163.jpg');
 
+  const handleSetBackground = (url: string) => {
+    setBackgroundUrl(url);
   };
 
   return (
-    <View className={styles.App}>
+    <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
       <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
         <Text fontSize="medium" fontWeight="bold">
           Header
@@ -160,7 +162,7 @@ function App() {
           >
             <Tutorial pages={pages} />
           </Window>
-          <Window title="Preferences">
+          <Window title="Preferences" style={{ width: 500 }}>
             <Preferences onSetBackground={handleSetBackground} />
           </Window>
         </Desktop>
