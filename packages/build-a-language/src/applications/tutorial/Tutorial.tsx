@@ -150,12 +150,12 @@ const Tutorial = ({ pages }: TutorialProps) => {
                 <Divider />
                 <Spacer size="medium" />
                 <View horizontal justifyContent="center">
-                  <View flex>
+                  <View flex hidden={window.innerWidth < 640 && currentPage < pages.length - 1}>
                     <Text flex fontSize="medium" fontWeight="light" hidden={currentPage < 1}>
                       Previous: {pages[currentPage - 1]?.title}
                     </Text>
                   </View>
-                  <View flex alignItems="flex-end">
+                  <View flex alignItems="flex-end" hidden={window.innerWidth < 640 && currentPage + 1 > pages.length - 1}>
                     <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1} style={{ textAlign: 'right' }}>
                       Next: {pages[currentPage + 1]?.title}
                     </Text>
