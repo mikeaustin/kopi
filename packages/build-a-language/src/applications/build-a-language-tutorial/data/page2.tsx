@@ -24,10 +24,16 @@ const language = `
 2
 `.trim();
 
+const data = {
+  grammar,
+  language,
+};
+
 export {
   title,
   subtitle,
   markdown,
   grammar,
   language,
+  data,
 };

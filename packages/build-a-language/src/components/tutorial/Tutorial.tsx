@@ -51,16 +51,20 @@ type Page = {
   language: string;
 };
 
-type TutorialProps = {
-  pages: Page[];
+type ContentProps = {
+  grammar: string;
+  language: string;
 };
 
-const Content = (pages: Page[]) => {
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
-  const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
-  const [grammar, setGrammar] = useState(pages[currentPage].grammar);
-  const [language, setLanguage] = useState(pages[currentPage].language);
+const Content = ({
+  data,
+}: {
+  data: ContentProps;
+}) => {
+  const [loadedGrammar, setLoadedGrammar] = useState(data.grammar);
+  const [loadedLanguage, setLoadedLanguage] = useState(data.language);
+  const [grammar, setGrammar] = useState(data.grammar);
+  const [language, setLanguage] = useState(data.language);
   const [value, setValue] = useState('');
 
   const handleGrammarChange = useCallback((grammar: string) => {
@@ -82,9 +86,9 @@ const Content = (pages: Page[]) => {
   }, [grammar, language]);
 
   useEffect(() => {
-    setLoadedGrammar(pages[currentPage].grammar);
-    setLoadedLanguage(pages[currentPage].language);
-  }, [currentPage, pages]);
+    setLoadedGrammar(data.grammar);
+    setLoadedLanguage(data.language);
+  }, [data]);
 
   return (
     <>
@@ -115,7 +119,13 @@ const Content = (pages: Page[]) => {
   );
 };
 
-const Tutorial = ({ pages }: TutorialProps) => {
+type TutorialProps = {
+  pages: Page[];
+};
+
+const Tutorial = ({
+  pages
+}: TutorialProps) => {
   const containerElementRef = useRef<HTMLDivElement>();
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);

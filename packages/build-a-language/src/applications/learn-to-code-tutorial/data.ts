@@ -6,6 +6,10 @@ const page1 = {
 `,
   grammar: ``,
   language: ``,
+  data: {
+    grammar: ``,
+    language: ``,
+  },
 };
 
 const page2 = {
@@ -14,6 +18,10 @@ const page2 = {
   markdown: ``,
   grammar: ``,
   language: ``,
+  data: {
+    grammar: ``,
+    language: ``,
+  },
 };
 
 const page3 = {
@@ -22,6 +30,10 @@ const page3 = {
   markdown: ``,
   grammar: ``,
   language: ``,
+  data: {
+    grammar: ``,
+    language: ``,
+  },
 };
 
 const pages = [
