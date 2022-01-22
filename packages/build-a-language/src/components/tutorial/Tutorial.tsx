@@ -43,24 +43,23 @@ const markdownComponents = {
   ),
 };
 
-type Page = {
+type Page<TData> = {
   title: string;
   subtitle: string;
   markdown: string;
-  grammar: string;
-  language: string;
+  data: TData;
 };
 
 type ContentProps = {
-  grammar: string;
-  language: string;
+  data: {
+    grammar: string;
+    language: string;
+  };
 };
 
 const Content = ({
   data,
-}: {
-  data: ContentProps;
-}) => {
+}: ContentProps) => {
   const [loadedGrammar, setLoadedGrammar] = useState(data.grammar);
   const [loadedLanguage, setLoadedLanguage] = useState(data.language);
   const [grammar, setGrammar] = useState(data.grammar);
@@ -119,28 +118,28 @@ const Content = ({
   );
 };
 
-type TutorialProps = {
-  pages: Page[];
+type TutorialProps<TData> = {
+  pages: Page<TData>[];
 };
 
-const Tutorial = ({
+const Tutorial = <TData,>({
   pages
-}: TutorialProps) => {
+}: TutorialProps<TData>) => {
   const containerElementRef = useRef<HTMLDivElement>();
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
-  const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
-  const [grammar, setGrammar] = useState(pages[currentPage].grammar);
-  const [language, setLanguage] = useState(pages[currentPage].language);
-  const [value, setValue] = useState('');
+  // const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
+  // const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
+  // const [grammar, setGrammar] = useState(pages[currentPage].grammar);
+  // const [language, setLanguage] = useState(pages[currentPage].language);
+  // const [value, setValue] = useState('');
 
-  const handleGrammarChange = useCallback((grammar: string) => {
-    setGrammar(grammar);
-  }, []);
+  // const handleGrammarChange = useCallback((grammar: string) => {
+  //   setGrammar(grammar);
+  // }, []);
 
-  const handleLanguageChange = useCallback((language: string) => {
-    setLanguage(language);
-  }, []);
+  // const handleLanguageChange = useCallback((language: string) => {
+  //   setLanguage(language);
+  // }, []);
 
   const handlePreviousPageClick = useCallback(() => {
     setCurrentPage((currentPage) => currentPage > 0 ? currentPage - 1 : currentPage);
@@ -167,20 +166,20 @@ const Tutorial = ({
     });
   }, []);
 
-  useEffect(() => {
-    try {
-      const parser = Peggy.generate(grammar);
+  // useEffect(() => {
+  //   try {
+  //     const parser = Peggy.generate(grammar);
 
-      setValue(JSON.stringify(parser.parse(language), undefined, 2));
-    } catch (error: any) {
-      setValue(error.toString());
-    }
-  }, [grammar, language]);
+  //     setValue(JSON.stringify(parser.parse(language), undefined, 2));
+  //   } catch (error: any) {
+  //     setValue(error.toString());
+  //   }
+  // }, [grammar, language]);
 
-  useEffect(() => {
-    setLoadedGrammar(pages[currentPage].grammar);
-    setLoadedLanguage(pages[currentPage].language);
-  }, [currentPage, pages]);
+  // useEffect(() => {
+  //   setLoadedGrammar(pages[currentPage].grammar);
+  //   setLoadedLanguage(pages[currentPage].language);
+  // }, [currentPage, pages]);
 
   return (
     <>
@@ -261,7 +260,7 @@ const Tutorial = ({
           </View>
           <Divider />
           <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
-            <View horizontal style={{ minHeight: 100 }}>
+            {/* <View horizontal style={{ minHeight: 100 }}>
               <View flex>
                 <View padding="small" background="gray-0">
                   <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
@@ -283,7 +282,7 @@ const Tutorial = ({
               <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
             </View>
             <Divider />
-            <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
+            <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} /> */}
           </View>
         </View>
       </View>

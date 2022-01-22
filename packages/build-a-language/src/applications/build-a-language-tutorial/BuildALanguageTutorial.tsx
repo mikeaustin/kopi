@@ -5,7 +5,8 @@ import * as page2 from './data/page2';
 import * as page3 from './data/page3';
 import * as page4 from './data/page4';
 
-const pages: Page[] = [
+
+const pages = [
   page1,
   page2,
   page3,

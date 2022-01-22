@@ -1,30 +1,39 @@
-import React from "react";
+import React from 'react';
 
-type Page = {
+type Page<TData> = {
   title: string;
-  data: {
-    grammar: string;
-  };
+  data: TData;
+};
+
+type TutorialProps<TData> = {
+  pages: Page<TData>[],
+  Content: React.ComponentType<{ data: TData; }>;
+};
+
+const Tutorial = <TData,>({
+  pages,
+  Content,
+}: TutorialProps<TData>) => {
+  return <Content data={pages[0].data} />;
 };
 
 type ContentProps = {
-  data: Page['data'];
+  data: {
+    grammar: string;
+  };
 };
 
 const Content = ({ data }: ContentProps) => {
   return <div>{data.grammar}</div>;
 };
 
-const Tutorial = <TData,>({
-  Content,
-  data,
-}: {
-  Content: React.ComponentType<{ data: TData; }>;
-  data: TData;
-}) => {
-  return <Content data={data} />;
-};
+const pages = [
+  {
+    title: 'hi',
+    data: {
+      grammar: 'hi'
+    }
+  }
+];
 
-<Tutorial Content={Content} data={{ grammar: 'hi' }} />;
-
-export { };
+const x = <Tutorial pages={pages} Content={Content} />;
