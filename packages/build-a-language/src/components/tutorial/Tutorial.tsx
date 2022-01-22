@@ -2,11 +2,8 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
-import Peggy from 'peggy';
 
 import { View, Text, Input, Button, Spacer, Divider, List, Clickable } from '..';
-
-import Editor from '../editor';
 
 const Heading = ({ title, subtitle, index, selected, onSelect }: {
   title: string;
@@ -50,96 +47,17 @@ type Page<TData> = {
   data: TData;
 };
 
-type ContentProps = {
-  data: {
-    grammar: string;
-    language: string;
-  };
-};
-
-const Content = ({
-  data,
-}: ContentProps) => {
-  const [loadedGrammar, setLoadedGrammar] = useState(data.grammar);
-  const [loadedLanguage, setLoadedLanguage] = useState(data.language);
-  const [grammar, setGrammar] = useState(data.grammar);
-  const [language, setLanguage] = useState(data.language);
-  const [value, setValue] = useState('');
-
-  const handleGrammarChange = useCallback((grammar: string) => {
-    setGrammar(grammar);
-  }, []);
-
-  const handleLanguageChange = useCallback((language: string) => {
-    setLanguage(language);
-  }, []);
-
-  useEffect(() => {
-    try {
-      const parser = Peggy.generate(grammar);
-
-      setValue(JSON.stringify(parser.parse(language), undefined, 2));
-    } catch (error: any) {
-      setValue(error.toString());
-    }
-  }, [grammar, language]);
-
-  useEffect(() => {
-    setLoadedGrammar(data.grammar);
-    setLoadedLanguage(data.language);
-  }, [data]);
-
-  return (
-    <>
-      <View horizontal style={{ minHeight: 100 }}>
-        <View flex>
-          <View padding="small" background="gray-0">
-            <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
-          </View>
-          <Divider />
-          <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
-        </View>
-        <Divider />
-        <View flex>
-          <View padding="small" background="gray-0">
-            <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
-          </View>
-          <Divider />
-          <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
-        </View>
-      </View>
-      <Divider />
-      <View padding="small" background="gray-0">
-        <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
-      </View>
-      <Divider />
-      <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} />
-    </>
-  );
-};
-
 type TutorialProps<TData> = {
   pages: Page<TData>[];
+  Content: React.ComponentType<{ data: TData; }>;
 };
 
 const Tutorial = <TData,>({
-  pages
+  pages,
+  Content,
 }: TutorialProps<TData>) => {
   const containerElementRef = useRef<HTMLDivElement>();
   const [currentPage, setCurrentPage] = useState<number>(0);
-  // const [loadedGrammar, setLoadedGrammar] = useState(pages[currentPage].grammar);
-  // const [loadedLanguage, setLoadedLanguage] = useState(pages[currentPage].language);
-  // const [grammar, setGrammar] = useState(pages[currentPage].grammar);
-  // const [language, setLanguage] = useState(pages[currentPage].language);
-  // const [value, setValue] = useState('');
-
-  // const handleGrammarChange = useCallback((grammar: string) => {
-  //   setGrammar(grammar);
-  // }, []);
-
-  // const handleLanguageChange = useCallback((language: string) => {
-  //   setLanguage(language);
-  // }, []);
 
   const handlePreviousPageClick = useCallback(() => {
     setCurrentPage((currentPage) => currentPage > 0 ? currentPage - 1 : currentPage);
@@ -165,21 +83,6 @@ const Tutorial = <TData,>({
       }, 100);
     });
   }, []);
-
-  // useEffect(() => {
-  //   try {
-  //     const parser = Peggy.generate(grammar);
-
-  //     setValue(JSON.stringify(parser.parse(language), undefined, 2));
-  //   } catch (error: any) {
-  //     setValue(error.toString());
-  //   }
-  // }, [grammar, language]);
-
-  // useEffect(() => {
-  //   setLoadedGrammar(pages[currentPage].grammar);
-  //   setLoadedLanguage(pages[currentPage].language);
-  // }, [currentPage, pages]);
 
   return (
     <>
@@ -260,29 +163,7 @@ const Tutorial = <TData,>({
           </View>
           <Divider />
           <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
-            {/* <View horizontal style={{ minHeight: 100 }}>
-              <View flex>
-                <View padding="small" background="gray-0">
-                  <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">INPUT</Text>
-                </View>
-                <Divider />
-                <Editor defaultValue={loadedLanguage} onChange={handleLanguageChange} />
-              </View>
-              <Divider />
-              <View flex>
-                <View padding="small" background="gray-0">
-                  <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">OUTPUT</Text>
-                </View>
-                <Divider />
-                <Text style={{ fontFamily: 'monospace', padding: 5 }}>{value}</Text>
-              </View>
-            </View>
-            <Divider />
-            <View padding="small" background="gray-0">
-              <Text fontSize="tiny" fontWeight="bold" textColor="gray-6">GRAMMAR</Text>
-            </View>
-            <Divider />
-            <Editor defaultValue={loadedGrammar} onChange={handleGrammarChange} /> */}
+            <Content data={pages[currentPage].data} />
           </View>
         </View>
       </View>

@@ -4,8 +4,6 @@ const page1 = {
   markdown: `
 # Let’s Learn to Code
 `,
-  grammar: ``,
-  language: ``,
   data: {
     grammar: ``,
     language: ``,
@@ -16,8 +14,6 @@ const page2 = {
   title: 'The Circle of Life',
   subtitle: 'Introduction to learning how to code.',
   markdown: ``,
-  grammar: ``,
-  language: ``,
   data: {
     grammar: ``,
     language: ``,
@@ -28,8 +24,6 @@ const page3 = {
   title: 'What\'s Going On?',
   subtitle: 'Introduction to learning how to code.',
   markdown: ``,
-  grammar: ``,
-  language: ``,
   data: {
     grammar: ``,
     language: ``,

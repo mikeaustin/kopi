@@ -64,7 +64,5 @@ export {
   title,
   subtitle,
   markdown,
-  grammar,
-  language,
   data,
 };
