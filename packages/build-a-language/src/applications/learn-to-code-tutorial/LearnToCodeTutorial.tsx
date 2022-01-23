@@ -10,15 +10,19 @@ import pages from './data';
 
 type ContentProps = {
   data: {
-    grammar: string;
-    language: string;
+    url: string;
   };
 };
 
 const Content = ({
   data,
 }: ContentProps) => {
-  return <View />;
+  console.log(data.url);
+  return <View flex tag="iframe" src={data.url} style={{ border: 'none' }} />;
+};
+
+const options = {
+
 };
 
 const BuildALanguageTutorial = () => {

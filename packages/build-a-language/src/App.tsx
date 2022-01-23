@@ -157,7 +157,7 @@ function App() {
           >
             <BuildALanguageTutorial />
           </Window>
-          {/* <Window
+          <Window
             title="Tutorial: Learn to Code"
             style={{
               left: 8,
@@ -167,7 +167,7 @@ function App() {
             }}
           >
             <LearnToCodeTutorial />
-          </Window> */}
+          </Window>
         </Desktop>
       </View>
     </View>
