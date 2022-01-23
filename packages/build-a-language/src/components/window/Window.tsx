@@ -21,6 +21,7 @@ const Window = React.forwardRef(({
   onWindowEndDrag?: any;
 } & ViewProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
+  const contentElementRef = useRef<HTMLElement>();
 
   useImperativeHandle(ref, () => windowElementRef.current);
 
@@ -46,7 +47,9 @@ const Window = React.forwardRef(({
   };
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current) {
+    if (windowElementRef.current && contentElementRef.current) {
+      contentElementRef.current.style.pointerEvents = 'none';
+
       const boundingClientRect = windowElementRef.current.getBoundingClientRect();
 
       onWindowStartDrag(windowElementRef.current, {
@@ -60,6 +63,10 @@ const Window = React.forwardRef(({
     event.preventDefault();
 
     onWindowEndDrag(windowElementRef.current);
+
+    if (contentElementRef.current) {
+      contentElementRef.current.style.pointerEvents = '';
+    }
   };
 
   return (
@@ -82,7 +89,7 @@ const Window = React.forwardRef(({
         <Text fontWeight="bold" noSelect>{title}</Text>
       </View>
       <Divider color="gray-4" />
-      <View flex background="white" style={{ position: 'relative' }} {...props}>
+      <View ref={contentElementRef} flex background="white" style={{ position: 'relative' }} {...props}>
         {children}
       </View>
     </View>
