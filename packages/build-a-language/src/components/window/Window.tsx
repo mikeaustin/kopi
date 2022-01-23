@@ -39,7 +39,6 @@ const Window = React.forwardRef(({
         const windowElement = windowElementRef.current;
 
         setTimeout(() => {
-          windowElementRef.current?.remove();
           parentElement?.appendChild(windowElement);
         });
       }
