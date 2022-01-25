@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.11",
     "classnames": "^2.3.1",
     "codemirror": "^5.65.0",
+    "cross-env": "^7.0.3",
     "open-color": "^1.9.1",
     "peggy": "^1.2.0",
     "react": "^17.0.2",
@@ -25,6 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-dev": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
