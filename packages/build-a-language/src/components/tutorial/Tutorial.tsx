@@ -17,7 +17,7 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
   };
 
   return (
-    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onMouseDown={handleClick}>
+    <Clickable padding="small" verticalPadding="medium" background={selected ? 'blue-0' : undefined} borderRadius style={{ position: 'relative', margin: '-1px 0' }} onMouseDown={handleClick}>
       <Text fontSize="medium" fontWeight="semi-bold">{`${index !== undefined ? index + 1 : ''}. ${title}`}</Text>
       <Spacer size="medium" />
       <Text>{subtitle}</Text>
@@ -87,10 +87,10 @@ const Tutorial = <TData,>({
   return (
     <>
       <View ref={containerElementRef} flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
-        <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
+        <View tag="ul" padding="small" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
           {pages.map((page, index) => (
             <View key={index} tag="li">
-              {index > 0 && <Divider />}
+              {index > 0 && <Divider style={{ marginTop: 0, visibility: index === currentPage || index === currentPage + 1 ? 'hidden' : undefined }} />}
               <Heading
                 title={page.title}
                 subtitle={page.subtitle}
