@@ -1,3 +1,8 @@
-import Window from './Window';
+import Window, { WindowProps, WindowContext } from './Window';
 
 export default Window;
+
+export {
+  type WindowProps,
+  WindowContext,
+};

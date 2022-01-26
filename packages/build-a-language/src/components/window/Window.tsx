@@ -6,20 +6,30 @@ import Divider from '../divider';
 
 import styles from './Window.module.scss';
 
+const WindowContext = React.createContext<(() => void) | null>(null);
+
+type WindowProps = {
+  children?: Exclude<React.ReactNode, string>;
+  title?: string;
+  style?: React.CSSProperties;
+  order?: number;
+  windowId?: number;
+  onWindowFocus?: any;
+  onWindowStartDrag?: any;
+  onWindowEndDrag?: any;
+} & ViewProps;
+
 const Window = React.forwardRef(({
   children,
   title,
   style,
+  order,
+  windowId,
+  onWindowFocus,
   onWindowStartDrag,
   onWindowEndDrag,
   ...props
-}: {
-  children?: Exclude<React.ReactNode, string>;
-  title?: string;
-  style?: React.CSSProperties;
-  onWindowStartDrag?: any;
-  onWindowEndDrag?: any;
-} & ViewProps, ref) => {
+}: WindowProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
   const contentElementRef = useRef<HTMLElement>();
 
@@ -28,21 +38,12 @@ const Window = React.forwardRef(({
   useEffect(() => {
     if (windowElementRef.current) {
       windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
+      // windowElementRef.current.style.height = `${windowElementRef.current.offsetHeight}px`;
     }
   }, []);
 
   const handleWindowMouseDown = () => {
-    if (windowElementRef.current) {
-      const parentElement = windowElementRef.current?.parentElement;
-
-      if (windowElementRef.current !== parentElement?.lastChild) {
-        const windowElement = windowElementRef.current;
-
-        setTimeout(() => {
-          parentElement?.appendChild(windowElement);
-        });
-      }
-    }
+    onWindowFocus(windowId);
   };
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
@@ -74,7 +75,7 @@ const Window = React.forwardRef(({
       borderRadius="small"
       dropShadow
       className={styles.container}
-      style={{ ...style, zIndex: 1 }}
+      style={{ ...style, zIndex: order }}
       onMouseDown={handleWindowMouseDown}
     >
       <View
@@ -89,10 +90,17 @@ const Window = React.forwardRef(({
       </View>
       <Divider color="gray-4" />
       <View ref={contentElementRef} flex background="white" style={{ position: 'relative' }} {...props}>
-        {children}
+        <WindowContext.Provider value={handleWindowMouseDown}>
+          {children}
+        </WindowContext.Provider>
       </View>
     </View>
   );
 });
 
 export default Window;
+
+export {
+  type WindowProps,
+  WindowContext,
+};

@@ -1,15 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { View } from '../../components';
+
+import { WindowProps } from '../window';
 
 const Desktop = ({
   children
 }: {
-  children?: React.ReactElement | (React.ReactElement)[];
+  children: React.ReactElement<WindowProps> | React.ReactElement<WindowProps>[];
 }) => {
   const desktopElementRef = useRef<HTMLElement>();
   const windowElementRef = useRef<HTMLElement>();
   const firstMouseRef = useRef<{ clientX: number, clientY: number; }>();
+
+  const [windows, setWindows] = useState(children);
+  const [windowOrder, setWindowOrder] = useState<number[]>(React.Children.map(windows, (_, index) => index));
 
   useEffect(() => {
     document.addEventListener('pointerup', () => {
@@ -23,6 +28,10 @@ const Desktop = ({
     }
   };
 
+  const handleWindowFocus = (windowId: number) => {
+    setWindowOrder((windowOrder) => [...windowOrder.filter((id) => id !== windowId), windowId]);
+  };
+
   const handleWindowStartDrag = (windowElement: HTMLElement, firstMouse: { clientX: number, clientY: number; }) => {
     windowElementRef.current = windowElement;
     firstMouseRef.current = firstMouse;
@@ -31,7 +40,6 @@ const Desktop = ({
   };
 
   const handlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
-
     if (desktopElementRef.current && windowElementRef.current && firstMouseRef.current) {
       event.preventDefault();
 
@@ -58,8 +66,11 @@ const Desktop = ({
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
     >
-      {React.Children.map(children, (child) => (
+      {React.Children.map(windows, (child, windowId) => (
         React.isValidElement(child) && React.cloneElement(child, {
+          windowId: windowId,
+          order: windowOrder.indexOf(windowId),
+          onWindowFocus: handleWindowFocus,
           onWindowStartDrag: handleWindowStartDrag,
           onWindowEndDrag: handleWindowEndDrag,
         })
