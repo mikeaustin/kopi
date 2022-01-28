@@ -87,7 +87,7 @@ const Tutorial = <TData,>({
   return (
     <>
       <View ref={containerElementRef} flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
-        <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start' }}>
+        <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start', overflowY: 'auto' }}>
           {pages.map((page, index) => (
             <View key={index} tag="li">
               {index > 0 && <Divider />}
@@ -107,7 +107,7 @@ const Tutorial = <TData,>({
           {typeof pages[currentPage].markdown === 'string' && (
             <>
               <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
-                <View flex>
+                <View flex style={{ minHeight: 0 }}>
                   <View flex horizontalPadding="large" style={{ overflow: 'auto' }}>
                     <Spacer size="large" />
                     <View horizontal>

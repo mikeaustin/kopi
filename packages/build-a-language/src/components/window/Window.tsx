@@ -89,7 +89,7 @@ const Window = React.forwardRef(({
         <Text fontWeight="bold" noSelect>{title}</Text>
       </View>
       <Divider color="gray-4" />
-      <View ref={contentElementRef} flex background="white" style={{ position: 'relative' }} {...props}>
+      <View ref={contentElementRef} flex background="white" style={{ position: 'relative', minHeight: 0 }} {...props}>
         <WindowContext.Provider value={handleWindowMouseDown}>
           {children}
         </WindowContext.Provider>
