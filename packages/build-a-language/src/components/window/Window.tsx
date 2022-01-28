@@ -50,6 +50,8 @@ const Window = React.forwardRef(({
     if (windowElementRef.current && contentElementRef.current) {
       contentElementRef.current.style.pointerEvents = 'none';
 
+      // windowElementRef.current.setPointerCapture(event.nativeEvent.pointerId);
+
       const boundingClientRect = windowElementRef.current.getBoundingClientRect();
 
       onWindowStartDrag(windowElementRef.current, {
@@ -82,7 +84,7 @@ const Window = React.forwardRef(({
         padding="small"
         alignItems="center"
         background="gray-3"
-        style={{ marginBottom: -1 }}
+        style={{ marginBottom: -1, touchAction: 'none' }}
         onPointerDown={handleTitlePointerDown}
         onPointerUp={handleTitlePointerUp}
       >
