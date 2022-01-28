@@ -151,8 +151,8 @@ function App() {
             style={{
               left: 8,
               top: 8,
-              width: Math.min(window.innerWidth - 16, 1680),
-              height: Math.min(window.innerHeight - 16 - 47, 900),
+              width: Math.min(window.innerWidth - 16, 1920),
+              height: Math.min(window.innerHeight - 16 - 47, 1080),
             }}
           >
             <BuildALanguageTutorial />
@@ -162,8 +162,8 @@ function App() {
             style={{
               left: 8,
               top: 8,
-              width: Math.min(window.innerWidth - 16, 1680),
-              height: Math.min(window.innerHeight - 16 - 47, 900),
+              width: Math.min(window.innerWidth - 16, 1920),
+              height: Math.min(window.innerHeight - 16 - 47, 1080),
             }}
           >
             <LearnToCodeTutorial />

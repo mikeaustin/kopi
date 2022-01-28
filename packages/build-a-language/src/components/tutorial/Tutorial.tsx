@@ -77,8 +77,8 @@ const Tutorial = <TData,>({
         if (containerElementRef.current?.parentElement?.parentElement) {
           console.log(containerElementRef.current?.parentElement?.parentElement);
 
-          containerElementRef.current.parentElement.parentElement.style.width = Math.min(window.innerWidth - 16, 1680) + 'px';
-          containerElementRef.current.parentElement.parentElement.style.height = Math.min(window.innerHeight - 16 - 47, 900) + 'px';
+          containerElementRef.current.parentElement.parentElement.style.width = Math.min(window.innerWidth - 16, 1920) + 'px';
+          containerElementRef.current.parentElement.parentElement.style.height = Math.min(window.innerHeight - 16 - 47, 1080) + 'px';
         }
       }, 100);
     });
