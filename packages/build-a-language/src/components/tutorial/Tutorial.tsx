@@ -47,6 +47,99 @@ type Page<TData> = {
   data: TData;
 };
 
+const StepsList = <TData,>({
+  pages,
+  currentPage,
+  onPageSelect,
+}: {
+  pages: Page<TData>[];
+  currentPage: number;
+  onPageSelect: (page: number) => void;
+}) => {
+  return (
+    <>
+      {pages.map((page, index) => (
+        <View key={index} tag="li">
+          {index > 0 && <Divider />}
+          <Heading
+            title={page.title}
+            subtitle={page.subtitle}
+            index={index}
+            selected={index === currentPage}
+            onSelect={onPageSelect}
+          />
+        </View>
+      ))}
+      <Divider />
+    </>
+  );
+};
+
+const Markdown = <TData,>({ pages, currentPage, onPreviousPageClick, onNextPageClick }: {
+  pages: Page<TData>[];
+  currentPage: number;
+  onPreviousPageClick: () => void;
+  onNextPageClick: () => void;
+}) => {
+  return (
+    <>
+      <View flex horizontalPadding="large" style={{ overflow: 'auto' }}>
+        <Spacer size="large" />
+        <View horizontal>
+          <Text flex fontSize="large" fontWeight="semi-bold">{pages[currentPage].title}</Text>
+          <Text fontSize="large" fontWeight="light">{currentPage + 1} / {pages.length}</Text>
+        </View>
+        <Spacer size="xlarge" />
+        <ReactMarkdown components={markdownComponents}>
+          {pages[currentPage].markdown ?? ''}
+        </ReactMarkdown>
+        <Spacer flex />
+      </View>
+      <View horizontalPadding="large">
+        <Divider />
+        <Spacer size="medium" />
+        <View horizontal justifyContent="center">
+          <View flex hidden={window.innerWidth < 640 && currentPage < pages.length - 1}>
+            <Text flex fontSize="medium" fontWeight="light" hidden={currentPage < 1}>
+              Previous: {pages[currentPage - 1]?.title}
+            </Text>
+          </View>
+          <View flex alignItems="flex-end" hidden={window.innerWidth < 640 && currentPage + 1 > pages.length - 1}>
+            <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1} style={{ textAlign: 'right' }}>
+              Next: {pages[currentPage + 1]?.title}
+            </Text>
+          </View>
+        </View>
+        <Spacer size="small" />
+        <Spacer size="tiny" />
+        <View horizontal justifyContent="center">
+          <View flex horizontal>
+            <Button
+              primary
+              title="Go Back"
+              leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
+              style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
+              hidden={currentPage < 1}
+              onClick={onPreviousPageClick}
+            />
+          </View>
+          <View flex horizontal justifyContent="flex-end">
+            <Button
+              primary
+              solid
+              title="Continue"
+              rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
+              hidden={currentPage + 1 > pages.length - 1}
+              onClick={onNextPageClick}
+            />
+          </View>
+        </View>
+        <Spacer size="large" />
+      </View>
+    </>
+  );
+};
+
 type TutorialProps<TData> = {
   pages: Page<TData>[];
   Content: React.ComponentType<{ data: TData; }>;
@@ -88,85 +181,24 @@ const Tutorial = <TData,>({
     <>
       <View ref={containerElementRef} flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
         <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start', overflowY: 'auto' }}>
-          {pages.map((page, index) => (
-            <View key={index} tag="li">
-              {index > 0 && <Divider />}
-              <Heading
-                title={page.title}
-                subtitle={page.subtitle}
-                index={index}
-                selected={index === currentPage}
-                onSelect={handlePageSelect}
-              />
-            </View>
-          ))}
-          <Divider />
+          <StepsList pages={pages} currentPage={currentPage} onPageSelect={handlePageSelect} />
         </View>
         <Divider />
-        <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1680 ? '100%' : 0}`, scrollSnapType: 'x mandatory' }}>
+        <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1680 ? '100%' : 0}`, minWidth: '100%', scrollSnapType: 'x mandatory' }}>
           {typeof pages[currentPage].markdown === 'string' && (
             <>
-              <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
-                <View flex style={{ minHeight: 0 }}>
-                  <View flex horizontalPadding="large" style={{ overflow: 'auto' }}>
-                    <Spacer size="large" />
-                    <View horizontal>
-                      <Text flex fontSize="large" fontWeight="semi-bold">{pages[currentPage].title}</Text>
-                      <Text fontSize="large" fontWeight="light">{currentPage + 1} / {pages.length}</Text>
-                    </View>
-                    <Spacer size="xlarge" />
-                    <ReactMarkdown components={markdownComponents}>
-                      {pages[currentPage].markdown ?? ''}
-                    </ReactMarkdown>
-                    <Spacer flex />
-                  </View>
-                  <View horizontalPadding="large">
-                    <Divider />
-                    <Spacer size="medium" />
-                    <View horizontal justifyContent="center">
-                      <View flex hidden={window.innerWidth < 640 && currentPage < pages.length - 1}>
-                        <Text flex fontSize="medium" fontWeight="light" hidden={currentPage < 1}>
-                          Previous: {pages[currentPage - 1]?.title}
-                        </Text>
-                      </View>
-                      <View flex alignItems="flex-end" hidden={window.innerWidth < 640 && currentPage + 1 > pages.length - 1}>
-                        <Text flex fontSize="medium" fontWeight="light" hidden={currentPage + 1 > pages.length - 1} style={{ textAlign: 'right' }}>
-                          Next: {pages[currentPage + 1]?.title}
-                        </Text>
-                      </View>
-                    </View>
-                    <Spacer size="small" />
-                    <Spacer size="tiny" />
-                    <View horizontal justifyContent="center">
-                      <View flex horizontal>
-                        <Button
-                          primary
-                          title="Go Back"
-                          leftIcon={<Text fontWeight="bold" textColor="primary" style={{ transform: 'scale(-1, 1)' }}>➜</Text>}
-                          style={{ visibility: currentPage > 0 ? 'visible' : 'hidden' }}
-                          hidden={currentPage < 1}
-                          onClick={handlePreviousPageClick}
-                        />
-                      </View>
-                      <View flex horizontal justifyContent="flex-end">
-                        <Button
-                          primary
-                          solid
-                          title="Continue"
-                          rightIcon={<Text fontWeight="bold" textColor="white">➜</Text>}
-                          hidden={currentPage + 1 > pages.length - 1}
-                          onClick={handleNextPageClick}
-                        />
-                      </View>
-                    </View>
-                    <Spacer size="large" />
-                  </View>
-                </View>
+              <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start', minHeight: 0 }}>
+                <Markdown
+                  pages={pages}
+                  currentPage={currentPage}
+                  onPreviousPageClick={handlePreviousPageClick}
+                  onNextPageClick={handleNextPageClick}
+                />
               </View>
               <Divider />
             </>
           )}
-          <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start' }}>
+          <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, width: '100%', scrollSnapAlign: 'start' }}>
             <Content data={pages[currentPage].data} />
           </View>
         </View>
