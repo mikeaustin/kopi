@@ -22,7 +22,6 @@ const Calendar = () => {
       <View background="gray-1">
         <Spacer size="medium" />
         <View horizontal horizontalPadding="medium" alignItems="center" background="gray-1">
-          {/* <Button size="xsmall" title="Today" solid rounded /> */}
           <Text fontSize="large">{today.toLocaleDateString(undefined, { month: 'long' })}</Text>
           <Spacer flex />
           <Button size="xsmall" title="◀" solid rounded />
@@ -46,7 +45,7 @@ const Calendar = () => {
         ))}
         {Array.from({ length: daysInMonth() }, (_, index) => (
           <View
-            key={index}
+            key={index + 7}
             borderRadius
             padding="small"
             background={index + 1 === today.getDate() ? 'primary' : undefined}

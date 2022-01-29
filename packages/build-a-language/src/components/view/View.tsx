@@ -12,6 +12,7 @@ import verticalPaddingStyles from '../../styles/verticalPadding.module.scss';
 import horizontalPaddingStyles from '../../styles/horizontalPadding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
 import borderRadiusStyles from '../../styles/borderRadius.module.scss';
+import scrollSnapAlignStyles from '../../styles/scrollSnapAlign.module.scss';
 
 type ViewProps = {
   tag?: string | React.ComponentType<any>;
@@ -32,6 +33,11 @@ type ViewProps = {
   background?: Color;
   borderRadius?: boolean | 'xsmall' | 'small' | 'max';
   hidden?: boolean;
+  scrollX?: boolean;
+  scrollY?: boolean;
+  scrollSnapX?: boolean;
+  scrollSnapY?: boolean;
+  scrollSnapAlign?: 'start' | 'center' | 'end';
   dropShadow?: boolean;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
@@ -56,6 +62,11 @@ const View = React.forwardRef(({
   background,
   borderRadius,
   hidden,
+  scrollX,
+  scrollY,
+  scrollSnapX,
+  scrollSnapY,
+  scrollSnapAlign,
   dropShadow,
   onPointerDown,
   onPointerMove,
@@ -77,6 +88,11 @@ const View = React.forwardRef(({
     background && backgroundColorStyles[background],
     (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
     hidden && styles.hidden,
+    scrollX && styles.scrollX,
+    scrollY && styles.scrollY,
+    scrollSnapX && styles.scrollSnapX,
+    scrollSnapY && styles.scrollSnapY,
+    scrollSnapAlign && scrollSnapAlignStyles[scrollSnapAlign],
     dropShadow && styles.dropShadow,
     className,
   );

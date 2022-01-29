@@ -167,11 +167,11 @@ const Tutorial = <TData,>({
   useEffect(() => {
     window.addEventListener('orientationchange', (event) => {
       setTimeout(() => {
-        if (containerElementRef.current?.parentElement?.parentElement) {
-          console.log(containerElementRef.current?.parentElement?.parentElement);
+        const windowElement = containerElementRef.current?.parentElement?.parentElement;
 
-          containerElementRef.current.parentElement.parentElement.style.width = Math.min(window.innerWidth - 16, 1920) + 'px';
-          containerElementRef.current.parentElement.parentElement.style.height = Math.min(window.innerHeight - 16 - 47, 1080) + 'px';
+        if (windowElement) {
+          windowElement.style.width = Math.min(window.innerWidth - 16, 1920) + 'px';
+          windowElement.style.height = Math.min(window.innerHeight - 16 - 47, 1080) + 'px';
         }
       }, 100);
     });
@@ -179,15 +179,19 @@ const Tutorial = <TData,>({
 
   return (
     <>
-      <View ref={containerElementRef} flex horizontal style={{ overflow: 'auto', scrollSnapType: 'x mandatory' }}>
-        <View tag="ul" style={{ flex: '0 0 300px', scrollSnapAlign: 'start', overflowY: 'auto' }}>
+      <View ref={containerElementRef} flex horizontal scrollX scrollSnapX>
+        <View tag="ul" scrollY scrollSnapAlign="start" style={{ flex: '0 0 300px' }}>
           <StepsList pages={pages} currentPage={currentPage} onPageSelect={handlePageSelect} />
         </View>
         <Divider />
-        <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1680 ? '100%' : 0}`, minWidth: '100%', scrollSnapType: 'x mandatory' }}>
+        <View horizontal style={{ flex: `1 0 ${window.innerWidth < 1680 ? '100%' : 0}` }}>
           {typeof pages[currentPage].markdown === 'string' && (
             <>
-              <View background="gray-0" style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, scrollSnapAlign: 'start', minHeight: 0 }}>
+              <View
+                background="gray-0"
+                scrollSnapAlign="start"
+                style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, minHeight: 0 }}
+              >
                 <Markdown
                   pages={pages}
                   currentPage={currentPage}
@@ -198,7 +202,11 @@ const Tutorial = <TData,>({
               <Divider />
             </>
           )}
-          <View flex style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, width: '100%', scrollSnapAlign: 'start' }}>
+          <View
+            flex
+            scrollSnapAlign="start"
+            style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, width: '100%' }}
+          >
             <Content data={pages[currentPage].data} />
           </View>
         </View>
