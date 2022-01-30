@@ -47,16 +47,16 @@ const Window = React.forwardRef(({
       const desktopBoundingClientRect = windowElementRef.current.parentElement.getBoundingClientRect();
 
       firstMouseRef.current = {
-        clientX: event.nativeEvent.pageX - boundingClientRect.left,
-        clientY: event.nativeEvent.pageY - boundingClientRect.top + desktopBoundingClientRect.top,
+        clientX: event.nativeEvent.clientX - boundingClientRect.left,
+        clientY: event.nativeEvent.clientY - boundingClientRect.top + desktopBoundingClientRect.top,
       };
     }
   };
 
   const handleTitlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
     if (windowElementRef.current && firstMouseRef.current) {
-      windowElementRef.current.style.left = `${event.nativeEvent.pageX - firstMouseRef.current.clientX}px`;
-      windowElementRef.current.style.top = `${event.nativeEvent.pageY - firstMouseRef.current.clientY}px`;
+      windowElementRef.current.style.left = `${event.nativeEvent.clientX - firstMouseRef.current.clientX}px`;
+      windowElementRef.current.style.top = `${event.nativeEvent.clientY - firstMouseRef.current.clientY}px`;
     }
   };
 
