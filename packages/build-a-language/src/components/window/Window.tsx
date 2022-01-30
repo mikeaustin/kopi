@@ -15,8 +15,6 @@ type WindowProps = {
   order?: number;
   windowId?: number;
   onWindowFocus?: any;
-  onWindowStartDrag?: any;
-  onWindowEndDrag?: any;
 } & ViewProps;
 
 const Window = React.forwardRef(({
@@ -26,14 +24,55 @@ const Window = React.forwardRef(({
   order,
   windowId,
   onWindowFocus,
-  onWindowStartDrag,
-  onWindowEndDrag,
   ...props
 }: WindowProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
   const contentElementRef = useRef<HTMLElement>();
+  const firstMouseRef = useRef<{ clientX: number, clientY: number; }>();
 
   useImperativeHandle(ref, () => windowElementRef.current);
+
+  const handleWindowMouseDown = () => {
+    onWindowFocus(windowId);
+  };
+
+  const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if (windowElementRef.current && windowElementRef.current.parentElement && contentElementRef.current) {
+      windowElementRef.current.style.willChange = 'left, top';
+      contentElementRef.current.style.pointerEvents = 'none';
+
+      event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+
+      const boundingClientRect = windowElementRef.current.getBoundingClientRect();
+      const desktopBoundingClientRect = windowElementRef.current.parentElement.getBoundingClientRect();
+
+      firstMouseRef.current = {
+        clientX: event.nativeEvent.pageX - boundingClientRect.left,
+        clientY: event.nativeEvent.pageY - boundingClientRect.top + desktopBoundingClientRect.top,
+      };
+    }
+  };
+
+  const handleTitlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if (windowElementRef.current && firstMouseRef.current) {
+      windowElementRef.current.style.left = `${event.nativeEvent.pageX - firstMouseRef.current.clientX}px`;
+      windowElementRef.current.style.top = `${event.nativeEvent.pageY - firstMouseRef.current.clientY}px`;
+    }
+  };
+
+  const handleTitlePointerUp = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    event.preventDefault();
+
+    if (windowElementRef.current) {
+      windowElementRef.current.style.willChange = '';
+    }
+
+    firstMouseRef.current = undefined;
+
+    if (contentElementRef.current) {
+      contentElementRef.current.style.pointerEvents = '';
+    }
+  };
 
   useEffect(() => {
     if (windowElementRef.current) {
@@ -41,35 +80,6 @@ const Window = React.forwardRef(({
       // windowElementRef.current.style.height = `${windowElementRef.current.offsetHeight}px`;
     }
   }, []);
-
-  const handleWindowMouseDown = () => {
-    onWindowFocus(windowId);
-  };
-
-  const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current && contentElementRef.current) {
-      contentElementRef.current.style.pointerEvents = 'none';
-
-      // windowElementRef.current.setPointerCapture(event.nativeEvent.pointerId);
-
-      const boundingClientRect = windowElementRef.current.getBoundingClientRect();
-
-      onWindowStartDrag(windowElementRef.current, {
-        clientX: event.nativeEvent.pageX - boundingClientRect.left,
-        clientY: event.nativeEvent.pageY - boundingClientRect.top,
-      });
-    }
-  };
-
-  const handleTitlePointerUp = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    event.preventDefault();
-
-    onWindowEndDrag(windowElementRef.current);
-
-    if (contentElementRef.current) {
-      contentElementRef.current.style.pointerEvents = '';
-    }
-  };
 
   return (
     <View
@@ -86,6 +96,7 @@ const Window = React.forwardRef(({
         background="gray-3"
         style={{ marginBottom: -1, touchAction: 'none' }}
         onPointerDown={handleTitlePointerDown}
+        onPointerMove={handleTitlePointerMove}
         onPointerUp={handleTitlePointerUp}
       >
         <Text fontWeight="bold" noSelect>{title}</Text>
