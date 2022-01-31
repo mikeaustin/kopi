@@ -5,6 +5,7 @@ import Text from '../text';
 import Divider from '../divider';
 
 import styles from './Window.module.scss';
+import textStyles from '../text/Text.module.scss';
 
 const WindowContext = React.createContext<{ onWindowFocus: (() => void); } | null>(null);
 
@@ -79,7 +80,9 @@ const Window = React.forwardRef(({
   };
 
   const handleContentPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+    if ((event.target as HTMLElement).classList.contains(textStyles.container)) {
+      event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+    }
   };
 
   const windowContextValue = useMemo(() => ({
@@ -111,7 +114,7 @@ const Window = React.forwardRef(({
         onPointerMove={handleTitlePointerMove}
         onPointerUp={handleTitlePointerUp}
       >
-        <Text fontWeight="bold" noSelect>{title}</Text>
+        <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
       </View>
       <Divider color="gray-4" />
       <View

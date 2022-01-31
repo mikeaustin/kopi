@@ -57,7 +57,15 @@ const Button = ({
           <Spacer size="small" />
         </>
       )}
-      <Text fontSize={size} fontWeight="bold" textColor={textColor} noSelect>{title}</Text>
+      <Text
+        fontSize={size}
+        fontWeight="bold"
+        textColor={textColor}
+        noSelect
+        style={{ pointerEvents: 'none' }}
+      >
+        {title}
+      </Text>
       {rightIcon && (
         <>
           <Spacer size="small" />
