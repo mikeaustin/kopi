@@ -18,7 +18,8 @@ type WindowProps = {
   order?: number;
   windowId?: number;
   onWindowFocus?: any;
-  onWindowPositionChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
+  onWindowChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
+  onWindowTransientChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
 } & ViewProps;
 
 const Window = React.forwardRef(({
@@ -28,7 +29,8 @@ const Window = React.forwardRef(({
   order,
   windowId,
   onWindowFocus,
-  onWindowPositionChange,
+  onWindowChange,
+  onWindowTransientChange,
   ...props
 }: WindowProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
@@ -67,6 +69,16 @@ const Window = React.forwardRef(({
       windowElementRef.current.style.left = `${event.nativeEvent.clientX - firstMouseRef.current.clientX}px`;
       windowElementRef.current.style.top = `${event.nativeEvent.clientY - firstMouseRef.current.clientY}px`;
     }
+
+    if (firstMouseRef.current && windowId !== undefined && windowElementRef.current && onWindowTransientChange) {
+      onWindowTransientChange({
+        windowId,
+        left: windowElementRef.current.offsetLeft,
+        top: windowElementRef.current.offsetTop,
+        width: windowElementRef.current.offsetWidth,
+        height: windowElementRef.current.offsetHeight,
+      });
+    }
   };
 
   const handleTitlePointerUp = (event: React.SyntheticEvent<any, PointerEvent>) => {
@@ -82,8 +94,8 @@ const Window = React.forwardRef(({
       contentElementRef.current.style.pointerEvents = '';
     }
 
-    if (windowId !== undefined && windowElementRef.current && onWindowPositionChange) {
-      onWindowPositionChange({
+    if (windowId !== undefined && windowElementRef.current && onWindowChange) {
+      onWindowChange({
         windowId,
         left: windowElementRef.current.offsetLeft,
         top: windowElementRef.current.offsetTop,
@@ -108,8 +120,8 @@ const Window = React.forwardRef(({
       windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
       // windowElementRef.current.style.height = `${windowElementRef.current.offsetHeight}px`;
 
-      if (windowId !== undefined && onWindowPositionChange) {
-        onWindowPositionChange({
+      if (windowId !== undefined && onWindowChange) {
+        onWindowChange({
           windowId,
           left: windowElementRef.current.offsetLeft,
           top: windowElementRef.current.offsetTop,
@@ -118,7 +130,7 @@ const Window = React.forwardRef(({
         });
       }
     }
-  }, [windowId, onWindowPositionChange]);
+  }, [windowId, onWindowChange]);
 
   return (
     <View

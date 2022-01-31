@@ -16,11 +16,28 @@ const windowPositionEventTarget = new EventTarget();
 
 const MiniMap = ({
   windowPositions,
+  windowPositionEventTarget,
 }: {
   windowPositions: WindowPosition[];
+  windowPositionEventTarget: any;
 }) => {
+  console.log('MiniMap()');
+
+  const containerRef = useRef<HTMLElement>();
+
+  const handleWindowChange = ({ detail: { windowId, left, top } }: { detail: WindowPosition; }) => {
+    if (containerRef.current) {
+      (containerRef.current.children[windowId] as HTMLElement).style.left = left / 10 + 'px';
+      (containerRef.current.children[windowId] as HTMLElement).style.top = top / 10 + 'px';
+    }
+  };
+
+  useEffect(() => {
+    windowPositionEventTarget.addEventListener('windowpositionchange', handleWindowChange);
+  }, [windowPositionEventTarget]);
+
   return (
-    <View style={{ position: 'absolute', top: 10, right: 10, width: window.innerWidth / 10 }}>
+    <View ref={containerRef} style={{ position: 'absolute', top: 10, right: 10, width: window.innerWidth / 10 }}>
       {windowPositions.map(({ left, top, width, height }, index) => (
         <View
           key={index}
@@ -45,6 +62,8 @@ const Desktop = ({
 }: {
   children: React.ReactElement<WindowProps> | React.ReactElement<WindowProps>[];
 }) => {
+  console.log('Desktop()');
+
   const [windows, setWindows] = useState(React.Children.toArray(children));
   const [windowOrder, setWindowOrder] = useState<number[]>(React.Children.map(windows, (_, index) => index));
 
@@ -67,15 +86,13 @@ const Desktop = ({
     setWindowOrder((windowOrder) => [...windowOrder.filter((id) => id !== windowId), windowId]);
   };
 
-  const handleWindowPositionChange = useCallback(({
+  const handleWindowChange = useCallback(({
     windowId, left, top, width, height,
   }: {
     windowId: number; left: number; top: number; width: number; height: number;
   }) => {
-    console.log('here', left, top, width);
-
     setWindowPositions((windowPositions) => windowPositions.map((position, index) => (
-      windowId === index ? { ...position, left, top, width, height } : position
+      windowId === position.windowId ? { ...position, left, top, width, height } : position
     )));
 
     windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
@@ -83,6 +100,20 @@ const Desktop = ({
         windowId,
         left,
         top,
+        width,
+        height,
+      }
+    }));
+  }, []);
+
+  const handleWindowTransientChange = useCallback(({ windowId, left, top, width, height }: WindowPosition) => {
+    windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
+      detail: {
+        windowId,
+        left,
+        top,
+        width,
+        height,
       }
     }));
   }, []);
@@ -94,13 +125,14 @@ const Desktop = ({
       style={{ position: 'relative' }}
       onPointerDown={handlePointerDown}
     >
-      <MiniMap windowPositions={windowPositions} />
+      <MiniMap windowPositions={windowPositions} windowPositionEventTarget={windowPositionEventTarget} />
       {React.Children.map(windows, (child, windowId) => (
         React.isValidElement(child) && React.cloneElement(child, {
           windowId: windowId,
           order: windowOrder.indexOf(windowId),
           onWindowFocus: handleWindowFocus,
-          onWindowPositionChange: handleWindowPositionChange,
+          onWindowChange: handleWindowChange,
+          onWindowTransientChange: handleWindowTransientChange,
         })
       ))}
     </View>
