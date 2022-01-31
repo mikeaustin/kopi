@@ -57,7 +57,7 @@ const Button = ({
           <Spacer size="small" />
         </>
       )}
-      <Text fontSize={size} fontWeight="bold" textColor={textColor}>{title}</Text>
+      <Text fontSize={size} fontWeight="bold" textColor={textColor} noSelect>{title}</Text>
       {rightIcon && (
         <>
           <Spacer size="small" />

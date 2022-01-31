@@ -78,6 +78,10 @@ const Window = React.forwardRef(({
     }
   };
 
+  const handleContentPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+  };
+
   const windowContextValue = useMemo(() => ({
     onWindowFocus: handleWindowFocus,
   }), [handleWindowFocus]);
@@ -110,7 +114,14 @@ const Window = React.forwardRef(({
         <Text fontWeight="bold" noSelect>{title}</Text>
       </View>
       <Divider color="gray-4" />
-      <View ref={contentElementRef} flex background="white" style={{ position: 'relative', minHeight: 0 }} {...props}>
+      <View
+        ref={contentElementRef}
+        flex
+        background="white"
+        style={{ position: 'relative', minHeight: 0 }}
+        onPointerDown={handleContentPointerDown}
+        {...props}
+      >
         <WindowContext.Provider value={windowContextValue}>
           {children}
         </WindowContext.Provider>
