@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useImperativeHandle } from 'react';
+import React, { useRef, useMemo, useEffect, useCallback, useImperativeHandle } from 'react';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';
@@ -6,7 +6,7 @@ import Divider from '../divider';
 
 import styles from './Window.module.scss';
 
-const WindowContext = React.createContext<(() => void) | null>(null);
+const WindowContext = React.createContext<{ onWindowFocus: (() => void); } | null>(null);
 
 type WindowProps = {
   children?: Exclude<React.ReactNode, string>;
@@ -32,9 +32,13 @@ const Window = React.forwardRef(({
 
   useImperativeHandle(ref, () => windowElementRef.current);
 
-  const handleWindowMouseDown = () => {
-    onWindowFocus(windowId);
+  const handleWindowPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    handleWindowFocus();
   };
+
+  const handleWindowFocus = useCallback(() => {
+    onWindowFocus(windowId);
+  }, [windowId, onWindowFocus]);
 
   const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
     if (windowElementRef.current && windowElementRef.current.parentElement && contentElementRef.current) {
@@ -74,6 +78,10 @@ const Window = React.forwardRef(({
     }
   };
 
+  const windowContextValue = useMemo(() => ({
+    onWindowFocus: handleWindowFocus,
+  }), [handleWindowFocus]);
+
   useEffect(() => {
     if (windowElementRef.current) {
       windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
@@ -88,7 +96,7 @@ const Window = React.forwardRef(({
       dropShadow
       className={styles.container}
       style={{ ...style, zIndex: order }}
-      onMouseDown={handleWindowMouseDown}
+      onPointerDown={handleWindowPointerDown}
     >
       <View
         padding="small"
@@ -103,7 +111,7 @@ const Window = React.forwardRef(({
       </View>
       <Divider color="gray-4" />
       <View ref={contentElementRef} flex background="white" style={{ position: 'relative', minHeight: 0 }} {...props}>
-        <WindowContext.Provider value={handleWindowMouseDown}>
+        <WindowContext.Provider value={windowContextValue}>
           {children}
         </WindowContext.Provider>
       </View>

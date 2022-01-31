@@ -19,7 +19,7 @@ const Content = ({
   data,
 }: ContentProps) => {
   const iframeElementRef = useRef();
-  const onWindowFocus = useContext(WindowContext);
+  const { onWindowFocus } = useContext(WindowContext) ?? { onWindowFocus: null };
 
   const handleWindowBlur = useCallback(() => {
     if (document.activeElement === iframeElementRef.current) {
