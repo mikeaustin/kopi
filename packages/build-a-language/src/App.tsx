@@ -137,20 +137,20 @@ function App() {
       </View>
       <View flex horizontal>
         <Desktop>
-          <Window title="Examples" style={{ left: 15, top: 15 }}>
+          <Window title="Examples" style={{ left: 30, top: 30 }}>
             <Examples />
           </Window>
-          <Window title="Calendar" style={{ left: 30, top: 30 }}>
+          <Window title="Calendar" style={{ left: 45, top: 45 }}>
             <Calendar />
           </Window>
-          <Window title="Preferences" style={{ left: 45, top: 45, width: 500 }}>
+          <Window title="Preferences" style={{ left: 60, top: 60, width: 500 }}>
             <Preferences onSetBackground={handleSetBackground} />
           </Window>
           <Window
             title="Tutorial: Let’s Build a Programming Language"
             style={{
-              left: 8,
-              top: 8,
+              left: 15,
+              top: 15,
               width: Math.min(window.innerWidth - 16, 1920),
               height: Math.min(window.innerHeight - 16 - 47, 1080),
             }}

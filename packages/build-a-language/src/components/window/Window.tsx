@@ -4,6 +4,8 @@ import View, { ViewProps } from '../view';
 import Text from '../text';
 import Divider from '../divider';
 
+import { type WindowPosition } from '../desktop';
+
 import styles from './Window.module.scss';
 import textStyles from '../text/Text.module.scss';
 
@@ -16,6 +18,7 @@ type WindowProps = {
   order?: number;
   windowId?: number;
   onWindowFocus?: any;
+  onWindowPositionChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
 } & ViewProps;
 
 const Window = React.forwardRef(({
@@ -25,6 +28,7 @@ const Window = React.forwardRef(({
   order,
   windowId,
   onWindowFocus,
+  onWindowPositionChange,
   ...props
 }: WindowProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
@@ -77,6 +81,16 @@ const Window = React.forwardRef(({
     if (contentElementRef.current) {
       contentElementRef.current.style.pointerEvents = '';
     }
+
+    if (windowId !== undefined && windowElementRef.current && onWindowPositionChange) {
+      onWindowPositionChange({
+        windowId,
+        left: windowElementRef.current.offsetLeft,
+        top: windowElementRef.current.offsetTop,
+        width: windowElementRef.current.offsetWidth,
+        height: windowElementRef.current.offsetHeight,
+      });
+    }
   };
 
   const handleContentPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
@@ -93,8 +107,18 @@ const Window = React.forwardRef(({
     if (windowElementRef.current) {
       windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
       // windowElementRef.current.style.height = `${windowElementRef.current.offsetHeight}px`;
+
+      if (windowId !== undefined && onWindowPositionChange) {
+        onWindowPositionChange({
+          windowId,
+          left: windowElementRef.current.offsetLeft,
+          top: windowElementRef.current.offsetTop,
+          width: windowElementRef.current.offsetWidth,
+          height: windowElementRef.current.offsetHeight,
+        });
+      }
     }
-  }, []);
+  }, [windowId, onWindowPositionChange]);
 
   return (
     <View
