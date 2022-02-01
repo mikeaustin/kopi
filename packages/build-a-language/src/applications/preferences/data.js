@@ -1,28 +1,18 @@
 const data = [
-  'triangles-colorful-green-colors-low-poly-abstract-4748.png',
   '1638098.jpg',
   '1638137.png',
-  '1638149.jpg',
   '1638435.jpg',
   '16930.jpg',
   '16933.jpg',
   '16935.jpg',
-  '16961.jpg',
-  '16966.jpg',
-  '16979.jpg',
-  '16981.jpg',
   '16989.jpg',
-  '2909191.jpg',
   '2909224.jpg',
   '2909247.jpg',
-  '2909251.jpg',
-  '2909268.jpg',
   '306406.jpg',
   '306409.jpg',
   '306428.jpg',
   '306440.png',
   '306458.png',
-  '306520.jpg',
   '306619.jpg',
   '3401069.jpg',
   '346752.png',
@@ -32,13 +22,10 @@ const data = [
   '653931.jpg',
   '653934.jpg',
   '653936.jpg',
-  '781752.jpg',
   '781767.jpg',
   '961115.jpg',
-  '961137.jpg',
-  // 'd1e91a4058a8a1082da711095b4e0163.jpg',
   'purple-skies-3440x1440.jpg',
-  'rcdhYe4.jpg'
+  'triangles-colorful-green-colors-low-poly-abstract-4748.png'
 ];
 
 export default data;

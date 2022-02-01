@@ -8,6 +8,7 @@ const data = `const data = [
 ${images.join(',\n')}
 ];
 
-export default data;`;
+export default data;
+`;
 
 fs.writeFile('./src/applications/preferences/data.js', data);
