@@ -1,4 +1,5 @@
 const data = [
+  'triangles-colorful-green-colors-low-poly-abstract-4748.png',
   '1638098.jpg',
   '1638137.png',
   '1638149.jpg',
@@ -35,7 +36,7 @@ const data = [
   '781767.jpg',
   '961115.jpg',
   '961137.jpg',
-  'd1e91a4058a8a1082da711095b4e0163.jpg',
+  // 'd1e91a4058a8a1082da711095b4e0163.jpg',
   'purple-skies-3440x1440.jpg',
   'rcdhYe4.jpg'
 ];
