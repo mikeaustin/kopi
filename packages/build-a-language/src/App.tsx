@@ -12,6 +12,8 @@ import Window from './components/window';
 import Calendar from './components/calendar';
 import Preferences from './applications/preferences';
 
+import { DigitalClock } from './components/clock';
+
 import styles from './App.module.scss';
 
 
@@ -128,12 +130,16 @@ function App() {
     setBackgroundUrl(url);
   };
 
+  const inset = window.innerWidth < 1440 ? 8 : 15;
+
   return (
     <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
-      <View horizontal background="white" alignItems="center" padding="medium" dropShadow>
-        <Text fontSize="medium" fontWeight="bold">
+      <View horizontal background="white" alignItems="center" padding="small" horizontalPadding="medium" dropShadow style={{ background: 'hsla(210, 100%, 98%, 0.9)' }}>
+        <Text fontWeight="bold">
           Header
         </Text>
+        <Spacer flex />
+        <DigitalClock />
       </View>
       <View flex horizontal>
         <Desktop>
@@ -149,10 +155,10 @@ function App() {
           <Window
             title="Tutorial: Let’s Build a Programming Language"
             style={{
-              left: 15,
-              top: 15,
-              width: Math.min(window.innerWidth - 16, 1920),
-              height: Math.min(window.innerHeight - 16 - 47, 1080),
+              left: inset,
+              top: inset,
+              width: Math.min(window.innerWidth - (inset * 2), 1920),
+              height: Math.min(window.innerHeight - (inset * 2) - 47, 1080),
             }}
           >
             <BuildALanguageTutorial />
