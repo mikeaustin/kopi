@@ -51,12 +51,11 @@ const Menu = ({
     horizontal: horizontal,
     verticalPadding: !horizontal ? 'xsmall' : undefined,
     dropShadow: !horizontal,
-    style: !horizontal ? { position: 'absolute', zIndex: 1000 } : {},
     ...props,
   };
 
   return (
-    <List background="white" className={styles.menu} {...containerProps}>
+    <List background="white" className={classNames(styles.menu, !horizontal && styles.vertical)} {...containerProps}>
       {React.Children.map(children, (child) => React.isValidElement(child) && React.cloneElement(child, {
         parentHorizontal: horizontal,
       }))}

@@ -1,5 +1,10 @@
 @import 'open-color';
 
+.menu.vertical {
+  position: absolute;
+  z-index: 1000;
+}
+
 .menuItem {
   cursor: pointer;
 
