@@ -1,0 +1,21 @@
+@import 'open-color';
+
+.menuItem {
+  cursor: pointer;
+  
+  .items {
+    display: none;
+  }
+
+  &:hover {
+    background: $oc-blue-4;
+
+    > div > .text {
+      color: white;
+    }
+
+    .items {
+      display: unset;
+    }
+  }
+}

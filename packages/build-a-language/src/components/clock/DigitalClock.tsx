@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { View, Text } from '../index';
 
-const DigitalClock = () => {
+const DigitalClock = ({ ...props }) => {
   const [date, setDate] = useState(new Date());
   const timerRef = useRef<number>();
 
@@ -25,8 +25,10 @@ const DigitalClock = () => {
   }, [updateDate]);
 
   return (
-    <View alignItems="center">
-      <Text fontWeight="medium">{date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</Text>
+    <View alignItems="center" {...props}>
+      <Text fontWeight="medium">
+        {date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
+      </Text>
     </View>
   );
 };

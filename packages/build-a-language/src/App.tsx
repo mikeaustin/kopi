@@ -13,6 +13,7 @@ import Calendar from './components/calendar';
 import Preferences from './applications/preferences';
 
 import { DigitalClock } from './components/clock';
+import { MenuBar } from './components/menu';
 
 import styles from './App.module.scss';
 
@@ -134,12 +135,10 @@ function App() {
 
   return (
     <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
-      <View horizontal background="white" alignItems="center" padding="small" horizontalPadding="medium" dropShadow style={{ background: 'hsla(210, 100%, 98%, 0.9)' }}>
-        <Text fontWeight="medium">
-          Header
-        </Text>
+      <View horizontal background="white" alignItems="center" dropShadow /* style={{ background: 'hsla(210, 100%, 98%, 0.9)' }} */>
+        <MenuBar />
         <Spacer flex />
-        <DigitalClock />
+        <DigitalClock horizontalPadding="medium" />
       </View>
       <View flex horizontal>
         <Desktop>

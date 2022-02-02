@@ -2,7 +2,9 @@
 
 .container {
   align-self: stretch;
+}
 
+:not(.horizontal) > .container {
   &.tiny {
     min-height: 2.5px;
   }

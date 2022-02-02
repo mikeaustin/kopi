@@ -12,6 +12,7 @@ import textColorStyles from '../../styles/textColor.module.scss';
 type TextProps = {
   children: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
   textParent?: boolean;
   flex?: boolean,
   noSelect?: boolean;
@@ -24,6 +25,7 @@ type TextProps = {
 const Text = React.forwardRef<HTMLDivElement, TextProps>(({
   children,
   style,
+  className,
   textParent,
   flex,
   noSelect,
@@ -67,6 +69,7 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>(({
     (fontSize && fontSizeStyles[fontSize]) || (!textParent && fontSizeStyles.small),
     fontWeight && fontWeightStyles[fontWeight],
     (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['gray-7']),
+    className,
   );
 
   const Component = textParent ? 'span' : 'div';
