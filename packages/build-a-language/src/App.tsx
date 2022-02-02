@@ -135,7 +135,7 @@ function App() {
   return (
     <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
       <View horizontal background="white" alignItems="center" padding="small" horizontalPadding="medium" dropShadow style={{ background: 'hsla(210, 100%, 98%, 0.9)' }}>
-        <Text fontWeight="bold">
+        <Text fontWeight="medium">
           Header
         </Text>
         <Spacer flex />
@@ -146,11 +146,11 @@ function App() {
           <Window title="Examples" style={{ left: 30, top: 30 }}>
             <Examples />
           </Window>
-          <Window title="Calendar" style={{ left: 45, top: 45 }}>
-            <Calendar />
-          </Window>
-          <Window title="Preferences" style={{ left: 60, top: 60, width: 500 }}>
+          <Window title="Preferences" style={{ left: 45, top: 45, width: 500 }}>
             <Preferences onSetBackground={handleSetBackground} />
+          </Window>
+          <Window title="Calendar" style={{ left: 60, top: 60 }}>
+            <Calendar />
           </Window>
           <Window
             title="Tutorial: Let’s Build a Programming Language"
