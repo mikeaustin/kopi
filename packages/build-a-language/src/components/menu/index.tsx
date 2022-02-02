@@ -1,54 +1,91 @@
 import React from 'react';
-import { View, Text, List } from '../index';
+import { View, Text, Spacer, List } from '../index';
+import classNames from 'classnames';
+
+import { type ViewProps } from '../view';
 
 import styles from './Menu.module.scss';
 
 const MenuItem = ({
   title,
+  parentHorizontal,
   children,
   onClick,
 }: {
   title: string;
+  parentHorizontal?: boolean;
   children?: React.ReactElement | React.ReactElement[];
   onClick?: () => void;
 }) => {
   return (
     <View className={styles.menuItem}>
-      <View flex padding="small" horizontalPadding="medium" onClick={onClick}>
-        <Text fontWeight="medium" className={styles.text}>
+      <View flex horizontal padding="small" horizontalPadding="medium" onClick={onClick}>
+        <Text flex fontWeight="medium" className={styles.text}>
           {title}
         </Text>
+        {!parentHorizontal && (
+          <>
+            <Spacer size="small" />
+            <Text className={styles.text} style={{ visibility: children ? 'visible' : 'hidden' }}>❯</Text>
+          </>
+        )}
       </View>
       {children && (
         <View className={styles.items}>
-          <List verticalPadding="xsmall" background="white" dropShadow style={{ position: 'absolute', zIndex: 1000 }}>
-            {children}
-          </List>
+          <Menu >{children}</Menu>
         </View>
       )}
     </View>
   );
 };
 
-const MenuBar = ({
+const Menu = ({
+  children,
   horizontal,
+  ...props
 }: {
+  children?: React.ReactElement | React.ReactElement[],
   horizontal?: boolean;
-}) => {
+} & ViewProps) => {
+  const containerProps: ViewProps = {
+    horizontal: horizontal,
+    verticalPadding: !horizontal ? 'xsmall' : undefined,
+    dropShadow: !horizontal,
+    style: !horizontal ? { position: 'absolute', zIndex: 1000 } : {},
+    ...props,
+  };
+
+  return (
+    <List background="white" className={styles.menu} {...containerProps}>
+      {React.Children.map(children, (child) => React.isValidElement(child) && React.cloneElement(child, {
+        parentHorizontal: horizontal,
+      }))}
+    </List>
+  );
+};
+
+const MenuBar = () => {
   const handlePreferencesClick = () => {
     alert('here');
   };
 
   return (
-    <List horizontal>
+    <Menu horizontal>
       <MenuItem title="React Desktop">
         <MenuItem title="Desktop Preferences" onClick={handlePreferencesClick} />
       </MenuItem>
       <MenuItem title="Tutorials">
         <MenuItem title="Let's Build a Programming Language" />
         <MenuItem title="Learn to Code using JavaScript" />
+        <MenuItem title="MenuItem with Submenu">
+          <MenuItem title="MenuItem" />
+          <MenuItem title="MenuItem with Submenu">
+            <MenuItem title="Submenu" />
+            <MenuItem title="Submenu" />
+          </MenuItem>
+        </MenuItem>
       </MenuItem>
-    </List>
+    </Menu>
   );
 };
 

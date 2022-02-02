@@ -2,7 +2,11 @@
 
 .menuItem {
   cursor: pointer;
-  
+
+  .text {
+    white-space: nowrap;
+  }
+
   .items {
     display: none;
   }
@@ -14,8 +18,16 @@
       color: white;
     }
 
-    .items {
+    > .items {
       display: unset;
+    }
+
+    > .items .items {
+      align-self: flex-end;
+
+      .menu {
+        margin-top: -35px;
+      }
     }
   }
 }
