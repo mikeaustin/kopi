@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 
 import { View } from '../../components';
+import MiniMap from './MiniMap';
 
 import { WindowProps } from '../window';
 
@@ -14,49 +15,6 @@ type WindowPosition = {
 
 const windowPositionEventTarget = new EventTarget();
 
-const MiniMap = ({
-  windowPositions,
-  windowPositionEventTarget,
-}: {
-  windowPositions: WindowPosition[];
-  windowPositionEventTarget: any;
-}) => {
-  console.log('MiniMap()');
-
-  const containerRef = useRef<HTMLElement>();
-
-  const handleWindowChange = ({ detail: { windowId, left, top } }: { detail: WindowPosition; }) => {
-    if (containerRef.current) {
-      (containerRef.current.children[windowId] as HTMLElement).style.left = left / 10 + 'px';
-      (containerRef.current.children[windowId] as HTMLElement).style.top = top / 10 + 'px';
-    }
-  };
-
-  useEffect(() => {
-    windowPositionEventTarget.addEventListener('windowpositionchange', handleWindowChange);
-  }, [windowPositionEventTarget]);
-
-  return (
-    <View ref={containerRef} style={{ position: 'absolute', top: 15, right: 15, width: window.innerWidth / 10 }}>
-      {windowPositions.map(({ left, top, width, height }, index) => (
-        <View
-          key={index}
-          borderRadius="xsmall"
-          style={{
-            position: 'absolute',
-            left: left / 10,
-            top: top / 10,
-            width: width / 10,
-            height: height / 10,
-            background: 'white',
-            opacity: 0.5
-          }}
-        />
-      ))}
-    </View>
-  );
-};
-
 const Desktop = ({
   children
 }: {
@@ -69,11 +27,7 @@ const Desktop = ({
 
   const desktopElementRef = useRef<HTMLElement>();
   const [windowPositions, setWindowPositions] = useState<WindowPosition[]>(windows.map((child, index) => ({
-    windowId: index,
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0,
+    windowId: index, left: 0, top: 0, width: 0, height: 0,
   })));
 
   const handlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
@@ -88,20 +42,14 @@ const Desktop = ({
 
   const handleWindowChange = useCallback(({
     windowId, left, top, width, height,
-  }: {
-    windowId: number; left: number; top: number; width: number; height: number;
-  }) => {
+  }: WindowPosition) => {
     setWindowPositions((windowPositions) => windowPositions.map((position, index) => (
       windowId === position.windowId ? { ...position, left, top, width, height } : position
     )));
 
     windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
       detail: {
-        windowId,
-        left,
-        top,
-        width,
-        height,
+        windowId, left, top, width, height,
       }
     }));
   }, []);
@@ -109,11 +57,7 @@ const Desktop = ({
   const handleWindowTransientChange = useCallback(({ windowId, left, top, width, height }: WindowPosition) => {
     windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
       detail: {
-        windowId,
-        left,
-        top,
-        width,
-        height,
+        windowId, left, top, width, height,
       }
     }));
   }, []);
