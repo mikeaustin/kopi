@@ -78,7 +78,7 @@ const Preferences = ({
       </View>
       <Divider style={{ marginBottom: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
       <View ref={scrollerRef} className={styles.outerScroll}>
-        <View padding="medium" horizontalPadding="medium" className={styles.scroll} style={{ height: 305 }} onScroll={handleScroll}>
+        <View padding="medium" horizontalPadding="medium" className={styles.scroll} style={{ height: 300 }} onScroll={handleScroll}>
           {backgroundUrls.map((url, index) => (
             <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
           ))}
