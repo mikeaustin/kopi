@@ -42,6 +42,7 @@ type ViewProps = {
   scrollSnapX?: boolean;
   scrollSnapY?: boolean;
   scrollSnapAlign?: 'start' | 'center' | 'end';
+  border?: boolean;
   dropShadow?: boolean;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
@@ -73,6 +74,7 @@ const View = React.forwardRef(({
   scrollSnapX,
   scrollSnapY,
   scrollSnapAlign,
+  border,
   dropShadow,
   onPointerDown,
   onPointerMove,
@@ -101,6 +103,7 @@ const View = React.forwardRef(({
     scrollSnapX && styles.scrollSnapX,
     scrollSnapY && styles.scrollSnapY,
     scrollSnapAlign && scrollSnapAlignStyles[scrollSnapAlign],
+    border && styles.border,
     dropShadow && styles.dropShadow,
     className,
   );

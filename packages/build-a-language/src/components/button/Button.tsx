@@ -45,6 +45,7 @@ const Button = ({
     <View
       tag="button"
       horizontal
+      justifyContent="center"
       horizontalPadding={size === 'xsmall' ? 'small' : 'medium'}
       verticalPadding={'small'}
       borderRadius={rounded ? 'max' : true}
@@ -62,7 +63,7 @@ const Button = ({
         fontWeight="bold"
         textColor={textColor}
         noSelect
-        style={{ pointerEvents: 'none' }}
+        style={{ pointerEvents: 'none', textAlign: 'center' }}
       >
         {title}
       </Text>

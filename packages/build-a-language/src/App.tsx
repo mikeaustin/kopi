@@ -173,6 +173,47 @@ function App() {
           >
             <LearnToCodeTutorial />
           </Window> */}
+          <Window title="MugShot" style={{ left: 1000, top: 400, width: 1000 }}>
+            <View flex padding="large" alignItems="center" background="gray-1">
+              <View border borderRadius="small" style={{ width: '100%', maxWidth: 800 }}>
+                <View padding="medium" background="white">
+                  <Text fontWeight="bold">Weyland-Yutani Corporation</Text>
+                  <Spacer size="small" />
+                  <Text fontSize="xsmall" textColor="gray-6">
+                    <Text fontWeight="medium">Magnus C. Christian</Text> – 23h
+                  </Text>
+                </View>
+                <Divider />
+                <View style={{ height: 100 }} />
+                <Divider />
+                <View padding="medium" background="white">
+                  <View horizontal>
+                    <Text>591</Text>
+                    <Spacer flex />
+                    <Text>87 Comments</Text>
+                  </View>
+                  <Spacer size="medium" />
+                  <Divider />
+                  <Spacer size="xsmall" />
+                  <View horizontal>
+                    <Button flex title="Like" />
+                    <Spacer size="small" />
+                    <Button flex title="Comment" />
+                    <Spacer size="small" />
+                    <Button flex title="Share" />
+                  </View>
+                  <Spacer size="xsmall" />
+                  <Divider />
+                  <Spacer size="medium" />
+                  <View>
+                    <View padding="medium" background="gray-1" borderRadius="max">
+                      <Text>Add a comment...</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Window>
         </Desktop>
       </View>
     </View>
