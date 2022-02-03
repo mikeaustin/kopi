@@ -62,7 +62,7 @@ const Preferences = ({
       <Text fontWeight="bold">Background</Text>
       <Spacer size="medium" />
       <Divider />
-      <View style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px 10px', maxHeight: 300, overflowY: 'auto', paddingTop: 10, paddingBottom: 10 }}>
+      <View style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px 10px', height: 320, overflowY: 'auto', paddingTop: 10, paddingBottom: 10 }}>
         {backgroundUrls.map((url, index) => (
           <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
         ))}
