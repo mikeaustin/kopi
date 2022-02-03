@@ -135,7 +135,7 @@ const Window = React.forwardRef(({
   return (
     <View
       ref={windowElementRef}
-      borderRadius="small"
+      borderRadius="xsmall"
       dropShadow
       className={styles.container}
       style={{ ...style, zIndex: order }}

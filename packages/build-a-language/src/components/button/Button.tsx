@@ -13,6 +13,7 @@ const Button = ({
   primary,
   solid,
   link,
+  hover,
   rounded,
   leftIcon,
   rightIcon,
@@ -23,6 +24,7 @@ const Button = ({
   primary?: boolean;
   solid?: boolean;
   link?: boolean;
+  hover?: boolean;
   rounded?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -32,12 +34,13 @@ const Button = ({
     primary && styles.primary,
     solid && styles.solid,
     link && styles.link,
+    hover && styles.hover,
     rounded && styles.rounded,
   );
 
   const textColor = primary && solid
     ? 'gray-0'
-    : primary || link
+    : primary
       ? 'primary'
       : undefined;
 
@@ -46,9 +49,9 @@ const Button = ({
       tag="button"
       horizontal
       justifyContent="center"
-      horizontalPadding={size === 'xsmall' ? 'small' : 'medium'}
-      verticalPadding={'small'}
-      borderRadius={rounded ? 'max' : true}
+      horizontalPadding={size === 'xsmall' ? 'medium' : 'medium'}
+      verticalPadding={size === 'xsmall' ? 'small' : 'small'}
+      borderRadius={rounded ? 'max' : 'tiny'}
       className={containerClassName}
       {...props}
     >
@@ -63,7 +66,7 @@ const Button = ({
         fontWeight="bold"
         textColor={textColor}
         noSelect
-        style={{ pointerEvents: 'none', textAlign: 'center' }}
+        style={{ pointerEvents: 'none', textAlign: 'center', whiteSpace: 'nowrap' }}
       >
         {title}
       </Text>

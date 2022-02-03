@@ -1,9 +1,19 @@
-.xsmall {
+.tiny {
   border-radius: 2.5px;
 }
 
+
+.xsmall {
+  border-radius: 5px;
+}
+
 .small {
-  border-radius: 4px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.medium {
+  border-radius: 15px;
   overflow: hidden;
 }
 

@@ -19,10 +19,6 @@
     background: $oc-gray-3;
   }
 
-  // &:focus {
-  //   box-shadow: inset 0 0 0 2px $oc-gray-4;
-  // }
-
   &:focus:not(:active)::before {
     content: '';
     position: absolute;
@@ -42,8 +38,21 @@
   &.link {
     box-shadow: none;
 
+    &:hover:enabled {
+      text-decoration: underline;
+    }
+
     &:active:enabled {
-      background-color: var(--primary-color-light);
+      background-color: transparent;
+      filter: brightness(0.0);
+    }
+  }
+
+  &.hover {
+    box-shadow: none;
+
+    &:hover:enabled:not(:active) {
+      background-color: $oc-gray-1;
     }
   }
 

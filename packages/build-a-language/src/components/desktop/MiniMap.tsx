@@ -31,7 +31,7 @@ const MiniMap = ({
       {windowPositions.map(({ left, top, width, height }, index) => (
         <View
           key={index}
-          borderRadius="xsmall"
+          borderRadius="tiny"
           style={{
             position: 'absolute',
             left: left / 10,

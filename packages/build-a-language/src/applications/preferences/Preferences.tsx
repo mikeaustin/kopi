@@ -22,7 +22,7 @@ const ClickableImage = ({
   return (
     <Clickable onClick={handleClick}>
       {/* <Image src={url} width="100%" borderRadius /> */}
-      <Image src={src} borderRadius title={src} {...props} />
+      <Image src={src} borderRadius="tiny" title={src} {...props} />
     </Clickable>
   );
 };

@@ -46,7 +46,7 @@ const Calendar = () => {
         {Array.from({ length: daysInMonth() }, (_, index) => (
           <View
             key={index + 7}
-            borderRadius
+            borderRadius="tiny"
             padding="small"
             background={index + 1 === today.getDate() ? 'primary' : undefined}
           >

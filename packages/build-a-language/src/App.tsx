@@ -11,6 +11,7 @@ import Desktop from './components/desktop';
 import Window from './components/window';
 import Calendar from './components/calendar';
 import Preferences from './applications/preferences';
+import MugShot from './applications/mug-shot';
 
 import { DigitalClock } from './components/clock';
 import { MenuBar } from './components/menu';
@@ -39,7 +40,7 @@ const Buttons = () => {
   return (
     <View>
       <View horizontal justifyContent="center" alignItems="center">
-        <Button link title="Link" />
+        <Button hover title="Hover" />
         <Spacer size="small" />
         <Button title="Default" />
         <Spacer size="small" />
@@ -48,10 +49,12 @@ const Buttons = () => {
         <Button primary title="Primary" />
         <Spacer size="small" />
         <Button primary solid title="Primary Solid" />
+        <Spacer size="small" />
+        <Button link title="Link" />
       </View>
       <Spacer size="small" />
       <View horizontal justifyContent="center" alignItems="center">
-        <Button link title="Multiline\nLink" />
+        <Button hover title="Multiline\nHover" />
         <Spacer size="small" />
         <Button title="Multiline\nDefault" />
         <Spacer size="small" />
@@ -60,10 +63,26 @@ const Buttons = () => {
         <Button primary title="Multiline\nPrimary" />
         <Spacer size="small" />
         <Button primary solid title="Multiline\nPrimary Solid" />
+        <Spacer size="small" />
+        <Button link title="Multiline\nLink" />
       </View>
       <Spacer size="small" />
       <View horizontal justifyContent="center" alignItems="center">
-        <Button disabled link title="Link" />
+        <Button rounded hover title="Hover" />
+        <Spacer size="small" />
+        <Button rounded title="Default" />
+        <Spacer size="small" />
+        <Button rounded solid title="Solid" />
+        <Spacer size="small" />
+        <Button rounded primary title="Primary" />
+        <Spacer size="small" />
+        <Button rounded primary solid title="Primary Solid" />
+        <Spacer size="small" />
+        <Button rounded link title="Link" />
+      </View>
+      <Spacer size="small" />
+      <View horizontal justifyContent="center" alignItems="center">
+        <Button disabled hover title="Hover" />
         <Spacer size="small" />
         <Button disabled title="Default" />
         <Spacer size="small" />
@@ -72,16 +91,8 @@ const Buttons = () => {
         <Button disabled primary title="Primary" />
         <Spacer size="small" />
         <Button disabled primary solid title="Primary Solid" />
-      </View>
-      <Spacer size="small" />
-      <View horizontal justifyContent="center" alignItems="center">
-        <Button rounded title="Default" />
         <Spacer size="small" />
-        <Button rounded solid title="Solid" />
-        <Spacer size="small" />
-        <Button rounded primary title="Primary" />
-        <Spacer size="small" />
-        <Button rounded primary solid title="Primary Solid" />
+        <Button disabled link title="Link" />
       </View>
     </View>
   );
@@ -142,13 +153,16 @@ function App() {
       </View>
       <View flex horizontal>
         <Desktop>
-          <Window title="Examples" style={{ left: 30, top: 30 }}>
+          <Window title="MugShot" style={{ left: 30, top: 30, width: 1000 }}>
+            <MugShot />
+          </Window>
+          <Window title="Examples" style={{ left: 45, top: 45 }}>
             <Examples />
           </Window>
-          <Window title="Preferences" style={{ left: 45, top: 45, width: 500 }}>
+          <Window title="Preferences" style={{ left: 60, top: 60, width: 500 }}>
             <Preferences onSetBackground={handleSetBackground} />
           </Window>
-          <Window title="Calendar" style={{ left: 60, top: 60 }}>
+          <Window title="Calendar" style={{ left: 75, top: 75 }}>
             <Calendar />
           </Window>
           <Window
@@ -173,47 +187,6 @@ function App() {
           >
             <LearnToCodeTutorial />
           </Window> */}
-          <Window title="MugShot" style={{ left: 1000, top: 400, width: 1000 }}>
-            <View flex padding="large" alignItems="center" background="gray-1">
-              <View border borderRadius="small" style={{ width: '100%', maxWidth: 800 }}>
-                <View padding="medium" background="white">
-                  <Text fontWeight="bold">Weyland-Yutani Corporation</Text>
-                  <Spacer size="small" />
-                  <Text fontSize="xsmall" textColor="gray-6">
-                    <Text fontWeight="medium">Magnus C. Christian</Text> – 23h
-                  </Text>
-                </View>
-                <Divider />
-                <View style={{ height: 100 }} />
-                <Divider />
-                <View padding="medium" background="white">
-                  <View horizontal>
-                    <Text>591</Text>
-                    <Spacer flex />
-                    <Text>87 Comments</Text>
-                  </View>
-                  <Spacer size="medium" />
-                  <Divider />
-                  <Spacer size="xsmall" />
-                  <View horizontal>
-                    <Button flex title="Like" />
-                    <Spacer size="small" />
-                    <Button flex title="Comment" />
-                    <Spacer size="small" />
-                    <Button flex title="Share" />
-                  </View>
-                  <Spacer size="xsmall" />
-                  <Divider />
-                  <Spacer size="medium" />
-                  <View>
-                    <View padding="medium" background="gray-1" borderRadius="max">
-                      <Text>Add a comment...</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Window>
         </Desktop>
       </View>
     </View>

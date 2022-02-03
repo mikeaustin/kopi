@@ -35,7 +35,7 @@ type ViewProps = {
   verticalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   horizontalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
-  borderRadius?: boolean | 'xsmall' | 'small' | 'max';
+  borderRadius?: 'tiny' | 'xsmall' | 'small' | 'medium' | 'max';
   hidden?: boolean;
   scrollX?: boolean;
   scrollY?: boolean;
