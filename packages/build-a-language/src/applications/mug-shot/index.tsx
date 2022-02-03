@@ -41,7 +41,7 @@ const MugShot = () => {
             </View>
             <Spacer size="small" />
             <View padding="medium" background="gray-1" borderRadius="max" style={{ borderRadius: 20 }}>
-              <Text fontWeight="bold">Machieste Davis</Text>
+              <Text fontWeight="semi-bold">Machieste Davis</Text>
               <Spacer size="small" />
               <Text>My dad loved this film.he was a Vietnam veteran hero</Text>
             </View>
@@ -51,7 +51,7 @@ const MugShot = () => {
             </View>
             <Spacer size="tiny" />
             <View padding="medium" background="gray-1" borderRadius="max" style={{ borderRadius: 20 }}>
-              <Text fontWeight="bold">Machieste Davis</Text>
+              <Text fontWeight="semi-bold">Machieste Davis</Text>
               <Spacer size="small" />
               <Text>My dad loved this film.he was a Vietnam veteran hero</Text>
             </View>
