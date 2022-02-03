@@ -10,6 +10,8 @@ import alignItemsStyles from '../../styles/alignItems.module.scss';
 import paddingStyles from '../../styles/padding.module.scss';
 import verticalPaddingStyles from '../../styles/verticalPadding.module.scss';
 import horizontalPaddingStyles from '../../styles/horizontalPadding.module.scss';
+import topPaddingStyles from '../../styles/topPadding.module.scss';
+import bottomPaddingStyles from '../../styles/bottomPadding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
 import borderRadiusStyles from '../../styles/borderRadius.module.scss';
 import scrollSnapAlignStyles from '../../styles/scrollSnapAlign.module.scss';
@@ -28,6 +30,8 @@ type ViewProps = {
   justifyContent?: 'flex-start' | 'center' | 'flex-end';
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  topPadding?: 'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  bottomPadding?: 'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   verticalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   horizontalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
@@ -57,6 +61,8 @@ const View = React.forwardRef(({
   justifyContent,
   alignItems,
   padding,
+  topPadding,
+  bottomPadding,
   verticalPadding,
   horizontalPadding,
   background,
@@ -83,6 +89,8 @@ const View = React.forwardRef(({
     justifyContent && justifyContentStyles[justifyContent],
     alignItems && alignItemsStyles[alignItems],
     padding && paddingStyles[padding],
+    topPadding && topPaddingStyles[topPadding],
+    bottomPadding && bottomPaddingStyles[bottomPadding],
     verticalPadding && verticalPaddingStyles[verticalPadding],
     horizontalPadding && horizontalPaddingStyles[horizontalPadding],
     background && backgroundColorStyles[background],

@@ -5,6 +5,7 @@ import { View, Text, Button, Spacer, Divider, List, Clickable } from '../../comp
 import Image, { type ImageProps } from '../../components/image';
 
 import backgroundUrls from './data';
+import styles from './styles.module.scss';
 
 const ClickableImage = ({
   src,
@@ -26,6 +27,8 @@ const ClickableImage = ({
   );
 };
 
+//
+
 type PreferencesProps = {
   onSetBackground: (url: string) => void;
 };
@@ -34,6 +37,7 @@ const Preferences = ({
   onSetBackground
 }: PreferencesProps) => {
   const backgroundRef = useRef<string>();
+  const scrollerRef = useRef<HTMLElement>();
 
   const handleImageClick = (event: any, src: string) => {
     backgroundRef.current = src;
@@ -57,22 +61,37 @@ const Preferences = ({
     }
   }, [onSetBackground]);
 
+  const handleScroll = () => {
+    if (scrollerRef.current) {
+      const ratio = scrollerRef.current.children[0].clientHeight / scrollerRef.current.children[0].scrollHeight;
+
+      scrollerRef.current.style.setProperty('--top', scrollerRef.current.children[0].scrollTop * ratio + 'px');
+      scrollerRef.current.style.setProperty('--height', scrollerRef.current.children[0].clientHeight * ratio + 'px');
+    }
+  };
+
   return (
-    <View padding="medium">
-      <Text fontWeight="bold">Background</Text>
-      <Spacer size="medium" />
-      <Divider />
-      <View style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px 10px', height: 320, overflowY: 'auto', paddingTop: 10, paddingBottom: 10 }}>
-        {backgroundUrls.map((url, index) => (
-          <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
-        ))}
+    <View>
+      <View padding="medium" bottomPadding="none">
+        <Text fontWeight="bold">Background</Text>
+        <Spacer size="medium" />
+        <Divider />
       </View>
-      <Divider />
-      <Spacer size="medium" />
-      <List horizontal spacerSize="small" justifyContent="center">
-        <Button primary title="Cancel" />
-        <Button primary solid title="Save" onClick={handleSaveClick} />
-      </List>
+      <View ref={scrollerRef} className={styles.outerScroll}>
+        <View padding="small" horizontalPadding="medium" className={styles.scroll} style={{ height: 305 }} onScroll={handleScroll}>
+          {backgroundUrls.map((url, index) => (
+            <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
+          ))}
+        </View>
+      </View>
+      <View padding="medium" topPadding="none">
+        <Divider />
+        <Spacer size="medium" />
+        <List horizontal spacerSize="small" justifyContent="center">
+          <Button primary title="Cancel" />
+          <Button primary solid title="Save" onClick={handleSaveClick} />
+        </List>
+      </View>
     </View>
   );
 };
