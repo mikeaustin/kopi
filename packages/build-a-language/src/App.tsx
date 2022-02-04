@@ -13,7 +13,7 @@ import Calendar from './components/calendar';
 import Preferences from './applications/preferences';
 import MugShot from './applications/mug-shot';
 
-import { DigitalClock } from './components/clock';
+import { DigitalClock, AnalogClock } from './components/clock';
 import { MenuBar } from './components/menu';
 
 import styles from './App.module.scss';
@@ -175,6 +175,9 @@ function App() {
             }}
           >
             <BuildALanguageTutorial />
+          </Window>
+          <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 150, width: 200, height: 200 }}>
+            <AnalogClock />
           </Window>
           {/* <Window
             title="Tutorial: Learn to Code"

@@ -17,6 +17,7 @@ type WindowProps = {
   style?: React.CSSProperties;
   order?: number;
   windowId?: number;
+  borderRadius?: 'xsmall' | 'max';
   onWindowFocus?: any;
   onWindowChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
   onWindowTransientChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
@@ -28,6 +29,7 @@ const Window = React.forwardRef(({
   style,
   order,
   windowId,
+  borderRadius = 'xsmall',
   onWindowFocus,
   onWindowChange,
   onWindowTransientChange,
@@ -135,30 +137,37 @@ const Window = React.forwardRef(({
   return (
     <View
       ref={windowElementRef}
-      borderRadius="xsmall"
+      borderRadius={borderRadius}
       dropShadow
       className={styles.container}
       style={{ ...style, zIndex: order }}
       onPointerDown={handleWindowPointerDown}
     >
-      <View
-        padding="small"
-        alignItems="center"
-        background="gray-3"
-        style={{ marginBottom: -1, touchAction: 'none' }}
-        onPointerDown={handleTitlePointerDown}
-        onPointerMove={handleTitlePointerMove}
-        onPointerUp={handleTitlePointerUp}
-      >
-        <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
-      </View>
-      <Divider color="gray-4" />
+      {title && (
+        <>
+          <View
+            padding="small"
+            alignItems="center"
+            background="gray-3"
+            style={{ marginBottom: -1, touchAction: 'none' }}
+            onPointerDown={handleTitlePointerDown}
+            onPointerMove={handleTitlePointerMove}
+            onPointerUp={handleTitlePointerUp}
+          >
+            <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
+          </View>
+          <Divider color="gray-4" />
+        </>
+      )}
       <View
         ref={contentElementRef}
         flex
         background="white"
-        style={{ position: 'relative', minHeight: 0 }}
-        onPointerDown={handleContentPointerDown}
+        borderRadius={borderRadius === 'max' ? borderRadius : undefined}
+        style={{ position: 'relative', minHeight: 0, overflow: 'hidden' }}
+        onPointerDown={title ? handleContentPointerDown : handleTitlePointerDown}
+        onPointerMove={handleTitlePointerMove}
+        onPointerUp={handleTitlePointerUp}
         {...props}
       >
         <WindowContext.Provider value={windowContextValue}>

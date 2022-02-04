@@ -44,6 +44,7 @@ type ViewProps = {
   scrollSnapAlign?: 'start' | 'center' | 'end';
   border?: boolean;
   dropShadow?: boolean;
+  viewBox?: string;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;
