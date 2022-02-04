@@ -178,7 +178,7 @@ function App() {
           >
             <BuildALanguageTutorial />
           </Window>
-          <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 150, width: 200, height: 200 }}>
+          <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 160, width: 200, height: 200 }}>
             <AnalogClock />
           </Window>
           {/* <Window

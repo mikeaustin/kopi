@@ -27,7 +27,7 @@ const MiniMap = ({
   }, [windowPositionEventTarget]);
 
   return (
-    <View ref={containerRef} style={{ position: 'absolute', top: 15, right: 15, width: window.innerWidth / 10 }}>
+    <View ref={containerRef} style={{ position: 'absolute', top: 15, right: 15, width: window.innerWidth / 10, height: window.innerHeight / 10, overflow: 'hidden' }}>
       {windowPositions.map(({ left, top, width, height }, index) => (
         <View
           key={index}
