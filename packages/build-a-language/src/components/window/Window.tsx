@@ -149,7 +149,7 @@ const Window = React.forwardRef(({
             padding="small"
             alignItems="center"
             background="gray-3"
-            style={{ marginBottom: -1, touchAction: 'none' }}
+            style={{ marginBottom: -1, touchAction: 'none', borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
             onPointerDown={handleTitlePointerDown}
             onPointerMove={handleTitlePointerMove}
             onPointerUp={handleTitlePointerUp}
@@ -164,7 +164,7 @@ const Window = React.forwardRef(({
         flex
         background="white"
         borderRadius={borderRadius === 'max' ? borderRadius : undefined}
-        style={{ position: 'relative', minHeight: 0, overflow: 'hidden' }}
+        style={{ position: 'relative', minHeight: 0, overflow: 'hidden', borderBottomLeftRadius: borderRadius === 'max' ? borderRadius : 5, borderBottomRightRadius: borderRadius === 'max' ? borderRadius : 5 }}
         onPointerDown={title ? handleContentPointerDown : handleTitlePointerDown}
         onPointerMove={handleTitlePointerMove}
         onPointerUp={handleTitlePointerUp}
