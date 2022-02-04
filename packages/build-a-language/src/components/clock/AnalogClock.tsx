@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { View, Text } from '../index';
 
+console.log(window.fetch);
+
 const calculateHands = (date: Date) => {
   const hourAngle = ((date.getHours() + date.getMinutes() / 60) * 30 + 180) * (Math.PI / 180);
   const minuteAngle = ((date.getMinutes() + date.getSeconds() / 60) * 6 + 180) * (Math.PI / 180);
