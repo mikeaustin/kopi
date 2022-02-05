@@ -166,8 +166,8 @@ const Window = React.forwardRef(({
         borderRadius={borderRadius === 'max' ? borderRadius : undefined}
         style={{ position: 'relative', minHeight: 0, overflow: 'hidden', borderBottomLeftRadius: borderRadius === 'max' ? borderRadius : 5, borderBottomRightRadius: borderRadius === 'max' ? borderRadius : 5 }}
         onPointerDown={title ? handleContentPointerDown : handleTitlePointerDown}
-        onPointerMove={handleTitlePointerMove}
-        onPointerUp={handleTitlePointerUp}
+        onPointerMove={title ? undefined : handleTitlePointerMove}
+        onPointerUp={title ? undefined : handleTitlePointerUp}
         {...props}
       >
         <WindowContext.Provider value={windowContextValue}>
