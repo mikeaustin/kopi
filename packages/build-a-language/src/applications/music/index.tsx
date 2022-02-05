@@ -38,7 +38,7 @@ const songs = [
 const Music = () => {
   const audioElementRef = useRef<HTMLAudioElement>();
   const [selectedSongIndex, setSelectedSongIndex] = useState<number>(0);
-  const [playingSongIndex, setPlayingSongIndex] = useState<number>(-1);
+  const [activeSongIndex, setActiveSongIndex] = useState<number>(-1);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const handleSongSelect = (index: number) => {
@@ -46,8 +46,8 @@ const Music = () => {
   };
 
   const handlePlayClick = () => {
-    setPlayingSongIndex(selectedSongIndex);
-    setIsPlaying(selectedSongIndex !== playingSongIndex || !isPlaying);
+    setActiveSongIndex(selectedSongIndex);
+    setIsPlaying(selectedSongIndex !== activeSongIndex || !isPlaying);
   };
 
   useEffect(() => {
@@ -55,16 +55,16 @@ const Music = () => {
       return;
     }
 
-    if (isPlaying || selectedSongIndex !== playingSongIndex) {
+    if (isPlaying || (isPlaying && selectedSongIndex !== activeSongIndex)) {
       audioElementRef.current.play();
     } else {
       audioElementRef.current.pause();
     }
-  }, [isPlaying, playingSongIndex, selectedSongIndex]);
+  }, [isPlaying, activeSongIndex, selectedSongIndex]);
 
   return (
     <>
-      <View ref={audioElementRef} tag="audio" src={playingSongIndex >= 0 ? songs[playingSongIndex].uri : undefined} />
+      <View ref={audioElementRef} tag="audio" src={activeSongIndex >= 0 ? songs[activeSongIndex].uri : undefined} />
       <List flex padding="xsmall">
         {songs.map((song, index) => (
           <Song title={song.title} index={index} selected={index === selectedSongIndex} onSongSelect={handleSongSelect} />
