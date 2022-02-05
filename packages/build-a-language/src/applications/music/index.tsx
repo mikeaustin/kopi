@@ -16,13 +16,16 @@ const Song = ({
   onSongSelect: (songIndex: number) => void;
 }) => {
   const handleClick = () => {
-    console.log(index);
     onSongSelect(index);
   };
 
+  const handleDoubleClick = () => {
+    console.log('here');
+  };
+
   return (
-    <View padding="medium" borderRadius="xsmall" background={selected ? 'primary' : undefined} onPointerDown={handleClick}>
-      <Text fontWeight={selected ? 'semi-bold' : undefined} textColor={selected ? 'white' : undefined} style={{ pointerEvents: 'none', whiteSpace: 'nowrap' }}>
+    <View padding="small" borderRadius="xsmall" background={selected ? 'primary' : undefined} onPointerDown={handleClick} onDoubleClick={handleDoubleClick}>
+      <Text fontWeight={selected ? 'semi-bold' : undefined} textColor={selected ? 'white' : undefined} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
         {title}
       </Text>
     </View>
@@ -33,6 +36,7 @@ const songs = [
   { title: 'Dubstep — Royalty Free Music from Bensound', uri: './audio/bensound-dubstep.mp3' },
   { title: 'Better Days — Royalty Free Music from Bensound', uri: './audio/bensound-betterdays.mp3' },
   { title: 'Sunny — Royalty Free Music from Bensound', uri: './audio/bensound-sunny.mp3' },
+  { title: 'Evolution — Royalty Free Music from Bensound', uri: './audio/bensound-evolution.mp3' },
 ];
 
 const Music = () => {

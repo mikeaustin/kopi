@@ -37,7 +37,9 @@ const Desktop = ({
   };
 
   const handleWindowFocus = (windowId: number) => {
-    setWindowOrder((windowOrder) => [...windowOrder.filter((id) => id !== windowId), windowId]);
+    setWindowOrder((windowOrder) => windowOrder[windowOrder.length - 1] !== windowId
+      ? [...windowOrder.filter((id) => id !== windowId), windowId]
+      : windowOrder);
   };
 
   const handleWindowChange = useCallback(({
