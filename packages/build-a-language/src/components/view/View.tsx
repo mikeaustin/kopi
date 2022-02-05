@@ -45,6 +45,8 @@ type ViewProps = {
   border?: boolean;
   dropShadow?: boolean;
   viewBox?: string;
+  controls?: boolean;
+  autoPlay?: boolean;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;

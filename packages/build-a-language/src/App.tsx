@@ -14,6 +14,7 @@ import Window from './components/window';
 import Calendar from './components/calendar';
 import Preferences from './applications/preferences';
 import MugShot from './applications/mug-shot';
+import Music from './applications/music';
 
 import { DigitalClock, AnalogClock } from './components/clock';
 import { MenuBar } from './components/menu';
@@ -180,6 +181,9 @@ function App() {
           </Window>
           <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 160, width: 200, height: 200 }}>
             <AnalogClock />
+          </Window>
+          <Window title="Music" style={{ width: 500, height: 300 }}>
+            <Music />
           </Window>
           {/* <Window
             title="Tutorial: Learn to Code"
