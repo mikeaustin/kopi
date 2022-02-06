@@ -3,10 +3,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { View, Text, Image, Spacer, Divider, List } from '../../components';
+import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
 
 import colors from 'open-color';
-
-console.log(colors);
 
 const Song = ({
   title,
@@ -16,6 +15,7 @@ const Song = ({
   index,
   selected,
   onSongSelect,
+  onSongSelectAndPlay,
 }: {
   title: string;
   album?: string;
@@ -24,6 +24,7 @@ const Song = ({
   index: number;
   selected: boolean;
   onSongSelect: (songIndex: number) => void;
+  onSongSelectAndPlay: (songIndex: number) => void;
 }) => {
   const handleClick = () => {
     onSongSelect(index);
@@ -31,15 +32,23 @@ const Song = ({
 
   const handleDoubleClick = () => {
     console.log('here');
+    onSongSelectAndPlay(index);
   };
 
   const primaryTextColor = selected ? 'white' : undefined;
   const textColor = selected ? 'gray-3' : 'gray-6';
 
   return (
-    <View horizontal padding="small" borderRadius="tiny" background={selected ? 'primary' : undefined} onPointerDown={handleClick} onDoubleClick={handleDoubleClick}>
+    <View
+      horizontal
+      padding="small"
+      horizontalPadding="medium"
+      background={selected ? 'primary' : undefined}
+      onPointerDown={handleClick}
+      onDoubleClick={handleDoubleClick}
+    >
       <View horizontal alignItems="center">
-        <Image src="./images/Noun_Project_Star_icon_370530_cc.svg" width={20} height={20} />
+        <HeartIcon style={{ fill: colors.gray[4], width: 20, height: 20 }} />
       </View>
       <Spacer size="small" />
       {/* <Divider color="gray-4" style={{ margin: '-10px 0' }} />
@@ -49,10 +58,10 @@ const Song = ({
           <Text flex fontWeight={'semi-bold'} textColor={primaryTextColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
             {title}
           </Text>
-          <Text textColor={primaryTextColor}>{length}</Text>
+          <Text fontWeight="medium" textColor={primaryTextColor}>{length}</Text>
         </View>
         <Spacer size="small" />
-        <Text fontSize="xsmall" fontWeight={'semi-bold'} textColor={textColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
+        <Text fitContent fontSize="xsmall" fontWeight={'semi-bold'} textColor={textColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
           {artist}
         </Text>
       </View>
@@ -61,10 +70,10 @@ const Song = ({
 };
 
 const songs = [
-  { title: 'Dubstep', length: '2:34', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-dubstep.mp3' },
-  { title: 'Better Days', length: '2:34', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-betterdays.mp3' },
-  { title: 'Sunny', length: '2:34', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-sunny.mp3' },
-  { title: 'Evolution', length: '2:34', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-evolution.mp3' },
+  { title: 'Dubstep', length: '2:04', artist: 'Benjamin Tissot — www.bensound.comv - asdf asdf asdf asdf', uri: './audio/bensound-dubstep.mp3' },
+  { title: 'Better Days', length: '2:33', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-betterdays.mp3' },
+  { title: 'Sunny', length: '2:20', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-sunny.mp3' },
+  { title: 'Evolution', length: '2:45', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-evolution.mp3' },
 ];
 
 const Music = () => {
@@ -75,6 +84,13 @@ const Music = () => {
 
   const handleSongSelect = (index: number) => {
     setSelectedSongIndex(index);
+  };
+
+  const handleSongSelectAndPlay = (index: number) => {
+    setSelectedSongIndex(index);
+
+    setActiveSongIndex(selectedSongIndex);
+    setIsPlaying(selectedSongIndex !== activeSongIndex || !isPlaying);
   };
 
   const handlePlayClick = () => {
@@ -106,23 +122,42 @@ const Music = () => {
         src={activeSongIndex >= 0 ? songs[activeSongIndex].uri : undefined}
         onTimeUpdate={handleProgress}
       />
-      <List flex padding="xsmall">
-        {songs.map((song, index) => (
-          <Song
-            key={index}
-            title={song.title}
-            artist={song.artist}
-            length={song.length}
-            index={index}
-            selected={index === selectedSongIndex}
-            onSongSelect={handleSongSelect}
-          />
-        ))}
-      </List>
-      <Divider />
-      <View padding="medium" justifyContent="center" alignItems="center" background="gray-1">
-        <View tag="svg" viewBox="0 0 100 100" flex style={{ width: 25, height: 25 }} onClick={handlePlayClick}>
-          <polygon fill={colors.gray[7]} points="10,10 97,50 10,100" />
+      <View flex>
+        <View flex horizontal scrollX scrollSnapX>
+          <List scrollSnapAlign="start" style={{ flexGrow: 0, flexShrink: 0, flexBasis: '100%' }}>
+            {songs.map((song, index) => (
+              <Song
+                key={index}
+                title={song.title}
+                artist={song.artist}
+                length={song.length}
+                index={index}
+                selected={index === selectedSongIndex}
+                onSongSelect={handleSongSelect}
+                onSongSelectAndPlay={handleSongSelectAndPlay}
+              />
+            ))}
+          </List>
+          <List scrollSnapAlign="start" style={{ flexGrow: 0, flexShrink: 0, flexBasis: '100%' }}>
+            {songs.map((song, index) => (
+              <Song
+                key={index}
+                title={song.title}
+                artist={song.artist}
+                length={song.length}
+                index={index}
+                selected={index === selectedSongIndex}
+                onSongSelect={handleSongSelect}
+                onSongSelectAndPlay={handleSongSelectAndPlay}
+              />
+            ))}
+          </List>
+        </View>
+        <Divider />
+        <View padding="medium" justifyContent="center" alignItems="center" background="gray-1">
+          <View tag="svg" viewBox="0 0 100 100" flex style={{ width: 25, height: 25 }} onClick={handlePlayClick}>
+            <polygon fill={colors.gray[7]} points="10,10 97,50 10,100" />
+          </View>
         </View>
       </View>
     </>
