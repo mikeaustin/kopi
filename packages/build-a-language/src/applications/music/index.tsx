@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-import { View, Text, Image, Spacer, Divider, List } from '../../components';
+import { View, Text, Image, Spacer, Divider, List, Slider } from '../../components';
 import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
 
 import colors from 'open-color';
@@ -78,9 +78,13 @@ const songs = [
 
 const Music = () => {
   const audioElementRef = useRef<HTMLAudioElement>();
+
   const [selectedSongIndex, setSelectedSongIndex] = useState<number>(0);
   const [activeSongIndex, setActiveSongIndex] = useState<number>(-1);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const handleSongSelect = (index: number) => {
     setSelectedSongIndex(index);
@@ -98,8 +102,22 @@ const Music = () => {
     setIsPlaying(selectedSongIndex !== activeSongIndex || !isPlaying);
   };
 
-  const handleProgress = (event: React.SyntheticEvent<any, MediaStreamTrackEvent>) => {
-    console.log(event);
+  const handleLoadMetaData = (event: React.SyntheticEvent<any, MediaStreamTrackEvent>) => {
+    if (audioElementRef.current) {
+      setDuration(audioElementRef.current.duration);
+    }
+  };
+
+  const handleTimeUpdate = (event: React.SyntheticEvent<any, MediaStreamTrackEvent>) => {
+    if (audioElementRef.current) {
+      setCurrentTime(audioElementRef.current.currentTime);
+    }
+  };
+
+  const handleSliderChange = (event: React.SyntheticEvent<any, MediaStreamTrackEvent>) => {
+    if (audioElementRef.current) {
+      audioElementRef.current.currentTime = Number(event.currentTarget.value);
+    }
   };
 
   useEffect(() => {
@@ -120,7 +138,8 @@ const Music = () => {
         ref={audioElementRef}
         tag="audio"
         src={activeSongIndex >= 0 ? songs[activeSongIndex].uri : undefined}
-        onTimeUpdate={handleProgress}
+        onLoadedMetadata={handleLoadMetaData}
+        onTimeUpdate={handleTimeUpdate}
       />
       <View flex>
         <View flex horizontal scrollX scrollSnapX>
@@ -154,10 +173,26 @@ const Music = () => {
           </List>
         </View>
         <Divider />
-        <View padding="medium" justifyContent="center" alignItems="center" background="gray-1">
-          <View tag="svg" viewBox="0 0 100 100" flex style={{ width: 25, height: 25 }} onClick={handlePlayClick}>
-            <polygon fill={colors.gray[7]} points="10,10 97,50 10,100" />
+        <View padding="medium" horizontalPadding="medium" background="gray-1">
+          <Spacer size="xsmall" />
+          <Slider value={currentTime} onInput={handleSliderChange} />
+          <Spacer size="small" />
+          <View horizontal>
+            <Text fontSize="xsmall">
+              {`${Math.floor(currentTime / 60)}:${Math.floor(currentTime % 60)?.toString().padStart(2, '0')}`}
+            </Text>
+            <Spacer flex />
+            <Text fontSize="xsmall">
+              {`${Math.floor(duration / 60)}:${Math.floor(duration % 60)?.toString().padStart(2, '0')}`}
+            </Text>
           </View>
+          <Spacer size="xsmall" />
+          <View justifyContent="center" alignItems="center">
+            <View tag="svg" viewBox="0 0 100 100" flex style={{ width: 25, height: 25 }} onClick={handlePlayClick}>
+              <polygon fill={colors.gray[7]} points="10,10 97,50 10,100" />
+            </View>
+          </View>
+          <Spacer size="xsmall" />
         </View>
       </View>
     </>

@@ -47,6 +47,8 @@ type ViewProps = {
   viewBox?: string;
   controls?: boolean;
   autoPlay?: boolean;
+  type?: string;
+  step?: string;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;

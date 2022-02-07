@@ -1,0 +1,25 @@
+@import 'open-color';
+
+.container {
+  appearance: none;
+  position: relative;
+  width: 100%;
+  --width: 100px;
+  border-radius: 1000px;;
+  margin: 0;
+  padding: 0;
+  height: 8px;
+  background: $oc-gray-4;
+  background-image: linear-gradient(var(--primary-color), var(--primary-color));
+  background-size: var(--width) 8px;
+  background-repeat: no-repeat;
+}
+
+.container::-webkit-slider-thumb {
+  appearance: none;
+  background: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 12.5px;
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.075);
+}
