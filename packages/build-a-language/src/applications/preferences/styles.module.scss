@@ -21,13 +21,6 @@
 
 .scroll {
   display: grid;
-  overflow: auto;
-  position: relative;
-
   grid-template-columns: repeat(3, 1fr);
   gap: 10px 10px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }

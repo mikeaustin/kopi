@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-import { View, Text, Button, Spacer, Divider, List, Clickable } from '../../components';
+import { View, Text, Button, Spacer, Divider, List, Scroller, Clickable } from '../../components';
 
 import Image, { type ImageProps } from '../../components/image';
 
@@ -71,19 +71,26 @@ const Preferences = ({
   };
 
   return (
-    <View>
+    <View style={{ minHeight: 0 }}>
       <View padding="medium" bottomPadding="none" background="gray-1">
         <Text fontWeight="bold">Background</Text>
         <Spacer size="medium" />
       </View>
       <Divider style={{ marginBottom: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
-      <View ref={scrollerRef} className={styles.outerScroll}>
+      <Scroller scrollY>
+        <View padding="medium" horizontalPadding="medium" className={styles.scroll}>
+          {backgroundUrls.map((url, index) => (
+            <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
+          ))}
+        </View>
+      </Scroller>
+      {/* <View ref={scrollerRef} className={styles.outerScroll}>
         <View padding="medium" horizontalPadding="medium" className={styles.scroll} style={{ height: 310 }} onScroll={handleScroll}>
           {backgroundUrls.map((url, index) => (
             <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
           ))}
         </View>
-      </View>
+      </View> */}
       <Divider style={{ marginTop: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
       <View padding="medium" topPadding="none" background="gray-1">
         <Spacer size="medium" />

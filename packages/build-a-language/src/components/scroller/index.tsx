@@ -18,8 +18,8 @@ const Scroller = ({
     if (containerRef.current) {
       const ratio = event.currentTarget.clientHeight / event.currentTarget.scrollHeight;
 
-      containerRef.current.style.setProperty('--top', containerRef.current.children[0].scrollTop * ratio + 'px');
-      containerRef.current.style.setProperty('--height', containerRef.current.children[0].clientHeight * ratio + 'px');
+      containerRef.current.style.setProperty('--top', event.currentTarget.scrollTop * ratio + 'px');
+      containerRef.current.style.setProperty('--height', event.currentTarget.clientHeight * ratio + 'px');
     }
   };
 

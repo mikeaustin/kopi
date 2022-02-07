@@ -17,6 +17,16 @@
     width: 7px;
     // margin: 3px 3px;
     // border-radius: 1000px;
+    // transform: translate(100%, 0);
+    opacity: 0.0;
+    transition: 0.15s opacity;
+  }
+
+  &:hover {
+    &::after {
+      opacity: unset;
+      transform: none;
+    }
   }
 }
 
