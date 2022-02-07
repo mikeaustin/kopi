@@ -12,6 +12,7 @@ const List = ({
   children,
   wrap,
   divider,
+  dividerInset,
   bottomDivider,
   spacerSize,
   spacerColor,
@@ -20,6 +21,7 @@ const List = ({
   children: Exclude<React.ReactNode, React.ReactText>;
   wrap?: boolean;
   divider?: boolean;
+  dividerInset?: boolean;
   bottomDivider?: boolean;
   spacerSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   spacerColor?: Color;
@@ -32,7 +34,9 @@ const List = ({
       {React.Children.map(children, (child, index) => (
         <>
           {divider && index > 0 && (
-            <Divider style={{ visibility: (index === selectedIndex || index === selectedIndex + 1) ? 'hidden' : 'visible' }} />
+            <Divider
+              style={{ marginLeft: dividerInset ? 8 : 0, marginRight: dividerInset ? 8 : 0, visibility: (index === selectedIndex || index === selectedIndex + 1) ? 'hidden' : 'visible' }}
+            />
           )}
           {spacerSize && index > 0 && (
             <Spacer size={spacerSize} background={spacerColor} />

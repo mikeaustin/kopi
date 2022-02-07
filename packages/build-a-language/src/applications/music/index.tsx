@@ -47,12 +47,14 @@ const Song = ({
     <View
       horizontal
       padding="small"
-      // horizontalPadding="medium"
+      horizontalPadding="medium"
+      alignItems="center"
       background={selected ? 'primary' : undefined}
-      borderRadius="tiny"
       onPointerDown={handleClick}
       onDoubleClick={handleDoubleClick}
     >
+      {/* <Image src="./audio/dubstep.jpg" height={45} borderRadius="tiny" style={{ margin: '-5px 0' }} />
+      <Spacer size="small" /> */}
       <View flex>
         <View horizontal>
           <Text flex textColor={primaryTextColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
@@ -64,7 +66,7 @@ const Song = ({
           </Text>
         </View>
         <Spacer size="small" />
-        <Text fitContent fontSize="xsmall" fontWeight={'semi-bold'} textColor={textColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+        <Text fontSize="xsmall" fontWeight={'semi-bold'} textColor={textColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
           {artist}
         </Text>
       </View>
@@ -77,10 +79,12 @@ const Song = ({
 };
 
 const songs = [
-  { title: 'Dubstep', length: '2:04', artist: 'Benjamin Tissot — www.bensound.comv - asdf asdf asdf asdf', uri: './audio/bensound-dubstep.mp3' },
+  { title: 'Tomorrow', length: '4:54', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-tomorrow.mp3' },
+  { title: 'Dubstep', length: '2:04', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-dubstep.mp3' },
   { title: 'Better Days', length: '2:33', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-betterdays.mp3' },
   { title: 'Sunny', length: '2:20', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-sunny.mp3' },
   { title: 'Evolution', length: '2:45', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-evolution.mp3' },
+  { title: 'Dreams', length: '3:30', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-dreams.mp3' },
 ];
 
 const Music = () => {
@@ -168,8 +172,8 @@ const Music = () => {
         onLoadedMetadata={handleLoadMetaData}
         onTimeUpdate={handleTimeUpdate}
       />
-      <View flex>
-        <List flex divider bottomDivider padding="xsmall">
+      <View flex style={{ minHeight: 0 }}>
+        <List flex divider dividerInset bottomDivider scrollY style={{ overflowX: 'hidden' }}>
           {songs.map((song, index) => (
             <Song
               key={index}

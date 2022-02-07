@@ -8,8 +8,8 @@ import styles from './Image.module.scss';
 
 type ImageProps = {
   src: string;
-  width: number | string;
-  height: number | string;
+  width?: number | string;
+  height?: number | string;
   style?: React.CSSProperties;
 } & ViewProps;
 
