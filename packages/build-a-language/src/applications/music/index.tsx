@@ -5,6 +5,11 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Text, Image, Spacer, Divider, List, Slider } from '../../components';
 import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
 
+import playIconUrl from './images/play.png';
+import pauseIconUrl from './images/pause.png';
+import backIconUrl from './images/back.png';
+import nextIconUrl from './images/next.png';
+
 import colors from 'open-color';
 
 const Song = ({
@@ -47,23 +52,24 @@ const Song = ({
       onPointerDown={handleClick}
       onDoubleClick={handleDoubleClick}
     >
-      <View horizontal alignItems="center">
-        <HeartIcon style={{ fill: colors.gray[4], width: 20, height: 20 }} />
-      </View>
-      <Spacer size="small" />
-      {/* <Divider color="gray-4" style={{ margin: '-10px 0' }} />
-      <Spacer size="medium" /> */}
       <View flex>
         <View horizontal>
-          <Text flex fontWeight={'semi-bold'} textColor={primaryTextColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
-            {title}
+          <Text flex textColor={primaryTextColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap' }}>
+            <Text fontWeight={'semi-bold'}>
+              {title}
+            </Text>
+            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+            <Text fontSize="xsmall" textColor={primaryTextColor}>{length}</Text>
           </Text>
-          <Text fontWeight="medium" textColor={primaryTextColor}>{length}</Text>
         </View>
         <Spacer size="small" />
         <Text fitContent fontSize="xsmall" fontWeight={'semi-bold'} textColor={textColor} style={{ userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
           {artist}
         </Text>
+      </View>
+      <Spacer size="small" />
+      <View horizontal alignItems="center">
+        <HeartIcon style={{ fill: colors.gray[4], width: 20, height: 20 }} />
       </View>
     </View>
   );
@@ -100,6 +106,26 @@ const Music = () => {
   const handlePlayClick = () => {
     setActiveSongIndex(selectedSongIndex);
     setIsPlaying(selectedSongIndex !== activeSongIndex || !isPlaying);
+  };
+
+  const handleBackClick = () => {
+    if (activeSongIndex > 0) {
+      setSelectedSongIndex(selectedSongIndex - 1);
+
+      if (isPlaying) {
+        setActiveSongIndex(selectedSongIndex - 1);
+      }
+    }
+  };
+
+  const handleNextClick = () => {
+    if (activeSongIndex < songs.length - 1) {
+      setSelectedSongIndex(selectedSongIndex + 1);
+
+      if (isPlaying) {
+        setActiveSongIndex(selectedSongIndex + 1);
+      }
+    }
   };
 
   const handleLoadMetaData = (event: React.SyntheticEvent<any, MediaStreamTrackEvent>) => {
@@ -142,7 +168,7 @@ const Music = () => {
         onTimeUpdate={handleTimeUpdate}
       />
       <View flex>
-        <View flex horizontal scrollX scrollSnapX>
+        <View flex horizontal scrollX scrollSnapX noScrollbar>
           <List scrollSnapAlign="start" style={{ flexGrow: 0, flexShrink: 0, flexBasis: '100%' }}>
             {songs.map((song, index) => (
               <Song
@@ -175,9 +201,9 @@ const Music = () => {
         <Divider />
         <View padding="medium" horizontalPadding="medium" background="gray-1">
           <Spacer size="xsmall" />
-          <Slider value={currentTime} onInput={handleSliderChange} />
+          <Slider value={currentTime} max={duration} onInput={handleSliderChange} />
           <Spacer size="small" />
-          <View horizontal>
+          {/* <View horizontal>
             <Text fontSize="xsmall">
               {`${Math.floor(currentTime / 60)}:${Math.floor(currentTime % 60)?.toString().padStart(2, '0')}`}
             </Text>
@@ -185,14 +211,25 @@ const Music = () => {
             <Text fontSize="xsmall">
               {`${Math.floor(duration / 60)}:${Math.floor(duration % 60)?.toString().padStart(2, '0')}`}
             </Text>
-          </View>
+          </View> */}
           <Spacer size="xsmall" />
-          <View justifyContent="center" alignItems="center">
-            <View tag="svg" viewBox="0 0 100 100" flex style={{ width: 25, height: 25 }} onClick={handlePlayClick}>
-              <polygon fill={colors.gray[7]} points="10,10 97,50 10,100" />
+          <View horizontal justifyContent="center" alignItems="center" style={{ opacity: 0.7 }}>
+            <View padding="small" style={{ opacity: selectedSongIndex === 0 ? 0.5 : 1 }} onClick={handleBackClick}>
+              <Image src={backIconUrl} width={25} height={25} />
+            </View>
+            <Spacer size="xsmall" />
+            <View padding="small" style={{ border: '3px solid #202020' }} borderRadius="max" onClick={handlePlayClick}>
+              {isPlaying ? (
+                <Image src={pauseIconUrl} width={25} height={25} />
+              ) : (
+                <Image src={playIconUrl} width={25} height={25} style={{ position: 'relative', left: 1 }} />
+              )}
+            </View>
+            <Spacer size="xsmall" />
+            <View padding="small" style={{ opacity: selectedSongIndex === songs.length - 1 ? 0.5 : 1 }} onClick={handleNextClick}>
+              <Image src={nextIconUrl} width={25} height={25} />
             </View>
           </View>
-          <Spacer size="xsmall" />
         </View>
       </View>
     </>

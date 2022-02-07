@@ -7,11 +7,13 @@ import styles from './styles.module.scss';
 type SliderProps = {
   flex?: boolean;
   value?: number;
+  max?: number;
 } & React.HtmlHTMLAttributes<HTMLInputElement>;
 
 const Slider = React.forwardRef<HTMLInputElement, SliderProps>(({
   flex,
   value,
+  max,
   ...props
 }: SliderProps, ref) => {
   const sliderElementRef = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(({
       type="range"
       step="0.1"
       min={0}
-      max={100}
+      max={max}
       style={{ flex: flex ? 1 : undefined }}
       className={styles.container}
       value={value}

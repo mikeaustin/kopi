@@ -44,6 +44,7 @@ type ViewProps = {
   scrollSnapAlign?: 'start' | 'center' | 'end';
   border?: boolean;
   dropShadow?: boolean;
+  noScrollbar?: boolean;
   viewBox?: string;
   controls?: boolean;
   autoPlay?: boolean;
@@ -81,6 +82,7 @@ const View = React.forwardRef(({
   scrollSnapAlign,
   border,
   dropShadow,
+  noScrollbar,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -110,6 +112,7 @@ const View = React.forwardRef(({
     scrollSnapAlign && scrollSnapAlignStyles[scrollSnapAlign],
     border && styles.border,
     dropShadow && styles.dropShadow,
+    noScrollbar && styles.noScrollbar,
     className,
   );
 

@@ -34,6 +34,12 @@
   scroll-snap-type: y mandatory;
 }
 
+.noScrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .border {
   box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.075);
 }
