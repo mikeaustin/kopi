@@ -47,8 +47,9 @@ const Song = ({
     <View
       horizontal
       padding="small"
-      horizontalPadding="medium"
+      // horizontalPadding="medium"
       background={selected ? 'primary' : undefined}
+      borderRadius="tiny"
       onPointerDown={handleClick}
       onDoubleClick={handleDoubleClick}
     >
@@ -168,36 +169,20 @@ const Music = () => {
         onTimeUpdate={handleTimeUpdate}
       />
       <View flex>
-        <View flex horizontal scrollX scrollSnapX noScrollbar>
-          <List scrollSnapAlign="start" style={{ flexGrow: 0, flexShrink: 0, flexBasis: '100%' }}>
-            {songs.map((song, index) => (
-              <Song
-                key={index}
-                title={song.title}
-                artist={song.artist}
-                length={song.length}
-                index={index}
-                selected={index === selectedSongIndex}
-                onSongSelect={handleSongSelect}
-                onSongSelectAndPlay={handleSongSelectAndPlay}
-              />
-            ))}
-          </List>
-          <List scrollSnapAlign="start" style={{ flexGrow: 0, flexShrink: 0, flexBasis: '100%' }}>
-            {songs.map((song, index) => (
-              <Song
-                key={index}
-                title={song.title}
-                artist={song.artist}
-                length={song.length}
-                index={index}
-                selected={index === selectedSongIndex}
-                onSongSelect={handleSongSelect}
-                onSongSelectAndPlay={handleSongSelectAndPlay}
-              />
-            ))}
-          </List>
-        </View>
+        <List flex divider bottomDivider padding="xsmall">
+          {songs.map((song, index) => (
+            <Song
+              key={index}
+              title={song.title}
+              artist={song.artist}
+              length={song.length}
+              index={index}
+              selected={index === selectedSongIndex}
+              onSongSelect={handleSongSelect}
+              onSongSelectAndPlay={handleSongSelectAndPlay}
+            />
+          ))}
+        </List>
         <Divider />
         <View padding="medium" horizontalPadding="medium" background="gray-1">
           <Spacer size="xsmall" />

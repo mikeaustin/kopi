@@ -12,6 +12,7 @@ const List = ({
   children,
   wrap,
   divider,
+  bottomDivider,
   spacerSize,
   spacerColor,
   ...props
@@ -19,15 +20,19 @@ const List = ({
   children: Exclude<React.ReactNode, React.ReactText>;
   wrap?: boolean;
   divider?: boolean;
+  bottomDivider?: boolean;
   spacerSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   spacerColor?: Color;
 } & ViewProps) => {
+  const childrenArray = React.Children.toArray(children);
+  const selectedIndex = childrenArray.findIndex((child) => (child as React.ReactElement).props.selected);
+
   return (
     <View className={styles.container} {...props}>
       {React.Children.map(children, (child, index) => (
         <>
           {divider && index > 0 && (
-            <Divider />
+            <Divider style={{ visibility: (index === selectedIndex || index === selectedIndex + 1) ? 'hidden' : 'visible' }} />
           )}
           {spacerSize && index > 0 && (
             <Spacer size={spacerSize} background={spacerColor} />
@@ -35,6 +40,9 @@ const List = ({
           {child}
         </>
       ))}
+      {bottomDivider && (
+        <Divider style={{ visibility: (childrenArray.length - 1 === selectedIndex) ? 'hidden' : 'visible' }} />
+      )}
     </View>
   );
 };
