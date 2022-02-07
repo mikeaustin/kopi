@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-import { View, Text, Image, Spacer, Divider, List, Slider } from '../../components';
+import { View, Text, Image, Spacer, Divider, List, Slider, Scroller } from '../../components';
 import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
 
 import playIconUrl from './images/play.png';
@@ -173,20 +173,22 @@ const Music = () => {
         onTimeUpdate={handleTimeUpdate}
       />
       <View flex style={{ minHeight: 0 }}>
-        <List flex divider dividerInset bottomDivider scrollY style={{ overflowX: 'hidden' }}>
-          {songs.map((song, index) => (
-            <Song
-              key={index}
-              title={song.title}
-              artist={song.artist}
-              length={song.length}
-              index={index}
-              selected={index === selectedSongIndex}
-              onSongSelect={handleSongSelect}
-              onSongSelectAndPlay={handleSongSelectAndPlay}
-            />
-          ))}
-        </List>
+        <Scroller scrollY style={{ overflowX: 'hidden' }}>
+          <List flex divider dividerInset bottomDivider>
+            {songs.map((song, index) => (
+              <Song
+                key={index}
+                title={song.title}
+                artist={song.artist}
+                length={song.length}
+                index={index}
+                selected={index === selectedSongIndex}
+                onSongSelect={handleSongSelect}
+                onSongSelectAndPlay={handleSongSelectAndPlay}
+              />
+            ))}
+          </List>
+        </Scroller>
         <Divider />
         <View padding="medium" horizontalPadding="medium" background="gray-1">
           <Spacer size="xsmall" />

@@ -8,6 +8,7 @@ import Divider from './divider';
 import List from './list';
 import Clickable from './clickable';
 import Slider from './slider';
+import Scroller from './scroller';
 
 export {
   View,
@@ -20,4 +21,5 @@ export {
   List,
   Clickable,
   Slider,
+  Scroller,
 };

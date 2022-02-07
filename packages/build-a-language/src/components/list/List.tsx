@@ -35,7 +35,7 @@ const List = ({
         <>
           {divider && index > 0 && (
             <Divider
-              style={{ marginLeft: dividerInset ? 8 : 0, marginRight: dividerInset ? 8 : 0, visibility: (index === selectedIndex || index === selectedIndex + 1) ? 'hidden' : 'visible' }}
+              style={{ marginLeft: dividerInset ? 15 : 0, marginRight: dividerInset ? 15 : 0, visibility: (index === selectedIndex || index === selectedIndex + 1) ? 'hidden' : 'visible' }}
             />
           )}
           {spacerSize && index > 0 && (

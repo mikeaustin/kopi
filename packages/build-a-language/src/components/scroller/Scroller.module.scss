@@ -1,32 +1,26 @@
 @import 'open-color';
 
-.outerScroll {
+.container {
   position: relative;
+  min-height: 0;
 
   --top: 0;
   --height: 200px;
-  
+
   &::after {
     content: '';
     position: absolute;
-    background: $oc-blue-5;
+    background: hsla(0, 0%, 0%, 0.25);
     top: var(--top);
     right: 0;
     height: var(--height);
     width: 7px;
-    margin: 0 0px;
+    // margin: 3px 3px;
+    // border-radius: 1000px;
   }
-
 }
 
-.scroll {
-  display: grid;
-  overflow: auto;
-  position: relative;
-
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px 10px;
-
+.inner {
   &::-webkit-scrollbar {
     display: none;
   }

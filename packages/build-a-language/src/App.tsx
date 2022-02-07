@@ -182,7 +182,7 @@ function App() {
           <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 160, width: 200, height: 200 }}>
             <AnalogClock />
           </Window>
-          <Window title="Music" style={{ width: 375, height: 400 }}>
+          <Window title="Music" style={{ width: 375, height: 310 }}>
             <Music />
           </Window>
           {/* <Window
