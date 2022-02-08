@@ -34,4 +34,20 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
+  &.scrollX {
+    overflow-x: auto;
+  }
+  
+  &.scrollY {
+    overflow-y: auto;
+  }
+  
+  .scrollSnapX {
+    scroll-snap-type: x mandatory;
+  }
+  
+  .scrollSnapY {
+    scroll-snap-type: y mandatory;
+  }  
 }

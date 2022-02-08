@@ -1,16 +1,25 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import classNames from 'classnames';
 
-import { View, Text, Button, Spacer, Divider, List, Clickable } from '..';
-
+import { View } from '..';
 import { ViewProps } from '../view';
 
 import styles from './Scroller.module.scss';
 
 const Scroller = ({
   children,
+  className,
+  scrollX,
+  scrollY,
+  scrollSnapX,
+  scrollSnapY,
   ...props
 }: {
   children?: React.ReactElement | React.ReactElement[];
+  scrollX?: boolean;
+  scrollY?: boolean;
+  scrollSnapX?: boolean;
+  scrollSnapY?: boolean;
 } & ViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -32,9 +41,18 @@ const Scroller = ({
     }
   }, []);
 
+  const innerClassName = classNames(
+    styles.inner,
+    scrollX && styles.scrollX,
+    scrollY && styles.scrollY,
+    scrollSnapX && styles.scrollSnapX,
+    scrollSnapY && styles.scrollSnapY,
+    className,
+  );
+
   return (
     <View ref={containerRef} className={styles.container}>
-      <View className={styles.inner} onScroll={handleScroll} {...props}>
+      <View className={innerClassName} onScroll={handleScroll} {...props}>
         {children}
       </View>
     </View>
