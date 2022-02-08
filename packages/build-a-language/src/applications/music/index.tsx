@@ -31,7 +31,12 @@ const Song = ({
   onSongSelect: (songIndex: number) => void;
   onSongSelectAndPlay: (songIndex: number) => void;
 }) => {
-  const handleClick = () => {
+  const handleClick = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    event.currentTarget.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    });
+
     onSongSelect(index);
   };
 

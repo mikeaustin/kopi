@@ -16,6 +16,11 @@ const ClickableImage = ({
   onImageClick: (event: React.SyntheticEvent<any, MouseEvent>, src: string) => void;
 } & ImageProps) => {
   const handleClick = (event: React.SyntheticEvent<any, MouseEvent>) => {
+    event.currentTarget.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    });
+
     onImageClick(event, src);
   };
 
@@ -37,7 +42,6 @@ const Preferences = ({
   onSetBackground
 }: PreferencesProps) => {
   const backgroundRef = useRef<string>();
-  const scrollerRef = useRef<HTMLElement>();
 
   const handleImageClick = (event: any, src: string) => {
     backgroundRef.current = src;
@@ -61,15 +65,6 @@ const Preferences = ({
     }
   }, [onSetBackground]);
 
-  const handleScroll = () => {
-    if (scrollerRef.current) {
-      const ratio = scrollerRef.current.children[0].clientHeight / scrollerRef.current.children[0].scrollHeight;
-
-      scrollerRef.current.style.setProperty('--top', scrollerRef.current.children[0].scrollTop * ratio + 'px');
-      scrollerRef.current.style.setProperty('--height', scrollerRef.current.children[0].clientHeight * ratio + 'px');
-    }
-  };
-
   return (
     <View style={{ minHeight: 0 }}>
       <View padding="medium" bottomPadding="none" background="gray-1">
@@ -84,13 +79,6 @@ const Preferences = ({
           ))}
         </View>
       </Scroller>
-      {/* <View ref={scrollerRef} className={styles.outerScroll}>
-        <View padding="medium" horizontalPadding="medium" className={styles.scroll} style={{ height: 310 }} onScroll={handleScroll}>
-          {backgroundUrls.map((url, index) => (
-            <ClickableImage key={index} src={`./images/${url}`} width="100%" height="auto" onImageClick={handleImageClick} />
-          ))}
-        </View>
-      </View> */}
       <Divider style={{ marginTop: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
       <View padding="medium" topPadding="none" background="gray-1">
         <Spacer size="medium" />
