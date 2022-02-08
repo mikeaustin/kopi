@@ -66,8 +66,8 @@ const Song = ({
             <Text fontWeight={'semi-bold'}>
               {title}
             </Text>
-            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
-            <Text fontSize="xsmall" textColor={primaryTextColor}>{length}</Text>
+            &nbsp;
+            (<Text fontSize="xsmall" textColor={primaryTextColor}>{length}</Text>)
           </Text>
         </View>
         <Spacer size="small" />
