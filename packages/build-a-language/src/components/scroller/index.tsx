@@ -23,6 +23,15 @@ const Scroller = ({
     }
   };
 
+  useEffect(() => {
+    if (containerRef.current) {
+      const ratio = containerRef.current.children[0].clientHeight / containerRef.current.children[0].scrollHeight;
+
+      containerRef.current.style.setProperty('--top', containerRef.current.children[0].scrollTop * ratio + 'px');
+      containerRef.current.style.setProperty('--height', containerRef.current.children[0].clientHeight * ratio + 'px');
+    }
+  }, []);
+
   return (
     <View ref={containerRef} className={styles.container}>
       <View className={styles.inner} onScroll={handleScroll} {...props}>
