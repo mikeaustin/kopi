@@ -69,7 +69,7 @@ const Preferences = ({
     <View style={{ minHeight: 0 }}>
       <View padding="medium" bottomPadding="none" background="gray-1">
         <Text fontWeight="bold">Background</Text>
-        <Spacer size="medium" />
+        <Spacer size="small" />
       </View>
       <Divider style={{ marginBottom: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
       <Scroller scrollY>

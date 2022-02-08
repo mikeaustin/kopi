@@ -16,6 +16,7 @@ type WindowProps = {
   title?: string;
   style?: React.CSSProperties;
   order?: number;
+  noDivider?: boolean;
   windowId?: number;
   borderRadius?: 'xsmall' | 'max';
   onWindowFocus?: any;
@@ -28,6 +29,7 @@ const Window = React.forwardRef(({
   title,
   style,
   order,
+  noDivider,
   windowId,
   borderRadius = 'xsmall',
   onWindowFocus,
@@ -149,6 +151,7 @@ const Window = React.forwardRef(({
             padding="small"
             alignItems="center"
             background="gray-3"
+            // background="gray-1"
             style={{ marginBottom: -1, touchAction: 'none', borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
             onPointerDown={handleTitlePointerDown}
             onPointerMove={handleTitlePointerMove}
@@ -156,7 +159,10 @@ const Window = React.forwardRef(({
           >
             <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
           </View>
-          <Divider color="gray-4" />
+          {/* <Divider color="gray-4" /> */}
+          {!noDivider && (
+            <Divider color="gray-4" />
+          )}
         </>
       )}
       <View

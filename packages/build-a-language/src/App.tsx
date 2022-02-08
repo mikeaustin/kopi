@@ -162,10 +162,10 @@ function App() {
           <Window title="Examples" style={{ left: 45, top: 45 }}>
             <Examples />
           </Window>
-          <Window title="Preferences" style={{ left: 60, top: 60, width: 500, height: 400 }}>
+          <Window noDivider title="Preferences" style={{ left: 60, top: 60, width: 500, height: 400 }}>
             <Preferences onSetBackground={handleSetBackground} />
           </Window>
-          <Window title="Calendar" style={{ left: 75, top: 75 }}>
+          <Window noDivider title="Calendar" style={{ left: 75, top: 75 }}>
             <Calendar />
           </Window>
           <Window
