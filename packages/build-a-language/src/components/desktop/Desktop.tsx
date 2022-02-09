@@ -45,15 +45,22 @@ const Desktop = ({
   const handleWindowChange = useCallback(({
     windowId, left, top, width, height,
   }: WindowPosition) => {
-    setWindowPositions((windowPositions) => windowPositions.map((position, index) => (
-      windowId === position.windowId ? { ...position, left, top, width, height } : position
-    )));
+    console.log(windowId, left);
+    setWindowPositions((windowPositions) => {
+      const newWindowPositions = windowPositions.map((position, index) => (
+        windowId === position.windowId ? { ...position, left, top, width, height } : position
+      ));
 
-    windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
-      detail: {
-        windowId, left, top, width, height,
-      }
-    }));
+      console.log(newWindowPositions);
+
+      return newWindowPositions;
+    });
+
+    // windowPositionEventTarget.dispatchEvent(new CustomEvent('windowpositionchange', {
+    //   detail: {
+    //     windowId, left, top, width, height,
+    //   }
+    // }));
   }, []);
 
   const handleWindowTransientChange = useCallback(({ windowId, left, top, width, height }: WindowPosition) => {

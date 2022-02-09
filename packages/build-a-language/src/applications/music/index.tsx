@@ -9,6 +9,7 @@ import playIconUrl from './images/play.png';
 import pauseIconUrl from './images/pause.png';
 import backIconUrl from './images/back.png';
 import nextIconUrl from './images/next.png';
+import soundIconUrl from './images/volume.png';
 
 import colors from 'open-color';
 
@@ -19,6 +20,7 @@ const Song = ({
   length,
   index,
   selected,
+  isPlaying,
   onSongSelect,
   onSongSelectAndPlay,
 }: {
@@ -28,6 +30,7 @@ const Song = ({
   length: string;
   index: number;
   selected: boolean;
+  isPlaying: boolean;
   onSongSelect: (songIndex: number) => void;
   onSongSelectAndPlay: (songIndex: number) => void;
 }) => {
@@ -41,7 +44,6 @@ const Song = ({
   };
 
   const handleDoubleClick = () => {
-    console.log('here');
     onSongSelectAndPlay(index);
   };
 
@@ -77,6 +79,12 @@ const Song = ({
       </View>
       <Spacer size="small" />
       <View horizontal alignItems="center">
+        {isPlaying && (
+          <>
+            <Image src={soundIconUrl} width={20} height={20} />
+            <Spacer size="small" />
+          </>
+        )}
         <HeartIcon style={{ fill: colors.gray[4], width: 20, height: 20 }} />
       </View>
     </View>
@@ -120,20 +128,16 @@ const Music = () => {
 
   const handleBackClick = () => {
     if (activeSongIndex > 0) {
-      setSelectedSongIndex(selectedSongIndex - 1);
-
       if (isPlaying) {
-        setActiveSongIndex(selectedSongIndex - 1);
+        setActiveSongIndex(activeSongIndex - 1);
       }
     }
   };
 
   const handleNextClick = () => {
     if (activeSongIndex < songs.length - 1) {
-      setSelectedSongIndex(selectedSongIndex + 1);
-
       if (isPlaying) {
-        setActiveSongIndex(selectedSongIndex + 1);
+        setActiveSongIndex(activeSongIndex + 1);
       }
     }
   };
@@ -161,12 +165,13 @@ const Music = () => {
       return;
     }
 
-    if (isPlaying || (isPlaying && selectedSongIndex !== activeSongIndex)) {
+    if (isPlaying || (isPlaying && activeSongIndex !== -1)) {
+      console.log('here');
       audioElementRef.current.play();
     } else {
       audioElementRef.current.pause();
     }
-  }, [isPlaying, activeSongIndex, selectedSongIndex]);
+  }, [isPlaying, activeSongIndex]);
 
   return (
     <>
@@ -188,6 +193,7 @@ const Music = () => {
                 length={song.length}
                 index={index}
                 selected={index === selectedSongIndex}
+                isPlaying={index === activeSongIndex}
                 onSongSelect={handleSongSelect}
                 onSongSelectAndPlay={handleSongSelectAndPlay}
               />
@@ -210,7 +216,7 @@ const Music = () => {
           </View> */}
           <Spacer size="xsmall" />
           <View horizontal justifyContent="center" alignItems="center" style={{ opacity: 0.7 }}>
-            <View padding="small" style={{ opacity: selectedSongIndex === 0 ? 0.5 : 1 }} onClick={handleBackClick}>
+            <View padding="small" style={{ opacity: activeSongIndex === 0 ? 0.5 : 1 }} onClick={handleBackClick}>
               <Image src={backIconUrl} width={25} height={25} />
             </View>
             <Spacer size="xsmall" />
@@ -222,7 +228,7 @@ const Music = () => {
               )}
             </View>
             <Spacer size="xsmall" />
-            <View padding="small" style={{ opacity: selectedSongIndex === songs.length - 1 ? 0.5 : 1 }} onClick={handleNextClick}>
+            <View padding="small" style={{ opacity: activeSongIndex === songs.length - 1 ? 0.5 : 1 }} onClick={handleNextClick}>
               <Image src={nextIconUrl} width={25} height={25} />
             </View>
           </View>

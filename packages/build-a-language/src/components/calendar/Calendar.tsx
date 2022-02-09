@@ -24,9 +24,9 @@ const Calendar = () => {
         <View horizontal horizontalPadding="medium" alignItems="center" background="gray-1">
           <Text fontSize="large">{today.toLocaleDateString(undefined, { month: 'long' })}</Text>
           <Spacer flex />
-          <Button size="xsmall" title="◀" solid rounded />
+          <Button size="xsmall" title="❮" solid rounded />
           <Spacer size="xsmall" />
-          <Button size="xsmall" title="▶" solid rounded />
+          <Button size="xsmall" title="❯" solid rounded />
         </View>
         <Spacer size="medium" />
         <View horizontal horizontalPadding="small">
