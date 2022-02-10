@@ -149,7 +149,7 @@ function App() {
 
   return (
     <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
-      <View horizontal background="white" alignItems="center" dropShadow /* style={{ background: 'hsla(210, 100%, 98%, 0.9)' }} */>
+      <View horizontal background="white" alignItems="center" dropShadow>
         <MenuBar />
         <Spacer flex />
         <DigitalClock horizontalPadding="medium" />
@@ -182,7 +182,7 @@ function App() {
           <Window borderRadius="max" style={{ left: window.innerWidth - 215, top: 160, width: 200, height: 200 }}>
             <AnalogClock />
           </Window>
-          <Window title="Music" style={{ width: 375, height: 310 }}>
+          <Window title="Music" style={{ width: 375, height: 365 }}>
             <Music />
           </Window>
           {/* <Window
