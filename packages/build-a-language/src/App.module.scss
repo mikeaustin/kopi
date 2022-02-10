@@ -16,6 +16,20 @@
   --primary-color-9: #{$oc-blue-9};
 }
 
+:root {
+  --theme-content-color: white;
+  --theme-panel-color: #{$oc-gray-1};
+  --theme-divider-color: #{$oc-gray-3};
+  --theme-text-color: #{$oc-gray-7};
+}
+
+// :root {
+//   --theme-content-color: #{$oc-gray-9};
+//   --theme-panel-color: #{$oc-gray-8};
+//   --theme-divider-color: #{$oc-gray-7};
+//   --theme-text-color: #{$oc-gray-4};
+// }
+
 .App {
   min-height: 100vh;
   background: center / cover transparent;

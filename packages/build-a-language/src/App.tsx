@@ -25,8 +25,8 @@ import styles from './App.module.scss';
 const FontSizes = () => {
   return (
     <View justifyContent="center">
-      <Spacer size="small" background="gray-1" />
-      <List spacerSize="small" spacerColor="gray-1" alignItems="center">
+      <Spacer size="small" background="theme-panel" />
+      <List spacerSize="small" spacerColor="theme-panel" alignItems="center">
         <Text fontSize="xlarge" style={{ position: 'relative', whiteSpace: 'nowrap' }}>XLarge (30px)</Text>
         <Text fontSize="large" style={{ position: 'relative', whiteSpace: 'nowrap' }}>Large (24px)</Text>
         <Text fontSize="medium" style={{ position: 'relative', whiteSpace: 'nowrap' }}>Medium (18px)</Text>
@@ -34,7 +34,7 @@ const FontSizes = () => {
         <Text fontSize="xsmall" style={{ position: 'relative', whiteSpace: 'nowrap' }}>XSmall (12px)</Text>
         <Text fontSize="tiny">TINY (11px)</Text>
       </List>
-      <Spacer size="small" background="gray-1" />
+      <Spacer size="small" background="theme-panel" />
     </View>
   );
 };
@@ -149,7 +149,7 @@ function App() {
 
   return (
     <View className={styles.App} style={{ backgroundImage: `url(${backgroundUrl})` }}>
-      <View horizontal background="white" alignItems="center" dropShadow>
+      <View horizontal background="theme-content" alignItems="center" dropShadow>
         <MenuBar />
         <Spacer flex />
         <DigitalClock horizontalPadding="medium" />

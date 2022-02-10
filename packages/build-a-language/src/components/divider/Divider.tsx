@@ -23,7 +23,7 @@ const Divider = ({
   return (
     <>
       {spacerSize && (<Spacer size={spacerSize} />)}
-      <View background={color ?? 'gray-3'} className={containerClassName} {...props} />
+      <View background={color ?? 'theme-divider'} className={containerClassName} {...props} />
       {spacerSize && (<Spacer size={spacerSize} />)}
     </>
   );

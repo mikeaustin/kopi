@@ -68,7 +68,7 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>(({
     fitContent && styles.fitContent,
     (fontSize && fontSizeStyles[fontSize]) || (!textParent && fontSizeStyles.small),
     fontWeight && fontWeightStyles[fontWeight],
-    (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['gray-7']),
+    (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['theme-text']),
     className,
   );
 

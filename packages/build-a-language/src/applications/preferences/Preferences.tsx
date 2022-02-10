@@ -67,7 +67,7 @@ const Preferences = ({
 
   return (
     <View style={{ minHeight: 0 }}>
-      <View padding="medium" bottomPadding="none" background="gray-1">
+      <View padding="medium" bottomPadding="none" background="theme-panel">
         <Text fontWeight="bold">Background</Text>
         <Spacer size="small" />
       </View>
@@ -80,7 +80,7 @@ const Preferences = ({
         </View>
       </Scroller>
       <Divider style={{ marginTop: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
-      <View padding="medium" topPadding="none" background="gray-1">
+      <View padding="medium" topPadding="none" background="theme-panel">
         <Spacer size="medium" />
         <List horizontal spacerSize="small" justifyContent="center">
           <Button primary title="Cancel" />

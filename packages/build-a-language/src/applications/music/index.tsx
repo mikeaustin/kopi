@@ -201,7 +201,7 @@ const Music = () => {
           </List>
         </Scroller>
         <Divider />
-        <View padding="medium" horizontalPadding="medium" background="gray-1">
+        <View padding="medium" horizontalPadding="medium" background="theme-panel">
           <Spacer size="xsmall" />
           <Slider value={currentTime} max={duration} onInput={handleSliderChange} />
           <Spacer size="small" />

@@ -1,5 +1,9 @@
 @import 'open-color';
 
+.theme-text {
+  color: var(--theme-text-color);
+}
+
 .primary {
   color: var(--primary-color);
 }

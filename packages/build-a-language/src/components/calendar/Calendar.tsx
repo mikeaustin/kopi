@@ -19,9 +19,9 @@ const Calendar = () => {
 
   return (
     <View flex>
-      <View background="gray-1">
+      <View background="theme-panel">
         <Spacer size="medium" />
-        <View horizontal horizontalPadding="medium" alignItems="center" background="gray-1">
+        <View horizontal horizontalPadding="medium" alignItems="center">
           <Text fontSize="large">{today.toLocaleDateString(undefined, { month: 'long' })}</Text>
           <Spacer flex />
           <Button size="xsmall" title="❮" solid rounded />
