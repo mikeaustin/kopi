@@ -157,7 +157,7 @@ const Window = React.forwardRef(({
             onPointerMove={handleTitlePointerMove}
             onPointerUp={handleTitlePointerUp}
           >
-            <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
+            <Text fontSize="medium" fontWeight="semi-bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
           </View>
           {/* <Divider color="gray-4" /> */}
           {/* {!noDivider && ( */}
