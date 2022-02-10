@@ -150,8 +150,8 @@ const Window = React.forwardRef(({
           <View
             padding="small"
             alignItems="center"
-            background="gray-3"
-            // background="gray-1"
+            // background="gray-3"
+            background="gray-1"
             style={{ marginBottom: -1, touchAction: 'none', borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
             onPointerDown={handleTitlePointerDown}
             onPointerMove={handleTitlePointerMove}
@@ -160,9 +160,9 @@ const Window = React.forwardRef(({
             <Text fontWeight="bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
           </View>
           {/* <Divider color="gray-4" /> */}
-          {!noDivider && (
-            <Divider color="gray-4" />
-          )}
+          {/* {!noDivider && ( */}
+          <Divider />
+          {/* )} */}
         </>
       )}
       <View
