@@ -71,7 +71,7 @@ const Preferences = ({
         <Text fontWeight="bold">Background</Text>
         <Spacer size="small" />
       </View>
-      <Divider style={{ marginBottom: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
+      <Divider style={{ marginBottom: -1, position: 'relative', zIndex: 1, background: 'var(--theme-image-divider-color)' }} />
       <Scroller scrollY>
         <View padding="medium" horizontalPadding="medium" className={styles.scroll}>
           {backgroundUrls.map((url, index) => (
@@ -79,7 +79,7 @@ const Preferences = ({
           ))}
         </View>
       </Scroller>
-      <Divider style={{ marginTop: -1, position: 'relative', zIndex: 1, background: 'hsla(0, 0%, 0%, 0.15)' }} />
+      <Divider style={{ marginTop: -1, position: 'relative', zIndex: 1, background: 'var(--theme-image-divider-color)' }} />
       <View padding="medium" topPadding="none" background="theme-panel">
         <Spacer size="medium" />
         <List horizontal spacerSize="small" justifyContent="center">

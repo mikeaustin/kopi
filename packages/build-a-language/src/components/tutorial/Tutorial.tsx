@@ -17,10 +17,14 @@ const Heading = ({ title, subtitle, index, selected, onSelect }: {
   };
 
   return (
-    <Clickable padding="medium" background={selected ? 'blue-0' : undefined} onMouseDown={handleClick}>
-      <Text fontSize="medium" fontWeight="semi-bold">{`${index !== undefined ? index + 1 : ''}. ${title}`}</Text>
+    <Clickable padding="medium" background={selected ? 'primary' : undefined} onMouseDown={handleClick}>
+      <Text fontSize="medium" fontWeight="semi-bold" textColor={selected ? 'white' : undefined}>
+        {`${index !== undefined ? index + 1 : ''}. ${title}`}
+      </Text>
       <Spacer size="medium" />
-      <Text>{subtitle}</Text>
+      <Text textColor={selected ? 'white' : undefined}>
+        {subtitle}
+      </Text>
     </Clickable>
   );
 };
@@ -188,7 +192,7 @@ const Tutorial = <TData,>({
           {typeof pages[currentPage].markdown === 'string' && (
             <>
               <View
-                background="gray-0"
+                background="theme-panel"
                 scrollSnapAlign="start"
                 style={{ flex: `1 0 ${window.innerWidth < 1024 ? '100%' : 0}`, minHeight: 0 }}
               >

@@ -41,11 +41,12 @@
 }
 
 .border {
-  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.075);
+  box-shadow: 0 0 0 1px var(--theme-border-color);
 }
 
 .dropShadow {
   box-shadow:
     0 3px 10px hsla(0, 0%, 0%, 0.25),
     0 0 0 1px hsla(0, 0%, 0%, 0.1);
+  box-shadow: var(--theme-drop-shadow);
 }

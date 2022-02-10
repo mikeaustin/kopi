@@ -21,14 +21,32 @@
   --theme-panel-color: #{$oc-gray-1};
   --theme-divider-color: #{$oc-gray-3};
   --theme-text-color: #{$oc-gray-7};
+
+  --theme-solid-button-normal-color: #{$oc-gray-3};
+  --theme-hover-button-hover-color: hsla(210, 50%, 10%, 0.055);
+
+  --theme-border-color: hsla(0, 0%, 0%, 0.075);
+  --theme-image-divider-color: hsla(0, 0%, 0%, 0.15);
+  --theme-drop-shadow:
+    0 3px 10px hsla(0, 0%, 0%, 0.25),
+    0 0 0 1px hsla(0, 0%, 0%, 0.1);
 }
 
-// :root {
-//   --theme-content-color: #{$oc-gray-9};
-//   --theme-panel-color: #{$oc-gray-8};
-//   --theme-divider-color: #{$oc-gray-7};
-//   --theme-text-color: #{$oc-gray-4};
-// }
+:xroot {
+  --theme-content-color: #{$oc-gray-9};
+  --theme-panel-color: #{$oc-gray-8};
+  --theme-divider-color: #{$oc-gray-7};
+  --theme-text-color: #{$oc-gray-4};
+
+  --theme-solid-button-normal-color: #{$oc-gray-7};
+  --theme-hover-button-hover-color: hsla(210, 50%, 90%, 0.065);
+
+  --theme-border-color: hsla(0, 0%, 100%, 0.075);
+  --theme-image-divider-color: hsla(0, 0%, 100%, 0.15);
+  --theme-drop-shadow:
+    0 3px 10px hsla(0, 0%, 0%, 0.25),
+    0 0 0 1px hsla(0, 0%, 100%, 0.1);
+}
 
 .App {
   min-height: 100vh;
