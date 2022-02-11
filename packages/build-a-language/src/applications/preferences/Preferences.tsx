@@ -53,18 +53,6 @@ const Preferences = ({
     localStorage.setItem('background', JSON.stringify(backgroundRef.current));
   };
 
-  useEffect(() => {
-    const background = localStorage.getItem('background');
-
-    if (background) {
-      backgroundRef.current = JSON.parse(background);
-
-      onSetBackground(JSON.parse(background));
-    } else {
-      onSetBackground('./images/triangles-colorful-green-colors-low-poly-abstract-4748.png');
-    }
-  }, [onSetBackground]);
-
   return (
     <View style={{ minHeight: 0 }}>
       <View padding="medium" bottomPadding="none" background="theme-panel">
