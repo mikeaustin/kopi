@@ -1,4 +1,5 @@
 import React, { useRef, useMemo, useEffect, useCallback, useImperativeHandle } from 'react';
+import classNames from 'classnames';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';
@@ -9,10 +10,13 @@ import { type WindowPosition } from '../desktop';
 import styles from './Window.module.scss';
 import textStyles from '../text/Text.module.scss';
 
-const WindowContext = React.createContext<{ onWindowFocus: (() => void); } | null>(null);
+const WindowContext = React.createContext<{
+  onWindowFocus: (() => void);
+} | null>(null);
 
 type WindowProps = {
   children?: Exclude<React.ReactNode, string>;
+  className?: string;
   title?: string;
   style?: React.CSSProperties;
   order?: number;
@@ -26,6 +30,7 @@ type WindowProps = {
 
 const Window = React.forwardRef(({
   children,
+  className,
   title,
   style,
   order,
@@ -141,7 +146,7 @@ const Window = React.forwardRef(({
       ref={windowElementRef}
       borderRadius={borderRadius}
       dropShadow
-      className={styles.container}
+      className={classNames(styles.container, className)}
       style={{ ...style, zIndex: order }}
       onPointerDown={handleWindowPointerDown}
     >

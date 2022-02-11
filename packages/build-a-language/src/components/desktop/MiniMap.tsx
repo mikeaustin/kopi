@@ -4,8 +4,6 @@ import { View } from '../../components';
 
 import { type WindowPosition } from './Desktop';
 
-const scaleFactor = window.innerWidth / 10 + 200;
-
 const MiniMap = ({
   windowPositions,
   windowPositionEventTarget,
