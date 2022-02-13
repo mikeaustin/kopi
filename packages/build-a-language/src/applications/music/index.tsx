@@ -5,11 +5,12 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Text, Image, Spacer, Divider, List, Slider, Scroller } from '../../components';
 import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
 
-import playIconUrl from './images/play.png';
-import pauseIconUrl from './images/pause.png';
-import backIconUrl from './images/back.png';
-import nextIconUrl from './images/next.png';
 import soundIconUrl from './images/volume.png';
+
+import { ReactComponent as BackIcon } from './images/back.svg';
+import { ReactComponent as PlayIcon } from './images/play.svg';
+import { ReactComponent as PauseIcon } from './images/pause.svg';
+import { ReactComponent as NextIcon } from './images/next.svg';
 
 import colors from 'open-color';
 
@@ -215,21 +216,21 @@ const Music = () => {
             </Text>
           </View> */}
           <Spacer size="xsmall" />
-          <View horizontal justifyContent="center" alignItems="center" style={{ opacity: 0.7 }}>
+          <View horizontal justifyContent="center" alignItems="center">
             <View padding="small" style={{ opacity: activeSongIndex === 0 ? 0.5 : 1 }} onClick={handleBackClick}>
-              <Image src={backIconUrl} width={25} height={25} />
+              <BackIcon style={{ fill: 'var(--theme-text-color)', width: 30, height: 30 }} />
             </View>
             <Spacer size="xsmall" />
-            <View padding="small" style={{ border: '3px solid #202020' }} borderRadius="max" onClick={handlePlayClick}>
+            <View onClick={handlePlayClick}>
               {isPlaying ? (
-                <Image src={pauseIconUrl} width={25} height={25} />
+                <PauseIcon style={{ fill: 'var(--theme-text-color)', width: 50, height: 50 }} />
               ) : (
-                <Image src={playIconUrl} width={25} height={25} style={{ position: 'relative', left: 1 }} />
+                <PlayIcon style={{ fill: 'var(--theme-text-color)', width: 50, height: 50 }} />
               )}
             </View>
             <Spacer size="xsmall" />
             <View padding="small" style={{ opacity: activeSongIndex === songs.length - 1 ? 0.5 : 1 }} onClick={handleNextClick}>
-              <Image src={nextIconUrl} width={25} height={25} />
+              <NextIcon style={{ fill: 'var(--theme-text-color)', width: 30, height: 30 }} />
             </View>
           </View>
         </View>
