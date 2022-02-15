@@ -19,7 +19,7 @@ const Button = ({
   rightIcon,
   ...props
 }: {
-  title: string;
+  title: React.ReactNode;
   size?: 'xsmall' | 'small' | 'medium';
   primary?: boolean;
   solid?: boolean;
@@ -44,12 +44,29 @@ const Button = ({
       ? 'primary'
       : undefined;
 
+  const titleText = typeof title === 'string' ? (
+    <Text
+      fontSize={size}
+      fontWeight="bold"
+      textColor={textColor}
+      noSelect
+      style={{ pointerEvents: 'none', textAlign: 'center', whiteSpace: 'nowrap' }}
+    >
+      {title}
+    </Text>
+  ) : React.isValidElement(title) && React.cloneElement(title, {
+    style: {
+      ...(title as any).props.style,
+      fill: 'var(--theme-text-color)'
+    }
+  });
+  console.log(titleText);
   return (
     <View
       tag="button"
       horizontal
       justifyContent="center"
-      horizontalPadding={size === 'xsmall' ? 'medium' : 'medium'}
+      horizontalPadding={size === 'xsmall' ? 'small' : 'medium'}
       verticalPadding={size === 'xsmall' ? 'small' : 'small'}
       borderRadius={rounded ? 'max' : 'tiny'}
       className={containerClassName}
@@ -61,15 +78,7 @@ const Button = ({
           <Spacer size="small" />
         </>
       )}
-      <Text
-        fontSize={size}
-        fontWeight="bold"
-        textColor={textColor}
-        noSelect
-        style={{ pointerEvents: 'none', textAlign: 'center', whiteSpace: 'nowrap' }}
-      >
-        {title}
-      </Text>
+      {titleText}
       {rightIcon && (
         <>
           <Spacer size="small" />

@@ -24,6 +24,9 @@ function App() {
   return (
     <View className={styles.App}>
       <Desktop>
+        <Window title="About" padding="large">
+          <Text style={{ whiteSpace: 'nowrap' }}>React Desktop — 2022 Mike Austin</Text>
+        </Window>
         {/* <Window
             title="Tutorial: Learn to Code"
             style={{
