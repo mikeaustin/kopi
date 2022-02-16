@@ -74,19 +74,22 @@ const Window = React.forwardRef(({
   };
 
   const handleTitlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current && firstMouseRef.current) {
-      windowElementRef.current.style.left = `${event.nativeEvent.clientX - firstMouseRef.current.clientX}px`;
-      windowElementRef.current.style.top = `${event.nativeEvent.clientY - firstMouseRef.current.clientY}px`;
-    }
+    if (windowElementRef.current && windowElementRef.current.parentElement && firstMouseRef.current) {
+      const clientX = event.nativeEvent.clientX - windowElementRef.current.parentElement.offsetLeft;
+      const clientY = event.nativeEvent.clientY; // - windowElementRef.current.parentElement.offsetTop;
 
-    if (firstMouseRef.current && windowId !== undefined && windowElementRef.current && onWindowTransientChange) {
-      onWindowTransientChange({
-        windowId,
-        left: windowElementRef.current.offsetLeft,
-        top: windowElementRef.current.offsetTop,
-        width: windowElementRef.current.offsetWidth,
-        height: windowElementRef.current.offsetHeight,
-      });
+      windowElementRef.current.style.left = `${clientX - firstMouseRef.current.clientX}px`;
+      windowElementRef.current.style.top = `${clientY - firstMouseRef.current.clientY}px`;
+
+      if (windowId !== undefined && onWindowTransientChange) {
+        onWindowTransientChange({
+          windowId,
+          left: windowElementRef.current.offsetLeft,
+          top: windowElementRef.current.offsetTop,
+          width: windowElementRef.current.offsetWidth,
+          height: windowElementRef.current.offsetHeight,
+        });
+      }
     }
   };
 

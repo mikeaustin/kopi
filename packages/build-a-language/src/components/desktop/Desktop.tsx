@@ -28,9 +28,11 @@ const DesktopContext = React.createContext<{
 const Desktop = ({
   children,
   className,
+  id,
 }: {
   children: React.ReactElement<WindowProps> | React.ReactElement<WindowProps>[];
   className?: string;
+  id?: string;
 }) => {
   console.log('Desktop()');
 
@@ -45,8 +47,14 @@ const Desktop = ({
 
   const desktopElementRef = useRef<HTMLElement>();
 
+  const handleTransientSetBackground = (url: string) => {
+    setBackgroundUrl(url);
+  };
+
   const handleSetBackground = (url: string) => {
     setBackgroundUrl(url);
+
+    // localStorage.setItem('background', JSON.stringify(url));
   };
 
   const handlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
