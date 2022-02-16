@@ -32,7 +32,7 @@
     0 0 0 1px hsla(0, 0%, 0%, 0.1);
 }
 
-:xroot {
+.dark {
   --theme-content-color: #{$oc-gray-9};
   --theme-panel-color: #{$oc-gray-8};
   --theme-divider-color: #{$oc-gray-7};

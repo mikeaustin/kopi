@@ -25,8 +25,9 @@ const Calendar = () => {
       <View background="theme-panel">
         <Spacer size="medium" />
         <View horizontal horizontalPadding="medium" alignItems="center">
-          <Text fontSize="large" fontWeight="light">
-            {today.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+          <Text fontSize="large">
+            <Text fontWeight="medium">{today.toLocaleDateString(undefined, { month: 'long' })}</Text>{' '}
+            <Text fontWeight="light">{today.toLocaleDateString(undefined, { year: 'numeric' })}</Text>
           </Text>
           <Spacer flex size="medium" />
           <Button size="xsmall" title={<ArrowLeftIcon style={{ height: 10 }} /> as any} solid rounded />

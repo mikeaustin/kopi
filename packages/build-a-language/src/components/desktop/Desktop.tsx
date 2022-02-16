@@ -26,9 +26,11 @@ const DesktopContext = React.createContext<{
 } | null>(null);
 
 const Desktop = ({
-  children
+  children,
+  className,
 }: {
   children: React.ReactElement<WindowProps> | React.ReactElement<WindowProps>[];
+  className?: string;
 }) => {
   console.log('Desktop()');
 
@@ -100,7 +102,7 @@ const Desktop = ({
   }), [handleAddWindow]);
 
   return (
-    <View flex style={{ background: `center / cover url(${backgroundUrl})` }}>
+    <View flex className={className} style={{ background: `center / cover url(${backgroundUrl})` }}>
       <DesktopContext.Provider value={desktopContextValue}>
         <View horizontal background="theme-content" alignItems="center" dropShadow>
           <MenuBar />

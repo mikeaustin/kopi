@@ -22,22 +22,16 @@ import styles from './App.module.scss';
 
 function App() {
   return (
-    <View className={styles.App}>
+    <View horizontal className={styles.App}>
       <Desktop>
         <Window title="About" padding="large">
           <Text style={{ whiteSpace: 'nowrap' }}>React Desktop — 2022 Mike Austin</Text>
         </Window>
-        {/* <Window
-            title="Tutorial: Learn to Code"
-            style={{
-              left: 8,
-              top: 8,
-              width: Math.min(window.innerWidth - 16, 1920),
-              height: Math.min(window.innerHeight - 16 - 47, 1080),
-            }}
-          >
-            <LearnToCodeTutorial />
-          </Window> */}
+      </Desktop>
+      <Desktop className={styles.dark}>
+        <Window title="About" padding="large">
+          <Text style={{ whiteSpace: 'nowrap' }}>React Desktop — 2022 Mike Austin</Text>
+        </Window>
       </Desktop>
     </View>
   );
