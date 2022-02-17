@@ -110,7 +110,7 @@ const Desktop = ({
   }), [handleAddWindow]);
 
   return (
-    <View flex className={className} style={{ background: `center / cover url(${backgroundUrl})` }}>
+    <View flex className={className} style={{ overflow: 'hidden', background: `center / cover url(${backgroundUrl})` }}>
       <DesktopContext.Provider value={desktopContextValue}>
         <View horizontal background="theme-content" alignItems="center" dropShadow>
           <MenuBar />

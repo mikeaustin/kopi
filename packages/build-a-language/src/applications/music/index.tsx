@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useReducer, useCallback, useContext } from 'react';
+
+import { useNamespacedReducer } from '../../App';
 
 import { View, Text, Image, Spacer, Divider, List, Slider, Scroller } from '../../components';
 import { ReactComponent as HeartIcon } from './heart-svgrepo-com.svg';
@@ -101,6 +103,30 @@ const songs = [
   { title: 'Dreams', length: '3:30', artist: 'Benjamin Tissot — www.bensound.com', uri: './audio/bensound-dreams.mp3' },
 ];
 
+/*
+  useState('selectedSongIndex')
+*/
+
+// const AppContext = React.createContext(null);
+
+type MusicPlayerState = {
+  selectedSongIndex: number;
+};
+
+type MusicPlayerAction = (state: MusicPlayerState) => MusicPlayerState;
+
+const reducer = (state: MusicPlayerState, action: MusicPlayerAction): MusicPlayerState => {
+  return action(state);
+
+  return {
+    selectedSongIndex: 1,
+  };
+};
+
+const setSelectedSongIndex2 = (selectedSongIndex: number) => (state: MusicPlayerState) => ({ ...state, selectedSongIndex });
+
+const initialState = { selectedSongIndex: -1 };
+
 const Music = () => {
   const audioElementRef = useRef<HTMLAudioElement>();
 
@@ -110,6 +136,13 @@ const Music = () => {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const [state, dispatch] = useNamespacedReducer('app.musicplayer', reducer, initialState);
+
+  useEffect(() => {
+    // console.log('here');
+    dispatch(setSelectedSongIndex2(1));
+  }, [dispatch]);
 
   const handleSongSelect = (index: number) => {
     setSelectedSongIndex(index);
