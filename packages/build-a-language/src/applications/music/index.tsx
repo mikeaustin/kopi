@@ -144,6 +144,8 @@ const Music = () => {
     dispatch(setSelectedSongIndex2(1));
   }, [dispatch]);
 
+  console.log('state', state);
+
   const handleSongSelect = (index: number) => {
     setSelectedSongIndex(index);
   };

@@ -17,7 +17,11 @@ type State = {
 
 type Action = {
   type: 'setState',
-  payload: { namespace: string; reducer: any; action: any; },
+  payload: {
+    namespace: string;
+    reducer: React.Reducer<any, any>;
+    action: React.ReducerAction<React.Reducer<any, any>>;
+  },
 };
 
 const AppContext = React.createContext<{
@@ -25,7 +29,7 @@ const AppContext = React.createContext<{
   dispatch: React.Dispatch<Action>;
 } | null>(null);
 
-const useNamespacedReducer = <TState, TAction>(
+const useNamespacedReducer = <TState, TAction extends React.ReducerAction<React.Reducer<TState, any>>>(
   namespace: string,
   reducer: React.Reducer<TState, TAction>,
   initialState: TState
@@ -45,20 +49,18 @@ const useNamespacedReducer = <TState, TAction>(
     }
   }, [dispatch, namespace, reducer]);
 
-  const x = useMemo(() => {
-    console.log('here');
-
+  const result = useMemo(() => {
     if (state) {
       return [
-        state[namespace],
+        state[namespace] || initialState,
         hookDspatch,
       ];
     }
 
     return [];
-  }, [hookDspatch, namespace, state]);
+  }, [hookDspatch, initialState, namespace, state]);
 
-  return x;
+  return result;
 };
 
 const reducer = (state: State, action: Action) => {
