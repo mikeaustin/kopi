@@ -115,7 +115,7 @@ function getElementOffsets(windowElement: HTMLElement) {
 
 interface WindowProps {
   title?: string,
-  config: { width: number, height: number; };
+  config: { left: number, top: number, width: number, height: number; };
   children?: React.ReactNode,
 }
 
@@ -129,11 +129,13 @@ function Window({
   const initialPointerRef = useRef<{ clientX: number, clientY: number; } | null>(null);
   const initialWindowRectRef = useRef<DOMRect>();
 
+  //
+
   const handleTitlePointerDown = (event: React.PointerEvent) => {
     event.currentTarget.setPointerCapture(event.pointerId);
     event.preventDefault();
 
-    if (windowElementRef.current && windowElementRef.current.parentElement) {
+    if (windowElementRef.current) {
       initialPointerRef.current = { clientX: event.nativeEvent.clientX, clientY: event.nativeEvent.clientY };
       initialWindowRectRef.current = getElementOffsets(windowElementRef.current);
     }
@@ -153,12 +155,16 @@ function Window({
     initialPointerRef.current = null;
   };
 
+  //
+
   useEffect(() => {
     if (windowElementRef.current) {
+      windowElementRef.current.style.left = `${config.left}px`;
+      windowElementRef.current.style.top = `${config.top}px`;
       windowElementRef.current.style.width = `${config.width}px`;
       windowElementRef.current.style.height = `${config.height}px`;
     }
-  }, [config.height, config.width]);
+  }, [config.left, config.top, config.height, config.width]);
 
   const windowClassName = clsx(
     styles.Window,
@@ -173,17 +179,17 @@ function Window({
       </View>
       <View fill className={styles.innerView}>
         <View
-          style={{ cursor: 'pointer', background: '#dee2e6', position: 'relative' }}
+          style={{ cursor: 'pointer', background: '#dee2e6' }}
           onPointerDown={handleTitlePointerDown}
           onPointerMove={handleTitlePointerMove}
           onPointerUp={handleTitlePointerUp}
         >
-          <Text fontWeight="bold" style={{ textAlign: 'center', padding: 5 }}>
+          <Text fontWeight="bold" textColor="gray-8" style={{ textAlign: 'center', padding: 5, paddingTop: 6, marginBottom: -1 }}>
             {title}
           </Text>
         </View>
         <Divider />
-        <View fill style={{ position: 'relative' }}>
+        <View fill>
           {children}
         </View>
       </View>

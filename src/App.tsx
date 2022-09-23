@@ -27,36 +27,54 @@ function Desktop({
   );
 }
 
+const clock = (
+  <View padding="medium">
+    <Text fontWeight="bold">
+      Hello
+      <Text textColor="red-5">
+        World
+      </Text>
+    </Text>
+  </View>
+);
+
+const draw = (
+  <iframe src="https://mike-austin.com/draw-2" style={{ border: 'none', height: '100%' }} />
+);
+
+const movies = (
+  <iframe src="https://bestestmoviesever.com" style={{ border: 'none', height: '100%' }} />
+);
+
+const kopi = (
+  <iframe src="https://mike-austin.com/kopi" style={{ border: 'none', height: '100%' }} />
+);
+
+const gemtask = (
+  <iframe src="https://gemtask.mike-austin.com" style={{ border: 'none', height: '100%' }} />
+);
+
+const language = (
+  <iframe src="https://mike-austin.com/build-a-language" style={{ border: 'none', height: '100%' }} />
+);
+
+const site = (
+  <iframe src="https://mike-austin.com" style={{ border: 'none', height: '100%' }} />
+);
+
 function App() {
   const [windows, setWindows] = useState([
-    {
-      title: 'Clock',
-      width: 200,
-      height: 200,
-      client: (
-        <View padding="medium">
-          <Text fontWeight="bold">
-            Hello
-            <Text textColor="red-5">
-              World
-            </Text>
-          </Text>
-        </View>
-      )
-    },
-    {
-      title: 'Clock',
-      width: 1000,
-      height: 800,
-      client: (
-        <iframe src="https://mike-austin.com/draw-2/" style={{ border: 'none', height: '100%' }} />
-      )
-    }
+    { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
+    { title: 'Movies', left: 1040, top: 20, width: 1000, height: 600, client: movies },
+    { title: 'Kopi', left: 2060, top: 20, width: 1000, height: 600, client: kopi },
+    { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
+    { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
+    { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
   ]);
 
   return (
     <View fill className="App">
-      <Desktop fill backgroundUrl="images/triangles-colorful-green-colors-low-poly-abstract-4748.png">
+      <Desktop fill backgroundUrl="images/653931.jpg">
         {windows.map((window, index) => (
           <Window key={index} title={window.title} config={window}>
             {window.client}
