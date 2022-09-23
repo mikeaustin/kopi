@@ -1,0 +1,12 @@
+.View {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.fill {
+  flex: 1
+}
