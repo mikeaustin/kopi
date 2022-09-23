@@ -111,21 +111,21 @@ const songs = [
 
 type MusicPlayerState = {
   selectedSongIndex: number;
+  someOtherProperty: string;
 };
 
 type MusicPlayerAction = (state: MusicPlayerState) => MusicPlayerState;
 
 const reducer = (state: MusicPlayerState, action: MusicPlayerAction): MusicPlayerState => {
   return action(state);
-
-  return {
-    selectedSongIndex: 1,
-  };
 };
 
-const setSelectedSongIndex2 = (selectedSongIndex: number) => (state: MusicPlayerState) => ({ ...state, selectedSongIndex });
+const updateState = (args: Partial<MusicPlayerState>) => (state: any) => ({ ...state, ...args });
 
-const initialState = { selectedSongIndex: -1 };
+const setSelectedSongIndex2 = (selectedSongIndex: number) => (state: MusicPlayerState) => ({ ...state, selectedSongIndex });
+const setSelectedSongIndex3 = (selectedSongIndex: number) => updateState({ selectedSongIndex });
+
+const initialState = { selectedSongIndex: -1, someOtherProperty: 'foo' };
 
 const Music = () => {
   const audioElementRef = useRef<HTMLAudioElement>();
@@ -139,15 +139,17 @@ const Music = () => {
 
   const [state, dispatch] = useNamespacedReducer('app.musicplayer', reducer, initialState);
 
-  useEffect(() => {
-    // console.log('here');
-    dispatch(setSelectedSongIndex2(1));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // console.log('here');
+  //   dispatch(setSelectedSongIndex3(1));
+  // }, [dispatch]);
 
   console.log('state', state);
 
   const handleSongSelect = (index: number) => {
     setSelectedSongIndex(index);
+
+    dispatch(setSelectedSongIndex3(index));
   };
 
   const handleSongSelectAndPlay = (index: number) => {
@@ -228,7 +230,8 @@ const Music = () => {
                 artist={song.artist}
                 length={song.length}
                 index={index}
-                selected={index === selectedSongIndex}
+                // selected={index === selectedSongIndex}
+                selected={index === state.selectedSongIndex}
                 isPlaying={index === activeSongIndex}
                 onSongSelect={handleSongSelect}
                 onSongSelectAndPlay={handleSongSelectAndPlay}
