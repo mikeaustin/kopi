@@ -28,14 +28,7 @@ function Desktop({
 }
 
 const clock = (
-  <View padding="medium">
-    <Text fontWeight="bold">
-      Hello
-      <Text textColor="red-5">
-        World
-      </Text>
-    </Text>
-  </View>
+  <iframe src="clients/clock" style={{ border: 'none', height: '100%' }} />
 );
 
 const draw = (
@@ -70,6 +63,7 @@ function App() {
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
+    { title: 'Clock', left: 20, top: 20, width: 300, height: 300, client: clock },
   ]);
 
   return (
