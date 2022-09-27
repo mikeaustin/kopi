@@ -1,25 +1,14 @@
 import React, { useContext } from 'react';
 import clsx from 'clsx';
-import { createUseStyles } from 'react-jss';
 
-// import useStyles from './styles.js';
+import { useStyles } from './styles.js';
 import { useTextColorStyles } from '../../styles/textColorStyles.js';
 import { useFontWeightStyles } from '../../styles/fontWeightStyles.js';
 
 import TextContext from './TextContext.js';
-import type Color from '../../types/Color.js';
-import type Weight from '../../types/Weight.js';
 
-const useStyles = createUseStyles({
-  Text: {
-    display: 'block',
-    fontSize: 14,
-    lineHeight: '20px',
-  },
-  textParent: {
-    display: 'inline',
-  }
-});
+import Color from '../../types/Color.js';
+import Weight from '../../types/Weight.js';
 
 type Child<TProps> = string | number | React.ReactElement<TProps>;
 
@@ -46,7 +35,7 @@ function Text({
     (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
   );
-  console.log(textColor);
+
   return (
     <TextContext.Provider value={true}>
       <span className={textClassName} {...props}>

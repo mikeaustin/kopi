@@ -4,9 +4,8 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   Button: {
     appearance: 'none',
-    // background: OpenColor.blue[5],
     border: 'none',
-    padding: '6px 16px',
+    padding: '5px 12px',
     borderRadius: 2.5,
   }
 });

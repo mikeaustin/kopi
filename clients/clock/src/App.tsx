@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { View, Text, Button, Stack } from 'core';
+import { View, Text, Button, Stack, Spacer } from 'core';
 
 import './App.css';
 
 function App() {
   return (
     <View className="App">
-      <Stack horizontal divider padding="small" spacing="small">
+      <Stack horizontal divider padding="medium" spacing="medium">
         <Stack>
           <Text>Large</Text>
           <Text>Large</Text>

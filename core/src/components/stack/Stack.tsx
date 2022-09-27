@@ -4,9 +4,11 @@ import View from '../view/index.js';
 import Divider from '../divider/index.js';
 import Spacer from '../spacer/index.js';
 
+import Spacing from '../../types/Spacing.js';
+
 interface StackProps extends React.ComponentProps<typeof View> {
   divider?: boolean,
-  spacing?: 'small',
+  spacing?: Spacing,
 }
 
 const Stack = ({

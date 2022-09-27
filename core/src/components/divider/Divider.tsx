@@ -1,8 +1,10 @@
 import View from '../view/index.js';
 import Spacer from '../spacer/index.js';
 
+import Spacing from '../../types/Spacing.js';
+
 interface DividerProps extends React.ComponentProps<typeof View> {
-  spacing?: 'small',
+  spacing?: Spacing,
 }
 
 const Divider = ({
