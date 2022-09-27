@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
+
+import { View, Text, Button, Stack } from 'core';
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <View className="App">
+      <Stack horizontal padding="small">
+        <Stack>
+          <Text>Large</Text>
+          <Text>Large</Text>
+          <Text>Large</Text>
+        </Stack>
+        <Stack>
+          <Button title="Hello World" />
+        </Stack>
+      </Stack>
+    </View>
   );
 }
 

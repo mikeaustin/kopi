@@ -57,7 +57,7 @@ const site = (
 
 function App() {
   const [windows, setWindows] = useState([
-    { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
+    // { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
     // { title: 'Movies', left: 1040, top: 20, width: 1000, height: 600, client: movies },
     // { title: 'Kopi', left: 2060, top: 20, width: 1000, height: 600, client: kopi },
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
