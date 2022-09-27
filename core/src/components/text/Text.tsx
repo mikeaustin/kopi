@@ -1,18 +1,23 @@
 import React, { useContext } from 'react';
 import clsx from 'clsx';
+import { createUseStyles } from 'react-jss';
 
-import OpenColor from 'open-color';
-
-import { StyleSheet } from '../../utils/StyleUtils.js';
+// import useStyles from './styles.js';
+import { useTextColorStyles } from '../../styles/textColorStyles.js';
+import { useFontWeightStyles } from '../../styles/fontWeightStyles.js';
 
 import TextContext from './TextContext.js';
 import type Color from '../../types/Color.js';
+import type Weight from '../../types/Weight.js';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
   Text: {
     display: 'block',
     fontSize: 14,
-    lineheight: 20,
+    lineHeight: '20px',
+  },
+  textParent: {
+    display: 'inline',
   }
 });
 
@@ -20,7 +25,7 @@ type Child<TProps> = string | number | React.ReactElement<TProps>;
 
 interface TextProps extends React.ComponentProps<'span'> {
   textColor?: Color,
-  fontWeight?: 'bold',
+  fontWeight?: Weight,
   children?: Child<TextProps> | Child<TextProps>[],
 }
 
@@ -31,13 +36,17 @@ function Text({
   ...props
 }: TextProps) {
   const isTextParent = useContext(TextContext);
+  const styles = useStyles();
+  const textColorStyles = useTextColorStyles();
+  const fontWeightStyles = useFontWeightStyles();
+
   const textClassName = clsx(
     styles.Text,
     isTextParent && styles.textParent,
-    (textColor && styles[textColor]) ?? (!isTextParent && styles.black),
-    (fontWeight && styles[fontWeight]) ?? (!isTextParent && styles.normal),
+    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
+    (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
   );
-
+  console.log(textColor);
   return (
     <TextContext.Provider value={true}>
       <span className={textClassName} {...props}>

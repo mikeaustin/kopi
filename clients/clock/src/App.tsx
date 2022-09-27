@@ -7,7 +7,7 @@ import './App.css';
 function App() {
   return (
     <View className="App">
-      <Stack horizontal padding="small">
+      <Stack horizontal divider padding="small" spacing="small">
         <Stack>
           <Text>Large</Text>
           <Text>Large</Text>

@@ -15,7 +15,7 @@ const Button = ({
 
   return (
     <View fillColor="blue-5" className={styles.Button} {...props}>
-      <Text>{title}</Text>
+      <Text fontWeight="bold" textColor="white">{title}</Text>
     </View>
   );
 };
