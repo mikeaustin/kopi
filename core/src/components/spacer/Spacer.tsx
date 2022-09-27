@@ -8,13 +8,16 @@ import { useSpacingStyles } from '../../styles/spacingStyles.js';
 import ViewContext from '../view/ViewContext.js';
 
 import Spacing from '../../types/Spacing';
+import Color from '../../types/Color';
 
 interface SpacerProps extends React.ComponentProps<typeof View> {
   size: Spacing,
+  color?: Color,
 }
 
 const Spacer = ({
   size,
+  color,
   ...props
 }: SpacerProps) => {
   const { isHorizontal } = useContext(ViewContext);
@@ -25,7 +28,7 @@ const Spacer = ({
   );
 
   return (
-    <View className={spacerClassName} {...props} />
+    <View fillColor={color} className={spacerClassName} {...props} />
   );
 };
 

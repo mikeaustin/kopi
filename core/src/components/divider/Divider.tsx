@@ -14,7 +14,7 @@ const Divider = ({
   return (
     <>
       {spacing && <Spacer size={spacing} />}
-      <View fillColor="gray-5" style={{ minHeight: 1, minWidth: 1 }} {...props} />
+      <View fillColor="gray-3" style={{ minHeight: 1, minWidth: 1 }} {...props} />
       {spacing && <Spacer size={spacing} />}
     </>
   );

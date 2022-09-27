@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useRef, useContext, useLayoutEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import { useStyles } from './styles.js';
-import { useTextColorStyles } from '../../styles/textColorStyles.js';
+import { useFontSizeStyles } from '../../styles/fontSizeStyles.js';
 import { useFontWeightStyles } from '../../styles/fontWeightStyles.js';
+import { useTextColorStyles } from '../../styles/textColorStyles.js';
 
 import TextContext from './TextContext.js';
 
@@ -12,33 +13,56 @@ import Weight from '../../types/Weight.js';
 
 type Child<TProps> = string | number | React.ReactElement<TProps>;
 
+type Size = 'xsmall' | 'small' | 'default' | 'medium' | 'large' | 'xlarge';
+
 interface TextProps extends React.ComponentProps<'span'> {
+  flex?: boolean,
+  contain?: boolean,
+  fontSize?: Size,
   textColor?: Color,
   fontWeight?: Weight,
   children?: Child<TextProps> | Child<TextProps>[],
 }
 
 function Text({
+  flex,
+  contain,
+  fontSize,
   textColor,
   fontWeight,
   children,
   ...props
 }: TextProps) {
   const isTextParent = useContext(TextContext);
+  const [isHidden, setIsHidden] = useState(contain);
+  const textElementRef = useRef<HTMLElement>(null);
+
   const styles = useStyles();
-  const textColorStyles = useTextColorStyles();
+  const fontSizeStyles = useFontSizeStyles();
   const fontWeightStyles = useFontWeightStyles();
+  const textColorStyles = useTextColorStyles();
+
+  useLayoutEffect(() => {
+    if (contain && textElementRef.current) {
+      textElementRef.current.style.width = `${textElementRef.current.parentElement?.offsetWidth}px`;
+    }
+
+    setIsHidden(false);
+  }, [contain]);
 
   const textClassName = clsx(
     styles.Text,
     isTextParent && styles.textParent,
-    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
+    flex && styles.flex,
+    isHidden && styles.hidden,
+    (fontSize && fontSizeStyles[fontSize]) ?? (!isTextParent && fontSizeStyles.default),
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
+    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
   );
 
   return (
     <TextContext.Provider value={true}>
-      <span className={textClassName} {...props}>
+      <span ref={textElementRef} className={textClassName} {...props}>
         {children}
       </span>
     </TextContext.Provider>

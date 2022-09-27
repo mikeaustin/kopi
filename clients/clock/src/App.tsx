@@ -6,15 +6,37 @@ import './App.css';
 
 function App() {
   return (
-    <View className="App">
-      <Stack horizontal divider padding="medium" spacing="medium">
-        <Stack>
-          <Text>Large</Text>
-          <Text>Large</Text>
-          <Text>Large</Text>
+    <View horizontal className="App">
+      <Stack divider padding="medium" spacing="medium">
+        <Stack horizontal divider spacing="medium">
+          <Stack spacing="small" spacingColor="gray-1">
+            <Text fontSize="xlarge">XLarge (32px)</Text>
+            <Text fontSize="large">Large (24px)</Text>
+            <Text fontSize="medium">Medium (18px)</Text>
+            <Text>Default (14px)</Text>
+            <Text fontSize="small">Small (12px)</Text>
+            <Text fontSize="xsmall">XSmall (11px)</Text>
+          </Stack>
+          <Stack>
+            <Button title="Hello World" />
+          </Stack>
         </Stack>
-        <Stack>
-          <Button title="Hello World" />
+        <Text contain>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur.
+        </Text>
+        <Stack horizontal spacing="medium">
+          <Text fontSize="large" style={{ width: 250 }}>
+            Lorem ipsum dolor sit amet, consectetur…
+          </Text>
+          <Text fontSize="medium" style={{ width: 250 }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing…
+          </Text>
+          <Text style={{ width: 250 }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do…
+          </Text>
         </Stack>
       </Stack>
     </View>

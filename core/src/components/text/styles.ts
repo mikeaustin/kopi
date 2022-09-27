@@ -8,6 +8,12 @@ const useStyles = createUseStyles({
   },
   textParent: {
     display: 'inline',
+  },
+  flex: {
+    flex: 1,
+  },
+  hidden: {
+    display: 'none',
   }
 });
 
