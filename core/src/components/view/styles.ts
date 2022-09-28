@@ -4,6 +4,7 @@ const useStyles = createUseStyles({
   View: {
     display: 'flex',
     flexDirection: 'column',
+    boxSizing: 'border-box',
   },
   horizontal: {
     flexDirection: 'row',

@@ -68,6 +68,9 @@ const blue = {
 };
 
 const useFillColorStyles = createUseStyles({
+  'transparent': {
+    background: 'transparent'
+  },
   'black': {
     background: OpenColor.black
   },

@@ -62,7 +62,7 @@ function Text({
     isHidden && styles.hidden,
     (fontSize && fontSizeStyles[fontSize]) ?? (!isTextParent && fontSizeStyles.default),
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
-    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
+    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles['gray-8']),
     textAlign && styles[textAlign],
   );
 

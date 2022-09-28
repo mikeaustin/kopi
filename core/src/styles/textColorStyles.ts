@@ -68,6 +68,9 @@ const blue = {
 };
 
 const useTextColorStyles = createUseStyles({
+  'transparent': {
+    background: 'transparent'
+  },
   'black': {
     color: OpenColor.black
   },

@@ -1,3 +1,5 @@
+type Transparent = 'transparent';
+
 type White = 'white';
 type Black = 'black';
 
@@ -38,6 +40,7 @@ type Blue =
   | 'blue-9';
 
 type Color =
+  | Transparent
   | White
   | Black
   | Gray

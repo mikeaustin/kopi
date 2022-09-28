@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import View from '../view/index.js';
 import clsx from 'clsx';
 
+import { useStyles } from './style.js';
 import { useSpacingStyles } from '../../styles/spacingStyles.js';
 
 import ViewContext from '../view/ViewContext.js';
@@ -21,11 +22,12 @@ const Spacer = ({
   ...props
 }: SpacerProps) => {
   const { isHorizontal } = useContext(ViewContext);
+  const styles = useStyles();
   const spacingStyles = useSpacingStyles();
 
   const spacerClassName = clsx(
+    styles.Spacer,
     spacingStyles[`${isHorizontal ? 'horizontal-' : ''}${size}`],
-    // spacingStyles[size],
   );
 
   return (

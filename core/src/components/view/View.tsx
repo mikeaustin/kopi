@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import useStyles from './styles.js';
+import { useBorderColorStyles } from '../../styles/borderColorStyles.js';
 import { useAlignVerticalStyles, useAlignHorizontalStyles } from '../../styles/alignStyles.js';
 import { usePaddingVerticalStyles, usePaddingHorizontalStyles } from '../../styles/paddingStyles.js';
 import useFillColorStyles from '../../styles/fillColorStyles.js';
@@ -64,21 +65,27 @@ function alignToStyle(align: ShorthandAlign | undefined): [Align | undefined, Al
 }
 
 interface ViewProps extends React.ComponentProps<'div'> {
+  as?: React.ElementType,
   flex?: boolean,
   horizontal?: boolean,
   align?: 'center',
   fillColor?: Color,
   padding?: CombinedPadding,
+  border?: boolean,
+  borderColor?: Color,
   className?: string,
   children?: React.ReactNode,
 }
 
 const View = ({
+  as: Component = 'div',
   flex,
   horizontal,
   align,
   fillColor,
   padding,
+  border,
+  borderColor,
   className,
   children,
   ...props
@@ -86,6 +93,7 @@ const View = ({
   ref: React.Ref<HTMLDivElement>
 ) => {
   const styles = useStyles();
+  const borderColorStyles = useBorderColorStyles();
   const alignVerticalStyles = useAlignVerticalStyles();
   const alignHorizontalStyles = useAlignHorizontalStyles();
   const paddingVerticalStyles = usePaddingVerticalStyles();
@@ -100,6 +108,7 @@ const View = ({
     flex && styles.flex,
     horizontal && styles.horizontal,
     fillColor && fillColorStyles[fillColor],
+    border && borderColorStyles[borderColor ?? 'gray-3'],
     alignVertical && alignVerticalStyles[alignVertical],
     alignHorizontal && alignHorizontalStyles[alignHorizontal],
     paddingVertical && paddingVerticalStyles[paddingVertical],
@@ -109,9 +118,9 @@ const View = ({
 
   return (
     <ViewContext.Provider value={{ isHorizontal: horizontal ?? false }}>
-      <div ref={ref} className={viewClassName} {...props}>
+      <Component ref={ref} className={viewClassName} {...props}>
         {children}
-      </div>
+      </Component>
     </ViewContext.Provider>
   );
 };

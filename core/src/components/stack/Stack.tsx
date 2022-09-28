@@ -20,9 +20,9 @@ const Stack = ({
   spacingColor,
   children,
   ...props
-}: StackProps) => {
+}: StackProps, ref: React.Ref<HTMLDivElement>) => {
   return (
-    <View {...props}>
+    <View ref={ref} {...props}>
       {React.Children.map(children, (child, index) => (
         <>
           {divider && index > 0 && (
@@ -38,4 +38,4 @@ const Stack = ({
   );
 };
 
-export default Stack;
+export default React.forwardRef(Stack);

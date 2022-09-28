@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { View, Text } from './components/shared';
 
@@ -55,6 +55,10 @@ const site = (
   <iframe src="https://mike-austin.com" style={{ border: 'none', height: '100%' }} />
 );
 
+const game = (
+  <iframe src="https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U" style={{ border: 'none', height: '100%' }} />
+);
+
 function App() {
   const [windows, setWindows] = useState([
     // { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
@@ -64,7 +68,24 @@ function App() {
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
     { title: 'Clock', left: 20, top: 20, width: 900, height: 450, client: clock },
+    { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
+
+  const handleWindowMessage = (event: MessageEvent) => {
+    if (event.data.type === 'setClientDimensions') {
+      console.log('setClientDimensions', event.data.data);
+
+      // setWindows(windows => windows.map(window => ({
+      //   ...window,
+      //   width: event.data.data.width,
+      //   height: event.data.data.height,
+      // })));
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', handleWindowMessage);
+  }, []);
 
   return (
     <View fill className="App">
