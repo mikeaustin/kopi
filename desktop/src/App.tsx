@@ -63,7 +63,7 @@ function App() {
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
-    { title: 'Clock', left: 20, top: 20, width: 300, height: 300, client: clock },
+    { title: 'Clock', left: 20, top: 20, width: 900, height: 450, client: clock },
   ]);
 
   return (

@@ -68,8 +68,12 @@ const blue = {
 };
 
 const useFillColorStyles = createUseStyles({
-  'black': OpenColor.black,
-  'white': OpenColor.white,
+  'black': {
+    background: OpenColor.black
+  },
+  'white': {
+    background: OpenColor.white
+  },
   ...gray,
   ...blue,
 });

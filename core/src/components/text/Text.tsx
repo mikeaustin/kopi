@@ -18,18 +18,22 @@ type Size = 'xsmall' | 'small' | 'default' | 'medium' | 'large' | 'xlarge';
 interface TextProps extends React.ComponentProps<'span'> {
   flex?: boolean,
   contain?: boolean,
+  light?: boolean,
   fontSize?: Size,
-  textColor?: Color,
   fontWeight?: Weight,
+  textColor?: Color,
+  textAlign?: 'center',
   children?: Child<TextProps> | Child<TextProps>[],
 }
 
 function Text({
   flex,
   contain,
+  light,
   fontSize,
-  textColor,
   fontWeight,
+  textColor,
+  textAlign,
   children,
   ...props
 }: TextProps) {
@@ -54,10 +58,12 @@ function Text({
     styles.Text,
     isTextParent && styles.textParent,
     flex && styles.flex,
+    light && styles.light,
     isHidden && styles.hidden,
     (fontSize && fontSizeStyles[fontSize]) ?? (!isTextParent && fontSizeStyles.default),
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
     (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles.black),
+    textAlign && styles[textAlign],
   );
 
   return (

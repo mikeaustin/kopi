@@ -2,46 +2,60 @@ import { createUseStyles } from 'react-jss';
 
 const useSpacingStyles = createUseStyles({
   xxsmall: {
-    height: 2.5,
+    minHeight: 2.5,
+    alignSelf: 'stretch'
   },
   xsmall: {
-    height: 5,
+    minHeight: 5,
+    alignSelf: 'stretch'
   },
   small: {
-    height: 10,
+    minHeight: 10,
+    alignSelf: 'stretch'
   },
   medium: {
-    height: 15,
+    minHeight: 15,
+    alignSelf: 'stretch'
   },
   large: {
-    height: 20,
+    minHeight: 20,
+    alignSelf: 'stretch'
   },
   xlarge: {
-    height: 25,
+    minHeight: 25,
+    alignSelf: 'stretch'
   },
   xxlarge: {
-    height: 30,
+    minHeight: 30,
+    alignSelf: 'stretch'
   },
   'horizontal-xxsmall': {
-    width: 2.5,
+    minWidth: 2.5,
+    alignSelf: 'stretch'
   },
   'horizontal-xsmall': {
-    width: 5,
+    minWidth: 5,
+    alignSelf: 'stretch'
   },
   'horizontal-small': {
-    width: 10,
+    minWidth: 10,
+    alignSelf: 'stretch'
   },
   'horizontal-medium': {
-    width: 15,
+    minWidth: 15,
+    alignSelf: 'stretch'
   },
   'horizontal-large': {
-    width: 20,
+    minWidth: 20,
+    alignSelf: 'stretch'
   },
   'horizontal-xlarge': {
-    width: 25,
+    minWidth: 25,
+    alignSelf: 'stretch'
   },
   'horizontal-xxlarge': {
-    width: 30,
+    minWidth: 30,
+    alignSelf: 'stretch'
   },
 });
 

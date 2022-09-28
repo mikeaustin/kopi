@@ -25,6 +25,7 @@ const Spacer = ({
 
   const spacerClassName = clsx(
     spacingStyles[`${isHorizontal ? 'horizontal-' : ''}${size}`],
+    // spacingStyles[size],
   );
 
   return (

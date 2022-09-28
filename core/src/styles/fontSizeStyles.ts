@@ -12,7 +12,7 @@ const useFontSizeStyles = createUseStyles({
   'default': {
     fontSize: 14,
     lineHeight: '20px',
-    margin: '-6px 0 -4px 0',
+    margin: '-4px 0 -4px 0',
   },
   'medium': {
     fontSize: 18,

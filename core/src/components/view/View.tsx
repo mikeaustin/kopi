@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import useStyles from './styles.js';
+import { useAlignVerticalStyles, useAlignHorizontalStyles } from '../../styles/alignStyles.js';
 import { usePaddingVerticalStyles, usePaddingHorizontalStyles } from '../../styles/paddingStyles.js';
 import useFillColorStyles from '../../styles/fillColorStyles.js';
 
@@ -29,9 +30,43 @@ function paddingToStyle(padding: CombinedPadding | undefined): [Padding | undefi
   }
 }
 
+type ShorthandAlign =
+  | 'top left' | 'top' | 'top right'
+  | 'left' | 'center' | 'right'
+  | 'bottom left' | 'bottom' | 'bottom right'
+  ;
+
+type Align = 'start' | 'center' | 'end';
+
+function alignToStyle(align: ShorthandAlign | undefined): [Align | undefined, Align | undefined] {
+  switch (align) {
+    case 'top left':
+      return ['start', 'start'];
+    case 'top':
+      return ['start', 'center'];
+    case 'top right':
+      return ['start', 'end'];
+    case 'left':
+      return ['center', 'start'];
+    case 'center':
+      return ['center', 'center'];
+    case 'right':
+      return ['center', 'end'];
+    case 'bottom left':
+      return ['end', 'start'];
+    case 'bottom':
+      return ['end', 'center'];
+    case 'bottom right':
+      return ['end', 'end'];
+    default:
+      return [undefined, undefined];
+  }
+}
+
 interface ViewProps extends React.ComponentProps<'div'> {
   flex?: boolean,
   horizontal?: boolean,
+  align?: 'center',
   fillColor?: Color,
   padding?: CombinedPadding,
   className?: string,
@@ -41,6 +76,7 @@ interface ViewProps extends React.ComponentProps<'div'> {
 const View = ({
   flex,
   horizontal,
+  align,
   fillColor,
   padding,
   className,
@@ -50,17 +86,22 @@ const View = ({
   ref: React.Ref<HTMLDivElement>
 ) => {
   const styles = useStyles();
+  const alignVerticalStyles = useAlignVerticalStyles();
+  const alignHorizontalStyles = useAlignHorizontalStyles();
   const paddingVerticalStyles = usePaddingVerticalStyles();
   const paddingHorizontalStyles = usePaddingHorizontalStyles();
   const fillColorStyles = useFillColorStyles();
 
   const [paddingVertical, paddingHorizontal] = paddingToStyle(padding);
+  const [alignVertical, alignHorizontal] = alignToStyle(align);
 
   const viewClassName = clsx(
     styles.View,
     flex && styles.flex,
     horizontal && styles.horizontal,
     fillColor && fillColorStyles[fillColor],
+    alignVertical && alignVerticalStyles[alignVertical],
+    alignHorizontal && alignHorizontalStyles[alignHorizontal],
     paddingVertical && paddingVerticalStyles[paddingVertical],
     paddingHorizontal && paddingHorizontalStyles[paddingHorizontal],
     className,

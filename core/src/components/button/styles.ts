@@ -5,7 +5,7 @@ const useStyles = createUseStyles({
   Button: {
     appearance: 'none',
     border: 'none',
-    padding: '5px 12px',
+    padding: '9px 12px',
     borderRadius: 2.5,
   }
 });

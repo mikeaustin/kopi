@@ -6,16 +6,26 @@ import './App.css';
 
 function App() {
   return (
-    <View horizontal className="App">
+    <View horizontal fillColor="white" className="App">
       <Stack divider padding="medium" spacing="medium">
         <Stack horizontal divider spacing="medium">
-          <Stack spacing="small" spacingColor="gray-1">
+          <Stack spacing="small" spacingColor="gray-1" align="center">
             <Text fontSize="xlarge">XLarge (32px)</Text>
             <Text fontSize="large">Large (24px)</Text>
             <Text fontSize="medium">Medium (18px)</Text>
             <Text>Default (14px)</Text>
             <Text fontSize="small">Small (12px)</Text>
             <Text fontSize="xsmall">XSmall (11px)</Text>
+            <Stack horizontal spacing="small">
+              <Text fontWeight="light">Light</Text>
+              <Text>Normal</Text>
+              <Text fontWeight="medium">Medium</Text>
+              <Text fontWeight="semi-bold">Semi-Bold</Text>
+              <Text fontWeight="bold">Bold</Text>
+            </Stack>
+            <Stack horizontal spacing="small">
+              <Text light>Light</Text>
+            </Stack>
           </Stack>
           <Stack>
             <Button title="Hello World" />

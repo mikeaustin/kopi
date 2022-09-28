@@ -12,8 +12,14 @@ const useStyles = createUseStyles({
   flex: {
     flex: 1,
   },
+  light: {
+    opacity: 0.5,
+  },
   hidden: {
     display: 'none',
+  },
+  center: {
+    textAlign: 'center',
   }
 });
 
