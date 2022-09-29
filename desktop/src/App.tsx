@@ -68,7 +68,7 @@ function App() {
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
     { title: 'Clock', left: 20, top: 20, width: 900, height: 450, client: clock },
-    { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
+    // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
 
   const handleWindowMessage = (event: MessageEvent) => {
