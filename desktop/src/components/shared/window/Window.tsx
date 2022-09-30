@@ -114,12 +114,18 @@ function getElementOffsets(windowElement: HTMLElement) {
 }
 
 interface WindowProps {
+  id: string,
+  src: string,
+  order: number,
   title?: string,
-  config: { left: number, top: number, width: number, height: number; };
+  config: { left: number, top: number, width: number, height: number; },
   children?: React.ReactNode,
 }
 
 function Window({
+  id,
+  src,
+  order,
   title,
   config,
   children,
@@ -155,6 +161,10 @@ function Window({
     initialPointerRef.current = null;
   };
 
+  const handleWindowPointerDown = () => {
+    console.log('handleWindowPointerDown');
+  };
+
   //
 
   useEffect(() => {
@@ -171,8 +181,8 @@ function Window({
   );
 
   return (
-    <View ref={windowElementRef} className={windowClassName}>
-      <View style={{ position: 'absolute', top: -10, right: -10, bottom: -10, left: -10 }}>
+    <View ref={windowElementRef} className={windowClassName} style={{ zIndex: order }} onPointerDown={handleWindowPointerDown}>
+      <View style={{ position: 'absolute', inset: -10 }}>
         <Handle align="top-left" /><Handle align="top" /><Handle align="top-right" />
         <Handle align="left" /><Handle align="right" />
         <Handle align="bottom-left" /><Handle align="bottom" /><Handle align="bottom-right" />
@@ -190,7 +200,7 @@ function Window({
         </View>
         <Divider />
         <View fill>
-          {children}
+          <iframe src={`${src}?id=${id}`} style={{ border: 'none', height: '100%' }} />
         </View>
       </View>
     </View>

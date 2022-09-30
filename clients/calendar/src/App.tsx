@@ -14,10 +14,19 @@ const headerTextProps: React.ComponentProps<typeof Text> = {
 };
 
 function App() {
+  const handleAppPointerDown = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    window.parent.postMessage({
+      type: 'bringWindowToTop',
+      id: searchParams.get('id'),
+    });
+  };
+
   const days = Array.from({ length: 30 }, (_, index) => index + 1);
 
   return (
-    <View fillColor="white" className="App">
+    <View fillColor="white" className="App" onPointerDown={handleAppPointerDown}>
       <View padding="medium" fillColor="gray-1">
         <View horizontal style={{ alignItems: 'center' }}>
           <Text fontSize="large">September</Text>

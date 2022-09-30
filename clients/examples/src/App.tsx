@@ -7,6 +7,17 @@ import './App.css';
 function App() {
   const appElementRef = useRef<HTMLDivElement>(null);
 
+  const handleAppPointerDown = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    console.log(searchParams.get('id'));
+
+    window.parent.postMessage({
+      type: 'bringWindowToTop',
+      id: searchParams.get('id'),
+    });
+  };
+
   useEffect(() => {
     setTimeout(() => {
       if (appElementRef.current) {
@@ -24,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <View fillColor="white" className="App">
+    <View fillColor="white" className="App" onPointerDown={handleAppPointerDown}>
       <View horizontal>
         <Stack ref={appElementRef} divider padding="medium" spacing="medium">
           <Stack horizontal divider spacing="medium">
