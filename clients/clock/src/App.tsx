@@ -46,11 +46,31 @@ function App() {
                 <Text light>Light</Text>
               </Stack>
             </Stack>
-            <Stack horizontal spacing="small" align="center">
-              <Button title="Default" />
-              <Button solid title="Solid" />
-              <Button primary title="Primary" />
-              <Button primary solid title="Primary Solid" />
+            <Stack flex spacing="small" align="center">
+              <Stack horizontal spacing="small">
+                <Button title="Default" />
+                <Button solid title="Solid" />
+                <Button primary title="Primary" />
+                <Button primary solid title="Primary Solid" />
+              </Stack>
+              <Stack horizontal spacing="small">
+                <Button icon="house" title="Default" />
+                <Button icon="house" solid title="Solid" />
+                <Button icon="house" primary title="Primary" />
+                <Button icon="house" primary solid title="Primary Solid" />
+              </Stack>
+              <Stack horizontal spacing="small">
+                <Button title="Multiline\nDefault" />
+                <Button solid title="Multiline\nSolid" />
+                <Button primary title="Multiline\nPrimary" />
+                <Button primary solid title="Multiline\nPrimary Solid" />
+              </Stack>
+              <Stack horizontal spacing="small">
+                <Button icon="house" />
+                <Button icon="house" solid />
+                <Button icon="house" primary />
+                <Button icon="house" primary solid />
+              </Stack>
             </Stack>
           </Stack>
           <Stack horizontal padding="medium" spacing="small" align="center" fillColor="gray-1">

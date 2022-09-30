@@ -22,7 +22,7 @@ const useFontSizeStyles = createUseStyles({
   'large': {
     fontSize: 24,
     lineHeight: '30px',
-    margin: '-8px 0 -4.5px 0',
+    margin: '-7px 0 -4.5px 0',
   },
   'xlarge': {
     fontSize: 32,

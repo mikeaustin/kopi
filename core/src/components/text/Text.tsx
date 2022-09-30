@@ -11,7 +11,7 @@ import TextContext from './TextContext.js';
 import Color from '../../types/Color.js';
 import Weight from '../../types/Weight.js';
 
-type Child<TProps> = string | number | React.ReactElement<TProps>;
+type Child<TProps> = string | number | React.ReactElement<TProps | HTMLBRElement>;
 
 type Size = 'xsmall' | 'small' | 'default' | 'medium' | 'large' | 'xlarge';
 

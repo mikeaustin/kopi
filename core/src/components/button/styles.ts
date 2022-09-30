@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     appearance: 'none',
     border: 'none',
     outline: 'none',
-    padding: '9px 12px',
+    padding: '9px 16px',
     borderRadius: 2.5,
 
     // '&:focus': {
@@ -39,6 +39,9 @@ const useStyles = createUseStyles({
       // boxShadow: '0 0 0 2px hsla(0, 0%, 0%, 0.5)',
       boxShadow: `0 0 0 2px ${OpenColor.blue[5]}`
     }
+  },
+  small: {
+    padding: '5px 8px',
   }
 });
 

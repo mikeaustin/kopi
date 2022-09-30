@@ -59,6 +59,10 @@ const game = (
   <iframe src="https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U" style={{ border: 'none', height: '100%' }} />
 );
 
+const calendar = (
+  <iframe src="clients/calendar" style={{ border: 'none', height: '100%' }} />
+);
+
 function App() {
   const [windows, setWindows] = useState([
     // { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
@@ -67,7 +71,8 @@ function App() {
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
-    { title: 'Clock', left: 20, top: 20, width: 900, height: 450, client: clock },
+    { title: 'Style Guide', left: 20, top: 20, width: 900, height: 450, client: clock },
+    { title: 'Calendar', left: 20, top: 20, width: 360, height: 320, client: calendar },
     // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
 
