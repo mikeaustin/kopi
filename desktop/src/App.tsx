@@ -27,8 +27,8 @@ function Desktop({
   );
 }
 
-const clock = (
-  <iframe src="clients/clock" style={{ border: 'none', height: '100%' }} />
+const examples = (
+  <iframe src="clients/examples" title="Examples" style={{ border: 'none', height: '100%' }} />
 );
 
 const draw = (
@@ -71,7 +71,7 @@ function App() {
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
-    { title: 'Style Guide', left: 20, top: 20, width: 900, height: 450, client: clock },
+    { title: 'Examples', left: 20, top: 20, width: 846, height: 510, client: examples },
     { title: 'Calendar', left: 20, top: 20, width: 360, height: 320, client: calendar },
     // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
