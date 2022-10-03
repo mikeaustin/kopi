@@ -68,7 +68,7 @@ interface ViewProps extends React.ComponentProps<'div'> {
   as?: React.ElementType,
   flex?: boolean,
   horizontal?: boolean,
-  align?: 'center',
+  align?: ShorthandAlign,
   fillColor?: Color,
   padding?: CombinedPadding,
   border?: boolean,

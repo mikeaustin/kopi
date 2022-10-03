@@ -189,7 +189,7 @@ function Window({
       </View>
       <View fill className={styles.innerView}>
         <View
-          style={{ cursor: 'pointer', background: '#dee2e6' }}
+          style={{ cursor: 'pointer', background: '#f1f3f5' }}
           onPointerDown={handleTitlePointerDown}
           onPointerMove={handleTitlePointerMove}
           onPointerUp={handleTitlePointerUp}

@@ -16,7 +16,7 @@ function Divider({
   ref: React.Ref<HTMLDivElement>
 ) {
   return (
-    <View backgroundColor="gray-4" className={styles.Divider} />
+    <View backgroundColor="gray-3" className={styles.Divider} />
   );
 }
 

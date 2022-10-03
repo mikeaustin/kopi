@@ -36,6 +36,10 @@ const calendar = (
   <iframe src="clients/calendar" style={{ border: 'none', height: '100%' }} />
 );
 
+const preferences = (
+  <iframe src="clients/preferences" style={{ border: 'none', height: '100%' }} />
+);
+
 const draw = (
   <iframe src="https://mike-austin.com/draw-2" style={{ border: 'none', height: '100%' }} />
 );
@@ -73,7 +77,8 @@ function App() {
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
     { title: 'Examples', left: 20, top: 20, width: 846, height: 510, client: examples, src: 'clients/examples', id: uuid() },
-    { title: 'Calendar', left: 20, top: 20, width: 360, height: 320, client: calendar, src: 'clients/calendar', id: uuid() },
+    { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, client: calendar, src: 'clients/calendar', id: uuid() },
+    { title: 'Calendar', left: 885, top: 360, width: 500, height: 400, client: calendar, src: 'clients/preferences', id: uuid() },
     // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
