@@ -22,7 +22,7 @@ function Image({
   return (
     <View style={{ position: 'relative', cursor: 'pointer' }} tabIndex={0} onPointerDown={handleImagePointerDown}>
       {selected && (
-        <View style={{ position: 'absolute', inset: -4, border: '3px solid #339af0', borderRadius: 6 }} />
+        <View style={{ position: 'absolute', inset: -3, border: '3px solid #339af0', borderRadius: 6 }} />
       )}
       <img src={src} style={{ width: '100%', height: 'auto', borderRadius: 2.5, overflow: 'hidden' }} />
     </View>

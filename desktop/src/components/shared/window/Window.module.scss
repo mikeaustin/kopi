@@ -5,6 +5,11 @@
   width: 100px;
   height: 100px;
 
+  .frame {
+    position: absolute;
+    inset: -10px;
+  }
+
   .innerView {
     position: relative;
     box-shadow:

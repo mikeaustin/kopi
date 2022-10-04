@@ -182,7 +182,7 @@ function Window({
 
   return (
     <View ref={windowElementRef} className={windowClassName} style={{ zIndex: order }} onPointerDown={handleWindowPointerDown}>
-      <View style={{ position: 'absolute', inset: -10 }}>
+      <View className={styles.frame}>
         <Handle align="top-left" /><Handle align="top" /><Handle align="top-right" />
         <Handle align="left" /><Handle align="right" />
         <Handle align="bottom-left" /><Handle align="bottom" /><Handle align="bottom-right" />

@@ -78,7 +78,7 @@ function App() {
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
     { title: 'Examples', left: 20, top: 20, width: 846, height: 510, client: examples, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, client: calendar, src: 'clients/calendar', id: uuid() },
-    { title: 'Calendar', left: 885, top: 360, width: 500, height: 400, client: calendar, src: 'clients/preferences', id: uuid() },
+    { title: 'Preferences', left: 885, top: 360, width: 500, height: 400, client: calendar, src: 'clients/preferences', id: uuid() },
     // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
