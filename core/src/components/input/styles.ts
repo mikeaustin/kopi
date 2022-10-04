@@ -4,10 +4,12 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   Input: {
     borderRadius: 2.5,
-    padding: '4px 10px',
+    padding: '9px 10px',
+    position: 'relative',
 
     '&:focus-within': {
-      boxShadow: `inset 0 0 0 2px ${OpenColor.blue[5]}`
+      borderRadius: 3,
+      boxShadow: `inset 0 0 0 3px ${OpenColor.blue[2]}`
     },
 
     '& input': {

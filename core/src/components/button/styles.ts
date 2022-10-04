@@ -26,16 +26,13 @@ const useStyles = createUseStyles({
     //   boxShadow: 'inset 0 0 0 2px hsla(0, 0%, 0%, 0.25)',
     // }
 
-    '&:focus:before': {
-      position: 'absolute',
-      top: -1,
-      right: -1,
-      bottom: -1,
-      left: -1,
-      content: '""',
+    '&:focus': {
+      // position: 'absolute',
+      // inset: 0,
+      // content: '""',
       // background: 'red'
       // border: '1px solid transparent',
-      borderRadius: '3px',
+      borderRadius: 3,
       // border: `2px dotted ${OpenColor.gray[5]}`,
       // boxShadow: '0 0 0 2px hsla(0, 0%, 0%, 0.5)',
       // boxShadow: `0 0 0 3px ${OpenColor.blue[5]}`
