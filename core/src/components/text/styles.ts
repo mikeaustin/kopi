@@ -3,8 +3,6 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   Text: {
     display: 'block',
-    fontSize: 14,
-    lineHeight: '20px',
   },
   textParent: {
     display: 'inline',
@@ -14,6 +12,9 @@ const useStyles = createUseStyles({
   },
   light: {
     opacity: 0.5,
+  },
+  caps: {
+    textTransform: 'uppercase',
   },
   hidden: {
     display: 'none',

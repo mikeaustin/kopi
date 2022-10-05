@@ -10,7 +10,6 @@ import useStyles from './styles.js';
 import View from '../view/index.js';
 import Text from '../text/index.js';
 import Spacer from '../spacer/index.js';
-import { JsxEmit } from 'typescript';
 
 library.add(fas);
 
