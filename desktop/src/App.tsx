@@ -1,8 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { View, Text, Button } from 'core';
+import AppContext from './AppContext';
 
+import { View, Text, Button } from 'core';
 import Window from './components/shared/window';
 
 import './App.css';
@@ -52,6 +53,12 @@ function Desktop({
   backgroundUrl,
   children,
 }: DesktopProps) {
+  const { onOpenWindow } = useContext(AppContext);
+
+  const handleClick = () => {
+    onOpenWindow('https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U');
+  };
+
   return (
     <View flex style={{ background: `center / cover url(${backgroundUrl})` }}>
       <View horizontal padding="none small" fillColor="white">
@@ -61,7 +68,7 @@ function Desktop({
         <Menu title="Applications">
           <Button title="Calendar" />
           <Button title="Explorer" />
-          <Button title="Asteroids" />
+          <Button title="Asteroids" onClick={handleClick} />
         </Menu>
       </View>
       <View style={{ position: 'relative' }}>
@@ -111,7 +118,7 @@ function App() {
     { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Preferences', left: 885, top: 360, width: 500, height: 400, src: 'clients/preferences', id: uuid() },
     { title: 'Explorer', left: 20, top: 550, width: 846, height: 400, src: 'clients/explorer', id: uuid() },
-    // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
+    // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
 
@@ -138,15 +145,33 @@ function App() {
     window.addEventListener('message', handleWindowMessage);
   }, []);
 
+  const handleOpenWindow = (src: string) => {
+    console.log('handleOpenWindow');
+
+    const newId = uuid();
+
+    setWindows(windows => [
+      ...windows,
+      { title: 'Asteroids', left: 20, top: 20, width: 800, height: 874, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U', id: newId },
+    ]);
+
+    setWindowOrder(windowOrder => [
+      ...windowOrder.filter((id) => id !== newId),
+      newId,
+    ]);
+
+  };
+
   return (
-    <View flex className="App">
-      <Desktop flex backgroundUrl="images/653931.jpg">
-        {windows.map((window) => (
-          <Window key={window.id} id={window.id} src={window.src} title={window.title} config={window} order={windowOrder.indexOf(window.id)}>
-          </Window>
-        ))}
-      </Desktop>
-    </View>
+    <AppContext.Provider value={{ onOpenWindow: handleOpenWindow }}>
+      <View flex className="App">
+        <Desktop flex backgroundUrl="images/653931.jpg">
+          {windows.map((window) => (
+            <Window key={window.id} id={window.id} src={window.src} title={window.title} config={window} order={windowOrder.indexOf(window.id)} />
+          ))}
+        </Desktop>
+      </View>
+    </AppContext.Provider>
   );
 }
 
