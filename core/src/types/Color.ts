@@ -39,11 +39,52 @@ type Blue =
   | 'blue-8'
   | 'blue-9';
 
+type Green =
+  | 'green-0'
+  | 'green-1'
+  | 'green-2'
+  | 'green-3'
+  | 'green-4'
+  | 'green-5'
+  | 'green-6'
+  | 'green-7'
+  | 'green-8'
+  | 'green-9';
+
+type Yellow =
+  | 'yellow-0'
+  | 'yellow-1'
+  | 'yellow-2'
+  | 'yellow-3'
+  | 'yellow-4'
+  | 'yellow-5'
+  | 'yellow-6'
+  | 'yellow-7'
+  | 'yellow-8'
+  | 'yellow-9';
+
+type Orange =
+  | 'orange-0'
+  | 'orange-1'
+  | 'orange-2'
+  | 'orange-3'
+  | 'orange-4'
+  | 'orange-5'
+  | 'orange-6'
+  | 'orange-7'
+  | 'orange-8'
+  | 'orange-9';
+
 type Color =
   | Transparent
   | White
   | Black
   | Gray
-  | Blue;
+  | Red
+  | Blue
+  | Green
+  | Yellow
+  | Orange
+  ;
 
 export default Color;
