@@ -76,9 +76,10 @@ function App() {
     // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
     // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
     // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
-    { title: 'Examples', left: 20, top: 20, width: 846, height: 510, client: examples, src: 'clients/examples', id: uuid() },
-    { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, client: calendar, src: 'clients/calendar', id: uuid() },
-    { title: 'Preferences', left: 885, top: 360, width: 500, height: 400, client: calendar, src: 'clients/preferences', id: uuid() },
+    { title: 'Examples', left: 20, top: 20, width: 846, height: 510, src: 'clients/examples', id: uuid() },
+    { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
+    { title: 'Preferences', left: 885, top: 360, width: 500, height: 400, src: 'clients/preferences', id: uuid() },
+    { title: 'Explorer', left: 20, top: 550, width: 846, height: 400, src: 'clients/explorer', id: uuid() },
     // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, client: game },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
@@ -111,7 +112,6 @@ function App() {
       <Desktop fill backgroundUrl="images/653931.jpg">
         {windows.map((window) => (
           <Window key={window.id} id={window.id} src={window.src} title={window.title} config={window} order={windowOrder.indexOf(window.id)}>
-            {window.client}
           </Window>
         ))}
       </Desktop>

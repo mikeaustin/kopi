@@ -39,7 +39,7 @@ const Folder = ({ Prefix, level, selectedPath, selected, onPathSelect }: AWS.S3.
   return (
     <View>
       <Stack key={Prefix} horizontal align="left" padding="small" fillColor={selected ? 'blue-5' : undefined} style={{ borderRadius: 2.5, cursor: 'default' }} onPointerDown={handleRowClick}>
-        <Icon icon="chevron-right" size="xs" color={textColor} style={{ width: 20, cursor: 'pointer', marginLeft: level * 20 }} rotation={isExpanded ? 90 : undefined} onPointerDown={handleFolderExpandClick} />
+        <Icon icon="chevron-right" size="xs" color={textColor} style={{ width: 20, cursor: 'pointer', paddingTop: 4, paddingBottom: 4, marginLeft: level * 20 }} rotation={isExpanded ? 90 : undefined} onPointerDown={handleFolderExpandClick} />
         <Icon icon="folder" color="yellow-5" />
         <Spacer size="xsmall" />
         <Text textColor={textColor}>{Prefix?.split('/').at(-2)}</Text>
@@ -151,7 +151,7 @@ function App() {
         <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
       </Stack>
       <Divider />
-      <Entry path={'photos/'} selectedPath={selectedPath} padding="small" fillColor="white" onPathSelect={onPathSelect} />
+      <Entry path={''} selectedPath={selectedPath} padding="small" fillColor="white" style={{ overflowY: 'auto' }} onPathSelect={onPathSelect} />
     </View>
   );
 }
