@@ -16,8 +16,11 @@
   color: $oc-black;
 }
 
-@each $color-list, $name in $oc-color-list {
-  @each $level, $color in $color-list {
+@each $color-list,
+$name in $oc-color-list {
+
+  @each $level,
+  $color in $color-list {
     .#{$name}-#{$level} {
       color: $color;
     }
@@ -26,6 +29,10 @@
 
 .normal {
   font-weight: 400;
+}
+
+.semi-bold {
+  font-weight: 600;
 }
 
 .bold {

@@ -10,7 +10,7 @@ type Child<TProps> = string | number | React.ReactElement<TProps>;
 
 interface TextProps extends React.ComponentProps<'span'> {
   textColor?: Color,
-  fontWeight?: 'bold',
+  fontWeight?: 'semi-bold' | 'bold',
   children?: Child<TextProps> | Child<TextProps>[],
 }
 
