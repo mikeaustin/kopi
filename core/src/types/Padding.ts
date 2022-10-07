@@ -1,4 +1,7 @@
 type PaddingVertical =
+  | 'none small'
+  | 'none medium'
+  | 'none large'
   | 'small none'
   | 'small small'
   | 'small medium'

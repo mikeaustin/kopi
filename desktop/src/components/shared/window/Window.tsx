@@ -1,9 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 
-import View from '../view';
-import Text from '../text';
-import Divider from '../divider';
+import { View, Text, Divider } from 'core';
 
 import styles from './Window.module.scss';
 
@@ -187,19 +185,21 @@ function Window({
         <Handle align="left" /><Handle align="right" />
         <Handle align="bottom-left" /><Handle align="bottom" /><Handle align="bottom-right" />
       </View>
-      <View fill className={styles.innerView}>
+      <View flex className={styles.innerView}>
         <View
-          style={{ cursor: 'pointer', background: '#f1f3f5' }}
+          style={{ cursor: 'pointer' }}
+          padding="small"
+          fillColor="gray-1"
           onPointerDown={handleTitlePointerDown}
           onPointerMove={handleTitlePointerMove}
           onPointerUp={handleTitlePointerUp}
         >
-          <Text fontWeight="bold" textColor="gray-7" style={{ textAlign: 'center', padding: 5, paddingTop: 6, marginBottom: -1 }}>
+          <Text fontWeight="bold" textColor="gray-6" style={{ textAlign: 'center' }}>
             {title}
           </Text>
         </View>
         <Divider />
-        <View fill>
+        <View flex>
           <iframe src={`${src}?id=${id}`} style={{ border: 'none', height: '100%' }} />
         </View>
       </View>

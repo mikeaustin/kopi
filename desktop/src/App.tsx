@@ -1,11 +1,47 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { View, Text } from './components/shared';
+import { View, Text, Button } from 'core';
 
 import Window from './components/shared/window';
 
 import './App.css';
+
+interface MenuProps extends React.ComponentProps<typeof Button> {
+  title: string,
+  titleFontWeight?: 'bold' | 'medium',
+  children: React.ReactNode;
+}
+
+function Menu({
+  title,
+  titleFontWeight = 'medium',
+  children,
+  ...props
+}: MenuProps) {
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const handleTitlePointerDown = () => {
+    setIsMenuVisible(isMenuVisible => !isMenuVisible);
+  };
+
+  return (
+    <View style={{ position: 'relative' }}>
+      <Button title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
+      {isMenuVisible && (
+        <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5 }}>
+          {React.Children.map(children, child => React.isValidElement(child) && child.type === Button
+            ? React.cloneElement(child as React.ReactElement<React.ComponentProps<typeof Button>>, {
+              titleFontWeight: 'medium',
+              titleAlign: 'left',
+            }) : (
+              child
+            ))}
+        </View>
+      )}
+    </View>
+  );
+}
 
 interface DesktopProps extends React.ComponentProps<typeof View> {
   backgroundUrl?: string,
@@ -17,9 +53,16 @@ function Desktop({
   children,
 }: DesktopProps) {
   return (
-    <View fill style={{ background: `center / cover url(${backgroundUrl})` }}>
-      <View padding="small" backgroundColor="white">
-        <Text>Header</Text>
+    <View flex style={{ background: `center / cover url(${backgroundUrl})` }}>
+      <View horizontal padding="none small" fillColor="white">
+        <Menu title="Desktop" titleFontWeight="bold">
+          <Button title="Preferences" />
+        </Menu>
+        <Menu title="Applications">
+          <Button title="Calendar" />
+          <Button title="Explorer" />
+          <Button title="Asteroids" />
+        </Menu>
       </View>
       <View style={{ position: 'relative' }}>
         {children}
@@ -27,18 +70,6 @@ function Desktop({
     </View>
   );
 }
-
-const examples = (
-  <iframe src="clients/examples" title="Examples" style={{ border: 'none', height: '100%' }} />
-);
-
-const calendar = (
-  <iframe src="clients/calendar" style={{ border: 'none', height: '100%' }} />
-);
-
-const preferences = (
-  <iframe src="clients/preferences" style={{ border: 'none', height: '100%' }} />
-);
 
 const draw = (
   <iframe src="https://mike-austin.com/draw-2" style={{ border: 'none', height: '100%' }} />
@@ -108,8 +139,8 @@ function App() {
   }, []);
 
   return (
-    <View fill className="App">
-      <Desktop fill backgroundUrl="images/653931.jpg">
+    <View flex className="App">
+      <Desktop flex backgroundUrl="images/653931.jpg">
         {windows.map((window) => (
           <Window key={window.id} id={window.id} src={window.src} title={window.title} config={window} order={windowOrder.indexOf(window.id)}>
           </Window>

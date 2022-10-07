@@ -11,6 +11,9 @@ import View from '../view/index.js';
 import Text from '../text/index.js';
 import Spacer from '../spacer/index.js';
 
+import Weight from '../../types/Weight.js';
+import { ShorthandAlign } from '../../types/Align.js';
+
 library.add(fas);
 
 interface ButtonProps extends React.ComponentProps<typeof View> {
@@ -19,6 +22,8 @@ interface ButtonProps extends React.ComponentProps<typeof View> {
   primary?: boolean,
   solid?: boolean,
   size?: 'small',
+  titleFontWeight?: Weight,
+  titleAlign?: ShorthandAlign,
 }
 
 function getFillColor({ primary, solid }: ButtonProps) {
@@ -58,6 +63,8 @@ const Button = ({
   primary,
   solid,
   size,
+  titleFontWeight = 'bold',
+  titleAlign = 'center',
   ...props
 }: ButtonProps) => {
   const buttonElementRef = useRef<HTMLDivElement>(null);
@@ -93,21 +100,19 @@ const Button = ({
       as="button"
       horizontal
       border
-      align="center"
+      align={titleAlign}
       fillColor={fillColor}
       borderColor={borderColor}
       className={buttonClassName}
       {...props}
     >
       {icon && (
-        <>
-          <FontAwesomeIcon icon={icon} color={iconColor} style={{ marginTop: -4, marginBottom: -4 }} />
-        </>
+        <FontAwesomeIcon icon={icon} color={iconColor} style={{ marginTop: -4, marginBottom: -4 }} />
       )}
       {icon && title && (
         <Spacer size="small" />
       )}
-      <Text fontWeight="bold" textColor={textColor}>{titleElement ?? '​'}</Text>
+      <Text fontWeight={titleFontWeight} textColor={textColor}>{titleElement ?? '​'}</Text>
     </View>
   );
 };

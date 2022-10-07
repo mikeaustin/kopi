@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "clsx": "^1.2.1",
+    "core": "file:../core",
     "open-color": "^1.9.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
