@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import OpenColor from 'open-color';
 import clsx from 'clsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,17 +16,19 @@ import { ShorthandAlign } from '../../types/Align.js';
 
 library.add(fas);
 
-interface ButtonProps extends React.ComponentProps<typeof View> {
+interface ButtonProps<TData> extends React.ComponentProps<typeof View> {
   icon?: IconName,
   title?: string,
   primary?: boolean,
   solid?: boolean,
   size?: 'small',
+  data?: TData,
   titleFontWeight?: Weight,
   titleAlign?: ShorthandAlign,
+  onClick?: (event: React.PointerEvent<HTMLDivElement>, data?: TData) => void;
 }
 
-function getFillColor({ primary, solid }: ButtonProps) {
+function getFillColor({ primary, solid }: ButtonProps<any>) {
   switch (true) {
     case primary && solid:
       return 'blue-5';
@@ -37,7 +39,7 @@ function getFillColor({ primary, solid }: ButtonProps) {
   }
 }
 
-function getBorderColor({ primary, solid }: ButtonProps) {
+function getBorderColor({ primary, solid }: ButtonProps<any>) {
   switch (true) {
     case primary:
       return 'blue-5';
@@ -46,7 +48,7 @@ function getBorderColor({ primary, solid }: ButtonProps) {
   }
 }
 
-function getTextColor({ primary, solid }: ButtonProps) {
+function getTextColor({ primary, solid }: ButtonProps<any>) {
   switch (true) {
     case primary && solid:
       return 'white';
@@ -57,22 +59,30 @@ function getTextColor({ primary, solid }: ButtonProps) {
   }
 }
 
-const Button = ({
+function Button<TData>({
   icon,
   title,
   primary,
   solid,
   size,
+  data,
   titleFontWeight = 'bold',
   titleAlign = 'center',
+  onClick,
   ...props
-}: ButtonProps) => {
+}: ButtonProps<TData>) {
   const buttonElementRef = useRef<HTMLDivElement>(null);
   const styles = useStyles();
 
   const fillColor = getFillColor({ primary, solid });
   const borderColor = getBorderColor({ primary, solid });
   const textColor = getTextColor({ primary, solid });
+
+  const handleClick = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (onClick) {
+      onClick(event, data);
+    }
+  };
 
   useEffect(() => {
     if (buttonElementRef.current && borderColor) {
@@ -104,6 +114,7 @@ const Button = ({
       fillColor={fillColor}
       borderColor={borderColor}
       className={buttonClassName}
+      onClick={handleClick}
       {...props}
     >
       {icon && (

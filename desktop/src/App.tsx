@@ -44,19 +44,39 @@ function Menu({
   );
 }
 
+const applicationsMenu = [
+  { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
+  { title: 'Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' }
+];
+
 interface DesktopProps extends React.ComponentProps<typeof View> {
   backgroundUrl?: string,
   children?: React.ReactNode,
+}
+
+interface OpenWindowArgs {
+  title: string,
+  src: string,
+  width?: number,
+  height?: number;
 }
 
 function Desktop({
   backgroundUrl,
   children,
 }: DesktopProps) {
-  const { onOpenWindow } = useContext(AppContext);
+  const { onOpenWindowEx } = useContext(AppContext);
 
-  const handleClick = () => {
-    onOpenWindow('https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U');
+  const handleClick = (event: React.PointerEvent, data?: OpenWindowArgs) => {
+    if (data) {
+      // onOpenWindow(data);
+      onOpenWindowEx({
+        title: data.title,
+        src: data.src,
+        width: data.width,
+        height: data.height,
+      });
+    }
   };
 
   return (
@@ -66,9 +86,9 @@ function Desktop({
           <Button title="Preferences" />
         </Menu>
         <Menu title="Applications">
-          <Button title="Calendar" />
-          <Button title="Explorer" />
-          <Button title="Asteroids" onClick={handleClick} />
+          {applicationsMenu.map((item, index) => (
+            <Button key={index} title={item.title} data={item} onClick={handleClick} />
+          ))}
         </Menu>
       </View>
       <View style={{ position: 'relative' }}>
@@ -152,18 +172,36 @@ function App() {
 
     setWindows(windows => [
       ...windows,
-      { title: 'Asteroids', left: 20, top: 20, width: 800, height: 874, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U', id: newId },
+      { title: 'Asteroids', left: 20, top: 20, width: 800, height: 874, src, id: newId },
     ]);
 
     setWindowOrder(windowOrder => [
       ...windowOrder.filter((id) => id !== newId),
       newId,
     ]);
+  };
 
+  const handleOpenWindowEx = ({ title, src, width, height }: OpenWindowArgs) => {
+    const newId = uuid();
+
+    setWindows(windows => [
+      ...windows,
+      { title, left: 20, top: 20, width: width ?? 300, height: height ?? 300, src, id: newId },
+    ]);
+
+    setWindowOrder(windowOrder => [
+      ...windowOrder.filter((id) => id !== newId),
+      newId,
+    ]);
+  };
+
+  const appContextValue = {
+    onOpenWindow: handleOpenWindow,
+    onOpenWindowEx: handleOpenWindowEx,
   };
 
   return (
-    <AppContext.Provider value={{ onOpenWindow: handleOpenWindow }}>
+    <AppContext.Provider value={appContextValue}>
       <View flex className="App">
         <Desktop flex backgroundUrl="images/653931.jpg">
           {windows.map((window) => (
