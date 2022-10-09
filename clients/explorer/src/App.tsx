@@ -55,6 +55,28 @@ const Folder = ({
     setIsExpanded(isExpanded => !isExpanded);
   };
 
+  const handleDragOver = (event: React.DragEvent<HTMLElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDragEnter = (event: React.DragEvent<HTMLElement>) => {
+    event.currentTarget.style.boxShadow = 'inset 0 0 0 2px #339af0';
+
+    event.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLElement>) => {
+    event.currentTarget.style.boxShadow = '';
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLElement>) => {
+    const data = event.dataTransfer.getData("text/plain");
+
+    event.currentTarget.style.boxShadow = '';
+
+    console.log(data, '>', path);
+  };
+
   const textColor = selected
     ? 'white'
     : undefined;
@@ -69,6 +91,10 @@ const Folder = ({
         fillColor={selected ? 'blue-5' : undefined}
         style={{ borderRadius: 2.5, cursor: 'default' }}
         onPointerDown={handleRowPointerDown}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
         <Icon
           icon="chevron-right"
@@ -108,6 +134,14 @@ const File = ({
     onPathSelect(path);
   };
 
+  const handleDragStart = (event: React.DragEvent) => {
+    console.log('onDragStart');
+
+    event.dataTransfer.setData("text/plain", path);
+
+    event.dataTransfer.effectAllowed = "move";
+  };
+
   const textColor = selected
     ? 'white'
     : undefined;
@@ -119,11 +153,13 @@ const File = ({
   return (
     <Stack
       horizontal
+      draggable
       align="left"
       padding="small"
       fillColor={selected ? 'blue-5' : undefined}
       style={{ borderRadius: 2.5, cursor: 'default' }}
       onPointerDown={handleRowPointerDown}
+      onDragStart={handleDragStart}
     >
       <Icon icon="image" color={iconColor} style={{ marginLeft: level * 20 + 20 }} />
       <Spacer size="xsmall" />
