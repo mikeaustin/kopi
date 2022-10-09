@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo, useContext } from 'react';
 import AWS from 'aws-sdk';
-import { PromiseResult } from 'aws-sdk/lib/request';
 
 import { View, Text, Stack, Spacer, Divider, Icon } from 'core';
 
@@ -19,20 +18,26 @@ const s3 = new AWS.S3({
 });
 
 interface AppContext {
-  selectedPath: string | null,
+  selectedPaths: string[],
   onPathSelect: (path: string) => void,
 }
 
 const AppContext = React.createContext<AppContext>({
-  selectedPath: null,
+  selectedPaths: [],
   onPathSelect: (path: string) => undefined,
 });
 
+interface S3Object {
+  folders: { path: string; }[],
+  files: { path: string, size: number, modified: Date; }[],
+}
+
 const Folder = ({
-  Prefix,
+  path,
   level,
   selected
-}: AWS.S3.CommonPrefix & {
+}: {
+  path: string,
   level: number,
   selected?: boolean,
 }) => {
@@ -40,7 +45,7 @@ const Folder = ({
   const { onPathSelect } = useContext(AppContext);
 
   const handleRowPointerDown = (event: React.PointerEvent) => {
-    onPathSelect(Prefix ?? '');
+    onPathSelect(path);
   };
 
   const handleExpandPointerDown = (event: React.PointerEvent) => {
@@ -57,7 +62,7 @@ const Folder = ({
   return (
     <View>
       <Stack
-        key={Prefix}
+        key={path}
         horizontal
         align="left"
         padding="small"
@@ -75,29 +80,32 @@ const Folder = ({
         />
         <Icon icon="folder" color="yellow-5" />
         <Spacer size="xsmall" />
-        <Text textColor={textColor}>{Prefix?.split('/').at(-2)}</Text>
+        <Text textColor={textColor}>{path.split('/').at(-2)}</Text>
       </Stack>
       {isExpanded && (
-        <Entry path={Prefix ?? ''} level={level + 1} />
+        <Entry path={path} level={level + 1} />
       )}
     </View>
   );
 };
 
 const File = ({
-  Key,
-  Size,
-  LastModified,
+  path,
+  size,
+  modified,
   level,
   selected,
-}: AWS.S3.Object & {
+}: {
+  path: string,
+  size: number,
+  modified: Date,
   level: number,
   selected: boolean,
 }) => {
   const { onPathSelect } = useContext(AppContext);
 
   const handleRowPointerDown = () => {
-    onPathSelect(Key ?? '');
+    onPathSelect(path);
   };
 
   const textColor = selected
@@ -109,15 +117,23 @@ const File = ({
     : 'blue-5';
 
   return (
-    <Stack horizontal align="left" padding="small" fillColor={selected ? 'blue-5' : undefined} style={{ borderRadius: 2.5, cursor: 'default' }} onPointerDown={handleRowPointerDown}>
+    <Stack
+      horizontal
+      align="left"
+      padding="small"
+      fillColor={selected ? 'blue-5' : undefined}
+      style={{ borderRadius: 2.5, cursor: 'default' }}
+      onPointerDown={handleRowPointerDown}
+    >
       <Icon icon="image" color={iconColor} style={{ marginLeft: level * 20 + 20 }} />
       <Spacer size="xsmall" />
-      <Text textColor={textColor} style={{ width: 300 - (level * 20) }}>{Key?.split('/').at(-1)}</Text>
-      <Text textColor={textColor} style={{ width: 150 }}>{Size}</Text>
-      <Text textColor={textColor}>{LastModified?.toLocaleDateString()}</Text>
+      <Text textColor={textColor} style={{ width: 300 - (level * 20) }}>{path.split('/').at(-1)}</Text>
+      <Text textColor={textColor} style={{ width: 150 }}>{size}</Text>
+      <Text textColor={textColor}>{modified.toLocaleDateString()}</Text>
     </Stack>
   );
 };
+
 
 interface EntryProps extends React.ComponentProps<typeof View> {
   path: string,
@@ -129,8 +145,8 @@ const Entry = ({
   level = 0,
   ...props
 }: EntryProps) => {
-  const [objects, setObjects] = useState<PromiseResult<AWS.S3.ListObjectsV2Output, AWS.AWSError> | null>(null);
-  const { selectedPath } = useContext(AppContext);
+  const [objects, setObjects] = useState<S3Object | null>(null);
+  const { selectedPaths } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -141,35 +157,44 @@ const Entry = ({
         Delimiter: '/',
       }).promise();
 
-      setObjects(objects);
+      setObjects({
+        folders: objects.CommonPrefixes?.map(({ Prefix }) => ({
+          path: Prefix ?? '',
+        })) ?? [],
+        files: objects.Contents?.map(({ Key, Size, LastModified }) => ({
+          path: Key ?? '',
+          size: Size ?? 0,
+          modified: LastModified ?? new Date(),
+        })) ?? []
+      });
     })();
   }, [path]);
 
   return (
     <Stack flex {...props}>
-      {objects?.CommonPrefixes?.map((item) => (
-        <Folder key={item.Prefix} level={level} selected={item.Prefix === selectedPath} {...item} />
+      {objects?.folders.map((item) => (
+        <Folder key={item.path} level={level} selected={selectedPaths.includes(item.path)} {...item} />
       ))}
-      {objects?.Contents?.map((item) => (
-        <File key={item.Key} level={level} selected={item.Key === selectedPath} {...item} />
+      {objects?.files.map((item) => (
+        <File key={item.path} level={level} selected={selectedPaths.includes(item.path)} {...item} />
       ))}
     </Stack>
   );
 };
 
 function App() {
-  const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const [selectedPaths, setSelectedPath] = useState<string[]>([]);
 
-  const onPathSelect = useCallback((path: string | null) => {
+  const onPathSelect = useCallback((path: string) => {
     console.log(path);
 
-    setSelectedPath(path);
+    setSelectedPath(selectedPaths => [path]);
   }, []);
 
   const appContextValue = useMemo(() => ({
-    selectedPath,
+    selectedPaths,
     onPathSelect,
-  }), [onPathSelect, selectedPath]);
+  }), [onPathSelect, selectedPaths]);
 
   return (
     <AppContext.Provider value={appContextValue}>
