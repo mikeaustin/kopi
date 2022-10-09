@@ -8,13 +8,11 @@ interface OpenWindowArgs {
 }
 
 interface AppContext {
-  onOpenWindow: (src: string) => void,
-  onOpenWindowEx: (args: OpenWindowArgs) => void,
+  onOpenWindow: (args: OpenWindowArgs) => void,
 }
 
 const AppContext = React.createContext<AppContext>({
-  onOpenWindow: (src: string) => undefined,
-  onOpenWindowEx: (args: OpenWindowArgs) => undefined,
+  onOpenWindow: (args: OpenWindowArgs) => undefined,
 });
 
 export default AppContext;

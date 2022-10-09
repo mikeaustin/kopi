@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import AppContext from './AppContext';
@@ -65,12 +65,11 @@ function Desktop({
   backgroundUrl,
   children,
 }: DesktopProps) {
-  const { onOpenWindowEx } = useContext(AppContext);
+  const { onOpenWindow } = useContext(AppContext);
 
   const handleClick = (event: React.PointerEvent, data?: OpenWindowArgs) => {
     if (data) {
-      // onOpenWindow(data);
-      onOpenWindowEx({
+      onOpenWindow({
         title: data.title,
         src: data.src,
         width: data.width,
@@ -165,23 +164,7 @@ function App() {
     window.addEventListener('message', handleWindowMessage);
   }, []);
 
-  const handleOpenWindow = (src: string) => {
-    console.log('handleOpenWindow');
-
-    const newId = uuid();
-
-    setWindows(windows => [
-      ...windows,
-      { title: 'Asteroids', left: 20, top: 20, width: 800, height: 874, src, id: newId },
-    ]);
-
-    setWindowOrder(windowOrder => [
-      ...windowOrder.filter((id) => id !== newId),
-      newId,
-    ]);
-  };
-
-  const handleOpenWindowEx = ({ title, src, width, height }: OpenWindowArgs) => {
+  const handleOpenWindow = useCallback(({ title, src, width, height }: OpenWindowArgs) => {
     const newId = uuid();
 
     setWindows(windows => [
@@ -193,12 +176,11 @@ function App() {
       ...windowOrder.filter((id) => id !== newId),
       newId,
     ]);
-  };
+  }, []);
 
-  const appContextValue = {
+  const appContextValue = useMemo(() => ({
     onOpenWindow: handleOpenWindow,
-    onOpenWindowEx: handleOpenWindowEx,
-  };
+  }), [handleOpenWindow]);
 
   return (
     <AppContext.Provider value={appContextValue}>

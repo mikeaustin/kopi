@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useContext } from 'react';
 import AWS from 'aws-sdk';
 import { PromiseResult } from 'aws-sdk/lib/request';
 
@@ -18,14 +18,32 @@ const s3 = new AWS.S3({
   }
 });
 
-const Folder = ({ Prefix, level, selectedPath, selected, onPathSelect }: AWS.S3.CommonPrefix & { level: number, selectedPath: string | null, selected?: boolean, onPathSelect: (path: string | null) => void; }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface AppContext {
+  selectedPath: string | null,
+  onPathSelect: (path: string) => void,
+}
 
-  const handleRowClick = (event: React.PointerEvent) => {
+const AppContext = React.createContext<AppContext>({
+  selectedPath: null,
+  onPathSelect: (path: string) => undefined,
+});
+
+const Folder = ({
+  Prefix,
+  level,
+  selected
+}: AWS.S3.CommonPrefix & {
+  level: number,
+  selected?: boolean,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { onPathSelect } = useContext(AppContext);
+
+  const handleRowPointerDown = (event: React.PointerEvent) => {
     onPathSelect(Prefix ?? '');
   };
 
-  const handleFolderExpandClick = (event: React.PointerEvent) => {
+  const handleExpandPointerDown = (event: React.PointerEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -38,14 +56,29 @@ const Folder = ({ Prefix, level, selectedPath, selected, onPathSelect }: AWS.S3.
 
   return (
     <View>
-      <Stack key={Prefix} horizontal align="left" padding="small" fillColor={selected ? 'blue-5' : undefined} style={{ borderRadius: 2.5, cursor: 'default' }} onPointerDown={handleRowClick}>
-        <Icon icon="chevron-right" size="xs" color={textColor} style={{ width: 20, cursor: 'pointer', paddingTop: 4, paddingBottom: 4, marginLeft: level * 20 }} rotation={isExpanded ? 90 : undefined} onPointerDown={handleFolderExpandClick} />
+      <Stack
+        key={Prefix}
+        horizontal
+        align="left"
+        padding="small"
+        fillColor={selected ? 'blue-5' : undefined}
+        style={{ borderRadius: 2.5, cursor: 'default' }}
+        onPointerDown={handleRowPointerDown}
+      >
+        <Icon
+          icon="chevron-right"
+          size="xs"
+          color={textColor}
+          style={{ width: 20, cursor: 'pointer', paddingTop: 4, paddingBottom: 4, marginLeft: level * 20 }}
+          rotation={isExpanded ? 90 : undefined}
+          onPointerDown={handleExpandPointerDown}
+        />
         <Icon icon="folder" color="yellow-5" />
         <Spacer size="xsmall" />
         <Text textColor={textColor}>{Prefix?.split('/').at(-2)}</Text>
       </Stack>
       {isExpanded && (
-        <Entry path={Prefix ?? ''} selectedPath={selectedPath} level={level + 1} onPathSelect={onPathSelect} />
+        <Entry path={Prefix ?? ''} level={level + 1} />
       )}
     </View>
   );
@@ -57,21 +90,15 @@ const File = ({
   LastModified,
   level,
   selected,
-  onPathSelect,
-}: AWS.S3.Object & { level: number, selected: boolean, onPathSelect: (path: string | null) => void; }
-) => {
-  const handleRowClick = () => {
+}: AWS.S3.Object & {
+  level: number,
+  selected: boolean,
+}) => {
+  const { onPathSelect } = useContext(AppContext);
+
+  const handleRowPointerDown = () => {
     onPathSelect(Key ?? '');
   };
-
-  // useEffect(() => {
-  //   return () => {
-  //     console.log('unmount');
-  //     if (selected) {
-  //       onPathSelect(null);
-  //     }
-  //   };
-  // }, [onPathSelect, selected]);
 
   const textColor = selected
     ? 'white'
@@ -82,7 +109,7 @@ const File = ({
     : 'blue-5';
 
   return (
-    <Stack horizontal align="left" padding="small" fillColor={selected ? 'blue-5' : undefined} style={{ borderRadius: 2.5, cursor: 'default' }} onPointerDown={handleRowClick}>
+    <Stack horizontal align="left" padding="small" fillColor={selected ? 'blue-5' : undefined} style={{ borderRadius: 2.5, cursor: 'default' }} onPointerDown={handleRowPointerDown}>
       <Icon icon="image" color={iconColor} style={{ marginLeft: level * 20 + 20 }} />
       <Spacer size="xsmall" />
       <Text textColor={textColor} style={{ width: 300 - (level * 20) }}>{Key?.split('/').at(-1)}</Text>
@@ -94,19 +121,16 @@ const File = ({
 
 interface EntryProps extends React.ComponentProps<typeof View> {
   path: string,
-  selectedPath: string | null,
   level?: number,
-  onPathSelect: (path: string | null) => void,
 }
 
 const Entry = ({
   path,
-  selectedPath,
   level = 0,
-  onPathSelect,
   ...props
 }: EntryProps) => {
   const [objects, setObjects] = useState<PromiseResult<AWS.S3.ListObjectsV2Output, AWS.AWSError> | null>(null);
+  const { selectedPath } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -124,10 +148,10 @@ const Entry = ({
   return (
     <Stack flex {...props}>
       {objects?.CommonPrefixes?.map((item) => (
-        <Folder key={item.Prefix} level={level} selectedPath={selectedPath} selected={item.Prefix === selectedPath} {...item} onPathSelect={onPathSelect} />
+        <Folder key={item.Prefix} level={level} selected={item.Prefix === selectedPath} {...item} />
       ))}
       {objects?.Contents?.map((item) => (
-        <File key={item.Key} level={level} selected={item.Key === selectedPath} {...item} onPathSelect={onPathSelect} />
+        <File key={item.Key} level={level} selected={item.Key === selectedPath} {...item} />
       ))}
     </Stack>
   );
@@ -142,17 +166,24 @@ function App() {
     setSelectedPath(path);
   }, []);
 
+  const appContextValue = useMemo(() => ({
+    selectedPath,
+    onPathSelect,
+  }), [onPathSelect, selectedPath]);
+
   return (
-    <View fillColor="gray-1" className="App">
-      <Spacer size="small" />
-      <Stack horizontal padding="small medium">
-        <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
-        <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
-        <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
-      </Stack>
-      <Divider />
-      <Entry path={''} selectedPath={selectedPath} padding="small" fillColor="white" style={{ overflowY: 'auto' }} onPathSelect={onPathSelect} />
-    </View>
+    <AppContext.Provider value={appContextValue}>
+      <View fillColor="gray-1" className="App">
+        <Spacer size="small" />
+        <Stack horizontal padding="small medium">
+          <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
+          <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
+          <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
+        </Stack>
+        <Divider />
+        <Entry path={''} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
+      </View>
+    </AppContext.Provider>
   );
 }
 
