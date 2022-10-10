@@ -28,14 +28,15 @@ function Menu({
 
   return (
     <View style={{ position: 'relative' }}>
-      <Button title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
+      <Button hover title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
       {isMenuVisible && (
-        <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5 }}>
+        <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5, boxShadow: '0 4px 8px hsla(0, 0%, 0%, 0.24), 0 0 0 1px hsla(0, 0%, 0%, 0.1)' }}>
           {React.Children.map(children, child => React.isValidElement(child) && child.type === Button
             ? React.cloneElement(child as React.ReactElement<React.ComponentProps<typeof Button>>, {
-              // hover: true,
+              hover: true,
               titleFontWeight: 'medium',
               titleAlign: 'left',
+              onPointerUp: (event: any) => { child.props.onPointerUp(event, child.props.data); setIsMenuVisible(false); },
             }) : (
               child
             ))}
@@ -47,7 +48,9 @@ function Menu({
 
 const applicationsMenu = [
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
-  { title: 'Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' }
+  { title: 'Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' },
+  { title: 'The io language', width: 800, height: 873, src: 'https://iolanguage.org' },
+  { title: 'Learn to code using p5.js', width: 1200, height: 873, src: 'https://socialme.us/lets-code' },
 ];
 
 interface DesktopProps extends React.ComponentProps<typeof View> {
@@ -68,7 +71,7 @@ function Desktop({
 }: DesktopProps) {
   const { onOpenWindow } = useContext(AppContext);
 
-  const handleClick = (event: React.PointerEvent, data?: OpenWindowArgs) => {
+  const handlePointerUp = (event: React.PointerEvent, data?: OpenWindowArgs) => {
     if (data) {
       onOpenWindow({
         title: data.title,
@@ -87,7 +90,7 @@ function Desktop({
         </Menu>
         <Menu title="Applications">
           {applicationsMenu.map((item, index) => (
-            <Button key={index} title={item.title} data={item} onClick={handleClick} />
+            <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
           ))}
         </Menu>
       </View>

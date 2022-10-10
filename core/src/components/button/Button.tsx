@@ -21,6 +21,7 @@ interface ButtonProps<TData> extends React.ComponentProps<typeof View> {
   title?: string,
   primary?: boolean,
   solid?: boolean,
+  hover?: boolean,
   size?: 'small',
   data?: TData,
   disabled?: boolean,
@@ -40,10 +41,12 @@ function getFillColor({ primary, solid }: ButtonProps<any>) {
   }
 }
 
-function getBorderColor({ primary, solid }: ButtonProps<any>) {
+function getBorderColor({ primary, solid, hover }: ButtonProps<any>) {
   switch (true) {
     case primary:
       return 'blue-5';
+    case hover:
+      return undefined;
     default:
       return 'gray-3';
   }
@@ -65,6 +68,7 @@ function Button<TData>({
   title,
   primary,
   solid,
+  hover,
   size,
   data,
   disabled,
@@ -77,7 +81,7 @@ function Button<TData>({
   const styles = useStyles();
 
   const fillColor = getFillColor({ primary, solid });
-  const borderColor = getBorderColor({ primary, solid });
+  const borderColor = getBorderColor({ primary, solid, hover });
   const textColor = getTextColor({ primary, solid });
 
   const handleClick = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -96,6 +100,7 @@ function Button<TData>({
 
   const buttonClassName = clsx(
     styles.Button,
+    hover && styles.hover,
     size && styles[size],
   );
 
@@ -111,7 +116,7 @@ function Button<TData>({
       ref={buttonElementRef}
       as="button"
       horizontal
-      border
+      border={borderColor !== undefined}
       align={titleAlign}
       fillColor={fillColor}
       borderColor={borderColor}

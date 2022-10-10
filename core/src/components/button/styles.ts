@@ -8,6 +8,7 @@ const useStyles = createUseStyles({
     border: 'none',
     outline: 'none',
     padding: '9px 16px',
+    whiteSpace: 'nowrap',
     borderRadius: 2.5,
 
     // '&:focus': {
@@ -25,7 +26,7 @@ const useStyles = createUseStyles({
     //   boxShadow: 'inset 0 0 0 2px hsla(0, 0%, 0%, 0.25)',
     // }
 
-    '&:focus': {
+    '&:focus-visible': {
       // position: 'absolute',
       // inset: 0,
       // content: '""',
@@ -41,6 +42,11 @@ const useStyles = createUseStyles({
     '&:disabled': {
       opacity: 0.5,
     }
+  },
+  hover: {
+    '&:hover': {
+      backgroundColor: OpenColor.gray[1]
+    },
   },
   small: {
     padding: '5px 8px',
