@@ -46,11 +46,30 @@ function Menu({
   );
 }
 
+const desktopMenu = [
+  { title: 'Preferences', width: 500, height: 400, src: 'clients/preferences' },
+];
+
 const applicationsMenu = [
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
-  { title: 'Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' },
-  { title: 'The io language', width: 800, height: 873, src: 'https://iolanguage.org' },
-  { title: 'Learn to code using p5.js', width: 1200, height: 873, src: 'https://socialme.us/lets-code' },
+  { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
+  { title: 'S3 File Explorer', width: 850, height: 400, src: 'clients/explorer' },
+  { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
+  { title: 'Bestest Movies Ever', width: 1200, height: 800, src: 'https://bestestmoviesever.com' },
+  { title: 'Kopi Programming Language', width: 1200, height: 800, src: 'https://mike-austin.com/kopi' },
+  { title: 'React Desktop 0.5', width: 1200, height: 800, src: 'https://mike-austin.com/build-a-language' },
+  { title: 'React Desktop 0.1', width: 1200, height: 800, src: 'https://mike-austin.com/react-wm' },
+  { title: 'Old Site with Resume', width: 1200, height: 800, src: 'https://mike-austin.com' },
+];
+
+const gamesMenu = [
+  { title: 'Let’s Code', width: 1400, height: 800, src: 'https://socialme.us/lets-code' },
+  { title: 'Snakey Snake', width: 400, height: 470, src: 'https://editor.p5js.org/mike_ekim1024/full/8c5ovMThX' },
+  { title: 'Stetegic Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' },
+];
+
+const referenceMenu = [
+  { title: 'The io Language', width: 800, height: 800, src: 'https://iolanguage.org' },
 ];
 
 interface DesktopProps extends React.ComponentProps<typeof View> {
@@ -86,10 +105,22 @@ function Desktop({
     <View flex style={{ background: `center / cover url(${backgroundUrl})` }}>
       <View horizontal padding="none small" fillColor="white">
         <Menu title="Desktop" titleFontWeight="bold">
-          <Button title="Preferences" />
+          {desktopMenu.map((item, index) => (
+            <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
+          ))}
         </Menu>
         <Menu title="Applications">
           {applicationsMenu.map((item, index) => (
+            <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
+          ))}
+        </Menu>
+        <Menu title="Games">
+          {gamesMenu.map((item, index) => (
+            <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
+          ))}
+        </Menu>
+        <Menu title="Reference">
+          {referenceMenu.map((item, index) => (
             <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
           ))}
         </Menu>

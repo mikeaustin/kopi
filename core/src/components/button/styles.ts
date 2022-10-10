@@ -7,9 +7,10 @@ const useStyles = createUseStyles({
     appearance: 'none',
     border: 'none',
     outline: 'none',
-    padding: '9px 16px',
+    padding: '10px 16px',
     whiteSpace: 'nowrap',
     borderRadius: 2.5,
+    cursor: 'pointer',
 
     // '&:focus': {
     //   boxShadow: `inset 0 0 0 2px ${OpenColor.blue[5]}`

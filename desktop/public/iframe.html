@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript">
+      let searchParams = new URLSearchParams(window.location.search);
+
+      window.addEventListener('load', function () {
+        let iframe = document.querySelector('iframe');
+        iframe.src = searchParams.get('url');
+      })
+    </script>
+  </head>
+  <body onpointerpdown="console.log('here')">
+    <iframe></iframe>
+  </body>
+</html>
