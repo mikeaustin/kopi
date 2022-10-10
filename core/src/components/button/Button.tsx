@@ -23,6 +23,7 @@ interface ButtonProps<TData> extends React.ComponentProps<typeof View> {
   solid?: boolean,
   size?: 'small',
   data?: TData,
+  disabled?: boolean,
   titleFontWeight?: Weight,
   titleAlign?: ShorthandAlign,
   onClick?: (event: React.PointerEvent<HTMLDivElement>, data?: TData) => void;
@@ -66,6 +67,7 @@ function Button<TData>({
   solid,
   size,
   data,
+  disabled,
   titleFontWeight = 'bold',
   titleAlign = 'center',
   onClick,
@@ -113,6 +115,7 @@ function Button<TData>({
       align={titleAlign}
       fillColor={fillColor}
       borderColor={borderColor}
+      disabled={disabled}
       className={buttonClassName}
       onClick={handleClick}
       {...props}

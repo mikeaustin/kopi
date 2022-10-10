@@ -9,7 +9,6 @@ const useStyles = createUseStyles({
     outline: 'none',
     padding: '9px 16px',
     borderRadius: 2.5,
-    minWidth: 100,
 
     // '&:focus': {
     //   boxShadow: `inset 0 0 0 2px ${OpenColor.blue[5]}`
@@ -37,6 +36,10 @@ const useStyles = createUseStyles({
       // boxShadow: '0 0 0 2px hsla(0, 0%, 0%, 0.5)',
       // boxShadow: `0 0 0 3px ${OpenColor.blue[5]}`
       boxShadow: `0 0 0 3px ${OpenColor.blue[2]}`
+    },
+
+    '&:disabled': {
+      opacity: 0.5,
     }
   },
   small: {

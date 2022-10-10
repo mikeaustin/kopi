@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo, useContext } from 'react';
 import AWS from 'aws-sdk';
 
-import { View, Text, Stack, Spacer, Divider, Icon } from 'core';
-
-import './App.css';
+import { View, Text, Button, Stack, Spacer, Divider, Icon } from 'core';
 
 AWS.config.region = 'us-east-1';
 AWS.config.credentials = new AWS.Credentials({
@@ -19,11 +17,13 @@ const s3 = new AWS.S3({
 
 interface AppContext {
   selectedPaths: string[],
+  onFolderChange: (path: string) => void,
   onPathSelect: (path: string) => void,
 }
 
 const AppContext = React.createContext<AppContext>({
   selectedPaths: [],
+  onFolderChange: (path: string) => undefined,
   onPathSelect: (path: string) => undefined,
 });
 
@@ -42,9 +42,11 @@ const Folder = ({
   selected?: boolean,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { onPathSelect } = useContext(AppContext);
+  const { onFolderChange, onPathSelect } = useContext(AppContext);
 
   const handleRowPointerDown = (event: React.PointerEvent) => {
+    event.preventDefault();
+
     onPathSelect(path);
   };
 
@@ -55,11 +57,21 @@ const Folder = ({
     setIsExpanded(isExpanded => !isExpanded);
   };
 
+  const handleRowDoubleClick = (event: React.PointerEvent<HTMLDivElement>) => {
+    console.log('here');
+
+    event.preventDefault();
+
+    onFolderChange(path);
+  };
+
   const handleDragOver = (event: React.DragEvent<HTMLElement>) => {
     event.preventDefault();
   };
 
   const handleDragEnter = (event: React.DragEvent<HTMLElement>) => {
+    event.preventDefault();
+
     event.currentTarget.style.boxShadow = 'inset 0 0 0 2px #339af0';
 
     event.dataTransfer.dropEffect = "move";
@@ -70,6 +82,9 @@ const Folder = ({
   };
 
   const handleDrop = (event: React.DragEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     const data = event.dataTransfer.getData("text/plain");
 
     event.currentTarget.style.boxShadow = '';
@@ -91,6 +106,7 @@ const Folder = ({
         fillColor={selected ? 'blue-5' : undefined}
         style={{ borderRadius: 2.5, cursor: 'default' }}
         onPointerDown={handleRowPointerDown}
+        onDoubleClick={handleRowDoubleClick}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -219,30 +235,50 @@ const Entry = ({
 };
 
 function App() {
+  const [folderHistory, setFolderHistory] = useState<string[]>([]);
+  const [currentFolder, setCurrentFolder] = useState('');
   const [selectedPaths, setSelectedPath] = useState<string[]>([]);
 
-  const onPathSelect = useCallback((path: string) => {
-    console.log(path);
+  const onFolderChange = useCallback((path: string) => {
+    setFolderHistory(folderHistory => [...folderHistory, currentFolder]);
+    setCurrentFolder(path);
+  }, [currentFolder]);
 
+  const handleHistoryBackClick = () => {
+    setFolderHistory(folderHistory => folderHistory.slice(0, folderHistory.length - 1));
+    setCurrentFolder(currentFolder => {
+      const path = folderHistory.at(-1);
+
+      return path ?? currentFolder;
+    });
+  };
+
+  const onPathSelect = useCallback((path: string) => {
     setSelectedPath(selectedPaths => [path]);
   }, []);
 
   const appContextValue = useMemo(() => ({
     selectedPaths,
+    onFolderChange,
     onPathSelect,
-  }), [onPathSelect, selectedPaths]);
+  }), [selectedPaths, onFolderChange, onPathSelect]);
 
   return (
     <AppContext.Provider value={appContextValue}>
+      <View horizontal padding="small medium" align="left" fillColor="gray-1">
+        <Button solid icon="chevron-left" disabled={currentFolder === ''} onClick={handleHistoryBackClick} />
+        <Spacer size="medium" />
+        <Text>/{currentFolder}</Text>
+      </View>
       <View fillColor="gray-1" className="App">
-        <Spacer size="small" />
+        {/* <Spacer size="small" /> */}
         <Stack horizontal padding="small medium">
           <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
           <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
           <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
         </Stack>
         <Divider />
-        <Entry path={''} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
+        <Entry path={currentFolder} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
       </View>
     </AppContext.Provider>
   );

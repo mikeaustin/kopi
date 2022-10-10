@@ -146,6 +146,8 @@ function Window({
   };
 
   const handleTitlePointerMove = (event: React.PointerEvent) => {
+    event.preventDefault();
+
     if (windowElementRef.current && initialWindowRectRef.current && initialPointerRef.current) {
       const initialWindowRect = initialWindowRectRef.current;
       const initialPointer = initialPointerRef.current;

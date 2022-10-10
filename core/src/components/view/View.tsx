@@ -83,6 +83,7 @@ interface ViewProps extends React.ComponentProps<'div'> {
   padding?: CombinedPadding,
   border?: boolean,
   borderColor?: Color,
+  disabled?: boolean,
   className?: string,
   children?: React.ReactNode,
 }
@@ -96,6 +97,7 @@ const View = ({
   padding,
   border,
   borderColor,
+  disabled,
   className,
   children,
   ...props
@@ -128,7 +130,7 @@ const View = ({
 
   return (
     <ViewContext.Provider value={{ isHorizontal: horizontal ?? false }}>
-      <Component ref={ref} className={viewClassName} {...props}>
+      <Component ref={ref} disabled={disabled} className={viewClassName} {...props}>
         {children}
       </Component>
     </ViewContext.Provider>

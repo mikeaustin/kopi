@@ -21,7 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "export": "npm run build && cp -r build/. ../../desktop/public/clients/preferences",
+    "export": "npm run build && (rm -rf ../../desktop/public/clients/preferences; cp -r build/. ../../desktop/public/clients/preferences)",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
