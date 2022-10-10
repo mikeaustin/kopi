@@ -57,7 +57,7 @@ function App() {
         <Text>Background</Text>
       </View>
       <Divider />
-      <View flex padding="medium" fillColor="white" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, alignContent: 'flex-start', overflowY: 'auto' }}>
+      <View flex padding="medium" fillColor="white" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, alignContent: 'flex-start', overflowY: 'auto' }}>
         {backgroundImages.map((image, index) => (
           <Image selected={image.src === selectedImageSrc} src={image.src} onImageSelected={handleImageSelected} />
         ))}

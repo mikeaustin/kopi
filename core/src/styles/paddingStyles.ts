@@ -5,25 +5,25 @@ const usePaddingStyles = createUseStyles({
     padding: 0,
   },
   xxsmall: {
-    padding: 2.5,
+    padding: 2,
   },
   xsmall: {
-    padding: 5,
+    padding: 4,
   },
   small: {
-    padding: 10,
+    padding: 8,
   },
   medium: {
-    padding: 15,
+    padding: 16,
   },
   large: {
-    padding: 20,
+    padding: 24,
   },
   xlarge: {
-    padding: 25,
+    padding: 32,
   },
   xxlarge: {
-    padding: 30,
+    padding: 40,
   }
 });
 
@@ -33,32 +33,32 @@ const usePaddingHorizontalStyles = createUseStyles({
     paddingRight: 0,
   },
   xxsmall: {
-    paddingLeft: 2.5,
-    paddingRight: 2.5,
+    paddingLeft: 2,
+    paddingRight: 2,
   },
   xsmall: {
-    paddingLeft: 5,
+    paddingLeft: 4,
     paddingRight: 5,
   },
   small: {
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   medium: {
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   large: {
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 24,
+    paddingRight: 24,
   },
   xlarge: {
-    paddingLeft: 25,
-    paddingRight: 25,
+    paddingLeft: 32,
+    paddingRight: 32,
   },
   xxlarge: {
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 40,
+    paddingRight: 40,
   }
 });
 
@@ -68,32 +68,32 @@ const usePaddingVerticalStyles = createUseStyles({
     paddingBottom: 0,
   },
   xxsmall: {
-    paddingTop: 2.5,
-    paddingBottom: 2.5,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   xsmall: {
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   small: {
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   medium: {
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: 16,
+    paddingBottom: 16,
   },
   large: {
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 24,
+    paddingBottom: 24,
   },
   xlarge: {
-    paddingTop: 25,
-    paddingBottom: 25,
+    paddingTop: 32,
+    paddingBottom: 32,
   },
   xxlarge: {
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingTop: 40,
+    paddingBottom: 40,
   }
 });
 

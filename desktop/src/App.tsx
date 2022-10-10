@@ -33,6 +33,7 @@ function Menu({
         <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5 }}>
           {React.Children.map(children, child => React.isValidElement(child) && child.type === Button
             ? React.cloneElement(child as React.ReactElement<React.ComponentProps<typeof Button>>, {
+              // hover: true,
               titleFontWeight: 'medium',
               titleAlign: 'left',
             }) : (

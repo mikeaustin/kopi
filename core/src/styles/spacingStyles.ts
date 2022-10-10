@@ -2,46 +2,46 @@ import { createUseStyles } from 'react-jss';
 
 const useSpacingStyles = createUseStyles({
   xxsmall: {
-    minHeight: 2.5,
+    minHeight: 2,
   },
   xsmall: {
-    minHeight: 5,
+    minHeight: 4,
   },
   small: {
-    minHeight: 10,
+    minHeight: 8,
   },
   medium: {
-    minHeight: 15,
+    minHeight: 16,
   },
   large: {
-    minHeight: 20,
+    minHeight: 24,
   },
   xlarge: {
-    minHeight: 25,
+    minHeight: 32,
   },
   xxlarge: {
-    minHeight: 30,
+    minHeight: 40,
   },
   'horizontal-xxsmall': {
-    minWidth: 2.5,
+    minWidth: 2,
   },
   'horizontal-xsmall': {
-    minWidth: 5,
+    minWidth: 4,
   },
   'horizontal-small': {
-    minWidth: 10,
+    minWidth: 8,
   },
   'horizontal-medium': {
-    minWidth: 15,
+    minWidth: 16,
   },
   'horizontal-large': {
-    minWidth: 20,
+    minWidth: 24,
   },
   'horizontal-xlarge': {
-    minWidth: 25,
+    minWidth: 32,
   },
   'horizontal-xxlarge': {
-    minWidth: 30,
+    minWidth: 40,
   },
 });
 
