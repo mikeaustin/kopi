@@ -60,11 +60,13 @@ const applicationsMenu = [
   { title: 'React Desktop 0.5', width: 1200, height: 800, src: 'https://mike-austin.com/build-a-language' },
   { title: 'React Desktop 0.1', width: 1200, height: 800, src: 'https://mike-austin.com/react-wm' },
   { title: 'Old Site with Resume', width: 1200, height: 800, src: 'https://mike-austin.com' },
+  { title: 'After a While, Crocodile', width: 800, height: 482, src: 'https://www.youtube.com/embed/oWkOkpzyD3Y' },
 ];
 
 const gamesMenu = [
   { title: 'Let’s Code', width: 1400, height: 800, src: 'https://socialme.us/lets-code' },
-  { title: 'Snakey Snake', width: 400, height: 470, src: 'https://editor.p5js.org/mike_ekim1024/full/8c5ovMThX' },
+  { title: 'React Asteroids', width: 1600, height: 900, src: 'https://codepen.io/mikeaustin/embed/mdpYMym?default-tab=js%2Cresult' },
+  { title: 'Snakey Snake', width: 400, height: 474, src: 'https://editor.p5js.org/mike_ekim1024/full/8c5ovMThX' },
   { title: 'Stetegic Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' },
 ];
 
