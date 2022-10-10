@@ -3,6 +3,8 @@ import AWS from 'aws-sdk';
 
 import { View, Text, Button, Stack, Spacer, Divider, Icon } from 'core';
 
+import './App.css';
+
 AWS.config.region = 'us-east-1';
 AWS.config.credentials = new AWS.Credentials({
   accessKeyId: 'AKIATDBOG2D72AZWREML',
@@ -265,24 +267,25 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextValue}>
-      <View horizontal padding="small medium" align="left" fillColor="gray-1">
-        <Button solid icon="chevron-left" disabled={currentFolder === ''} onClick={handleHistoryBackClick} />
-        <Spacer size="medium" />
-        <View>
-          <Text>/{currentFolder}</Text>
-          {/* <Spacer size="medium" />
+      <View className="App">
+        <View horizontal padding="small medium" align="left" fillColor="gray-1">
+          <Button solid icon="chevron-left" disabled={currentFolder === ''} onClick={handleHistoryBackClick} />
+          <Spacer size="medium" />
+          <View>
+            <Text>/{currentFolder}</Text>
+            {/* <Spacer size="medium" />
           <Text light fontSize="small">5 items</Text> */}
+          </View>
         </View>
-      </View>
-      <View fillColor="gray-1" className="App">
-        {/* <Spacer size="small" /> */}
-        <Stack horizontal padding="small medium">
-          <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
-          <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
-          <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
-        </Stack>
+        <View fillColor="gray-1">
+          <Stack horizontal padding="small medium">
+            <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
+            <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
+            <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
+          </Stack>
+        </View>
         <Divider />
-        <Entry path={currentFolder} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
+        <Entry flex path={currentFolder} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
       </View>
     </AppContext.Provider>
   );
