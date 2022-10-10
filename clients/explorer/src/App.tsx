@@ -268,7 +268,11 @@ function App() {
       <View horizontal padding="small medium" align="left" fillColor="gray-1">
         <Button solid icon="chevron-left" disabled={currentFolder === ''} onClick={handleHistoryBackClick} />
         <Spacer size="medium" />
-        <Text>/{currentFolder}</Text>
+        <View>
+          <Text>/{currentFolder}</Text>
+          {/* <Spacer size="medium" />
+          <Text light fontSize="small">5 items</Text> */}
+        </View>
       </View>
       <View fillColor="gray-1" className="App">
         {/* <Spacer size="small" /> */}
