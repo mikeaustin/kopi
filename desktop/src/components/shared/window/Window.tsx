@@ -189,7 +189,7 @@ function Window({
       </View>
       <View flex className={styles.innerView}>
         <View
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', marginBottom: -1 }}
           padding="small"
           fillColor="gray-1"
           onPointerDown={handleTitlePointerDown}

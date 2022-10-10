@@ -20,7 +20,7 @@ const s3 = new AWS.S3({
 interface AppContext {
   selectedPaths: string[],
   onFolderChange: (path: string) => void,
-  onPathSelect: (path: string) => void,
+  onPathSelect: (path: string, metaKey: boolean) => void,
 }
 
 const AppContext = React.createContext<AppContext>({
@@ -49,7 +49,7 @@ const Folder = ({
   const handleRowPointerDown = (event: React.PointerEvent) => {
     event.preventDefault();
 
-    onPathSelect(path);
+    onPathSelect(path, event.metaKey);
   };
 
   const handleExpandPointerDown = (event: React.PointerEvent) => {
@@ -148,8 +148,8 @@ const File = ({
 }) => {
   const { onPathSelect } = useContext(AppContext);
 
-  const handleRowPointerDown = () => {
-    onPathSelect(path);
+  const handleRowPointerDown = (event: React.PointerEvent) => {
+    onPathSelect(path, event.metaKey);
   };
 
   const handleDragStart = (event: React.DragEvent) => {
@@ -253,10 +253,21 @@ function App() {
 
       return path ?? currentFolder;
     });
+    setSelectedPath([]);
   };
 
-  const onPathSelect = useCallback((path: string) => {
-    setSelectedPath(selectedPaths => [path]);
+  const onPathSelect = useCallback((path: string, metaKey: boolean) => {
+    setSelectedPath(selectedPaths => {
+      if (metaKey) {
+        if (selectedPaths.includes(path)) {
+          return selectedPaths.filter(selectedPath => selectedPath !== path);
+        } else {
+          return [...selectedPaths, path];
+        }
+      } else {
+        return [path];
+      }
+    });
   }, []);
 
   const appContextValue = useMemo(() => ({
@@ -272,17 +283,24 @@ function App() {
           <Button solid icon="chevron-left" disabled={currentFolder === ''} onClick={handleHistoryBackClick} />
           <Spacer size="medium" />
           <View>
-            <Text>/{currentFolder}</Text>
+            <Text>https://mike-austin.s3.amazonaws.com/{currentFolder}</Text>
             {/* <Spacer size="medium" />
           <Text light fontSize="small">5 items</Text> */}
           </View>
+          <Spacer flex size="medium" />
+          <Stack horizontal spacing="medium" align="right">
+            <Text>{selectedPaths.length > 0 ? selectedPaths.length : 'No'} items selected</Text>
+            <Button title="Some Button" />
+          </Stack>
         </View>
         <View fillColor="gray-1">
-          <Stack horizontal padding="small medium">
+          <Spacer size="small" />
+          <Stack horizontal padding="none medium">
             <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
             <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
             <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
           </Stack>
+          <Spacer size="xsmall" />
         </View>
         <Divider />
         <Entry flex path={currentFolder} padding="small" fillColor="white" style={{ overflowY: 'auto' }} />
