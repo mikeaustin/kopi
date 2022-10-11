@@ -53,7 +53,7 @@ const desktopMenu = [
 const applicationsMenu = [
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
   { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
-  { title: 'S3 File Explorer', width: 850, height: 400, src: 'clients/explorer' },
+  { title: 'S3 File Explorer', width: 800, height: 400, src: 'clients/explorer' },
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
   { title: 'Bestest Movies Ever', width: 1200, height: 800, src: 'https://bestestmoviesever.com' },
   { title: 'Kopi Programming Language', width: 1200, height: 800, src: 'https://mike-austin.com/kopi' },

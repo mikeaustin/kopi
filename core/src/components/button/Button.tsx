@@ -126,7 +126,7 @@ function Button<TData>({
       {...props}
     >
       {icon && (
-        <FontAwesomeIcon icon={icon} color={iconColor} style={{ marginTop: -4, marginBottom: -4 }} />
+        <FontAwesomeIcon fixedWidth icon={icon} color={iconColor} style={{ marginTop: -4, marginBottom: -4 }} />
       )}
       {icon && title && (
         <Spacer size="small" />
