@@ -16,7 +16,7 @@ import { ShorthandAlign } from '../../types/Align.js';
 
 library.add(fas);
 
-interface ButtonProps<TData> extends React.ComponentProps<typeof View> {
+interface ButtonProps<TData = unknown> extends React.ComponentProps<typeof View> {
   icon?: IconName,
   title?: string,
   primary?: boolean,
@@ -30,7 +30,7 @@ interface ButtonProps<TData> extends React.ComponentProps<typeof View> {
   onClick?: (event: React.PointerEvent<HTMLDivElement>, data?: TData) => void;
 }
 
-function getFillColor({ primary, solid }: ButtonProps<any>) {
+function getFillColor({ primary, solid }: ButtonProps) {
   switch (true) {
     case primary && solid:
       return 'blue-5';
@@ -41,7 +41,7 @@ function getFillColor({ primary, solid }: ButtonProps<any>) {
   }
 }
 
-function getBorderColor({ primary, solid, hover }: ButtonProps<any>) {
+function getBorderColor({ primary, solid, hover }: ButtonProps) {
   switch (true) {
     case primary:
       return 'blue-5';
@@ -52,7 +52,7 @@ function getBorderColor({ primary, solid, hover }: ButtonProps<any>) {
   }
 }
 
-function getTextColor({ primary, solid }: ButtonProps<any>) {
+function getTextColor({ primary, solid }: ButtonProps) {
   switch (true) {
     case primary && solid:
       return 'white';

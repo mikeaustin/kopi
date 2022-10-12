@@ -35,9 +35,9 @@ function App() {
   }, []);
 
   return (
-    <View fillColor="white" className="App" onPointerDown={handleAppPointerDown}>
-      <View horizontal>
-        <Stack ref={appElementRef} divider padding="medium" spacing="medium">
+    <View flex fillColor="white" className="App" onPointerDown={handleAppPointerDown}>
+      <View flex horizontal>
+        <Stack flex ref={appElementRef} divider padding="medium" spacing="medium">
           <Stack horizontal divider spacing="medium">
             <Stack spacing="small" spacingColor="gray-1" align="center">
               <Text fontSize="xlarge">XLarge (32px)</Text>
@@ -84,7 +84,7 @@ function App() {
               </Stack>
             </Stack>
           </Stack>
-          <Stack horizontal padding="medium" spacing="small" align="center" fillColor="gray-1">
+          <Stack flex horizontal padding="medium" spacing="small" align="center" fillColor="gray-1">
             <Input label="First Name" />
             <Input label="Last Name" />
           </Stack>

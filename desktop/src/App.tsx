@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import AppContext from './AppContext';
 
-import { View, Text, Button } from 'core';
+import { View, Button } from 'core';
 import Window from './components/shared/window';
 
 import './App.css';
 
 interface MenuProps extends React.ComponentProps<typeof Button> {
   title: string,
-  titleFontWeight?: 'bold' | 'medium',
+  titleFontWeight?: React.ComponentProps<(typeof Button)>['titleFontWeight'],
   children: React.ReactNode;
 }
 
@@ -134,47 +134,16 @@ function Desktop({
   );
 }
 
-const draw = (
-  <iframe src="https://mike-austin.com/draw-2" style={{ border: 'none', height: '100%' }} />
-);
-
-const movies = (
-  <iframe src="https://bestestmoviesever.com" style={{ border: 'none', height: '100%' }} />
-);
-
-const kopi = (
-  <iframe src="https://mike-austin.com/kopi" style={{ border: 'none', height: '100%' }} />
-);
-
 const gemtask = (
   <iframe src="https://gemtask.mike-austin.com" style={{ border: 'none', height: '100%' }} />
 );
 
-const language = (
-  <iframe src="https://mike-austin.com/build-a-language" style={{ border: 'none', height: '100%' }} />
-);
-
-const site = (
-  <iframe src="https://mike-austin.com" style={{ border: 'none', height: '100%' }} />
-);
-
-const game = (
-  <iframe src="https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U" style={{ border: 'none', height: '100%' }} />
-);
-
 function App() {
   const [windows, setWindows] = useState([
-    // { title: 'Draw', left: 20, top: 20, width: 1000, height: 600, client: draw },
-    // { title: 'Movies', left: 1040, top: 20, width: 1000, height: 600, client: movies },
-    // { title: 'Kopi', left: 2060, top: 20, width: 1000, height: 600, client: kopi },
-    // { title: 'Gemtask', left: 20, top: 640, width: 1000, height: 600, client: gemtask },
-    // { title: 'Language', left: 1040, top: 640, width: 1000, height: 600, client: language },
-    // { title: 'Site', left: 2060, top: 640, width: 1000, height: 600, client: site },
-    { title: 'Examples', left: 20, top: 20, width: 846, height: 510, src: 'clients/examples', id: uuid() },
-    { title: 'Calendar', left: 885, top: 20, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
-    { title: 'Preferences', left: 885, top: 360, width: 500, height: 400, src: 'clients/preferences', id: uuid() },
-    { title: 'Explorer', left: 20, top: 550, width: 846, height: 400, src: 'clients/explorer', id: uuid() },
-    // { title: 'Asteroids', left: 20, top: 20, width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U', id: uuid() },
+    { title: 'Examples', left: 15, top: 15, width: 850, height: 530, src: 'clients/examples', id: uuid() },
+    { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
+    { title: 'Preferences', left: 880, top: 350, width: 500, height: 400, src: 'clients/preferences', id: uuid() },
+    { title: 'Explorer', left: 15, top: 560, width: 850, height: 340, src: 'clients/explorer', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
 

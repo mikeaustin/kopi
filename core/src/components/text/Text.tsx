@@ -50,7 +50,7 @@ function Text({
 
   useLayoutEffect(() => {
     if (contain && textElementRef.current) {
-      textElementRef.current.style.width = `${textElementRef.current.parentElement?.offsetWidth}px`;
+      // textElementRef.current.style.width = `${textElementRef.current.parentElement?.offsetWidth}px`;
     }
 
     setIsHidden(false);
