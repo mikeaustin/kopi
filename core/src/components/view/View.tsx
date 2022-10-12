@@ -84,6 +84,7 @@ interface ViewProps extends React.ComponentProps<'div'> {
   border?: boolean,
   borderColor?: Color,
   disabled?: boolean,
+  viewBox?: string,
   className?: string,
   children?: React.ReactNode,
 }
@@ -98,6 +99,7 @@ const View = ({
   border,
   borderColor,
   disabled,
+  viewBox,
   className,
   children,
   ...props
@@ -130,7 +132,7 @@ const View = ({
 
   return (
     <ViewContext.Provider value={{ isHorizontal: horizontal ?? false }}>
-      <Component ref={ref} disabled={disabled} className={viewClassName} {...props}>
+      <Component ref={ref} disabled={disabled} viewBox={viewBox} className={viewClassName} {...props}>
         {children}
       </Component>
     </ViewContext.Provider>

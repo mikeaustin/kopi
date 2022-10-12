@@ -142,10 +142,12 @@ function App() {
   const [windows, setWindows] = useState([
     { title: 'Examples', left: 15, top: 15, width: 850, height: 530, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
-    { title: 'Preferences', left: 880, top: 350, width: 500, height: 400, src: 'clients/preferences', id: uuid() },
+    { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
+    { title: 'Preferences', left: 880, top: 350, width: 500, height: 390, src: 'clients/preferences', id: uuid() },
     { title: 'Explorer', left: 15, top: 560, width: 850, height: 340, src: 'clients/explorer', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
+  const [wallpaperUrl, setWallpaperUrl] = useState('images/653931.jpg');
 
   const handleWindowMessage = (event: MessageEvent) => {
     if (event.data.type === 'setClientDimensions') {
@@ -163,6 +165,9 @@ function App() {
         ...windowOrder.filter((id) => id !== event.data.id),
         event.data.id,
       ]);
+    } else if (event.data.type === 'setDesktopWallpaper') {
+      console.log(event.data.url);
+      setWallpaperUrl(event.data.url);
     }
   };
 
@@ -191,7 +196,7 @@ function App() {
   return (
     <AppContext.Provider value={appContextValue}>
       <View flex className="App">
-        <Desktop flex backgroundUrl="images/653931.jpg">
+        <Desktop flex backgroundUrl={wallpaperUrl}>
           {windows.map((window) => (
             <Window key={window.id} id={window.id} src={window.src} title={window.title} config={window} order={windowOrder.indexOf(window.id)} />
           ))}
