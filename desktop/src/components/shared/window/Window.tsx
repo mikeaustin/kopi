@@ -1,7 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 
 import { View, Text, Button, Divider } from 'core';
+import AppContext from '../../../AppContext';
 
 import styles from './Window.module.scss';
 
@@ -133,6 +134,8 @@ function Window({
   const initialPointerRef = useRef<{ clientX: number, clientY: number; } | null>(null);
   const initialWindowRectRef = useRef<DOMRect>();
 
+  const { onOpenWindow, onCloseWindow } = useContext(AppContext);
+
   //
 
   const handleTitlePointerDown = (event: React.PointerEvent) => {
@@ -165,6 +168,10 @@ function Window({
     console.log('handleWindowPointerDown');
   };
 
+  const handleCloseButtonClick = () => {
+    onCloseWindow(id);
+  };
+
   //
 
   useEffect(() => {
@@ -188,17 +195,16 @@ function Window({
         <Handle align="bottom-left" /><Handle align="bottom" /><Handle align="bottom-right" />
       </View>
       <View flex className={styles.innerView}>
+        <Button hover icon="xmark" size="small" style={{ position: 'absolute', margin: 5, padding: '5px 3px 5px 3px' }} onClick={handleCloseButtonClick} />
         <View
           horizontal
           style={{ cursor: 'pointer', marginBottom: -1, padding: 10 }}
           padding="small"
           fillColor="gray-3"
-          align="center"
           onPointerDown={handleTitlePointerDown}
           onPointerMove={handleTitlePointerMove}
           onPointerUp={handleTitlePointerUp}
         >
-          <Button hover icon="xmark" size="small" style={{ margin: '-5px -5px -5px -5px', padding: '5px 3px 5px 3px' }} />
           <Text flex fontWeight="bold" textColor="gray-6" style={{ textAlign: 'center' }}>
             {title}
           </Text>

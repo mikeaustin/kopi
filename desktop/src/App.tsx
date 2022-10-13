@@ -189,9 +189,16 @@ function App() {
     ]);
   }, []);
 
+  const handleCloseWindow = useCallback((id: string) => {
+    console.log('handleCloseWindow');
+
+    setWindows(windows => windows.filter(window => window.id !== id));
+  }, []);
+
   const appContextValue = useMemo(() => ({
     onOpenWindow: handleOpenWindow,
-  }), [handleOpenWindow]);
+    onCloseWindow: handleCloseWindow,
+  }), [handleOpenWindow, handleCloseWindow]);
 
   return (
     <AppContext.Provider value={appContextValue}>
