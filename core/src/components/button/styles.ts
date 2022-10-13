@@ -1,5 +1,6 @@
 import OpenColor from 'open-color';
 import { createUseStyles } from 'react-jss';
+import color from 'color';
 
 const useStyles = createUseStyles({
   Button: {
@@ -41,12 +42,20 @@ const useStyles = createUseStyles({
     },
 
     '&:disabled': {
-      // opacity: 0.5,
-    }
+      opacity: 0.5,
+    },
+
+    '&:hover': {
+      // filter: 'brightness(1.05)',
+      // opacity: 0.5
+    },
+  },
+  solid: {
+    // background: color(OpenColor.gray[6]).alpha(0.25).saturate(1.0).hexa(),
   },
   hover: {
     '&:hover': {
-      backgroundColor: OpenColor.gray[1]
+      background: color(OpenColor.gray[6]).alpha(0.25).saturate(1.0).hexa(),
     },
   },
   small: {

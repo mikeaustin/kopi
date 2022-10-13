@@ -279,10 +279,12 @@ function App() {
   return (
     <AppContext.Provider value={appContextValue}>
       <View className="App">
-        <Stack horizontal padding="small medium" spacing="small" align="left" fillColor="gray-1">
-          <Button solid icon="home" disabled={currentFolder === ''} style={{ padding: 10 }} onClick={handleHistoryBackClick} />
-          <Button solid icon="chevron-left" disabled={currentFolder === ''} style={{ padding: 10 }} onClick={handleHistoryBackClick} />
-          <View />
+        <View horizontal padding="medium" align="left" fillColor="gray-1">
+          <Stack horizontal spacing="small" >
+            <Button solid icon="chevron-left" disabled={currentFolder === ''} style={{ padding: 10 }} onClick={handleHistoryBackClick} />
+            <Button solid icon="home" disabled={currentFolder === ''} style={{ padding: 10 }} onClick={handleHistoryBackClick} />
+          </Stack>
+          <Spacer size="medium" />
           <View>
             <Text light fontSize="small">https://mike-austin.s3.amazonaws.com</Text>
             <Spacer size="small" />
@@ -293,9 +295,9 @@ function App() {
             <Text>{selectedPaths.length > 0 ? selectedPaths.length : 'No'} items selected</Text>
             <Button title="Some Button" />
           </Stack>
-        </Stack>
+        </View>
         <View fillColor="gray-1">
-          <Spacer size="small" />
+          {/* <Spacer size="small" /> */}
           <Stack horizontal padding="none medium">
             <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
             <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>

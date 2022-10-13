@@ -43,12 +43,18 @@ function getFillColor({ primary, solid }: ButtonProps) {
 
 function getBorderColor({ primary, solid, hover }: ButtonProps) {
   switch (true) {
-    case primary:
-      return 'blue-5';
     case hover:
       return undefined;
-    default:
+    case !primary && solid:
+      return undefined;
+    case !primary && !solid:
       return 'gray-3';
+    case primary && !solid:
+      return 'blue-5';
+    case primary && solid:
+      return undefined;
+    default:
+      return undefined;
   }
 }
 
@@ -100,6 +106,7 @@ function Button<TData>({
 
   const buttonClassName = clsx(
     styles.Button,
+    solid && !primary && styles.solid,
     hover && styles.hover,
     size && styles[size],
   );

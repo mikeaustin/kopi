@@ -59,6 +59,7 @@ function App() {
             </Stack>
             <Stack flex spacing="small" align="center">
               <Stack horizontal spacing="small">
+                <Button hover title="Hover" />
                 <Button title="Default" />
                 <Button solid title="Solid" />
                 <Button primary title="Primary" />
