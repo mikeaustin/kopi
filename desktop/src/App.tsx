@@ -47,11 +47,13 @@ function Menu({
 }
 
 const desktopMenu = [
-  { title: 'Preferences', width: 500, height: 400, src: 'clients/preferences' },
+  { title: 'Preferences', width: 500, height: 390, src: 'clients/preferences' },
 ];
 
 const applicationsMenu = [
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
+  { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
+  { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
   { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
   { title: 'S3 File Explorer', width: 800, height: 400, src: 'clients/explorer' },
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
@@ -143,6 +145,7 @@ function App() {
     { title: 'Examples', left: 15, top: 15, width: 850, height: 530, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
+    { title: 'Calculator', left: 1555, top: 15, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
     { title: 'Preferences', left: 880, top: 350, width: 500, height: 390, src: 'clients/preferences', id: uuid() },
     { title: 'Explorer', left: 15, top: 560, width: 850, height: 340, src: 'clients/explorer', id: uuid() },
   ]);

@@ -205,7 +205,7 @@ function Window({
           onPointerMove={handleTitlePointerMove}
           onPointerUp={handleTitlePointerUp}
         >
-          <Text flex fontWeight="bold" textColor="gray-6" style={{ textAlign: 'center' }}>
+          <Text flex fontWeight="bold" textColor="gray-7" style={{ textAlign: 'center' }}>
             {title}
           </Text>
         </View>

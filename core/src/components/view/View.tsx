@@ -34,6 +34,8 @@ function paddingToStyle(padding: CombinedPadding | undefined): [Padding | undefi
       return ['small', 'medium'];
     case 'small large':
       return ['small', 'large'];
+    case 'medium none':
+      return ['medium', 'none'];
     case 'medium small':
       return ['medium', 'small'];
     default:
