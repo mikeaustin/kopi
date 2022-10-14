@@ -110,6 +110,9 @@ const useFillColorStyles = createUseStyles({
   'theme-divider': {
     background: 'var(--theme-divider-color)',
   },
+  'theme-button': {
+    background: 'var(--theme-button-color)',
+  },
   'transparent': {
     background: 'transparent'
   },

@@ -185,6 +185,7 @@ function Window({
         panelColor: OpenColor.gray[8],
         dividerColor: OpenColor.gray[7],
         textColor: OpenColor.gray[4],
+        buttonColor: OpenColor.gray[7],
       }
     });
   };

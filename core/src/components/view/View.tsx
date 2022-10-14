@@ -78,11 +78,13 @@ function alignToStyle(align: ShorthandAlign | undefined): [Align | undefined, Al
 }
 
 interface ColorThemeMessage {
+  type: string,
   theme: {
     contentColor: string,
     panelColor: string,
     dividerColor: string,
     textColor: string,
+    buttonColor: string,
   };
 }
 
@@ -91,7 +93,7 @@ interface ViewProps extends React.ComponentProps<'div'> {
   flex?: boolean,
   horizontal?: boolean,
   align?: ShorthandAlign,
-  fillColor?: Color | 'theme-content' | 'theme-panel' | 'theme-divider',
+  fillColor?: Color | 'theme-content' | 'theme-panel' | 'theme-divider' | 'theme-button',
   padding?: CombinedPadding,
   border?: boolean,
   borderColor?: Color,
@@ -119,10 +121,13 @@ const View = ({
   ref: React.Ref<HTMLDivElement>
 ) => {
   const handleWindowMessage = useCallback((event: MessageEvent<ColorThemeMessage>) => {
-    document.documentElement.style.setProperty('--theme-content-color', event.data.theme.contentColor);
-    document.documentElement.style.setProperty('--theme-panel-color', event.data.theme.panelColor);
-    document.documentElement.style.setProperty('--theme-divider-color', event.data.theme.dividerColor);
-    document.documentElement.style.setProperty('--theme-text-color', event.data.theme.textColor);
+    if (event.data.type === 'setColorTheme') {
+      document.documentElement.style.setProperty('--theme-content-color', event.data.theme.contentColor);
+      document.documentElement.style.setProperty('--theme-panel-color', event.data.theme.panelColor);
+      document.documentElement.style.setProperty('--theme-divider-color', event.data.theme.dividerColor);
+      document.documentElement.style.setProperty('--theme-text-color', event.data.theme.textColor);
+      document.documentElement.style.setProperty('--theme-button-color', event.data.theme.buttonColor);
+    }
   }, []);
 
   useEffect(() => {
@@ -130,6 +135,7 @@ const View = ({
     document.documentElement.style.setProperty('--theme-panel-color', OpenColor.gray[1]);
     document.documentElement.style.setProperty('--theme-divider-color', OpenColor.gray[3]);
     document.documentElement.style.setProperty('--theme-text-color', OpenColor.gray[8]);
+    document.documentElement.style.setProperty('--theme-button-color', OpenColor.gray[3]);
 
     window.addEventListener('message', handleWindowMessage);
 

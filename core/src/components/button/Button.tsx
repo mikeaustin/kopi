@@ -35,7 +35,7 @@ function getFillColor({ primary, solid }: ButtonProps) {
     case primary && solid:
       return 'blue-5';
     case solid:
-      return 'gray-3';
+      return 'theme-button';
     default:
       return 'transparent';
   }
