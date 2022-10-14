@@ -142,6 +142,11 @@ function Window({
     event.currentTarget.setPointerCapture(event.pointerId);
     event.preventDefault();
 
+    window.parent.postMessage({
+      type: 'bringWindowToTop',
+      id,
+    });
+
     if (windowElementRef.current) {
       initialPointerRef.current = { clientX: event.nativeEvent.clientX, clientY: event.nativeEvent.clientY };
       initialWindowRectRef.current = getElementOffsets(windowElementRef.current);

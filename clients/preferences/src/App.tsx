@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './App.css';
 
@@ -45,16 +45,28 @@ const backgroundImages = [
 ];
 
 function App() {
-  const [selectedImageSrc, setSelectedImageSrc] = useState('https://mike-austin.com/build-a-language/images/653931.jpg?1');
+  const wallpaperUrlData = localStorage.getItem('wallpaperUrl');
+
+  const [selectedImageUrl, setSelectedImageUrl] = useState(wallpaperUrlData && JSON.parse(wallpaperUrlData));
+  // '../..//images/653931.jpg'
 
   const handleImageSelected = (src: string) => {
-    setSelectedImageSrc(src);
+    setSelectedImageUrl(src);
+
+    localStorage.setItem('wallpaperUrl', JSON.stringify(src));
 
     window.parent.postMessage({
       type: 'setDesktopWallpaper',
       url: src,
     });
   };
+
+  useEffect(() => {
+    window.parent.postMessage({
+      type: 'setDesktopWallpaper',
+      url: selectedImageUrl,
+    });
+  }, [selectedImageUrl]);
 
   return (
     <View className="App">
@@ -69,7 +81,7 @@ function App() {
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, alignContent: 'flex-start', overflowY: 'auto' }}
       >
         {backgroundImages.map((image, index) => (
-          <Image selected={image.src === selectedImageSrc} src={image.src} onImageSelected={handleImageSelected} />
+          <Image selected={image.src === selectedImageUrl} src={image.src} onImageSelected={handleImageSelected} />
         ))}
       </View>
       {/* <Divider />

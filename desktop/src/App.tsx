@@ -76,16 +76,16 @@ const referenceMenu = [
   { title: 'The io Language', width: 800, height: 800, src: 'https://iolanguage.org' },
 ];
 
-interface DesktopProps extends React.ComponentProps<typeof View> {
-  backgroundUrl?: string,
-  children?: React.ReactNode,
-}
-
 interface OpenWindowArgs {
   title: string,
   src: string,
   width?: number,
   height?: number;
+}
+
+interface DesktopProps extends React.ComponentProps<typeof View> {
+  backgroundUrl?: string | null,
+  children?: React.ReactNode,
 }
 
 function Desktop({
@@ -150,7 +150,7 @@ function App() {
     { title: 'Explorer', left: 15, top: 560, width: 850, height: 340, src: 'clients/explorer', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
-  const [wallpaperUrl, setWallpaperUrl] = useState('images/653931.jpg');
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(null);
 
   const handleWindowMessage = (event: MessageEvent) => {
     if (event.data.type === 'setClientDimensions') {
