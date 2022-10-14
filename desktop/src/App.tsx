@@ -148,8 +148,9 @@ function App() {
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
     { title: 'Calculator', left: 625, top: 580, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
-    { title: 'Preferences', left: 880, top: 350, width: 500, height: 390, src: 'clients/preferences', id: uuid() },
+    { title: 'Preferences', left: 880, top: 580, width: 660, height: 320, src: 'clients/preferences', id: uuid() },
     { title: 'Explorer', left: 15, top: 580, width: 595, height: 320, src: 'clients/explorer', id: uuid() },
+    { title: 'Terminal', left: 880, top: 350, width: 660, height: 215, src: 'clients/terminal', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
   const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(null);

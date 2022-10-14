@@ -179,15 +179,15 @@ function Window({
   };
 
   const handleIframeLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
-    event.currentTarget.contentWindow?.postMessage({
-      type: 'setColorTheme', theme: {
-        contentColor: OpenColor.gray[9],
-        panelColor: OpenColor.gray[8],
-        dividerColor: OpenColor.gray[7],
-        textColor: OpenColor.gray[4],
-        buttonColor: OpenColor.gray[7],
-      }
-    });
+    // event.currentTarget.contentWindow?.postMessage({
+    //   type: 'setColorTheme', theme: {
+    //     contentColor: OpenColor.gray[9],
+    //     panelColor: OpenColor.gray[8],
+    //     dividerColor: OpenColor.gray[7],
+    //     textColor: OpenColor.gray[4],
+    //     buttonColor: OpenColor.gray[7],
+    //   }
+    // });
   };
 
   //
