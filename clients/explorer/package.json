@@ -22,7 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "export": "npm run build && (rm -rf ../../desktop/public/clients/explorer; cp -r build/. ../../desktop/public/clients/explorer)",
+    "export": "npm run build && (rm -rf ../../desktop/public/clients/explorer && cp -r build ../../desktop/public/clients/explorer)",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

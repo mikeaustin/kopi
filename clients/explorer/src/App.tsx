@@ -17,6 +17,11 @@ const s3 = new AWS.S3({
   }
 });
 
+const numberToKB = (value: number) => `${(value / 1000).toLocaleString(undefined, {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})} KB`;
+
 interface AppContext {
   selectedPaths: string[],
   onFolderChange: (path: string) => void,
@@ -182,7 +187,7 @@ const File = ({
       <Icon icon="image" color={iconColor} style={{ marginLeft: level * 20 + 20 }} />
       <Spacer size="xsmall" />
       <Text textColor={textColor} style={{ width: 300 - (level * 20) }}>{path.split('/').at(-1)}</Text>
-      <Text textColor={textColor} style={{ width: 150 }}>{size}</Text>
+      <Text textColor={textColor} style={{ width: 125 }}>{numberToKB(size)}</Text>
       <Text textColor={textColor}>{modified.toLocaleDateString()}</Text>
     </Stack>
   );
@@ -300,7 +305,7 @@ function App() {
           {/* <Spacer size="small" /> */}
           <Stack horizontal padding="none medium">
             <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 345 }}>Name</Text>
-            <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 150 }}>Size</Text>
+            <Text light caps fontSize="xsmall" fontWeight="bold" style={{ width: 125 }}>Size</Text>
             <Text light caps fontSize="xsmall" fontWeight="bold">Last Modified</Text>
           </Stack>
           <Spacer size="xsmall" />

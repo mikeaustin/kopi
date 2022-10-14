@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import AppContext from './AppContext';
 
-import { View, Button } from 'core';
+import { View, Button, Divider } from 'core';
 import Window from './components/shared/window';
 
 import './App.css';
@@ -28,7 +28,7 @@ function Menu({
 
   return (
     <View style={{ position: 'relative' }}>
-      <Button hover title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
+      <Button hover size="small" title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
       {isMenuVisible && (
         <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5, boxShadow: '0 4px 8px hsla(0, 0%, 0%, 0.24), 0 0 0 1px hsla(0, 0%, 0%, 0.1)' }}>
           {React.Children.map(children, child => React.isValidElement(child) && child.type === Button
@@ -55,8 +55,9 @@ const applicationsMenu = [
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
   { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
   { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
+  { title: 'Explorer', width: 800, height: 400, src: 'clients/explorer' },
+  {},
   { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
-  { title: 'S3 File Explorer', width: 800, height: 400, src: 'clients/explorer' },
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
   { title: 'Bestest Movies Ever', width: 1200, height: 800, src: 'https://bestestmoviesever.com' },
   { title: 'Kopi Programming Language', width: 1200, height: 800, src: 'https://mike-austin.com/kopi' },
@@ -116,7 +117,7 @@ function Desktop({
         </Menu>
         <Menu title="Applications">
           {applicationsMenu.map((item, index) => (
-            <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
+            item.title ? <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} /> : <Divider spacing="small" />
           ))}
         </Menu>
         <Menu title="Games">
@@ -143,12 +144,12 @@ const gemtask = (
 
 function App() {
   const [windows, setWindows] = useState([
-    { title: 'Examples', left: 15, top: 15, width: 850, height: 530, src: 'clients/examples', id: uuid() },
+    { title: 'Examples', left: 15, top: 15, width: 850, height: 550, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
-    { title: 'Calculator', left: 1555, top: 15, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
+    { title: 'Calculator', left: 625, top: 580, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
     { title: 'Preferences', left: 880, top: 350, width: 500, height: 390, src: 'clients/preferences', id: uuid() },
-    { title: 'Explorer', left: 15, top: 560, width: 850, height: 340, src: 'clients/explorer', id: uuid() },
+    { title: 'Explorer', left: 15, top: 580, width: 595, height: 320, src: 'clients/explorer', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
   const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(null);
