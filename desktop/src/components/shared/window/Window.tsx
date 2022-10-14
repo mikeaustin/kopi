@@ -200,7 +200,13 @@ function Window({
         <Handle align="bottom-left" /><Handle align="bottom" /><Handle align="bottom-right" />
       </View>
       <View flex className={styles.innerView}>
-        <Button hover icon="xmark" size="small" style={{ position: 'absolute', margin: 5, padding: '5px 3px 5px 3px' }} onClick={handleCloseButtonClick} />
+        <Button
+          hover
+          icon="xmark"
+          size="small"
+          style={{ position: 'absolute', margin: 5, padding: '5px 3px 5px 3px' }}
+          onClick={handleCloseButtonClick}
+        />
         <View
           horizontal
           style={{ cursor: 'pointer', marginBottom: -1, padding: 10 }}
@@ -216,7 +222,7 @@ function Window({
         </View>
         <Divider color="gray-4" />
         <View flex>
-          <iframe src={`${src}?id=${id}`} style={{ border: 'none', height: '100%' }} />
+          <iframe src={`${src}?id=${id}`} title={title} style={{ border: 'none', height: '100%' }} />
         </View>
       </View>
     </View>
