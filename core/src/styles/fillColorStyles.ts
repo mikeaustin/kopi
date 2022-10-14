@@ -101,6 +101,15 @@ const yellow = {
 };
 
 const useFillColorStyles = createUseStyles({
+  'theme-content': {
+    background: 'var(--theme-content-color)',
+  },
+  'theme-panel': {
+    background: 'var(--theme-panel-color)',
+  },
+  'theme-divider': {
+    background: 'var(--theme-divider-color)',
+  },
   'transparent': {
     background: 'transparent'
   },

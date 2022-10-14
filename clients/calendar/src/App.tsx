@@ -26,8 +26,8 @@ function App() {
   const days = Array.from({ length: 30 }, (_, index) => index + 1);
 
   return (
-    <View fillColor="white" className="App" onPointerDown={handleAppPointerDown}>
-      <View padding="medium" fillColor="gray-1">
+    <View className="App" onPointerDown={handleAppPointerDown}>
+      <View padding="medium" fillColor="theme-panel">
         <View horizontal style={{ alignItems: 'center' }}>
           <Text fontSize="large">September</Text>
           <Spacer flex size="small" />
@@ -37,7 +37,7 @@ function App() {
         </View>
       </View>
       {/* <Spacer size="medium" /> */}
-      <View fillColor="gray-1" style={{ padding: '0 10px' }}>
+      <View fillColor="theme-panel" style={{ padding: '0 10px' }}>
         <View horizontal>
           <Text flex light {...headerTextProps}>SUN</Text>
           <Text flex light {...headerTextProps}>MON</Text>
@@ -50,7 +50,7 @@ function App() {
         <Spacer size="xsmall" />
       </View>
       <Divider />
-      <View flex padding="small" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
+      <View flex padding="small" fillColor="theme-content" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
         <Text style={{ textAlign: 'right' }}></Text>
         <Text style={{ textAlign: 'right' }}></Text>
         <Text style={{ textAlign: 'right' }}></Text>

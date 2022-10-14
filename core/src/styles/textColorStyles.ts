@@ -101,8 +101,11 @@ const yellow = {
 };
 
 const useTextColorStyles = createUseStyles({
+  'theme-text': {
+    color: 'var(--theme-text-color)',
+  },
   'transparent': {
-    background: 'transparent'
+    color: 'transparent'
   },
   'black': {
     color: OpenColor.black

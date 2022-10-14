@@ -22,7 +22,7 @@ interface TextProps extends React.ComponentProps<'span'> {
   caps?: boolean,
   fontSize?: Size,
   fontWeight?: Weight,
-  textColor?: Color,
+  textColor?: Color | 'theme-text',
   textAlign?: 'center',
   children?: Child<TextProps> | Child<TextProps>[],
 }
@@ -65,7 +65,7 @@ function Text({
     isHidden && styles.hidden,
     (fontSize && fontSizeStyles[fontSize]) ?? (!isTextParent && fontSizeStyles.default),
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
-    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles['gray-8']),
+    (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles['theme-text']),
     textAlign && styles[textAlign],
   );
 

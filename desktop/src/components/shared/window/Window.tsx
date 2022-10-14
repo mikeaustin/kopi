@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
+import OpenColor from 'open-color';
 import clsx from 'clsx';
 
 import { View, Text, Button, Divider } from 'core';
@@ -177,6 +178,17 @@ function Window({
     onCloseWindow(id);
   };
 
+  const handleIframeLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
+    event.currentTarget.contentWindow?.postMessage({
+      type: 'setColorTheme', theme: {
+        contentColor: OpenColor.gray[9],
+        panelColor: OpenColor.gray[8],
+        dividerColor: OpenColor.gray[7],
+        textColor: OpenColor.gray[4],
+      }
+    });
+  };
+
   //
 
   useEffect(() => {
@@ -222,7 +234,7 @@ function Window({
         </View>
         <Divider color="gray-4" />
         <View flex>
-          <iframe src={`${src}?id=${id}`} title={title} style={{ border: 'none', height: '100%' }} />
+          <iframe src={`${src}?id=${id}`} title={title} style={{ border: 'none', height: '100%' }} onLoad={handleIframeLoad} />
         </View>
       </View>
     </View>

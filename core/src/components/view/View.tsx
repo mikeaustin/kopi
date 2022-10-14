@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import OpenColor from 'open-color';
 import clsx from 'clsx';
 
 import useStyles from './styles.js';
@@ -76,12 +77,21 @@ function alignToStyle(align: ShorthandAlign | undefined): [Align | undefined, Al
   }
 }
 
+interface ColorThemeMessage {
+  theme: {
+    contentColor: string,
+    panelColor: string,
+    dividerColor: string,
+    textColor: string,
+  };
+}
+
 interface ViewProps extends React.ComponentProps<'div'> {
   as?: React.ElementType,
   flex?: boolean,
   horizontal?: boolean,
   align?: ShorthandAlign,
-  fillColor?: Color,
+  fillColor?: Color | 'theme-content' | 'theme-panel' | 'theme-divider',
   padding?: CombinedPadding,
   border?: boolean,
   borderColor?: Color,
@@ -108,6 +118,26 @@ const View = ({
 }: ViewProps,
   ref: React.Ref<HTMLDivElement>
 ) => {
+  const handleWindowMessage = useCallback((event: MessageEvent<ColorThemeMessage>) => {
+    document.documentElement.style.setProperty('--theme-content-color', event.data.theme.contentColor);
+    document.documentElement.style.setProperty('--theme-panel-color', event.data.theme.panelColor);
+    document.documentElement.style.setProperty('--theme-divider-color', event.data.theme.dividerColor);
+    document.documentElement.style.setProperty('--theme-text-color', event.data.theme.textColor);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--theme-content-color', OpenColor.white);
+    document.documentElement.style.setProperty('--theme-panel-color', OpenColor.gray[1]);
+    document.documentElement.style.setProperty('--theme-divider-color', OpenColor.gray[3]);
+    document.documentElement.style.setProperty('--theme-text-color', OpenColor.gray[8]);
+
+    window.addEventListener('message', handleWindowMessage);
+
+    return () => {
+      window.removeEventListener('message', handleWindowMessage);
+    };
+  }, [handleWindowMessage]);
+
   const styles = useStyles();
   const borderColorStyles = useBorderColorStyles();
   const alignVerticalStyles = useAlignVerticalStyles();

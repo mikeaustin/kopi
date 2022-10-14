@@ -6,12 +6,12 @@ import Spacing from '../../types/Spacing.js';
 import Color from '../../types/Color.js';
 
 interface DividerProps extends React.ComponentProps<typeof View> {
-  color?: Color,
+  color?: Color | 'theme-divider',
   spacing?: Spacing,
 }
 
 const Divider = ({
-  color = 'gray-3',
+  color = 'theme-divider',
   spacing,
   ...props
 }: DividerProps) => {
