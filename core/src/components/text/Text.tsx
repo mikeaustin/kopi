@@ -24,6 +24,7 @@ interface TextProps extends React.ComponentProps<'span'> {
   fontWeight?: Weight,
   textColor?: Color | 'theme-text',
   textAlign?: 'center',
+  className?: string,
   children?: Child<TextProps> | Child<TextProps>[],
 }
 
@@ -36,6 +37,7 @@ function Text({
   fontWeight,
   textColor,
   textAlign,
+  className,
   children,
   ...props
 }: TextProps) {
@@ -67,6 +69,7 @@ function Text({
     (fontWeight && fontWeightStyles[fontWeight]) ?? (!isTextParent && fontWeightStyles.normal),
     (textColor && textColorStyles[textColor]) ?? (!isTextParent && textColorStyles['theme-text']),
     textAlign && styles[textAlign],
+    className,
   );
 
   return (

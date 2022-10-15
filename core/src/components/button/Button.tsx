@@ -27,6 +27,7 @@ interface ButtonProps<TData = unknown> extends React.ComponentProps<typeof View>
   disabled?: boolean,
   titleFontWeight?: Weight,
   titleAlign?: ShorthandAlign,
+  className?: string,
   onClick?: (event: React.PointerEvent<HTMLDivElement>, data?: TData) => void;
 }
 
@@ -80,6 +81,7 @@ function Button<TData>({
   disabled,
   titleFontWeight = 'bold',
   titleAlign = 'center',
+  className,
   onClick,
   ...props
 }: ButtonProps<TData>) {
@@ -109,6 +111,7 @@ function Button<TData>({
     solid && !primary && styles.solid,
     hover && styles.hover,
     size && styles[size],
+    className,
   );
 
   const [color, level] = textColor?.split('-') ?? [];
