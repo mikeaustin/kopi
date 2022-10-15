@@ -45,7 +45,7 @@ function App() {
       <View horizontal align="left">
         {/* <Text style={{ fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>&gt;</Text> */}
         <Icon size="xs" icon="chevron-right" style={{ marginLeft: -5, marginTop: -5 }} />
-        {/* <Spacer size="small" /> */}
+        <Spacer size="xsmall" />
         <input ref={inputElementRef} value={line} style={{ flex: 1, border: 0, padding: 0, outline: 'none', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace', fontSize: 14, lineHeight: 1, marginTop: -4, marginBottom: -4, background: 'transparent' }} onKeyDown={handleInputKeyDown} onChange={handleInputChange} />
       </View>
     </View>
