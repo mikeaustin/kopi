@@ -49,15 +49,16 @@ function Menu({
 
 const desktopMenu = [
   { title: 'Preferences', width: 500, height: 390, src: 'clients/preferences' },
+  { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
 ];
 
 const applicationsMenu = [
-  { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
-  { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
-  { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
   { title: 'Explorer', width: 800, height: 400, src: 'clients/explorer' },
+  { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
+  { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
+  { title: 'Terminal', width: 800, height: 400, src: 'clients/terminal' },
+  { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
   {},
-  { title: 'Styleguide', width: 850, height: 510, src: 'clients/examples' },
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
   { title: 'Bestest Movies Ever', width: 1200, height: 800, src: 'https://bestestmoviesever.com' },
   { title: 'Kopi Programming Language', width: 1200, height: 800, src: 'https://mike-austin.com/kopi' },
@@ -72,6 +73,7 @@ const gamesMenu = [
   { title: 'React Asteroids', width: 1600, height: 900, src: 'https://codepen.io/mikeaustin/embed/mdpYMym?default-tab=js%2Cresult' },
   { title: 'Snakey Snake', width: 400, height: 474, src: 'https://editor.p5js.org/mike_ekim1024/full/8c5ovMThX' },
   { title: 'Stetegic Asteroids', width: 800, height: 873, src: 'https://editor.p5js.org/mike_ekim1024/full/q8nWdZV0U' },
+  { title: 'JS Doom', width: 640, height: 480, src: 'clients/jsdoom' },
 ];
 
 const referenceMenu = [
@@ -148,8 +150,8 @@ function App() {
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
     { title: 'Calculator', left: 625, top: 580, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
-    { title: 'Preferences', left: 880, top: 580, width: 660, height: 320, src: 'clients/preferences', id: uuid() },
-    { title: 'Explorer', left: 15, top: 580, width: 595, height: 320, src: 'clients/explorer', id: uuid() },
+    { title: 'Preferences', left: 15, top: 580, width: 595, height: 320, src: 'clients/preferences', id: uuid() },
+    { title: 'Explorer', left: 880, top: 580, width: 660, height: 320, src: 'clients/explorer', id: uuid() },
     { title: 'Terminal', left: 880, top: 350, width: 660, height: 215, src: 'clients/terminal', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
@@ -186,7 +188,7 @@ function App() {
 
     setWindows(windows => [
       ...windows,
-      { title, left: 20, top: 20, width: width ?? 300, height: height ?? 300, src, id: newId },
+      { title, left: 15, top: 15, width: width ?? 300, height: height ?? 300, src, id: newId },
     ]);
 
     setWindowOrder(windowOrder => [

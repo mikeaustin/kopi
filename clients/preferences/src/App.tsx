@@ -46,7 +46,7 @@ const backgroundImages = [
 
 function App() {
   const wallpaperUrlData = localStorage.getItem('wallpaperUrl');
-  const [selectedImageUrl, setSelectedImageUrl] = useState(wallpaperUrlData && JSON.parse(wallpaperUrlData));
+  const [selectedImageUrl, setSelectedImageUrl] = useState(wallpaperUrlData ? JSON.parse(wallpaperUrlData) : 'd1e91a4058a8a1082da711095b4e0163.jpg');
 
   const handleImageSelected = (src: string) => {
     setSelectedImageUrl(src);
