@@ -203,7 +203,7 @@ function App() {
 
   return (
     <AppContext.Provider value={appContextValue}>
-      <View className="App">
+      <View fillColor="white" className="App">
         <Layout components={components} template={template} bindings={bindings} />
         <Spacer size="medium" />
         <View>

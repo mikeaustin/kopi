@@ -53,11 +53,12 @@ const desktopMenu = [
 ];
 
 const applicationsMenu = [
-  { title: 'Explorer', width: 800, height: 400, src: 'clients/explorer' },
+  { title: 'S3 Explorer', width: 800, height: 400, src: 'clients/explorer' },
   { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
   { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
   { title: 'Terminal', width: 800, height: 400, src: 'clients/terminal' },
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
+  { title: 'UI Builder', width: 1200, height: 800, src: 'clients/builder' },
   {},
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },
   { title: 'Bestest Movies Ever', width: 1200, height: 800, src: 'https://bestestmoviesever.com' },
@@ -151,7 +152,7 @@ function App() {
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
     { title: 'Calculator', left: 625, top: 580, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
     { title: 'Preferences', left: 15, top: 580, width: 595, height: 320, src: 'clients/preferences', id: uuid() },
-    { title: 'Explorer', left: 880, top: 580, width: 660, height: 320, src: 'clients/explorer', id: uuid() },
+    { title: 'S3 Explorer', left: 880, top: 580, width: 660, height: 320, src: 'clients/explorer', id: uuid() },
     { title: 'Terminal', left: 880, top: 350, width: 660, height: 215, src: 'clients/terminal', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));

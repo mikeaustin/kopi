@@ -25,6 +25,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "export": "npm run build && (rm -rf ../../desktop/public/clients/builder && cp -r build ../../desktop/public/clients/builder)",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
