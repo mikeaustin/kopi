@@ -11,10 +11,7 @@ function App() {
   const inputElementRef = useRef<HTMLInputElement>(null);
 
   const handleTerminalPointerDown = () => {
-    console.log('here');
-
     setTimeout(() => {
-      console.log('here 2');
       if (inputElementRef.current) {
         inputElementRef.current.focus();
       }
@@ -29,7 +26,7 @@ function App() {
     console.log(event);
 
     if (event.key === 'Enter') {
-      setHistory(history => [...history, line]);
+      setHistory(history => [...history, line + ' ']);
       setLine('');
     }
   };

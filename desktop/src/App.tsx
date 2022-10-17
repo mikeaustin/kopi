@@ -146,7 +146,7 @@ const gemtask = (
 
 function App() {
   const [windows, setWindows] = useState([
-    { title: 'Examples', left: 15, top: 15, width: 850, height: 550, src: 'clients/examples', id: uuid() },
+    { title: 'Styleguide', left: 15, top: 15, width: 850, height: 550, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
     { title: 'Clock', left: 1255, top: 15, width: 285, height: 320, src: 'clients/clock', id: uuid() },
     { title: 'Calculator', left: 625, top: 580, width: 240, height: 320, src: 'clients/calculator', id: uuid() },
