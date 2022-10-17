@@ -45,7 +45,7 @@ function Repeater({ 'for': _for, 'in': _in, children }: RepeaterProps) {
 
 //
 
-const mappings: { [type: string]: React.ComponentType<any>; } = {
+const components: { [type: string]: React.ComponentType<any>; } = {
   View,
   Text,
   Stack,
@@ -67,7 +67,7 @@ function getProps(node: any, index: number) {
 
 function buildLayout(node: any, index: number) {
   return React.createElement(
-    mappings[node.type],
+    components[node.type],
     getProps(node, index),
     typeof node.children === 'string'
       ? node.children
@@ -78,11 +78,13 @@ function buildLayout(node: any, index: number) {
 //
 
 interface LayoutProps {
+  components: { [type: string]: React.ComponentType<any>; },
   template: {},
   bindings: {};
 }
 
 function Layout({
+  components,
   template,
   bindings,
 }: LayoutProps
@@ -121,7 +123,7 @@ const bindings = {
 function App() {
   return (
     <View className="App">
-      <Layout template={template} bindings={bindings} />
+      <Layout components={components} template={template} bindings={bindings} />
     </View>
   );
 }
