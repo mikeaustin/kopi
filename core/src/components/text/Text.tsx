@@ -72,10 +72,16 @@ function Text({
     className,
   );
 
+  const childrenElement = typeof children === 'string'
+    ? children.split('\\n').reduce((title: (string | React.ReactElement<HTMLBRElement>)[], word, index) => (
+      index > 0 ? [...title, <br />, word] : [...title, word]
+    ), [])
+    : children;
+
   return (
     <TextContext.Provider value={true}>
       <span ref={textElementRef} className={textClassName} {...props}>
-        {children}
+        {childrenElement}
       </span>
     </TextContext.Provider>
   );
