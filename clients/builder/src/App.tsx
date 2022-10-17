@@ -21,10 +21,12 @@ function Text({
   );
 }
 
-interface RepeaterProps extends React.ComponentProps<'span'> {
-  for?: string;
-  in?: {}[],
-  children?: React.ReactNode;
+//
+
+interface RepeaterProps {
+  for: string;
+  in: string,
+  children: React.ReactNode;
 }
 
 function Repeater({ 'for': _for, 'in': _in, children }: RepeaterProps) {
@@ -32,18 +34,18 @@ function Repeater({ 'for': _for, 'in': _in, children }: RepeaterProps) {
 
   return (
     <>
-      {_in?.map((item, index) => (
-        <LayoutContext.Provider key={index} value={{ ...env, [_for ?? '']: item }}>
+      {env[_in].map((item: any, index: number) => (
+        <LayoutContext.Provider key={index} value={{ ...env, [_for]: item }}>
           {children}
         </LayoutContext.Provider>
-      )) ?? <div></div>}
+      ))}
     </>
   );
 }
 
 //
 
-const mappings: { [type: string]: React.ComponentType; } = {
+const mappings: { [type: string]: React.ComponentType<any>; } = {
   View,
   Text,
   Stack,
@@ -103,7 +105,7 @@ const template = {
     { type: 'Text', props: { fontWeight: 'bold', textColor: 'blue-5' }, children: 'Hello, world.' },
     { type: 'Text', props: {}, children: '{name}: {age}' },
     {
-      type: 'Repeater', props: { for: 'item', in: [1, 2, 3] }, children: [
+      type: 'Repeater', props: { for: 'item', in: 'contacts' }, children: [
         { type: 'Text', props: { fontWeight: 'bold', textColor: 'blue-5' }, children: '{item}' },
       ]
     },
@@ -111,6 +113,7 @@ const template = {
 };
 
 const bindings = {
+  contacts: [1, 2, 3],
   name: 'Joe',
   age: 30,
 };
