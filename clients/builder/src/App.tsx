@@ -13,7 +13,12 @@ function Text({
   const env = useContext(LayoutContext);
 
   const childrenElement = typeof children === 'string'
-    ? children.replace(/\{(\w*)\}/g, (match, p) => env[p])
+    ? children.replace(/\{(\w*(\.\w*)?)\}/g, (match, p) => {
+      console.log(p);
+      const [a, b] = p.split('.');
+
+      return b ? env[a][b] : env[a];
+    })
     : children;
 
   return (
@@ -108,14 +113,14 @@ const template = {
     { type: 'Text', props: {}, children: '{name}: {age}' },
     {
       type: 'Repeater', props: { for: 'item', in: 'contacts' }, children: [
-        { type: 'Text', props: { fontWeight: 'bold', textColor: 'blue-5' }, children: '{item}' },
+        { type: 'Text', props: { fontWeight: 'bold', textColor: 'blue-5' }, children: 'id: {item.id}' },
       ]
     },
   ]
 };
 
 const bindings = {
-  contacts: [1, 2, 3],
+  contacts: [{ id: 1 }, { id: 2 }, { id: 3 }],
   name: 'Joe',
   age: 30,
 };
