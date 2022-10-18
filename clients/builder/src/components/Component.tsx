@@ -18,7 +18,9 @@ function Component({
   children,
 }: ComponentProps) {
   const handleDragStart = (event: React.DragEvent<HTMLElement>) => {
-    document.body.classList.add('dragging');
+    setTimeout(() => {
+      document.body.classList.add('dragging');
+    });
 
     event.dataTransfer.setData("text/plain", JSON.stringify({
       index,
