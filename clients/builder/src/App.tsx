@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { insert, remove } from 'ramda';
+import { v4 as uuidv4 } from 'uuid';
 
 import { View, Text as OriginalText, Button, Stack, Spacer, Divider, Input } from 'core';
 
@@ -68,16 +69,20 @@ function App() {
 
   const appContextValue = {
     onDrop: (data: any, index: number) => {
+      console.log('>>>', data.index, index);
+
       if (data.index !== undefined) {
         setElements(elements => remove(data.index, 1, elements));
       }
 
+      const insertIndex = index + (data.index === undefined ? 0 : (Number(data.index > index)));
+
       setElements(elements => insert(
-        index + 1,
+        insertIndex,
         {
           type: data.type,
           element: (
-            <Component index={index} type={data.type} props={data.props}>
+            <Component index={insertIndex} type={data.type} props={data.props}>
               {React.createElement(components[data.type], data.props, [])}
             </Component>
           )
@@ -92,7 +97,6 @@ function App() {
       <View fillColor="white" className="App">
         <Layout components={components} template={template} bindings={bindings} />
         <Spacer size="medium" />
-
         <View flex>
           <Stack horizontal padding="small" spacing="small" fillColor="gray-1" style={{ justifyContent: 'center' }}>
             <Component label="Default\nButton" type="Button" />

@@ -5,6 +5,8 @@ import { View, Text as OriginalText, Button, Stack, Spacer, Divider, Input } fro
 import AppContext from '../AppContext';
 
 function Placeholder({ index }: { index: number; }) {
+  const { onDrop } = useContext(AppContext);
+
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
   };
@@ -37,10 +39,9 @@ function Placeholder({ index }: { index: number; }) {
     event.currentTarget.style.background = '';
   };
 
-  const { onDrop } = useContext(AppContext);
-
   return (
     <View
+      fillColor="gray-1"
       className={clsx('Placeholder')}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
