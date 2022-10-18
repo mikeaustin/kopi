@@ -53,11 +53,11 @@ const desktopMenu = [
 ];
 
 const applicationsMenu = [
-  { title: 'S3 Explorer', width: 800, height: 400, src: 'clients/explorer' },
-  { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
   { title: 'Clock', width: 285, height: 320, src: 'clients/clock' },
+  { title: 'Calculator', width: 240, height: 320, src: 'clients/calculator' },
   { title: 'Terminal', width: 800, height: 400, src: 'clients/terminal' },
   { title: 'Calendar', width: 360, height: 320, src: 'clients/calendar' },
+  { title: 'S3 Explorer', width: 800, height: 400, src: 'clients/explorer' },
   { title: 'UI Builder', width: 1200, height: 800, src: 'clients/builder' },
   {},
   { title: 'Grid Draw', width: 1200, height: 800, src: 'https://mike-austin.com/draw-2' },

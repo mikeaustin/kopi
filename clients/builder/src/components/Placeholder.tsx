@@ -12,21 +12,11 @@ function Placeholder({ index }: { index: number; }) {
   };
 
   const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-    event.currentTarget.style.background = `linear-gradient(
-      0deg,
-      #00000000,
-      #00000000,
-      calc(50% - 2px),
-      #000000 calc(50% - 2px),
-      #000000 calc(50% + 2px),
-      #00000000,
-      calc(50% + 2px),
-      #00000000
-    )`;
+    event.currentTarget.classList.add('dragOver');
   };
 
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.currentTarget.style.background = '';
+    event.currentTarget.classList.remove('dragOver');
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -36,12 +26,11 @@ function Placeholder({ index }: { index: number; }) {
 
     onDrop(data, index);
 
-    event.currentTarget.style.background = '';
+    event.currentTarget.classList.remove('dragOver');
   };
 
   return (
     <View
-      fillColor="gray-1"
       className={clsx('Placeholder')}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}

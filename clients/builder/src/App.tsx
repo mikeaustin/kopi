@@ -90,8 +90,6 @@ function App() {
   return (
     <AppContext.Provider value={appContextValue}>
       <View fillColor="white" className="App">
-        <Layout components={components} template={template} bindings={bindings} />
-        <Spacer size="medium" />
         <View flex>
           <Stack horizontal padding="small" spacing="small" fillColor="gray-1" style={{ justifyContent: 'center' }}>
             <Component label="Default\nButton" type="Button" />
@@ -102,7 +100,7 @@ function App() {
             <Component label="Input" type="Input" />
             <Component label="Divider" type="Divider" />
           </Stack>
-          <Divider />
+          <Divider color="gray-5" />
           <Stack flex horizontal>
             <Stack padding="small" fillColor="gray-1" style={{ width: 250 }}>
               {elements.map(({ type }) => (
@@ -111,14 +109,19 @@ function App() {
                 </View>
               ))}
             </Stack>
-            <Stack flex padding="medium" fillColor="white">
-              <Placeholder index={0} />
-              {elements.map(({ element }, index) => (
-                [React.cloneElement(element, { index }), <Placeholder index={index + 1} />]
-              ))}
-            </Stack>
+            {/* <Divider /> */}
+            <View flex padding="medium" fillColor="gray-5">
+              <Stack padding="medium" fillColor="white" style={{ width: 250, borderRadius: 4 }}>
+                <Placeholder index={0} />
+                {elements.map(({ element }, index) => (
+                  [React.cloneElement(element, { index }), <Placeholder index={index + 1} />]
+                ))}
+              </Stack>
+            </View>
           </Stack>
         </View>
+        <Spacer size="medium" />
+        <Layout components={components} template={template} bindings={bindings} />
       </View>
     </AppContext.Provider>
   );

@@ -148,6 +148,10 @@ const View = ({
     };
   }, [handleWindowMessage]);
 
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+  };
+
   const styles = useStyles();
   const borderColorStyles = useBorderColorStyles();
   const alignVerticalStyles = useAlignVerticalStyles();
@@ -174,7 +178,15 @@ const View = ({
 
   return (
     <ViewContext.Provider value={{ isHorizontal: horizontal ?? false }}>
-      <Component ref={ref} disabled={disabled} viewBox={viewBox} className={viewClassName} {...props}>
+      <Component
+        ref={ref}
+        disabled={disabled}
+        viewBox={viewBox}
+        className={viewClassName}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragOver}
+        {...props}
+      >
         {children}
       </Component>
     </ViewContext.Provider>
