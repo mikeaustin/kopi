@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { insert, remove } from 'ramda';
-import { v4 as uuidv4 } from 'uuid';
+import { insert, move } from 'ramda';
 
 import { View, Text as OriginalText, Button, Stack, Spacer, Divider, Input } from 'core';
 
@@ -69,26 +68,22 @@ function App() {
 
   const appContextValue = {
     onDrop: (data: any, index: number) => {
-      console.log('>>>', data.index, index);
-
       if (data.index !== undefined) {
-        setElements(elements => remove(data.index, 1, elements));
+        setElements(elements => move(data.index, index - (Number(data.index < index)), elements));
+      } else {
+        setElements(elements => insert(
+          index,
+          {
+            type: data.type,
+            element: (
+              <Component type={data.type} props={data.props}>
+                {React.createElement(components[data.type], data.props, [])}
+              </Component>
+            )
+          },
+          elements),
+        );
       }
-
-      const insertIndex = index + (data.index === undefined ? 0 : (Number(data.index > index)));
-
-      setElements(elements => insert(
-        insertIndex,
-        {
-          type: data.type,
-          element: (
-            <Component index={insertIndex} type={data.type} props={data.props}>
-              {React.createElement(components[data.type], data.props, [])}
-            </Component>
-          )
-        },
-        elements),
-      );
     }
   };
 
@@ -119,7 +114,7 @@ function App() {
             <Stack flex padding="medium" fillColor="white">
               <Placeholder index={0} />
               {elements.map(({ element }, index) => (
-                [element, <Placeholder index={index + 1} />]
+                [React.cloneElement(element, { index }), <Placeholder index={index + 1} />]
               ))}
             </Stack>
           </Stack>
