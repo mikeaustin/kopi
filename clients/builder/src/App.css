@@ -1,3 +1,14 @@
 .App {
   height: 100vh;
 }
+
+.Placeholder {
+  z-index: 1;
+  height: 0;
+}
+
+.dragging .Placeholder {
+  height: 16px;
+  margin-top: -8px;
+  margin-bottom: -8px;
+}

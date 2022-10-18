@@ -23,12 +23,16 @@ function paddingToStyle(padding: CombinedPadding | undefined): [Padding | undefi
       return ['medium', 'medium'];
     case 'large':
       return ['large', 'large'];
+    case 'none xsmall':
+      return ['none', 'xsmall'];
     case 'none small':
       return ['none', 'small'];
     case 'none medium':
       return ['none', 'medium'];
     case 'none large':
       return ['none', 'large'];
+    case 'xsmall none':
+      return ['xsmall', 'none'];
     case 'small none':
       return ['small', 'none'];
     case 'small medium':
