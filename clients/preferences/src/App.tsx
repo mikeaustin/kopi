@@ -30,39 +30,33 @@ function Image({
 }
 
 const backgroundImages = [
-  { src: '../../images/9Azi4uS.jpg' },
-  { src: '../../images/2685046.jpg' },
-  { src: '../../images/millennium-falcon.jpg' },
-  { src: '../../images/16933.jpg' },
-  { src: '../../images/653899.jpg' },
-  { src: '../../images/653931.jpg' },
-  { src: '../../images/306458.png' },
-  { src: '../../images/d1e91a4058a8a1082da711095b4e0163.jpg' },
-  { src: '../../images/6414167.jpg' },
-  { src: '../../images/2909224.jpg' },
-  { src: '../../images/video-games-video-game-art-ultrawide-ultra-wide-need-for-speed-heat-hd-wallpaper-preview.jpg' },
-  { src: '../../images/2909247.jpg' },
+  { src: '9Azi4uS.jpg' },
+  { src: '2685046.jpg' },
+  { src: 'millennium-falcon.jpg' },
+  { src: '16933.jpg' },
+  { src: '653899.jpg' },
+  { src: '653931.jpg' },
+  { src: '306458.png' },
+  { src: 'd1e91a4058a8a1082da711095b4e0163.jpg' },
+  { src: '6414167.jpg' },
+  { src: '2909224.jpg' },
+  { src: 'video-games-video-game-art-ultrawide-ultra-wide-need-for-speed-heat-hd-wallpaper-preview.jpg' },
+  { src: '2909247.jpg' },
 ];
 
 function App() {
   const wallpaperUrlData = localStorage.getItem('wallpaperUrl');
-  const [selectedImageUrl, setSelectedImageUrl] = useState(wallpaperUrlData ? JSON.parse(wallpaperUrlData) : 'd1e91a4058a8a1082da711095b4e0163.jpg');
+
+  const [selectedImageUrl, setSelectedImageUrl] = useState(JSON.parse(wallpaperUrlData as string));
 
   const handleImageSelected = (src: string) => {
-    setSelectedImageUrl(src);
-
-    localStorage.setItem('wallpaperUrl', JSON.stringify(src));
-
-    window.parent.postMessage({
-      type: 'setDesktopWallpaper',
-      url: src,
-    });
+    setSelectedImageUrl(src.split('/').at(-1));
   };
 
   useEffect(() => {
     window.parent.postMessage({
       type: 'setDesktopWallpaper',
-      url: selectedImageUrl,
+      url: selectedImageUrl.split('/').at(-1),
     });
   }, [selectedImageUrl]);
 
@@ -79,14 +73,9 @@ function App() {
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, alignContent: 'flex-start', overflowY: 'auto' }}
       >
         {backgroundImages.map((image, index) => (
-          <Image selected={image.src === selectedImageUrl} src={image.src} onImageSelected={handleImageSelected} />
+          <Image selected={image.src === selectedImageUrl} src={`../../images/${image.src}`} onImageSelected={handleImageSelected} />
         ))}
       </View>
-      {/* <Divider />
-      <Stack horizontal align="right" padding="medium" fillColor="gray-1">
-        <Button primary solid title="Save" />
-        <Button primary title="Close" />
-      </Stack> */}
     </View>
   );
 }

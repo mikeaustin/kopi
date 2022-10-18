@@ -111,7 +111,7 @@ function Desktop({
   };
 
   return (
-    <View flex style={{ background: `center / cover url(${backgroundUrl})` }}>
+    <View flex style={{ background: `center / cover url(images/${backgroundUrl})` }}>
       <View horizontal padding="none small" fillColor="white">
         <Menu title="Desktop" titleFontWeight="bold">
           {desktopMenu.map((item, index) => (
@@ -146,6 +146,8 @@ const gemtask = (
 );
 
 function App() {
+  const wallpaperUrlData = localStorage.getItem('wallpaperUrl');
+
   const [windows, setWindows] = useState([
     { title: 'Styleguide', left: 15, top: 15, width: 850, height: 550, src: 'clients/examples', id: uuid() },
     { title: 'Calendar', left: 880, top: 15, width: 360, height: 320, src: 'clients/calendar', id: uuid() },
@@ -156,7 +158,9 @@ function App() {
     { title: 'Terminal', left: 880, top: 350, width: 660, height: 215, src: 'clients/terminal', id: uuid() },
   ]);
   const [windowOrder, setWindowOrder] = useState<string[]>(windows.map(({ id }) => id));
-  const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(null);
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(
+    JSON.parse(wallpaperUrlData as string) ?? 'd1e91a4058a8a1082da711095b4e0163.jpg'
+  );
 
   const handleWindowMessage = (event: MessageEvent) => {
     if (event.data.type === 'setClientDimensions') {
@@ -175,8 +179,11 @@ function App() {
         event.data.id,
       ]);
     } else if (event.data.type === 'setDesktopWallpaper') {
-      console.log(event.data.url);
+      console.log('setDesktopWallpaper', event.data.url);
+
       setWallpaperUrl(event.data.url);
+
+      localStorage.setItem('wallpaperUrl', JSON.stringify(event.data.url));
     }
   };
 
