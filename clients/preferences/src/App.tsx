@@ -51,14 +51,12 @@ function App() {
 
   const handleImageSelected = (src: string) => {
     setSelectedImageUrl(src.split('/').at(-1));
-  };
 
-  useEffect(() => {
     window.parent.postMessage({
       type: 'setDesktopWallpaper',
-      url: selectedImageUrl.split('/').at(-1),
+      url: src.split('/').at(-1),
     });
-  }, [selectedImageUrl]);
+  };
 
   return (
     <View className="App">
