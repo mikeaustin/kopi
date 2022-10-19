@@ -19,6 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "build:parser": "peggy -o src/parser.js src/parser.pegjs",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "export": "npm run build && (rm -rf ../../desktop/public/clients/terminal && cp -r build ../../desktop/public/clients/terminal)",
@@ -42,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "peggy": "^2.0.1"
   }
 }

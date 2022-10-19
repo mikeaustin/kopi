@@ -15,6 +15,7 @@
     "@types/uuid": "^8.3.4",
     "clsx": "^1.2.1",
     "core": "file:../../core",
+    "peggy": "^2.0.1",
     "ramda": "^0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

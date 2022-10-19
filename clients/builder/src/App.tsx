@@ -11,6 +11,8 @@ import Repeater from './components/Repeater';
 import AppContext from './AppContext';
 import LayoutContext from './LayoutContext';
 
+import test from './utils/test.js';
+
 import './App.css';
 
 function Text({
@@ -100,7 +102,7 @@ function App() {
             <Component label="Input" type="Input" />
             <Component label="Divider" type="Divider" />
           </Stack>
-          <Divider color="gray-5" />
+          <Divider color="gray-4" />
           <Stack flex horizontal>
             <Stack padding="small" fillColor="gray-1" style={{ width: 250 }}>
               {elements.map(({ type }) => (
@@ -109,8 +111,8 @@ function App() {
                 </View>
               ))}
             </Stack>
-            {/* <Divider /> */}
-            <View flex padding="medium" fillColor="gray-5">
+            <Divider color="gray-4" />
+            <View flex padding="medium" fillColor="gray-3">
               <Stack padding="medium" fillColor="white" style={{ width: 250, borderRadius: 4 }}>
                 <Placeholder index={0} />
                 {elements.map(({ element }, index) => (
