@@ -1,8 +1,21 @@
 import React, { useRef, useState } from 'react';
 
+import * as parser from './lib/parser';
+import * as core from './modules/core';
+import * as math from './modules/operators';
+
 import { View, Text, Icon, Spacer } from 'core';
 
 import './App.css';
+
+const ast = parser.parse('3.5 + 1') as core.AST;
+
+console.log(ast);
+console.log(core.interpret(ast, {}));
+
+
+// core.interpret2<math.AST>(ast, {});
+
 
 function App() {
   const [history, setHistory] = useState<string[]>([]);
