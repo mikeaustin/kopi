@@ -16,10 +16,11 @@ const visitors = {
   OperatorExpression(
     { op, left, right }: OperatorExpression,
     scope: {},
-    evaluate: (ast: any, scope: {}) => any
+    // evaluate: (ast: core.AST, scope: {}) => any
+    evaluate: <T = any>(ast: core.AST, scope: {}) => T
   ) {
-    const leftValue = evaluate(left, scope);
-    const rightValue = evaluate(right, scope);
+    const leftValue = evaluate<terminals.KopiNumber>(left, scope);
+    const rightValue = evaluate<terminals.KopiNumber>(right, scope);
 
     return new terminals.KopiNumber(leftValue.value + rightValue.value);
   }

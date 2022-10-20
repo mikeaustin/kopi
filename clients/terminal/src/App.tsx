@@ -11,10 +11,6 @@ import './App.css';
 
 type AST = core.AST | math.AST | terminals.AST;
 
-const ast = parser.parse('3.5 + 1') as AST;
-
-console.log(ast);
-
 const visitors = {
   ...core.visitors,
   ...math.visitors,
@@ -26,18 +22,18 @@ const visitors = {
 //   undefined
 // );
 
-function evaluate(ast: AST, scope: {}) {
+function evaluate<T = any>(ast: AST, scope: {}): T {
   switch (ast.type) {
-    case 'OperatorExpression': return visitors[ast.type](ast, {}, evaluate);
-    case 'NumericLiteral': return visitors[ast.type](ast, {});
-    case 'BooleanLiteral': return visitors[ast.type](ast, {});
-    default: const exhaustiveCheck: never = ast;
+    case 'OperatorExpression': {
+      const visitor = visitors[ast.type];
+
+      return visitors[ast.type](ast, {}, evaluate) as T;
+    }
+    case 'NumericLiteral': return visitors[ast.type](ast, {}) as T;
+    case 'BooleanLiteral': return visitors[ast.type](ast, {}) as T;
+    default: const exhaustiveCheck: never = ast; throw new Error();
   }
 }
-
-const z = evaluate(ast, {});
-
-console.log(z);
 
 type Kinds = 'n' | 's' | 'b';
 type Reify<K extends Kinds> = K extends 'n' ? number : K extends 's' ? string : K extends 'b' ? boolean : never;
