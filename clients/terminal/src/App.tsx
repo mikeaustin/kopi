@@ -3,19 +3,56 @@ import React, { useRef, useState } from 'react';
 import * as parser from './lib/parser';
 import * as core from './modules/core';
 import * as math from './modules/operators';
+import * as terminals from './modules/terminals';
 
 import { View, Text, Icon, Spacer } from 'core';
 
 import './App.css';
 
-const ast = parser.parse('3.5 + 1') as core.AST;
+type AST = core.AST | math.AST | terminals.AST;
+
+const ast = parser.parse('3.5 + 1') as AST;
 
 console.log(ast);
-console.log(core.interpret(ast, {}));
 
+const visitors = {
+  ...core.visitors,
+  ...math.visitors,
+  ...terminals.visitors,
+} as const;
 
-// core.interpret2<math.AST>(ast, {});
+// Object.keys(visitors).reduce(
+//   (value, key) => key === ast.type ? visitors[ast.type](ast, {}) : value,
+//   undefined
+// );
 
+function evaluate(ast: AST, scope: {}) {
+  switch (ast.type) {
+    case 'OperatorExpression': return visitors[ast.type](ast, {}, evaluate);
+    case 'NumericLiteral': return visitors[ast.type](ast, {});
+    case 'BooleanLiteral': return visitors[ast.type](ast, {});
+    default: const exhaustiveCheck: never = ast;
+  }
+}
+
+const z = evaluate(ast, {});
+
+console.log(z);
+
+type Kinds = 'n' | 's' | 'b';
+type Reify<K extends Kinds> = K extends 'n' ? number : K extends 's' ? string : K extends 'b' ? boolean : never;
+type Record<K extends Kinds> = { kind: K, v: Reify<K>, f: (v: Reify<K>) => void; };
+
+function processRecord<K extends Kinds>(record: Record<K>) {
+  record.f(record.v);
+}
+
+const val: Record<'n'> = { kind: 'n', v: 1, f: (x: number) => { } };
+const val2: Record<'s'> = { kind: 's', v: '1', f: (x: string) => { } };
+processRecord(val);
+processRecord(val2);
+
+//
 
 function App() {
   const [history, setHistory] = useState<string[]>([]);
@@ -35,11 +72,15 @@ function App() {
     setLine(event.target.value);
   };
 
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     console.log(event);
 
     if (event.key === 'Enter') {
-      setHistory(history => [...history, line + ' ']);
+      const ast = parser.parse(line.trim()) as AST;
+      const value = await evaluate(ast, {})?.inspect();
+
+      setHistory(history => [...history, '> ' + line + ' ']);
+      setHistory(history => [...history, value + ' ']);
       setLine('');
     }
   };

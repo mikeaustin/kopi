@@ -6,25 +6,42 @@ type AST =
 type NumericLiteral = { type: 'NumericLiteral', value: number; };
 type BooleanLiteral = { type: 'BooleanLiteral', value: boolean; };
 
+class KopiNumber {
+  constructor(value: number) {
+    this.value = value;
+  }
+
+  async inspect() {
+    return `${this.value}`;
+  }
+
+  value: number;
+}
+
+class KopiBoolean {
+  constructor(value: boolean) {
+    this.value = value;
+  }
+
+  async inspect() {
+    return `${this.value}`;
+  }
+
+  value: boolean;
+}
+
 const visitors = {
   NumericLiteral({ value }: NumericLiteral, env?: {}) {
-    return value;
+    return new KopiNumber(value);
   },
-  // BooleanLiteral({ value }: BooleanLiteral, env?: {}) {
-  //   return value;
-  // }
-};
-
-function interpret(astNode: AST, scope: any): number {
-  if (astNode.type === 'NumericLiteral') {
-    return visitors[astNode.type](astNode, scope);
-  } else {
-    return -1;
-    // throw new Error(`No ${this.constructor.name} AST visitor for '${astNode.constructor.name}'`);
+  BooleanLiteral({ value }: BooleanLiteral, env?: {}) {
+    return new KopiBoolean(value);
   }
-}
+};
 
 export {
   type AST,
-  interpret
+  visitors,
+  KopiNumber,
+  KopiBoolean,
 };
