@@ -22,15 +22,27 @@ const visitors = {
 //   undefined
 // );
 
-function evaluate<T = any>(ast: AST, scope: {}): T {
+function evaluate<R = any>(ast: AST, scope: {}, type: Function = Object): R {
+  if (visitors[ast.type]) {
+    const value = visitors[ast.type](ast as any, {}, evaluate);
+
+    if (value instanceof type) {
+      return value as R;
+    }
+  }
+
   switch (ast.type) {
     case 'OperatorExpression': {
-      const visitor = visitors[ast.type];
+      const value = visitors[ast.type](ast, {}, evaluate);
 
-      return visitors[ast.type](ast, {}, evaluate) as T;
+      if (value instanceof terminals.KopiNumber) {
+        return value as R;
+      }
+
+      throw new Error();
     }
-    case 'NumericLiteral': return visitors[ast.type](ast, {}) as T;
-    case 'BooleanLiteral': return visitors[ast.type](ast, {}) as T;
+    case 'NumericLiteral': return visitors[ast.type](ast, {}) as R;
+    case 'BooleanLiteral': return visitors[ast.type](ast, {}) as R;
     default: const exhaustiveCheck: never = ast; throw new Error();
   }
 }
@@ -69,8 +81,6 @@ function App() {
   };
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(event);
-
     if (event.key === 'Enter') {
       const ast = parser.parse(line.trim()) as AST;
       const value = await evaluate(ast, {})?.inspect();

@@ -1,5 +1,5 @@
 import * as core from '../core';
-import * as terminals from '../terminals';
+import { KopiNumber } from '../terminals';
 
 type AST =
   | OperatorExpression
@@ -17,12 +17,12 @@ const visitors = {
     { op, left, right }: OperatorExpression,
     scope: {},
     // evaluate: (ast: core.AST, scope: {}) => any
-    evaluate: <T = any>(ast: core.AST, scope: {}) => T
+    evaluate: <T = any>(ast: core.AST, scope: {}, type: Function) => T
   ) {
-    const leftValue = evaluate<terminals.KopiNumber>(left, scope);
-    const rightValue = evaluate<terminals.KopiNumber>(right, scope);
+    const leftValue = evaluate<KopiNumber>(left, scope, KopiNumber);
+    const rightValue = evaluate<KopiNumber>(right, scope, KopiNumber);
 
-    return new terminals.KopiNumber(leftValue.value + rightValue.value);
+    return new KopiNumber(leftValue.value + rightValue.value);
   }
 };
 
