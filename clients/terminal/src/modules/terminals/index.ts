@@ -41,6 +41,8 @@ const visitors = {
 
 export {
   type AST,
+  type NumericLiteral,
+  type BooleanLiteral,
   visitors,
   KopiNumber,
   KopiBoolean,

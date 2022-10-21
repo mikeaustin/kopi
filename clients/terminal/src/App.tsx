@@ -10,8 +10,8 @@ import { View, Text, Icon, Spacer } from 'core';
 import './App.css';
 
 type AST =
-  | core.AST
-  | math.AST<core.AST | terminals.AST>
+  // | core.AST
+  | math.AST<terminals.AST>
   | terminals.AST
   ;
 

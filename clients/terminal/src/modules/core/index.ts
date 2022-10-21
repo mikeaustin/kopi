@@ -1,8 +1,8 @@
-type AST = never;
+type AST = void;
 
 const visitors = {};
 
 export {
-  type AST,
+  // type AST,
   visitors,
 };

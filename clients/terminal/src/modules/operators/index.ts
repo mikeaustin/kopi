@@ -1,9 +1,12 @@
 import * as core from '../core';
 import { KopiNumber } from '../terminals';
+import * as terminals from '../terminals';
 
 type AST<TAST> =
   | OperatorExpression<TAST>
   ;
+
+type Dummy = { type: 'Dummy', value: number; };
 
 type OperatorExpression<TAST> = {
   type: 'OperatorExpression',
@@ -31,45 +34,44 @@ const visitors = {
   }
 };
 
-// function evaluate<TAST, TValue extends KopiValue>(
-//   astNode: TAST,
-//   environment: {},
-//   type?: { new(...args: any): TValue; }
-// ): TValue {
-//   let value;
+function evaluate<TValue extends KopiValue>(
+  astNode: AST<Dummy> | Dummy,
+  environment: {},
+  type?: { new(...args: any): TValue; }
+): TValue {
+  let value;
 
-//   switch (astNode.type) {
-//     case 'OperatorExpression':
-//       value = visitors[astNode.type](astNode, environment, evaluate);
-//       break;
-//     case 'NumericLiteral':
-//       value = visitors[astNode.type](astNode, environment);
-//       break;
-//     case 'BooleanLiteral':
-//       value = visitors[astNode.type](astNode, environment);
-//       break;
-//     default:
-//       const exhaustiveCheck: never = astNode;
-//       throw new Error();
-//   }
+  switch (astNode.type) {
+    case 'Dummy':
+      value = new KopiNumber(5);
+      break;
+    case 'OperatorExpression':
+      value = visitors[astNode.type](astNode, environment, evaluate);
+      break;
+    default:
+      const exhaustiveCheck: never = astNode;
+      throw new Error();
+  }
 
-//   if (type) {
-//     if (value instanceof type) {
-//       return value;
-//     } else {
-//       throw new Error(`Unexpected type ${type}`);
-//     }
-//   }
+  if (type) {
+    if (value instanceof type) {
+      return value;
+    } else {
+      throw new Error(`Unexpected type ${type}`);
+    }
+  }
 
-//   return value as unknown as TValue;
-// }
+  return value as unknown as TValue;
+}
 
-// evaluate({
-//   type: 'OperatorExpression',
-//   op: '+',
-//   left: { type: 'NumericLiteral', value: 2 },
-//   right: { type: 'NumericLiteral', value: 3 },
-// }, {}, evaluate);
+const value = evaluate({
+  type: 'OperatorExpression',
+  op: '+',
+  left: { type: 'Dummy', value: 2 },
+  right: { type: 'Dummy', value: 3 },
+}, {});
+
+console.log('operators', value);
 
 export {
   type AST,
