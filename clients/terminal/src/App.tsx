@@ -9,7 +9,11 @@ import { View, Text, Icon, Spacer } from 'core';
 
 import './App.css';
 
-type AST = core.AST | math.AST | terminals.AST;
+type AST =
+  | core.AST
+  | math.AST<core.AST | terminals.AST>
+  | terminals.AST
+  ;
 
 const visitors = {
   ...core.visitors,
@@ -22,29 +26,41 @@ const visitors = {
 //   undefined
 // );
 
-function evaluate<R = any>(ast: AST, scope: {}, type: Function = Object): R {
-  if (visitors[ast.type]) {
-    const value = visitors[ast.type](ast as any, {}, evaluate);
+interface KopiValue {
+  inspect(): Promise<string>,
+};
 
-    if (value instanceof type) {
-      return value as R;
-    }
-  }
+function evaluate<TValue extends KopiValue>(
+  astNode: AST,
+  environment: {},
+  type?: { new(...args: any): TValue; }
+): TValue {
+  let value;
 
-  switch (ast.type) {
-    case 'OperatorExpression': {
-      const value = visitors[ast.type](ast, {}, evaluate);
-
-      if (value instanceof terminals.KopiNumber) {
-        return value as R;
-      }
-
+  switch (astNode.type) {
+    case 'OperatorExpression':
+      value = visitors[astNode.type](astNode, environment, evaluate);
+      break;
+    case 'NumericLiteral':
+      value = visitors[astNode.type](astNode, environment);
+      break;
+    case 'BooleanLiteral':
+      value = visitors[astNode.type](astNode, environment);
+      break;
+    default:
+      const exhaustiveCheck: never = astNode;
       throw new Error();
-    }
-    case 'NumericLiteral': return visitors[ast.type](ast, {}) as R;
-    case 'BooleanLiteral': return visitors[ast.type](ast, {}) as R;
-    default: const exhaustiveCheck: never = ast; throw new Error();
   }
+
+  if (type) {
+    if (value instanceof type) {
+      return value;
+    } else {
+      throw new Error(`Unexpected type ${type}`);
+    }
+  }
+
+  return value as unknown as TValue;
 }
 
 type Kinds = 'n' | 's' | 'b';
