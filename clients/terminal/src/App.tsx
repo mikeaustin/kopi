@@ -15,6 +15,8 @@ type AST =
   | terminals.AST
   ;
 
+type ASTKeys = keyof AST;
+
 const visitors = {
   ...core.visitors,
   ...math.visitors,
@@ -36,6 +38,8 @@ function evaluate<TValue extends KopiValue>(
   type?: { new(...args: any): TValue; }
 ): TValue {
   let value;
+
+  // visitors[astNode.type](astNode, environment, evaluate);
 
   switch (astNode.type) {
     case 'OperatorExpression':
