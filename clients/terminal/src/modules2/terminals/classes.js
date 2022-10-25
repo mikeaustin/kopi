@@ -63,7 +63,7 @@ var KopiNumber = /** @class */ (function (_super) {
     KopiNumber.prototype.inspect = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, "\"".concat(this.value, "\"")];
+                return [2 /*return*/, "".concat(this.value)];
             });
         });
     };

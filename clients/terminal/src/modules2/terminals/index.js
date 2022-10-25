@@ -51,16 +51,6 @@ var Identifier = /** @class */ (function (_super) {
     }
     return Identifier;
 }(shared_1.ASTNode));
-var TupleExpression = /** @class */ (function (_super) {
-    __extends(TupleExpression, _super);
-    function TupleExpression(_a) {
-        var elements = _a.elements, location = _a.location;
-        var _this = _super.call(this, location) || this;
-        _this.elements = elements;
-        return _this;
-    }
-    return TupleExpression;
-}(shared_1.ASTNode));
 //
 var transform = function (rawAstNode) {
     switch (rawAstNode.type) {
@@ -77,11 +67,6 @@ var transform = function (rawAstNode) {
         case 'Identifier':
             return new Identifier({
                 name: rawAstNode.name,
-                location: rawAstNode.location
-            });
-        case 'TupleExpression':
-            return new TupleExpression({
-                elements: rawAstNode.elements,
                 location: rawAstNode.location
             });
     }

@@ -8,7 +8,7 @@ class KopiNumber extends KopiValue {
   }
 
   async inspect() {
-    return `"${this.value}"`;
+    return `${this.value}`;
   }
 
   '+'(that: KopiNumber) {

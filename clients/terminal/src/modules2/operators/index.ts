@@ -1,5 +1,5 @@
 import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
-import { KopiFunction } from '../terminals/classes';
+import { KopiTuple, KopiFunction } from '../terminals/classes';
 
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
@@ -13,6 +13,16 @@ class OperatorExpression extends ASTNode {
   operator: string;
   leftExpression: ASTNode;
   rightExpression: ASTNode;
+}
+
+class TupleExpression extends ASTNode {
+  constructor({ elements, location }: TupleExpression) {
+    super(location);
+
+    this.elements = elements;
+  }
+
+  elements: ASTNode[];
 }
 
 class FunctionExpression extends ASTNode {
@@ -42,6 +52,11 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
         bodyExpression: transform(rawAstNode.bodyExpression),
         location: rawAstNode.location,
       } as FunctionExpression);
+    case 'TupleExpression':
+      return new TupleExpression({
+        elements: rawAstNode.elements.map((element: ASTNode) => transform(element)),
+        location: rawAstNode.location,
+      } as TupleExpression);
     default:
       return next(rawAstNode);
   }
@@ -59,6 +74,8 @@ const evaluate =
         } else {
           throw new Error(`${leftValue} doesn't have a method '${astNode.operator}'`);
         }
+      } else if (astNode instanceof TupleExpression) {
+        return new KopiTuple(astNode.elements.map(element => evaluate(element, environment)));
       } else if (astNode instanceof FunctionExpression) {
         return new KopiFunction(astNode.parameters, astNode.bodyExpression);
       } else {

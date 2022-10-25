@@ -30,6 +30,16 @@ var OperatorExpression = /** @class */ (function (_super) {
     }
     return OperatorExpression;
 }(shared_1.ASTNode));
+var TupleExpression = /** @class */ (function (_super) {
+    __extends(TupleExpression, _super);
+    function TupleExpression(_a) {
+        var elements = _a.elements, location = _a.location;
+        var _this = _super.call(this, location) || this;
+        _this.elements = elements;
+        return _this;
+    }
+    return TupleExpression;
+}(shared_1.ASTNode));
 var FunctionExpression = /** @class */ (function (_super) {
     __extends(FunctionExpression, _super);
     function FunctionExpression(_a) {
@@ -56,6 +66,11 @@ var transform = function (next, transform) { return function (rawAstNode) {
                 bodyExpression: transform(rawAstNode.bodyExpression),
                 location: rawAstNode.location
             });
+        case 'TupleExpression':
+            return new TupleExpression({
+                elements: rawAstNode.elements.map(function (element) { return transform(element); }),
+                location: rawAstNode.location
+            });
         default:
             return next(rawAstNode);
     }
@@ -72,6 +87,9 @@ var evaluate = function (next, evaluate) {
             else {
                 throw new Error("".concat(leftValue, " doesn't have a method '").concat(astNode.operator, "'"));
             }
+        }
+        else if (astNode instanceof TupleExpression) {
+            return new classes_1.KopiTuple(astNode.elements.map(function (element) { return evaluate(element, environment); }));
         }
         else if (astNode instanceof FunctionExpression) {
             return new classes_1.KopiFunction(astNode.parameters, astNode.bodyExpression);

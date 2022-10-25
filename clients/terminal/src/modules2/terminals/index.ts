@@ -1,5 +1,5 @@
-import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
-import { KopiNumber, KopiBoolean, KopiTuple } from './classes';
+import { RawASTNode, ASTNode, Environment } from '../shared';
+import { KopiNumber, KopiBoolean } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -31,16 +31,6 @@ class Identifier extends ASTNode {
   name: string;
 }
 
-class TupleExpression extends ASTNode {
-  constructor({ elements, location }: TupleExpression) {
-    super(location);
-
-    this.elements = elements;
-  }
-
-  elements: KopiValue[];
-}
-
 //
 
 const transform = (rawAstNode: RawASTNode) => {
@@ -60,11 +50,6 @@ const transform = (rawAstNode: RawASTNode) => {
         name: rawAstNode.name,
         location: rawAstNode.location,
       } as Identifier);
-    case 'TupleExpression':
-      return new TupleExpression({
-        elements: rawAstNode.elements,
-        location: rawAstNode.location,
-      } as TupleExpression);
   }
 
   throw new Error(`No transform found for '${rawAstNode.type}'`);

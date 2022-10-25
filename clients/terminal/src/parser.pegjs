@@ -34,8 +34,20 @@ FunctionExpression
   / PrimaryExpression
 
 PrimaryExpression
-  = "(" expression:Expression ")" {
-      return expression;
+  = "(" _ head:Expression tail:(_ "," _ Expression)+ _ ")" {
+      return {
+        type: 'TupleExpression',
+        elements: tail.reduce((elements, [, , , expression]) => [...elements, expression], [head]),
+      }
+    }
+  / "(" _ head:Expression _ ")" {
+      return head;
+    }
+  / "(" _ ")" {
+      return {
+        type: 'TupleExpression',
+        elements: [],
+      }
     }
   / NumericLiteral
   / Identifier
