@@ -170,8 +170,8 @@ function peg$parse(input, options) {
   var peg$FAILED = {};
   var peg$source = options.grammarSource;
 
-  var peg$startRuleFunctions = { AddExpression: peg$parseAddExpression };
-  var peg$startRuleFunction = peg$parseAddExpression;
+  var peg$startRuleFunctions = { Expression: peg$parseExpression };
+  var peg$startRuleFunction = peg$parseExpression;
 
   var peg$c0 = "+";
   var peg$c1 = "-";
@@ -189,19 +189,20 @@ function peg$parse(input, options) {
   var peg$e6 = peg$classExpectation([" ", "\t"], false, false);
 
   var peg$f0 = function(head, tail) {
-      return tail.reduce((left, [, op, , right]) => ({
+      return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
         type: 'OperatorExpression',
-        op,
-        left,
-        right
+        operator,
+        leftExpression,
+        rightExpression,
+        location: location(),
        }), head);
     };
   var peg$f1 = function(value) {
-    return {
+    return ({
       type: 'NumericLiteral',
       value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`),
       location: location(),
-    };
+    });
   };
   var peg$currPos = 0;
   var peg$savedPos = 0;
@@ -356,6 +357,14 @@ function peg$parse(input, options) {
       found,
       location
     );
+  }
+
+  function peg$parseExpression() {
+    var s0;
+
+    s0 = peg$parseAddExpression();
+
+    return s0;
   }
 
   function peg$parseAddExpression() {
