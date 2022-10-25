@@ -1,4 +1,4 @@
-import { ASTNode } from '../shared';
+import { RawASTNode, ASTNode, Environment } from '../shared';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -20,45 +20,85 @@ class BooleanLiteral extends ASTNode {
   value: boolean;
 }
 
+class Identifier extends ASTNode {
+  constructor({ name, location }: Identifier) {
+    super(location);
+
+    this.name = name;
+  }
+
+  name: string;
+}
+
+//
+
 class KopiNumber {
   constructor(value: number) {
     this.value = value;
   }
 
-  async toString() {
-    return this.value;
+  async inspect() {
+    return `"${this.value}"`;
   }
 
   '+'(that: KopiNumber) {
-    return this.value + that.value;
+    return new KopiNumber(this.value + that.value);
+  }
+
+  '*'(that: KopiNumber) {
+    return new KopiNumber(this.value * that.value);
   }
 
   value: number;
 }
 
-const transform = (astNode: any) => {
-  switch (astNode.type) {
+class KopiBoolean {
+  constructor(value: boolean) {
+    this.value = value;
+  }
+
+  async inspect() {
+    return this.value ? 'true' : 'false';
+  }
+
+  value: boolean;
+}
+
+const transform = (rawAstNode: RawASTNode) => {
+  switch (rawAstNode.type) {
     case 'NumericLiteral':
       return new NumericLiteral({
-        value: astNode.value,
-        location: astNode.location,
+        value: rawAstNode.value,
+        location: rawAstNode.location,
       } as NumericLiteral);
     case 'BooleanLiteral':
       return new BooleanLiteral({
-        value: astNode.value,
+        value: rawAstNode.value,
+        location: rawAstNode.location,
       } as BooleanLiteral);
+    case 'Identifier':
+      return new Identifier({
+        name: rawAstNode.name,
+        location: rawAstNode.location,
+      } as Identifier);
   }
 
-  throw new Error(`astNodesToClasses: Can't convert ${astNode.type}`);
+  throw new Error(`No transform found for '${rawAstNode.type}'`);
 };
 
-const evaluate = (astNode: ASTNode) => {
+const evaluate = (astNode: ASTNode, environment: Environment) => {
   if (astNode instanceof NumericLiteral) {
     return new KopiNumber(astNode.value);
   } else if (astNode instanceof BooleanLiteral) {
-    return astNode.value;
+    return new KopiBoolean(astNode.value);
+  } else if (astNode instanceof Identifier) {
+    if (!(astNode.name in environment)) {
+      throw new Error(`Variable '${astNode.name}' not found in current scope`);
+    }
+
+    return environment[astNode.name];
   } else {
-    throw new Error(`No visitor found for ${astNode.constructor.name}`);
+    throw new Error(`No visitor found for '${astNode.constructor.name}'`);
   }
 };
 

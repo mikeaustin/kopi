@@ -75,47 +75,86 @@ var BooleanLiteral = /** @class */ (function (_super) {
     return BooleanLiteral;
 }(shared_1.ASTNode));
 exports.BooleanLiteral = BooleanLiteral;
+var Identifier = /** @class */ (function (_super) {
+    __extends(Identifier, _super);
+    function Identifier(_a) {
+        var name = _a.name, location = _a.location;
+        var _this = _super.call(this, location) || this;
+        _this.name = name;
+        return _this;
+    }
+    return Identifier;
+}(shared_1.ASTNode));
+//
 var KopiNumber = /** @class */ (function () {
     function KopiNumber(value) {
         this.value = value;
     }
-    KopiNumber.prototype.toString = function () {
+    KopiNumber.prototype.inspect = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.value];
+                return [2 /*return*/, "\"".concat(this.value, "\"")];
             });
         });
     };
     KopiNumber.prototype['+'] = function (that) {
-        return this.value + that.value;
+        return new KopiNumber(this.value + that.value);
+    };
+    KopiNumber.prototype['*'] = function (that) {
+        return new KopiNumber(this.value * that.value);
     };
     return KopiNumber;
 }());
 exports.KopiNumber = KopiNumber;
-var transform = function (astNode) {
-    switch (astNode.type) {
+var KopiBoolean = /** @class */ (function () {
+    function KopiBoolean(value) {
+        this.value = value;
+    }
+    KopiBoolean.prototype.inspect = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value ? 'true' : 'false'];
+            });
+        });
+    };
+    return KopiBoolean;
+}());
+var transform = function (rawAstNode) {
+    switch (rawAstNode.type) {
         case 'NumericLiteral':
             return new NumericLiteral({
-                value: astNode.value,
-                location: astNode.location
+                value: rawAstNode.value,
+                location: rawAstNode.location
             });
         case 'BooleanLiteral':
             return new BooleanLiteral({
-                value: astNode.value
+                value: rawAstNode.value,
+                location: rawAstNode.location
+            });
+        case 'Identifier':
+            return new Identifier({
+                name: rawAstNode.name,
+                location: rawAstNode.location
             });
     }
-    throw new Error("astNodesToClasses: Can't convert ".concat(astNode.type));
+    throw new Error("No transform found for '".concat(rawAstNode.type, "'"));
 };
 exports.transform = transform;
-var evaluate = function (astNode) {
+var evaluate = function (astNode, environment) {
     if (astNode instanceof NumericLiteral) {
         return new KopiNumber(astNode.value);
     }
     else if (astNode instanceof BooleanLiteral) {
-        return astNode.value;
+        return new KopiBoolean(astNode.value);
+    }
+    else if (astNode instanceof Identifier) {
+        if (!(astNode.name in environment)) {
+            throw new Error("Variable '".concat(astNode.name, "' not found in current scope"));
+        }
+        return environment[astNode.name];
     }
     else {
-        throw new Error("No visitor found for ".concat(astNode.constructor.name));
+        throw new Error("No visitor found for '".concat(astNode.constructor.name, "'"));
     }
 };
 exports.evaluate = evaluate;

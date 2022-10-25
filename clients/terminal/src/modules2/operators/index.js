@@ -29,33 +29,35 @@ var OperatorExpression = /** @class */ (function (_super) {
     }
     return OperatorExpression;
 }(shared_1.ASTNode));
-var transform = function (next, transform) { return function (astNode) {
-    switch (astNode.type) {
+var transform = function (next, transform) { return function (rawAstNode) {
+    switch (rawAstNode.type) {
         case 'OperatorExpression':
             return new OperatorExpression({
-                operator: astNode.operator,
-                leftExpression: transform(astNode.leftExpression),
-                rightExpression: transform(astNode.rightExpression),
-                location: astNode.location
+                operator: rawAstNode.operator,
+                leftExpression: transform(rawAstNode.leftExpression),
+                rightExpression: transform(rawAstNode.rightExpression),
+                location: rawAstNode.location
             });
         default:
-            return next(astNode);
+            return next(rawAstNode);
     }
 }; };
 exports.transform = transform;
-var evaluate = function (next, evaluate) { return function (astNode) {
-    if (astNode instanceof OperatorExpression) {
-        var leftValue = evaluate(astNode.leftExpression);
-        var rightValue = evaluate(astNode.rightExpression);
-        if (astNode.operator in leftValue) {
-            return leftValue[astNode.operator](rightValue);
+var evaluate = function (next, evaluate) {
+    return function (astNode, environment) {
+        if (astNode instanceof OperatorExpression) {
+            var leftValue = evaluate(astNode.leftExpression, environment);
+            var rightValue = evaluate(astNode.rightExpression, environment);
+            if (astNode.operator in leftValue) {
+                return leftValue[astNode.operator](rightValue);
+            }
+            else {
+                throw new Error("".concat(leftValue, " doesn't have a method '").concat(astNode.operator, "'"));
+            }
         }
         else {
-            throw new Error("Trying to add non-numbers");
+            return next(astNode, environment);
         }
-    }
-    else {
-        return next(astNode);
-    }
-}; };
+    };
+};
 exports.evaluate = evaluate;
