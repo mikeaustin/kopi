@@ -1,4 +1,5 @@
-import { RawASTNode, ASTNode, Environment } from '../shared';
+import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
+import { KopiNumber, KopiBoolean, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -30,39 +31,17 @@ class Identifier extends ASTNode {
   name: string;
 }
 
+class TupleExpression extends ASTNode {
+  constructor({ elements, location }: TupleExpression) {
+    super(location);
+
+    this.elements = elements;
+  }
+
+  elements: KopiValue[];
+}
+
 //
-
-class KopiNumber {
-  constructor(value: number) {
-    this.value = value;
-  }
-
-  async inspect() {
-    return `"${this.value}"`;
-  }
-
-  '+'(that: KopiNumber) {
-    return new KopiNumber(this.value + that.value);
-  }
-
-  '*'(that: KopiNumber) {
-    return new KopiNumber(this.value * that.value);
-  }
-
-  value: number;
-}
-
-class KopiBoolean {
-  constructor(value: boolean) {
-    this.value = value;
-  }
-
-  async inspect() {
-    return this.value ? 'true' : 'false';
-  }
-
-  value: boolean;
-}
 
 const transform = (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
@@ -81,6 +60,11 @@ const transform = (rawAstNode: RawASTNode) => {
         name: rawAstNode.name,
         location: rawAstNode.location,
       } as Identifier);
+    case 'TupleExpression':
+      return new TupleExpression({
+        elements: rawAstNode.elements,
+        location: rawAstNode.location,
+      } as TupleExpression);
   }
 
   throw new Error(`No transform found for '${rawAstNode.type}'`);

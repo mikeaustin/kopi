@@ -13,7 +13,7 @@ AddExpression
     }
 
 MultiplyExpression
-  = head:PrimaryExpression tail:(_ ("*" / "/") _ PrimaryExpression)* {
+  = head:FunctionExpression tail:(_ ("*" / "/") _ FunctionExpression)* {
       return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
         type: 'OperatorExpression',
         operator,
@@ -22,6 +22,16 @@ MultiplyExpression
         location: location(),
        }), head);
     }
+
+FunctionExpression
+  = "()" _ "=>" _ bodyExpression:Expression {
+      return {
+        type: "FunctionExpression",
+        parameters: [],
+        bodyExpression,
+      }
+    }
+  / PrimaryExpression
 
 PrimaryExpression
   = "(" expression:Expression ")" {

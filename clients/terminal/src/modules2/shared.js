@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.KopiValue = exports.ASTNode = exports.RawASTNode = void 0;
+var util = require("util");
 var RawASTNode = /** @class */ (function () {
     function RawASTNode() {
     }
@@ -45,7 +46,8 @@ var RawASTNode = /** @class */ (function () {
 exports.RawASTNode = RawASTNode;
 var ASTNode = /** @class */ (function () {
     function ASTNode(location) {
-        this.location = location;
+        this.location = {};
+        // this.location = location;
     }
     return ASTNode;
 }());
@@ -56,7 +58,9 @@ var KopiValue = /** @class */ (function () {
     KopiValue.prototype.inspect = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, "KopiValue.inspect()"];
+                return [2 /*return*/, util.inspect(this, {
+                        depth: null
+                    })];
             });
         });
     };

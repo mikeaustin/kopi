@@ -1,4 +1,5 @@
 import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
+import { KopiFunction } from '../terminals/classes';
 
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
@@ -14,6 +15,18 @@ class OperatorExpression extends ASTNode {
   rightExpression: ASTNode;
 }
 
+class FunctionExpression extends ASTNode {
+  constructor({ parameters, bodyExpression, location }: FunctionExpression) {
+    super(location);
+
+    this.parameters = parameters;
+    this.bodyExpression = bodyExpression;
+  }
+
+  parameters: any[];
+  bodyExpression: ASTNode;
+}
+
 const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: any): ASTNode => {
   switch (rawAstNode.type) {
     case 'OperatorExpression':
@@ -23,6 +36,12 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
         rightExpression: transform(rawAstNode.rightExpression),
         location: rawAstNode.location,
       } as OperatorExpression);
+    case 'FunctionExpression':
+      return new FunctionExpression({
+        parameters: rawAstNode.parameters,
+        bodyExpression: transform(rawAstNode.bodyExpression),
+        location: rawAstNode.location,
+      } as FunctionExpression);
     default:
       return next(rawAstNode);
   }
@@ -30,7 +49,7 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
 
 const evaluate =
   (next: (astNode: ASTNode, environment: Environment) => KopiValue, evaluate: (astNode: ASTNode, environment: Environment) => KopiValue) =>
-    (astNode: any, environment: Environment) => {
+    (astNode: any, environment: Environment): KopiValue => {
       if (astNode instanceof OperatorExpression) {
         const leftValue = evaluate(astNode.leftExpression, environment);
         const rightValue = evaluate(astNode.rightExpression, environment);
@@ -40,6 +59,8 @@ const evaluate =
         } else {
           throw new Error(`${leftValue} doesn't have a method '${astNode.operator}'`);
         }
+      } else if (astNode instanceof FunctionExpression) {
+        return new KopiFunction(astNode.parameters, astNode.bodyExpression);
       } else {
         return next(astNode, environment);
       }

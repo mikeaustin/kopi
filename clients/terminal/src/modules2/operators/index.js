@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.evaluate = exports.transform = void 0;
 var shared_1 = require("../shared");
+var classes_1 = require("../terminals/classes");
 var OperatorExpression = /** @class */ (function (_super) {
     __extends(OperatorExpression, _super);
     function OperatorExpression(_a) {
@@ -29,6 +30,17 @@ var OperatorExpression = /** @class */ (function (_super) {
     }
     return OperatorExpression;
 }(shared_1.ASTNode));
+var FunctionExpression = /** @class */ (function (_super) {
+    __extends(FunctionExpression, _super);
+    function FunctionExpression(_a) {
+        var parameters = _a.parameters, bodyExpression = _a.bodyExpression, location = _a.location;
+        var _this = _super.call(this, location) || this;
+        _this.parameters = parameters;
+        _this.bodyExpression = bodyExpression;
+        return _this;
+    }
+    return FunctionExpression;
+}(shared_1.ASTNode));
 var transform = function (next, transform) { return function (rawAstNode) {
     switch (rawAstNode.type) {
         case 'OperatorExpression':
@@ -36,6 +48,12 @@ var transform = function (next, transform) { return function (rawAstNode) {
                 operator: rawAstNode.operator,
                 leftExpression: transform(rawAstNode.leftExpression),
                 rightExpression: transform(rawAstNode.rightExpression),
+                location: rawAstNode.location
+            });
+        case 'FunctionExpression':
+            return new FunctionExpression({
+                parameters: rawAstNode.parameters,
+                bodyExpression: transform(rawAstNode.bodyExpression),
                 location: rawAstNode.location
             });
         default:
@@ -54,6 +72,9 @@ var evaluate = function (next, evaluate) {
             else {
                 throw new Error("".concat(leftValue, " doesn't have a method '").concat(astNode.operator, "'"));
             }
+        }
+        else if (astNode instanceof FunctionExpression) {
+            return new classes_1.KopiFunction(astNode.parameters, astNode.bodyExpression);
         }
         else {
             return next(astNode, environment);
