@@ -1,4 +1,19 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -40,12 +55,40 @@ var parser = require("./lib/parser");
 var operators = require("./modules2/operators");
 var terminals = require("./modules2/terminals");
 var terminals_1 = require("./modules2/terminals");
+var shared_1 = require("./modules2/shared");
+var NativeFunction = /** @class */ (function (_super) {
+    __extends(NativeFunction, _super);
+    function NativeFunction(name, argType, func) {
+        var _this = _super.call(this) || this;
+        _this.name = name;
+        _this.func = func;
+        _this.argType = argType;
+        return _this;
+    }
+    NativeFunction.prototype.apply = function (thisArg, _a) {
+        var arg = _a[0];
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                if (!(arg instanceof this.argType)) {
+                    throw new Error("".concat(this.name, "() only accepts a ").concat(this.argType, " as an argument, not ").concat(arg));
+                }
+                return [2 /*return*/, this.func.apply(thisArg, [arg])];
+            });
+        });
+    };
+    return NativeFunction;
+}(shared_1.KopiValue));
 var environment = {
     x: new terminals_1.KopiNumber(3),
-    sleep: (function (value) {
-        if (!(value instanceof terminals_1.KopiNumber)) {
-            throw new Error("round() only accepts a number as an argument");
-        }
+    // sleep: ((value: KopiValue) => {
+    //   if (!(value instanceof KopiNumber)) {
+    //     throw new Error(`round() only accepts a number as an argument`);
+    //   }
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => resolve(value), value.value * 1000);
+    //   });
+    // }) as unknown as KopiValue,
+    sleep: new NativeFunction('sleep', terminals_1.KopiNumber, function (value) {
         return new Promise(function (resolve) {
             setTimeout(function () { return resolve(value); }, value.value * 1000);
         });

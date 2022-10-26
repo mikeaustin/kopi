@@ -63,7 +63,7 @@ class KopiFunction extends KopiValue {
     this.bodyExpression = bodyExpression;
   }
 
-  apply(thisArg: this, arg: KopiValue, evaluate: (astNode: any, environment: any) => Promise<KopiValue>): Promise<KopiValue> {
+  apply(thisArg: KopiValue, arg: KopiValue, evaluate: (astNode: any, environment: any) => Promise<KopiValue>): Promise<KopiValue> {
     return evaluate(this.bodyExpression, this.environment);
   }
 

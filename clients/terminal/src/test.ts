@@ -8,17 +8,45 @@ import { KopiNumber } from './modules2/terminals';
 
 import { KopiValue } from './modules2/shared';
 
-const environment = {
-  x: new KopiNumber(3),
-  sleep: ((value: KopiValue) => {
-    if (!(value instanceof KopiNumber)) {
-      throw new Error(`round() only accepts a number as an argument`);
+class NativeFunction<TArg> extends KopiValue {
+  constructor(name: string, argType: Function, func: (arg: TArg) => Promise<KopiValue>) {
+    super();
+
+    this.name = name;
+    this.func = func;
+    this.argType = argType;
+  }
+
+  async apply(thisArg: KopiValue, [arg]: [TArg]): Promise<KopiValue> {
+    if (!(arg instanceof this.argType)) {
+      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${arg}`);
     }
 
+    return this.func.apply(thisArg, [arg]);
+  }
+
+
+  name: string;
+  func: (arg: TArg) => Promise<KopiValue>;
+  argType: Function;
+}
+
+const environment = {
+  x: new KopiNumber(3),
+  // sleep: ((value: KopiValue) => {
+  //   if (!(value instanceof KopiNumber)) {
+  //     throw new Error(`round() only accepts a number as an argument`);
+  //   }
+
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => resolve(value), value.value * 1000);
+  //   });
+  // }) as unknown as KopiValue,
+  sleep: new NativeFunction('sleep', KopiNumber, (value: KopiNumber) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(value), value.value * 1000);
     });
-  }) as unknown as KopiValue,
+  }),
   round: ((value: KopiValue) => {
     if (!(value instanceof KopiNumber)) {
       throw new Error(`round() only accepts a number as an argument`);
