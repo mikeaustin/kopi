@@ -43,19 +43,11 @@ ApplyExpression
     }
 
 PrimaryExpression
-  = "(" _ head:Expression tail:(_ "," _ Expression)+ _ ")" {
-      return {
+  = "(" _ head:Expression? tail:(_ "," _ Expression)* _ ")" {
+      return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        elements: tail.reduce((elements, [, , , expression]) => [...elements, expression], [head]),
-      }
-    }
-  / "(" _ head:Expression _ ")" {
-      return head;
-    }
-  / "(" _ ")" {
-      return {
-        type: 'TupleExpression',
-        elements: [],
+        elements: !head ? [] : tail.reduce((elements, [, , , expression]) =>
+          [...elements, expression], [head]),
       }
     }
   / NumericLiteral
@@ -71,11 +63,11 @@ NumericLiteral "number"
     });
   }
 
-AstLiteral "ast literal"
+AstLiteral "ast"
   = "'" expression:PrimaryExpression {
       return {
         type: 'AstLiteral',
-         value: expression,
+        value: expression,
       };
     }
 

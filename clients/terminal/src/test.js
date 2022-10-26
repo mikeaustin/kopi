@@ -95,7 +95,7 @@ var environment = {
         });
     }); })
 };
-// const ast = parser.parse('(1, 2, 3)');
+var ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');
 // const ast = parser.parse('(1 + 2) * x');
 // const ast = parser.parse('() => (1 + 2) * x');
@@ -107,7 +107,7 @@ var environment = {
 // const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
 // const ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
 // const ast = parser.parse(`'(('sin 5) 1, 'sin 5)`);
-var ast = parser.parse("'('1, 2, 3)");
+// const ast = parser.parse(`'('1, 2, 3)`);
 var transform = function (ast) {
     return transformPipeline(ast);
 };
