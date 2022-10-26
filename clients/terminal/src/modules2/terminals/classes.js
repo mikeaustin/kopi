@@ -73,6 +73,12 @@ var KopiNumber = /** @class */ (function (_super) {
     KopiNumber.prototype['*'] = function (that) {
         return new KopiNumber(this.value * that.value);
     };
+    KopiNumber.prototype.sin = function () {
+        return new KopiNumber(Math.sin(this.value));
+    };
+    KopiNumber.prototype.cos = function () {
+        return new KopiNumber(Math.cos(this.value));
+    };
     return KopiNumber;
 }(shared_1.KopiValue));
 exports.KopiNumber = KopiNumber;

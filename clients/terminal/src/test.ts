@@ -1,3 +1,5 @@
+import * as util from 'util';
+
 import * as parser from './lib/parser';
 
 import { RawASTNode, ASTNode, Environment } from './modules2/shared';
@@ -9,12 +11,12 @@ import { KopiNumber } from './modules2/terminals';
 import { KopiValue } from './modules2/shared';
 
 class NativeFunction<TArg> extends KopiValue {
-  constructor(name: string, argType: Function, func: (arg: TArg) => Promise<KopiValue>) {
+  constructor(name: string, argType: Function = KopiValue, func: (arg: TArg) => Promise<KopiValue>) {
     super();
 
     this.name = name;
-    this.func = func;
     this.argType = argType;
+    this.func = func;
   }
 
   async apply(thisArg: KopiValue, [arg]: [TArg]): Promise<KopiValue> {
@@ -26,8 +28,8 @@ class NativeFunction<TArg> extends KopiValue {
   }
 
   name: string;
-  func: (arg: TArg) => Promise<KopiValue>;
   argType: Function;
+  func: (arg: TArg) => Promise<KopiValue>;
 }
 
 const environment = {
@@ -52,13 +54,16 @@ const environment = {
 // const ast = parser.parse('(() => 5) ()');
 // const ast = parser.parse('(() => 3) () + round 2.7');
 
-const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
+// const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
+// const ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
+// const ast = parser.parse(`'(('sin 5) 1, 'sin 5)`);
+const ast = parser.parse(`'('1, 2, 3)`);
 
 const transform = (ast: RawASTNode) => {
   return transformPipeline(ast);
 };
 
-const transformPipeline = operators.transform(terminals.transform, transform);
+const transformPipeline = operators.transform(terminals.transform(transform), transform);
 
 const evaluate = (ast: ASTNode, environment: Environment) => {
   return evaluatePipeline(ast, environment);
@@ -69,7 +74,7 @@ const evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
 const transformedAst = transformPipeline(ast);
 
 const main = async () => {
-  console.log(transformedAst);
+  console.log(util.inspect(transformedAst, { depth: Infinity }));
   console.log(await (await evaluate(transformedAst, environment)).inspect());
 };
 

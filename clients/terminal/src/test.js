@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var util = require("util");
 var parser = require("./lib/parser");
 var operators = require("./modules2/operators");
 var terminals = require("./modules2/terminals");
@@ -59,10 +60,11 @@ var shared_1 = require("./modules2/shared");
 var NativeFunction = /** @class */ (function (_super) {
     __extends(NativeFunction, _super);
     function NativeFunction(name, argType, func) {
+        if (argType === void 0) { argType = shared_1.KopiValue; }
         var _this = _super.call(this) || this;
         _this.name = name;
-        _this.func = func;
         _this.argType = argType;
+        _this.func = func;
         return _this;
     }
     NativeFunction.prototype.apply = function (thisArg, _a) {
@@ -89,14 +91,10 @@ var environment = {
     }); }),
     round: new NativeFunction('round', terminals_1.KopiNumber, function (value) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            if (!(value instanceof terminals_1.KopiNumber)) {
-                throw new Error("round() only accepts a number as an argument");
-            }
             return [2 /*return*/, new terminals_1.KopiNumber(Math.round(value.value))];
         });
     }); })
 };
-// NativeFunction = (type, func) =>
 // const ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');
 // const ast = parser.parse('(1 + 2) * x');
@@ -106,11 +104,14 @@ var environment = {
 // const ast = parser.parse('() => () => (2, 3)');
 // const ast = parser.parse('(() => 5) ()');
 // const ast = parser.parse('(() => 3) () + round 2.7');
-var ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
+// const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
+// const ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
+// const ast = parser.parse(`'(('sin 5) 1, 'sin 5)`);
+var ast = parser.parse("'('1, 2, 3)");
 var transform = function (ast) {
     return transformPipeline(ast);
 };
-var transformPipeline = operators.transform(terminals.transform, transform);
+var transformPipeline = operators.transform(terminals.transform(transform), transform);
 var evaluate = function (ast, environment) {
     return evaluatePipeline(ast, environment);
 };
@@ -121,7 +122,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                console.log(transformedAst);
+                console.log(util.inspect(transformedAst, { depth: Infinity }));
                 _b = (_a = console).log;
                 return [4 /*yield*/, evaluate(transformedAst, environment)];
             case 1: return [4 /*yield*/, (_c.sent()).inspect()];

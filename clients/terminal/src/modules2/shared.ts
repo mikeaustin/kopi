@@ -4,20 +4,28 @@ class RawASTNode {
   [key: string]: any;
 }
 
-class ASTNode {
-  constructor(location: {}) {
-    // this.location = location;
-  }
-
-  location: {} = {};
-}
-
 class KopiValue {
   async inspect() {
     return util.inspect(this, {
       depth: null,
     });
   }
+}
+
+class ASTNode extends KopiValue {
+  constructor(location: {}) {
+    super();
+
+    // this.location = location;
+  }
+
+  async inspect() {
+    return util.inspect(this, {
+      depth: null,
+    });
+  }
+
+  location: {} = {};
 }
 
 interface Environment {

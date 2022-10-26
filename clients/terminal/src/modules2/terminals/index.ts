@@ -21,6 +21,16 @@ class BooleanLiteral extends ASTNode {
   value: boolean;
 }
 
+class AstLiteral extends ASTNode {
+  constructor({ value, location }: AstLiteral) {
+    super(location);
+
+    this.value = value;
+  }
+
+  value: ASTNode;
+}
+
 class Identifier extends ASTNode {
   constructor({ name, location }: Identifier) {
     super(location);
@@ -28,12 +38,16 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
+  async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
+    return (arg as any)[this.name]();
+  }
+
   name: string;
 }
 
 //
 
-const transform = (rawAstNode: RawASTNode) => {
+const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
     case 'NumericLiteral':
       return new NumericLiteral({
@@ -45,6 +59,11 @@ const transform = (rawAstNode: RawASTNode) => {
         value: rawAstNode.value,
         location: rawAstNode.location,
       } as BooleanLiteral);
+    case 'AstLiteral':
+      return new AstLiteral({
+        value: transform(rawAstNode.value),
+        location: rawAstNode.location,
+      } as AstLiteral);
     case 'Identifier':
       return new Identifier({
         name: rawAstNode.name,
@@ -60,6 +79,8 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
     return new KopiNumber(astNode.value);
   } else if (astNode instanceof BooleanLiteral) {
     return new KopiBoolean(astNode.value);
+  } else if (astNode instanceof AstLiteral) {
+    return astNode.value;
   } else if (astNode instanceof Identifier) {
     if (!(astNode.name in environment)) {
       throw new Error(`Variable '${astNode.name}' not found in current scope`);
@@ -74,6 +95,7 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
 export {
   transform,
   evaluate,
+  Identifier,
   NumericLiteral,
   BooleanLiteral,
   KopiNumber,

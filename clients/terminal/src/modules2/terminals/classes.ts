@@ -19,6 +19,14 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value * that.value);
   }
 
+  sin() {
+    return new KopiNumber(Math.sin(this.value));
+  }
+
+  cos() {
+    return new KopiNumber(Math.cos(this.value));
+  }
+
   value: number;
 }
 

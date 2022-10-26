@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.KopiNumber = exports.BooleanLiteral = exports.NumericLiteral = exports.evaluate = exports.transform = void 0;
+exports.KopiNumber = exports.BooleanLiteral = exports.NumericLiteral = exports.Identifier = exports.evaluate = exports.transform = void 0;
 var shared_1 = require("../shared");
 var classes_1 = require("./classes");
 exports.KopiNumber = classes_1.KopiNumber;
@@ -77,6 +77,16 @@ var BooleanLiteral = /** @class */ (function (_super) {
     return BooleanLiteral;
 }(shared_1.ASTNode));
 exports.BooleanLiteral = BooleanLiteral;
+var AstLiteral = /** @class */ (function (_super) {
+    __extends(AstLiteral, _super);
+    function AstLiteral(_a) {
+        var value = _a.value, location = _a.location;
+        var _this = _super.call(this, location) || this;
+        _this.value = value;
+        return _this;
+    }
+    return AstLiteral;
+}(shared_1.ASTNode));
 var Identifier = /** @class */ (function (_super) {
     __extends(Identifier, _super);
     function Identifier(_a) {
@@ -85,10 +95,19 @@ var Identifier = /** @class */ (function (_super) {
         _this.name = name;
         return _this;
     }
+    Identifier.prototype.apply = function (thisArg, _a) {
+        var arg = _a[0];
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                return [2 /*return*/, arg[this.name]()];
+            });
+        });
+    };
     return Identifier;
 }(shared_1.ASTNode));
+exports.Identifier = Identifier;
 //
-var transform = function (rawAstNode) {
+var transform = function (transform) { return function (rawAstNode) {
     switch (rawAstNode.type) {
         case 'NumericLiteral':
             return new NumericLiteral({
@@ -100,6 +119,11 @@ var transform = function (rawAstNode) {
                 value: rawAstNode.value,
                 location: rawAstNode.location
             });
+        case 'AstLiteral':
+            return new AstLiteral({
+                value: transform(rawAstNode.value),
+                location: rawAstNode.location
+            });
         case 'Identifier':
             return new Identifier({
                 name: rawAstNode.name,
@@ -107,7 +131,7 @@ var transform = function (rawAstNode) {
             });
     }
     throw new Error("No transform found for '".concat(rawAstNode.type, "'"));
-};
+}; };
 exports.transform = transform;
 var evaluate = function (astNode, environment) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -116,6 +140,9 @@ var evaluate = function (astNode, environment) { return __awaiter(void 0, void 0
         }
         else if (astNode instanceof BooleanLiteral) {
             return [2 /*return*/, new classes_1.KopiBoolean(astNode.value)];
+        }
+        else if (astNode instanceof AstLiteral) {
+            return [2 /*return*/, astNode.value];
         }
         else if (astNode instanceof Identifier) {
             if (!(astNode.name in environment)) {

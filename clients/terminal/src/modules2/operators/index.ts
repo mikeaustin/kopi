@@ -1,6 +1,8 @@
-import { env } from 'process';
+import * as util from 'util';
+
 import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
+import { Identifier } from '../terminals';
 
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
@@ -34,6 +36,11 @@ class ApplyExpression extends ASTNode {
     this.argument = argument;
   }
 
+  async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
+    console.log('here');
+    return (arg as any)[(this.expression as Identifier).name]();
+  }
+
   expression: ASTNode;
   argument: ASTNode;
 }
@@ -49,6 +56,8 @@ class FunctionExpression extends ASTNode {
   parameters: any[];
   bodyExpression: ASTNode;
 }
+
+//
 
 const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: any): ASTNode => {
   switch (rawAstNode.type) {
@@ -87,7 +96,7 @@ const evaluate =
       if (astNode instanceof OperatorExpression) {
         const [leftValue, rightValue] = await Promise.all([
           evaluate(astNode.leftExpression, environment),
-          evaluate(astNode.leftExpression, environment),
+          evaluate(astNode.rightExpression, environment),
         ]);
 
         if (astNode.operator in leftValue) {
@@ -116,4 +125,5 @@ const evaluate =
 export {
   transform,
   evaluate,
+  ApplyExpression,
 };

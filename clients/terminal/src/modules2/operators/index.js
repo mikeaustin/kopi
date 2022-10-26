@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.evaluate = exports.transform = void 0;
+exports.ApplyExpression = exports.evaluate = exports.transform = void 0;
 var shared_1 = require("../shared");
 var classes_1 = require("../terminals/classes");
 var OperatorExpression = /** @class */ (function (_super) {
@@ -85,8 +85,18 @@ var ApplyExpression = /** @class */ (function (_super) {
         _this.argument = argument;
         return _this;
     }
+    ApplyExpression.prototype.apply = function (thisArg, _a) {
+        var arg = _a[0];
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                console.log('here');
+                return [2 /*return*/, arg[this.expression.name]()];
+            });
+        });
+    };
     return ApplyExpression;
 }(shared_1.ASTNode));
+exports.ApplyExpression = ApplyExpression;
 var FunctionExpression = /** @class */ (function (_super) {
     __extends(FunctionExpression, _super);
     function FunctionExpression(_a) {
@@ -98,6 +108,7 @@ var FunctionExpression = /** @class */ (function (_super) {
     }
     return FunctionExpression;
 }(shared_1.ASTNode));
+//
 var transform = function (next, transform) { return function (rawAstNode) {
     switch (rawAstNode.type) {
         case 'OperatorExpression':
@@ -138,7 +149,7 @@ var evaluate = function (next, evaluate) {
                     if (!(astNode instanceof OperatorExpression)) return [3 /*break*/, 2];
                     return [4 /*yield*/, Promise.all([
                             evaluate(astNode.leftExpression, environment),
-                            evaluate(astNode.leftExpression, environment),
+                            evaluate(astNode.rightExpression, environment),
                         ])];
                 case 1:
                     _a = _e.sent(), leftValue = _a[0], rightValue = _a[1];
