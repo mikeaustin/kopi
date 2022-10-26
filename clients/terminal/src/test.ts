@@ -25,7 +25,6 @@ class NativeFunction<TArg> extends KopiValue {
     return this.func.apply(thisArg, [arg]);
   }
 
-
   name: string;
   func: (arg: TArg) => Promise<KopiValue>;
   argType: Function;
@@ -33,30 +32,15 @@ class NativeFunction<TArg> extends KopiValue {
 
 const environment = {
   x: new KopiNumber(3),
-  // sleep: ((value: KopiValue) => {
-  //   if (!(value instanceof KopiNumber)) {
-  //     throw new Error(`round() only accepts a number as an argument`);
-  //   }
-
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => resolve(value), value.value * 1000);
-  //   });
-  // }) as unknown as KopiValue,
-  sleep: new NativeFunction('sleep', KopiNumber, (value: KopiNumber) => {
+  sleep: new NativeFunction('sleep', KopiNumber, async (value: KopiNumber) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(value), value.value * 1000);
     });
   }),
-  round: ((value: KopiValue) => {
-    if (!(value instanceof KopiNumber)) {
-      throw new Error(`round() only accepts a number as an argument`);
-    }
-
+  round: new NativeFunction('round', KopiNumber, async (value: KopiNumber) => {
     return new KopiNumber(Math.round(value.value));
-  }) as unknown as KopiValue,
+  }),
 };
-
-// NativeFunction = (type, func) =>
 
 // const ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');

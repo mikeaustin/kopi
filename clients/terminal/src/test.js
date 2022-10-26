@@ -80,25 +80,21 @@ var NativeFunction = /** @class */ (function (_super) {
 }(shared_1.KopiValue));
 var environment = {
     x: new terminals_1.KopiNumber(3),
-    // sleep: ((value: KopiValue) => {
-    //   if (!(value instanceof KopiNumber)) {
-    //     throw new Error(`round() only accepts a number as an argument`);
-    //   }
-    //   return new Promise((resolve) => {
-    //     setTimeout(() => resolve(value), value.value * 1000);
-    //   });
-    // }) as unknown as KopiValue,
-    sleep: new NativeFunction('sleep', terminals_1.KopiNumber, function (value) {
-        return new Promise(function (resolve) {
-            setTimeout(function () { return resolve(value); }, value.value * 1000);
+    sleep: new NativeFunction('sleep', terminals_1.KopiNumber, function (value) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve) {
+                    setTimeout(function () { return resolve(value); }, value.value * 1000);
+                })];
         });
-    }),
-    round: (function (value) {
-        if (!(value instanceof terminals_1.KopiNumber)) {
-            throw new Error("round() only accepts a number as an argument");
-        }
-        return new terminals_1.KopiNumber(Math.round(value.value));
-    })
+    }); }),
+    round: new NativeFunction('round', terminals_1.KopiNumber, function (value) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!(value instanceof terminals_1.KopiNumber)) {
+                throw new Error("round() only accepts a number as an argument");
+            }
+            return [2 /*return*/, new terminals_1.KopiNumber(Math.round(value.value))];
+        });
+    }); })
 };
 // NativeFunction = (type, func) =>
 // const ast = parser.parse('(1, 2, 3)');
