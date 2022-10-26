@@ -82,11 +82,13 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
 };
 
 const evaluate =
-  (next: (astNode: ASTNode, environment: Environment) => KopiValue, evaluate: (astNode: ASTNode, environment: Environment) => KopiValue) =>
-    (astNode: any, environment: Environment): KopiValue => {
+  (next: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>, evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>) =>
+    async (astNode: any, environment: Environment): Promise<KopiValue> => {
       if (astNode instanceof OperatorExpression) {
-        const leftValue = evaluate(astNode.leftExpression, environment);
-        const rightValue = evaluate(astNode.rightExpression, environment);
+        const [leftValue, rightValue] = await Promise.all([
+          evaluate(astNode.leftExpression, environment),
+          evaluate(astNode.leftExpression, environment),
+        ]);
 
         if (astNode.operator in leftValue) {
           return (leftValue as any)[astNode.operator](rightValue);
@@ -98,11 +100,11 @@ const evaluate =
       } else if (astNode instanceof FunctionExpression) {
         return new KopiFunction(astNode.parameters, astNode.bodyExpression, environment);
       } else if (astNode instanceof ApplyExpression) {
-        const func = evaluate(astNode.expression, environment);
+        const func = await evaluate(astNode.expression, environment);
 
         if ('apply' in func) {
-          return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): KopiValue; })
-            .apply(undefined, [evaluate(astNode.argument, environment)], evaluate);
+          return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): Promise<KopiValue>; })
+            .apply(undefined, [await evaluate(astNode.argument, environment)], evaluate);
         } else {
           throw new Error(`No apply() method found`);
         }

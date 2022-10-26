@@ -37,13 +37,21 @@ class KopiBoolean extends KopiValue {
 }
 
 class KopiTuple extends KopiValue {
-  constructor(elements: KopiValue[]) {
+  constructor(elements: Promise<KopiValue>[]) {
     super();
 
     this.elements = elements;
   }
 
-  elements: KopiValue[];
+  async inspect() {
+    const elements = await Promise.all(
+      this.elements.map(async element => (await element).inspect())
+    );
+
+    return `(${elements.join(', ')})`;
+  }
+
+  elements: Promise<KopiValue>[];
 }
 
 class KopiFunction extends KopiValue {
@@ -55,7 +63,7 @@ class KopiFunction extends KopiValue {
     this.bodyExpression = bodyExpression;
   }
 
-  apply(thisArg: this, arg: KopiValue, evaluate: (astNode: any, environment: any) => KopiValue): KopiValue {
+  apply(thisArg: this, arg: KopiValue, evaluate: (astNode: any, environment: any) => Promise<KopiValue>): Promise<KopiValue> {
     return evaluate(this.bodyExpression, this.environment);
   }
 

@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, Environment } from '../shared';
+import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
 import { KopiNumber, KopiBoolean } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -55,7 +55,7 @@ const transform = (rawAstNode: RawASTNode) => {
   throw new Error(`No transform found for '${rawAstNode.type}'`);
 };
 
-const evaluate = (astNode: ASTNode, environment: Environment) => {
+const evaluate = async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
   if (astNode instanceof NumericLiteral) {
     return new KopiNumber(astNode.value);
   } else if (astNode instanceof BooleanLiteral) {

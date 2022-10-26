@@ -39,6 +39,25 @@ exports.__esModule = true;
 var parser = require("./lib/parser");
 var operators = require("./modules2/operators");
 var terminals = require("./modules2/terminals");
+var terminals_1 = require("./modules2/terminals");
+var environment = {
+    x: new terminals_1.KopiNumber(3),
+    sleep: (function (value) {
+        if (!(value instanceof terminals_1.KopiNumber)) {
+            throw new Error("round() only accepts a number as an argument");
+        }
+        return new Promise(function (resolve) {
+            setTimeout(function () { return resolve(value); }, value.value * 1000);
+        });
+    }),
+    round: (function (value) {
+        if (!(value instanceof terminals_1.KopiNumber)) {
+            throw new Error("round() only accepts a number as an argument");
+        }
+        return new terminals_1.KopiNumber(Math.round(value.value));
+    })
+};
+// NativeFunction = (type, func) =>
 // const ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');
 // const ast = parser.parse('(1 + 2) * x');
@@ -47,18 +66,8 @@ var terminals = require("./modules2/terminals");
 // const ast = parser.parse('() => 2, 3, () => 2, 3');
 // const ast = parser.parse('() => () => (2, 3)');
 // const ast = parser.parse('(() => 5) ()');
-var ast = parser.parse('(() => 3) () + round 2.7');
-/*
-   1, (() => 2), 3
-   1, (() => 2, 3)
-   1, (() => 2), 3
-
-   () => 2, 3, () => 2, 3
-
-   () => 2, (3, () => 2, 3)
-
-   () => 2, (3, () => 2, 3)
-*/
+// const ast = parser.parse('(() => 3) () + round 2.7');
+var ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
 var transform = function (ast) {
     return transformPipeline(ast);
 };
@@ -67,15 +76,6 @@ var evaluate = function (ast, environment) {
     return evaluatePipeline(ast, environment);
 };
 var evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
-var environment = {
-    x: new terminals.KopiNumber(3),
-    round: (function (value) {
-        if (!(value instanceof terminals.KopiNumber)) {
-            throw new Error("round() only accepts a number as an argument");
-        }
-        return new terminals.KopiNumber(Math.round(value.value));
-    })
-};
 var transformedAst = transformPipeline(ast);
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b;
@@ -84,8 +84,9 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 0:
                 console.log(transformedAst);
                 _b = (_a = console).log;
-                return [4 /*yield*/, evaluate(transformedAst, environment).inspect()];
-            case 1:
+                return [4 /*yield*/, evaluate(transformedAst, environment)];
+            case 1: return [4 /*yield*/, (_c.sent()).inspect()];
+            case 2:
                 _b.apply(_a, [_c.sent()]);
                 return [2 /*return*/];
         }
