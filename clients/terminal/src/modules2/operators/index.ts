@@ -1,3 +1,4 @@
+import { env } from 'process';
 import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 
@@ -23,6 +24,18 @@ class TupleExpression extends ASTNode {
   }
 
   elements: ASTNode[];
+}
+
+class ApplyExpression extends ASTNode {
+  constructor({ expression, argument, location }: ApplyExpression) {
+    super(location);
+
+    this.expression = expression;
+    this.argument = argument;
+  }
+
+  expression: ASTNode;
+  argument: ASTNode;
 }
 
 class FunctionExpression extends ASTNode {
@@ -57,6 +70,12 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
         elements: rawAstNode.elements.map((element: ASTNode) => transform(element)),
         location: rawAstNode.location,
       } as TupleExpression);
+    case 'ApplyExpression':
+      return new ApplyExpression({
+        expression: transform(rawAstNode.expression),
+        argument: rawAstNode.argument,
+        location: rawAstNode.location,
+      } as ApplyExpression);
     default:
       return next(rawAstNode);
   }
@@ -77,7 +96,15 @@ const evaluate =
       } else if (astNode instanceof TupleExpression) {
         return new KopiTuple(astNode.elements.map(element => evaluate(element, environment)));
       } else if (astNode instanceof FunctionExpression) {
-        return new KopiFunction(astNode.parameters, astNode.bodyExpression);
+        return new KopiFunction(astNode.parameters, astNode.bodyExpression, environment);
+      } else if (astNode instanceof ApplyExpression) {
+        const func = evaluate(astNode.expression, environment);
+
+        if ('apply' in func) {
+          return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): KopiValue; }).apply(undefined, [], evaluate);
+        } else {
+          throw new Error(`No apply() method found`);
+        }
       } else {
         return next(astNode, environment);
       }

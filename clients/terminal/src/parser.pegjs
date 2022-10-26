@@ -1,5 +1,15 @@
 Expression
-  = AddExpression
+  = FunctionExpression
+
+FunctionExpression
+  = "()" _ "=>" _ bodyExpression:Expression {
+      return {
+        type: "FunctionExpression",
+        parameters: [],
+        bodyExpression,
+      }
+    }
+  / AddExpression
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
@@ -13,7 +23,7 @@ AddExpression
     }
 
 MultiplyExpression
-  = head:FunctionExpression tail:(_ ("*" / "/") _ FunctionExpression)* {
+  = head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
       return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
         type: 'OperatorExpression',
         operator,
@@ -23,15 +33,14 @@ MultiplyExpression
        }), head);
     }
 
-FunctionExpression
-  = "()" _ "=>" _ bodyExpression:Expression {
-      return {
-        type: "FunctionExpression",
-        parameters: [],
-        bodyExpression,
-      }
+ApplyExpression
+  = expression:PrimaryExpression _arguments:(_ PrimaryExpression)* {
+      return _arguments.reduce((expression, [, argument]) => ({
+        type: 'ApplyExpression',
+        expression,
+        argument: argument,
+      }), expression);
     }
-  / PrimaryExpression
 
 PrimaryExpression
   = "(" _ head:Expression tail:(_ "," _ Expression)+ _ ")" {

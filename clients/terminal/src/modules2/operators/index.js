@@ -40,6 +40,17 @@ var TupleExpression = /** @class */ (function (_super) {
     }
     return TupleExpression;
 }(shared_1.ASTNode));
+var ApplyExpression = /** @class */ (function (_super) {
+    __extends(ApplyExpression, _super);
+    function ApplyExpression(_a) {
+        var expression = _a.expression, argument = _a.argument, location = _a.location;
+        var _this = _super.call(this, location) || this;
+        _this.expression = expression;
+        _this.argument = argument;
+        return _this;
+    }
+    return ApplyExpression;
+}(shared_1.ASTNode));
 var FunctionExpression = /** @class */ (function (_super) {
     __extends(FunctionExpression, _super);
     function FunctionExpression(_a) {
@@ -71,6 +82,12 @@ var transform = function (next, transform) { return function (rawAstNode) {
                 elements: rawAstNode.elements.map(function (element) { return transform(element); }),
                 location: rawAstNode.location
             });
+        case 'ApplyExpression':
+            return new ApplyExpression({
+                expression: transform(rawAstNode.expression),
+                argument: rawAstNode.argument,
+                location: rawAstNode.location
+            });
         default:
             return next(rawAstNode);
     }
@@ -92,7 +109,16 @@ var evaluate = function (next, evaluate) {
             return new classes_1.KopiTuple(astNode.elements.map(function (element) { return evaluate(element, environment); }));
         }
         else if (astNode instanceof FunctionExpression) {
-            return new classes_1.KopiFunction(astNode.parameters, astNode.bodyExpression);
+            return new classes_1.KopiFunction(astNode.parameters, astNode.bodyExpression, environment);
+        }
+        else if (astNode instanceof ApplyExpression) {
+            var func = evaluate(astNode.expression, environment);
+            if ('apply' in func) {
+                return func.apply(undefined, [], evaluate);
+            }
+            else {
+                throw new Error("No apply() method found");
+            }
         }
         else {
             return next(astNode, environment);

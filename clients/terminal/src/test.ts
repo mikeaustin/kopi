@@ -5,7 +5,6 @@ import { RawASTNode, ASTNode, Environment } from './modules2/shared';
 import * as operators from './modules2/operators';
 import * as terminals from './modules2/terminals';
 
-const ast = parser.parse('(1, 2)');
 // const ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');
 // const ast = parser.parse('(1 + 2) * x');
@@ -13,6 +12,7 @@ const ast = parser.parse('(1, 2)');
 // const ast = parser.parse('() => 2, 3');
 // const ast = parser.parse('() => 2, 3, () => 2, 3');
 // const ast = parser.parse('() => () => (2, 3)');
+const ast = parser.parse('(() => 5) ()');
 
 /*
    1, (() => 2), 3

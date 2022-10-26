@@ -39,7 +39,6 @@ exports.__esModule = true;
 var parser = require("./lib/parser");
 var operators = require("./modules2/operators");
 var terminals = require("./modules2/terminals");
-var ast = parser.parse('(1, 2)');
 // const ast = parser.parse('(1, 2, 3)');
 // const ast = parser.parse('(1, (() => 2), 3)');
 // const ast = parser.parse('(1 + 2) * x');
@@ -47,6 +46,7 @@ var ast = parser.parse('(1, 2)');
 // const ast = parser.parse('() => 2, 3');
 // const ast = parser.parse('() => 2, 3, () => 2, 3');
 // const ast = parser.parse('() => () => (2, 3)');
+var ast = parser.parse('(() => 5) ()');
 /*
    1, (() => 2), 3
    1, (() => 2, 3)

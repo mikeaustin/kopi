@@ -105,12 +105,16 @@ var KopiTuple = /** @class */ (function (_super) {
 exports.KopiTuple = KopiTuple;
 var KopiFunction = /** @class */ (function (_super) {
     __extends(KopiFunction, _super);
-    function KopiFunction(parameters, bodyExpression) {
+    function KopiFunction(parameters, bodyExpression, environment) {
         var _this = _super.call(this) || this;
         _this.parameters = parameters;
+        _this.environment = environment;
         _this.bodyExpression = bodyExpression;
         return _this;
     }
+    KopiFunction.prototype.apply = function (thisArg, arg, evaluate) {
+        return evaluate(this.bodyExpression, this.environment);
+    };
     return KopiFunction;
 }(shared_1.KopiValue));
 exports.KopiFunction = KopiFunction;
