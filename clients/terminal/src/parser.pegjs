@@ -38,7 +38,7 @@ ApplyExpression
       return _arguments.reduce((expression, [, argument]) => ({
         type: 'ApplyExpression',
         expression,
-        argument: argument,
+        argument,
       }), expression);
     }
 

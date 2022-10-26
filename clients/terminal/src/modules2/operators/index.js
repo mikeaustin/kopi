@@ -85,7 +85,7 @@ var transform = function (next, transform) { return function (rawAstNode) {
         case 'ApplyExpression':
             return new ApplyExpression({
                 expression: transform(rawAstNode.expression),
-                argument: rawAstNode.argument,
+                argument: transform(rawAstNode.argument),
                 location: rawAstNode.location
             });
         default:
@@ -114,7 +114,8 @@ var evaluate = function (next, evaluate) {
         else if (astNode instanceof ApplyExpression) {
             var func = evaluate(astNode.expression, environment);
             if ('apply' in func) {
-                return func.apply(undefined, [], evaluate);
+                return func
+                    .apply(undefined, [evaluate(astNode.argument, environment)], evaluate);
             }
             else {
                 throw new Error("No apply() method found");

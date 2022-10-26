@@ -46,7 +46,8 @@ var terminals = require("./modules2/terminals");
 // const ast = parser.parse('() => 2, 3');
 // const ast = parser.parse('() => 2, 3, () => 2, 3');
 // const ast = parser.parse('() => () => (2, 3)');
-var ast = parser.parse('(() => 5) ()');
+// const ast = parser.parse('(() => 5) ()');
+var ast = parser.parse('(() => 3) () + round 2.7');
 /*
    1, (() => 2), 3
    1, (() => 2, 3)
@@ -67,7 +68,13 @@ var evaluate = function (ast, environment) {
 };
 var evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
 var environment = {
-    x: new terminals.KopiNumber(3)
+    x: new terminals.KopiNumber(3),
+    round: (function (value) {
+        if (!(value instanceof terminals.KopiNumber)) {
+            throw new Error("round() only accepts a number as an argument");
+        }
+        return new terminals.KopiNumber(Math.round(value.value));
+    })
 };
 var transformedAst = transformPipeline(ast);
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {

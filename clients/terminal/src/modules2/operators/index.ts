@@ -1,6 +1,6 @@
 import { env } from 'process';
 import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
-import { KopiTuple, KopiFunction } from '../terminals/classes';
+import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
@@ -73,7 +73,7 @@ const transform = (next: (rawAstNode: RawASTNode) => ASTNode, transform: (rawAst
     case 'ApplyExpression':
       return new ApplyExpression({
         expression: transform(rawAstNode.expression),
-        argument: rawAstNode.argument,
+        argument: transform(rawAstNode.argument),
         location: rawAstNode.location,
       } as ApplyExpression);
     default:
@@ -101,7 +101,8 @@ const evaluate =
         const func = evaluate(astNode.expression, environment);
 
         if ('apply' in func) {
-          return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): KopiValue; }).apply(undefined, [], evaluate);
+          return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): KopiValue; })
+            .apply(undefined, [evaluate(astNode.argument, environment)], evaluate);
         } else {
           throw new Error(`No apply() method found`);
         }

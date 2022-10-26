@@ -236,7 +236,7 @@ function peg$parse(input, options) {
       return _arguments.reduce((expression, [, argument]) => ({
         type: 'ApplyExpression',
         expression,
-        argument: argument,
+        argument,
       }), expression);
     };
   var peg$f4 = function(head, tail) {
