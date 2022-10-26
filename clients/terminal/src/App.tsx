@@ -9,76 +9,56 @@ import { View, Text, Icon, Spacer } from 'core';
 
 import './App.css';
 
-type AST =
-  // | core.AST
-  | math.AST<terminals.AST>
-  | terminals.AST
-  ;
+import './test';
 
-type ASTKeys = keyof AST;
+// type AST =
+//   // | core.AST
+//   | math.AST<terminals.AST>
+//   | terminals.AST
+//   ;
 
-const visitors = {
-  ...core.visitors,
-  ...math.visitors,
-  ...terminals.visitors,
-} as const;
+// const visitors = {
+//   ...core.visitors,
+//   ...math.visitors,
+//   ...terminals.visitors,
+// } as const;
 
-// Object.keys(visitors).reduce(
-//   (value, key) => key === ast.type ? visitors[ast.type](ast, {}) : value,
-//   undefined
-// );
+// interface KopiValue {
+//   inspect(): Promise<string>,
+// };
 
-interface KopiValue {
-  inspect(): Promise<string>,
-};
+// function evaluate<TValue extends KopiValue>(
+//   astNode: AST,
+//   environment: {},
+//   type?: { new(...args: any): TValue; }
+// ): TValue {
+//   let value;
 
-function evaluate<TValue extends KopiValue>(
-  astNode: AST,
-  environment: {},
-  type?: { new(...args: any): TValue; }
-): TValue {
-  let value;
+//   switch (astNode.type) {
+//     case 'OperatorExpression':
+//       value = visitors[astNode.type](astNode, environment, evaluate);
+//       break;
+//     case 'NumericLiteral':
+//       value = visitors[astNode.type](astNode, environment);
+//       break;
+//     case 'BooleanLiteral':
+//       value = visitors[astNode.type](astNode, environment);
+//       break;
+//     default:
+//       const exhaustiveCheck: never = astNode;
+//       throw new Error();
+//   }
 
-  // visitors[astNode.type](astNode, environment, evaluate);
+//   if (type) {
+//     if (value instanceof type) {
+//       return value;
+//     } else {
+//       throw new Error(`Unexpected type ${type}`);
+//     }
+//   }
 
-  switch (astNode.type) {
-    case 'OperatorExpression':
-      value = visitors[astNode.type](astNode, environment, evaluate);
-      break;
-    case 'NumericLiteral':
-      value = visitors[astNode.type](astNode, environment);
-      break;
-    case 'BooleanLiteral':
-      value = visitors[astNode.type](astNode, environment);
-      break;
-    default:
-      const exhaustiveCheck: never = astNode;
-      throw new Error();
-  }
-
-  if (type) {
-    if (value instanceof type) {
-      return value;
-    } else {
-      throw new Error(`Unexpected type ${type}`);
-    }
-  }
-
-  return value as unknown as TValue;
-}
-
-type Kinds = 'n' | 's' | 'b';
-type Reify<K extends Kinds> = K extends 'n' ? number : K extends 's' ? string : K extends 'b' ? boolean : never;
-type Record<K extends Kinds> = { kind: K, v: Reify<K>, f: (v: Reify<K>) => void; };
-
-function processRecord<K extends Kinds>(record: Record<K>) {
-  record.f(record.v);
-}
-
-const val: Record<'n'> = { kind: 'n', v: 1, f: (x: number) => { } };
-const val2: Record<'s'> = { kind: 's', v: '1', f: (x: string) => { } };
-processRecord(val);
-processRecord(val2);
+//   return value as unknown as TValue;
+// }
 
 //
 
@@ -102,11 +82,11 @@ function App() {
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      const ast = parser.parse(line.trim()) as AST;
-      const value = await evaluate(ast, {})?.inspect();
+      // const ast = parser.parse(line.trim()) as AST;
+      // const value = await evaluate(ast, {})?.inspect();
 
       setHistory(history => [...history, '> ' + line + ' ']);
-      setHistory(history => [...history, value + ' ']);
+      // setHistory(history => [...history, value + ' ']);
       setLine('');
     }
   };
