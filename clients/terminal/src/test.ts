@@ -52,7 +52,7 @@ const environment = {
 // const ast = parser.parse('(() => 5) ()');
 // const ast = parser.parse('(() => 3) () + round 2.7');
 
-const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
+// const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
 // const ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
 // const ast = parser.parse(`'(('sin 5) 1, 'sin 5)`);
 // const ast = parser.parse(`'('1, 2, 3)`);
@@ -69,11 +69,11 @@ const evaluate = (ast: ASTNode, environment: Environment) => {
 
 const evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
 
-const transformedAst = transformPipeline(ast);
+// const transformedAst = transformPipeline(ast);
 
 const main = async () => {
-  console.log(inspect(transformedAst));
-  console.log(await (await evaluate(transformedAst, environment)).inspect());
+  // console.log(inspect(transformedAst));
+  // console.log(await (await evaluate(transformedAst, environment)).inspect());
 };
 
 // main();
@@ -81,4 +81,5 @@ const main = async () => {
 export {
   transform,
   evaluate,
+  environment,
 };

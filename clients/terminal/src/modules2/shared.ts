@@ -6,6 +6,10 @@ class KopiValue {
   async inspect() {
     return inspect(this);
   }
+
+  async force() {
+    return this;
+  }
 }
 
 class ASTNode extends KopiValue {

@@ -1,22 +1,45 @@
+/* eslint-disable jest/no-conditional-expect */
+
 import * as parser from './lib/parser';
-import { transform, evaluate } from './test';
+import { transform, evaluate, environment } from './test';
+import { KopiNumber, KopiTuple } from './modules2/terminals/classes';
 
-test('foo', async () => {
-  let ast = parser.parse('1');
-  let value = await evaluate(transform(ast), {});
+test('Nested sleeps', async () => {
+  let ast = parser.parse(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`);
+  let value = await evaluate(transform(ast), environment);
 
-  console.log(value);
+  console.log(await value.inspect());
 
-  expect(value).toEqual({
-    value: 1
-  });
+  expect(value).toBeInstanceOf(KopiTuple);
 
-  ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
-  value = await evaluate(transform(ast), {});
+  if (value instanceof KopiTuple) {
+    const elements = await Promise.all(value.elements);
 
-  console.log(value);
+    expect(elements).toEqual([
+      { value: 2 },
+      { value: 2 },
+    ]);
+  }
+});
 
-  // expect(value).toEqual({
-  //   value: 1
-  // });
+test('Trigonometry', async () => {
+  let ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
+  let value = await evaluate(transform(ast), environment);
+
+  console.log(await value.inspect());
+
+  if (value instanceof KopiNumber) {
+    expect(value.value).toBeCloseTo(6.908866453380181);
+  }
+});
+
+test('Function application', async () => {
+  let ast = parser.parse(`(() => 3) () + round 2.7`);
+  let value = await evaluate(transform(ast), environment);
+
+  console.log(await value.inspect());
+
+  if (value instanceof KopiNumber) {
+    expect(value.value).toBeCloseTo(6);
+  }
 });
