@@ -269,8 +269,8 @@ function peg$parse(input, options) {
   var peg$f8 = function(head, tail) {
     return head && tail.length === 0 ? head : {
       type: 'TuplePattern',
-      elements: !head ? [] : tail.reduce((elements, [, , , pattern]) =>
-        [...elements, pattern], [head]),
+      patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
+        [...patterns, pattern], [head]),
     }
   };
   var peg$f9 = function(identifier) {

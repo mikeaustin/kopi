@@ -94,8 +94,8 @@ PrimaryPattern
   = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
     return head && tail.length === 0 ? head : {
       type: 'TuplePattern',
-      elements: !head ? [] : tail.reduce((elements, [, , , pattern]) =>
-        [...elements, pattern], [head]),
+      patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
+        [...patterns, pattern], [head]),
     }
   }
   / IdentifierPattern

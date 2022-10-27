@@ -26,6 +26,10 @@ class ASTNode extends KopiValue {
   location: {} = {};
 }
 
+interface Bindings extends Promise<{
+  [name: string]: KopiValue;
+}> { }
+
 abstract class ASTPatternNode extends ASTNode {
   abstract match(value: KopiValue): Promise<{ [name: string]: KopiValue; }>;
 }
@@ -64,6 +68,7 @@ export {
   ASTNode,
   ASTPatternNode,
   KopiValue,
+  type Bindings,
   type Environment,
   inspect,
 };

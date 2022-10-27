@@ -1,4 +1,6 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Environment } from '../shared';
+import { Equals } from 'tsafe';
+
+import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Environment } from '../shared';
 import { KopiNumber, KopiBoolean, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -64,18 +66,19 @@ class IdentifierPattern extends ASTPatternNode {
 }
 
 class TuplePattern extends ASTPatternNode {
-  constructor({ elements, location }: TuplePattern) {
+  constructor({ patterns, location }: TuplePattern) {
     super(location);
 
-    this.elements = elements;
+    this.patterns = patterns;
   }
 
-  async match(value: KopiValue) {
-    if (value instanceof KopiTuple) {
-      const bindings = await this.elements.reduce(async (bindings, element, index) => ({
+  async match(tuple: KopiValue) {
+    if (tuple instanceof KopiTuple) {
+      const bindings = await this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
-        ...await element.match(await value.elements[index])
-      }), {});
+        ...await pattern.match(await tuple.elements[index]),
+        // x: 1,
+      }), {} as Bindings);
 
       return bindings;
     }
@@ -83,7 +86,7 @@ class TuplePattern extends ASTPatternNode {
     return {};
   }
 
-  elements: ASTPatternNode[];
+  patterns: ASTPatternNode[];
 }
 
 //
@@ -117,7 +120,7 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
       } as IdentifierPattern);
     case 'TuplePattern':
       return new TuplePattern({
-        elements: rawAstNode.elements.map((element: ASTPatternNode) => transform(element)),
+        patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transform(pattern)),
         location: rawAstNode.location,
       } as TuplePattern);
   }
