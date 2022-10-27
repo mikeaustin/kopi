@@ -1,4 +1,4 @@
-import { ASTNode, KopiValue } from '../shared';
+import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals';
 
 class OperatorExpression extends ASTNode {
@@ -50,7 +50,7 @@ class FunctionExpression extends ASTNode {
     this.bodyExpression = bodyExpression;
   }
 
-  parameterPattern: ASTNode;
+  parameterPattern: ASTPatternNode;
   bodyExpression: ASTNode;
 }
 

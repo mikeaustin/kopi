@@ -71,8 +71,8 @@ class KopiFunction extends KopiValue {
     this.bodyExpression = bodyExpression;
   }
 
-  apply(thisArg: KopiValue, [argument]: KopiValue[], evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>): Promise<KopiValue> {
-    const matches = this.parameterPattern.match(argument);
+  async apply(thisArg: KopiValue, [argument]: KopiValue[], evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>): Promise<KopiValue> {
+    const matches = await this.parameterPattern.match(argument);
 
     return evaluate(this.bodyExpression, { ...this.environment, ...matches });
   }

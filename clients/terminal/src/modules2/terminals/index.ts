@@ -38,10 +38,6 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
-  match() {
-
-  }
-
   async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
     return (arg as any)[this.name]();
   }
@@ -58,7 +54,7 @@ class IdentifierPattern extends ASTPatternNode {
     this.name = name;
   }
 
-  match(value: KopiValue) {
+  async match(value: KopiValue) {
     return {
       [this.name]: value,
     };
@@ -74,7 +70,7 @@ class TuplePattern extends ASTPatternNode {
     this.elements = elements;
   }
 
-  match(value: KopiValue) {
+  async match(value: KopiValue) {
     return {
     };
   }
