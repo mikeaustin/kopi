@@ -49,6 +49,8 @@ class Identifier extends ASTNode {
   name: string;
 }
 
+//
+
 class IdentifierPattern extends ASTPatternNode {
   constructor({ name, location }: IdentifierPattern) {
     super(location);
@@ -63,6 +65,21 @@ class IdentifierPattern extends ASTPatternNode {
   }
 
   name: string;
+}
+
+class TuplePattern extends ASTPatternNode {
+  constructor({ elements, location }: TuplePattern) {
+    super(location);
+
+    this.elements = elements;
+  }
+
+  match(value: KopiValue) {
+    return {
+    };
+  }
+
+  elements: ASTPatternNode[];
 }
 
 //
@@ -94,6 +111,11 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
         name: rawAstNode.name,
         location: rawAstNode.location,
       } as IdentifierPattern);
+    case 'TuplePattern':
+      return new TuplePattern({
+        elements: rawAstNode.elements,
+        location: rawAstNode.location,
+      } as TuplePattern);
   }
 
   throw new Error(`No transform found for '${rawAstNode.type}'`);
