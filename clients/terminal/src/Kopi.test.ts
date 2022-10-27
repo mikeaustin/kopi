@@ -4,7 +4,7 @@ import * as parser from './lib/parser';
 import { transform, evaluate, environment } from './test';
 import { KopiNumber, KopiTuple } from './modules2/terminals/classes';
 
-test('Nested sleeps', async () => {
+test('Async operations', async () => {
   let ast = parser.parse(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`);
   let value = await evaluate(transform(ast), environment);
 
@@ -34,12 +34,12 @@ test('Trigonometry', async () => {
 });
 
 test('Function application', async () => {
-  let ast = parser.parse(`(() => 3) () + round 2.7`);
+  let ast = parser.parse(`(x => x + 1) 3 + round 2.7`);
   let value = await evaluate(transform(ast), environment);
 
   console.log(await value.inspect());
 
   if (value instanceof KopiNumber) {
-    expect(value.value).toBeCloseTo(6);
+    expect(value.value).toBeCloseTo(7);
   }
 });

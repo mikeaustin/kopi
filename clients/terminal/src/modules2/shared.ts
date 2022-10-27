@@ -26,6 +26,10 @@ class ASTNode extends KopiValue {
   location: {} = {};
 }
 
+abstract class ASTPatternNode extends ASTNode {
+  abstract match(value: KopiValue): { [name: string]: KopiValue; };
+}
+
 interface Environment {
   [name: string]: KopiValue;
 }
@@ -58,6 +62,7 @@ const inspect = (value: unknown, level: number = 0): string => {
 export {
   RawASTNode,
   ASTNode,
+  ASTPatternNode,
   KopiValue,
   type Environment,
   inspect,

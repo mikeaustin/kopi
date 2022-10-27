@@ -2,10 +2,10 @@ Expression
   = FunctionExpression
 
 FunctionExpression
-  = "()" _ "=>" _ bodyExpression:Expression {
+  = parameterPattern:Pattern _ "=>" _ bodyExpression:Expression {
       return {
         type: "FunctionExpression",
-        parameters: [],
+        parameterPattern,
         bodyExpression,
       }
     }
@@ -41,6 +41,10 @@ ApplyExpression
         argument,
       }), expression);
     }
+
+//
+// PrimaryExpression
+//
 
 PrimaryExpression
   = "(" _ head:Expression? tail:(_ "," _ Expression)* _ ")" {
@@ -78,6 +82,30 @@ Identifier "identifier"
         name: name[0] + name[1].join('')
       });
     }
+
+//
+// Pattern
+//
+
+Pattern
+  = PrimaryPattern
+
+PrimaryPattern
+  = "(" pattern:Pattern? ")" {
+    return pattern ? pattern : {
+      type: 'TuplePattern',
+      elements: [],
+    };
+  }
+  / IdentifierPattern
+
+IdentifierPattern
+  = identifier:Identifier {
+    return {
+      type: 'IdentifierPattern',
+      name: identifier.name,
+    }
+  }
 
 _ "whitespace"
   = [ \t]*

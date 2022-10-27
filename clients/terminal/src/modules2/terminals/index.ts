@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Environment } from '../shared';
 import { KopiNumber, KopiBoolean } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -38,8 +38,28 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
+  match() {
+
+  }
+
   async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
     return (arg as any)[this.name]();
+  }
+
+  name: string;
+}
+
+class IdentifierPattern extends ASTPatternNode {
+  constructor({ name, location }: IdentifierPattern) {
+    super(location);
+
+    this.name = name;
+  }
+
+  match(value: KopiValue) {
+    return {
+      [this.name]: value,
+    };
   }
 
   name: string;
@@ -69,6 +89,11 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
         name: rawAstNode.name,
         location: rawAstNode.location,
       } as Identifier);
+    case 'IdentifierPattern':
+      return new IdentifierPattern({
+        name: rawAstNode.name,
+        location: rawAstNode.location,
+      } as IdentifierPattern);
   }
 
   throw new Error(`No transform found for '${rawAstNode.type}'`);
