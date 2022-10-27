@@ -1,5 +1,5 @@
 import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Environment } from '../shared';
-import { KopiNumber, KopiBoolean } from './classes';
+import { KopiNumber, KopiBoolean, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -71,8 +71,16 @@ class TuplePattern extends ASTPatternNode {
   }
 
   async match(value: KopiValue) {
-    return {
-    };
+    if (value instanceof KopiTuple) {
+      const bindings = await this.elements.reduce(async (bindings, element, index) => ({
+        ...await bindings,
+        ...await element.match(await value.elements[index])
+      }), {});
+
+      return bindings;
+    }
+
+    return {};
   }
 
   elements: ASTPatternNode[];
@@ -109,7 +117,7 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
       } as IdentifierPattern);
     case 'TuplePattern':
       return new TuplePattern({
-        elements: rawAstNode.elements,
+        elements: rawAstNode.elements.map((element: ASTPatternNode) => transform(element)),
         location: rawAstNode.location,
       } as TuplePattern);
   }

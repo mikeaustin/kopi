@@ -91,11 +91,12 @@ Pattern
   = PrimaryPattern
 
 PrimaryPattern
-  = "(" pattern:Pattern? ")" {
-    return pattern ? pattern : {
+  = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
+    return head && tail.length === 0 ? head : {
       type: 'TuplePattern',
-      elements: [],
-    };
+      elements: !head ? [] : tail.reduce((elements, [, , , pattern]) =>
+        [...elements, pattern], [head]),
+    }
   }
   / IdentifierPattern
 
@@ -104,7 +105,7 @@ IdentifierPattern
     return {
       type: 'IdentifierPattern',
       name: identifier.name,
-    }
+    };
   }
 
 _ "whitespace"
