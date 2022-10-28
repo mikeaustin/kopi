@@ -13,6 +13,32 @@ abstract class Equatable extends Trait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
+abstract class Comparable extends Trait {
+  abstract compare(thisArg: KopiValue, that: KopiValue): number;
+  abstract '<'(thisArg: KopiValue, that: KopiValue): boolean;
+  abstract '>'(thisArg: KopiValue, that: KopiValue): boolean;
+}
+
+const $Comparable = ({
+  compare,
+  '<': lessThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) < 0,
+  '>': greaterThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) > 0,
+}: {
+  compare: (thisArg: KopiValue, that: KopiValue) => number,
+  '<'?: (thisArg: KopiValue, that: KopiValue) => boolean,
+  '>'?: (thisArg: KopiValue, that: KopiValue) => boolean,
+}) => class extends Comparable {
+    // compare(thisArg: KopiValue, that: KopiValue): number { return compare(thisArg, that); }
+    'compare' = compare;
+    '<' = lessThan;
+    '>' = greaterThan;
+  };
+
+console.log(Numeric);
+console.log($Comparable({
+  compare: (a: KopiValue, b: KopiValue) => 0
+}));
+
 abstract class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
