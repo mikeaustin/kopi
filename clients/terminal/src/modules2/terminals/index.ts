@@ -56,7 +56,7 @@ class IdentifierPattern extends ASTPatternNode {
     this.name = name;
   }
 
-  async match(value: KopiValue) {
+  override async match(value: KopiValue) {
     return {
       [this.name]: value,
     };
@@ -72,15 +72,11 @@ class TuplePattern extends ASTPatternNode {
     this.patterns = patterns;
   }
 
-  async match(tuple: KopiValue) {
-    if (tuple instanceof KopiTuple) {
-      return this.patterns.reduce(async (bindings, pattern, index) => ({
-        ...await bindings,
-        ...await pattern.match(await tuple.elements[index]),
-      }), {} as Bindings);
-    }
-
-    return {};
+  override async match(tuple: KopiTuple) {
+    return this.patterns.reduce(async (bindings, pattern, index) => ({
+      ...await bindings,
+      ...await pattern.match(await tuple.elements[index]),
+    }), {} as Bindings);
   }
 
   patterns: ASTPatternNode[];

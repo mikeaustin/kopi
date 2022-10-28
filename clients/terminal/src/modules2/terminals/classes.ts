@@ -7,7 +7,7 @@ class KopiNumber extends KopiValue {
     this.value = value;
   }
 
-  async inspect() {
+  override async inspect() {
     return `${this.value}`;
   }
 
@@ -37,7 +37,7 @@ class KopiBoolean extends KopiValue {
     this.value = value;
   }
 
-  async inspect() {
+  override async inspect() {
     return this.value ? 'true' : 'false';
   }
 
@@ -51,7 +51,7 @@ class KopiTuple extends KopiValue {
     this.elements = elements;
   }
 
-  async inspect() {
+  override async inspect() {
     const elements = await Promise.all(
       this.elements.map(async element => (await element).inspect())
     );
