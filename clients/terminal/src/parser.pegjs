@@ -35,10 +35,10 @@ MultiplyExpression
 
 ApplyExpression
   = expression:PrimaryExpression _arguments:(_ PrimaryExpression)* {
-      return _arguments.reduce((expression, [, argument]) => ({
+      return _arguments.reduce((expression, [, argumentExpression]) => ({
         type: 'ApplyExpression',
         expression,
-        argument,
+        argumentExpression,
       }), expression);
     }
 

@@ -234,10 +234,10 @@ function peg$parse(input, options) {
        }), head);
     };
   var peg$f3 = function(expression, _arguments) {
-      return _arguments.reduce((expression, [, argument]) => ({
+      return _arguments.reduce((expression, [, argumentExpression]) => ({
         type: 'ApplyExpression',
         expression,
-        argument,
+        argumentExpression,
       }), expression);
     };
   var peg$f4 = function(head, tail) {

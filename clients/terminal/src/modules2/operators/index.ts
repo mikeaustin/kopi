@@ -29,7 +29,7 @@ const transform = (next: Transform, transform: Transform) =>
       case 'ApplyExpression':
         return new astNodes.ApplyExpression({
           expression: transform(rawAstNode.expression),
-          argument: transform(rawAstNode.argument),
+          argumentExpression: transform(rawAstNode.argumentExpression),
           location: rawAstNode.location,
         } as astNodes.ApplyExpression);
       default:

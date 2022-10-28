@@ -26,11 +26,11 @@ class TupleExpression extends ASTNode {
 }
 
 class ApplyExpression extends ASTNode {
-  constructor({ expression, argument, location }: ApplyExpression) {
+  constructor({ expression, argumentExpression, location }: ApplyExpression) {
     super(location);
 
     this.expression = expression;
-    this.argument = argument;
+    this.argumentExpression = argumentExpression;
   }
 
   async apply(thisArg: KopiValue, [argument]: [KopiValue]): Promise<KopiValue> {
@@ -40,7 +40,7 @@ class ApplyExpression extends ASTNode {
   }
 
   expression: ASTNode;
-  argument: ASTNode;
+  argumentExpression: ASTNode;
 }
 
 class FunctionExpression extends ASTNode {
