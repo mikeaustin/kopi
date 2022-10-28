@@ -7,29 +7,7 @@ import * as terminals from './modules2/terminals';
 import { KopiNumber } from './modules2/terminals';
 
 import { KopiValue } from './modules2/shared';
-import { KopiFunction } from './modules2/terminals/classes';
-
-class NativeFunction<TArgument> extends KopiValue {
-  constructor(name: string, argType: Function = KopiValue, func: (value: TArgument) => Promise<KopiValue>) {
-    super();
-
-    this.name = name;
-    this.argType = argType;
-    this.func = func;
-  }
-
-  async apply(thisArg: KopiValue, [argument]: [TArgument]): Promise<KopiValue> {
-    if (!(argument instanceof this.argType)) {
-      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
-    }
-
-    return this.func.apply(thisArg, [argument]);
-  }
-
-  name: string;
-  argType: Function;
-  func: (value: TArgument) => Promise<KopiValue>;
-}
+import { NativeFunction, KopiFunction } from './modules2/terminals/classes';
 
 const environment = {
   x: new KopiNumber(3),

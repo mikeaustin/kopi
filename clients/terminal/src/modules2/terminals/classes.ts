@@ -85,9 +85,32 @@ class KopiFunction extends KopiValue {
   bodyExpression: ASTNode;
 }
 
+class NativeFunction<TArgument> extends KopiValue {
+  constructor(name: string, argType: Function = KopiValue, func: (value: TArgument) => Promise<KopiValue>) {
+    super();
+
+    this.name = name;
+    this.argType = argType;
+    this.func = func;
+  }
+
+  async apply(thisArg: KopiValue, [argument, evaluate]: [TArgument, Evaluate]): Promise<KopiValue> {
+    if (!(argument instanceof this.argType)) {
+      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
+    }
+
+    return this.func.apply(thisArg, [argument]);
+  }
+
+  name: string;
+  argType: Function;
+  func: (value: TArgument) => Promise<KopiValue>;
+}
+
 export {
   KopiNumber,
   KopiBoolean,
   KopiTuple,
   KopiFunction,
+  NativeFunction,
 };
