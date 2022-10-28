@@ -9,6 +9,10 @@ abstract class Numeric extends Trait {
   abstract '*'(that: KopiValue): KopiValue;
 }
 
+abstract class Equatable extends Trait {
+  abstract '=='(that: KopiValue): KopiValue;
+}
+
 class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
@@ -84,6 +88,7 @@ export {
   ASTPatternNode,
   Trait,
   Numeric,
+  Equatable,
   KopiValue,
   type Bindings,
   type Environment,

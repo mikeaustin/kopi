@@ -65,3 +65,17 @@ test('Function application 3', async () => {
     expect(value.value).toBeCloseTo(9);
   }
 });
+
+test('Function application 4', async () => {
+  let ast = parser.parse(`((a, b) => (b, a)) (1, 2)`);
+  let value = await evaluate(transform(ast), environment);
+
+  console.log(await value.inspect());
+
+  const elements = await Promise.all((value as KopiTuple).elements);
+
+  expect(elements).toEqual([
+    new KopiNumber(2),
+    new KopiNumber(1),
+  ]);
+});
