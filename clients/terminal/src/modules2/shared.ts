@@ -13,7 +13,7 @@ abstract class Equatable extends Trait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
-class KopiValue {
+abstract class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
   }

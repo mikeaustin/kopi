@@ -19,6 +19,9 @@ const environment = {
       setTimeout(() => resolve(value), value.value * 1000);
     });
   }),
+  fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue) => {
+    return new KopiNumber(5);
+  }),
   round: new NativeFunction('round', KopiNumber, async (value: KopiNumber) => {
     return new KopiNumber(Math.round(value.value));
   }),
