@@ -33,9 +33,10 @@ class ApplyExpression extends ASTNode {
     this.argument = argument;
   }
 
-  async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
+  async apply(thisArg: KopiValue, [argument]: [KopiValue]): Promise<KopiValue> {
     console.log('here');
-    return (arg as any)[(this.expression as Identifier).name]();
+    // TODO
+    return (argument as any)[(this.expression as Identifier).name]();
   }
 
   expression: ASTNode;

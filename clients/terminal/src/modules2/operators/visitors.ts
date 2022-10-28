@@ -1,4 +1,4 @@
-import { ASTNode, KopiValue, Environment } from '../shared';
+import { ASTNode, KopiValue, Evaluate, Environment } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
@@ -46,9 +46,10 @@ async function ApplyExpression({ expression, argument }: astNodes.ApplyExpressio
 ) {
   const func = await evaluate(expression, environment);
 
+  // TODO
   if ('apply' in func) {
-    return (func as unknown as { apply(thisArg: KopiValue | undefined, args: KopiValue[], evaluate: any): Promise<KopiValue>; })
-      .apply(undefined, [await evaluate(argument, environment)], evaluate);
+    return (func as unknown as { apply(thisArg: KopiValue | undefined, [argument, evaluate]: [KopiValue, Evaluate]): Promise<KopiValue>; })
+      .apply(undefined, [await evaluate(argument, environment), evaluate]);
   }
 
   throw new Error(`No apply() method found`);

@@ -7,9 +7,10 @@ import * as terminals from './modules2/terminals';
 import { KopiNumber } from './modules2/terminals';
 
 import { KopiValue } from './modules2/shared';
+import { KopiFunction } from './modules2/terminals/classes';
 
-class NativeFunction<TArg> extends KopiValue {
-  constructor(name: string, argType: Function = KopiValue, func: (arg: TArg) => Promise<KopiValue>) {
+class NativeFunction<TArgument> extends KopiValue {
+  constructor(name: string, argType: Function = KopiValue, func: (value: TArgument) => Promise<KopiValue>) {
     super();
 
     this.name = name;
@@ -17,21 +18,24 @@ class NativeFunction<TArg> extends KopiValue {
     this.func = func;
   }
 
-  async apply(thisArg: KopiValue, [arg]: [TArg]): Promise<KopiValue> {
-    if (!(arg instanceof this.argType)) {
-      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${arg}`);
+  async apply(thisArg: KopiValue, [argument]: [TArgument]): Promise<KopiValue> {
+    if (!(argument instanceof this.argType)) {
+      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
     }
 
-    return this.func.apply(thisArg, [arg]);
+    return this.func.apply(thisArg, [argument]);
   }
 
   name: string;
   argType: Function;
-  func: (arg: TArg) => Promise<KopiValue>;
+  func: (value: TArgument) => Promise<KopiValue>;
 }
 
 const environment = {
   x: new KopiNumber(3),
+  // let: new NativeFunction('let', KopiFunction, async (value: KopiFunction) => {
+  //   return value.apply(new KopiValue(), []);
+  // }),
   sleep: new NativeFunction('sleep', KopiNumber, async (value: KopiNumber) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(value), value.value * 1000);

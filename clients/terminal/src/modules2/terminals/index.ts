@@ -40,8 +40,8 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
-  async apply(thisArg: KopiValue, [arg]: [KopiValue]): Promise<KopiValue> {
-    return (arg as any)[this.name]();
+  async apply(thisArg: KopiValue, [argument]: [KopiValue]): Promise<KopiValue> {
+    return (argument as any)[this.name]();
   }
 
   name: string;

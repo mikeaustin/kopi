@@ -30,6 +30,8 @@ interface Bindings extends Promise<{
   [name: string]: KopiValue;
 }> { }
 
+type Evaluate = (astNode: ASTNode, environment: Environment) => Promise<KopiValue>;
+
 abstract class ASTPatternNode extends ASTNode {
   abstract match(value: KopiValue): Promise<{ [name: string]: KopiValue; }>;
 }
@@ -70,5 +72,6 @@ export {
   KopiValue,
   type Bindings,
   type Environment,
+  type Evaluate,
   inspect,
 };
