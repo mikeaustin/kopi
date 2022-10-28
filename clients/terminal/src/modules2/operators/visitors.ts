@@ -1,4 +1,4 @@
-import { ASTNode, KopiValue, Evaluate, Environment } from '../shared';
+import { ASTNode, KopiValue, Evaluate, Numeric, Environment } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
@@ -13,8 +13,12 @@ async function OperatorExpression(
     evaluate(rightExpression, environment),
   ]);
 
-  if (operator in leftValue) {
-    return (leftValue as any)[operator](rightValue);
+  if (leftValue.traits.includes(Numeric)) {
+    if (operator === '+') {
+      return (leftValue as unknown as Numeric)[operator](rightValue);
+    } else if (operator === '*') {
+      return (leftValue as unknown as Numeric)[operator](rightValue);
+    }
   }
 
   throw new Error(`${leftValue} doesn't have a method '${operator}'`);

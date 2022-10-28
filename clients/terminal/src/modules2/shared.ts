@@ -2,7 +2,18 @@ class RawASTNode {
   [key: string]: any;
 }
 
+abstract class Trait { }
+
+abstract class Numeric extends Trait {
+  abstract '+'(that: KopiValue): KopiValue;
+  abstract '*'(that: KopiValue): KopiValue;
+}
+
 class KopiValue {
+  constructor(traits = [] as Trait[]) {
+    this.traits = traits;
+  }
+
   async inspect() {
     return inspect(this);
   }
@@ -10,6 +21,8 @@ class KopiValue {
   async force() {
     return this;
   }
+
+  traits: Trait[];
 }
 
 class ASTNode extends KopiValue {
@@ -69,6 +82,8 @@ export {
   RawASTNode,
   ASTNode,
   ASTPatternNode,
+  Trait,
+  Numeric,
   KopiValue,
   type Bindings,
   type Environment,

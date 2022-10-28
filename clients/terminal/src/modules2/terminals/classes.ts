@@ -1,8 +1,8 @@
-import { ASTNode, ASTPatternNode, Environment, Evaluate, KopiValue } from "../shared";
+import { ASTNode, ASTPatternNode, Environment, Evaluate, Numeric, KopiValue } from "../shared";
 
 class KopiNumber extends KopiValue {
   constructor(value: number) {
-    super();
+    super([Numeric]);
 
     this.value = value;
   }

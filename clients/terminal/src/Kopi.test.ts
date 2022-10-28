@@ -16,8 +16,8 @@ test('Async operations', async () => {
     const elements = await Promise.all(value.elements);
 
     expect(elements).toEqual([
-      { value: 2 },
-      { value: 2 },
+      new KopiNumber(2),
+      new KopiNumber(2),
     ]);
   }
 });
