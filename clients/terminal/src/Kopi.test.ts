@@ -54,3 +54,14 @@ test('Function application 2', async () => {
     expect(value.value).toBeCloseTo(3);
   }
 });
+
+test('Function application 3', async () => {
+  let ast = parser.parse(`((a, (b, c)) => (a + b) * c) (1, (2, 3))`);
+  let value = await evaluate(transform(ast), environment);
+
+  console.log(await value.inspect());
+
+  if (value instanceof KopiNumber) {
+    expect(value.value).toBeCloseTo(9);
+  }
+});

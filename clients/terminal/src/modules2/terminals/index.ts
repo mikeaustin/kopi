@@ -74,13 +74,10 @@ class TuplePattern extends ASTPatternNode {
 
   async match(tuple: KopiValue) {
     if (tuple instanceof KopiTuple) {
-      const bindings = await this.patterns.reduce(async (bindings, pattern, index) => ({
+      return this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
         ...await pattern.match(await tuple.elements[index]),
-        // x: 1,
       }), {} as Bindings);
-
-      return bindings;
     }
 
     return {};
