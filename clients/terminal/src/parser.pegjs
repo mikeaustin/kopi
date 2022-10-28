@@ -55,6 +55,7 @@ PrimaryExpression
       }
     }
   / NumericLiteral
+  / StringLiteral
   / AstLiteral
   / Identifier
 
@@ -65,6 +66,15 @@ NumericLiteral "number"
       value: Number(`${value[0].join('')}.${value[1] ? value[1][2].join('') : ''}`),
       location: location(),
     });
+  }
+
+StringLiteral "string"
+  = _ "\"" value:[^"]* "\"" _ {
+    return {
+      type: 'StringLiteral',
+      value: value.join(''),
+      location: location(),
+    };
   }
 
 AstLiteral "ast"

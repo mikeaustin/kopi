@@ -45,6 +45,20 @@ class KopiBoolean extends KopiValue {
   value: boolean;
 }
 
+class KopiString extends KopiValue {
+  constructor(value: string) {
+    super();
+
+    this.value = value;
+  }
+
+  override async inspect() {
+    return `"${this.value}"`;
+  }
+
+  value: string;
+}
+
 class KopiTuple extends KopiValue {
   constructor(elements: Promise<KopiValue>[]) {
     super();
@@ -111,6 +125,7 @@ class NativeFunction<TArgument> extends KopiValue {
 export {
   KopiNumber,
   KopiBoolean,
+  KopiString,
   KopiTuple,
   KopiFunction,
   NativeFunction,

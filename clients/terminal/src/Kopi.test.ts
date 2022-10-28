@@ -2,7 +2,21 @@
 
 import * as parser from './lib/parser';
 import { transform, evaluate, environment } from './test';
-import { KopiNumber, KopiTuple } from './modules2/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple } from './modules2/terminals/classes';
+
+test('Basic types', async () => {
+  let ast = parser.parse(`(123, "abc")`);
+  let value = await evaluate(transform(ast), environment) as KopiTuple;
+
+  console.log(await value.inspect());
+
+  const elements = await Promise.all(value.elements);
+
+  expect(elements).toEqual([
+    new KopiNumber(123),
+    new KopiString("abc"),
+  ]);
+});
 
 test('Async operations', async () => {
   let ast = parser.parse(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`);

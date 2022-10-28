@@ -1,7 +1,7 @@
 import { Equals } from 'tsafe';
 
 import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Environment } from '../shared';
-import { KopiNumber, KopiBoolean, KopiTuple } from './classes';
+import { KopiNumber, KopiBoolean, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -21,6 +21,16 @@ class BooleanLiteral extends ASTNode {
   }
 
   value: boolean;
+}
+
+class StringLiteral extends ASTNode {
+  constructor({ value, location }: StringLiteral) {
+    super(location);
+
+    this.value = value;
+  }
+
+  value: string;
 }
 
 class AstLiteral extends ASTNode {
@@ -96,6 +106,11 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
         value: rawAstNode.value,
         location: rawAstNode.location,
       } as BooleanLiteral);
+    case 'StringLiteral':
+      return new StringLiteral({
+        value: rawAstNode.value,
+        location: rawAstNode.location,
+      } as StringLiteral);
     case 'AstLiteral':
       return new AstLiteral({
         value: transform(rawAstNode.value),
@@ -126,6 +141,8 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
     return new KopiNumber(astNode.value);
   } else if (astNode instanceof BooleanLiteral) {
     return new KopiBoolean(astNode.value);
+  } else if (astNode instanceof StringLiteral) {
+    return new KopiString(astNode.value);
   } else if (astNode instanceof AstLiteral) {
     return astNode.value;
   } else if (astNode instanceof Identifier) {
