@@ -52,8 +52,8 @@ async function ApplyExpression({ expression, argumentExpression }: astNodes.Appl
 
   // TODO
   if ('apply' in func) {
-    return (func as unknown as { apply(thisArg: KopiValue | undefined, [argument, evaluate]: [KopiValue, Evaluate]): Promise<KopiValue>; })
-      .apply(undefined, [await evaluate(argumentExpression, environment), evaluate]);
+    return (func as unknown as { apply(thisArg: KopiValue | undefined, [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]): Promise<KopiValue>; })
+      .apply(undefined, [await evaluate(argumentExpression, environment), evaluate, environment]);
   }
 
   throw new Error(`No apply() method found`);

@@ -287,11 +287,11 @@ function peg$parse(input, options) {
         [...patterns, pattern], [head]),
     }
   };
-  var peg$f10 = function(identifier, defaultValue) {
+  var peg$f10 = function(identifier, defaultExpression) {
     return {
       type: 'IdentifierPattern',
       name: identifier.name,
-      defaultValue,
+      defaultExpression: defaultExpression && defaultExpression[3],
     };
   };
   var peg$currPos = 0;

@@ -1,6 +1,9 @@
 import { Equals } from 'tsafe';
+import { Evaluate } from '../shared';
 
-import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Environment } from '../shared';
+import { AST } from '../../modules/terminals';
+
+import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Environment, inspect } from '../shared';
 import { KopiNumber, KopiBoolean, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -60,19 +63,31 @@ class Identifier extends ASTNode {
 //
 
 class IdentifierPattern extends ASTPatternNode {
-  constructor({ name, location }: IdentifierPattern) {
+  constructor({ name, defaultExpression, location }: IdentifierPattern) {
     super(location);
 
     this.name = name;
+    this.defaultExpression = defaultExpression;
   }
 
-  override async match(value: KopiValue) {
-    return {
-      [this.name]: value,
+  override async match(value: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+    console.log('here 2', value);
+
+    if (value !== undefined) {
+      return {
+        [this.name]: value
+      };
+    } else if (this.defaultExpression !== null) {
+      return {
+        [this.name]: await evaluate(this.defaultExpression, environment)
+      };
     };
+
+    throw new Error();
   }
 
   name: string;
+  defaultExpression: ASTNode | null;
 }
 
 class TuplePattern extends ASTPatternNode {
@@ -82,11 +97,15 @@ class TuplePattern extends ASTPatternNode {
     this.patterns = patterns;
   }
 
-  override async match(tuple: KopiValue) {
-    if (tuple instanceof KopiTuple) {
+  override async match(value: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+    if (value !== undefined) {
+      const tuple = value instanceof KopiTuple
+        ? value
+        : new KopiTuple([Promise.resolve(value)]);
+
       return this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
-        ...await pattern.match(await tuple.elements[index]),
+        ...await pattern.match(await tuple.elements[index], evaluate, environment),
       }), {} as Bindings);
     }
 
@@ -129,6 +148,9 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
       return new IdentifierPattern({
         name: rawAstNode.name,
         location: rawAstNode.location,
+        defaultExpression: rawAstNode.defaultExpression
+          ? transform(rawAstNode.defaultExpression)
+          : rawAstNode.defaultExpression,
       } as IdentifierPattern);
     case 'TuplePattern':
       return new TuplePattern({
@@ -150,13 +172,15 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
   } else if (astNode instanceof AstLiteral) {
     return astNode.value;
   } else if (astNode instanceof Identifier) {
-    if (!(astNode.name in environment)) {
-      throw new Error(`Variable '${astNode.name}' not found in current scope`);
+    const value = environment[astNode.name];
+
+    if (astNode.name in environment && value !== undefined) {
+      return value;
     }
 
-    return environment[astNode.name];
+    throw new Error(`Variable '${astNode.name}' not found in current scope`);
   } else {
-    throw new Error(`No visitor found for '${astNode.constructor.name}'`);
+    throw new Error(`No visitor found for '${inspect(astNode)}'`);
   }
 };
 

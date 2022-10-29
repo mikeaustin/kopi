@@ -86,8 +86,8 @@ class KopiFunction extends KopiValue {
     this.bodyExpression = bodyExpression;
   }
 
-  async apply(thisArg: KopiValue, [argument, evaluate]: [KopiValue, Evaluate]): Promise<KopiValue> {
-    const matches = await this.parameterPattern.match(argument);
+  async apply(thisArg: KopiValue, [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]): Promise<KopiValue> {
+    const matches = await this.parameterPattern.match(argument, evaluate, environment);
 
     return evaluate(this.bodyExpression, {
       ...this.environment,
@@ -109,7 +109,7 @@ class NativeFunction<TArgument> extends KopiValue {
     this.func = func;
   }
 
-  async apply(thisArg: KopiValue, [argument, evaluate]: [TArgument, Evaluate]): Promise<KopiValue> {
+  async apply(thisArg: KopiValue, [argument, evaluate, environment]: [TArgument, Evaluate, Environment]): Promise<KopiValue> {
     if (!(argument instanceof this.argType)) {
       throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
     }

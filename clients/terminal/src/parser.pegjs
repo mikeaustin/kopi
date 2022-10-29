@@ -111,11 +111,11 @@ PrimaryPattern
   / IdentifierPattern
 
 IdentifierPattern
-  = identifier:Identifier defaultValue:(_ "=" _ Expression)? {
+  = identifier:Identifier defaultExpression:(_ "=" _ Expression)? {
     return {
       type: 'IdentifierPattern',
       name: identifier.name,
-      defaultValue,
+      defaultExpression: defaultExpression && defaultExpression[3],
     };
   }
 

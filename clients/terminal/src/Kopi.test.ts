@@ -95,7 +95,7 @@ test('Function application 4', async () => {
 });
 
 test('Default arguments', async () => {
-  let ast = parser.parse(`((a, b, c = 3) => (a, b, c)) (1, 2, 3)`);
+  let ast = parser.parse(`((a = 1, b = 2, c = 3) => (a, b, c)) ()`);
   let value = await evaluate(transform(ast), environment);
 
   console.log(await value.inspect());
