@@ -34,14 +34,10 @@ const $Comparable = ({
     '>' = greaterThan;
   };
 
-console.log(Numeric);
-console.log($Comparable({
-  compare: (a: KopiValue, b: KopiValue) => 0
-}));
-
 abstract class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
+    this.elements = [Promise.resolve(this)];
   }
 
   async inspect() {
@@ -53,6 +49,7 @@ abstract class KopiValue {
   }
 
   traits: Trait[];
+  elements: Promise<KopiValue>[];
 }
 
 class ASTNode extends KopiValue {

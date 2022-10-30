@@ -95,16 +95,12 @@ class TuplePattern extends ASTPatternNode {
     this.patterns = patterns;
   }
 
-  override async match(value: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
-    if (value === undefined) {
+  override async match(tuple: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+    if (tuple === undefined) {
       throw new Error('TuplePattern match(): value is not a tuple');
     }
 
     try {
-      const tuple = value instanceof KopiTuple
-        ? value
-        : new KopiTuple([Promise.resolve(value)]);
-
       return await this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
         ...await pattern.match(await tuple.elements[index], evaluate, environment),
