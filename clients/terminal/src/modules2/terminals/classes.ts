@@ -20,6 +20,10 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value * that.value);
   }
 
+  round() {
+    return new KopiNumber(Math.round(this.value));
+  }
+
   sin() {
     return new KopiNumber(Math.sin(this.value));
   }
@@ -72,6 +76,10 @@ class KopiTuple extends KopiValue {
     );
 
     return `(${elements.join(', ')})`;
+  }
+
+  size() {
+    return new KopiNumber(this.elements.length);
   }
 
   elements: Promise<KopiValue>[];
