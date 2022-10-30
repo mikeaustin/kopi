@@ -34,7 +34,7 @@ test('Trigonometry', async () => {
 });
 
 test('Function application', async () => {
-  let value = await interpret(`(x => x + 1) 3 + round 2.7`) as KopiNumber;
+  let value = await interpret(`(x => x + 1) 3 + 'round 2.7`) as KopiNumber;
 
   expect(value.value).toBeCloseTo(7);
 });
@@ -68,4 +68,10 @@ test('Default arguments', async () => {
     new KopiNumber(2),
     new KopiNumber(3),
   ]);
+});
+
+test('Default arguments 2', async () => {
+  let value = await interpret(`'size (1, 2, 3)`) as KopiNumber;
+
+  expect(value.value).toEqual(3);
 });

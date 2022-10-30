@@ -2,7 +2,8 @@ import { RawASTNode, ASTNode, Evaluate, Environment, inspect } from './modules2/
 
 import * as operators from './modules2/operators';
 import * as terminals from './modules2/terminals';
-import { KopiNumber } from './modules2/terminals';
+
+import { KopiNumber } from './modules2/terminals/classes';
 
 import { KopiValue } from './modules2/shared';
 import { NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
@@ -19,9 +20,6 @@ const environment = {
   }),
   fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue, evaluate: Evaluate, environment: Environment) => {
     return new KopiNumber(5);
-  }),
-  round: new NativeFunction('round', KopiNumber, async (value: KopiNumber, evaluate: Evaluate, environment: Environment) => {
-    return new KopiNumber(Math.round(value.value));
   }),
 };
 
