@@ -16,13 +16,13 @@ class OperatorExpression extends ASTNode {
 }
 
 class TupleExpression extends ASTNode {
-  constructor({ elements, location }: TupleExpression) {
+  constructor({ expressionElements, location }: TupleExpression) {
     super(location);
 
-    this.elements = elements;
+    this.expressionElements = expressionElements;
   }
 
-  elements: ASTNode[];
+  expressionElements: ASTNode[];
 }
 
 class ApplyExpression extends ASTNode {

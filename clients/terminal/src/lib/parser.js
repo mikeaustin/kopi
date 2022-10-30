@@ -250,8 +250,8 @@ function peg$parse(input, options) {
   var peg$f4 = function(head, tail) {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        elements: !head ? [] : tail.reduce((elements, [, , , expression]) =>
-          [...elements, expression], [head]),
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+          [...expressionElements, expressionElement], [head]),
       }
     };
   var peg$f5 = function(value) {

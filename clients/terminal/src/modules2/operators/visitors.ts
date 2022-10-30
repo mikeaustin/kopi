@@ -24,12 +24,12 @@ async function OperatorExpression(
   throw new Error(`${leftValue} doesn't have a method '${operator}'`);
 }
 
-async function TupleExpression({ elements }: astNodes.TupleExpression,
+async function TupleExpression({ expressionElements }: astNodes.TupleExpression,
   evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
   environment: Environment,
 ) {
   return new KopiTuple(
-    elements.map(element => evaluate(element, environment))
+    expressionElements.map(expressionElement => evaluate(expressionElement, environment))
   );
 }
 

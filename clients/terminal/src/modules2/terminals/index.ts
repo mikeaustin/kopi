@@ -115,6 +115,10 @@ class TuplePattern extends ASTPatternNode {
 
 //
 
+// const transform2 = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
+//   if ()
+// };
+
 const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
     case 'NumericLiteral':

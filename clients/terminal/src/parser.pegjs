@@ -50,8 +50,8 @@ PrimaryExpression
   = "(" _ head:Expression? tail:(_ "," _ Expression)* _ ")" {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        elements: !head ? [] : tail.reduce((elements, [, , , expression]) =>
-          [...elements, expression], [head]),
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+          [...expressionElements, expressionElement], [head]),
       }
     }
   / NumericLiteral
