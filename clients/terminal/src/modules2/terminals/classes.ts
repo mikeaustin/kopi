@@ -86,7 +86,10 @@ class KopiFunction extends KopiValue {
     this.bodyExpression = bodyExpression;
   }
 
-  async apply(thisArg: KopiValue, [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]): Promise<KopiValue> {
+  async apply(
+    thisArg: KopiValue,
+    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+  ): Promise<KopiValue> {
     const matches = await this.parameterPattern.match(argument, evaluate, environment);
 
     return evaluate(this.bodyExpression, {
@@ -101,7 +104,11 @@ class KopiFunction extends KopiValue {
 }
 
 class NativeFunction<TArgument> extends KopiValue {
-  constructor(name: string, argType: Function = KopiValue, func: (value: TArgument) => Promise<KopiValue>) {
+  constructor(
+    name: string,
+    argType: Function = KopiValue,
+    func: (value: TArgument, evaluate: Evaluate, environment: Environment) => Promise<KopiValue>
+  ) {
     super();
 
     this.name = name;
@@ -114,12 +121,12 @@ class NativeFunction<TArgument> extends KopiValue {
       throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
     }
 
-    return this.func.apply(thisArg, [argument]);
+    return this.func.apply(thisArg, [argument, evaluate, environment]);
   }
 
   name: string;
   argType: Function;
-  func: (value: TArgument) => Promise<KopiValue>;
+  func: (value: TArgument, evaluate: Evaluate, environment: Environment) => Promise<KopiValue>;
 }
 
 export {

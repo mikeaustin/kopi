@@ -1,28 +1,26 @@
-import * as parser from './lib/parser';
-
-import { RawASTNode, ASTNode, Environment, inspect } from './modules2/shared';
+import { RawASTNode, ASTNode, Evaluate, Environment, inspect } from './modules2/shared';
 
 import * as operators from './modules2/operators';
 import * as terminals from './modules2/terminals';
 import { KopiNumber } from './modules2/terminals';
 
 import { KopiValue } from './modules2/shared';
-import { NativeFunction, KopiFunction } from './modules2/terminals/classes';
+import { NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
 
 const environment = {
   x: new KopiNumber(3),
-  // let: new NativeFunction('let', KopiFunction, async (value: KopiFunction) => {
-  //   return value.apply(new KopiValue(), []);
-  // }),
-  sleep: new NativeFunction('sleep', KopiNumber, async (value: KopiNumber) => {
+  let: new NativeFunction('let', KopiFunction, async (value: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+    return value.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
+  }),
+  sleep: new NativeFunction('sleep', KopiNumber, async (value: KopiNumber, evaluate: Evaluate, environment: Environment) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(value), value.value * 1000);
     });
   }),
-  fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue) => {
+  fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue, evaluate: Evaluate, environment: Environment) => {
     return new KopiNumber(5);
   }),
-  round: new NativeFunction('round', KopiNumber, async (value: KopiNumber) => {
+  round: new NativeFunction('round', KopiNumber, async (value: KopiNumber, evaluate: Evaluate, environment: Environment) => {
     return new KopiNumber(Math.round(value.value));
   }),
 };
@@ -56,10 +54,10 @@ const evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
 
 // const transformedAst = transformPipeline(ast);
 
-const main = async () => {
-  // console.log(inspect(transformedAst));
-  // console.log(await (await evaluate(transformedAst, environment)).inspect());
-};
+// const main = async () => {
+//   // console.log(inspect(transformedAst));
+//   // console.log(await (await evaluate(transformedAst, environment)).inspect());
+// };
 
 // main();
 

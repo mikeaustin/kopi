@@ -71,8 +71,6 @@ class IdentifierPattern extends ASTPatternNode {
   }
 
   override async match(value: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
-    console.log('here 2', value);
-
     if (value !== undefined) {
       return {
         [this.name]: value
@@ -83,7 +81,7 @@ class IdentifierPattern extends ASTPatternNode {
       };
     };
 
-    throw new Error();
+    throw new Error(`IdentifierPattern: No match found for ${value}`);
   }
 
   name: string;

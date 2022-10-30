@@ -108,3 +108,17 @@ test('Default arguments', async () => {
     new KopiNumber(3),
   ]);
 });
+
+test('Default arguments 2', async () => {
+  let ast = parser.parse(`let (a = 1, b = 2) => (a, b)`);
+  let value = await evaluate(transform(ast), environment);
+
+  console.log(await value.inspect());
+
+  const elements = await Promise.all((value as KopiTuple).elements);
+
+  expect(elements).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+  ]);
+});

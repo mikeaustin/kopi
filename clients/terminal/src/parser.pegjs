@@ -1,15 +1,5 @@
 Expression
-  = FunctionExpression
-
-FunctionExpression
-  = parameterPattern:Pattern _ "=>" _ bodyExpression:Expression {
-      return {
-        type: "FunctionExpression",
-        parameterPattern,
-        bodyExpression,
-      }
-    }
-  / AddExpression
+  = AddExpression
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {
@@ -34,13 +24,23 @@ MultiplyExpression
     }
 
 ApplyExpression
-  = expression:PrimaryExpression _arguments:(_ PrimaryExpression)* {
+  = expression:FunctionExpression _arguments:(_ FunctionExpression)* {
       return _arguments.reduce((expression, [, argumentExpression]) => ({
         type: 'ApplyExpression',
         expression,
         argumentExpression,
       }), expression);
     }
+
+FunctionExpression
+  = parameterPattern:Pattern _ "=>" _ bodyExpression:Expression {
+      return {
+        type: "FunctionExpression",
+        parameterPattern,
+        bodyExpression,
+      }
+    }
+  / PrimaryExpression
 
 //
 // PrimaryExpression
