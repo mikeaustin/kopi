@@ -41,6 +41,10 @@ const $Comparable = ({
 
 //
 
+interface Indexable {
+  [name: string]: any;
+}
+
 abstract class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
@@ -56,17 +60,18 @@ abstract class KopiValue {
   }
 
   async invoke(
-    method: string,
+    methodName: string,
     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
   ) {
-    const extensions = (environment._extensions as Extensions);
-    const map = extensions.map.get(this.constructor);
+    const functions = (environment._extensions as Extensions).map.get(this.constructor);
 
-    if (map && map[method]) {
-      return map[method].apply(this, [argument]);
+    const method = functions && functions[methodName]
+      ? functions[methodName]
+      : (this as Indexable)[methodName];
+
+    if (method) {
+      return method.apply(this, [argument, evaluate, environment]);
     }
-
-    return (this as any)[method]();
   }
 
   traits: Trait[];
