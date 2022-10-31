@@ -13,6 +13,13 @@ abstract class Equatable extends Trait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
+abstract class Applicative extends Trait {
+  abstract apply(
+    thisArg: KopiValue | undefined,
+    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+  ): Promise<KopiValue>;
+}
+
 abstract class Comparable extends Trait {
   abstract compare(thisArg: KopiValue, that: KopiValue): number;
   abstract '<'(thisArg: KopiValue, that: KopiValue): boolean;
@@ -54,7 +61,7 @@ abstract class KopiValue {
 
 class ASTNode extends KopiValue {
   constructor(location: {}) {
-    super();
+    super([Applicative]);
 
     // this.location = location;
   }
@@ -116,6 +123,7 @@ export {
   Trait,
   Numeric,
   Equatable,
+  Applicative,
   KopiValue,
   type Bindings,
   type Environment,

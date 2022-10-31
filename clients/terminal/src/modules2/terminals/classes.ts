@@ -1,4 +1,5 @@
-import { ASTNode, ASTPatternNode, Environment, Evaluate, KopiValue } from "../shared";
+import App from "../../App";
+import { ASTNode, ASTPatternNode, Applicative, Environment, Evaluate, KopiValue } from "../shared";
 import { Numeric, Equatable } from "../shared";
 
 class KopiNumber extends KopiValue {
@@ -87,7 +88,7 @@ class KopiTuple extends KopiValue {
 
 class KopiFunction extends KopiValue {
   constructor(parameterPattern: ASTPatternNode, bodyExpression: ASTNode, environment: Environment) {
-    super();
+    super([Applicative]);
 
     this.parameterPattern = parameterPattern;
     this.environment = environment;
@@ -117,14 +118,17 @@ class NativeFunction<TArgument> extends KopiValue {
     argType: Function = KopiValue,
     func: (value: TArgument, evaluate: Evaluate, environment: Environment) => Promise<KopiValue>
   ) {
-    super();
+    super([Applicative]);
 
     this.name = name;
     this.argType = argType;
     this.func = func;
   }
 
-  async apply(thisArg: KopiValue, [argument, evaluate, environment]: [TArgument, Evaluate, Environment]): Promise<KopiValue> {
+  async apply(
+    thisArg: KopiValue,
+    [argument, evaluate, environment]: [TArgument, Evaluate, Environment]
+  ): Promise<KopiValue> {
     if (!(argument instanceof this.argType)) {
       throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
     }

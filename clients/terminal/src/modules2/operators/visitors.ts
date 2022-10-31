@@ -1,4 +1,4 @@
-import { KopiValue, Numeric, Evaluate, Environment } from '../shared';
+import { KopiValue, Numeric, Applicative, Evaluate, Environment, inspect } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
@@ -53,13 +53,14 @@ async function ApplyExpression(
 ) {
   const func = await evaluate(expression, environment);
 
-  // TODO
-  if ('apply' in func) {
-    return (func as unknown as { apply(thisArg: KopiValue | undefined, [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]): Promise<KopiValue>; })
-      .apply(undefined, [await evaluate(argumentExpression, environment), evaluate, environment]);
+  if (func.traits.includes(Applicative)) {
+    return (func as unknown as Applicative).apply(
+      undefined,
+      [await evaluate(argumentExpression, environment), evaluate, environment]
+    );
   }
 
-  throw new Error(`No apply() method found`);
+  throw new Error(`No apply() method found for ${func.constructor.name}`);
 }
 
 export {
