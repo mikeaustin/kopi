@@ -1,4 +1,4 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment } from '../shared';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, Extensions } from '../shared';
 import { KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -48,14 +48,13 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
-  // TODO
+  // TODO method call to KopiAny
   async apply(
     thisArg: KopiValue,
     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue> {
-    const extensions = (environment._extensions as unknown as Map<Function, any>);
-
-    const map = extensions.get(argument.constructor);
+    const extensions = (environment._extensions as Extensions);
+    const map = extensions.map.get(argument.constructor);
 
     if (map) {
       if (map[this.name]) {

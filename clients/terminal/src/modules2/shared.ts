@@ -99,6 +99,16 @@ interface Environment {
   [name: string]: KopiValue;
 }
 
+class Extensions extends KopiValue {
+  constructor(mappings: [[Function, { [name: string]: any; }]]) {
+    super();
+
+    this.map = new Map(mappings);
+  }
+
+  map: Map<Function, { [name: string]: any; }>;
+}
+
 export {
   ASTNode,
   ASTPatternNode,
@@ -107,6 +117,7 @@ export {
   Equatable,
   Applicative,
   KopiValue,
+  Extensions,
   type RawASTNode,
   type Bindings,
   type Transform,

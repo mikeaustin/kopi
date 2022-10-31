@@ -4,7 +4,7 @@ import { inspect } from './modules2/utils';
 import * as operators from './modules2/operators';
 import * as terminals from './modules2/terminals';
 
-import { KopiValue } from './modules2/shared';
+import { KopiValue, Extensions } from './modules2/shared';
 import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
 
 const environment: {
@@ -28,11 +28,11 @@ const environment: {
   fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue) => {
     return new KopiNumber(5);
   }),
-  _extensions: new Map([[KopiString, {
+  _extensions: new Extensions([[KopiString, {
     capitalize: new NativeFunction('capitalize', KopiTuple, async function (this: KopiString, value: KopiString) {
       return new KopiString(this.value.toUpperCase());
     })
-  }]]) as unknown as KopiValue
+  }]])
 };
 
 // const ast = parser.parse('(1, 2, 3)');
