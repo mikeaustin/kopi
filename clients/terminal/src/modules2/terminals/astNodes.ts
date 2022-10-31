@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, inspect } from '../shared';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment } from '../shared';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {

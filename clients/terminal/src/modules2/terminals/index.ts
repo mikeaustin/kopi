@@ -1,4 +1,5 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Environment, inspect } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Evaluate, Environment } from '../shared';
+import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';
 import * as visitors from './visitors';
@@ -7,7 +8,7 @@ import * as visitors from './visitors';
 //   if ()
 // };
 
-const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
+const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
     case 'NumericLiteral':
       return new astNodes.NumericLiteral({

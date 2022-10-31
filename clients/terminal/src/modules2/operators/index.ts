@@ -1,12 +1,10 @@
-import { RawASTNode, ASTNode, KopiValue, Environment } from '../shared';
+import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment } from '../shared';
 
 import * as astNodes from './astNodes';
 import * as visitorsx from './visitors';
 
-type Transform = (rawAstNode: RawASTNode) => ASTNode;
-
 const transform = (next: Transform, transform: Transform) =>
-  (rawAstNode: any): ASTNode => {
+  (rawAstNode: RawASTNode): ASTNode => {
     switch (rawAstNode.type) {
       case 'OperatorExpression':
         return new astNodes.OperatorExpression({
@@ -36,8 +34,6 @@ const transform = (next: Transform, transform: Transform) =>
         return next(rawAstNode);
     }
   };
-
-type Evaluate = (astNode: ASTNode, environment: Environment) => Promise<KopiValue>;
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
   async (astNode: any, environment: Environment): Promise<KopiValue> => {
