@@ -48,21 +48,11 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
-  // TODO method call to KopiAny
   async apply(
     thisArg: KopiValue,
     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue> {
-    const extensions = (environment._extensions as Extensions);
-    const map = extensions.map.get(argument.constructor);
-
-    if (map) {
-      if (map[this.name]) {
-        return map[this.name].apply(argument, [new KopiTuple([])]);
-      }
-    }
-
-    return (argument as any)[this.name]();
+    return argument.invoke(this.name, [new KopiTuple([]), evaluate, environment]);
   }
 
   name: string;

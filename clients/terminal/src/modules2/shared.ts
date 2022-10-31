@@ -55,6 +55,20 @@ abstract class KopiValue {
     return this;
   }
 
+  async invoke(
+    method: string,
+    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+  ) {
+    const extensions = (environment._extensions as Extensions);
+    const map = extensions.map.get(this.constructor);
+
+    if (map && map[method]) {
+      return map[method].apply(this, [argument]);
+    }
+
+    return (this as any)[method]();
+  }
+
   traits: Trait[];
   elements: Promise<KopiValue>[];
 }
