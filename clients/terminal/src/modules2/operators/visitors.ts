@@ -1,11 +1,11 @@
-import { ASTNode, KopiValue, Evaluate, Numeric, Environment } from '../shared';
+import { KopiValue, Numeric, Evaluate, Environment } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
 
 async function OperatorExpression(
   { operator, leftExpression, rightExpression }: astNodes.OperatorExpression,
-  evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
+  evaluate: Evaluate,
   environment: Environment,
 ) {
   const [leftValue, rightValue] = await Promise.all([
@@ -26,7 +26,7 @@ async function OperatorExpression(
 
 async function TupleExpression(
   { expressionElements }: astNodes.TupleExpression,
-  evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
+  evaluate: Evaluate,
   environment: Environment,
 ) {
   return new KopiTuple(
@@ -36,7 +36,7 @@ async function TupleExpression(
 
 async function FunctionExpression(
   { parameterPattern, bodyExpression }: astNodes.FunctionExpression,
-  evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
+  evaluate: Evaluate,
   environment: Environment,
 ) {
   return new KopiFunction(
@@ -48,7 +48,7 @@ async function FunctionExpression(
 
 async function ApplyExpression(
   { expression, argumentExpression }: astNodes.ApplyExpression,
-  evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
+  evaluate: Evaluate,
   environment: Environment,
 ) {
   const func = await evaluate(expression, environment);
