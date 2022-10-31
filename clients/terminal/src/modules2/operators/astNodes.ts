@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
-import { Identifier } from '../terminals';
+import { Identifier } from '../terminals/astNodes';
 
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
