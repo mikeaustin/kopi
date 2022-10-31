@@ -66,7 +66,7 @@ class ASTNode extends KopiValue {
     // this.location = location;
   }
 
-  async inspect() {
+  override async inspect() {
     return inspect(this);
   }
 

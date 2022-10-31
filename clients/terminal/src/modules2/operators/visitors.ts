@@ -60,7 +60,7 @@ async function ApplyExpression(
     );
   }
 
-  throw new Error(`No apply() method found for ${func.constructor.name}`);
+  throw new Error(`No Applicative.apply() method found for ${func.constructor.name}`);
 }
 
 export {

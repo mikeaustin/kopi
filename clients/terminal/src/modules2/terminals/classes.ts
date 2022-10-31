@@ -1,4 +1,3 @@
-import App from "../../App";
 import { ASTNode, ASTPatternNode, Applicative, Environment, Evaluate, KopiValue } from "../shared";
 import { Numeric, Equatable } from "../shared";
 
@@ -50,6 +49,27 @@ class KopiBoolean extends KopiValue {
   value: boolean;
 }
 
+class KopiType extends KopiValue {
+  constructor(type: Function) {
+    super([Applicative]);
+
+    this.type = type;
+  }
+
+  override async inspect() {
+    return this.type.prototype.inspect.apply(undefined, []);
+  }
+
+  async apply(
+    thisArg: KopiValue,
+    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+  ): Promise<KopiValue> {
+    return new KopiString("Hello, world");
+  }
+
+  type: Function;
+}
+
 class KopiString extends KopiValue {
   constructor(value: string) {
     super();
@@ -83,7 +103,7 @@ class KopiTuple extends KopiValue {
     return new KopiNumber(this.elements.length);
   }
 
-  elements: Promise<KopiValue>[];
+  override elements: Promise<KopiValue>[];
 }
 
 class KopiFunction extends KopiValue {
@@ -144,6 +164,7 @@ class NativeFunction<TArgument> extends KopiValue {
 export {
   KopiNumber,
   KopiBoolean,
+  KopiType,
   KopiString,
   KopiTuple,
   KopiFunction,
