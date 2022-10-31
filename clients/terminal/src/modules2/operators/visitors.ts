@@ -24,7 +24,8 @@ async function OperatorExpression(
   throw new Error(`${leftValue} doesn't have a method '${operator}'`);
 }
 
-async function TupleExpression({ expressionElements }: astNodes.TupleExpression,
+async function TupleExpression(
+  { expressionElements }: astNodes.TupleExpression,
   evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
   environment: Environment,
 ) {
@@ -33,7 +34,8 @@ async function TupleExpression({ expressionElements }: astNodes.TupleExpression,
   );
 }
 
-async function FunctionExpression({ parameterPattern, bodyExpression }: astNodes.FunctionExpression,
+async function FunctionExpression(
+  { parameterPattern, bodyExpression }: astNodes.FunctionExpression,
   evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
   environment: Environment,
 ) {
@@ -44,7 +46,8 @@ async function FunctionExpression({ parameterPattern, bodyExpression }: astNodes
   );
 }
 
-async function ApplyExpression({ expression, argumentExpression }: astNodes.ApplyExpression,
+async function ApplyExpression(
+  { expression, argumentExpression }: astNodes.ApplyExpression,
   evaluate: (astNode: ASTNode, environment: Environment) => Promise<KopiValue>,
   environment: Environment,
 ) {

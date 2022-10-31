@@ -1,10 +1,7 @@
-import { Equals } from 'tsafe';
-import { Evaluate } from '../shared';
-
-import { RawASTNode, ASTNode, ASTPatternNode, Bindings, KopiValue, Environment, inspect } from '../shared';
-import { KopiNumber, KopiBoolean, KopiString, KopiTuple } from './classes';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Environment, inspect } from '../shared';
 
 import * as astNodes from './astNodes';
+import * as visitors from './visitors';
 
 // const transform2 = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
 //   if ()
@@ -57,21 +54,15 @@ const transform = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNod
 
 const evaluate = async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
   if (astNode instanceof astNodes.NumericLiteral) {
-    return new KopiNumber(astNode.value);
+    return visitors.NumericLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.BooleanLiteral) {
-    return new KopiBoolean(astNode.value);
+    return visitors.BooleanLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.StringLiteral) {
-    return new KopiString(astNode.value);
+    return visitors.StringLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.AstLiteral) {
     return astNode.value;
   } else if (astNode instanceof astNodes.Identifier) {
-    const value = environment[astNode.name];
-
-    if (astNode.name in environment && value !== undefined) {
-      return value;
-    }
-
-    throw new Error(`Variable '${astNode.name}' not found in current scope`);
+    return visitors.Identifier(astNode, evaluate, environment);
   } else {
     throw new Error(`No visitor found for '${inspect(astNode)}'`);
   }
