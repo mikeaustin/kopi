@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Evaluate, Environment } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment } from '../shared';
 import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';

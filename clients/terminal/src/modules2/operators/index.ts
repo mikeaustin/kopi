@@ -36,7 +36,7 @@ const transform = (next: Transform, transform: Transform) =>
   };
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
-  async (astNode: any, environment: Environment): Promise<KopiValue> => {
+  async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
     if (astNode instanceof astNodes.OperatorExpression) {
       return visitorsx.OperatorExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.TupleExpression) {

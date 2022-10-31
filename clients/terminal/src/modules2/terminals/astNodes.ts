@@ -47,6 +47,7 @@ class Identifier extends ASTNode {
     this.name = name;
   }
 
+  // TODO
   async apply(thisArg: KopiValue, [argument]: [KopiValue]): Promise<KopiValue> {
     return (argument as any)[this.name]();
   }
