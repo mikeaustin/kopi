@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, Evaluate, Environment, Bindings } from './modules2/shared';
+import { RawASTNode, ASTNode, Evaluate, Environment, Bindings, Trait, Applicative } from './modules2/shared';
 import { inspect } from './modules2/utils';
 
 import * as operators from './modules2/operators';
@@ -7,17 +7,36 @@ import * as terminals from './modules2/terminals';
 import { KopiValue, Extensions } from './modules2/shared';
 import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
 
+declare global {
+  interface Function {
+    inspect(): Promise<string>;
+    force(): Promise<KopiValue>;
+    invoke(
+      methodName: string,
+      [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    ): Promise<KopiValue>;
+    traits: Trait[];
+    elements: Promise<KopiValue>[];
+  }
+}
+
+Function.prototype.inspect = function () {
+  return Promise.resolve(`<native-function>`);
+};
+
+Function.prototype.traits = [Applicative];
+
 const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
   String: new KopiType(KopiString),
-  print: new NativeFunction('print', KopiValue, async (value: KopiValue) => {
-    console.log(await value.inspect());
+  print: async (value: KopiValue) => {
+    console.log('print', await value.inspect());
 
     return new KopiTuple([]);
-  }),
-  match: new NativeFunction('match', KopiTuple, async (tuple: KopiTuple) => {
+  },
+  match: async (tuple: KopiTuple) => {
     for await (const func of tuple.elements) {
       const matches = await (func as KopiFunction).parameterPattern.match(new KopiNumber(0), evaluate, environment);
 
@@ -27,23 +46,19 @@ const environment: {
     }
 
     throw new Error('Match failed');
-  }),
+  },
   // extend: () => {},
-  let: new NativeFunction(
-    'let',
-    KopiFunction,
-    async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
-      return func.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
-    }
-  ),
-  sleep: new NativeFunction('sleep', KopiNumber, async (number: KopiNumber,) => {
+  let: async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+    return func.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
+  },
+  sleep: async (number: KopiNumber,) => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(number), number.value * 1000);
     });
-  }),
-  fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue) => {
+  },
+  fetch: async (url: KopiValue) => {
     return new KopiNumber(5);
-  }),
+  },
   _extensions: new Extensions([[KopiString, {
     capitalize: new NativeFunction('capitalize', KopiTuple, async function (this: KopiString, tuple: KopiTuple) {
       return new KopiString(this.value.toUpperCase());
