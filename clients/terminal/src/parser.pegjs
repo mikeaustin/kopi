@@ -1,5 +1,5 @@
 Block
-  = (" " / Newline)* head:Statement? tail:(_ (Newline _)+ Statement)* (" " / Newline)* {
+  = __ head:Statement? tail:(_ (Newline _)+ Statement)* __ {
       return {
         type: 'BlockExpression',
         statements: tail.reduce(
@@ -70,7 +70,7 @@ BlockExpression
 //
 
 PrimaryExpression
-  = "(" _ head:Expression? tail:(_ "," _ Expression)* _ ")" {
+  = "(" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ ")" {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
         expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
@@ -142,8 +142,12 @@ IdentifierPattern
     };
   }
 
-_ "whitespace"
-  = [ \t]*
+
+_ "space"
+  = " "*
+
+__ "whitespace"
+  = (" " / Newline)*
 
 Newline
   = [\r?\n]

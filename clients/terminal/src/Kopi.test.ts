@@ -66,6 +66,12 @@ test('Function application 5', async () => {
   expect(number.value).toEqual(9);
 });
 
+test('Function application 6', async () => {
+  let tuple = await interpret(`print (1 + 2)`) as KopiTuple;
+
+  expect(tuple).toEqual(new KopiTuple([]));
+});
+
 test('Default arguments', async () => {
   let tuple = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
 
@@ -119,9 +125,30 @@ test('Block Expressions', async () => {
 test('Block Expressions 2', async () => {
   let string = await interpret(`
     ((a, b) => {
+
       a + b
+
     }) (1, 2)
   `) as KopiNumber;
 
   expect(string.value).toEqual(3);
+});
+
+test('Tuple Element Newlines', async () => {
+  let tuple = await interpret(`
+    (
+
+      ((a, b) => a + b) (0, 1)
+
+      0 + 1 + 1,
+
+      3
+    
+    )`) as KopiTuple;
+
+  expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
 });

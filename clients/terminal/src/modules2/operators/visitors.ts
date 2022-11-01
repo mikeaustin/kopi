@@ -31,7 +31,7 @@ async function OperatorExpression(
     }
   }
 
-  throw new Error(`${leftValue} doesn't have a method '${operator}'`);
+  throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);
 }
 
 async function TupleExpression(

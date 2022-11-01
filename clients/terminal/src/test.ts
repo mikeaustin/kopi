@@ -11,6 +11,11 @@ const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
+  print: new NativeFunction('print', KopiValue, async (value: KopiValue) => {
+    console.log(await value.inspect());
+
+    return new KopiTuple([]);
+  }),
   String: new KopiType(KopiString),
   // extend: () => {},
   let: new NativeFunction(
