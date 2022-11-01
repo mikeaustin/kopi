@@ -35,6 +35,11 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
         name: rawAstNode.name,
         location: rawAstNode.location,
       } as astNodes.Identifier);
+    case 'NumericLiteralPattern':
+      return new astNodes.NumericLiteralPattern({
+        value: rawAstNode.value,
+        location: rawAstNode.location,
+      });
     case 'IdentifierPattern':
       return new astNodes.IdentifierPattern({
         name: rawAstNode.name,

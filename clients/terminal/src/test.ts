@@ -11,12 +11,23 @@ const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
+  String: new KopiType(KopiString),
   print: new NativeFunction('print', KopiValue, async (value: KopiValue) => {
     console.log(await value.inspect());
 
     return new KopiTuple([]);
   }),
-  String: new KopiType(KopiString),
+  match: new NativeFunction('match', KopiTuple, async (tuple: KopiTuple) => {
+    for await (const func of tuple.elements) {
+      const matches = await (func as KopiFunction).parameterPattern.match(new KopiNumber(0), evaluate, environment);
+
+      if (matches) {
+        return (func as KopiFunction).apply(new KopiTuple([]), [new KopiNumber(0), evaluate, environment]);
+      }
+    }
+
+    throw new Error('Match failed');
+  }),
   // extend: () => {},
   let: new NativeFunction(
     'let',

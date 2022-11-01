@@ -131,7 +131,16 @@ PrimaryPattern
         [...patterns, pattern], [head]),
     }
   }
+  / NumericLiteralPattern
   / IdentifierPattern
+
+NumericLiteralPattern
+  = number:NumericLiteral {
+      return {
+        type: 'NumericLiteralPattern',
+        value: number.value,
+      }
+    }
 
 IdentifierPattern
   = identifier:Identifier defaultExpression:(_ "=" _ Expression)? {

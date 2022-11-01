@@ -152,3 +152,14 @@ test('Tuple Element Newlines', async () => {
     new KopiNumber(3),
   ]);
 });
+
+test('match', async () => {
+  let string = await interpret(`
+    match (
+      0 => "Zero"
+      1 => "One"
+    )
+  `) as KopiString;
+
+  expect(string.value).toEqual("Zero");
+});

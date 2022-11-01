@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, Extensions } from '../shared';
-import { KopiString, KopiTuple } from './classes';
+import { KopiNumber, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -60,6 +60,24 @@ class Identifier extends ASTNode {
 
 //
 
+class NumericLiteralPattern extends ASTPatternNode {
+  constructor({ value, location }: NumericLiteralPattern) {
+    super(location);
+
+    this.value = value;
+  }
+
+  override async match(number: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+    if (number instanceof KopiNumber && number.value === this.value) {
+      return {} as Bindings;
+    }
+
+    return undefined;
+  }
+
+  value: number;
+}
+
 class IdentifierPattern extends ASTPatternNode {
   constructor({ name, defaultExpression, location }: IdentifierPattern) {
     super(location);
@@ -79,7 +97,8 @@ class IdentifierPattern extends ASTPatternNode {
       };
     };
 
-    throw new Error(`IdentifierPattern.match: No match found for pattern '${this.name}'`);
+    return undefined;
+    // throw new Error(`IdentifierPattern.match: No match found for pattern '${this.name}'`);
   }
 
   name: string;
@@ -117,6 +136,7 @@ export {
   StringLiteral,
   AstLiteral,
   Identifier,
+  NumericLiteralPattern,
   IdentifierPattern,
   TuplePattern
 };

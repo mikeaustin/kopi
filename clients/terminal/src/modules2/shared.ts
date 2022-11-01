@@ -98,7 +98,7 @@ abstract class ASTPatternNode extends ASTNode {
     value: KopiValue | undefined,
     evaluate: Evaluate,
     environment: Environment
-  ): Promise<{ [name: string]: KopiValue; }>;
+  ): Promise<{ [name: string]: KopiValue; } | undefined>;
 }
 
 //
