@@ -6,6 +6,10 @@ import * as visitorsx from './visitors';
 const transform = (next: Transform, transform: Transform) =>
   (rawAstNode: RawASTNode): ASTNode => {
     switch (rawAstNode.type) {
+      case 'BlockExpression':
+        return new astNodes.BlockExpression({
+          statements: rawAstNode.statements.map((statement: ASTNode) => transform(statement)),
+        } as astNodes.BlockExpression);
       case 'OperatorExpression':
         return new astNodes.OperatorExpression({
           operator: rawAstNode.operator,
@@ -37,7 +41,9 @@ const transform = (next: Transform, transform: Transform) =>
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
-    if (astNode instanceof astNodes.OperatorExpression) {
+    if (astNode instanceof astNodes.BlockExpression) {
+      return visitorsx.BlockExpression(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.OperatorExpression) {
       return visitorsx.OperatorExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.TupleExpression) {
       return visitorsx.TupleExpression(astNode, evaluate, environment);

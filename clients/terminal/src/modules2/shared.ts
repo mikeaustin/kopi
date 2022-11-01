@@ -15,6 +15,7 @@ abstract class Applicative extends Trait {
   abstract apply(
     thisArg: KopiValue | undefined,
     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    // [argumentValue, evaluateNode, currentEnvironment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue>;
 }
 

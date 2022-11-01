@@ -1,7 +1,17 @@
 import { KopiValue, Numeric, Applicative, Evaluate, Environment, inspect } from '../shared';
-import { KopiTuple, KopiFunction } from '../terminals/classes';
+import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
+
+async function BlockExpression(
+  { statements }: astNodes.BlockExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+): Promise<KopiValue> {
+  return await statements.reduce<Promise<KopiValue>>(async (result, statement) => (
+    (await result, await evaluate(statement, environment))
+  ), Promise.resolve(new KopiTuple([])));
+}
 
 async function OperatorExpression(
   { operator, leftExpression, rightExpression }: astNodes.OperatorExpression,
@@ -64,6 +74,7 @@ async function ApplyExpression(
 }
 
 export {
+  BlockExpression,
   OperatorExpression,
   TupleExpression,
   FunctionExpression,

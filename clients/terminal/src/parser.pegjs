@@ -1,3 +1,17 @@
+Program
+  = (" " / Newline)* head:Statement? tail:(_ (Newline _)+ Statement)* (" " / Newline)* {
+      return {
+        type: 'BlockExpression',
+        statements: tail.reduce(
+          (statements, [, , statement]) => [...statements, statement],
+          head ? [head] : []
+        ),
+      };
+    }
+
+Statement
+  = Expression
+
 Expression
   = AddExpression
 
@@ -121,3 +135,6 @@ IdentifierPattern
 
 _ "whitespace"
   = [ \t]*
+
+Newline
+  = [\r?\n]

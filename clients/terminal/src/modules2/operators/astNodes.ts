@@ -1,6 +1,16 @@
 import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
+class BlockExpression extends ASTNode {
+  constructor({ statements, location }: BlockExpression) {
+    super(location);
+
+    this.statements = statements;
+  }
+
+  statements: ASTNode[];
+}
+
 class OperatorExpression extends ASTNode {
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
     super(location);
@@ -55,6 +65,7 @@ class FunctionExpression extends ASTNode {
 }
 
 export {
+  BlockExpression,
   OperatorExpression,
   TupleExpression,
   ApplyExpression,
