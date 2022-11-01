@@ -16,20 +16,20 @@ const environment: {
   let: new NativeFunction(
     'let',
     KopiFunction,
-    async (value: KopiFunction, evaluate: Evaluate, environment: Environment) => {
-      return value.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
+    async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+      return func.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
     }
   ),
-  sleep: new NativeFunction('sleep', KopiNumber, async (value: KopiNumber,) => {
+  sleep: new NativeFunction('sleep', KopiNumber, async (number: KopiNumber,) => {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(value), value.value * 1000);
+      setTimeout(() => resolve(number), number.value * 1000);
     });
   }),
   fetch: new NativeFunction('fetch', KopiValue, async (url: KopiValue) => {
     return new KopiNumber(5);
   }),
   _extensions: new Extensions([[KopiString, {
-    capitalize: new NativeFunction('capitalize', KopiTuple, async function (this: KopiString, value: KopiString) {
+    capitalize: new NativeFunction('capitalize', KopiTuple, async function (this: KopiString, tuple: KopiTuple) {
       return new KopiString(this.value.toUpperCase());
     })
   }]])

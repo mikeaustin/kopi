@@ -10,60 +10,60 @@ async function interpret(source: string) {
 }
 
 test('Basic types', async () => {
-  let value = await interpret(`(123, "abc")`) as KopiTuple;
+  let tuple = await interpret(`(123, "abc")`) as KopiTuple;
 
-  expect(await Promise.all(value.elements)).toEqual([
+  expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(123),
     new KopiString("abc"),
   ]);
 });
 
 test('Async operations', async () => {
-  let value = await interpret(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`) as KopiTuple;
+  let tuple = await interpret(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`) as KopiTuple;
 
-  expect(await Promise.all(value.elements)).toEqual([
+  expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(2),
     new KopiNumber(2),
   ]);
 });
 
 test('Trigonometry', async () => {
-  let value = await interpret(`5 * 'sin 1 + 5 * 'cos 1`) as KopiNumber;
+  let number = await interpret(`5 * 'sin 1 + 5 * 'cos 1`) as KopiNumber;
 
-  expect(value.value).toBeCloseTo(6.908866453380181);
+  expect(number.value).toBeCloseTo(6.908866453380181);
 });
 
 test('Function application', async () => {
-  let value = await interpret(`(x => x + 1) 3 + 'round 2.7`) as KopiNumber;
+  let number = await interpret(`(x => x + 1) 3 + 'round 2.7`) as KopiNumber;
 
-  expect(value.value).toBeCloseTo(7);
+  expect(number.value).toBeCloseTo(7);
 });
 
 test('Function application 2', async () => {
-  let value = await interpret(`((a, b) => a + b) (1, 2)`) as KopiNumber;
+  let number = await interpret(`((a, b) => a + b) (1, 2)`) as KopiNumber;
 
-  expect(value.value).toBeCloseTo(3);
+  expect(number.value).toBeCloseTo(3);
 });
 
 test('Function application 3', async () => {
-  let value = await interpret(`((a, (b, c)) => (a + b) * c) (1, (2, 3))`) as KopiNumber;
+  let number = await interpret(`((a, (b, c)) => (a + b) * c) (1, (2, 3))`) as KopiNumber;
 
-  expect(value.value).toBeCloseTo(9);
+  expect(number.value).toBeCloseTo(9);
 });
 
 test('Function application 4', async () => {
-  let value = await interpret(`((a, b) => (b, a)) (1, 2)`) as KopiTuple;
+  let tuple = await interpret(`((a, b) => (b, a)) (1, 2)`) as KopiTuple;
 
-  expect(await Promise.all((value as KopiTuple).elements)).toEqual([
+  expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(2),
     new KopiNumber(1),
   ]);
 });
 
 test('Default arguments', async () => {
-  let value = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
+  let tuple = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
 
-  expect(await Promise.all((value as KopiTuple).elements)).toEqual([
+  expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -71,29 +71,29 @@ test('Default arguments', async () => {
 });
 
 test('Default arguments 2', async () => {
-  let value = await interpret(`'size (1, 2, 3)`) as KopiNumber;
+  let number = await interpret(`'size (1, 2, 3)`) as KopiNumber;
 
-  expect(value.value).toEqual(3);
+  expect(number.value).toEqual(3);
 });
 
 test('Default arguments 3', async () => {
-  let value = await interpret(`String ()`) as KopiString;
+  let string = await interpret(`String ()`) as KopiString;
 
-  expect(value.value).toEqual("Hello, world");
+  expect(string.value).toEqual("Hello, world");
 
-  value = await interpret(`'capitalize "foo"`) as KopiString;
+  string = await interpret(`'capitalize "foo"`) as KopiString;
 
-  expect(value.value).toEqual("FOO");
+  expect(string.value).toEqual("FOO");
 });
 
 test('Block Expressions', async () => {
-  let value = await interpret(`
+  let string = await interpret(`
     
     (1, 2, 3)  
-
+    
     "abc"  
     
 `) as KopiString;
 
-  expect(value.value).toEqual("abc");
+  expect(string.value).toEqual("abc");
 });
