@@ -60,6 +60,12 @@ test('Function application 4', async () => {
   ]);
 });
 
+test('Function application 5', async () => {
+  let number = await interpret(`((a, b) => c => (a + b) * c) (1, 2) 3`) as KopiNumber;
+
+  expect(number.value).toEqual(9);
+});
+
 test('Default arguments', async () => {
   let tuple = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
 
@@ -99,13 +105,23 @@ test('Statements', async () => {
 });
 
 test('Block Expressions', async () => {
-  let string = await interpret(`  {
+  let string = await interpret(`  (() => {
     
     (1, 2, 3)  
     
     "abc"  
     
-  }`) as KopiString;
+  }) ()`) as KopiString;
 
   expect(string.value).toEqual("abc");
+});
+
+test('Block Expressions 2', async () => {
+  let string = await interpret(`
+    ((a, b) => {
+      a + b
+    }) (1, 2)
+  `) as KopiNumber;
+
+  expect(string.value).toEqual(3);
 });
