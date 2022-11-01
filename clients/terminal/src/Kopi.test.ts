@@ -86,7 +86,7 @@ test('Default arguments 3', async () => {
   expect(string.value).toEqual("FOO");
 });
 
-test('Block Expressions', async () => {
+test('Statements', async () => {
   let string = await interpret(`
     
     (1, 2, 3)  
@@ -94,6 +94,18 @@ test('Block Expressions', async () => {
     "abc"  
     
 `) as KopiString;
+
+  expect(string.value).toEqual("abc");
+});
+
+test('Block Expressions', async () => {
+  let string = await interpret(`  {
+    
+    (1, 2, 3)  
+    
+    "abc"  
+    
+  }`) as KopiString;
 
   expect(string.value).toEqual("abc");
 });

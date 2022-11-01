@@ -1,4 +1,4 @@
-Program
+Block
   = (" " / Newline)* head:Statement? tail:(_ (Newline _)+ Statement)* (" " / Newline)* {
       return {
         type: 'BlockExpression',
@@ -38,13 +38,18 @@ MultiplyExpression
     }
 
 ApplyExpression
-  = expression:FunctionExpression _arguments:(_ FunctionExpression)* {
+  = expression:SecondaryExpression _arguments:(_ SecondaryExpression)* {
       return _arguments.reduce((expression, [, argumentExpression]) => ({
         type: 'ApplyExpression',
         expression,
         argumentExpression,
       }), expression);
     }
+
+SecondaryExpression
+  = FunctionExpression
+  / BlockExpression
+  / PrimaryExpression
 
 FunctionExpression
   = parameterPattern:Pattern _ "=>" _ bodyExpression:Expression {
@@ -54,7 +59,11 @@ FunctionExpression
         bodyExpression,
       }
     }
-  / PrimaryExpression
+
+BlockExpression
+  = "{" _ statements:Block _ "}" {
+    return statements;
+  }
 
 //
 // PrimaryExpression
