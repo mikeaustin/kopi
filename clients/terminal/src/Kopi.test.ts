@@ -155,7 +155,7 @@ test('Tuple Element Newlines', async () => {
 
 test('match', async () => {
   let string = await interpret(`
-    match (
+    match 0 (
       0 => "Zero"
       1 => "One"
     )

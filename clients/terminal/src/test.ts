@@ -36,12 +36,12 @@ const environment: {
 
     return new KopiTuple([]);
   },
-  match: async (tuple: KopiTuple) => {
+  match: (value: KopiValue) => async (tuple: KopiTuple) => {
     for await (const func of tuple.elements) {
-      const matches = await (func as KopiFunction).parameterPattern.match(new KopiNumber(0), evaluate, environment);
+      const matches = await (func as KopiFunction).parameterPattern.match(value, evaluate, environment);
 
       if (matches) {
-        return (func as KopiFunction).apply(new KopiTuple([]), [new KopiNumber(0), evaluate, environment]);
+        return (func as KopiFunction).apply(new KopiTuple([]), [value, evaluate, environment]);
       }
     }
 
