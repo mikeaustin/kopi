@@ -26,6 +26,8 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value + 1);
   }
 
+  //
+
   round() {
     return new KopiNumber(Math.round(this.value));
   }
