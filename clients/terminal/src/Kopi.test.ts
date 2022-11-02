@@ -175,3 +175,9 @@ test('Pipe 2', async () => {
 
   expect(string.value).toEqual("FOO");
 });
+
+test('Pipe 3', async () => {
+  let string = await interpret(`3.14149 | toFixed 2`) as KopiString;
+
+  expect(string.value).toEqual("3.14");
+});

@@ -34,6 +34,10 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(Math.cos(this.value));
   }
 
+  toFixed(digits: KopiNumber) {
+    return new KopiString(this.value.toFixed(digits.value));
+  }
+
   value: number;
 }
 
