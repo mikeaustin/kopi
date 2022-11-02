@@ -99,11 +99,15 @@ class KopiTuple extends KopiValue {
     return `(${elements.join(', ')})`;
   }
 
+  override async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
+    return this.elements[index];
+  }
+
   size() {
     return new KopiNumber(this.elements.length);
   }
 
-  override elements: Promise<KopiValue>[];
+  elements: Promise<KopiValue>[];
 }
 
 class KopiFunction extends KopiValue {

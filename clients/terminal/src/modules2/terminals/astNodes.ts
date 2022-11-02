@@ -120,7 +120,8 @@ class TuplePattern extends ASTPatternNode {
     try {
       return await this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
-        ...await pattern.match(await tuple.elements[index], evaluate, environment),
+        // ...await pattern.match(await tuple.elements[index], evaluate, environment),
+        ...await pattern.match(await tuple.getElementAtIndex(index), evaluate, environment),
       }), {} as Bindings);
     } catch (error) {
       throw Error('TuplePattern.match\n  ' + (error as Error).message);

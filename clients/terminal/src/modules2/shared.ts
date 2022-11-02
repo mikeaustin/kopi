@@ -46,14 +46,28 @@ interface Indexable {
   [name: string]: any;
 }
 
+// interface IKopiValue {
+//   inspect(): Promise<string>;
+//   force(): Promise<KopiValue>;
+//   invoke(
+//     methodName: string,
+//     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+//   ): Promise<KopiValue>;
+//   traits: Trait[];
+//   elements: Promise<KopiValue>[];
+// }
+
 abstract class KopiValue {
   constructor(traits = [] as Trait[]) {
     this.traits = traits;
-    this.elements = [Promise.resolve(this)];
   }
 
   async inspect() {
     return inspect(this);
+  }
+
+  async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
+    return index === 0 ? Promise.resolve(this) : undefined;
   }
 
   async force() {
@@ -63,7 +77,7 @@ abstract class KopiValue {
   async invoke(
     methodName: string,
     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
-  ) {
+  ): Promise<KopiValue> {
     const functions = (environment._extensions as Extensions).map.get(this.constructor);
 
     const method = functions && functions[methodName]
@@ -71,12 +85,13 @@ abstract class KopiValue {
       : (this as Indexable)[methodName];
 
     if (method) {
-      return method.apply(this, [argument, evaluate, environment]);
+      return await method.apply(this, [argument, evaluate, environment]);
     }
+
+    throw new Error(`No method ${methodName} found in ${this}`);
   }
 
   traits: Trait[];
-  elements: Promise<KopiValue>[];
 }
 
 class ASTNode extends KopiValue {

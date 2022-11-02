@@ -10,13 +10,13 @@ import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTup
 declare global {
   interface Function {
     inspect(): Promise<string>;
+    getElementAtIndex(index: number): Promise<KopiValue | undefined>;
     force(): Promise<KopiValue>;
     invoke(
       methodName: string,
       [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
     ): Promise<KopiValue>;
     traits: Trait[];
-    elements: Promise<KopiValue>[];
   }
 }
 
