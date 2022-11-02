@@ -2,7 +2,7 @@ import { ASTNode, ASTPatternNode, Applicative, Environment, Evaluate, KopiValue 
 import { Numeric, Equatable } from "../shared";
 
 class KopiNumber extends KopiValue {
-  static override xtraits = [Numeric, Equatable];
+  static override traits = [Numeric, Equatable];
 
   constructor(value: number) {
     super();
@@ -52,7 +52,7 @@ class KopiBoolean extends KopiValue {
 }
 
 class KopiType extends KopiValue {
-  static override xtraits = [Applicative];
+  static override traits = [Applicative];
 
   constructor(type: Function) {
     super();
@@ -115,7 +115,7 @@ class KopiTuple extends KopiValue {
 }
 
 class KopiFunction extends KopiValue {
-  static override xtraits = [Applicative];
+  static override traits = [Applicative];
 
   constructor(parameterPattern: ASTPatternNode, bodyExpression: ASTNode, environment: Environment) {
     super();
@@ -143,7 +143,7 @@ class KopiFunction extends KopiValue {
 }
 
 class NativeFunction<TArgument> extends KopiValue {
-  static override xtraits = [Applicative];
+  static override traits = [Applicative];
 
   constructor(
     name: string,

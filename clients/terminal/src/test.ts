@@ -9,7 +9,7 @@ import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTup
 
 declare global {
   interface FunctionConstructor {
-    xtraits: Trait[];
+    traits: Trait[];
   }
 
   interface Function {
@@ -27,7 +27,7 @@ Function.prototype.inspect = function () {
   return Promise.resolve(`<native-function>`);
 };
 
-Function.xtraits = [Applicative];
+Function.traits = [Applicative];
 
 //
 

@@ -5,7 +5,7 @@ import * as astNodes from './astNodes';
 
 declare global {
   interface FunctionConstructor {
-    xtraits: Trait[];
+    traits: Trait[];
   }
 }
 
@@ -29,7 +29,7 @@ async function OperatorExpression(
     evaluate(rightExpression, environment),
   ]);
 
-  if ((leftValue.constructor as typeof KopiValue).xtraits.includes(Numeric)) {
+  if ((leftValue.constructor as typeof KopiValue).traits.includes(Numeric)) {
     if (operator === '+') {
       return (leftValue as unknown as Numeric)[operator](rightValue);
     } else if (operator === '*') {
@@ -69,7 +69,7 @@ async function ApplyExpression(
 ) {
   const func = await evaluate(expression, environment);
 
-  if ((func.constructor as typeof KopiValue).xtraits.includes(Applicative)) {
+  if ((func.constructor as typeof KopiValue).traits.includes(Applicative)) {
     return (func as unknown as Applicative).apply(
       undefined,
       [await evaluate(argumentExpression, environment), evaluate, environment]

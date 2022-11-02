@@ -42,7 +42,7 @@ class AstLiteral extends ASTNode {
 }
 
 class Identifier extends ASTNode {
-  static override xtraits: Trait[] = [Applicative];
+  static override traits: Trait[] = [Applicative];
 
   constructor({ name, location }: Identifier) {
     super(location);

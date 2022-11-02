@@ -47,7 +47,7 @@ interface Indexable {
 }
 
 abstract class KopiValue {
-  static xtraits: Trait[] = [];
+  static traits: Trait[] = [];
 
   async inspect() {
     return inspect(this);
