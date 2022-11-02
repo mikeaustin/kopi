@@ -235,9 +235,7 @@ function peg$parse(input, options) {
     };
   var peg$f1 = function(head, tail) {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
-        // console.log(argument, _arguments[0][1]);
-
-        const foo = {
+        const pipelineExpression = {
           type: 'PipeExpression', 
           expression,
           methodName: identifier.name,
@@ -248,20 +246,8 @@ function peg$parse(input, options) {
           type: 'ApplyExpression',
           expression,
           argumentExpression,
-        }), foo);
+        }), pipelineExpression);
       }, head);
-
-      // const expression = tail.reduce((left, [, op,, methodName, [, _arguments]]) => ({
-      //   type: 'PipeExpression', 
-      //   left,
-      //   methodName
-      // }), head)
-
-      // return tail.reduce((expression, [, argumentExpression]) => ({
-      //   type: 'ApplyExpression',
-      //   expression,
-      //   argumentExpression,
-      // }), expression);
     };
   var peg$f2 = function(head, tail) {
       return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({

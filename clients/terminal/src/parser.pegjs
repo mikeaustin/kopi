@@ -18,7 +18,7 @@ Expression
 PipeExpression
   = head:AddExpression tail:(_ "|" _ Identifier _ PrimaryExpression? (_ PrimaryExpression)*)* {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
-        const foo = {
+        const pipelineExpression = {
           type: 'PipeExpression', 
           expression,
           methodName: identifier.name,
@@ -29,7 +29,7 @@ PipeExpression
           type: 'ApplyExpression',
           expression,
           argumentExpression,
-        }), foo);
+        }), pipelineExpression);
       }, head);
     }
 
