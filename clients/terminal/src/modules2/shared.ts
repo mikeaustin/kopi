@@ -46,21 +46,8 @@ interface Indexable {
   [name: string]: any;
 }
 
-// interface IKopiValue {
-//   inspect(): Promise<string>;
-//   force(): Promise<KopiValue>;
-//   invoke(
-//     methodName: string,
-//     [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
-//   ): Promise<KopiValue>;
-//   traits: Trait[];
-//   elements: Promise<KopiValue>[];
-// }
-
 abstract class KopiValue {
-  constructor(traits = [] as Trait[]) {
-    this.traits = traits;
-  }
+  static xtraits: Trait[] = [];
 
   async inspect() {
     return inspect(this);
@@ -90,13 +77,11 @@ abstract class KopiValue {
 
     throw new Error(`No method ${methodName} found in ${this}`);
   }
-
-  traits: Trait[];
 }
 
 class ASTNode extends KopiValue {
   constructor(location: {}) {
-    super([Applicative]);
+    super();
 
     // this.location = location;
   }

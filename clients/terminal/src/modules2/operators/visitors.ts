@@ -1,7 +1,13 @@
-import { KopiValue, Numeric, Applicative, Evaluate, Environment, inspect } from '../shared';
+import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait, inspect } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
+
+declare global {
+  interface FunctionConstructor {
+    xtraits: Trait[];
+  }
+}
 
 async function BlockExpression(
   { statements }: astNodes.BlockExpression,
@@ -23,7 +29,7 @@ async function OperatorExpression(
     evaluate(rightExpression, environment),
   ]);
 
-  if (leftValue.traits.includes(Numeric)) {
+  if ((leftValue.constructor as typeof KopiValue).xtraits.includes(Numeric)) {
     if (operator === '+') {
       return (leftValue as unknown as Numeric)[operator](rightValue);
     } else if (operator === '*') {
@@ -63,7 +69,7 @@ async function ApplyExpression(
 ) {
   const func = await evaluate(expression, environment);
 
-  if (func.traits.includes(Applicative)) {
+  if ((func.constructor as typeof KopiValue).xtraits.includes(Applicative)) {
     return (func as unknown as Applicative).apply(
       undefined,
       [await evaluate(argumentExpression, environment), evaluate, environment]

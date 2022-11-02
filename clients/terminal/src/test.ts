@@ -8,6 +8,10 @@ import { KopiValue, Extensions } from './modules2/shared';
 import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
 
 declare global {
+  interface FunctionConstructor {
+    xtraits: Trait[];
+  }
+
   interface Function {
     inspect(): Promise<string>;
     getElementAtIndex(index: number): Promise<KopiValue | undefined>;
@@ -16,7 +20,6 @@ declare global {
       methodName: string,
       [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
     ): Promise<KopiValue>;
-    traits: Trait[];
   }
 }
 
@@ -24,7 +27,9 @@ Function.prototype.inspect = function () {
   return Promise.resolve(`<native-function>`);
 };
 
-Function.prototype.traits = [Applicative];
+Function.xtraits = [Applicative];
+
+//
 
 const environment: {
   [name: string]: KopiValue;
