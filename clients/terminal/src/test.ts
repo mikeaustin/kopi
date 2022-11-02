@@ -1,3 +1,5 @@
+/* eslint-disable no-extend-native */
+
 import { RawASTNode, ASTNode, Evaluate, Environment, Bindings, Trait, Applicative } from './modules2/shared';
 import { inspect } from './modules2/utils';
 
@@ -5,7 +7,7 @@ import * as operators from './modules2/operators';
 import * as terminals from './modules2/terminals';
 
 import { KopiValue, Extensions } from './modules2/shared';
-import { KopiNumber, KopiType, KopiString, NativeFunction, KopiFunction, KopiTuple } from './modules2/terminals/classes';
+import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules2/terminals/classes';
 
 declare global {
   interface FunctionConstructor {
@@ -65,9 +67,9 @@ const environment: {
     return new KopiNumber(5);
   },
   _extensions: new Extensions([[KopiString, {
-    capitalize: new NativeFunction('capitalize', KopiTuple, async function (this: KopiString, tuple: KopiTuple) {
+    capitalize: async function (this: KopiString, tuple: KopiTuple) {
       return new KopiString(this.value.toUpperCase());
-    })
+    }
   }]])
 };
 

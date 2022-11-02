@@ -142,37 +142,6 @@ class KopiFunction extends KopiValue {
   bodyExpression: ASTNode;
 }
 
-class NativeFunction<TArgument> extends KopiValue {
-  static override traits = [Applicative];
-
-  constructor(
-    name: string,
-    argType: Function = KopiValue,
-    func: (value: TArgument, evaluate: Evaluate, environment: Environment) => Promise<KopiValue>
-  ) {
-    super();
-
-    this.name = name;
-    this.argType = argType;
-    this.func = func;
-  }
-
-  async apply(
-    thisArg: KopiValue,
-    [argument, evaluate, environment]: [TArgument, Evaluate, Environment]
-  ): Promise<KopiValue> {
-    if (!(argument instanceof this.argType)) {
-      throw new Error(`${this.name}() only accepts a ${this.argType} as an argument, not ${argument}`);
-    }
-
-    return this.func.apply(thisArg, [argument, evaluate, environment]);
-  }
-
-  name: string;
-  argType: Function;
-  func: (value: TArgument, evaluate: Evaluate, environment: Environment) => Promise<KopiValue>;
-}
-
 export {
   KopiNumber,
   KopiBoolean,
@@ -180,5 +149,4 @@ export {
   KopiString,
   KopiTuple,
   KopiFunction,
-  NativeFunction,
 };
