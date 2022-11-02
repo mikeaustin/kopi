@@ -237,12 +237,18 @@ function peg$parse(input, options) {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
         // console.log(argument, _arguments[0][1]);
 
-        return {
+        const foo = {
           type: 'PipeExpression', 
           expression,
           methodName: identifier.name,
           argumentExpression,
         }
+
+        return _arguments.reduce((expression, [, argumentExpression]) => ({
+          type: 'ApplyExpression',
+          expression,
+          argumentExpression,
+        }), foo);
       }, head);
 
       // const expression = tail.reduce((left, [, op,, methodName, [, _arguments]]) => ({

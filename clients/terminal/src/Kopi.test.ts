@@ -171,7 +171,7 @@ test('Pipe', async () => {
 });
 
 test('Pipe 2', async () => {
-  let string = await interpret(`"foo" | capitalize 1 2`) as KopiString;
+  let string = await interpret(`"foo" | capitalize 1`) as KopiString;
 
   expect(string.value).toEqual("FOO");
 });
@@ -180,4 +180,10 @@ test('Pipe 3', async () => {
   let string = await interpret(`3.14149 | toFixed 2`) as KopiString;
 
   expect(string.value).toEqual("3.14");
+});
+
+test('Pipe 4', async () => {
+  let number = await interpret(`1 | test 2 3`) as KopiNumber;
+
+  expect(number.value).toEqual(9);
 });

@@ -38,6 +38,10 @@ class KopiNumber extends KopiValue {
     return new KopiString(this.value.toFixed(digits.value));
   }
 
+  test(a: KopiNumber) {
+    return (b: KopiNumber) => new KopiNumber((this.value + a.value) * b.value);
+  }
+
   value: number;
 }
 
