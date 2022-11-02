@@ -65,19 +65,33 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:SecondaryExpression _ ".." _ to:SecondaryExpression {
+  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
       return {
         type: 'RangeExpression',
         from,
         to
       };
     }
-  / SecondaryExpression
-
-SecondaryExpression
-  = FunctionExpression
-  / BlockExpression
   / PrimaryExpression
+
+//
+// PrimaryExpression
+//
+
+PrimaryExpression
+  = "(" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ ")" _ !"=>" {
+      return head && tail.length === 0 ? head : {
+        type: 'TupleExpression',
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+          [...expressionElements, expressionElement], [head]),
+      }
+    }
+  / FunctionExpression
+  / BlockExpression
+  / NumericLiteral
+  / StringLiteral
+  / AstLiteral
+  / Identifier
 
 FunctionExpression
   = parameterPattern:Pattern _ "=>" _ bodyExpression:Expression {
@@ -92,23 +106,6 @@ BlockExpression
   = "{" _ statements:Block _ "}" {
     return statements;
   }
-
-//
-// PrimaryExpression
-//
-
-PrimaryExpression
-  = "(" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ ")" {
-      return head && tail.length === 0 ? head : {
-        type: 'TupleExpression',
-        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
-          [...expressionElements, expressionElement], [head]),
-      }
-    }
-  / NumericLiteral
-  / StringLiteral
-  / AstLiteral
-  / Identifier
 
 NumericLiteral "number"
   = value:([0-9]+ ("." !"." [0-9]+)?) {

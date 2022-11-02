@@ -189,7 +189,7 @@ test('Pipe 4', async () => {
 });
 
 test('Range', async () => {
-  let number = await interpret(`1..5 | map ((n) => n * n)`) as KopiNumber;
+  let number = await interpret(`1..5 | map (n) => n * n`) as KopiNumber;
 
   console.log(await number.inspect());
 
