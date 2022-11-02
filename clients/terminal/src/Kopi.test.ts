@@ -169,3 +169,9 @@ test('Pipe', async () => {
 
   expect(string.value).toEqual("FOO");
 });
+
+test('Pipe 2', async () => {
+  let string = await interpret(`"foo" | capitalize 1 2`) as KopiString;
+
+  expect(string.value).toEqual("FOO");
+});

@@ -9,7 +9,8 @@ const transform = (next: Transform, transform: Transform) =>
       case 'PipeExpression':
         return new astNodes.PipeExpression({
           expression: transform(rawAstNode.expression),
-          methodName: rawAstNode.methodName
+          methodName: rawAstNode.methodName,
+          argumentExpression: rawAstNode.argumentExpression ? transform(rawAstNode.argumentExpression) : rawAstNode.argumentExpression,
         } as astNodes.PipeExpression);
       case 'BlockExpression':
         return new astNodes.BlockExpression({

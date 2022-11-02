@@ -10,13 +10,14 @@ declare global {
 }
 
 async function PipeExpression(
-  { expression, methodName }: astNodes.PipeExpression,
+  { expression, methodName, argumentExpression }: astNodes.PipeExpression,
   evaluate: Evaluate,
   environment: Environment,
 ) {
   const expressionValue = await evaluate(expression, environment);
+  const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment) : new KopiTuple([]);
 
-  return expressionValue.invoke(methodName, [new KopiTuple([]), evaluate, environment]);
+  return expressionValue.invoke(methodName, [argumentValue, evaluate, environment]);
 }
 
 async function BlockExpression(

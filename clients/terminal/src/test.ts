@@ -67,7 +67,9 @@ const environment: {
     return new KopiNumber(5);
   },
   _extensions: new Extensions([[KopiString, {
-    capitalize: async function (this: KopiString, tuple: KopiTuple) {
+    capitalize: async function (this: KopiString, tuple: KopiValue) {
+      console.log('capitalize arg =', tuple);
+
       return new KopiString(this.value.toUpperCase());
     }
   }]])

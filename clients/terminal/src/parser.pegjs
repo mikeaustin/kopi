@@ -18,12 +18,15 @@ Expression
   // = head:AddExpression tail:(_ "|" _ Identifier (_ PrimaryExpression)*)* {
 
 PipeExpression
-  = head:AddExpression tail:(_ "|" _ Identifier)* {
-      return tail.reduce((expression, [, , , identifier, _arguments]) => {
+  = head:AddExpression tail:(_ "|" _ Identifier _ PrimaryExpression? (_ PrimaryExpression)*)* {
+      return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
+        // console.log(argument, _arguments[0][1]);
+
         return {
           type: 'PipeExpression', 
           expression,
-          methodName: identifier.name
+          methodName: identifier.name,
+          argumentExpression,
         }
       }, head);
 

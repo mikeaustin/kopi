@@ -2,15 +2,17 @@ import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
 class PipeExpression extends ASTNode {
-  constructor({ expression, methodName, location }: PipeExpression) {
+  constructor({ expression, methodName, argumentExpression, location }: PipeExpression) {
     super(location);
 
     this.expression = expression;
     this.methodName = methodName;
+    this.argumentExpression = argumentExpression;
   }
 
   expression: ASTNode;
   methodName: string;
+  argumentExpression: ASTNode | null;
 }
 
 class BlockExpression extends ASTNode {
