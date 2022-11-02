@@ -187,3 +187,11 @@ test('Pipe 4', async () => {
 
   expect(number.value).toEqual(9);
 });
+
+// test('Range', async () => {
+//   let number = await interpret(`1..5 | map ((n) => n * n)`) as KopiNumber;
+
+//   console.log(await number.inspect());
+
+//   // expect(number.value).toEqual(9);
+// });

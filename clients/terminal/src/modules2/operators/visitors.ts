@@ -1,5 +1,6 @@
 import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
+import { KopiRange } from '../operators/classes';
 
 import * as astNodes from './astNodes';
 
@@ -90,6 +91,17 @@ async function ApplyExpression(
   throw new Error(`No Applicative.apply() method found for ${func.constructor.name}`);
 }
 
+async function RangeExpression(
+  { from, to }: astNodes.RangeExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  return new KopiRange(
+    evaluate(from, environment),
+    evaluate(to, environment)
+  );
+}
+
 export {
   PipeExpression,
   BlockExpression,
@@ -97,4 +109,5 @@ export {
   TupleExpression,
   FunctionExpression,
   ApplyExpression,
+  RangeExpression,
 };

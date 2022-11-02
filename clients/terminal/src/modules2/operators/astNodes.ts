@@ -78,6 +78,18 @@ class FunctionExpression extends ASTNode {
   bodyExpression: ASTNode;
 }
 
+class RangeExpression extends ASTNode {
+  constructor({ from, to, location }: RangeExpression) {
+    super(location);
+
+    this.from = from;
+    this.to = to;
+  }
+
+  from: ASTNode;
+  to: ASTNode;
+}
+
 export {
   PipeExpression,
   BlockExpression,
@@ -85,4 +97,5 @@ export {
   TupleExpression,
   ApplyExpression,
   FunctionExpression,
+  RangeExpression,
 };

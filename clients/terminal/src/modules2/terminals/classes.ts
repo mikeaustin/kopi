@@ -1,8 +1,8 @@
-import { ASTNode, ASTPatternNode, Applicative, Environment, Evaluate, KopiValue } from "../shared";
+import { ASTNode, ASTPatternNode, Applicative, Ordered, Environment, Evaluate, KopiValue } from "../shared";
 import { Numeric, Equatable } from "../shared";
 
 class KopiNumber extends KopiValue {
-  static override traits = [Numeric, Equatable];
+  static override traits = [Numeric, Equatable, Ordered];
 
   constructor(value: number) {
     super();
@@ -20,6 +20,10 @@ class KopiNumber extends KopiValue {
 
   '*'(that: KopiNumber) {
     return new KopiNumber(this.value * that.value);
+  }
+
+  succ() {
+    return new KopiNumber(this.value + 1);
   }
 
   round() {

@@ -56,13 +56,23 @@ MultiplyExpression
     }
 
 ApplyExpression
-  = expression:SecondaryExpression _arguments:(_ SecondaryExpression)* {
+  = expression:RangeExpression _arguments:(_ RangeExpression)* {
       return _arguments.reduce((expression, [, argumentExpression]) => ({
         type: 'ApplyExpression',
         expression,
         argumentExpression,
       }), expression);
     }
+
+RangeExpression
+  = from:SecondaryExpression _ ".." _ to:SecondaryExpression {
+      return {
+        type: 'RangeExpression',
+        from,
+        to
+      };
+    }
+  / SecondaryExpression
 
 SecondaryExpression
   = FunctionExpression

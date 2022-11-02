@@ -39,8 +39,6 @@ const environment: {
   x: new KopiNumber(3),
   String: new KopiType(KopiString),
   print: async (value: KopiValue) => {
-    console.log('print', await value.inspect());
-
     return new KopiTuple([]);
   },
   match: (value: KopiValue) => async (tuple: KopiTuple) => {
@@ -68,8 +66,6 @@ const environment: {
   },
   _extensions: new Extensions([[KopiString, {
     capitalize: async function (this: KopiString, tuple: KopiValue) {
-      console.log('capitalize arg =', tuple);
-
       return new KopiString(this.value.toUpperCase());
     }
   }]])

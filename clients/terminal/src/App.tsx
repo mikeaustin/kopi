@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 
 import * as parser from './lib/parser';
-import * as core from './modules/core';
-import * as math from './modules/operators';
-import * as terminals from './modules/terminals';
+// import * as core from './modules/core';
+// import * as math from './modules/operators';
+// import * as terminals from './modules/terminals';
 
 import { View, Text, Icon, Spacer } from 'core';
 

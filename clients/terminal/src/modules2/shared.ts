@@ -19,6 +19,10 @@ abstract class Applicative extends Trait {
   ): Promise<KopiValue>;
 }
 
+abstract class Ordered extends Trait {
+  abstract succ(): KopiValue;
+}
+
 abstract class Comparable extends Trait {
   abstract compare(thisArg: KopiValue, that: KopiValue): number;
   abstract '<'(thisArg: KopiValue, that: KopiValue): boolean;
@@ -136,6 +140,7 @@ export {
   Numeric,
   Equatable,
   Applicative,
+  Ordered,
   KopiValue,
   Extensions,
   type RawASTNode,
