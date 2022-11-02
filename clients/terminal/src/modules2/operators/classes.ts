@@ -1,6 +1,6 @@
 import { Environment, Evaluate, KopiValue } from "../shared";
 import { Applicative, Ordered } from "../shared";
-import { KopiFunction, KopiNumber, KopiTuple } from '../terminals/classes';
+import { KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../terminals/classes';
 
 class KopiRange extends KopiValue {
   constructor(from: Promise<KopiValue>, to: Promise<KopiValue>) {
@@ -32,17 +32,15 @@ class KopiRange extends KopiValue {
   }
 
   async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-    let accum: KopiValue[] = [];
+    let accum: Promise<KopiValue>[] = [];
 
     for await (const value of this) {
       accum.push(
-        await func.apply(new KopiTuple([]), [value, evaluate, environment])
+        func.apply(new KopiTuple([]), [value, evaluate, environment])
       );
     }
 
-    console.log(accum);
-    // return accum;
-    return new KopiNumber(5);
+    return new KopiArray(accum);
   }
 
   from: Promise<KopiValue>;

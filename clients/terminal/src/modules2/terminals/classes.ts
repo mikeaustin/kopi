@@ -128,6 +128,28 @@ class KopiTuple extends KopiValue {
   elements: Promise<KopiValue>[];
 }
 
+class KopiArray extends KopiValue {
+  constructor(elements: Promise<KopiValue>[]) {
+    super();
+
+    this.elements = elements;
+  }
+
+  override async inspect() {
+    const elements = await Promise.all(
+      this.elements.map(async element => (await element).inspect())
+    );
+
+    return `[${elements.join(', ')}]`;
+  }
+
+  size() {
+    return new KopiNumber(this.elements.length);
+  }
+
+  elements: Promise<KopiValue>[];
+}
+
 class KopiFunction extends KopiValue {
   static override traits = [Applicative];
 
@@ -162,5 +184,6 @@ export {
   KopiType,
   KopiString,
   KopiTuple,
+  KopiArray,
   KopiFunction,
 };

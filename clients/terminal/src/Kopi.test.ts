@@ -1,7 +1,7 @@
 import * as parser from './lib/parser';
 
 import { transform, evaluate, environment } from './test';
-import { KopiNumber, KopiString, KopiTuple } from './modules2/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple, KopiArray } from './modules2/terminals/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -171,25 +171,19 @@ test('Pipe', async () => {
 });
 
 test('Pipe 2', async () => {
-  let string = await interpret(`"foo" | capitalize 1`) as KopiString;
-
-  expect(string.value).toEqual("FOO");
-});
-
-test('Pipe 3', async () => {
   let string = await interpret(`3.14149 | toFixed 2`) as KopiString;
 
   expect(string.value).toEqual("3.14");
 });
 
-test('Pipe 4', async () => {
+test('Pipe 3', async () => {
   let number = await interpret(`1 | test 2 3`) as KopiNumber;
 
   expect(number.value).toEqual(9);
 });
 
 test('Range', async () => {
-  let number = await interpret(`1..5 | map (n) => n * n`) as KopiNumber;
+  let number = await interpret(`1..5 | map (n) => n * n`) as KopiArray;
 
   console.log(await number.inspect());
 
