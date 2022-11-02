@@ -13,7 +13,32 @@ Statement
   = Expression
 
 Expression
-  = AddExpression
+  = PipeExpression
+
+  // = head:AddExpression tail:(_ "|" _ Identifier (_ PrimaryExpression)*)* {
+
+PipeExpression
+  = head:AddExpression tail:(_ "|" _ Identifier)* {
+      return tail.reduce((expression, [, , , identifier, _arguments]) => {
+        return {
+          type: 'PipeExpression', 
+          expression,
+          methodName: identifier.name
+        }
+      }, head);
+
+      // const expression = tail.reduce((left, [, op,, methodName, [, _arguments]]) => ({
+      //   type: 'PipeExpression', 
+      //   left,
+      //   methodName
+      // }), head)
+
+      // return tail.reduce((expression, [, argumentExpression]) => ({
+      //   type: 'ApplyExpression',
+      //   expression,
+      //   argumentExpression,
+      // }), expression);
+    }
 
 AddExpression
   = head:MultiplyExpression tail:(_ ("+" / "-") _ MultiplyExpression)* {

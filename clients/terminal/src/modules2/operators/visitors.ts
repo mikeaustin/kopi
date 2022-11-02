@@ -1,4 +1,4 @@
-import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait, inspect } from '../shared';
+import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
@@ -7,6 +7,16 @@ declare global {
   interface FunctionConstructor {
     traits: Trait[];
   }
+}
+
+async function PipeExpression(
+  { expression, methodName }: astNodes.PipeExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  const expressionValue = await evaluate(expression, environment);
+
+  return expressionValue.invoke(methodName, [new KopiTuple([]), evaluate, environment]);
 }
 
 async function BlockExpression(
@@ -80,6 +90,7 @@ async function ApplyExpression(
 }
 
 export {
+  PipeExpression,
   BlockExpression,
   OperatorExpression,
   TupleExpression,

@@ -55,7 +55,7 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
       } as astNodes.TuplePattern);
   }
 
-  throw new Error(`No transform found for '${rawAstNode.type}'`);
+  throw new Error(`No transform found for '${inspect(rawAstNode)}'`);
 };
 
 const evaluate = async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
