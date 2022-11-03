@@ -75,7 +75,7 @@ test('Function application 6', async () => {
 test('Default arguments', async () => {
   let tuple = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
 
-  expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
+  expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -183,11 +183,15 @@ test('Pipe 3', async () => {
 });
 
 test('Range', async () => {
-  let number = await interpret(`1..5 | map (n) => n * n`) as KopiArray;
+  let array = await interpret(`1..3 | map (n) => n * n`) as KopiArray;
 
-  console.log(await number.inspect());
+  console.log(await array.inspect());
 
-  // expect(number.value).toEqual(9);
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(4),
+    new KopiNumber(9),
+  ]);
 });
 
 test('Fetch', async () => {
