@@ -1,5 +1,5 @@
 import { KopiValue } from "../../shared";
-import { Numeric, Equatable, Ordered } from "../../shared";
+import { Numeric, Equatable, Enumerable } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 

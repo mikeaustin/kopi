@@ -1,5 +1,5 @@
 import { Environment, Evaluate, KopiValue } from "../../shared";
-import { Applicative, Ordered } from "../../shared";
+import { Applicative, Enumerable } from "../../shared";
 import { KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../../terminals/classes';
 
 class KopiRange extends KopiValue {
@@ -18,14 +18,14 @@ class KopiRange extends KopiValue {
     const [from, to] = [await this.from, await this.to];
     // const op = from > to ? '>=' : '<=';
 
-    if (!(from.constructor as typeof KopiValue).traits.includes(Ordered)) {
-      throw new Error(`Range requires from and to values to have trait 'Ordered'`);
+    if (!(from.constructor as typeof KopiValue).traits.includes(Enumerable)) {
+      throw new Error(`Range requires from and to values to have trait 'Enumerable'`);
     }
 
     for (
       let current = from;
       (current as KopiNumber).value <= (to as KopiNumber).value;
-      current = (current as unknown as Ordered).succ()
+      current = (current as unknown as Enumerable).succ()
     ) {
       yield current;
     }

@@ -19,7 +19,7 @@ abstract class Applicative extends Trait {
   ): Promise<KopiValue>;
 }
 
-abstract class Ordered extends Trait {
+abstract class Enumerable extends Trait {
   abstract succ(): KopiValue;
 }
 
@@ -140,7 +140,7 @@ export {
   Numeric,
   Equatable,
   Applicative,
-  Ordered,
+  Enumerable,
   KopiValue,
   Extensions,
   type RawASTNode,

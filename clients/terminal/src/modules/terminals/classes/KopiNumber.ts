@@ -1,10 +1,10 @@
 import { KopiValue } from "../../shared";
-import { Numeric, Equatable, Ordered } from "../../shared";
+import { Numeric, Equatable, Enumerable } from "../../shared";
 
 import KopiString from './KopiString';
 
 class KopiNumber extends KopiValue {
-  static override traits = [Numeric, Equatable, Ordered];
+  static override traits = [Numeric, Equatable, Enumerable];
 
   constructor(value: number) {
     super();
