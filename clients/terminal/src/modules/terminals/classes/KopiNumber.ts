@@ -1,10 +1,11 @@
 import { KopiValue } from "../../shared";
-import { Numeric, Equatable, Enumerable } from "../../shared";
+import { Numeric, Equatable, Enumerable, Comparable } from "../../shared";
 
 import KopiString from './KopiString';
+import KopiBoolean from './KopiBoolean';
 
 class KopiNumber extends KopiValue {
-  static override traits = [Numeric, Equatable, Enumerable];
+  static override traits = [Numeric, Equatable, Enumerable, Comparable];
 
   constructor(value: number) {
     super();
@@ -26,6 +27,24 @@ class KopiNumber extends KopiValue {
 
   succ() {
     return new KopiNumber(this.value + 1);
+  }
+
+  compare(that: KopiNumber) {
+    if (this.value < that.value) {
+      return new KopiNumber(-1);
+    } else if (this.value > that.value) {
+      return new KopiNumber(+1);
+    }
+
+    return new KopiNumber(0);
+  }
+
+  '<'(that: KopiNumber) {
+    return new KopiBoolean(this.compare(that).value === -1);
+  }
+
+  '>'(that: KopiNumber) {
+    return new KopiBoolean(this.compare(that).value === +1);
   }
 
   //

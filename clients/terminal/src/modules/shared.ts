@@ -24,25 +24,25 @@ abstract class Enumerable extends Trait {
 }
 
 abstract class Comparable extends Trait {
-  abstract compare(thisArg: KopiValue, that: KopiValue): number;
-  abstract '<'(thisArg: KopiValue, that: KopiValue): boolean;
-  abstract '>'(thisArg: KopiValue, that: KopiValue): boolean;
+  abstract compare(this: KopiValue, that: KopiValue): KopiValue;
+  abstract '<'(this: KopiValue, that: KopiValue): KopiValue;
+  abstract '>'(this: KopiValue, that: KopiValue): KopiValue;
 }
 
-const $Comparable = ({
-  compare,
-  '<': lessThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) < 0,
-  '>': greaterThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) > 0,
-}: {
-  compare: (thisArg: KopiValue, that: KopiValue) => number,
-  '<'?: (thisArg: KopiValue, that: KopiValue) => boolean,
-  '>'?: (thisArg: KopiValue, that: KopiValue) => boolean,
-}) => class extends Comparable {
-    // compare(thisArg: KopiValue, that: KopiValue): number { return compare(thisArg, that); }
-    'compare' = compare;
-    '<' = lessThan;
-    '>' = greaterThan;
-  };
+// const $Comparable = ({
+//   compare,
+//   '<': lessThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) < 0,
+//   '>': greaterThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) > 0,
+// }: {
+//   compare: (thisArg: KopiValue, that: KopiValue) => number,
+//   '<'?: (thisArg: KopiValue, that: KopiValue) => boolean,
+//   '>'?: (thisArg: KopiValue, that: KopiValue) => boolean,
+// }) => class extends Comparable {
+//     // compare(thisArg: KopiValue, that: KopiValue): number { return compare(thisArg, that); }
+//     'compare' = compare;
+//     '<' = lessThan;
+//     '>' = greaterThan;
+//   };
 
 //
 
@@ -141,6 +141,7 @@ export {
   Equatable,
   Applicative,
   Enumerable,
+  Comparable,
   KopiValue,
   Extensions,
   type RawASTNode,

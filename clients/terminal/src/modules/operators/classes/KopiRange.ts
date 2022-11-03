@@ -1,6 +1,6 @@
 import { Environment, Evaluate, KopiValue } from "../../shared";
-import { Applicative, Enumerable } from "../../shared";
-import { KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../../terminals/classes';
+import { Applicative, Enumerable, Comparable } from "../../shared";
+import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../../terminals/classes';
 
 class KopiRange extends KopiValue {
   constructor(from: Promise<KopiValue>, to: Promise<KopiValue>) {
@@ -15,16 +15,25 @@ class KopiRange extends KopiValue {
   }
 
   async *[Symbol.asyncIterator]() {
-    const [from, to] = [await this.from, await this.to];
+    const [from, _to] = [await this.from, await this.to];
     // const op = from > to ? '>=' : '<=';
 
-    if (!(from.constructor as typeof KopiValue).traits.includes(Enumerable)) {
-      throw new Error(`Range requires from and to values to have trait 'Enumerable'`);
+    const fromTraits = (from.constructor as typeof KopiValue).traits;
+    const toTraits = (_to.constructor as typeof KopiValue).traits;
+
+    if (!(
+      fromTraits.includes(Enumerable) && fromTraits.includes(Comparable)
+      && toTraits.includes(Enumerable) && toTraits.includes(Comparable)
+    )) {
+      throw new Error(`Range requires 'from' and 'to' values to have traits 'Enumerable' and 'Comparable'`);
     }
+
+    const to = (_to as unknown as Enumerable).succ();
 
     for (
       let current = from;
-      (current as KopiNumber).value <= (to as KopiNumber).value;
+      ((current as unknown as Comparable).compare.apply(current, [to]) as KopiNumber).value < 0;
+      // ((current as unknown as Comparable)['<'].apply(new KopiTuple([]), [to]) as KopiBoolean).value;
       current = (current as unknown as Enumerable).succ()
     ) {
       yield current;
