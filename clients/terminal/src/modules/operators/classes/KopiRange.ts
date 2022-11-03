@@ -1,6 +1,6 @@
 import { Environment, Evaluate, KopiValue } from "../../shared";
 import { Applicative, Enumerable, Comparable } from "../../shared";
-import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../../terminals/classes';
+import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiSequence } from '../../terminals/classes';
 
 class KopiRange extends KopiValue {
   constructor(from: Promise<KopiValue>, to: Promise<KopiValue>) {
@@ -40,22 +40,30 @@ class KopiRange extends KopiValue {
     }
   }
 
+  // async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
+  //   let accum: Promise<KopiValue>[] = [];
+
+  //   for await (const value of this) {
+  //     accum.push(
+  //       func.apply(new KopiTuple([]), [value, evaluate, environment])
+  //     );
+  //   }
+
+  //   return new KopiArray(accum);
+  // }
+
   async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-    let accum: Promise<KopiValue>[] = [];
+    const _this = this;
 
-    for await (const value of this) {
-      accum.push(
-        func.apply(new KopiTuple([]), [value, evaluate, environment])
-      );
-    }
+    const generator = (async function* () {
+      for await (const value of _this) {
+        yield func.apply(new KopiTuple([]), [value, evaluate, environment]);
+      }
+    })();
 
-    return new KopiArray(accum);
-  }
+    console.log('>>>', generator);
 
-  async *mapGenerator(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-    for await (const value of this) {
-      yield func.apply(new KopiTuple([]), [value, evaluate, environment]);
-    }
+    return new KopiSequence(generator);
   }
 
   from: Promise<KopiValue>;
