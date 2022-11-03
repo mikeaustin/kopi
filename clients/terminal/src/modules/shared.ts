@@ -61,7 +61,7 @@ abstract class KopiValue {
     return index === 0 ? Promise.resolve(this) : undefined;
   }
 
-  async force() {
+  async force(): Promise<KopiValue> {
     return this;
   }
 

@@ -52,6 +52,12 @@ class KopiRange extends KopiValue {
     return new KopiArray(accum);
   }
 
+  async *mapGenerator(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
+    for await (const value of this) {
+      yield func.apply(new KopiTuple([]), [value, evaluate, environment]);
+    }
+  }
+
   from: Promise<KopiValue>;
   to: Promise<KopiValue>;
 }
