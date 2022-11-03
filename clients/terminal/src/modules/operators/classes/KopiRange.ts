@@ -61,8 +61,6 @@ class KopiRange extends KopiValue {
       }
     })();
 
-    console.log('>>>', generator);
-
     return new KopiSequence(generator);
   }
 

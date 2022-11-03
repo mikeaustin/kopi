@@ -15,7 +15,6 @@ class KopiSequence extends KopiValue {
       values.push(Promise.resolve(field));
     }
 
-    console.log('zzz', values);
     return new KopiArray(values).inspect();
   }
 
@@ -32,15 +31,12 @@ class KopiSequence extends KopiValue {
   }
 
   async toArray() {
-    console.log('toArray');
     const values: Promise<KopiValue>[] = [];
 
     for await (const element of this.sequence) {
-      console.log('here');
       values.push(Promise.resolve(element));
     }
 
-    console.log('values', values);
     return new KopiArray(values);
   }
 
