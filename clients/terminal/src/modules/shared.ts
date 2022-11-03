@@ -5,6 +5,7 @@ abstract class Trait { }
 abstract class Numeric extends Trait {
   abstract '+'(that: KopiValue): KopiValue;
   abstract '*'(that: KopiValue): KopiValue;
+  abstract negate(): KopiValue;
 }
 
 abstract class Equatable extends Trait {
@@ -27,6 +28,11 @@ abstract class Comparable extends Trait {
   abstract compare(this: KopiValue, that: KopiValue): KopiValue;
   abstract '<'(this: KopiValue, that: KopiValue): KopiValue;
   abstract '>'(this: KopiValue, that: KopiValue): KopiValue;
+}
+
+abstract class Bounded extends Trait {
+  abstract min(this: KopiValue): KopiValue;
+  abstract max(this: KopiValue): KopiValue;
 }
 
 // const $Comparable = ({

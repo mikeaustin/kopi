@@ -23,6 +23,12 @@ const transform = (next: Transform, transform: Transform) =>
           rightExpression: transform(rawAstNode.rightExpression),
           location: rawAstNode.location,
         } as astNodes.OperatorExpression);
+      case 'UnaryExpression':
+        return new astNodes.UnaryExpression({
+          operator: rawAstNode.operator,
+          argumentExpression: transform(rawAstNode.argumentExpression),
+          location: rawAstNode.location,
+        } as astNodes.UnaryExpression);
       case 'FunctionExpression':
         return new astNodes.FunctionExpression({
           parameterPattern: transform(rawAstNode.parameterPattern),
@@ -59,6 +65,8 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
       return visitorsx.BlockExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.OperatorExpression) {
       return visitorsx.OperatorExpression(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.UnaryExpression) {
+      return visitorsx.UnaryExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.TupleExpression) {
       return visitorsx.TupleExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.FunctionExpression) {

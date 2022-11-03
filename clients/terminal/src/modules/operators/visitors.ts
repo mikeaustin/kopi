@@ -52,6 +52,22 @@ async function OperatorExpression(
   throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);
 }
 
+async function UnaryExpression(
+  { operator, argumentExpression }: astNodes.UnaryExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  const argumentValue = await evaluate(argumentExpression, environment);
+
+  if ((argumentValue.constructor as typeof KopiValue).traits.includes(Numeric)) {
+    if (operator === '-') {
+      return (argumentValue as unknown as Numeric).negate();
+    }
+  }
+
+  throw new Error(`${await argumentValue.inspect()} doesn't have a method '${operator}'`);
+}
+
 async function TupleExpression(
   { expressionElements }: astNodes.TupleExpression,
   evaluate: Evaluate,
@@ -106,6 +122,7 @@ export {
   PipeExpression,
   BlockExpression,
   OperatorExpression,
+  UnaryExpression,
   TupleExpression,
   FunctionExpression,
   ApplyExpression,
