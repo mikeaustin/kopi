@@ -1,6 +1,9 @@
 import { Environment, Evaluate, KopiValue } from "../../shared";
 import { Applicative, Enumerable, Comparable } from "../../shared";
+
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiSequence } from '../../terminals/classes';
+
+import KopiIterable from '../traits/KopiIterable';
 
 class KopiRange extends KopiValue {
   constructor(from: Promise<KopiValue>, to: Promise<KopiValue>) {
@@ -44,20 +47,10 @@ class KopiRange extends KopiValue {
     }
   }
 
-  async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-    const _this = this;
-
-    const generator = (async function* () {
-      for await (const value of _this) {
-        yield func.apply(new KopiTuple([]), [value, evaluate, environment]);
-      }
-    })();
-
-    return new KopiSequence(generator);
-  }
-
   from: Promise<KopiValue>;
   to: Promise<KopiValue>;
 }
+
+(KopiRange.prototype as any).map = KopiIterable.prototype.map;
 
 export default KopiRange;
