@@ -1,13 +1,13 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Evaluate, Environment, Bindings, Trait, Applicative } from './modules2/shared';
-import { inspect } from './modules2/utils';
+import { RawASTNode, ASTNode, Evaluate, Environment, Bindings, Trait, Applicative } from './modules/shared';
+import { inspect } from './modules/utils';
 
-import * as operators from './modules2/operators';
-import * as terminals from './modules2/terminals';
+import * as operators from './modules/operators';
+import * as terminals from './modules/terminals';
 
-import { KopiValue, Extensions } from './modules2/shared';
-import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules2/terminals/classes';
+import { KopiValue, Extensions } from './modules/shared';
+import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes';
 
 declare global {
   interface FunctionConstructor {

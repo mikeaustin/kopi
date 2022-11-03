@@ -1,7 +1,7 @@
 import * as parser from './lib/parser';
 
 import { transform, evaluate, environment } from './test';
-import { KopiNumber, KopiString, KopiTuple, KopiArray } from './modules2/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple, KopiArray } from './modules/terminals/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -100,11 +100,11 @@ test('Default arguments 3', async () => {
 
 test('Statements', async () => {
   let string = await interpret(`
-    
-    (1, 2, 3)  
-    
-    "abc"  
-    
+
+    (1, 2, 3)
+
+    "abc"
+
 `) as KopiString;
 
   expect(string.value).toEqual("abc");
@@ -112,11 +112,11 @@ test('Statements', async () => {
 
 test('Block Expressions', async () => {
   let string = await interpret(`  (() => {
-    
-    (1, 2, 3)  
-    
-    "abc"  
-    
+
+    (1, 2, 3)
+
+    "abc"
+
   }) ()`) as KopiString;
 
   expect(string.value).toEqual("abc");
@@ -143,7 +143,7 @@ test('Tuple Element Newlines', async () => {
       0 + 1 + 1,
 
       3
-    
+
     )`) as KopiTuple;
 
   expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
