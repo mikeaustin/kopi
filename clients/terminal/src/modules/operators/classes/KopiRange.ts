@@ -40,18 +40,6 @@ class KopiRange extends KopiValue {
     }
   }
 
-  // async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-  //   let accum: Promise<KopiValue>[] = [];
-
-  //   for await (const value of this) {
-  //     accum.push(
-  //       func.apply(new KopiTuple([]), [value, evaluate, environment])
-  //     );
-  //   }
-
-  //   return new KopiArray(accum);
-  // }
-
   async map(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
     const _this = this;
 

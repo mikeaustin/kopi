@@ -25,6 +25,10 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value * that.value);
   }
 
+  even(): KopiBoolean {
+    return new KopiBoolean(this.value % 2 === 0);
+  }
+
   succ() {
     return new KopiNumber(this.value + 1);
   }

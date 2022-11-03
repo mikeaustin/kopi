@@ -183,11 +183,20 @@ test('Pipe 3', async () => {
 });
 
 test('Range', async () => {
-  let sequence = await interpret(`1..3 | map (n) => n * n`) as KopiSequence;
+  let sequence = await interpret(`1..5 | map (n) => n * n | filter (n) => 'even n`) as KopiSequence;
 
   const elements = (await sequence.toArray()).elements;
 
   expect(await Promise.all(elements)).toEqual([
+    new KopiNumber(4),
+    new KopiNumber(16),
+  ]);
+});
+
+test('Range 2', async () => {
+  let array = await interpret(`1..3 | map (n) => n * n | toArray`) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),

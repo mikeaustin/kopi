@@ -238,7 +238,7 @@ function peg$parse(input, options) {
   var peg$f1 = function(head, tail) {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
         const pipelineExpression = {
-          type: 'PipeExpression', 
+          type: 'PipeExpression',
           expression,
           methodName: identifier.name,
           argumentExpression,
@@ -1148,7 +1148,7 @@ function peg$parse(input, options) {
       }
       if (s3 !== peg$FAILED) {
         s4 = peg$parse_();
-        s5 = peg$parsePipeExpression();
+        s5 = peg$parseAddExpression();
         if (s5 !== peg$FAILED) {
           peg$savedPos = s0;
           s0 = peg$f7(s1, s5);

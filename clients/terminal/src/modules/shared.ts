@@ -79,7 +79,7 @@ abstract class KopiValue {
       return await method.apply(this, [argument, evaluate, environment]);
     }
 
-    throw new Error(`No method ${methodName} found in ${this}`);
+    throw new Error(`No method ${methodName} found in ${this.inspect()}`);
   }
 }
 
