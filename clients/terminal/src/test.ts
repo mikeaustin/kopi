@@ -7,7 +7,7 @@ import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes';
+import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes/index';
 
 declare global {
   interface FunctionConstructor {
