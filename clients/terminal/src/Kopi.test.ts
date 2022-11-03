@@ -218,3 +218,9 @@ test('Fetch', async () => {
 
   expect(number.value).toEqual(2138);
 });
+
+test('UnaryExpression', async () => {
+  let number = await interpret(`-1`) as KopiNumber;
+
+  expect(number.value).toEqual(-1);
+});

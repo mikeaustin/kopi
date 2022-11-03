@@ -65,14 +65,24 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:PrimaryExpression _ ".." _ to:PrimaryExpression {
+  = from:UnaryExpression _ ".." _ to:UnaryExpression {
       return {
         type: 'RangeExpression',
         from,
         to
       };
     }
-  / PrimaryExpression
+  / UnaryExpression
+
+UnaryExpression
+  = PrimaryExpression
+  / operator:("-") argumentExpression:UnaryExpression {
+      return {
+        type: 'UnaryExpression',
+        operator,
+        argumentExpression,
+      };
+    }
 
 //
 // PrimaryExpression

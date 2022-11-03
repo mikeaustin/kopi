@@ -33,6 +33,10 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value + 1);
   }
 
+  negate() {
+    return new KopiNumber(-this.value);
+  }
+
   compare(that: KopiNumber) {
     if (this.value < that.value) {
       return new KopiNumber(-1);

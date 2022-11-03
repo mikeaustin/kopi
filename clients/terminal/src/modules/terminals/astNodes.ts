@@ -61,6 +61,8 @@ class Identifier extends ASTNode {
 }
 
 //
+// Paterns
+//
 
 class NumericLiteralPattern extends ASTPatternNode {
   constructor({ value, location }: NumericLiteralPattern) {
