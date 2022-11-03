@@ -25,7 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "export": "npm run build && (rm -rf ../../desktop/public/clients/terminal && cp -r build ../../desktop/public/clients/terminal)",
-    "test": "react-scripts test",
+    "test": "react-scripts test --testURL https://mike-austin.com",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -189,3 +189,11 @@ test('Range', async () => {
 
   // expect(number.value).toEqual(9);
 });
+
+test('Fetch', async () => {
+  let number = await interpret(`fetch "https://mike-austin.com" | length`) as KopiNumber;
+
+  console.log(await number.inspect());
+
+  expect(number.value).toEqual(2138);
+});

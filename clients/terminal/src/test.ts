@@ -61,8 +61,10 @@ const environment: {
       setTimeout(() => resolve(number), number.value * 1000);
     });
   },
-  fetch: async (url: KopiValue) => {
-    return new KopiNumber(5);
+  fetch: async (url: KopiString) => {
+    const data = fetch(url.value);
+
+    return new KopiString(await (await data).text());
   },
   _extensions: new Extensions([[KopiString, {
     capitalize: async function (this: KopiString, tuple: KopiValue) {
@@ -70,21 +72,6 @@ const environment: {
     }
   }]])
 };
-
-// const ast = parser.parse('(1, 2, 3)');
-// const ast = parser.parse('(1, (() => 2), 3)');
-// const ast = parser.parse('(1 + 2) * x');
-// const ast = parser.parse('() => (1 + 2) * x');
-// const ast = parser.parse('() => 2, 3');
-// const ast = parser.parse('() => 2, 3, () => 2, 3');
-// const ast = parser.parse('() => () => (2, 3)');
-// const ast = parser.parse('(() => 5) ()');
-// const ast = parser.parse('(() => 3) () + round 2.7');
-
-// const ast = parser.parse('(sleep (sleep 1) + sleep (sleep 1), sleep 1 + sleep 1)');
-// const ast = parser.parse(`5 * 'sin 1 + 5 * 'cos 1`);
-// const ast = parser.parse(`'(('sin 5) 1, 'sin 5)`);
-// const ast = parser.parse(`'('1, 2, 3)`);
 
 const transform = (ast: RawASTNode) => {
   return transformPipeline(ast);
