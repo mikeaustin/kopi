@@ -1,5 +1,5 @@
 import { KopiValue, Evaluate, Environment } from '../shared';
-import { KopiNumber, KopiBoolean, KopiString } from './classes/index';
+import { KopiNumber, KopiBoolean, KopiString } from './classes';
 
 import * as astNodes from './astNodes';
 

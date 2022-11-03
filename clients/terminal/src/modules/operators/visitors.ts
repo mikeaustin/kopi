@@ -1,5 +1,5 @@
 import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
-import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes/index';
+import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 import { KopiRange } from './classes';
 
 import * as astNodes from './astNodes';

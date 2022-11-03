@@ -1,6 +1,6 @@
-import { Environment, Evaluate, KopiValue } from "../shared";
-import { Applicative, Ordered } from "../shared";
-import { KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../terminals/classes';
+import { Environment, Evaluate, KopiValue } from "../../shared";
+import { Applicative, Ordered } from "../../shared";
+import { KopiFunction, KopiNumber, KopiTuple, KopiArray } from '../../terminals/classes';
 
 class KopiRange extends KopiValue {
   constructor(from: Promise<KopiValue>, to: Promise<KopiValue>) {
@@ -47,6 +47,4 @@ class KopiRange extends KopiValue {
   to: Promise<KopiValue>;
 }
 
-export {
-  KopiRange,
-};
+export default KopiRange;
