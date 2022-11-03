@@ -21,11 +21,15 @@ class KopiRange extends KopiValue {
     const fromTraits = (from.constructor as typeof KopiValue).traits;
     const toTraits = (_to.constructor as typeof KopiValue).traits;
 
-    if (!(
-      fromTraits.includes(Enumerable) && fromTraits.includes(Comparable)
-      && toTraits.includes(Enumerable) && toTraits.includes(Comparable)
-    )) {
-      throw new Error(`Range requires 'from' and 'to' values to have traits 'Enumerable' and 'Comparable'`);
+    let errors: string[] = [];
+
+    if (!fromTraits.includes(Enumerable)) errors.push(`  'from' value '${await from.inspect()}' is missing trait 'Enumerable'`);
+    if (!fromTraits.includes(Comparable)) errors.push(`  'from' value '${await from.inspect()}' is missing trait 'Comparable'`);
+    if (!toTraits.includes(Enumerable)) errors.push(`  'to' value '${await _to.inspect()}' is missing trait 'Enumerable'`);
+    if (!toTraits.includes(Comparable)) errors.push(`  'to' value '${await _to.inspect()}' is missing trait 'Comparable'`);
+
+    if (errors.length > 0) {
+      throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
     }
 
     const to = (_to as unknown as Enumerable).succ();

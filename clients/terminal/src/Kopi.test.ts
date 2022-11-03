@@ -203,10 +203,18 @@ test('Range 2', async () => {
   ]);
 });
 
+test('Range 3', async () => {
+  let array = await interpret(`"a".."c" | map (c) => c | toArray`) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiString("a"),
+    new KopiString("b"),
+    new KopiString("c"),
+  ]);
+});
+
 test('Fetch', async () => {
   let number = await interpret(`fetch "https://mike-austin.com" | length`) as KopiNumber;
-
-  console.log(await number.inspect());
 
   expect(number.value).toEqual(2138);
 });
