@@ -17,25 +17,39 @@ class KopiNumber extends KopiValue {
     return `${this.value}`;
   }
 
+  // Numeric methods
+
   '+'(that: KopiNumber) {
     return new KopiNumber(this.value + that.value);
+  }
+
+  '-'(that: KopiNumber) {
+    return new KopiNumber(this.value - that.value);
   }
 
   '*'(that: KopiNumber) {
     return new KopiNumber(this.value * that.value);
   }
 
-  even(): KopiBoolean {
-    return new KopiBoolean(this.value % 2 === 0);
-  }
-
-  succ() {
-    return new KopiNumber(this.value + 1);
+  '/'(that: KopiNumber) {
+    return new KopiNumber(this.value / that.value);
   }
 
   negate() {
     return new KopiNumber(-this.value);
   }
+
+  even(): KopiBoolean {
+    return new KopiBoolean(this.value % 2 === 0);
+  }
+
+  // Enumerable methods
+
+  succ() {
+    return new KopiNumber(this.value + 1);
+  }
+
+  // Comparable methods
 
   compare(that: KopiNumber) {
     if (this.value < that.value) {
@@ -55,7 +69,7 @@ class KopiNumber extends KopiValue {
     return new KopiBoolean(this.compare(that).value === +1);
   }
 
-  //
+  // General methods
 
   round() {
     return new KopiNumber(Math.round(this.value));
