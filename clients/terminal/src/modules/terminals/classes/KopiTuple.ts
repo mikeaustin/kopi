@@ -3,7 +3,7 @@ import { Numeric, Equatable, Enumerable } from "../../shared";
 
 import KopiFunction from "./KopiFunction";
 import KopiNumber from './KopiNumber';
-import KopiSequence from "./KopiSequence";
+import KopiStream from "./KopiStream";
 
 class KopiTuple extends KopiValue {
   constructor(elements: Promise<KopiValue>[]) {
@@ -43,7 +43,7 @@ class KopiTuple extends KopiValue {
       }
     }).apply(this);
 
-    return new KopiSequence(result);
+    return new KopiStream(result);
   }
 
   elements: Promise<KopiValue>[];

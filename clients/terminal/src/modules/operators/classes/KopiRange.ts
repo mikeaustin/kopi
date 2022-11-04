@@ -1,7 +1,7 @@
 import { Environment, Evaluate, KopiValue } from "../../shared";
 import { Applicative, Enumerable, Comparable } from "../../shared";
 
-import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiSequence } from '../../terminals/classes';
+import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream } from '../../terminals/classes';
 
 import KopiIterable from '../traits/KopiIterable';
 

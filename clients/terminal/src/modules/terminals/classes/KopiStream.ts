@@ -6,17 +6,17 @@ import KopiFunction from './KopiFunction';
 import KopiBoolean from './KopiBoolean';
 import KopiNumber from './KopiNumber';
 
-class KopiSequence extends KopiValue {
-  constructor(sequence: AsyncIterable<KopiValue>) {
+class KopiStream extends KopiValue {
+  constructor(iterable: AsyncIterable<KopiValue>) {
     super();
 
-    this.sequence = sequence;
+    this.iterable = iterable;
   }
 
   override async inspect() {
     const values: Promise<KopiValue>[] = [];
 
-    for await (const field of this.sequence) {
+    for await (const field of this.iterable) {
       values.push(Promise.resolve(field));
     }
 
@@ -28,17 +28,17 @@ class KopiSequence extends KopiValue {
   // }
 
   // [Symbol.iterator]() {
-  //   return this.sequence[Symbol.iterator]();
+  //   return this.iterable[Symbol.iterator]();
   // }
 
   [Symbol.asyncIterator]() {
-    return this.sequence[Symbol.asyncIterator]();
+    return this.iterable[Symbol.asyncIterator]();
   }
 
   async toArray() {
     const values: Promise<KopiValue>[] = [];
 
-    for await (const element of this.sequence) {
+    for await (const element of this.iterable) {
       values.push(Promise.resolve(element));
     }
 
@@ -56,7 +56,7 @@ class KopiSequence extends KopiValue {
       }
     })();
 
-    return new KopiSequence(generator);
+    return new KopiStream(generator);
   }
 
   take(count: KopiNumber) {
@@ -76,10 +76,10 @@ class KopiSequence extends KopiValue {
       return;
     })();
 
-    return new KopiSequence(generator);
+    return new KopiStream(generator);
   }
 
-  sequence: AsyncIterable<KopiValue>;
+  iterable: AsyncIterable<KopiValue>;
 }
 
-export default KopiSequence;
+export default KopiStream;
