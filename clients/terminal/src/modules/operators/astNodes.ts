@@ -1,6 +1,18 @@
 import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
+class Assignment extends ASTNode {
+  constructor({ pattern, expression, location }: Assignment) {
+    super(location);
+
+    this.pattern = pattern;
+    this.expression = expression;
+  }
+
+  pattern: ASTPatternNode;
+  expression: ASTNode;
+}
+
 class PipeExpression extends ASTNode {
   constructor({ expression, methodName, argumentExpression, location }: PipeExpression) {
     super(location);
@@ -103,6 +115,7 @@ class RangeExpression extends ASTNode {
 }
 
 export {
+  Assignment,
   PipeExpression,
   BlockExpression,
   OperatorExpression,

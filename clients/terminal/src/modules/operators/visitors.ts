@@ -10,6 +10,24 @@ declare global {
   }
 }
 
+async function Assignment(
+  { pattern, expression }: astNodes.Assignment,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  const expressionValue = await evaluate(expression, environment);
+
+  console.log('here', expressionValue);
+
+  // pattern.match()
+
+  return new KopiTuple([]);
+  // const expressionValue = await evaluate(expression, environment);
+  // const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment) : new KopiTuple([]);
+
+  // return expressionValue.invoke(methodName, [argumentValue, evaluate, environment]);
+}
+
 async function PipeExpression(
   { expression, methodName, argumentExpression }: astNodes.PipeExpression,
   evaluate: Evaluate,
@@ -117,6 +135,7 @@ async function RangeExpression(
 }
 
 export {
+  Assignment,
   PipeExpression,
   BlockExpression,
   OperatorExpression,

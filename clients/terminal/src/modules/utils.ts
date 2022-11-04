@@ -18,6 +18,8 @@ const inspect = (value: unknown, level: number = 0): string => {
     return props.length === 0
       ? '{}'
       : `${value?.constructor.name} {\n${props.join(',\n')}\n${spaces(level)}}`;
+  } else if (typeof value === 'string') {
+    return `"${value}"`;
   }
 
   return `${value}`;

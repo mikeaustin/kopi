@@ -6,6 +6,11 @@ import * as visitorsx from './visitors';
 const transform = (next: Transform, transform: Transform) =>
   (rawAstNode: RawASTNode): ASTNode => {
     switch (rawAstNode.type) {
+      case 'Assignment':
+        return new astNodes.Assignment({
+          pattern: transform(rawAstNode.pattern),
+          expression: transform(rawAstNode.expression),
+        } as astNodes.Assignment);
       case 'PipeExpression':
         return new astNodes.PipeExpression({
           expression: transform(rawAstNode.expression),
@@ -59,7 +64,9 @@ const transform = (next: Transform, transform: Transform) =>
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment): Promise<KopiValue> => {
-    if (astNode instanceof astNodes.PipeExpression) {
+    if (astNode instanceof astNodes.Assignment) {
+      return visitorsx.Assignment(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.PipeExpression) {
       return visitorsx.PipeExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.BlockExpression) {
       return visitorsx.BlockExpression(astNode, evaluate, environment);

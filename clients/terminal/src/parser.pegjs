@@ -10,7 +10,17 @@ Block
     }
 
 Statement
-  = Expression
+  = Assignment
+  / Expression
+
+Assignment
+  = pattern:AssignmentPattern _ "=" _ expression:Expression {
+      return {
+        type: 'Assignment',
+        pattern,
+        expression,
+      }
+    }
 
 Expression
   = PipeExpression
@@ -135,7 +145,7 @@ StringLiteral "string"
     };
   }
 
-AstLiteral "ast"
+AstLiteral "ast-literal"
   = "'" expression:PrimaryExpression {
       return {
         type: 'AstLiteral',
@@ -155,8 +165,21 @@ Identifier "identifier"
 // Pattern
 //
 
+AssignmentPattern
+  = AssignmentIdentifierPattern
+
 Pattern
   = PrimaryPattern
+
+AssignmentIdentifierPattern
+  = identifier:Identifier {
+    return {
+      type: 'IdentifierPattern',
+      name: identifier.name,
+    };
+  }
+
+//
 
 PrimaryPattern
   = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {

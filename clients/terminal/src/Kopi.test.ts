@@ -243,3 +243,13 @@ test('Tuple map 2', async () => {
     new KopiNumber(9),
   ]);
 });
+
+test('Assignment', async () => {
+  let statement = await interpret(`a = 1`);
+
+  // expect(await Promise.all((await stream.toArray()).elements)).toEqual([
+  //   new KopiNumber(1),
+  //   new KopiNumber(4),
+  //   new KopiNumber(9),
+  // ]);
+});
