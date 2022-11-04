@@ -38,7 +38,10 @@ class KopiArray extends KopiValue {
   elements: Promise<KopiValue>[];
 }
 
-(KopiArray.prototype as any).map = KopiIterable.prototype.map;
-(KopiArray.prototype as any).filter = KopiIterable.prototype.filter;
+for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiArray.prototype as any)[name] = (KopiArray.prototype as any)[name];
+  }
+}
 
 export default KopiArray;

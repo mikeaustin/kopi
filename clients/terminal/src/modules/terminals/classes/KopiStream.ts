@@ -1,5 +1,7 @@
 import { KopiValue, Evaluate, Environment } from '../../shared';
 
+import KopiIterable from '../../operators/traits/KopiIterable';
+
 import KopiTuple from './KopiTuple';
 import KopiArray from './KopiArray';
 import KopiFunction from './KopiFunction';
@@ -45,41 +47,13 @@ class KopiStream extends KopiValue {
     return new KopiArray(values);
   }
 
-  filter(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
-    const _this = this;
-
-    const generator = (async function* () {
-      for await (const value of _this) {
-        if ((await func.apply(new KopiTuple([]), [value, evaluate, environment]) as KopiBoolean).value) {
-          yield value;
-        }
-      }
-    })();
-
-    return new KopiStream(generator);
-  }
-
-  take(count: KopiNumber) {
-    const _this = this;
-
-    let index = 0;
-
-    const generator = (async function* () {
-      for await (const value of _this) {
-        if (index++ < count.value) {
-          yield value;
-        } else {
-          break;
-        }
-      }
-
-      return;
-    })();
-
-    return new KopiStream(generator);
-  }
-
   iterable: AsyncIterable<KopiValue>;
+}
+
+for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiStream.prototype as any)[name] = (KopiIterable.prototype as any)[name];
+  }
 }
 
 export default KopiStream;

@@ -30,6 +30,26 @@ abstract class KopiIterable {
 
     return new KopiStream(generator);
   }
+
+  take(count: KopiNumber) {
+    const _this = this;
+
+    let index = 0;
+
+    const generator = (async function* () {
+      for await (const value of _this) {
+        if (index++ < count.value) {
+          yield value;
+        } else {
+          break;
+        }
+      }
+
+      return;
+    })();
+
+    return new KopiStream(generator);
+  }
 }
 
 export default KopiIterable;

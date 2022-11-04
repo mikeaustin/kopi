@@ -51,7 +51,10 @@ class KopiRange extends KopiValue {
   to: Promise<KopiValue>;
 }
 
-(KopiRange.prototype as any).map = KopiIterable.prototype.map;
-(KopiRange.prototype as any).filter = KopiIterable.prototype.filter;
+for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiRange.prototype as any)[name] = (KopiIterable.prototype as any)[name];
+  }
+}
 
 export default KopiRange;
