@@ -52,5 +52,6 @@ class KopiRange extends KopiValue {
 }
 
 (KopiRange.prototype as any).map = KopiIterable.prototype.map;
+(KopiRange.prototype as any).filter = KopiIterable.prototype.filter;
 
 export default KopiRange;

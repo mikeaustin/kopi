@@ -3,6 +3,8 @@ import { Numeric, Equatable, Enumerable } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
+import KopiIterable from '../../operators/traits/KopiIterable';
+
 class KopiArray extends KopiValue {
   constructor(elements: Promise<KopiValue>[]) {
     super();
@@ -35,5 +37,8 @@ class KopiArray extends KopiValue {
 
   elements: Promise<KopiValue>[];
 }
+
+(KopiArray.prototype as any).map = KopiIterable.prototype.map;
+(KopiArray.prototype as any).filter = KopiIterable.prototype.filter;
 
 export default KopiArray;

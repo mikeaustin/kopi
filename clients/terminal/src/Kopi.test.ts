@@ -224,3 +224,65 @@ test('UnaryExpression', async () => {
 
   expect(number.value).toEqual(-1);
 });
+
+test('Tuple map', async () => {
+  let sequence = await interpret(`(1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n`) as KopiSequence;
+
+  expect(await Promise.all((await sequence.toArray()).elements)).toEqual([
+    new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
+    new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
+  ]);
+});
+
+test('Tuple map 2', async () => {
+  let sequence = await interpret(`1..1000000000 | map (n) => (n * n) | take 3`) as KopiSequence;
+
+  expect(await Promise.all((await sequence.toArray()).elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(4),
+    new KopiNumber(9),
+  ]);
+});
+
+
+class Range {
+  constructor(public from: number, public to: number) { }
+
+  async *[Symbol.asyncIterator]() {
+    for (let current = this.from; current <= this.to; ++current) {
+      console.log('range', current);
+      yield current;
+    }
+  }
+}
+
+class Sequence {
+  constructor(public stream: AsyncIterable<number>) { }
+
+  [Symbol.asyncIterator]() {
+    return this.stream[Symbol.asyncIterator]();
+  }
+
+  async * take(count: number) {
+    let index = 0;
+
+    for await (const value of this.stream) {
+      if (index++ < count) {
+        yield value;
+      } else {
+        break;
+      }
+    }
+  }
+}
+
+async function main() {
+  const range = new Range(1, 10);
+  const stream = new Sequence(range).take(2);
+
+  for await (const value of stream) {
+    console.log('>>>', value);
+  }
+}
+
+// main();

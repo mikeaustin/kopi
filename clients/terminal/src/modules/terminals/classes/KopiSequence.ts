@@ -4,6 +4,7 @@ import KopiTuple from './KopiTuple';
 import KopiArray from './KopiArray';
 import KopiFunction from './KopiFunction';
 import KopiBoolean from './KopiBoolean';
+import KopiNumber from './KopiNumber';
 
 class KopiSequence extends KopiValue {
   constructor(sequence: AsyncIterable<KopiValue>) {
@@ -44,7 +45,7 @@ class KopiSequence extends KopiValue {
     return new KopiArray(values);
   }
 
-  async filter(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
+  filter(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
     const _this = this;
 
     const generator = (async function* () {
@@ -53,6 +54,26 @@ class KopiSequence extends KopiValue {
           yield value;
         }
       }
+    })();
+
+    return new KopiSequence(generator);
+  }
+
+  take(count: KopiNumber) {
+    const _this = this;
+
+    let index = 0;
+
+    const generator = (async function* () {
+      for await (const value of _this) {
+        if (index++ < count.value) {
+          yield value;
+        } else {
+          break;
+        }
+      }
+
+      return;
     })();
 
     return new KopiSequence(generator);
