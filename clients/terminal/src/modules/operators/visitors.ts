@@ -1,4 +1,4 @@
-import { KopiValue, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
+import { KopiValue, Bindings, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 import { KopiRange } from './classes';
 
@@ -14,18 +14,32 @@ async function Assignment(
   { pattern, expression }: astNodes.Assignment,
   evaluate: Evaluate,
   environment: Environment,
+  bindValues?: (bindings: { [name: string]: KopiValue; }) => void,
 ) {
   const expressionValue = await evaluate(expression, environment);
+  const patternMatches = await pattern.match(expressionValue, evaluate, environment);
 
-  console.log('here', expressionValue);
-
-  // pattern.match()
+  if (patternMatches && bindValues) {
+    bindValues(patternMatches);
+  }
 
   return new KopiTuple([]);
-  // const expressionValue = await evaluate(expression, environment);
-  // const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment) : new KopiTuple([]);
+}
 
-  // return expressionValue.invoke(methodName, [argumentValue, evaluate, environment]);
+async function BlockExpression(
+  { statements }: astNodes.BlockExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+): Promise<KopiValue> {
+  const bindValues = (bindings: { [name: string]: KopiValue; }) => {
+    console.log('BlockExpression.bindValues():', bindings);
+
+    environment = { ...environment, ...bindings };
+  };
+
+  return await statements.reduce<Promise<KopiValue>>(async (result, statement) => (
+    (await result, await evaluate(statement, environment, bindValues))
+  ), Promise.resolve(new KopiTuple([])));
 }
 
 async function PipeExpression(
@@ -37,16 +51,6 @@ async function PipeExpression(
   const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment) : new KopiTuple([]);
 
   return expressionValue.invoke(methodName, [argumentValue, evaluate, environment]);
-}
-
-async function BlockExpression(
-  { statements }: astNodes.BlockExpression,
-  evaluate: Evaluate,
-  environment: Environment,
-): Promise<KopiValue> {
-  return await statements.reduce<Promise<KopiValue>>(async (result, statement) => (
-    (await result, await evaluate(statement, environment))
-  ), Promise.resolve(new KopiTuple([])));
 }
 
 async function OperatorExpression(

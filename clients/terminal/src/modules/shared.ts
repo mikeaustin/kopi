@@ -125,7 +125,11 @@ interface Bindings extends Promise<{
 
 type Transform = (rawAstNode: RawASTNode) => ASTNode;
 
-type Evaluate = (astNode: ASTNode, environment: Environment) => Promise<KopiValue>;
+type Evaluate = (
+  astNode: ASTNode,
+  environment: Environment,
+  bindValues?: (bindings: { [name: string]: KopiValue; }) => void
+) => Promise<KopiValue>;
 
 interface Environment {
   [name: string]: KopiValue;

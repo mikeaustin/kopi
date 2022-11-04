@@ -245,11 +245,34 @@ test('Tuple map 2', async () => {
 });
 
 test('Assignment', async () => {
-  let statement = await interpret(`a = 1`);
+  let number = await interpret(`
+    a = 1
+    b = 2
 
-  // expect(await Promise.all((await stream.toArray()).elements)).toEqual([
-  //   new KopiNumber(1),
-  //   new KopiNumber(4),
-  //   new KopiNumber(9),
-  // ]);
+    a + b
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(3);
+});
+
+test('Assignment 2', async () => {
+  let number = await interpret(`
+    f = x => x * x
+
+    f 3
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(9);
+});
+
+test('Assignment 3', async () => {
+  let number = await interpret(`
+    x = 1
+    f = () => x
+    x = 2
+
+    f ()
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(1);
 });

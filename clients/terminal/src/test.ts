@@ -39,6 +39,8 @@ const environment: {
   x: new KopiNumber(3),
   String: new KopiType(KopiString),
   print: async (value: KopiValue) => {
+    console.log(value);
+
     return new KopiTuple([]);
   },
   match: (value: KopiValue) => async (tuple: KopiTuple) => {
@@ -79,8 +81,8 @@ const transform = (ast: RawASTNode) => {
 
 const transformPipeline = operators.transform(terminals.transform(transform), transform);
 
-const evaluate = (ast: ASTNode, environment: Environment) => {
-  return evaluatePipeline(ast, environment);
+const evaluate = (ast: ASTNode, environment: Environment, bindValues?: (bindings: { [name: string]: KopiValue; }) => void) => {
+  return evaluatePipeline(ast, environment, bindValues);
 };
 
 const evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
