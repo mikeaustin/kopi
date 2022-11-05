@@ -27,6 +27,16 @@ abstract class KopiIterable {
     return new KopiStream(generator);
   }
 
+  async find(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
+    for await (const value of this) {
+      if ((await func.apply(new KopiTuple([]), [value, evaluate, environment]) as KopiBoolean).value) {
+        return value;
+      }
+    }
+
+    return new KopiTuple([]);
+  }
+
   take(count: KopiNumber) {
     let index = 0;
 

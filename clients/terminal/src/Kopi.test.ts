@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-conditional-expect */
+
 import * as parser from './lib/parser';
 
 import { transform, evaluate, environment } from './test';
@@ -242,6 +244,14 @@ test('Tuple map 2', async () => {
     new KopiNumber(4),
     new KopiNumber(9),
   ]);
+});
+
+test('Tuple map 3', async () => {
+  let number = await interpret(`1..2 | find (n) => 'even n`) as KopiNumber | KopiTuple;
+
+  if (number instanceof KopiNumber) {
+    expect(number.value).toEqual(2);
+  }
 });
 
 test('Assignment', async () => {
