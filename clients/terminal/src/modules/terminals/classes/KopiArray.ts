@@ -28,7 +28,6 @@ class KopiArray extends KopiValue {
     let elements: Promise<KopiValue>[] = [];
 
     for (const element of this.elements) {
-      console.log(element);
       elements.push(element);
     }
 

@@ -32,8 +32,6 @@ async function BlockExpression(
   environment: Environment,
 ): Promise<KopiValue> {
   const bindValues = (bindings: { [name: string]: KopiValue; }) => {
-    console.log('BlockExpression.bindValues():', bindings);
-
     environment = { ...environment, ...bindings };
   };
 

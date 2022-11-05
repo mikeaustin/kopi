@@ -286,3 +286,21 @@ test('Assignment 3', async () => {
 
   expect(number.value).toEqual(1);
 });
+
+test('Coroutine', async () => {
+  let number = await interpret(`
+    coro = spawn (yield) => {
+      sleep 1
+      print "here 1"
+      yield (value) => value * value
+      print "here 2"
+    }
+
+    coro | send 5
+
+    print "here 3"
+    sleep 2
+  `) as KopiNumber;
+
+  // expect(number.value).toEqual(1);
+});

@@ -33,11 +33,36 @@ Function.traits = [Applicative];
 
 //
 
+class Coroutine extends KopiValue {
+  yield(value: KopiFunction) {
+    this._yield = value;
+
+    return new Promise(resolve => { });
+  }
+
+  async send(value: KopiValue) {
+    console.log('Coroutine.send():', value);
+
+    return new KopiTuple([]);
+  }
+
+  _yield: KopiFunction | undefined;
+}
+
+//
+
 const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
   String: new KopiType(KopiString),
+  spawn: async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+    const coroutine = new Coroutine();
+
+    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), evaluate, environment]);
+
+    return coroutine;
+  },
   print: async (value: KopiValue) => {
     console.log(value);
 
