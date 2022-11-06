@@ -51,6 +51,16 @@ class Coroutine extends KopiValue {
 
 //
 
+class KopiLoop extends KopiValue {
+  constructor(value: KopiValue) {
+    super();
+
+    this.value = value;
+  }
+
+  value: KopiValue;
+}
+
 const environment: {
   [name: string]: KopiValue;
 } = {
@@ -81,7 +91,18 @@ const environment: {
   },
   // extend: () => {},
   let: async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
-    return func.apply(new KopiTuple([]), [new KopiTuple([]), evaluate, environment]);
+    let result: KopiValue = new KopiTuple([]);
+
+    do {
+      const result2 = result instanceof KopiLoop ? result.value : result;
+
+      result = await func.apply(new KopiTuple([]), [result2, evaluate, environment]);
+    } while (result instanceof KopiLoop);
+
+    return result instanceof KopiLoop ? result.value : result;
+  },
+  loop: async (value: KopiValue) => {
+    return new KopiLoop(value);
   },
   sleep: async (number: KopiNumber,) => {
     return new Promise((resolve) => {
