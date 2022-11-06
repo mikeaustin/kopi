@@ -65,6 +65,7 @@ abstract class KopiValue {
     return inspect(this);
   }
 
+  // TODO: How to return Tuple: recursive import
   async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
     return index === 0 ? Promise.resolve(this) : undefined;
   }
@@ -107,7 +108,7 @@ class ASTNode extends KopiValue {
 
 abstract class ASTPatternNode extends ASTNode {
   abstract match(
-    value: KopiValue | undefined,
+    value: KopiValue,
     evaluate: Evaluate,
     environment: Environment
   ): Promise<{ [name: string]: KopiValue; } | undefined>;

@@ -289,9 +289,9 @@ test('Assignment 3', async () => {
 
 test('Loop', async () => {
   let number = await interpret(`
-    let (a = 1, b = 2) => {
+    let (a = 1) => {
       print a
-      sleep 1
+      sleep 0.5
 
       match (a) (
         3 => 3

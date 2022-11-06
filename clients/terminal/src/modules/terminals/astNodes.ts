@@ -71,7 +71,7 @@ class NumericLiteralPattern extends ASTPatternNode {
     this.value = value;
   }
 
-  override async match(number: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+  override async match(number: KopiValue, evaluate: Evaluate, environment: Environment) {
     if (number instanceof KopiNumber && number.value === this.value) {
       return {} as Bindings;
     }
@@ -90,19 +90,20 @@ class IdentifierPattern extends ASTPatternNode {
     this.defaultExpression = defaultExpression;
   }
 
-  override async match(value: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
-    if (value !== undefined) {
-      return {
-        [this.name]: value
-      };
-    } else if (this.defaultExpression !== null) {
-      return {
-        [this.name]: await evaluate(this.defaultExpression, environment)
-      };
-    };
+  override async match(value: KopiValue, evaluate: Evaluate, environment: Environment) {
+    if ((value === undefined || value instanceof KopiTuple)) {
+      if (this.defaultExpression !== null) {
+        return {
+          [this.name]: await evaluate(this.defaultExpression, environment)
+        };
+      } else {
+        throw new Error(`IdentifierPattern.match: No match found for pattern '${this.name}'`);
+      }
+    }
 
-    return undefined;
-    // throw new Error(`IdentifierPattern.match: No match found for pattern '${this.name}'`);
+    return {
+      [this.name]: value
+    };
   }
 
   name: string;
@@ -116,7 +117,7 @@ class TuplePattern extends ASTPatternNode {
     this.patterns = patterns;
   }
 
-  override async match(tuple: KopiValue | undefined, evaluate: Evaluate, environment: Environment) {
+  override async match(tuple: KopiValue, evaluate: Evaluate, environment: Environment) {
     if (tuple === undefined) {
       throw new Error('TuplePattern match(): value is not a tuple');
     }
@@ -124,8 +125,7 @@ class TuplePattern extends ASTPatternNode {
     try {
       return await this.patterns.reduce(async (bindings, pattern, index) => ({
         ...await bindings,
-        // ...await pattern.match(await tuple.elements[index], evaluate, environment),
-        ...await pattern.match(await tuple.getElementAtIndex(index), evaluate, environment),
+        ...await pattern.match(await tuple.getElementAtIndex(index) ?? new KopiTuple([]), evaluate, environment),
       }), {} as Bindings);
     } catch (error) {
       throw Error('TuplePattern.match\n  ' + (error as Error).message);
