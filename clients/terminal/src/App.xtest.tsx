@@ -10,9 +10,3 @@ test('renders learn react link', () => {
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });
-
-test('foo', () => {
-  const ast = parser.parse('1');
-
-  evaluate(ast, {});
-});
