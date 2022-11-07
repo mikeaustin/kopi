@@ -75,14 +75,25 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:UnaryExpression _ ".." _ to:UnaryExpression {
+  = from:MemberExpression _ ".." _ to:MemberExpression {
       return {
         type: 'RangeExpression',
         from,
         to
       };
     }
-  / UnaryExpression
+  / MemberExpression
+
+MemberExpression
+  = head:UnaryExpression tail:("." Identifier)* {
+      return tail.reduce((expression, [, identifier]) => (
+        ({
+          type: 'MemberExpression',
+          expression,
+          member: identifier.name
+        })
+      ), head)
+    }
 
 UnaryExpression
   = PrimaryExpression

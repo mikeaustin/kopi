@@ -2,7 +2,7 @@ import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment } from
 import { KopiTuple } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
-import * as visitorsx from './visitors';
+import * as visitors from './visitors';
 
 const transform = (next: Transform, transform: Transform) =>
   (rawAstNode: RawASTNode): ASTNode => {
@@ -29,6 +29,11 @@ const transform = (next: Transform, transform: Transform) =>
           rightExpression: transform(rawAstNode.rightExpression),
           location: rawAstNode.location,
         } as astNodes.OperatorExpression);
+      case 'MemberExpression':
+        return new astNodes.MemberExpression({
+          expression: transform(rawAstNode.expression),
+          member: rawAstNode.member,
+        } as astNodes.MemberExpression);
       case 'UnaryExpression':
         return new astNodes.UnaryExpression({
           operator: rawAstNode.operator,
@@ -66,23 +71,25 @@ const transform = (next: Transform, transform: Transform) =>
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues?: (bindings: { [name: string]: KopiValue; }) => void): Promise<KopiValue> => {
     if (astNode instanceof astNodes.Assignment) {
-      return visitorsx.Assignment(astNode, evaluate, environment, bindValues);
+      return visitors.Assignment(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.PipeExpression) {
-      return visitorsx.PipeExpression(astNode, evaluate, environment);
+      return visitors.PipeExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.BlockExpression) {
-      return visitorsx.BlockExpression(astNode, evaluate, environment);
+      return visitors.BlockExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.OperatorExpression) {
-      return visitorsx.OperatorExpression(astNode, evaluate, environment);
+      return visitors.OperatorExpression(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.MemberExpression) {
+      return visitors.MemberExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.UnaryExpression) {
-      return visitorsx.UnaryExpression(astNode, evaluate, environment);
+      return visitors.UnaryExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.TupleExpression) {
-      return visitorsx.TupleExpression(astNode, evaluate, environment);
+      return visitors.TupleExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.FunctionExpression) {
-      return visitorsx.FunctionExpression(astNode, evaluate, environment);
+      return visitors.FunctionExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.ApplyExpression) {
-      return visitorsx.ApplyExpression(astNode, evaluate, environment);
+      return visitors.ApplyExpression(astNode, evaluate, environment);
     } else if (astNode instanceof astNodes.RangeExpression) {
-      return visitorsx.RangeExpression(astNode, evaluate, environment);
+      return visitors.RangeExpression(astNode, evaluate, environment);
     } else {
       return next(astNode, environment);
     }

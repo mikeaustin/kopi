@@ -58,7 +58,7 @@ interface Indexable {
   [name: string]: any;
 }
 
-abstract class KopiValue {
+abstract class KopiValue implements Indexable {
   static traits: Trait[] = [];
 
   async inspect() {

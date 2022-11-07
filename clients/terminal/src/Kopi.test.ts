@@ -342,3 +342,11 @@ test('Factorial', async () => {
 
   expect(number.value).toEqual(120);
 });
+
+test('Member', async () => {
+  let number = await interpret(`
+    (1..5).to
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(5);
+});

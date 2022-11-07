@@ -70,6 +70,22 @@ async function OperatorExpression(
   throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);
 }
 
+async function MemberExpression(
+  { expression, member }: astNodes.MemberExpression,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  const expressionValue = await evaluate(expression, environment);
+
+  const value = expressionValue[member as keyof typeof expressionValue];
+
+  if (value !== undefined) {
+    return value;
+  }
+
+  throw new Error(`${await expression.inspect()} doesn't have a member '${member}'`);
+}
+
 async function UnaryExpression(
   { operator, argumentExpression }: astNodes.UnaryExpression,
   evaluate: Evaluate,
@@ -141,6 +157,7 @@ export {
   PipeExpression,
   BlockExpression,
   OperatorExpression,
+  MemberExpression,
   UnaryExpression,
   TupleExpression,
   FunctionExpression,

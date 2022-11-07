@@ -51,6 +51,18 @@ class OperatorExpression extends ASTNode {
   rightExpression: ASTNode;
 }
 
+class MemberExpression extends ASTNode {
+  constructor({ expression, member, location }: MemberExpression) {
+    super(location);
+
+    this.expression = expression;
+    this.member = member;
+  }
+
+  expression: ASTNode;
+  member: string;
+}
+
 class UnaryExpression extends ASTNode {
   constructor({ operator, argumentExpression, location }: UnaryExpression) {
     super(location);
@@ -119,6 +131,7 @@ export {
   PipeExpression,
   BlockExpression,
   OperatorExpression,
+  MemberExpression,
   UnaryExpression,
   TupleExpression,
   ApplyExpression,
