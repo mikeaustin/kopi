@@ -303,6 +303,29 @@ test('Loop', async () => {
   expect(number.value).toEqual(3);
 });
 
+test('Loop 2', async () => {
+  let string = await interpret(`
+    coro = spawn (yield) => {
+      let () => {
+        yield x => x * x
+
+        loop ()
+      }
+    }
+
+    let (n = 1) => {
+      print (coro | send n)
+
+      match (n) (
+        3 => "Done"
+        n => loop (n + 1)
+      )
+    }
+  `) as KopiNumber;
+
+  expect(string.value).toEqual('Done');
+});
+
 test('Factorial', async () => {
   let number = await interpret(`
     fix = f => (x => f (y => x x y)) x => f (y => x x y)

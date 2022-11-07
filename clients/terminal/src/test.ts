@@ -33,20 +33,54 @@ Function.traits = [Applicative];
 
 //
 
+class Deferred {
+  constructor() {
+    const promise = new Promise<KopiValue>((resolve, reject) => {
+      const timeoutId = setTimeout(() => reject, Math.pow(2, 32) / 2 - 1);
+
+      (this as any).resolve = (value: KopiValue) => {
+        clearTimeout(timeoutId);
+
+        resolve(value);
+      };
+
+      (this as any).reject = reject;
+    });
+
+    (promise as any).resolve = (this as any).resolve;
+    (promise as any).reject = (this as any).reject;
+
+    return promise;
+  }
+}
+
 class Coroutine extends KopiValue {
-  yield(value: KopiFunction) {
-    this._yield = value;
+  deferred: Deferred[];
 
-    return new Promise(resolve => { });
+  constructor() {
+    super();
+
+    this.deferred = [new Deferred(), new Deferred()];
   }
 
-  async send(value: KopiValue) {
-    console.log('Coroutine.send():', value);
+  async yield(func: KopiFunction) {
+    const data = await this.deferred[0] as KopiValue;
+    this.deferred[0] = new Deferred();
 
-    return new KopiTuple([]);
+    const value = await func.apply(new KopiTuple([]), [data, evaluate, environment]);
+
+    (this.deferred[1] as any).resolve(value);
+    this.deferred[1] = new Deferred();
   }
 
-  _yield: KopiFunction | undefined;
+  async send(value: KopiValue, evaluate: Evaluate, environment: Environment) {
+    (this.deferred[0] as any).resolve(value);
+
+    const x = await this.deferred[1];
+    this.deferred[1] = new Deferred();
+
+    return x;
+  }
 }
 
 //
