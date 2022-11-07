@@ -1,5 +1,5 @@
 import { KopiValue, Evaluate, Environment } from '../shared';
-import { KopiNumber, KopiBoolean, KopiString } from './classes';
+import { KopiNumber, KopiBoolean, KopiString, KopiArray } from './classes';
 
 import * as astNodes from './astNodes';
 
@@ -27,6 +27,14 @@ async function StringLiteral(
   return new KopiString(value);
 }
 
+async function ArrayLiteral(
+  { expressionElements }: astNodes.ArrayLiteral,
+  evaluate: Evaluate,
+  environment: Environment,
+) {
+  return new KopiArray(expressionElements.map((expression) => evaluate(expression, environment)));
+}
+
 async function Identifier(
   astNode: astNodes.Identifier,
   evaluate: Evaluate,
@@ -45,5 +53,6 @@ export {
   NumericLiteral,
   BooleanLiteral,
   StringLiteral,
+  ArrayLiteral,
   Identifier
 };

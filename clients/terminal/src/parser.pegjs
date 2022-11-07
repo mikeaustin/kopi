@@ -122,6 +122,7 @@ PrimaryExpression
   / NumericLiteral
   / StringLiteral
   / BooleanLiteral
+  / ArrayLiteral
   / AstLiteral
   / Identifier
 
@@ -138,6 +139,15 @@ BlockExpression
   = "{" _ statements:Block _ "}" {
     return statements;
   }
+
+ArrayLiteral
+  = "[" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ "]" _ !"=>" {
+      return {
+        type: 'ArrayLiteral',
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+          [...expressionElements, expressionElement], [head]),
+      }
+    }
 
 NumericLiteral "number"
   = value:([0-9]+ ("." !"." [0-9]+)?) {

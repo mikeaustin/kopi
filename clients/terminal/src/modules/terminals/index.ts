@@ -25,6 +25,11 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
         value: rawAstNode.value,
         location: rawAstNode.location,
       } as astNodes.StringLiteral);
+    case 'ArrayLiteral':
+      return new astNodes.ArrayLiteral({
+        expressionElements: rawAstNode.expressionElements.map((expression: ASTNode) => transform(expression)),
+        location: rawAstNode.location,
+      } as astNodes.ArrayLiteral);
     case 'AstLiteral':
       return new astNodes.AstLiteral({
         value: transform(rawAstNode.value),
@@ -65,6 +70,8 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
     return visitors.BooleanLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.StringLiteral) {
     return visitors.StringLiteral(astNode, evaluate, environment);
+  } else if (astNode instanceof astNodes.ArrayLiteral) {
+    return visitors.ArrayLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.AstLiteral) {
     return astNode.value;
   } else if (astNode instanceof astNodes.Identifier) {

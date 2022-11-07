@@ -21,6 +21,18 @@ test('Basic types', async () => {
   ]);
 });
 
+test('Array', async () => {
+  let array = await interpret(`
+    [123, "abc", true]
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(123),
+    new KopiString("abc"),
+    new KopiBoolean(true),
+  ]);
+});
+
 test('Async operations', async () => {
   let tuple = await interpret(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`) as KopiTuple;
 
