@@ -289,16 +289,31 @@ test('Assignment 3', async () => {
 
 test('Loop', async () => {
   let number = await interpret(`
-    let (a = 1) => {
-      print a
+    let (n = 1) => {
+      print n
       sleep 0.5
 
-      match (a) (
+      match (n) (
         3 => 3
-        n => loop (a + 1)
+        n => loop (n + 1)
       )
     }
   `) as KopiNumber;
 
   expect(number.value).toEqual(3);
+});
+
+test('Factorial', async () => {
+  let number = await interpret(`
+    fix = f => (x => f (y => x x y)) x => f (y => x x y)
+
+    factorial = fix factorial => n => match n (
+      0 => 1
+      n => n * factorial (n - 1)
+    )
+
+    factorial 5
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(120);
 });
