@@ -3,7 +3,7 @@
 import * as parser from './lib/parser';
 
 import { transform, evaluate, environment } from './test';
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream } from './modules/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from './modules/terminals/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -12,11 +12,12 @@ async function interpret(source: string) {
 }
 
 test('Basic types', async () => {
-  let tuple = await interpret(`(123, "abc")`) as KopiTuple;
+  let tuple = await interpret(`(123, "abc", true)`) as KopiTuple;
 
   expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(123),
     new KopiString("abc"),
+    new KopiBoolean(true),
   ]);
 });
 

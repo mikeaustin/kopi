@@ -110,6 +110,7 @@ PrimaryExpression
   / BlockExpression
   / NumericLiteral
   / StringLiteral
+  / BooleanLiteral
   / AstLiteral
   / Identifier
 
@@ -143,6 +144,14 @@ StringLiteral "string"
       value: value.join(''),
       location: location(),
     };
+  }
+
+BooleanLiteral
+  = value:("true" / "false") {
+    return {
+      type: 'BooleanLiteral',
+      value: value === 'true' ? true : false
+    }
   }
 
 AstLiteral "ast-literal"
@@ -199,7 +208,7 @@ NumericLiteralPattern
         value: number.value,
       }
     }
-
+  
 IdentifierPattern
   = identifier:Identifier defaultExpression:(_ "=" _ Expression)? {
     return {
