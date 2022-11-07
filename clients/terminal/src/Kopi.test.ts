@@ -290,7 +290,6 @@ test('Assignment 3', async () => {
 test('Loop', async () => {
   let number = await interpret(`
     let (n = 1) => {
-      print n
       sleep 0.5
 
       match (n) (
@@ -308,6 +307,7 @@ test('Loop 2', async () => {
     coro = spawn (yield) => {
       let () => {
         yield x => x * x
+        sleep 0.1
 
         loop ()
       }
