@@ -209,12 +209,14 @@ IdentifierPattern
     };
   }
 
-
 _ "space"
   = " "*
 
 __ "whitespace"
   = (" " / Newline)*
 
+Comment "comment"
+  = "#" (!Newline .)*
+
 Newline
-  = [\r?\n]
+  = Comment? [\r?\n]

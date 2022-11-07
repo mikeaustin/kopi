@@ -291,6 +291,7 @@ test('Loop', async () => {
   let number = await interpret(`
     let (n = 1) => {
       sleep 0.5
+      # print n
 
       match (n) (
         3 => 3
