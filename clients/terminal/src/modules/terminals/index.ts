@@ -58,6 +58,12 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
         patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transform(pattern)),
         location: rawAstNode.location,
       } as astNodes.TuplePattern);
+    case 'FunctionPattern':
+      return new astNodes.FunctionPattern({
+        name: rawAstNode.name,
+        parameterPattern: transform(rawAstNode.parameterPattern),
+        location: rawAstNode.location,
+      } as astNodes.FunctionPattern);
   }
 
   throw new Error(`No transform found for '${inspect(rawAstNode)}'`);

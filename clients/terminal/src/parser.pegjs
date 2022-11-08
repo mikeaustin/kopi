@@ -196,10 +196,27 @@ Identifier "identifier"
 //
 
 AssignmentPattern
-  = AssignmentIdentifierPattern
+  = AssignmentFunctionPattern
+  / AssignmentPrimaryPattern
 
-Pattern
-  = PrimaryPattern
+AssignmentFunctionPattern
+  = ident:Identifier _ parameterPattern:AssignmentPrimaryPattern {
+      return {
+        type: 'FunctionPattern',
+        name: ident.name,
+        parameterPattern,
+      };
+    }
+
+AssignmentPrimaryPattern
+  = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
+    return head && tail.length === 0 ? head : {
+      type: 'TuplePattern',
+      patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
+        [...patterns, pattern], [head]),
+    }
+  }
+  / AssignmentIdentifierPattern
 
 AssignmentIdentifierPattern
   = identifier:Identifier {
@@ -210,6 +227,9 @@ AssignmentIdentifierPattern
   }
 
 //
+
+Pattern
+  = PrimaryPattern
 
 PrimaryPattern
   = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {

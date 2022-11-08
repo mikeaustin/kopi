@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, Extensions, Trait, Applicative } from '../shared';
-import { KopiNumber, KopiString, KopiTuple } from './classes';
+import { KopiFunction, KopiNumber, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {
@@ -145,6 +145,24 @@ class TuplePattern extends ASTPatternNode {
   patterns: ASTPatternNode[];
 }
 
+class FunctionPattern extends ASTPatternNode {
+  constructor({ name, parameterPattern, location }: FunctionPattern) {
+    super(location);
+
+    this.name = name;
+    this.parameterPattern = parameterPattern;
+  }
+
+  override async match(value: KopiValue, evaluate: Evaluate, environment: Environment) {
+    return {
+      [this.name]: value,
+    };
+  }
+
+  name: string;
+  parameterPattern: ASTPatternNode;
+}
+
 export {
   NumericLiteral,
   BooleanLiteral,
@@ -154,5 +172,6 @@ export {
   Identifier,
   NumericLiteralPattern,
   IdentifierPattern,
-  TuplePattern
+  TuplePattern,
+  FunctionPattern,
 };

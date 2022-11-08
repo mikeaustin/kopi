@@ -103,15 +103,17 @@ class ApplyExpression extends ASTNode {
 }
 
 class FunctionExpression extends ASTNode {
-  constructor({ parameterPattern, bodyExpression, location }: FunctionExpression) {
+  constructor({ parameterPattern, bodyExpression, name, location }: FunctionExpression) {
     super(location);
 
     this.parameterPattern = parameterPattern;
     this.bodyExpression = bodyExpression;
+    this.name = name;
   }
 
   parameterPattern: ASTPatternNode;
   bodyExpression: ASTNode;
+  name?: string;
 }
 
 class RangeExpression extends ASTNode {

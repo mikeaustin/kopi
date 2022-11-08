@@ -1,8 +1,9 @@
-import { KopiValue, Bindings, Numeric, Applicative, Evaluate, Environment, Trait } from '../shared';
+import { KopiValue, Bindings, Numeric, Applicative, Evaluate, Environment, Trait, ASTPatternNode } from '../shared';
 import { KopiTuple, KopiFunction, KopiNumber } from '../terminals/classes';
 import { KopiRange } from './classes';
 
 import * as astNodes from './astNodes';
+import * as terminalAstNodes from '../terminals/astNodes';
 
 declare global {
   interface FunctionConstructor {
@@ -16,6 +17,14 @@ async function Assignment(
   environment: Environment,
   bindValues?: (bindings: { [name: string]: KopiValue; }) => void,
 ) {
+  if (pattern instanceof terminalAstNodes.FunctionPattern) {
+    expression = new astNodes.FunctionExpression({
+      parameterPattern: pattern.parameterPattern,
+      bodyExpression: expression,
+      name: pattern.name,
+    } as astNodes.FunctionExpression);
+  }
+
   const expressionValue = await evaluate(expression, environment);
   const patternMatches = await pattern.match(expressionValue, evaluate, environment);
 
@@ -113,7 +122,7 @@ async function TupleExpression(
 }
 
 async function FunctionExpression(
-  { parameterPattern, bodyExpression }: astNodes.FunctionExpression,
+  { parameterPattern, bodyExpression, name }: astNodes.FunctionExpression,
   evaluate: Evaluate,
   environment: Environment,
 ) {
@@ -121,6 +130,7 @@ async function FunctionExpression(
     parameterPattern,
     bodyExpression,
     environment,
+    name,
   );
 }
 

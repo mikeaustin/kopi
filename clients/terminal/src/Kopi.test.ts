@@ -355,10 +355,33 @@ test('Factorial', async () => {
   expect(number.value).toEqual(120);
 });
 
+test('Factorial 2', async () => {
+  let number = await interpret(`
+    factorial (n) = match n (
+      0 => 1
+      n => n * factorial (n - 1)
+    )
+
+    factorial 5
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(120);
+});
+
 test('Member', async () => {
   let number = await interpret(`
     (1..5).to
   `) as KopiNumber;
 
   expect(number.value).toEqual(5);
+});
+
+test('FunctionPattern', async () => {
+  let number = await interpret(`
+    add (a, b) = a + b
+
+    add (1, 2)
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(3);
 });

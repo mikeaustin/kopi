@@ -4,12 +4,13 @@ import { Applicative } from "../../shared";
 class KopiFunction extends KopiValue {
   static override traits = [Applicative];
 
-  constructor(parameterPattern: ASTPatternNode, bodyExpression: ASTNode, environment: Environment) {
+  constructor(parameterPattern: ASTPatternNode, bodyExpression: ASTNode, environment: Environment, name?: string) {
     super();
 
     this.parameterPattern = parameterPattern;
-    this.environment = environment;
     this.bodyExpression = bodyExpression;
+    this.environment = environment;
+    this.name = name;
   }
 
   async apply(
@@ -20,13 +21,15 @@ class KopiFunction extends KopiValue {
 
     return evaluate(this.bodyExpression, {
       ...this.environment,
-      ...matches
+      ...matches,
+      ...(this.name ? { [this.name]: this } : {}),
     });
   }
 
   parameterPattern: ASTPatternNode;
-  environment: Environment;
   bodyExpression: ASTNode;
+  environment: Environment;
+  name?: string;
 }
 
 export default KopiFunction;
