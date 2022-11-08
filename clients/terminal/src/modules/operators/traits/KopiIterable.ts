@@ -5,6 +5,16 @@ import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream
 abstract class KopiIterable {
   abstract [Symbol.asyncIterator](): AsyncIterator<KopiValue>;
 
+  async reduce(func: KopiFunction, evaluate: Evaluate, environment: Environment): Promise<KopiValue> {
+    let result: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
+
+    for await (const value of this) {
+      result = func.apply(new KopiTuple([]), [new KopiTuple([result, Promise.resolve(value)]), evaluate, environment]);
+    }
+
+    return result;
+  }
+
   async map(func: KopiFunction, evaluate: Evaluate, environment: Environment): Promise<KopiStream> {
     const generator = (async function* (this: KopiIterable) {
       for await (const value of this) {
@@ -27,7 +37,7 @@ abstract class KopiIterable {
     return new KopiStream(generator);
   }
 
-  async find(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
+  async find(func: KopiFunction, evaluate: Evaluate, environment: Environment): Promise<KopiValue> {
     for await (const value of this) {
       if ((await func.apply(new KopiTuple([]), [value, evaluate, environment]) as KopiBoolean).value) {
         return value;

@@ -2,7 +2,10 @@ import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment 
 import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';
+import * as operatorsAstNodes from '../operators/astNodes';
+
 import * as visitors from './visitors';
+import * as operatorsVisitors from '../operators/visitors';
 
 // const transform2 = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
 //   if ()
@@ -78,6 +81,8 @@ const evaluate = async (astNode: ASTNode, environment: Environment): Promise<Kop
     return visitors.StringLiteral(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.ArrayLiteral) {
     return visitors.ArrayLiteral(astNode, evaluate, environment);
+  } else if (astNode instanceof operatorsAstNodes.RangeExpression) {
+    return operatorsVisitors.RangeExpression(astNode, evaluate, environment);
   } else if (astNode instanceof astNodes.AstLiteral) {
     return astNode.value;
   } else if (astNode instanceof astNodes.Identifier) {
