@@ -133,20 +133,19 @@ class TuplePattern extends ASTPatternNode {
     }
 
     try {
-      let matches = {} as Bindings;
-      let index = 0;
+      let bindings = {} as Bindings;
 
-      for (const pattern of this.patterns) {
-        let localMatches = await pattern.match(await tuple.getElementAtIndex(index++) ?? new KopiTuple([]), evaluate, environment);
+      for (const [index, pattern] of this.patterns.entries()) {
+        let matches = await pattern.match(await tuple.getElementAtIndex(index) ?? new KopiTuple([]), evaluate, environment);
 
-        if (localMatches === undefined) {
+        if (matches === undefined) {
           return undefined;
         }
 
-        matches = { ...matches, ...localMatches };
+        bindings = { ...bindings, ...matches };
       }
 
-      return matches;
+      return bindings;
     } catch (error) {
       throw Error('TuplePattern.match\n  ' + (error as Error).message);
     }

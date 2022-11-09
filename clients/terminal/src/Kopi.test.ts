@@ -262,7 +262,9 @@ test('Loop', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(3);
+});
 
+test('Coroutine', async () => {
   let string = await interpret(`
     coro = spawn (yield) => {
       let () => {
