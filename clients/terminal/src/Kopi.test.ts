@@ -360,3 +360,26 @@ test('FizzBuzz', async () => {
     new KopiString('FizzBuzz'),
   ]);
 });
+
+test('Take and drop', async () => {
+  let array = await interpret(`
+    1..5 | drop 3 | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(4),
+    new KopiNumber(5),
+  ]);
+
+  let boolean = await interpret(`
+    [1, 3, 5] | some (n) => 'even n
+  `) as KopiBoolean;
+
+  expect(boolean.value).toEqual(false);
+
+  boolean = await interpret(`
+    [1, 2, 3, 4, 5] | some (n) => 'even n
+  `) as KopiBoolean;
+
+  expect(boolean.value).toEqual(true);
+});

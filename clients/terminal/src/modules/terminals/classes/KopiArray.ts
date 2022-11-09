@@ -20,6 +20,12 @@ class KopiArray extends KopiValue {
     return `[${elements.join(', ')}]`;
   }
 
+  *[Symbol.asyncIterator]() {
+    for (const value of this.elements) {
+      yield value;
+    }
+  }
+
   size() {
     return new KopiNumber(this.elements.length);
   }
@@ -39,7 +45,7 @@ class KopiArray extends KopiValue {
 
 for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
   if (name !== 'constructor') {
-    (KopiArray.prototype as any)[name] = (KopiArray.prototype as any)[name];
+    (KopiArray.prototype as any)[name] = (KopiIterable.prototype as any)[name];
   }
 }
 
