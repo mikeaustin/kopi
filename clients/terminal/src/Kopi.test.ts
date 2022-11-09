@@ -382,4 +382,14 @@ test('Take and drop', async () => {
   `) as KopiBoolean;
 
   expect(boolean.value).toEqual(true);
+
+  array = await interpret(`
+    iterate 1 (n) => n * 2 | take 3 | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(2),
+    new KopiNumber(4),
+    new KopiNumber(8),
+  ]);
 });

@@ -9,6 +9,9 @@ import * as terminals from './modules/terminals';
 import { KopiValue, Extensions } from './modules/shared';
 import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes';
 
+import KopiIterable from './modules/operators/traits/KopiIterable';
+import KopiStream from './modules/terminals/classes/KopiStream';
+
 declare global {
   interface FunctionConstructor {
     traits: Trait[];
@@ -99,32 +102,54 @@ const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
+
   String: new KopiType(KopiString),
-  spawn: async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+
+  async spawn(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
     const coroutine = new Coroutine();
 
     func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), evaluate, environment]);
 
     return coroutine;
   },
-  print: async (value: KopiValue) => {
+
+  async print(value: KopiValue) {
     console.log(value);
 
     return new KopiTuple([]);
   },
-  match: (value: KopiValue) => async (tuple: KopiTuple) => {
-    for await (const func of tuple.elements) {
-      const matches = await (func as KopiFunction).parameterPattern.match(value, evaluate, environment);
 
-      if (matches) {
-        return (func as KopiFunction).apply(new KopiTuple([]), [value, evaluate, environment]);
-      }
-    }
+  async iterate(value: KopiValue) {
+    return function (func: KopiFunction) {
+      let result = value;
 
-    throw new Error('Match failed');
+      const generator = (async function* () {
+        for (; ;) {
+          yield result = await func.apply(new KopiTuple([]), [result, evaluate, environment]);
+        }
+      })();
+
+      return new KopiStream(generator);
+    };
   },
+
+  match(value: KopiValue) {
+    return async (tuple: KopiTuple) => {
+      for await (const func of tuple.elements) {
+        const matches = await (func as KopiFunction).parameterPattern.match(value, evaluate, environment);
+
+        if (matches) {
+          return (func as KopiFunction).apply(new KopiTuple([]), [value, evaluate, environment]);
+        }
+      }
+
+      throw new Error('Match failed');
+    };
+  },
+
   // extend: () => {},
-  let: async (func: KopiFunction, evaluate: Evaluate, environment: Environment) => {
+
+  async let(func: KopiFunction, evaluate: Evaluate, environment: Environment) {
     let result: KopiValue = new KopiTuple([]);
 
     do {
@@ -135,19 +160,23 @@ const environment: {
 
     return result instanceof KopiLoop ? result.value : result;
   },
-  loop: async (value: KopiValue) => {
+
+  async loop(value: KopiValue) {
     return new KopiLoop(value);
   },
-  sleep: async (number: KopiNumber,) => {
+
+  async sleep(number: KopiNumber) {
     return new Promise((resolve) => {
       setTimeout(() => resolve(number), number.value * 1000);
     });
   },
-  fetch: async (url: KopiString) => {
+
+  async fetch(url: KopiString) {
     const data = fetch(url.value);
 
     return new KopiString(await (await data).text());
   },
+
   _extensions: new Extensions([[KopiString, {
     capitalize: async function (this: KopiString, tuple: KopiValue) {
       return new KopiString(this.value.toUpperCase());
