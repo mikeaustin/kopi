@@ -76,14 +76,14 @@ class UnaryExpression extends ASTNode {
 }
 
 class TupleExpression extends ASTNode {
-  constructor({ expressionElements, expressionFieldNames, location }: TupleExpression) {
+  constructor({ expressionFields, expressionFieldNames, location }: TupleExpression) {
     super(location);
 
-    this.expressionElements = expressionElements;
+    this.expressionFields = expressionFields;
     this.expressionFieldNames = expressionFieldNames;
   }
 
-  expressionElements: ASTNode[];
+  expressionFields: ASTNode[];
   expressionFieldNames: string[];
 }
 

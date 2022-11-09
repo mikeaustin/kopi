@@ -48,7 +48,7 @@ const transform = (next: Transform, transform: Transform) =>
         } as astNodes.FunctionExpression);
       case 'TupleExpression':
         return new astNodes.TupleExpression({
-          expressionElements: rawAstNode.expressionElements.map((expressionElement: ASTNode) => transform(expressionElement)),
+          expressionFields: rawAstNode.expressionFields.map((expressionElement: ASTNode) => transform(expressionElement)),
           expressionFieldNames: rawAstNode.expressionFieldNames,
           location: rawAstNode.location,
         } as astNodes.TupleExpression);

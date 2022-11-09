@@ -9,7 +9,7 @@ import { View, Text, Icon, Spacer } from 'core';
 
 import './App.css';
 
-import './test';
+import './compiler';
 
 // type AST =
 //   // | core.AST

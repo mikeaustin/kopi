@@ -113,8 +113,8 @@ PrimaryExpression
   = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) _ (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , , , expressionElement]) =>
-          [...expressionElements, expressionElement], [head]),
+        expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , , expressionField]) =>
+          [...expressionFields, expressionField], [head]),
         expressionFieldNames: tail.reduce((fieldNames, [, , , fieldName]) =>
           [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }

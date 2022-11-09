@@ -325,8 +325,8 @@ function peg$parse(input, options) {
   var peg$f9 = function(fieldName, head, tail) {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , , , expressionElement]) =>
-          [...expressionElements, expressionElement], [head]),
+        expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , , expressionField]) =>
+          [...expressionFields, expressionField], [head]),
         expressionFieldNames: tail.reduce((fieldNames, [, , , fieldName]) =>
           [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }
