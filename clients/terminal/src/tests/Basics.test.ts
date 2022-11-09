@@ -13,7 +13,9 @@ async function interpret(source: string) {
 }
 
 test('Basic types', async () => {
-  let tuple = await interpret(`(-123, "abc", true, 1..5)`) as KopiTuple;
+  let tuple = await interpret(`
+    (-123, "abc", true, 1..5)
+  `) as KopiTuple;
 
   expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(-123),
@@ -33,13 +35,17 @@ test('Basic types', async () => {
     new KopiRange(Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('c'))),
   ]);
 
-  let number = await interpret(`'size (1, 2, 3)`) as KopiNumber;
+  let number = await interpret(`
+    'size (1, 2, 3)
+  `) as KopiNumber;
 
   expect(number.value).toEqual(3);
 });
 
 test('Async operations', async () => {
-  let tuple = await interpret(`(sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)`) as KopiTuple;
+  let tuple = await interpret(`
+    (sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)
+  `) as KopiTuple;
 
   expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(2),
@@ -48,31 +54,43 @@ test('Async operations', async () => {
 });
 
 test('Math', async () => {
-  let number = await interpret(`5 * 'sin 1 + 5 * 'cos 1`) as KopiNumber;
+  let number = await interpret(`
+    5 * 'sin 1 + 5 * 'cos 1
+  `) as KopiNumber;
 
   expect(number.value).toBeCloseTo(6.908866453380181);
 });
 
 test('Function application', async () => {
-  let number = await interpret(`(x => x + 1) 3 + 'round 2.7`) as KopiNumber;
+  let number = await interpret(`
+    (x => x + 1) 3 + 'round 2.7
+  `) as KopiNumber;
 
   expect(number.value).toBeCloseTo(7);
 
-  number = await interpret(`((a, b) => a + b) (1, 2)`) as KopiNumber;
+  number = await interpret(`
+    ((a, b) => a + b) (1, 2)
+  `) as KopiNumber;
 
   expect(number.value).toBeCloseTo(3);
 
-  number = await interpret(`((a, (b, c)) => (a + b) * c) (1, (2, 3))`) as KopiNumber;
+  number = await interpret(`
+    ((a, (b, c)) => (a + b) * c) (1, (2, 3))
+  `) as KopiNumber;
 
   expect(number.value).toBeCloseTo(9);
 
-  number = await interpret(`((a, b) => c => (a + b) * c) (1, 2) 3`) as KopiNumber;
+  number = await interpret(`
+    ((a, b) => c => (a + b) * c) (1, 2) 3
+  `) as KopiNumber;
 
   expect(number.value).toEqual(9);
 });
 
 test('Default arguments', async () => {
-  let tuple = await interpret(`((a, b = 2, c = 3) => (a, b, c)) (1)`) as KopiTuple;
+  let tuple = await interpret(`
+    ((a, b = 2, c = 3) => (a, b, c)) (1)
+  `) as KopiTuple;
 
   expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(1),
@@ -82,11 +100,15 @@ test('Default arguments', async () => {
 });
 
 test('Extension Methods', async () => {
-  let string = await interpret(`String ()`) as KopiString;
+  let string = await interpret(`
+    String ()
+  `) as KopiString;
 
   expect(string.value).toEqual("Hello, world");
 
-  string = await interpret(`'capitalize "foo"`) as KopiString;
+  string = await interpret(`
+    'capitalize "foo"
+  `) as KopiString;
 
   expect(string.value).toEqual("FOO");
 });
@@ -123,7 +145,8 @@ test('Tuple Element Newlines', async () => {
 
       3
 
-    )`) as KopiTuple;
+    )
+  `) as KopiTuple;
 
   expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
     new KopiNumber(1),
@@ -158,7 +181,9 @@ test('Pipe', async () => {
 });
 
 test('Fetch', async () => {
-  let number = await interpret(`fetch "https://mike-austin.com" | length`) as KopiNumber;
+  let number = await interpret(`
+    fetch "https://mike-austin.com" | length
+  `) as KopiNumber;
 
   expect(number.value).toEqual(2138);
 });

@@ -13,7 +13,9 @@ async function interpret(source: string) {
 }
 
 test('Range', async () => {
-  let stream = await interpret(`1..5 | map (n) => n * n | filter (n) => 'even n`) as KopiStream;
+  let stream = await interpret(`
+    1..5 | map (n) => n * n | filter (n) => 'even n
+  `) as KopiStream;
 
   const elements = (await stream.toArray()).elements;
 
@@ -22,7 +24,9 @@ test('Range', async () => {
     new KopiNumber(16),
   ]);
 
-  let array = await interpret(`1..3 | map (n) => n * n | toArray`) as KopiArray;
+  let array = await interpret(`
+    1..3 | map (n) => n * n | toArray
+  `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(1),
@@ -30,7 +34,9 @@ test('Range', async () => {
     new KopiNumber(9),
   ]);
 
-  array = await interpret(`"a".."c" | map (c) => c | toArray`) as KopiArray;
+  array = await interpret(`
+    "a".."c" | map (c) => c | toArray
+  `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
     new KopiString("a"),
@@ -40,7 +46,9 @@ test('Range', async () => {
 });
 
 test('Map and filter', async () => {
-  let stream = await interpret(`(1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n`) as KopiStream;
+  let stream = await interpret(`
+    (1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n
+  `) as KopiStream;
 
   expect(await Promise.all((await stream.toArray()).elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
@@ -57,7 +65,9 @@ test('Map and filter', async () => {
     new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
   ]);
 
-  stream = await interpret(`1..1000000000 | map (n) => (n * n) | take 3`) as KopiStream;
+  stream = await interpret(
+    `1..1000000000 | map (n) => (n * n) | take 3
+  `) as KopiStream;
 
   expect(await Promise.all((await stream.toArray()).elements)).toEqual([
     new KopiNumber(1),
@@ -65,13 +75,17 @@ test('Map and filter', async () => {
     new KopiNumber(9),
   ]);
 
-  let number = await interpret(`1..2 | find (n) => 'even n`) as KopiNumber | KopiTuple;
+  let number = await interpret(`
+    1..2 | find (n) => 'even n
+  `) as KopiNumber | KopiTuple;
 
   if (number instanceof KopiNumber) {
     expect(number.value).toEqual(2);
   }
 
-  number = await interpret(`1..5 | reduce (a = 1, n) => (a * n)`) as KopiNumber;
+  number = await interpret(`
+    1..5 | reduce (a = 1, n) => a * n
+  `) as KopiNumber;
 
   expect(number.value).toEqual(120);
 });
