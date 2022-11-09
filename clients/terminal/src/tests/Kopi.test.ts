@@ -1,10 +1,10 @@
 /* eslint-disable jest/no-conditional-expect */
 
-import * as parser from './lib/parser';
+import * as parser from '../lib/parser';
 
-import { transform, evaluate, environment } from './test';
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from './modules/terminals/classes';
-import { KopiRange } from './modules/operators/classes';
+import { transform, evaluate, environment } from '../test';
+import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from '../modules/terminals/classes';
+import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -157,74 +157,10 @@ test('Pipe', async () => {
   expect(number.value).toEqual(9);
 });
 
-test('Range', async () => {
-  let stream = await interpret(`1..5 | map (n) => n * n | filter (n) => 'even n`) as KopiStream;
-
-  const elements = (await stream.toArray()).elements;
-
-  expect(await Promise.all(elements)).toEqual([
-    new KopiNumber(4),
-    new KopiNumber(16),
-  ]);
-
-  let array = await interpret(`1..3 | map (n) => n * n | toArray`) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiNumber(1),
-    new KopiNumber(4),
-    new KopiNumber(9),
-  ]);
-
-  array = await interpret(`"a".."c" | map (c) => c | toArray`) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
-  ]);
-});
-
 test('Fetch', async () => {
   let number = await interpret(`fetch "https://mike-austin.com" | length`) as KopiNumber;
 
   expect(number.value).toEqual(2138);
-});
-
-test('Map and filter', async () => {
-  let stream = await interpret(`(1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n`) as KopiStream;
-
-  expect(await Promise.all((await stream.toArray()).elements)).toEqual([
-    new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
-    new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
-  ]);
-
-  let array = await interpret(`
-    1..3 | flatMap a => ((a + 1)..3 | map b => (a, b)) | toArray
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))]),
-    new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(3))]),
-    new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
-  ]);
-
-  stream = await interpret(`1..1000000000 | map (n) => (n * n) | take 3`) as KopiStream;
-
-  expect(await Promise.all((await stream.toArray()).elements)).toEqual([
-    new KopiNumber(1),
-    new KopiNumber(4),
-    new KopiNumber(9),
-  ]);
-
-  let number = await interpret(`1..2 | find (n) => 'even n`) as KopiNumber | KopiTuple;
-
-  if (number instanceof KopiNumber) {
-    expect(number.value).toEqual(2);
-  }
-
-  number = await interpret(`1..5 | reduce (a = 1, n) => (a * n)`) as KopiNumber;
-
-  expect(number.value).toEqual(120);
 });
 
 test('Assignment', async () => {
@@ -264,56 +200,6 @@ test('Loop', async () => {
   expect(number.value).toEqual(3);
 });
 
-test('Coroutine', async () => {
-  let string = await interpret(`
-    coro = spawn (yield) => {
-      let () => {
-        yield x => x * x
-        sleep 0.1
-
-        loop ()
-      }
-    }
-
-    let (n = 1) => {
-      print (coro | send n)
-
-      match (n) (
-        3 => "Done"
-        n => loop (n + 1)
-      )
-    }
-  `) as KopiNumber;
-
-  expect(string.value).toEqual('Done');
-});
-
-test('Factorial', async () => {
-  let number = await interpret(`
-    fix = f => (x => f (y => x x y)) x => f (y => x x y)
-
-    factorial = fix factorial => n => match n (
-      0 => 1
-      n => n * factorial (n - 1)
-    )
-
-    factorial 5
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(120);
-
-  number = await interpret(`
-    factorial (n) = match n (
-      0 => 1
-      n => n * factorial (n - 1)
-    )
-
-    factorial 5
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(120);
-});
-
 test('Member', async () => {
   let number = await interpret(`
     (1..5).to
@@ -332,71 +218,7 @@ test('FunctionPattern', async () => {
   expect(number.value).toEqual(3);
 });
 
-test('FizzBuzz', async () => {
-  let array = await interpret(`
-    fizzBuzz (n) = 1..n | map (n) => match (n % 3, n % 5) (
-      (0, 0) => "FizzBuzz"
-      (0, _) => "Fizz"
-      (_, 0) => "Buzz"
-      _      => n
-    ) | toArray
-
-    fizzBuzz 15
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiNumber(1),
-    new KopiNumber(2),
-    new KopiString('Fizz'),
-    new KopiNumber(4),
-    new KopiString('Buzz'),
-    new KopiString('Fizz'),
-    new KopiNumber(7),
-    new KopiNumber(8),
-    new KopiString('Fizz'),
-    new KopiString('Buzz'),
-    new KopiNumber(11),
-    new KopiString('Fizz'),
-    new KopiNumber(13),
-    new KopiNumber(14),
-    new KopiString('FizzBuzz'),
-  ]);
-});
-
-test('Take and drop', async () => {
-  let array = await interpret(`
-    1..5 | drop 3 | toArray
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiNumber(4),
-    new KopiNumber(5),
-  ]);
-
-  let boolean = await interpret(`
-    [1, 3, 5] | some (n) => 'even n
-  `) as KopiBoolean;
-
-  expect(boolean.value).toEqual(false);
-
-  boolean = await interpret(`
-    [1, 2, 3, 4, 5] | some (n) => 'even n
-  `) as KopiBoolean;
-
-  expect(boolean.value).toEqual(true);
-
-  array = await interpret(`
-    iterate 1 (n) => n * 2 | take 3 | toArray
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiNumber(2),
-    new KopiNumber(4),
-    new KopiNumber(8),
-  ]);
-});
-
-test('Record', async () => {
+test('Named tuple fields', async () => {
   let tuple = await interpret(`
     tuple = (1, b: 2, c: 3)
     (tuple.0, tuple.1, tuple.2)

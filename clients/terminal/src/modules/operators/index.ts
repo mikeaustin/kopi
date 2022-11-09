@@ -49,7 +49,7 @@ const transform = (next: Transform, transform: Transform) =>
       case 'TupleExpression':
         return new astNodes.TupleExpression({
           expressionElements: rawAstNode.expressionElements.map((expressionElement: ASTNode) => transform(expressionElement)),
-          expressionElementNames: rawAstNode.expressionElementNames,
+          expressionFieldNames: rawAstNode.expressionFieldNames,
           location: rawAstNode.location,
         } as astNodes.TupleExpression);
       case 'ApplyExpression':

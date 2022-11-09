@@ -327,7 +327,7 @@ function peg$parse(input, options) {
         type: 'TupleExpression',
         expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , , , expressionElement]) =>
           [...expressionElements, expressionElement], [head]),
-        expressionElementNames: tail.reduce((fieldNames, [, , , fieldName]) =>
+        expressionFieldNames: tail.reduce((fieldNames, [, , , fieldName]) =>
           [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }
     };
