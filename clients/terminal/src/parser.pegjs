@@ -85,12 +85,12 @@ RangeExpression
   / MemberExpression
 
 MemberExpression
-  = head:UnaryExpression tail:("." Identifier)* {
-      return tail.reduce((expression, [, identifier]) => (
+  = head:UnaryExpression tail:("." (Identifier / NumericLiteral))* {
+      return tail.reduce((expression, [, member]) => (
         ({
           type: 'MemberExpression',
           expression,
-          member: identifier.name
+          member: member.name ? member.name : member.value
         })
       ), head)
     }
@@ -110,11 +110,13 @@ UnaryExpression
 //
 
 PrimaryExpression
-  = "(" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ ")" _ !"=>" {
+  = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) _ (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , , , expressionElement]) =>
           [...expressionElements, expressionElement], [head]),
+        expressionElementNames: tail.reduce((fieldNames, [, , , fieldName]) =>
+          [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }
     }
   / FunctionExpression

@@ -112,12 +112,13 @@ async function UnaryExpression(
 }
 
 async function TupleExpression(
-  { expressionElements }: astNodes.TupleExpression,
+  { expressionElements, expressionElementNames }: astNodes.TupleExpression,
   evaluate: Evaluate,
   environment: Environment,
 ) {
   return new KopiTuple(
-    expressionElements.map(expressionElement => evaluate(expressionElement, environment))
+    expressionElements.map(expressionElement => evaluate(expressionElement, environment)),
+    expressionElementNames,
   );
 }
 

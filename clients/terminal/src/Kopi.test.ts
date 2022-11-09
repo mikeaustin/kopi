@@ -393,3 +393,19 @@ test('Take and drop', async () => {
     new KopiNumber(8),
   ]);
 });
+
+test('Record', async () => {
+  let tuple = await interpret(`
+    tuple = (1, b: 2, c: 3)
+    (tuple.0, tuple.1, tuple.2)
+  `) as KopiTuple;
+
+  console.log(await tuple.inspect());
+
+  tuple = await interpret(`
+    tuple = (1, b: 2, c: 3)
+    (tuple.b, tuple.c)
+  `) as KopiTuple;
+
+  console.log(await tuple.inspect());
+});

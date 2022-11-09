@@ -6,15 +6,25 @@ import KopiNumber from './KopiNumber';
 import KopiStream from "./KopiStream";
 
 class KopiTuple extends KopiValue {
-  constructor(elements: Promise<KopiValue>[]) {
+  constructor(elements: Promise<KopiValue>[], fieldNames?: string[]) {
     super();
 
     this.elements = elements;
+    this.fieldNames = fieldNames ?? Array.from(elements, (_) => null);
+
+    this.fieldNames.forEach((fieldName, index) => {
+      (this as any)[index] = elements[index];
+
+      if (fieldName !== null) {
+        (this as any)[fieldName] = elements[index];
+      }
+    });
   }
 
   override async inspect() {
     const elements = await Promise.all(
-      this.elements.map(async element => (await element).inspect())
+      this.elements.map(async (element, index) =>
+        `${this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : ``}${await (await element).inspect()}`)
     );
 
     return `(${elements.join(', ')})`;
@@ -47,6 +57,7 @@ class KopiTuple extends KopiValue {
   }
 
   elements: Promise<KopiValue>[];
+  fieldNames: (string | null)[];
 }
 
 export default KopiTuple;
