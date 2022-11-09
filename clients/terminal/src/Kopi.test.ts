@@ -190,17 +190,25 @@ test('Fetch', async () => {
   expect(number.value).toEqual(2138);
 });
 
-test('Tuple map', async () => {
+test('Map and filter', async () => {
   let stream = await interpret(`(1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n`) as KopiStream;
 
   expect(await Promise.all((await stream.toArray()).elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
     new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
   ]);
-});
 
-test('Tuple map 2', async () => {
-  let stream = await interpret(`1..1000000000 | map (n) => (n * n) | take 3`) as KopiStream;
+  let array = await interpret(`
+    1..3 | flatMap a => ((a + 1)..3 | map b => (a, b)) | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))]),
+    new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(3))]),
+    new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
+  ]);
+
+  stream = await interpret(`1..1000000000 | map (n) => (n * n) | take 3`) as KopiStream;
 
   expect(await Promise.all((await stream.toArray()).elements)).toEqual([
     new KopiNumber(1),
@@ -216,7 +224,6 @@ test('Tuple map 2', async () => {
 
   number = await interpret(`1..5 | reduce (a = 1, n) => (a * n)`) as KopiNumber;
 
-  console.log(number);
   expect(number.value).toEqual(120);
 });
 
@@ -321,4 +328,35 @@ test('FunctionPattern', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(3);
+});
+
+test('FizzBuzz', async () => {
+  let array = await interpret(`
+    fizzBuzz (n) = 1..n | map (n) => match (n % 3, n % 5) (
+      (0, 0) => "FizzBuzz"
+      (0, _) => "Fizz"
+      (_, 0) => "Buzz"
+      _      => n
+    ) | toArray
+
+    fizzBuzz 15
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiString('Fizz'),
+    new KopiNumber(4),
+    new KopiString('Buzz'),
+    new KopiString('Fizz'),
+    new KopiNumber(7),
+    new KopiNumber(8),
+    new KopiString('Fizz'),
+    new KopiString('Buzz'),
+    new KopiNumber(11),
+    new KopiString('Fizz'),
+    new KopiNumber(13),
+    new KopiNumber(14),
+    new KopiString('FizzBuzz'),
+  ]);
 });

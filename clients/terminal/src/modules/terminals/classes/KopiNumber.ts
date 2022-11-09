@@ -35,6 +35,10 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(this.value / that.value);
   }
 
+  '%'(that: KopiNumber) {
+    return new KopiNumber(this.value % that.value);
+  }
+
   negate() {
     return new KopiNumber(-this.value);
   }

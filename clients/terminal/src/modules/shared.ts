@@ -7,6 +7,7 @@ abstract class Numeric extends Trait {
   abstract '-'(that: KopiValue): KopiValue;
   abstract '*'(that: KopiValue): KopiValue;
   abstract '/'(that: KopiValue): KopiValue;
+  abstract '%'(that: KopiValue): KopiValue;
   abstract negate(): KopiValue;
 }
 

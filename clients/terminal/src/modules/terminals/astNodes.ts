@@ -101,13 +101,13 @@ class IdentifierPattern extends ASTPatternNode {
   }
 
   override async match(value: KopiValue, evaluate: Evaluate, environment: Environment) {
-    if ((value === undefined || value instanceof KopiTuple)) {
+    if ((value === undefined || (value instanceof KopiTuple && value.elements.length === 0))) {
       if (this.defaultExpression !== null) {
         return {
           [this.name]: await evaluate(this.defaultExpression, environment)
         };
       } else {
-        throw new Error(`IdentifierPattern.match: No match found for pattern '${this.name}'`);
+        return undefined;
       }
     }
 
@@ -133,10 +133,20 @@ class TuplePattern extends ASTPatternNode {
     }
 
     try {
-      return await this.patterns.reduce(async (bindings, pattern, index) => ({
-        ...await bindings,
-        ...await pattern.match(await tuple.getElementAtIndex(index) ?? new KopiTuple([]), evaluate, environment),
-      }), {} as Bindings);
+      let matches = {} as Bindings;
+      let index = 0;
+
+      for (const pattern of this.patterns) {
+        let localMatches = await pattern.match(await tuple.getElementAtIndex(index++) ?? new KopiTuple([]), evaluate, environment);
+
+        if (localMatches === undefined) {
+          return undefined;
+        }
+
+        matches = { ...matches, ...localMatches };
+      }
+
+      return matches;
     } catch (error) {
       throw Error('TuplePattern.match\n  ' + (error as Error).message);
     }

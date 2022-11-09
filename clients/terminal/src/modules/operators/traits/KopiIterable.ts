@@ -25,6 +25,16 @@ abstract class KopiIterable {
     return new KopiStream(generator);
   }
 
+  async flatMap(func: KopiFunction, evaluate: Evaluate, environment: Environment): Promise<KopiStream> {
+    const generator = (async function* (this: KopiIterable) {
+      for await (const value of this) {
+        yield* (await func.apply(new KopiTuple([]), [value, evaluate, environment]) as KopiStream);
+      }
+    }).apply(this);
+
+    return new KopiStream(generator);
+  }
+
   async filter(func: KopiFunction, evaluate: Evaluate, environment: Environment): Promise<KopiStream> {
     const generator = (async function* (this: KopiIterable) {
       for await (const value of this) {

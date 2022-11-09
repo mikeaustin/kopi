@@ -55,7 +55,7 @@ AddExpression
     }
 
 MultiplyExpression
-  = head:ApplyExpression tail:(_ ("*" / "/") _ ApplyExpression)* {
+  = head:ApplyExpression tail:(_ ("*" / "/" / "%") _ ApplyExpression)* {
       return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
         type: 'OperatorExpression',
         operator,

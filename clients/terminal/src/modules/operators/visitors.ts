@@ -71,7 +71,7 @@ async function OperatorExpression(
   ]);
 
   if ((leftValue.constructor as typeof KopiValue).traits.includes(Numeric)) {
-    if (operator === '+' || operator === '-' || operator === '*' || operator === '/') {
+    if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
       return (leftValue as unknown as Numeric)[operator](rightValue);
     }
   }
