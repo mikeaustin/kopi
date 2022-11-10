@@ -297,3 +297,16 @@ test('Context', async () => {
     new KopiNumber(80),
   ]);
 });
+
+test('Map', async () => {
+  let number = await interpret(`
+    {"a": 1, "b": 2}
+    {
+      "a": 1
+      "b": 2
+    }
+  `) as KopiNumber;
+
+  console.log(number);
+  // expect(number.value).toEqual(3);
+});

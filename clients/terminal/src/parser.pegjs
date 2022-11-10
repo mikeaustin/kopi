@@ -110,21 +110,22 @@ UnaryExpression
 //
 
 PrimaryExpression
-  = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) _ (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
+  = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
       return head && tail.length === 0 ? head : {
         type: 'TupleExpression',
-        expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , , expressionField]) =>
+        expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , expressionField]) =>
           [...expressionFields, expressionField], [head]),
-        expressionFieldNames: tail.reduce((fieldNames, [, , , fieldName]) =>
+        expressionFieldNames: tail.reduce((fieldNames, [, , fieldName]) =>
           [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }
     }
   / FunctionExpression
-  / BlockExpression
   / NumericLiteral
   / StringLiteral
   / BooleanLiteral
   / ArrayLiteral
+  / MapLiteral
+  / BlockExpression
   / AstLiteral
   / Identifier
 
@@ -137,11 +138,6 @@ FunctionExpression
       }
     }
 
-BlockExpression
-  = "{" _ statements:Block _ "}" {
-    return statements;
-  }
-
 ArrayLiteral
   = "[" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ "]" _ !"=>" {
       return {
@@ -150,6 +146,26 @@ ArrayLiteral
           [...expressionElements, expressionElement], [head]),
       }
     }
+
+MapLiteral
+  = "{" _ ":" _ "}" {
+      return {
+        type: 'MapLiteral',
+        expressionEntries: [],
+      }
+    }
+  / "{" __ key:PrimaryExpression ":" _ head:Expression tail:(_ (("," __) / __) PrimaryExpression ":" _ Expression)* __ "}" _ !"=>" {
+      return {
+        type: 'MapLiteral',
+        expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
+          [...expressionEntries, [key.value, expressionValue]], [[key.value, head]]),
+      }
+    }
+
+BlockExpression
+  = "{" _ statements:Block _ "}" {
+    return statements;
+  }
 
 NumericLiteral "number"
   = value:([0-9]+ ("." !"." [0-9]+)?) {

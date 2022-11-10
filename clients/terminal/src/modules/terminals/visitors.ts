@@ -2,6 +2,7 @@ import { Evaluate, Environment, BindValues, Context } from '../shared';
 import { KopiNumber, KopiBoolean, KopiString, KopiArray } from './classes';
 
 import * as astNodes from './astNodes';
+import KopiMap from './classes/KopiMap';
 
 async function NumericLiteral(
   { value }: astNodes.NumericLiteral,
@@ -33,6 +34,15 @@ async function ArrayLiteral(
   return new KopiArray(expressionElements.map((expression) => evaluate(expression, environment, bindValues)));
 }
 
+async function MapLiteral(
+  { expressionEntries }: astNodes.MapLiteral,
+  context: Context,
+) {
+  const { evaluate, environment, bindValues } = context;
+
+  return new KopiMap(expressionEntries.map(([key, expression]) => [key, evaluate(expression, environment, bindValues)]));
+}
+
 async function Identifier(
   astNode: astNodes.Identifier,
   context: Context,
@@ -53,5 +63,6 @@ export {
   BooleanLiteral,
   StringLiteral,
   ArrayLiteral,
+  MapLiteral,
   Identifier
 };
