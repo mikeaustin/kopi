@@ -57,7 +57,7 @@ class Deferred {
   }
 }
 
-class Coroutine extends KopiValue {
+class KopiCoroutine extends KopiValue {
   deferred: Deferred[];
 
   constructor() {
@@ -98,7 +98,7 @@ class KopiLoop extends KopiValue {
   value: KopiValue;
 }
 
-class Context extends KopiValue {
+class KopiContext extends KopiValue {
   constructor(value: KopiValue, bindValues: BindValues) {
     super();
 
@@ -132,13 +132,13 @@ const environment: {
   String: new KopiType(KopiString),
 
   async context(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
-    const context = new Context(value, bindValues);
+    const context = new KopiContext(value, bindValues);
 
     return context;
   },
 
   async spawn(func: KopiFunction, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
-    const coroutine = new Coroutine();
+    const coroutine = new KopiCoroutine();
 
     func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), evaluate, environment, bindValues]);
 
