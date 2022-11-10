@@ -1,4 +1,4 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, Extensions, Trait, Applicative } from '../shared';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, BindValues, Extensions, Trait, Applicative } from '../shared';
 import { KopiFunction, KopiNumber, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -62,9 +62,9 @@ class Identifier extends ASTNode {
 
   async apply(
     thisArg: KopiValue,
-    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
   ): Promise<KopiValue> {
-    return argument.invoke(this.name, [new KopiTuple([]), evaluate, environment]);
+    return argument.invoke(this.name, [new KopiTuple([]), evaluate, environment, bindValues]);
   }
 
   name: string;
@@ -100,11 +100,11 @@ class IdentifierPattern extends ASTPatternNode {
     this.defaultExpression = defaultExpression;
   }
 
-  override async match(value: KopiValue, evaluate: Evaluate, environment: Environment) {
+  override async match(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
     if ((value === undefined || (value instanceof KopiTuple && value.elements.length === 0))) {
       if (this.defaultExpression !== null) {
         return {
-          [this.name]: await evaluate(this.defaultExpression, environment)
+          [this.name]: await evaluate(this.defaultExpression, environment, bindValues)
         };
       } else {
         return undefined;
@@ -127,7 +127,7 @@ class TuplePattern extends ASTPatternNode {
     this.patterns = patterns;
   }
 
-  override async match(tuple: KopiValue, evaluate: Evaluate, environment: Environment) {
+  override async match(tuple: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
     if (tuple === undefined) {
       throw new Error('TuplePattern match(): value is not a tuple');
     }
@@ -136,7 +136,7 @@ class TuplePattern extends ASTPatternNode {
       let bindings = {} as Bindings;
 
       for (const [index, pattern] of this.patterns.entries()) {
-        let matches = await pattern.match(await tuple.getElementAtIndex(index) ?? new KopiTuple([]), evaluate, environment);
+        let matches = await pattern.match(await tuple.getElementAtIndex(index) ?? new KopiTuple([]), evaluate, environment, bindValues);
 
         if (matches === undefined) {
           return undefined;

@@ -15,10 +15,12 @@ abstract class Equatable extends Trait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
+//   bindValues: (bindings: { [name: string]: KopiValue; }) => void,
+
 abstract class Applicative extends Trait {
   abstract apply(
     thisArg: KopiValue | undefined,
-    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
     // [argumentValue, evaluateNode, currentEnvironment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue>;
 }
@@ -77,7 +79,7 @@ abstract class KopiValue implements Indexable {
 
   async invoke(
     methodName: string,
-    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
   ): Promise<KopiValue> {
     const functions = (environment._extensions as Extensions).map.get(this.constructor);
 
@@ -86,7 +88,7 @@ abstract class KopiValue implements Indexable {
       : (this as Indexable)[methodName];
 
     if (method) {
-      return await method.apply(this, [argument, evaluate, environment]);
+      return await method.apply(this, [argument, evaluate, environment, bindValues]);
     }
 
     throw new Error(`No method '${methodName}' found in ${await this.inspect()}`);
@@ -111,7 +113,8 @@ abstract class ASTPatternNode extends ASTNode {
   abstract match(
     value: KopiValue,
     evaluate: Evaluate,
-    environment: Environment
+    environment: Environment,
+    bindValues: BindValues,
   ): Promise<{ [name: string]: KopiValue; } | undefined>;
 }
 
@@ -130,12 +133,14 @@ type Transform = (rawAstNode: RawASTNode) => ASTNode;
 type Evaluate = (
   astNode: ASTNode,
   environment: Environment,
-  bindValues?: (bindings: { [name: string]: KopiValue; }) => void
+  bindValues: (bindings: { [name: string | symbol]: KopiValue; }) => void
 ) => Promise<KopiValue>;
 
 interface Environment {
-  [name: string]: KopiValue;
+  [name: string | symbol]: KopiValue;
 }
+
+type BindValues = (bindings: { [name: string]: KopiValue; }) => void;
 
 class Extensions extends KopiValue {
   constructor(mappings: [[Function, { [name: string]: any; }]]) {
@@ -162,5 +167,6 @@ export {
   type Bindings,
   type Transform,
   type Environment,
+  type BindValues,
   type Evaluate,
 };

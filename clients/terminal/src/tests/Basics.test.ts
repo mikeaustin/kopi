@@ -148,7 +148,7 @@ test('Tuple Element Newlines', async () => {
     )
   `) as KopiTuple;
 
-  expect(await Promise.all((tuple as KopiTuple).elements)).toEqual([
+  expect(await Promise.all(tuple.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -257,4 +257,25 @@ test('Named tuple fields', async () => {
   `) as KopiTuple;
 
   console.log(await tuple.inspect());
+});
+
+test('Context', async () => {
+  let tuple = await interpret(`
+    columnWidth = context 80
+
+    (
+      columnWidth | get,
+      {
+        columnWidth | set 120
+        columnWidth | get
+      },
+      columnWidth | get
+    )
+  `) as KopiTuple;
+
+  expect(await Promise.all(tuple.elements)).toEqual([
+    new KopiNumber(80),
+    new KopiNumber(120),
+    new KopiNumber(80),
+  ]);
 });

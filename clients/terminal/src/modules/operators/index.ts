@@ -74,23 +74,23 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
     if (astNode instanceof astNodes.Assignment) {
       return visitors.Assignment(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.PipeExpression) {
-      return visitors.PipeExpression(astNode, evaluate, environment);
+      return visitors.PipeExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.BlockExpression) {
-      return visitors.BlockExpression(astNode, evaluate, environment);
+      return visitors.BlockExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.OperatorExpression) {
-      return visitors.OperatorExpression(astNode, evaluate, environment);
+      return visitors.OperatorExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.MemberExpression) {
-      return visitors.MemberExpression(astNode, evaluate, environment);
+      return visitors.MemberExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.UnaryExpression) {
-      return visitors.UnaryExpression(astNode, evaluate, environment);
+      return visitors.UnaryExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.TupleExpression) {
-      return visitors.TupleExpression(astNode, evaluate, environment);
+      return visitors.TupleExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.FunctionExpression) {
-      return visitors.FunctionExpression(astNode, evaluate, environment);
+      return visitors.FunctionExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.ApplyExpression) {
-      return visitors.ApplyExpression(astNode, evaluate, environment);
+      return visitors.ApplyExpression(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.RangeExpression) {
-      return visitors.RangeExpression(astNode, evaluate, environment);
+      return visitors.RangeExpression(astNode, evaluate, environment, bindValues);
     } else {
       return next(astNode, environment);
     }
