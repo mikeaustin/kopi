@@ -74,18 +74,20 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
 
 const evaluate = (evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
+    const context = { evaluate, environment, bindValues };
+
     if (astNode instanceof astNodes.NumericLiteral) {
-      return visitors.NumericLiteral(astNode, evaluate, environment);
+      return visitors.NumericLiteral(astNode, context);
     } else if (astNode instanceof astNodes.BooleanLiteral) {
-      return visitors.BooleanLiteral(astNode, evaluate, environment);
+      return visitors.BooleanLiteral(astNode, context);
     } else if (astNode instanceof astNodes.StringLiteral) {
-      return visitors.StringLiteral(astNode, evaluate, environment);
+      return visitors.StringLiteral(astNode, context);
     } else if (astNode instanceof astNodes.ArrayLiteral) {
-      return visitors.ArrayLiteral(astNode, evaluate, environment, bindValues);
+      return visitors.ArrayLiteral(astNode, context);
+    } else if (astNode instanceof astNodes.Identifier) {
+      return visitors.Identifier(astNode, context);
     } else if (astNode instanceof astNodes.AstLiteral) {
       return astNode.value;
-    } else if (astNode instanceof astNodes.Identifier) {
-      return visitors.Identifier(astNode, evaluate, environment);
     } else {
       throw new Error(`No visitor found for '${inspect(astNode)}'`);
     }
