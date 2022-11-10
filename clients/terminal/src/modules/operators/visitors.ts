@@ -26,7 +26,7 @@ async function Assignment(
   }
 
   const expressionValue = await evaluate(expression, environment, bindValues);
-  const patternMatches = await pattern.match(expressionValue, evaluate, environment, bindValues);
+  const patternMatches = await pattern.match(expressionValue, { evaluate, environment, bindValues });
 
   if (patternMatches && bindValues) {
     bindValues(patternMatches);
@@ -69,7 +69,7 @@ async function PipeExpression(
   const expressionValue = await evaluate(expression, environment, bindValues);
   const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment, bindValues) : new KopiTuple([]);
 
-  return expressionValue.invoke(methodName, [argumentValue, evaluate, environment, bindValues]);
+  return expressionValue.invoke(methodName, [argumentValue, { evaluate, environment, bindValues }]);
 }
 
 async function OperatorExpression(
@@ -163,7 +163,7 @@ async function ApplyExpression(
   if ((func.constructor as typeof KopiValue).traits.includes(Applicative)) {
     return (func as unknown as Applicative).apply(
       undefined,
-      [await evaluate(argumentExpression, environment, bindValues), evaluate, environment, bindValues]
+      [await evaluate(argumentExpression, environment, bindValues), { evaluate, environment, bindValues }]
     );
   }
 

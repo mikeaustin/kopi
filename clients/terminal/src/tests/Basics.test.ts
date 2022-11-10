@@ -7,7 +7,7 @@ import { KopiRange } from '../modules/operators/classes';
 async function interpret(source: string) {
   let ast = parser.parse(source);
 
-  return evaluate(transform(ast), environment);
+  return evaluate(transform(ast), environment, () => { });
 }
 
 test('Basic types', async () => {

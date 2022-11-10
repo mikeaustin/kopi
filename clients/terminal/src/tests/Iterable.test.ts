@@ -8,7 +8,7 @@ import KopiIterable from '../modules/operators/traits/KopiIterable';
 async function interpret(source: string) {
   let ast = parser.parse(source);
 
-  return evaluate(transform(ast), environment);
+  return evaluate(transform(ast), environment, () => { });
 }
 
 test('Range', async () => {

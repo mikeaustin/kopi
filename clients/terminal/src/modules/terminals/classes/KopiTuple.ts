@@ -1,4 +1,4 @@
-import { BindValues, Environment, Evaluate, KopiValue } from '../../shared';
+import { BindValues, Context, Environment, Evaluate, KopiValue } from '../../shared';
 
 import KopiFunction from './KopiFunction';
 import KopiNumber from './KopiNumber';
@@ -37,7 +37,7 @@ class KopiTuple extends KopiValue {
     return new KopiNumber(this.elements.length);
   }
 
-  map(func: KopiFunction, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  map(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
     const result = (async function* map(this: KopiTuple) {
       const iters = await Promise.all(
         this.elements.map(async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]())
@@ -46,7 +46,7 @@ class KopiTuple extends KopiValue {
       let results = await Promise.all(iters.map((iter) => iter.next()));
 
       while (results.every((result) => !result.done)) {
-        yield func.apply(new KopiTuple([]), [new KopiTuple(results.map((result) => result.value)), evaluate, environment, bindValues]);
+        yield func.apply(new KopiTuple([]), [new KopiTuple(results.map((result) => result.value)), { evaluate, environment, bindValues }]);
 
         results = await Promise.all(iters.map((iter) => iter.next()));
       }

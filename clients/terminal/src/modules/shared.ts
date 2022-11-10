@@ -18,7 +18,7 @@ abstract class Equatable extends Trait {
 abstract class Applicative extends Trait {
   abstract apply(
     thisArg: KopiValue | undefined,
-    [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
+    [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
     // [argumentValue, evaluateNode, currentEnvironment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue>;
 }
@@ -77,7 +77,7 @@ abstract class KopiValue implements Indexable {
 
   async invoke(
     methodName: string,
-    [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
+    [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
   ): Promise<KopiValue> {
     const functions = (environment._extensions as Extensions).map.get(this.constructor);
 
@@ -86,7 +86,7 @@ abstract class KopiValue implements Indexable {
       : (this as Indexable)[methodName];
 
     if (method) {
-      return await method.apply(this, [argument, evaluate, environment, bindValues]);
+      return await method.apply(this, [argument, { evaluate, environment, bindValues }]);
     }
 
     throw new Error(`No method '${methodName}' found in ${await this.inspect()}`);
@@ -110,9 +110,7 @@ class ASTNode extends KopiValue {
 abstract class ASTPatternNode extends ASTNode {
   abstract match(
     value: KopiValue,
-    evaluate: Evaluate,
-    environment: Environment,
-    bindValues: BindValues,
+    { evaluate, environment, bindValues }: Context,
   ): Promise<{ [name: string]: KopiValue; } | undefined>;
 }
 
@@ -131,7 +129,7 @@ type Transform = (rawAstNode: RawASTNode) => ASTNode;
 type Evaluate = (
   astNode: ASTNode,
   environment: Environment,
-  bindValues: (bindings: { [name: string | symbol]: KopiValue; }) => void
+  bindValues: BindValues,
 ) => Promise<KopiValue>;
 
 interface Environment {
@@ -150,6 +148,12 @@ class Extensions extends KopiValue {
   map: Map<Function, { [name: string]: any; }>;
 }
 
+type Context = {
+  environment: Environment,
+  evaluate: Evaluate,
+  bindValues: BindValues,
+};
+
 export {
   ASTNode,
   ASTPatternNode,
@@ -167,4 +171,5 @@ export {
   type Environment,
   type BindValues,
   type Evaluate,
+  type Context,
 };

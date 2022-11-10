@@ -1,4 +1,4 @@
-import { KopiValue, ASTNode, ASTPatternNode, Evaluate, Environment, BindValues } from "../../shared";
+import { KopiValue, ASTNode, ASTPatternNode, Evaluate, Environment, BindValues, Context } from "../../shared";
 import { Applicative } from "../../shared";
 
 class KopiFunction extends KopiValue {
@@ -15,9 +15,9 @@ class KopiFunction extends KopiValue {
 
   async apply(
     thisArg: KopiValue,
-    [argument, evaluate, _environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
+    [argument, { evaluate, environment: _environment, bindValues }]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    const matches = await this.parameterPattern.match(argument, evaluate, _environment, bindValues);
+    const matches = await this.parameterPattern.match(argument, { evaluate, environment: _environment, bindValues });
 
     const newEnvironment = {
       ...this.environment,

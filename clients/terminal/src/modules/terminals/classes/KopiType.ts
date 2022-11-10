@@ -1,4 +1,4 @@
-import { KopiValue, Evaluate, Environment } from "../../shared";
+import { KopiValue, Evaluate, Environment, Context } from "../../shared";
 import { Applicative } from "../../shared";
 
 import KopiString from './KopiString';
@@ -18,7 +18,7 @@ class KopiType extends KopiValue {
 
   async apply(
     thisArg: KopiValue,
-    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    [argument, { evaluate, environment }]: [KopiValue, Context]
   ): Promise<KopiValue> {
     return new KopiString("Hello, world");
   }

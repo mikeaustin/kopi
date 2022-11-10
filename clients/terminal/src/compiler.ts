@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Evaluate, Environment, Bindings, BindValues, Trait, Applicative } from './modules/shared';
+import { RawASTNode, ASTNode, Evaluate, Environment, Context, Bindings, BindValues, Trait, Applicative } from './modules/shared';
 import { inspect } from './modules/utils';
 
 import * as operators from './modules/operators';
@@ -23,7 +23,7 @@ declare global {
     force(): Promise<KopiValue>;
     invoke(
       methodName: string,
-      [argument, evaluate, environment, bindValues]: [KopiValue, Evaluate, Environment, BindValues]
+      [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
     ): Promise<KopiValue>;
   }
 }
@@ -66,17 +66,17 @@ class KopiCoroutine extends KopiValue {
     this.deferred = [new Deferred(), new Deferred()];
   }
 
-  async yield(func: KopiFunction, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  async yield(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
     const data = await this.deferred[0] as KopiValue;
     this.deferred[0] = new Deferred();
 
-    const value = await func.apply(new KopiTuple([]), [data, evaluate, environment, bindValues]);
+    const value = await func.apply(new KopiTuple([]), [data, { evaluate, environment, bindValues }]);
 
     (this.deferred[1] as any).resolve(value);
     this.deferred[1] = new Deferred();
   }
 
-  async send(value: KopiValue, evaluate: Evaluate, environment: Environment) {
+  async send(value: KopiValue) {
     (this.deferred[0] as any).resolve(value);
 
     const x = await this.deferred[1];
@@ -110,13 +110,13 @@ class KopiContext extends KopiValue {
     });
   }
 
-  set(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  set(value: KopiValue, { evaluate, environment, bindValues }: Context) {
     bindValues({
       [this.symbol]: value,
     });
   }
 
-  get(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  get(value: KopiValue, { evaluate, environment, bindValues }: Context) {
     return environment[this.symbol as keyof typeof environment];
   }
 
@@ -131,16 +131,16 @@ const environment: {
 
   String: new KopiType(KopiString),
 
-  async context(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  async context(value: KopiValue, { evaluate, environment, bindValues }: Context) {
     const context = new KopiContext(value, bindValues);
 
     return context;
   },
 
-  async spawn(func: KopiFunction, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  async spawn(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
     const coroutine = new KopiCoroutine();
 
-    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), evaluate, environment, bindValues]);
+    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), { evaluate, environment, bindValues }]);
 
     return coroutine;
   },
@@ -151,13 +151,13 @@ const environment: {
     return new KopiTuple([]);
   },
 
-  async iterate(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  async iterate(value: KopiValue, { evaluate, environment, bindValues }: Context) {
     return function (func: KopiFunction) {
       let result = value;
 
       const generator = (async function* () {
         for (; ;) {
-          yield result = await func.apply(new KopiTuple([]), [result, evaluate, environment, bindValues]);
+          yield result = await func.apply(new KopiTuple([]), [result, { evaluate, environment, bindValues }]);
         }
       })();
 
@@ -165,13 +165,13 @@ const environment: {
     };
   },
 
-  match(value: KopiValue, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  match(value: KopiValue, { evaluate, environment, bindValues }: Context) {
     return async (tuple: KopiTuple) => {
       for await (const func of tuple.elements) {
-        const matches = await (func as KopiFunction).parameterPattern.match(value, evaluate, environment, bindValues);
+        const matches = await (func as KopiFunction).parameterPattern.match(value, { evaluate, environment, bindValues });
 
         if (matches) {
-          return (func as KopiFunction).apply(new KopiTuple([]), [value, evaluate, environment, bindValues]);
+          return (func as KopiFunction).apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]);
         }
       }
 
@@ -181,13 +181,13 @@ const environment: {
 
   // extend: () => {},
 
-  async let(func: KopiFunction, evaluate: Evaluate, environment: Environment, bindValues: BindValues) {
+  async let(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
     let result: KopiValue = new KopiTuple([]);
 
     do {
       const result2 = result instanceof KopiLoop ? result.value : result;
 
-      result = await func.apply(new KopiTuple([]), [result2, evaluate, environment, bindValues]);
+      result = await func.apply(new KopiTuple([]), [result2, { evaluate, environment, bindValues }]);
     } while (result instanceof KopiLoop);
 
     return result instanceof KopiLoop ? result.value : result;
@@ -222,7 +222,7 @@ const transform = (ast: RawASTNode) => {
 
 const transformPipeline = operators.transform(terminals.transform(transform), transform);
 
-const evaluate = (ast: ASTNode, environment: Environment, bindValues?: (bindings: { [name: string]: KopiValue; }) => void) => {
+const evaluate = (ast: ASTNode, environment: Environment, bindValues: BindValues) => {
   return evaluatePipeline(ast, environment, bindValues);
 };
 
