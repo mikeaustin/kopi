@@ -26,7 +26,7 @@ abstract class Applicative extends Trait {
 }
 
 abstract class Enumerable extends Trait {
-  abstract succ(): KopiValue;
+  abstract succ(count: KopiValue): KopiValue;
 }
 
 abstract class Comparable extends Trait {

@@ -2,6 +2,7 @@ import { KopiValue } from "../../shared";
 import { Enumerable, Comparable } from "../../shared";
 
 import KopiNumber from "./KopiNumber";
+import KopiTuple from "./KopiTuple";
 
 class KopiString extends KopiValue {
   static override traits = [Enumerable, Comparable];
@@ -20,11 +21,15 @@ class KopiString extends KopiValue {
     return new KopiNumber(this.value.length);
   }
 
-  succ(): KopiString {
+  succ(count: KopiNumber): KopiString {
+    if (count instanceof KopiTuple && count.elements.length === 0) {
+      count = new KopiNumber(1);
+    }
+
     const codePoint = this.value.codePointAt(0);
 
     if (codePoint) {
-      return new KopiString(String.fromCodePoint(codePoint + 1));
+      return new KopiString(String.fromCodePoint(codePoint + count.value));
     }
 
     throw new Error('KopiString.succ()');

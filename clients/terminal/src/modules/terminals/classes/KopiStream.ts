@@ -1,12 +1,8 @@
-import { KopiValue, Evaluate, Environment } from '../../shared';
+import { KopiValue } from '../../shared';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 
-import KopiTuple from './KopiTuple';
 import KopiArray from './KopiArray';
-import KopiFunction from './KopiFunction';
-import KopiBoolean from './KopiBoolean';
-import KopiNumber from './KopiNumber';
 
 class KopiStream extends KopiValue {
   constructor(iterable: AsyncIterable<KopiValue>) {
@@ -29,22 +25,8 @@ class KopiStream extends KopiValue {
   //   return new KopiArray();
   // }
 
-  // [Symbol.iterator]() {
-  //   return this.iterable[Symbol.iterator]();
-  // }
-
   [Symbol.asyncIterator]() {
     return this.iterable[Symbol.asyncIterator]();
-  }
-
-  async toArray() {
-    const values: Promise<KopiValue>[] = [];
-
-    for await (const element of this.iterable) {
-      values.push(Promise.resolve(element));
-    }
-
-    return new KopiArray(values);
   }
 
   iterable: AsyncIterable<KopiValue>;

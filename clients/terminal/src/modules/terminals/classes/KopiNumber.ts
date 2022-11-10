@@ -3,6 +3,7 @@ import { Numeric, Equatable, Enumerable, Comparable } from "../../shared";
 
 import KopiString from './KopiString';
 import KopiBoolean from './KopiBoolean';
+import KopiTuple from './KopiTuple';
 
 class KopiNumber extends KopiValue {
   static override traits = [Numeric, Equatable, Enumerable, Comparable];
@@ -49,8 +50,12 @@ class KopiNumber extends KopiValue {
 
   // Enumerable methods
 
-  succ() {
-    return new KopiNumber(this.value + 1);
+  succ(count: KopiNumber) {
+    if (count instanceof KopiTuple && count.elements.length === 0) {
+      count = new KopiNumber(1);
+    }
+
+    return new KopiNumber(this.value + count.value);
   }
 
   // Comparable methods

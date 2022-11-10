@@ -231,6 +231,26 @@ test('Member', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(5);
+
+  let array = await interpret(`
+    (1..5 2) | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(3),
+    new KopiNumber(5),
+  ]);
+
+  array = await interpret(`
+    ("a".."z" 2) | take 3 | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiString('a'),
+    new KopiString('c'),
+    new KopiString('e'),
+  ]);
 });
 
 test('FunctionPattern', async () => {
