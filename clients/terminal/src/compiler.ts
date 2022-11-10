@@ -230,7 +230,7 @@ const evaluate = (ast: ASTNode, environment: Environment, bindValues: BindValues
   return evaluatePipeline(ast, environment, bindValues);
 };
 
-const evaluatePipeline = operators.evaluate(terminals.evaluate, evaluate);
+const evaluatePipeline = operators.evaluate(terminals.evaluate(evaluate), evaluate);
 
 // const transformedAst = transformPipeline(ast);
 

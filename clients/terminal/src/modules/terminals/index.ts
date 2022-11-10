@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, BindValues } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, Evaluate, BindValues } from '../shared';
 import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';
@@ -72,25 +72,24 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
   throw new Error(`No transform found for '${inspect(rawAstNode)}'`);
 };
 
-const evaluate = async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
-  if (astNode instanceof astNodes.NumericLiteral) {
-    return visitors.NumericLiteral(astNode, evaluate, environment);
-  } else if (astNode instanceof astNodes.BooleanLiteral) {
-    return visitors.BooleanLiteral(astNode, evaluate, environment);
-  } else if (astNode instanceof astNodes.StringLiteral) {
-    return visitors.StringLiteral(astNode, evaluate, environment);
-  } else if (astNode instanceof astNodes.ArrayLiteral) {
-    return visitors.ArrayLiteral(astNode, evaluate, environment, bindValues);
-  } else if (astNode instanceof operatorsAstNodes.RangeExpression) {
-    return operatorsVisitors.RangeExpression(astNode, evaluate, environment, bindValues);
-  } else if (astNode instanceof astNodes.AstLiteral) {
-    return astNode.value;
-  } else if (astNode instanceof astNodes.Identifier) {
-    return visitors.Identifier(astNode, evaluate, environment);
-  } else {
-    throw new Error(`No visitor found for '${inspect(astNode)}'`);
-  }
-};
+const evaluate = (evaluate: Evaluate) =>
+  async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
+    if (astNode instanceof astNodes.NumericLiteral) {
+      return visitors.NumericLiteral(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.BooleanLiteral) {
+      return visitors.BooleanLiteral(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.StringLiteral) {
+      return visitors.StringLiteral(astNode, evaluate, environment);
+    } else if (astNode instanceof astNodes.ArrayLiteral) {
+      return visitors.ArrayLiteral(astNode, evaluate, environment, bindValues);
+    } else if (astNode instanceof astNodes.AstLiteral) {
+      return astNode.value;
+    } else if (astNode instanceof astNodes.Identifier) {
+      return visitors.Identifier(astNode, evaluate, environment);
+    } else {
+      throw new Error(`No visitor found for '${inspect(astNode)}'`);
+    }
+  };
 
 export {
   transform,
