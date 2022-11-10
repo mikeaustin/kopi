@@ -1,5 +1,3 @@
-/* eslint-disable jest/no-conditional-expect */
-
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';

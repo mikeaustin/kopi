@@ -1,10 +1,9 @@
-/* eslint-disable jest/no-conditional-expect */
-
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
 import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from '../modules/terminals/classes';
-import { KopiRange } from '../modules/operators/classes';
+
+import KopiIterable from '../modules/operators/traits/KopiIterable';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -17,7 +16,7 @@ test('Range', async () => {
     1..5 | map (n) => n * n | filter (n) => 'even n
   `) as KopiStream;
 
-  const elements = (await stream.toArray()).elements;
+  const elements = (await (stream as unknown as KopiIterable).toArray()).elements;
 
   expect(await Promise.all(elements)).toEqual([
     new KopiNumber(4),
@@ -50,7 +49,7 @@ test('Map and filter', async () => {
     (1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n
   `) as KopiStream;
 
-  expect(await Promise.all((await stream.toArray()).elements)).toEqual([
+  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
     new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
   ]);
@@ -69,7 +68,7 @@ test('Map and filter', async () => {
     `1..1000000000 | map (n) => (n * n) | take 3
   `) as KopiStream;
 
-  expect(await Promise.all((await stream.toArray()).elements)).toEqual([
+  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
