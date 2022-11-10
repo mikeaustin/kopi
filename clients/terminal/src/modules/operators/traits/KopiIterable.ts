@@ -15,40 +15,40 @@ abstract class KopiIterable {
     return new KopiArray(values);
   }
 
-  async reduce(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiValue> {
+  async reduce(func: KopiFunction, context: Context): Promise<KopiValue> {
     let result: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
 
     for await (const value of this) {
-      result = func.apply(new KopiTuple([]), [new KopiTuple([result, Promise.resolve(value)]), { evaluate, environment, bindValues }]);
+      result = func.apply(new KopiTuple([]), [new KopiTuple([result, Promise.resolve(value)]), context]);
     }
 
     return result;
   }
 
-  async map(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiStream> {
+  async map(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = (async function* (this: KopiIterable) {
       for await (const value of this) {
-        yield func.apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]);
+        yield func.apply(new KopiTuple([]), [value, context]);
       }
     }).apply(this);
 
     return new KopiStream(generator);
   }
 
-  async flatMap(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiStream> {
+  async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = (async function* (this: KopiIterable) {
       for await (const value of this) {
-        yield* (await func.apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]) as KopiStream);
+        yield* (await func.apply(new KopiTuple([]), [value, context]) as KopiStream);
       }
     }).apply(this);
 
     return new KopiStream(generator);
   }
 
-  async filter(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiStream> {
+  async filter(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = (async function* (this: KopiIterable) {
       for await (const value of this) {
-        if ((await func.apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]) as KopiBoolean).value) {
+        if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
           yield value;
         }
       }
@@ -57,9 +57,9 @@ abstract class KopiIterable {
     return new KopiStream(generator);
   }
 
-  async find(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiValue> {
+  async find(func: KopiFunction, context: Context): Promise<KopiValue> {
     for await (const value of this) {
-      if ((await func.apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]) as KopiBoolean).value) {
+      if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
         return value;
       }
     }
@@ -97,9 +97,9 @@ abstract class KopiIterable {
     return new KopiStream(generator);
   }
 
-  async some(func: KopiFunction, { evaluate, environment, bindValues }: Context): Promise<KopiBoolean> {
+  async some(func: KopiFunction, context: Context): Promise<KopiBoolean> {
     for await (const value of this) {
-      if ((await func.apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]) as KopiBoolean).value) {
+      if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
         return new KopiBoolean(true);
       }
     }

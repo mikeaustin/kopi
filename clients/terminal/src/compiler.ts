@@ -23,7 +23,7 @@ declare global {
     force(): Promise<KopiValue>;
     invoke(
       methodName: string,
-      [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
+      [argument, context]: [KopiValue, Context]
     ): Promise<KopiValue>;
   }
 }
@@ -66,11 +66,11 @@ class KopiCoroutine extends KopiValue {
     this.deferred = [new Deferred(), new Deferred()];
   }
 
-  async yield(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
+  async yield(func: KopiFunction, context: Context) {
     const data = await this.deferred[0] as KopiValue;
     this.deferred[0] = new Deferred();
 
-    const value = await func.apply(new KopiTuple([]), [data, { evaluate, environment, bindValues }]);
+    const value = await func.apply(new KopiTuple([]), [data, context]);
 
     (this.deferred[1] as any).resolve(value);
     this.deferred[1] = new Deferred();
@@ -110,13 +110,17 @@ class KopiContext extends KopiValue {
     });
   }
 
-  set(value: KopiValue, { evaluate, environment, bindValues }: Context) {
+  set(value: KopiValue, context: Context) {
+    const { bindValues } = context;
+
     bindValues({
       [this.symbol]: value,
     });
   }
 
-  get(value: KopiValue, { evaluate, environment, bindValues }: Context) {
+  get(value: KopiValue, context: Context) {
+    const { environment } = context;
+
     return environment[this.symbol as keyof typeof environment];
   }
 
@@ -131,16 +135,16 @@ const environment: {
 
   String: new KopiType(KopiString),
 
-  async context(value: KopiValue, { evaluate, environment, bindValues }: Context) {
-    const context = new KopiContext(value, bindValues);
+  async context(value: KopiValue, context: Context) {
+    const { bindValues } = context;
 
-    return context;
+    return new KopiContext(value, bindValues);
   },
 
-  async spawn(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
+  async spawn(func: KopiFunction, context: Context) {
     const coroutine = new KopiCoroutine();
 
-    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), { evaluate, environment, bindValues }]);
+    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), context]);
 
     return coroutine;
   },
@@ -151,13 +155,13 @@ const environment: {
     return new KopiTuple([]);
   },
 
-  async iterate(value: KopiValue, { evaluate, environment, bindValues }: Context) {
+  async iterate(value: KopiValue, context: Context) {
     return function (func: KopiFunction) {
       let result = value;
 
       const generator = (async function* () {
         for (; ;) {
-          yield result = await func.apply(new KopiTuple([]), [result, { evaluate, environment, bindValues }]);
+          yield result = await func.apply(new KopiTuple([]), [result, context]);
         }
       })();
 
@@ -165,13 +169,13 @@ const environment: {
     };
   },
 
-  match(value: KopiValue, { evaluate, environment, bindValues }: Context) {
+  match(value: KopiValue, context: Context) {
     return async (tuple: KopiTuple) => {
       for await (const func of tuple.elements) {
-        const matches = await (func as KopiFunction).parameterPattern.match(value, { evaluate, environment, bindValues });
+        const matches = await (func as KopiFunction).parameterPattern.match(value, context);
 
         if (matches) {
-          return (func as KopiFunction).apply(new KopiTuple([]), [value, { evaluate, environment, bindValues }]);
+          return (func as KopiFunction).apply(new KopiTuple([]), [value, context]);
         }
       }
 
@@ -181,13 +185,13 @@ const environment: {
 
   // extend: () => {},
 
-  async let(func: KopiFunction, { evaluate, environment, bindValues }: Context) {
+  async let(func: KopiFunction, context: Context) {
     let result: KopiValue = new KopiTuple([]);
 
     do {
       const result2 = result instanceof KopiLoop ? result.value : result;
 
-      result = await func.apply(new KopiTuple([]), [result2, { evaluate, environment, bindValues }]);
+      result = await func.apply(new KopiTuple([]), [result2, context]);
     } while (result instanceof KopiLoop);
 
     return result instanceof KopiLoop ? result.value : result;

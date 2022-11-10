@@ -15,9 +15,11 @@ class KopiFunction extends KopiValue {
 
   async apply(
     thisArg: KopiValue,
-    [argument, { evaluate, environment: _environment, bindValues }]: [KopiValue, Context]
+    [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    const matches = await this.parameterPattern.match(argument, { evaluate, environment: _environment, bindValues });
+    const { evaluate, bindValues } = context;
+
+    const matches = await this.parameterPattern.match(argument, context);
 
     const newEnvironment = {
       ...this.environment,

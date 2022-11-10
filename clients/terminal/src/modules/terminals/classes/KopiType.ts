@@ -18,7 +18,7 @@ class KopiType extends KopiValue {
 
   async apply(
     thisArg: KopiValue,
-    [argument, { evaluate, environment }]: [KopiValue, Context]
+    [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
     return new KopiString("Hello, world");
   }

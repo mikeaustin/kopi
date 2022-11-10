@@ -18,7 +18,7 @@ abstract class Equatable extends Trait {
 abstract class Applicative extends Trait {
   abstract apply(
     thisArg: KopiValue | undefined,
-    [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
+    [argument, context]: [KopiValue, Context]
     // [argumentValue, evaluateNode, currentEnvironment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue>;
 }
@@ -77,8 +77,9 @@ abstract class KopiValue implements Indexable {
 
   async invoke(
     methodName: string,
-    [argument, { evaluate, environment, bindValues }]: [KopiValue, Context]
+    [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
+    const { environment } = context;
     const functions = (environment._extensions as Extensions).map.get(this.constructor);
 
     const method = functions && functions[methodName]
@@ -86,7 +87,7 @@ abstract class KopiValue implements Indexable {
       : (this as Indexable)[methodName];
 
     if (method) {
-      return await method.apply(this, [argument, { evaluate, environment, bindValues }]);
+      return await method.apply(this, [argument, context]);
     }
 
     throw new Error(`No method '${methodName}' found in ${await this.inspect()}`);
