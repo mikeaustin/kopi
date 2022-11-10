@@ -40,11 +40,21 @@ async function BlockExpression(
   evaluate: Evaluate,
   environment: Environment,
 ): Promise<KopiValue> {
+  const newEnvironment = {};
+
+  Object.setPrototypeOf(newEnvironment, environment);
+
+  environment = newEnvironment;
+
   const bindValues = (bindings: { [name: string]: KopiValue; }) => {
-    environment = { ...environment, ...bindings };
+    const newEnvironment = { ...environment, ...bindings };
+
+    Object.setPrototypeOf(newEnvironment, Object.getPrototypeOf(environment));
+
+    environment = newEnvironment;
   };
 
-  return await statements.reduce<Promise<KopiValue>>(async (result, statement) => (
+  return statements.reduce<Promise<KopiValue>>(async (result, statement) => (
     (await result, await evaluate(statement, environment, bindValues))
   ), Promise.resolve(new KopiTuple([])));
 }

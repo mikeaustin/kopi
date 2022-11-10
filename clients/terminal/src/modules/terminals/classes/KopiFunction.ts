@@ -15,15 +15,19 @@ class KopiFunction extends KopiValue {
 
   async apply(
     thisArg: KopiValue,
-    [argument, evaluate, environment]: [KopiValue, Evaluate, Environment]
+    [argument, evaluate, _environment]: [KopiValue, Evaluate, Environment]
   ): Promise<KopiValue> {
-    const matches = await this.parameterPattern.match(argument, evaluate, environment);
+    const matches = await this.parameterPattern.match(argument, evaluate, _environment);
 
-    return evaluate(this.bodyExpression, {
+    const newEnvironment = {
       ...this.environment,
       ...matches,
       ...(this.name ? { [this.name]: this } : {}),
-    });
+    };
+
+    Object.setPrototypeOf(newEnvironment, Object.getPrototypeOf(this.environment));
+
+    return evaluate(this.bodyExpression, newEnvironment);
   }
 
   parameterPattern: ASTPatternNode;
