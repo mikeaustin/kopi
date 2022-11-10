@@ -1,4 +1,4 @@
-import { KopiValue, Evaluate, Environment } from '../shared';
+import { Evaluate, Environment, BindValues } from '../shared';
 import { KopiNumber, KopiBoolean, KopiString, KopiArray } from './classes';
 
 import * as astNodes from './astNodes';
@@ -31,8 +31,9 @@ async function ArrayLiteral(
   { expressionElements }: astNodes.ArrayLiteral,
   evaluate: Evaluate,
   environment: Environment,
+  bindValues: BindValues,
 ) {
-  return new KopiArray(expressionElements.map((expression) => evaluate(expression, environment)));
+  return new KopiArray(expressionElements.map((expression) => evaluate(expression, environment, bindValues)));
 }
 
 async function Identifier(

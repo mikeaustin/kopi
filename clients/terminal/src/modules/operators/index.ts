@@ -1,5 +1,4 @@
-import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment } from '../shared';
-import { KopiTuple } from '../terminals/classes';
+import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment, BindValues } from '../shared';
 
 import * as astNodes from './astNodes';
 import * as visitors from './visitors';
@@ -70,7 +69,7 @@ const transform = (next: Transform, transform: Transform) =>
   };
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
-  async (astNode: ASTNode, environment: Environment, bindValues?: (bindings: { [name: string]: KopiValue; }) => void): Promise<KopiValue> => {
+  async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
     if (astNode instanceof astNodes.Assignment) {
       return visitors.Assignment(astNode, evaluate, environment, bindValues);
     } else if (astNode instanceof astNodes.PipeExpression) {
@@ -92,7 +91,7 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
     } else if (astNode instanceof astNodes.RangeExpression) {
       return visitors.RangeExpression(astNode, evaluate, environment, bindValues);
     } else {
-      return next(astNode, environment);
+      return next(astNode, environment, bindValues);
     }
   };
 

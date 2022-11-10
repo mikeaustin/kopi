@@ -1,5 +1,5 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, BindValues, Extensions, Trait, Applicative } from '../shared';
-import { KopiFunction, KopiNumber, KopiString, KopiTuple } from './classes';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, BindValues, Trait, Applicative } from '../shared';
+import { KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   constructor({ value, location }: NumericLiteral) {

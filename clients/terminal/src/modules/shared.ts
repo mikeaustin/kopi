@@ -15,8 +15,6 @@ abstract class Equatable extends Trait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
-//   bindValues: (bindings: { [name: string]: KopiValue; }) => void,
-
 abstract class Applicative extends Trait {
   abstract apply(
     thisArg: KopiValue | undefined,
