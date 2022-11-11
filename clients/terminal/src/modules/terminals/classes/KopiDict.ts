@@ -36,6 +36,17 @@ class KopiDict extends KopiValue {
     return new KopiNumber(this.entries.size);
   }
 
+  get(key: KopiValue) {
+    return this.entries.get((key as any).value);
+  }
+
+  set(key: KopiValue) {
+    return (value: Promise<KopiValue>) =>
+      new KopiDict(
+        Array.from(new Map([...this.entries, [(key as any).value, value]]))
+      );
+  }
+
   // override async force() {
   //   let elements: Promise<KopiValue>[] = [];
 

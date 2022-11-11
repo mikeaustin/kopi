@@ -298,15 +298,19 @@ test('Context', async () => {
   ]);
 });
 
-test('Map', async () => {
+test('Dict', async () => {
   let number = await interpret(`
-    {"a": 1, "b": 2}
-    {
-      "a": 1
-      "b": 2
-    }
+    dict = {"a": 1, "b": 2}
+    dict | get "b"
   `) as KopiNumber;
 
-  console.log(await number.inspect());
-  // expect(number.value).toEqual(3);
+  expect(number.value).toEqual(2);
+
+  number = await interpret(`
+    dict = {:}
+    dict = dict | set "c" 3
+    dict | get "c"
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(3);
 });
