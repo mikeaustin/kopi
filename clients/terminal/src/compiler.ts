@@ -171,7 +171,7 @@ const environment: {
 
   match(value: KopiValue, context: Context) {
     return async (tuple: KopiTuple) => {
-      for await (const func of tuple.elements) {
+      for await (const func of tuple.fields) {
         const matches = await (func as KopiFunction).parameterPattern.match(value, context);
 
         if (matches) {

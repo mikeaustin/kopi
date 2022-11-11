@@ -5,43 +5,43 @@ import KopiNumber from './KopiNumber';
 import KopiStream from './KopiStream';
 
 class KopiTuple extends KopiValue {
-  constructor(elements: Promise<KopiValue>[], fieldNames?: string[]) {
+  constructor(fields: Promise<KopiValue>[], fieldNames?: string[]) {
     super();
 
-    this.elements = elements;
-    this.fieldNames = fieldNames ?? Array.from(elements, (_) => null);
+    this.fields = fields;
+    this.fieldNames = fieldNames ?? Array.from(fields, (_) => null);
 
     this.fieldNames.forEach((fieldName, index) => {
-      (this as any)[index] = elements[index];
+      (this as any)[index] = fields[index];
 
       if (fieldName !== null) {
-        (this as any)[fieldName] = elements[index];
+        (this as any)[fieldName] = fields[index];
       }
     });
   }
 
   override async inspect() {
-    const elements = await Promise.all(
-      this.elements.map(async (element, index) =>
+    const fields = await Promise.all(
+      this.fields.map(async (element, index) =>
         this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : `` +
           `${await (await element).inspect()}`)
     );
 
-    return `(${elements.join(', ')})`;
+    return `(${fields.join(', ')})`;
   }
 
   override async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
-    return this.elements[index];
+    return this.fields[index];
   }
 
   async size() {
-    return new KopiNumber(this.elements.length);
+    return new KopiNumber(this.fields.length);
   }
 
   map(func: KopiFunction, context: Context) {
     const result = (async function* map(this: KopiTuple) {
       const iters = await Promise.all(
-        this.elements.map(
+        this.fields.map(
           async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]()
         )
       );
@@ -58,7 +58,7 @@ class KopiTuple extends KopiValue {
     return new KopiStream(result);
   }
 
-  elements: Promise<KopiValue>[];
+  fields: Promise<KopiValue>[];
   fieldNames: (string | null)[];
 }
 

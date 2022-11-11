@@ -15,7 +15,7 @@ test('Basic types', async () => {
     (-123, "abc", true, 1..5)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.elements)).toEqual([
+  expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(-123),
     new KopiString("abc"),
     new KopiBoolean(true),
@@ -45,7 +45,7 @@ test('Async operations', async () => {
     (sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.elements)).toEqual([
+  expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(2),
     new KopiNumber(2),
   ]);
@@ -90,7 +90,7 @@ test('Default arguments', async () => {
     ((a, b = 2, c = 3) => (a, b, c)) (1)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.elements)).toEqual([
+  expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -146,7 +146,7 @@ test('Tuple Element Newlines', async () => {
     )
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.elements)).toEqual([
+  expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -291,7 +291,7 @@ test('Context', async () => {
     )
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.elements)).toEqual([
+  expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(80),
     new KopiNumber(120),
     new KopiNumber(80),

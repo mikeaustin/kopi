@@ -51,7 +51,7 @@ class KopiNumber extends KopiValue {
   // Enumerable methods
 
   succ(count: KopiNumber) {
-    if (count instanceof KopiTuple && count.elements.length === 0) {
+    if (count instanceof KopiTuple && count.fields.length === 0) {
       count = new KopiNumber(1);
     }
 

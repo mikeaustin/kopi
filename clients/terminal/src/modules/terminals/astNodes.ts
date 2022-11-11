@@ -113,7 +113,7 @@ class IdentifierPattern extends ASTPatternNode {
   override async match(value: KopiValue, context: Context) {
     const { evaluate, environment, bindValues } = context;
 
-    if ((value === undefined || (value instanceof KopiTuple && value.elements.length === 0))) {
+    if ((value === undefined || (value instanceof KopiTuple && value.fields.length === 0))) {
       if (this.defaultExpression !== null) {
         return {
           [this.name]: await evaluate(this.defaultExpression, environment, bindValues)
