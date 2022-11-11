@@ -31,7 +31,9 @@ async function ArrayLiteral(
 ) {
   const { evaluate, environment, bindValues } = context;
 
-  return new KopiArray(expressionElements.map((expression) => evaluate(expression, environment, bindValues)));
+  return new KopiArray(
+    expressionElements.map((expression) => evaluate(expression, environment, bindValues))
+  );
 }
 
 async function DictLiteral(
@@ -40,7 +42,12 @@ async function DictLiteral(
 ) {
   const { evaluate, environment, bindValues } = context;
 
-  return new KopiDict(expressionEntries.map(([key, expression]) => [key, evaluate(expression, environment, bindValues)]));
+  return new KopiDict(
+    await Promise.all(expressionEntries.map(async ([key, expression]) => [
+      await evaluate(key, environment, bindValues),
+      evaluate(expression, environment, bindValues)
+    ]))
+  );
 }
 
 async function Identifier(

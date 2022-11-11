@@ -36,7 +36,10 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
     case 'DictLiteral':
       return new astNodes.DictLiteral({
         expressionEntries: rawAstNode.expressionEntries.map(
-          ([key, expression]: [key: any, expression: ASTNode]) => [key, transform(expression)]
+          ([key, expression]: [key: any, expression: ASTNode]) => [
+            transform(key),
+            transform(expression)
+          ]
         ),
         location: rawAstNode.location,
       } as astNodes.DictLiteral);

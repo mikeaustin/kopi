@@ -355,7 +355,7 @@ function peg$parse(input, options) {
       return {
         type: 'DictLiteral',
         expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
-          [...expressionEntries, [key.value, expressionValue]], [[key.value, head]]),
+          [...expressionEntries, [key, expressionValue]], [[key, head]]),
       }
     };
   var peg$f14 = function(statements) {
