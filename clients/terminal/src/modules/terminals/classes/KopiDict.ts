@@ -4,7 +4,7 @@ import KopiNumber from './KopiNumber';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 
-class KopiMap extends KopiValue {
+class KopiDict extends KopiValue {
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
     super();
 
@@ -48,4 +48,4 @@ class KopiMap extends KopiValue {
 //   }
 // }
 
-export default KopiMap;
+export default KopiDict;

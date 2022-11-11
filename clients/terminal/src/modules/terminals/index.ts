@@ -33,11 +33,11 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
         expressionElements: rawAstNode.expressionElements.map((expression: ASTNode) => transform(expression)),
         location: rawAstNode.location,
       } as astNodes.ArrayLiteral);
-    case 'MapLiteral':
-      return new astNodes.MapLiteral({
+    case 'DictLiteral':
+      return new astNodes.DictLiteral({
         expressionEntries: rawAstNode.expressionEntries.map(([key, expression]: [key: any, expression: ASTNode]) => [key, transform(expression)]),
         location: rawAstNode.location,
-      } as astNodes.MapLiteral);
+      } as astNodes.DictLiteral);
     case 'AstLiteral':
       return new astNodes.AstLiteral({
         value: transform(rawAstNode.value),
@@ -89,8 +89,8 @@ const evaluate = (evaluate: Evaluate) =>
       return visitors.StringLiteral(astNode, context);
     } else if (astNode instanceof astNodes.ArrayLiteral) {
       return visitors.ArrayLiteral(astNode, context);
-    } else if (astNode instanceof astNodes.MapLiteral) {
-      return visitors.MapLiteral(astNode, context);
+    } else if (astNode instanceof astNodes.DictLiteral) {
+      return visitors.DictLiteral(astNode, context);
     } else if (astNode instanceof astNodes.Identifier) {
       return visitors.Identifier(astNode, context);
     } else if (astNode instanceof astNodes.AstLiteral) {

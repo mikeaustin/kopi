@@ -347,13 +347,13 @@ function peg$parse(input, options) {
     };
   var peg$f12 = function() {
       return {
-        type: 'MapLiteral',
+        type: 'DictLiteral',
         expressionEntries: [],
       }
     };
   var peg$f13 = function(key, head, tail) {
       return {
-        type: 'MapLiteral',
+        type: 'DictLiteral',
         expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
           [...expressionEntries, [key.value, expressionValue]], [[key.value, head]]),
       }
@@ -1445,7 +1445,7 @@ function peg$parse(input, options) {
             if (s0 === peg$FAILED) {
               s0 = peg$parseArrayLiteral();
               if (s0 === peg$FAILED) {
-                s0 = peg$parseMapLiteral();
+                s0 = peg$parseDictLiteral();
                 if (s0 === peg$FAILED) {
                   s0 = peg$parseBlockExpression();
                   if (s0 === peg$FAILED) {
@@ -1637,7 +1637,7 @@ function peg$parse(input, options) {
     return s0;
   }
 
-  function peg$parseMapLiteral() {
+  function peg$parseDictLiteral() {
     var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14;
 
     s0 = peg$currPos;

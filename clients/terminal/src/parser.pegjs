@@ -124,7 +124,7 @@ PrimaryExpression
   / StringLiteral
   / BooleanLiteral
   / ArrayLiteral
-  / MapLiteral
+  / DictLiteral
   / BlockExpression
   / AstLiteral
   / Identifier
@@ -147,16 +147,16 @@ ArrayLiteral
       }
     }
 
-MapLiteral
+DictLiteral
   = "{" _ ":" _ "}" {
       return {
-        type: 'MapLiteral',
+        type: 'DictLiteral',
         expressionEntries: [],
       }
     }
   / "{" __ key:PrimaryExpression ":" _ head:Expression tail:(_ (("," __) / __) PrimaryExpression ":" _ Expression)* __ "}" _ !"=>" {
       return {
-        type: 'MapLiteral',
+        type: 'DictLiteral',
         expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
           [...expressionEntries, [key.value, expressionValue]], [[key.value, head]]),
       }

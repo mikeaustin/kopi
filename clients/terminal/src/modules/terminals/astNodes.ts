@@ -41,8 +41,8 @@ class ArrayLiteral extends ASTNode {
   expressionElements: ASTNode[];
 }
 
-class MapLiteral extends ASTNode {
-  constructor({ expressionEntries, location }: MapLiteral) {
+class DictLiteral extends ASTNode {
+  constructor({ expressionEntries, location }: DictLiteral) {
     super(location);
 
     this.expressionEntries = expressionEntries;
@@ -189,7 +189,7 @@ export {
   BooleanLiteral,
   StringLiteral,
   ArrayLiteral,
-  MapLiteral,
+  DictLiteral,
   AstLiteral,
   Identifier,
   NumericLiteralPattern,
