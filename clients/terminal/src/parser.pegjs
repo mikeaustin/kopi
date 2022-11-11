@@ -158,7 +158,7 @@ DictLiteral
       return {
         type: 'DictLiteral',
         expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
-          [...expressionEntries, [key, expressionValue]], [[key, head]]),
+          [...expressionEntries, [key.value, expressionValue]], [[key.value, head]]),
       }
     }
 
