@@ -1,4 +1,4 @@
-import { KopiValue, BindValues, Numeric, Applicative, Evaluate, Environment, Trait, Context } from '../shared';
+import { KopiValue, Numeric, Applicative, Trait, Context } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 import { KopiRange } from './classes';
 

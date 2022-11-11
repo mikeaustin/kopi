@@ -1,9 +1,17 @@
-import { KopiValue } from "../../shared";
+import { KopiValue, Trait } from "../../shared";
 import { Applicative, Enumerable, Comparable } from "../../shared";
 
 import { KopiNumber } from '../../terminals/classes';
 
 import KopiIterable from '../traits/KopiIterable';
+
+const assertTrait = async (value: KopiValue, variableName: string, trait: Function, errors: string[]) => {
+  const traits = (value.constructor as typeof KopiValue).traits;
+
+  if (!traits.includes(trait)) {
+    errors.push(`'${variableName}' value '${await value.inspect()}' is missing trait '${trait.constructor.name}'`);
+  }
+};
 
 class KopiRange extends KopiValue {
   static override traits = [Applicative];
@@ -28,15 +36,12 @@ class KopiRange extends KopiValue {
     const [from, _to] = [await this.from, await this.to];
     // const op = from > to ? '>=' : '<=';
 
-    const fromTraits = (from.constructor as typeof KopiValue).traits;
-    const toTraits = (_to.constructor as typeof KopiValue).traits;
-
     let errors: string[] = [];
 
-    if (!fromTraits.includes(Enumerable)) errors.push(`  'from' value '${await from.inspect()}' is missing trait 'Enumerable'`);
-    if (!fromTraits.includes(Comparable)) errors.push(`  'from' value '${await from.inspect()}' is missing trait 'Comparable'`);
-    if (!toTraits.includes(Enumerable)) errors.push(`  'to' value '${await _to.inspect()}' is missing trait 'Enumerable'`);
-    if (!toTraits.includes(Comparable)) errors.push(`  'to' value '${await _to.inspect()}' is missing trait 'Comparable'`);
+    assertTrait(from, 'from', Enumerable, errors);
+    assertTrait(from, 'from', Comparable, errors);
+    assertTrait(_to, 'to', Enumerable, errors);
+    assertTrait(_to, 'to', Comparable, errors);
 
     if (errors.length > 0) {
       throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);

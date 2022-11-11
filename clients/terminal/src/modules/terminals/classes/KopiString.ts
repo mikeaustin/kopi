@@ -26,11 +26,7 @@ class KopiString extends KopiValue {
     return new KopiNumber(this.value.length);
   }
 
-  split(string: KopiString) {
-    return new KopiArray(
-      this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
-    );
-  }
+  // Enumerable methods
 
   succ(count: KopiNumber): KopiString {
     if (count instanceof KopiTuple && count.elements.length === 0) {
@@ -46,6 +42,8 @@ class KopiString extends KopiValue {
     throw new Error('KopiString.succ()');
   }
 
+  // Comparable methods
+
   compare(that: KopiString) {
     if (this.value < that.value) {
       return new KopiNumber(-1);
@@ -54,6 +52,14 @@ class KopiString extends KopiValue {
     }
 
     return new KopiNumber(0);
+  }
+
+  // General methods
+
+  split(string: KopiString) {
+    return new KopiArray(
+      this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
+    );
   }
 
   value: string;

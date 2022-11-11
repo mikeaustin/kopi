@@ -1,4 +1,4 @@
-import { KopiValue, Evaluate, Environment, Context } from "../../shared";
+import { KopiValue, Context } from "../../shared";
 import { Applicative } from "../../shared";
 
 import KopiString from './KopiString';

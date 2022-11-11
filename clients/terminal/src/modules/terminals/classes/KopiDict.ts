@@ -11,7 +11,9 @@ class KopiDict extends KopiValue {
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
     super();
 
-    this.entries = new Map(entries.map(([key, value]) => [key.valueOf(), value]));
+    this.entries = new Map(
+      entries.map(([key, value]) => [key.valueOf(), value])
+    );
   }
 
   override async inspect() {

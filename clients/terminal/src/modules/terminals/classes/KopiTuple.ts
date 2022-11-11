@@ -23,7 +23,8 @@ class KopiTuple extends KopiValue {
   override async inspect() {
     const elements = await Promise.all(
       this.elements.map(async (element, index) =>
-        `${this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : ``}${await (await element).inspect()}`)
+        this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : `` +
+          `${await (await element).inspect()}`)
     );
 
     return `(${elements.join(', ')})`;
@@ -40,7 +41,9 @@ class KopiTuple extends KopiValue {
   map(func: KopiFunction, context: Context) {
     const result = (async function* map(this: KopiTuple) {
       const iters = await Promise.all(
-        this.elements.map(async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]())
+        this.elements.map(
+          async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]()
+        )
       );
 
       let results = await Promise.all(iters.map((iter) => iter.next()));

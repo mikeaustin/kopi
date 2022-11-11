@@ -48,10 +48,6 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(-this.value);
   }
 
-  even(): KopiBoolean {
-    return new KopiBoolean(this.value % 2 === 0);
-  }
-
   // Enumerable methods
 
   succ(count: KopiNumber) {
@@ -83,6 +79,14 @@ class KopiNumber extends KopiValue {
   }
 
   // General methods
+
+  even(): KopiBoolean {
+    return new KopiBoolean(this.value % 2 === 0);
+  }
+
+  odd(): KopiBoolean {
+    return new KopiBoolean(this.value % 2 !== 0);
+  }
 
   round() {
     return new KopiNumber(Math.round(this.value));

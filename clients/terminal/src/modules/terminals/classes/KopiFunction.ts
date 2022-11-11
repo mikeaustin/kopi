@@ -4,7 +4,12 @@ import { Applicative } from "../../shared";
 class KopiFunction extends KopiValue {
   static override traits = [Applicative];
 
-  constructor(parameterPattern: ASTPatternNode, bodyExpression: ASTNode, environment: Environment, name?: string) {
+  constructor(
+    parameterPattern: ASTPatternNode,
+    bodyExpression: ASTNode,
+    environment: Environment,
+    name?: string
+  ) {
     super();
 
     this.parameterPattern = parameterPattern;

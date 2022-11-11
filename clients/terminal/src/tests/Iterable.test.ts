@@ -76,11 +76,9 @@ test('Map and filter', async () => {
 
   let number = await interpret(`
     1..2 | find (n) => 'even n
-  `) as KopiNumber | KopiTuple;
+  `) as KopiNumber;
 
-  if (number instanceof KopiNumber) {
-    expect(number.value).toEqual(2);
-  }
+  expect(number.value).toEqual(2);
 
   number = await interpret(`
     1..5 | reduce (a = 1, n) => a * n
@@ -89,9 +87,9 @@ test('Map and filter', async () => {
   expect(number.value).toEqual(120);
 });
 
-test('Take and drop', async () => {
+test('Take and skip', async () => {
   let array = await interpret(`
-    1..5 | drop 3 | toArray
+    1..5 | skip 3 | toArray
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([

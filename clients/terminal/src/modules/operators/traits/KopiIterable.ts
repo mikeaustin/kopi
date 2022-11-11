@@ -1,5 +1,4 @@
-import { Environment, Evaluate, Context, BindValues, KopiValue } from "../../shared";
-import { Applicative, Enumerable, Comparable } from "../../shared";
+import { Context, KopiValue } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream } from '../../terminals/classes';
 
 abstract class KopiIterable {
@@ -26,33 +25,33 @@ abstract class KopiIterable {
   }
 
   async map(func: KopiFunction, context: Context): Promise<KopiStream> {
-    const generator = (async function* (this: KopiIterable) {
+    const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
         yield func.apply(new KopiTuple([]), [value, context]);
       }
-    }).apply(this);
+    }.apply(this);
 
     return new KopiStream(generator);
   }
 
   async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
-    const generator = (async function* (this: KopiIterable) {
+    const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
         yield* (await func.apply(new KopiTuple([]), [value, context]) as KopiStream);
       }
-    }).apply(this);
+    }.apply(this);
 
     return new KopiStream(generator);
   }
 
   async filter(func: KopiFunction, context: Context): Promise<KopiStream> {
-    const generator = (async function* (this: KopiIterable) {
+    const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
         if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
           yield value;
         }
       }
-    }).apply(this);
+    }.apply(this);
 
     return new KopiStream(generator);
   }
@@ -70,7 +69,7 @@ abstract class KopiIterable {
   take(count: KopiNumber) {
     let index = 0;
 
-    const generator = (async function* (this: KopiIterable) {
+    const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
         if (index++ < count.value) {
           yield value;
@@ -78,21 +77,21 @@ abstract class KopiIterable {
           break;
         }
       }
-    }).apply(this);
+    }.apply(this);
 
     return new KopiStream(generator);
   }
 
-  drop(count: KopiNumber) {
+  skip(count: KopiNumber) {
     let index = 0;
 
-    const generator = (async function* (this: KopiIterable) {
+    const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
         if (!(index++ < count.value)) {
           yield value;
         }
       }
-    }).apply(this);
+    }.apply(this);
 
     return new KopiStream(generator);
   }
@@ -105,6 +104,16 @@ abstract class KopiIterable {
     }
 
     return new KopiBoolean(false);
+  }
+
+  async every(func: KopiFunction, context: Context): Promise<KopiBoolean> {
+    for await (const value of this) {
+      if (!(await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
+        return new KopiBoolean(false);
+      }
+    }
+
+    return new KopiBoolean(true);
   }
 }
 
