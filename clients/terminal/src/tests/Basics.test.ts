@@ -307,6 +307,6 @@ test('Map', async () => {
     }
   `) as KopiNumber;
 
-  console.log(number);
+  console.log(await number.inspect());
   // expect(number.value).toEqual(3);
 });

@@ -3,6 +3,7 @@ import { KopiValue } from "../../shared";
 import KopiNumber from './KopiNumber';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
+import KopiTuple from "./KopiTuple";
 
 class KopiDict extends KopiValue {
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
@@ -11,19 +12,25 @@ class KopiDict extends KopiValue {
     this.entries = new Map(entries);
   }
 
-  // override async inspect() {
-  //   const elements = await Promise.all(
-  //     this.entries.map(async element => (await element).inspect())
-  //   );
+  override async inspect() {
+    if (this.entries.size === 0) {
+      return `{:}`;
+    }
 
-  //   return `[${elements.join(', ')}]`;
-  // }
+    const entries = await Promise.all(
+      (Array.from(this.entries)).map(
+        async ([key, value]: [any, Promise<KopiValue>]) => `${key}: ${await (await value).inspect()}`
+      )
+    );
 
-  // *[Symbol.asyncIterator]() {
-  //   for (const value of this.elements) {
-  //     yield value;
-  //   }
-  // }
+    return `{${entries.join(', ')}}`;
+  }
+
+  *[Symbol.asyncIterator]() {
+    for (const [key, value] of this.entries) {
+      yield new KopiTuple([Promise.resolve(key), value]);
+    }
+  }
 
   size() {
     return new KopiNumber(this.entries.size);
@@ -39,7 +46,7 @@ class KopiDict extends KopiValue {
   //   return new KopiArray(elements);
   // }
 
-  entries: Map<KopiValue, Promise<KopiValue>>;
+  entries: Map<any, Promise<KopiValue>>;
 }
 
 // for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
@@ -47,5 +54,11 @@ class KopiDict extends KopiValue {
 //     (KopiArray.prototype as any)[name] = (KopiIterable.prototype as any)[name];
 //   }
 // }
+
+for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiDict.prototype as any)[name] = (KopiIterable.prototype as any)[name];
+  }
+}
 
 export default KopiDict;
