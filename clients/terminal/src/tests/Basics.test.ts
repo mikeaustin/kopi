@@ -323,8 +323,8 @@ test('Dict', async () => {
   expect(number.value).toEqual(2);
 
   let dict = await interpret(`
-    "abcaba" | split "" | reduce (counts = {:}, letter) => {
-      counts | update letter (n = 0) => n + 1
+    "a b c a b a" | split " " | reduce (counts = {:}, word) => {
+      counts | update word (n = 0) => n + 1
     }
   `) as KopiDict;
 
