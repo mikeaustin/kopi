@@ -299,14 +299,8 @@ test('Context', async () => {
 });
 
 test('Dict', async () => {
-  let dict = await interpret(`
-    {"a": 1, "b": 2}
-  `) as KopiDict;
-
-  console.log(await dict.inspect());
-
   let number = await interpret(`
-    dict = {"a": 1, "b": 2}
+    dict = { "a": 1, "b": 2 }
     dict | get "b"
   `) as KopiNumber;
 
@@ -323,10 +317,16 @@ test('Dict', async () => {
   number = await interpret(`
     dict = { "a": 1 }
     dict = dict | update "a" (n = 0) => n + 1
-    dict = dict | update "c" (n = 0) => n + 1
-    dict
+    dict | get "a"
   `) as KopiNumber;
 
-  console.log(await number.inspect());
-  // expect(number.value).toEqual(3);
+  expect(number.value).toEqual(2);
+
+  let dict = await interpret(`
+    "abcaba" | split "" | reduce (counts = {:}, letter) => {
+      counts | update letter (n = 0) => n + 1
+    }
+  `) as KopiDict;
+
+  console.log(await dict.inspect());
 });

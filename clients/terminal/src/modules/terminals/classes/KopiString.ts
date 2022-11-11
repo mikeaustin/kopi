@@ -1,6 +1,7 @@
 import { KopiValue } from "../../shared";
 import { Enumerable, Comparable } from "../../shared";
 
+import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 
@@ -23,6 +24,12 @@ class KopiString extends KopiValue {
 
   length() {
     return new KopiNumber(this.value.length);
+  }
+
+  split(string: KopiString) {
+    return new KopiArray(
+      this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
+    );
   }
 
   succ(count: KopiNumber): KopiString {

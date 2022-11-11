@@ -25,7 +25,7 @@ class KopiDict extends KopiValue {
       )
     );
 
-    return `{${entries.join(', ')}}`;
+    return `{ ${entries.join(', ')} }`;
   }
 
   *[Symbol.asyncIterator]() {
