@@ -1,9 +1,11 @@
-import { KopiValue } from "../../shared";
+import { Context, KopiValue } from '../../shared';
 
 import KopiNumber from './KopiNumber';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
-import KopiTuple from "./KopiTuple";
+
+import KopiTuple from './KopiTuple';
+import KopiFunction from './KopiFunction';
 
 class KopiDict extends KopiValue {
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
@@ -37,14 +39,26 @@ class KopiDict extends KopiValue {
   }
 
   get(key: KopiValue) {
-    return this.entries.get((key as any).value);
+    return this.entries.get(key.valueOf());
   }
 
   set(key: KopiValue) {
     return (value: Promise<KopiValue>) =>
       new KopiDict(
-        Array.from(new Map([...this.entries, [(key as any).value, value]]))
+        Array.from(new Map([...this.entries, [key.valueOf(), value]]))
       );
+  }
+
+  update(key: KopiValue, context: Context) {
+    return async (func: KopiFunction) => {
+      const value = await this.entries.get(key.valueOf());
+
+      const updatedValue = func.apply(new KopiTuple([]), [value ?? new KopiTuple([]), context]);
+
+      return new KopiDict(
+        Array.from(new Map([...this.entries, [key.valueOf(), updatedValue]]))
+      );
+    };
   }
 
   // override async force() {

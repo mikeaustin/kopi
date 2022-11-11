@@ -48,7 +48,7 @@ class DictLiteral extends ASTNode {
     this.expressionEntries = expressionEntries;
   }
 
-  expressionEntries: [key: any, expression: ASTNode][];
+  expressionEntries: [key: ASTNode, expression: ASTNode][];
 }
 
 class AstLiteral extends ASTNode {
