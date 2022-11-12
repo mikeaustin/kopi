@@ -135,6 +135,19 @@ const environment: {
 
   String: new KopiType(KopiString),
 
+  async type(type: KopiTuple) {
+    const _class = class extends (type as any).constructor {
+      constructor(tuple: KopiTuple) {
+        super(tuple.fields, tuple.fieldNames);
+        // Add copy constructor
+      }
+    };
+
+    Object.defineProperty(_class, 'name', { value: 'Custom' });
+
+    return new KopiType(_class);
+  },
+
   async context(value: KopiValue, context: Context) {
     const { bindValues } = context;
 

@@ -6,24 +6,24 @@ import KopiString from './KopiString';
 class KopiType extends KopiValue {
   static override traits = [Applicative];
 
-  constructor(type: Function) {
+  constructor(_class: Function) {
     super();
 
-    this.type = type;
+    this._class = _class;
   }
 
   override async inspect() {
-    return this.type.prototype.inspect.apply(undefined, []);
+    return this._class.prototype.inspect.apply(undefined, []);
   }
 
   async apply(
     thisArg: KopiValue,
     [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    return new KopiString("Hello, world");
+    return new this._class(argument);
   }
 
-  type: Function;
+  _class: any;
 }
 
 export default KopiType;

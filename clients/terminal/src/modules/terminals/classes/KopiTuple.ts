@@ -5,7 +5,11 @@ import KopiNumber from './KopiNumber';
 import KopiStream from './KopiStream';
 
 class KopiTuple extends KopiValue {
-  constructor(fields: Promise<KopiValue>[], fieldNames?: string[]) {
+  static create(tuple: KopiTuple) {
+    return new KopiTuple(tuple.fields, tuple.fieldNames);
+  }
+
+  constructor(fields: Promise<KopiValue>[], fieldNames?: (string | null)[]) {
     super();
 
     this.fields = fields;

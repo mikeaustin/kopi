@@ -98,13 +98,13 @@ test('Default arguments', async () => {
 });
 
 test('Extension Methods', async () => {
+  // let string = await interpret(`
+  //   String ()
+  // `) as KopiString;
+
+  // expect(string.value).toEqual("Hello, world");
+
   let string = await interpret(`
-    String ()
-  `) as KopiString;
-
-  expect(string.value).toEqual("Hello, world");
-
-  string = await interpret(`
     'capitalize "foo"
   `) as KopiString;
 
@@ -329,4 +329,14 @@ test('Dict', async () => {
   `) as KopiDict;
 
   console.log(await dict.inspect());
+});
+
+test('User Type', async () => {
+  let number = await interpret(`
+    Person = type (name: String, age: String)
+
+    Person (name: "Joe", age: 30)
+  `) as KopiNumber;
+
+  console.log(number);
 });
