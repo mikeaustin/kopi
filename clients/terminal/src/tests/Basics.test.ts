@@ -331,7 +331,7 @@ test('Dict', async () => {
   console.log(await dict.inspect());
 
   let stream = await interpret(`
-    { "a": 1, "b": 2 } | map (k, v) => (k, v + 1)
+    { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
   `) as KopiStream;
 
   console.log('>>>', await stream.inspect());

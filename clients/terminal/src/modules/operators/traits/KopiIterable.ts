@@ -1,5 +1,5 @@
 import { Context, KopiValue } from "../../shared";
-import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream } from '../../terminals/classes';
+import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
 
 abstract class KopiIterable {
   abstract [Symbol.asyncIterator](): AsyncIterator<KopiValue>;
@@ -12,6 +12,20 @@ abstract class KopiIterable {
     }
 
     return new KopiArray(values);
+  }
+
+  async toDict() {
+    const values: [key: KopiValue, value: Promise<KopiValue>][] = [];
+
+    for await (const tuple of this as AsyncIterable<KopiTuple>) {
+      const fields = [tuple.getFieldAt(0), tuple.getFieldAt(1)];
+
+      if (fields[0] && fields[1]) {
+        values.push([await fields[0], fields[1]]);
+      }
+    }
+
+    return new KopiDict(values);
   }
 
   async reduce(func: KopiFunction, context: Context): Promise<KopiValue> {
