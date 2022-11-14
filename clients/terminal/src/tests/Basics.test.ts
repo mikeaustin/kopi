@@ -334,7 +334,7 @@ test('Dict', async () => {
     { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
   `) as KopiStream;
 
-  console.log('>>>', await stream.inspect());
+  console.log(await stream.inspect());
 });
 
 test('User Type', async () => {

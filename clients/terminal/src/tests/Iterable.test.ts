@@ -138,7 +138,7 @@ test('Take and skip', async () => {
 
 test('Splitting', async () => {
   let stream = await interpret(`
-    1..10 | splitEvery 3
+    [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
   `) as KopiStream;
 
   console.log('>>>', await stream.inspect());

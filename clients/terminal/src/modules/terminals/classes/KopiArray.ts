@@ -19,6 +19,12 @@ class KopiArray extends KopiValue {
     return `[${elements.join(', ')}]`;
   }
 
+  *[Symbol.iterator]() {
+    for (const value of this.elements) {
+      yield value;
+    }
+  }
+
   *[Symbol.asyncIterator]() {
     for (const value of this.elements) {
       yield value;

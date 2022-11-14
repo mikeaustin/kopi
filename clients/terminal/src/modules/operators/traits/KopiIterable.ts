@@ -2,6 +2,7 @@ import { Context, KopiValue } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
 
 abstract class KopiIterable {
+  abstract [Symbol.iterator](): Iterator<Promise<KopiValue>>;
   abstract [Symbol.asyncIterator](): AsyncIterator<KopiValue>;
 
   async toArray() {
@@ -153,14 +154,14 @@ abstract class KopiIterable {
     let index = 0;
 
     const generator = async function* (this: KopiIterable) {
-      for await (const value of this) {
+      for (const value of this) {
         if (values.length > 0 && index % count.value === 0) {
           yield new KopiArray(values);
 
           values = [];
         }
 
-        values = [...values, Promise.resolve(value)];
+        values = [...values, value];
         ++index;
       }
 
