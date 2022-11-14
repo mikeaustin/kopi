@@ -67,7 +67,7 @@ abstract class KopiValue implements Indexable {
   }
 
   // TODO: How to return Tuple: recursive import
-  async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
+  getFieldAt(index: number): Promise<KopiValue> | undefined {
     return index === 0 ? Promise.resolve(this) : undefined;
   }
 

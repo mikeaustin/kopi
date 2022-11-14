@@ -19,7 +19,7 @@ declare global {
 
   interface Function {
     inspect(): Promise<string>;
-    getElementAtIndex(index: number): Promise<KopiValue | undefined>;
+    getFieldAt(index: number): Promise<KopiValue> | undefined;
     force(): Promise<KopiValue>;
     invoke(
       methodName: string,

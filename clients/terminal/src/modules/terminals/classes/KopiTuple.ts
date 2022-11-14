@@ -34,7 +34,7 @@ class KopiTuple extends KopiValue {
     return `(${fields.join(', ')})`;
   }
 
-  override async getElementAtIndex(index: number): Promise<KopiValue | undefined> {
+  override getFieldAt(index: number): Promise<KopiValue> | undefined {
     return this.fields[index];
   }
 
