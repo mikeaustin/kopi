@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiBoolean, KopiDict } from '../modules/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiBoolean, KopiDict, KopiStream } from '../modules/terminals/classes';
 import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
@@ -329,6 +329,12 @@ test('Dict', async () => {
   `) as KopiDict;
 
   console.log(await dict.inspect());
+
+  let stream = await interpret(`
+    { "a": 1, "b": 2 } | map (k, v) => (k, v + 1)
+  `) as KopiStream;
+
+  console.log('>>>', await stream.inspect());
 });
 
 test('User Type', async () => {
