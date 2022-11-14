@@ -28,6 +28,8 @@ abstract class KopiIterable {
     return new KopiDict(values);
   }
 
+  //
+
   async reduce(func: KopiFunction, context: Context): Promise<KopiValue> {
     let result: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
 
@@ -69,6 +71,8 @@ abstract class KopiIterable {
 
     return new KopiStream(generator);
   }
+
+  //
 
   async find(func: KopiFunction, context: Context): Promise<KopiValue> {
     for await (const value of this) {
@@ -129,6 +133,45 @@ abstract class KopiIterable {
 
     return new KopiBoolean(true);
   }
+
+  async cycle() {
+    const values = await this.toArray();
+
+    const generator = async function* (this: KopiIterable) {
+      while (true) {
+        for await (const value of values) {
+          yield value;
+        }
+      }
+    }.apply(this);
+
+    return new KopiStream(generator);
+  }
+
+  async splitEvery(count: KopiNumber) {
+    let values: Promise<KopiValue>[] = [];
+    let index = 0;
+
+    const generator = async function* (this: KopiIterable) {
+      for await (const value of this) {
+        if (values.length > 0 && index % count.value === 0) {
+          yield new KopiArray(values);
+
+          values = [];
+        }
+
+        values = [...values, Promise.resolve(value)];
+        ++index;
+      }
+
+      if (values.length !== 0) {
+        yield new KopiArray(values);
+      }
+    }.apply(this);
+
+    return new KopiStream(generator);
+  }
+
 }
 
 export default KopiIterable;

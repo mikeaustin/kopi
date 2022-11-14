@@ -42,6 +42,22 @@ test('Range', async () => {
     new KopiString("b"),
     new KopiString("c"),
   ]);
+
+  array = await interpret(`
+    "a".."c" | cycle | take 9 | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiString("a"),
+    new KopiString("b"),
+    new KopiString("c"),
+    new KopiString("a"),
+    new KopiString("b"),
+    new KopiString("c"),
+    new KopiString("a"),
+    new KopiString("b"),
+    new KopiString("c"),
+  ]);
 });
 
 test('Map and filter', async () => {
@@ -118,4 +134,12 @@ test('Take and skip', async () => {
     new KopiNumber(4),
     new KopiNumber(8),
   ]);
+});
+
+test('Splitting', async () => {
+  let stream = await interpret(`
+    1..10 | splitEvery 3
+  `) as KopiStream;
+
+  console.log('>>>', await stream.inspect());
 });
