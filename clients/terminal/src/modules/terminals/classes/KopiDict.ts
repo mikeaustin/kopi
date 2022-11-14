@@ -12,7 +12,7 @@ class KopiDict extends KopiValue {
     super();
 
     this.entries = new Map(
-      entries.map(([key, value]) => [key.valueOf(), value])
+      entries.map(([key, value]) => [key.valueOf(), [key, value]])
     );
   }
 
@@ -23,7 +23,7 @@ class KopiDict extends KopiValue {
 
     const entries = await Promise.all(
       (Array.from(this.entries)).map(
-        async ([key, value]: [any, Promise<KopiValue>]) => `${key}: ${await (await value).inspect()}`
+        async ([key, [_, value]]) => `${key}: ${await (await value).inspect()}`
       )
     );
 
@@ -31,34 +31,44 @@ class KopiDict extends KopiValue {
   }
 
   *[Symbol.asyncIterator]() {
-    for (const [key, value] of this.entries) {
+    for (const [_, [key, value]] of this.entries) {
       yield new KopiTuple([Promise.resolve(key), value]);
     }
   }
 
-  size() {
+  async size() {
     return new KopiNumber(this.entries.size);
   }
 
-  get(key: KopiValue) {
-    return this.entries.get(key.valueOf());
+  async get(key: KopiValue): Promise<KopiValue> {
+    const [_, value] = this.entries.get(key.valueOf()) ?? [key, new KopiTuple([])];
+
+    return value;
   }
 
   set(key: KopiValue) {
-    return (value: Promise<KopiValue>) =>
-      new KopiDict(
-        Array.from(new Map([...this.entries, [key.valueOf(), value]]))
+    return async (value: Promise<KopiValue>): Promise<KopiDict> => {
+      const foo = [...this.entries.entries()].map(
+        ([key, [_, value]]) => [key, value]
+      ) as [key: any, value: Promise<KopiValue>][];
+
+      return new KopiDict(
+        [...foo, [key, Promise.resolve(value)]]
       );
+    };
   }
 
   update(key: KopiValue, context: Context) {
     return async (func: KopiFunction) => {
-      const value = await this.entries.get(key.valueOf());
+      const [_, value] = this.entries.get(key.valueOf()) ?? [key, new KopiTuple([])];
 
-      const updatedValue = func.apply(new KopiTuple([]), [value ?? new KopiTuple([]), context]);
+      const updatedValue = func.apply(new KopiTuple([]), [await value, context]);
+
+      const foo = [...this.entries.entries()].map(([key, value]) => [key, value[1]]) as
+        [key: any, value: Promise<KopiValue>][];
 
       return new KopiDict(
-        Array.from(new Map([...this.entries, [key.valueOf(), updatedValue]]))
+        [...foo, [key, Promise.resolve(updatedValue)]]
       );
     };
   }
@@ -73,7 +83,7 @@ class KopiDict extends KopiValue {
   //   return new KopiArray(elements);
   // }
 
-  entries: Map<any, Promise<KopiValue>>;
+  entries: Map<any, [KopiValue, Promise<KopiValue>]>;
 }
 
 // for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
