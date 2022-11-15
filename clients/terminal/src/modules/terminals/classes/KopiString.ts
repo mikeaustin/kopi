@@ -1,17 +1,25 @@
 import { addTraits, KopiValue } from "../../shared";
-import { Enumerable } from "../../shared";
 
+import { Enumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
+import KopiIterable from "../../operators/traits/KopiIterable";
 
 import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 
 class KopiString extends KopiValue {
-  constructor(value: string) {
+  static emptyValue = () => new KopiString('');
+
+  constructor(value: string, hasIterator = true) {
     super();
 
     this.value = value;
+
+    if (!hasIterator) {
+      delete (this as any)[Symbol.iterator];
+      delete (this as any)[Symbol.asyncIterator];
+    }
   }
 
   // Core methods
@@ -24,8 +32,25 @@ class KopiString extends KopiValue {
     return `"${this.value}"`;
   }
 
+  // *[Symbol.iterator]() {
+  //   for (const value of this.value) {
+  //     console.log('here');
+  //     yield new KopiString(value);
+  //   }
+  // }
+
+  // *[Symbol.asyncIterator]() {
+  //   for (const value of this.value) {
+  //     yield value;
+  //   }
+  // }
+
   size() {
     return new KopiNumber(this.value.length);
+  }
+
+  append(that: KopiString) {
+    return new KopiString(this.value + that.value);
   }
 
   // Enumerable methods
@@ -69,6 +94,6 @@ class KopiString extends KopiValue {
   value: string;
 }
 
-addTraits([Enumerable, Comparable], KopiString);
+addTraits([Enumerable, Comparable, KopiIterable], KopiString);
 
 export default KopiString;

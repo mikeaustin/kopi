@@ -5,6 +5,8 @@ import KopiNumber from './KopiNumber';
 import KopiIterable from '../../operators/traits/KopiIterable';
 
 class KopiArray extends KopiValue {
+  static emptyValue = () => new KopiArray([]);
+
   constructor(elements: Promise<KopiValue>[]) {
     super();
 
@@ -29,6 +31,11 @@ class KopiArray extends KopiValue {
     for (const value of this.elements) {
       yield value;
     }
+  }
+
+  append(that: KopiValue) {
+    console.log('zzz this =', this, 'that =', that);
+    return new KopiArray(this.elements.concat([Promise.resolve(that)]));
   }
 
   size() {

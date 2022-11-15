@@ -1,7 +1,7 @@
 import { addTraits, KopiValue } from "../../shared";
 import { Applicative, Enumerable } from "../../shared";
 
-import { KopiBoolean, KopiNumber } from '../../terminals/classes';
+import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
 
 import KopiIterable from '../traits/KopiIterable';
 import Comparable from '../traits/KopiComparable';
@@ -17,6 +17,8 @@ const assertTrait = async (value: KopiValue, variableName: string, traits: Funct
 };
 
 class KopiRange extends KopiValue {
+  static emptyValue = () => new KopiArray([]);
+
   constructor(from: KopiValue, to: KopiValue, stride?: KopiNumber) {
     super();
 

@@ -150,23 +150,26 @@ abstract class KopiIterable {
   }
 
   async splitEvery(count: KopiNumber) {
-    let values: Promise<KopiValue>[] = [];
+    let values: KopiValue = (this.constructor as any).emptyValue();
     let index = 0;
+    let length = 0;
 
     const generator = async function* (this: KopiIterable) {
       for (const value of this) {
-        if (values.length > 0 && index % count.value === 0) {
-          yield new KopiArray(values);
+        if (length > 0 && index % count.value === 0) {
+          yield values;
 
-          values = [];
+          values = (this.constructor as any).emptyValue();
+          length = 0;
         }
 
-        values = [...values, value];
+        values = (values as any).append(await value);
         ++index;
+        ++length;
       }
 
-      if (values.length !== 0) {
-        yield new KopiArray(values);
+      if (length !== 0) {
+        yield values;
       }
     }.apply(this);
 

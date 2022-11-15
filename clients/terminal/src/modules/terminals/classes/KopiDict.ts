@@ -8,6 +8,8 @@ import KopiTuple from './KopiTuple';
 import KopiFunction from './KopiFunction';
 
 class KopiDict extends KopiValue {
+  static empty = new KopiDict([]);
+
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
     super();
 
