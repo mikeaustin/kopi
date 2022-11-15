@@ -27,11 +27,24 @@ abstract class Enumerable extends Trait {
   abstract succ(count: KopiValue): KopiValue;
 }
 
-abstract class Comparable extends Trait {
-  abstract compare(this: KopiValue, that: KopiValue): KopiValue;
-  abstract '<'(this: KopiValue, that: KopiValue): KopiValue;
-  abstract '>'(this: KopiValue, that: KopiValue): KopiValue;
-}
+// abstract class Comparable extends Trait {
+//   abstract compare(this: Comparable, that: KopiValue): KopiNumber;
+// '<'(this: Comparable, that: KopiValue): KopiValue {
+//   return new KopiBoolean(this.compare(that).value < 0);
+// }
+// '>'(this: Comparable, that: KopiValue): KopiValue {
+//   return new KopiBoolean(this.compare(that).value > 0);
+// }
+// '<='(this: Comparable, that: KopiValue): KopiValue {
+//   return new KopiBoolean(this.compare(that).value <= 0);
+// }
+// '>='(this: Comparable, that: KopiValue): KopiValue {
+//   return new KopiBoolean(this.compare(that).value >= 0);
+// }
+// '=='(this: Comparable, that: KopiValue): KopiValue {
+//   return new KopiBoolean(this.compare(that).value === 0);
+// }
+// }
 
 abstract class Bounded extends Trait {
   abstract min(this: KopiValue): KopiValue;
@@ -163,7 +176,7 @@ export {
   Equatable,
   Applicative,
   Enumerable,
-  Comparable,
+  // Comparable,
   KopiValue,
   Extensions,
   type RawASTNode,

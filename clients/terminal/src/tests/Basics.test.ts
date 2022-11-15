@@ -180,7 +180,7 @@ test('Pipe', async () => {
 
 test('Fetch', async () => {
   let number = await interpret(`
-    fetch "https://mike-austin.com" | length
+    fetch "https://mike-austin.com" | size
   `) as KopiNumber;
 
   expect(number.value).toEqual(2138);

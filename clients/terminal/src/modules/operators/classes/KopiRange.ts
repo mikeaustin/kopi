@@ -1,9 +1,10 @@
 import { KopiValue, Trait } from "../../shared";
-import { Applicative, Enumerable, Comparable } from "../../shared";
+import { Applicative, Enumerable } from "../../shared";
 
-import { KopiNumber } from '../../terminals/classes';
+import { KopiBoolean, KopiNumber } from '../../terminals/classes';
 
 import KopiIterable from '../traits/KopiIterable';
+import Comparable from '../traits/KopiComparable';
 
 const assertTrait = async (value: KopiValue, variableName: string, traits: Function[], errors: string[]) => {
   for (const trait of traits) {
@@ -30,29 +31,29 @@ class KopiRange extends KopiValue {
     return `${await (await this.from).inspect()}..${await (await this.to).inspect()}`;
   }
 
+  // Applicatie methods
+
   async apply(thisArg: KopiValue, [by]: [KopiNumber]) {
     return new KopiRange(this.from, this.to, by);
   }
 
+  // Iterator methods
+
   *[Symbol.iterator]() {
-    const [from, _to] = [this.from, this.to];
     // const op = from > to ? '>=' : '<=';
 
     let errors: string[] = [];
 
-    assertTrait(from, 'from', [Enumerable, Comparable], errors);
-    assertTrait(_to, 'to', [Enumerable, Comparable], errors);
+    assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
+    assertTrait(this.to, 'to', [Enumerable, Comparable], errors);
 
     if (errors.length > 0) {
       throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
     }
 
-    const to = (_to as unknown as Enumerable).succ(this.stride);
-
     for (
-      let current = from;
-      ((current as unknown as Comparable).compare.apply(current, [to]) as KopiNumber).value < 0;
-      // ((current as unknown as Comparable)['<'].apply(new KopiTuple([]), [to]) as KopiBoolean).value;
+      let current = this.from;
+      ((current as unknown as Comparable)['<='].apply(current as unknown as Comparable, [this.to]) as KopiBoolean).value;
       current = (current as unknown as Enumerable).succ(this.stride)
     ) {
       yield current;
@@ -60,24 +61,20 @@ class KopiRange extends KopiValue {
   }
 
   async *[Symbol.asyncIterator]() {
-    const [from, _to] = [this.from, this.to];
     // const op = from > to ? '>=' : '<=';
 
     let errors: string[] = [];
 
-    assertTrait(from, 'from', [Enumerable, Comparable], errors);
-    assertTrait(_to, 'to', [Enumerable, Comparable], errors);
+    assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
+    assertTrait(this.to, 'to', [Enumerable, Comparable], errors);
 
     if (errors.length > 0) {
       throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
     }
 
-    const to = (_to as unknown as Enumerable).succ(this.stride);
-
     for (
-      let current = from;
-      ((current as unknown as Comparable).compare.apply(current, [to]) as KopiNumber).value < 0;
-      // ((current as unknown as Comparable)['<'].apply(new KopiTuple([]), [to]) as KopiBoolean).value;
+      let current = this.from;
+      ((current as unknown as Comparable)['<='].apply(current as unknown as Comparable, [this.to]) as KopiBoolean).value;
       current = (current as unknown as Enumerable).succ(this.stride)
     ) {
       yield current;

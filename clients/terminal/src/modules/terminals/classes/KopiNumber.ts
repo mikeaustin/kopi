@@ -1,5 +1,6 @@
 import { KopiValue } from "../../shared";
-import { Numeric, Equatable, Enumerable, Comparable } from "../../shared";
+import { Numeric, Equatable, Enumerable } from "../../shared";
+import Comparable from '../../operators/traits/KopiComparable';
 
 import KopiString from './KopiString';
 import KopiBoolean from './KopiBoolean';
@@ -13,6 +14,8 @@ class KopiNumber extends KopiValue {
 
     this.value = value;
   }
+
+  // Core methods
 
   override valueOf() {
     return this.value;
@@ -70,14 +73,6 @@ class KopiNumber extends KopiValue {
     return new KopiNumber(0);
   }
 
-  '<'(that: KopiNumber) {
-    return new KopiBoolean(this.compare(that).value === -1);
-  }
-
-  '>'(that: KopiNumber) {
-    return new KopiBoolean(this.compare(that).value === +1);
-  }
-
   // General methods
 
   even(): KopiBoolean {
@@ -109,6 +104,12 @@ class KopiNumber extends KopiValue {
   }
 
   value: number;
+}
+
+for (const name of Object.getOwnPropertyNames(Comparable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiNumber.prototype as any)[name] = (Comparable.prototype as any)[name];
+  }
 }
 
 export default KopiNumber;

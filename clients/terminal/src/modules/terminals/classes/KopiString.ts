@@ -1,5 +1,7 @@
 import { KopiValue } from "../../shared";
-import { Enumerable, Comparable } from "../../shared";
+import { Enumerable } from "../../shared";
+
+import Comparable from '../../operators/traits/KopiComparable';
 
 import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
@@ -14,6 +16,8 @@ class KopiString extends KopiValue {
     this.value = value;
   }
 
+  // Core methods
+
   override valueOf() {
     return this.value;
   }
@@ -22,14 +26,14 @@ class KopiString extends KopiValue {
     return `"${this.value}"`;
   }
 
-  length() {
+  size() {
     return new KopiNumber(this.value.length);
   }
 
   // Enumerable methods
 
   succ(count: KopiNumber): KopiString {
-    if (count instanceof KopiTuple && count.elements.length === 0) {
+    if (count instanceof KopiTuple && count.fields.length === 0) {
       count = new KopiNumber(1);
     }
 
@@ -63,6 +67,12 @@ class KopiString extends KopiValue {
   }
 
   value: string;
+}
+
+for (const name of Object.getOwnPropertyNames(Comparable.prototype)) {
+  if (name !== 'constructor') {
+    (KopiString.prototype as any)[name] = (Comparable.prototype as any)[name];
+  }
 }
 
 export default KopiString;
