@@ -1,4 +1,4 @@
-import { BindValues, Context, Environment, Evaluate, KopiValue } from '../../shared';
+import { Context, KopiValue } from '../../shared';
 
 import KopiFunction from './KopiFunction';
 import KopiNumber from './KopiNumber';

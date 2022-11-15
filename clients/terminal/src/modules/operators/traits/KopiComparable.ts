@@ -19,10 +19,6 @@ abstract class Comparable extends Trait {
   '>='(this: Comparable, that: KopiValue): KopiValue {
     return new KopiBoolean(this.compare(that).value >= 0);
   }
-
-  '=='(this: Comparable, that: KopiValue): KopiValue {
-    return new KopiBoolean(this.compare(that).value === 0);
-  }
 }
 
 export default Comparable;

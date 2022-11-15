@@ -1,8 +1,6 @@
 import { KopiValue, Context } from "../../shared";
 import { Applicative } from "../../shared";
 
-import KopiString from './KopiString';
-
 class KopiType extends KopiValue {
   static override traits = [Applicative];
 

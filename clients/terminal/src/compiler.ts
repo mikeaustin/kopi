@@ -1,7 +1,6 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Evaluate, Environment, Context, Bindings, BindValues, Trait, Applicative } from './modules/shared';
-import { inspect } from './modules/utils';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, Trait, Applicative } from './modules/shared';
 
 import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
@@ -9,7 +8,6 @@ import * as terminals from './modules/terminals';
 import { KopiValue, Extensions } from './modules/shared';
 import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes';
 
-import KopiIterable from './modules/operators/traits/KopiIterable';
 import KopiStream from './modules/terminals/classes/KopiStream';
 
 declare global {

@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, Trait } from "../../shared";
+import { addTraits, KopiValue } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 

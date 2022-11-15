@@ -1,4 +1,4 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, Evaluate, Environment, BindValues, Trait, Applicative, Context } from '../shared';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, Trait, Applicative, Context } from '../shared';
 import { KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {

@@ -1,4 +1,4 @@
-import { addTraits, Context, KopiValue, Trait } from "../../shared";
+import { addTraits, KopiValue } from "../../shared";
 import { Applicative, Enumerable } from "../../shared";
 
 import { KopiBoolean, KopiNumber } from '../../terminals/classes';

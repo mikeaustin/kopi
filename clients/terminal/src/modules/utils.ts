@@ -1,6 +1,5 @@
 const spaces = (level: number) => {
   return ''.padEnd(level * 2, ' ');
-  // return Array.from({ length: level }, _ => '  ').join('');
 };
 
 const inspect = (value: unknown, level: number = 0): string => {

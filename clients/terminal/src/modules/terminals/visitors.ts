@@ -1,4 +1,4 @@
-import { Evaluate, Environment, BindValues, Context } from '../shared';
+import { Context } from '../shared';
 import { KopiNumber, KopiBoolean, KopiString, KopiArray } from './classes';
 
 import * as astNodes from './astNodes';

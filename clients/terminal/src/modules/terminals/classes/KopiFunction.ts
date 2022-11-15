@@ -1,4 +1,4 @@
-import { KopiValue, ASTNode, ASTPatternNode, Evaluate, Environment, BindValues, Context } from "../../shared";
+import { KopiValue, ASTNode, ASTPatternNode, Environment, Context } from "../../shared";
 import { Applicative } from "../../shared";
 
 class KopiFunction extends KopiValue {
