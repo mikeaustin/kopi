@@ -1,4 +1,4 @@
-import { KopiValue, Trait } from "../../shared";
+import { addTraits, Context, KopiValue, Trait } from "../../shared";
 import { Applicative, Enumerable } from "../../shared";
 
 import { KopiBoolean, KopiNumber } from '../../terminals/classes';
@@ -17,8 +17,6 @@ const assertTrait = async (value: KopiValue, variableName: string, traits: Funct
 };
 
 class KopiRange extends KopiValue {
-  static override traits = [Applicative];
-
   constructor(from: KopiValue, to: KopiValue, stride?: KopiNumber) {
     super();
 
@@ -40,8 +38,6 @@ class KopiRange extends KopiValue {
   // Iterator methods
 
   *[Symbol.iterator]() {
-    // const op = from > to ? '>=' : '<=';
-
     let errors: string[] = [];
 
     assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
@@ -61,8 +57,6 @@ class KopiRange extends KopiValue {
   }
 
   async *[Symbol.asyncIterator]() {
-    // const op = from > to ? '>=' : '<=';
-
     let errors: string[] = [];
 
     assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
@@ -86,10 +80,6 @@ class KopiRange extends KopiValue {
   stride: KopiNumber;
 }
 
-for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
-  if (name !== 'constructor') {
-    (KopiRange.prototype as any)[name] = (KopiIterable.prototype as any)[name];
-  }
-}
+addTraits([KopiIterable, Applicative], KopiRange);
 
 export default KopiRange;

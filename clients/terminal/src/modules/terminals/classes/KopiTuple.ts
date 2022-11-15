@@ -5,12 +5,21 @@ import KopiNumber from './KopiNumber';
 import KopiStream from './KopiStream';
 
 class KopiTuple extends KopiValue {
+  static empty = new KopiTuple([], [], true);
+
   static create(tuple: KopiTuple) {
     return new KopiTuple(tuple.fields, tuple.fieldNames);
   }
 
-  constructor(fields: Promise<KopiValue>[], fieldNames?: (string | null)[]) {
+  constructor(fields: Promise<KopiValue>[], fieldNames?: (string | null)[], isEmpty = false) {
     super();
+
+    if (fields.length === 0 && !isEmpty) {
+      this.fields = [];
+      this.fieldNames = [];
+
+      return KopiTuple.empty;
+    }
 
     this.fields = fields;
     this.fieldNames = fieldNames ?? Array.from(fields, (_) => null);

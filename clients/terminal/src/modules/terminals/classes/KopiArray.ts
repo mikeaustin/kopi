@@ -1,4 +1,4 @@
-import { KopiValue } from "../../shared";
+import { addTraits, KopiValue, Trait } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
@@ -48,10 +48,6 @@ class KopiArray extends KopiValue {
   elements: Promise<KopiValue>[];
 }
 
-for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
-  if (name !== 'constructor') {
-    (KopiArray.prototype as any)[name] = (KopiIterable.prototype as any)[name];
-  }
-}
+addTraits([KopiIterable], KopiArray);
 
 export default KopiArray;

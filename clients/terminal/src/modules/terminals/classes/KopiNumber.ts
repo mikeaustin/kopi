@@ -1,4 +1,4 @@
-import { KopiValue } from "../../shared";
+import { addTraits, KopiValue } from "../../shared";
 import { Numeric, Equatable, Enumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
 
@@ -7,8 +7,6 @@ import KopiBoolean from './KopiBoolean';
 import KopiTuple from './KopiTuple';
 
 class KopiNumber extends KopiValue {
-  static override traits = [Numeric, Equatable, Enumerable, Comparable];
-
   constructor(value: number) {
     super();
 
@@ -106,10 +104,6 @@ class KopiNumber extends KopiValue {
   value: number;
 }
 
-for (const name of Object.getOwnPropertyNames(Comparable.prototype)) {
-  if (name !== 'constructor') {
-    (KopiNumber.prototype as any)[name] = (Comparable.prototype as any)[name];
-  }
-}
+addTraits([Numeric, Equatable, Enumerable, Comparable], KopiNumber);
 
 export default KopiNumber;

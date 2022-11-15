@@ -1,4 +1,4 @@
-import { KopiValue } from '../../shared';
+import { addTraits, KopiValue, Trait } from '../../shared';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 
@@ -37,5 +37,7 @@ for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
     (KopiStream.prototype as any)[name] = (KopiIterable.prototype as any)[name];
   }
 }
+
+addTraits([KopiIterable], KopiStream);
 
 export default KopiStream;

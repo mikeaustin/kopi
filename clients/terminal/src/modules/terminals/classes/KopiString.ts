@@ -1,4 +1,4 @@
-import { KopiValue } from "../../shared";
+import { addTraits, KopiValue } from "../../shared";
 import { Enumerable } from "../../shared";
 
 import Comparable from '../../operators/traits/KopiComparable';
@@ -8,8 +8,6 @@ import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 
 class KopiString extends KopiValue {
-  static override traits = [Enumerable, Comparable];
-
   constructor(value: string) {
     super();
 
@@ -32,15 +30,17 @@ class KopiString extends KopiValue {
 
   // Enumerable methods
 
-  succ(count: KopiNumber): KopiString {
-    if (count instanceof KopiTuple && count.fields.length === 0) {
+  succ(count: KopiNumber | KopiTuple): KopiString {
+    if (count === KopiTuple.empty) {
       count = new KopiNumber(1);
     }
 
-    const codePoint = this.value.codePointAt(0);
+    if (count instanceof KopiNumber) {
+      const codePoint = this.value.codePointAt(0);
 
-    if (codePoint) {
-      return new KopiString(String.fromCodePoint(codePoint + count.value));
+      if (codePoint) {
+        return new KopiString(String.fromCodePoint(codePoint + count.value));
+      }
     }
 
     throw new Error('KopiString.succ()');
@@ -69,10 +69,6 @@ class KopiString extends KopiValue {
   value: string;
 }
 
-for (const name of Object.getOwnPropertyNames(Comparable.prototype)) {
-  if (name !== 'constructor') {
-    (KopiString.prototype as any)[name] = (Comparable.prototype as any)[name];
-  }
-}
+addTraits([Enumerable, Comparable], KopiString);
 
 export default KopiString;

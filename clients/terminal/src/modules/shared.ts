@@ -27,25 +27,6 @@ abstract class Enumerable extends Trait {
   abstract succ(count: KopiValue): KopiValue;
 }
 
-// abstract class Comparable extends Trait {
-//   abstract compare(this: Comparable, that: KopiValue): KopiNumber;
-// '<'(this: Comparable, that: KopiValue): KopiValue {
-//   return new KopiBoolean(this.compare(that).value < 0);
-// }
-// '>'(this: Comparable, that: KopiValue): KopiValue {
-//   return new KopiBoolean(this.compare(that).value > 0);
-// }
-// '<='(this: Comparable, that: KopiValue): KopiValue {
-//   return new KopiBoolean(this.compare(that).value <= 0);
-// }
-// '>='(this: Comparable, that: KopiValue): KopiValue {
-//   return new KopiBoolean(this.compare(that).value >= 0);
-// }
-// '=='(this: Comparable, that: KopiValue): KopiValue {
-//   return new KopiBoolean(this.compare(that).value === 0);
-// }
-// }
-
 abstract class Bounded extends Trait {
   abstract min(this: KopiValue): KopiValue;
   abstract max(this: KopiValue): KopiValue;
@@ -65,6 +46,18 @@ abstract class Bounded extends Trait {
 //     '<' = lessThan;
 //     '>' = greaterThan;
 //   };
+
+const addTraits = (traits: Function[], _class: Function) => {
+  for (const trait of traits) {
+    for (const name of Object.getOwnPropertyNames(trait.prototype)) {
+      if (name !== 'constructor') {
+        (_class.prototype as any)[name] = (trait.prototype as any)[name];
+      }
+    }
+
+    (_class as any).traits = traits;
+  }
+};
 
 //
 
@@ -176,9 +169,9 @@ export {
   Equatable,
   Applicative,
   Enumerable,
-  // Comparable,
   KopiValue,
   Extensions,
+  addTraits,
   type RawASTNode,
   type Bindings,
   type Transform,
