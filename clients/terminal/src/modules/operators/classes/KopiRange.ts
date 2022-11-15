@@ -18,12 +18,12 @@ const assertTrait = async (value: KopiValue, variableName: string, traits: Funct
 class KopiRange extends KopiValue {
   static override traits = [Applicative];
 
-  constructor(from: Promise<KopiValue>, to: Promise<KopiValue>, stride?: Promise<KopiNumber>) {
+  constructor(from: KopiValue, to: KopiValue, stride?: KopiNumber) {
     super();
 
     this.from = from;
     this.to = to;
-    this.stride = stride ?? Promise.resolve(new KopiNumber(1));
+    this.stride = stride ?? new KopiNumber(1);
   }
 
   override async inspect() {
@@ -31,11 +31,11 @@ class KopiRange extends KopiValue {
   }
 
   async apply(thisArg: KopiValue, [by]: [KopiNumber]) {
-    return new KopiRange(this.from, this.to, Promise.resolve(by));
+    return new KopiRange(this.from, this.to, by);
   }
 
-  async *[Symbol.asyncIterator]() {
-    const [from, _to] = [await this.from, await this.to];
+  *[Symbol.iterator]() {
+    const [from, _to] = [this.from, this.to];
     // const op = from > to ? '>=' : '<=';
 
     let errors: string[] = [];
@@ -47,21 +47,46 @@ class KopiRange extends KopiValue {
       throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
     }
 
-    const to = (_to as unknown as Enumerable).succ(await this.stride);
+    const to = (_to as unknown as Enumerable).succ(this.stride);
 
     for (
       let current = from;
       ((current as unknown as Comparable).compare.apply(current, [to]) as KopiNumber).value < 0;
       // ((current as unknown as Comparable)['<'].apply(new KopiTuple([]), [to]) as KopiBoolean).value;
-      current = (current as unknown as Enumerable).succ(await this.stride)
+      current = (current as unknown as Enumerable).succ(this.stride)
     ) {
       yield current;
     }
   }
 
-  from: Promise<KopiValue>;
-  to: Promise<KopiValue>;
-  stride: Promise<KopiNumber>;
+  async *[Symbol.asyncIterator]() {
+    const [from, _to] = [this.from, this.to];
+    // const op = from > to ? '>=' : '<=';
+
+    let errors: string[] = [];
+
+    assertTrait(from, 'from', [Enumerable, Comparable], errors);
+    assertTrait(_to, 'to', [Enumerable, Comparable], errors);
+
+    if (errors.length > 0) {
+      throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
+    }
+
+    const to = (_to as unknown as Enumerable).succ(this.stride);
+
+    for (
+      let current = from;
+      ((current as unknown as Comparable).compare.apply(current, [to]) as KopiNumber).value < 0;
+      // ((current as unknown as Comparable)['<'].apply(new KopiTuple([]), [to]) as KopiBoolean).value;
+      current = (current as unknown as Enumerable).succ(this.stride)
+    ) {
+      yield current;
+    }
+  }
+
+  from: KopiValue;
+  to: KopiValue;
+  stride: KopiNumber;
 }
 
 for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {

@@ -4,6 +4,7 @@ import { transform, evaluate, environment } from '../compiler';
 import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from '../modules/terminals/classes';
 
 import KopiIterable from '../modules/operators/traits/KopiIterable';
+import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -141,5 +142,11 @@ test('Splitting', async () => {
     [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
   `) as KopiStream;
 
-  console.log('>>>', await stream.inspect());
+  console.log(await stream.inspect());
+
+  stream = await interpret(`
+    1..7 | splitEvery 3
+  `) as KopiStream;
+
+  console.log(await stream.inspect());
 });

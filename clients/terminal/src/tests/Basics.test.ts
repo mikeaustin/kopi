@@ -19,7 +19,7 @@ test('Basic types', async () => {
     new KopiNumber(-123),
     new KopiString("abc"),
     new KopiBoolean(true),
-    new KopiRange(Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(5))),
+    new KopiRange(new KopiNumber(1), new KopiNumber(5)),
   ]);
 
   let array = await interpret(`
@@ -30,7 +30,7 @@ test('Basic types', async () => {
     new KopiNumber(123),
     new KopiString("abc"),
     new KopiBoolean(true),
-    new KopiRange(Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('c'))),
+    new KopiRange(new KopiString('a'), new KopiString('c')),
   ]);
 
   let number = await interpret(`

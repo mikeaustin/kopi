@@ -177,8 +177,8 @@ async function RangeExpression(
   const { evaluate, environment, bindValues } = context;
 
   return new KopiRange(
-    evaluate(from, environment, bindValues),
-    evaluate(to, environment, bindValues)
+    await evaluate(from, environment, bindValues),
+    await evaluate(to, environment, bindValues)
   );
 }
 
