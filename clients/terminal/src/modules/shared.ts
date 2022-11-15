@@ -131,19 +131,14 @@ interface Bindings extends Promise<{
   [name: string]: KopiValue;
 }> { }
 
-type Transform = (rawAstNode: RawASTNode) => ASTNode;
+type BindValues = (bindings: { [name: string]: KopiValue; }) => void;
 
-type Evaluate = (
-  astNode: ASTNode,
-  environment: Environment,
-  bindValues: BindValues,
-) => Promise<KopiValue>;
+type Transform = (rawAstNode: RawASTNode) => ASTNode;
+type Evaluate = (astNode: ASTNode, environment: Environment, bindValues: BindValues) => Promise<KopiValue>;
 
 interface Environment {
   [name: string | symbol]: KopiValue;
 }
-
-type BindValues = (bindings: { [name: string]: KopiValue; }) => void;
 
 class Extensions extends KopiValue {
   constructor(mappings: [[Function, { [name: string]: any; }]]) {
