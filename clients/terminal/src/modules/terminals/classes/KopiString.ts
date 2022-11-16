@@ -34,7 +34,7 @@ class KopiString extends KopiValue {
 
   *[Symbol.iterator]() {
     for (const value of this.value) {
-      yield Promise.resolve(new KopiString(value));
+      yield new KopiString(value);
     }
   }
 
