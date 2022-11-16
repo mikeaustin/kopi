@@ -14,8 +14,8 @@ class KopiStream extends KopiValue {
   override async inspect() {
     const values: Promise<KopiValue>[] = [];
 
-    for await (const field of this.iterable) {
-      values.push(Promise.resolve(field));
+    for await (const element of this.iterable) {
+      values.push(Promise.resolve(element));
     }
 
     return new KopiArray(values).inspect();

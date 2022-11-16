@@ -38,11 +38,11 @@ class KopiString extends KopiValue {
     }
   }
 
-  // async *[Symbol.asyncIterator]() {
-  //   for await (const value of this.value) {
-  //     yield value;
-  //   }
-  // }
+  async *[Symbol.asyncIterator]() {
+    for (const value of this.value) {
+      yield new KopiString(value);
+    }
+  }
 
   size() {
     return new KopiNumber(this.value.length);

@@ -5,13 +5,13 @@ import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiBoolean, KopiDict, Ko
 import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
-  let ast = parser.parse(source);
+  var ast = parser.parse(source);
 
   return evaluate(transform(ast), environment, () => { });
 }
 
 test('Basic types', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     (-123, "abc", true, 1..5)
   `) as KopiTuple;
 
@@ -22,7 +22,7 @@ test('Basic types', async () => {
     new KopiRange(new KopiNumber(1), new KopiNumber(5)),
   ]);
 
-  let array = await interpret(`
+  var array = await interpret(`
     [123, "abc", true, "a".."c"]
   `) as KopiArray;
 
@@ -33,7 +33,7 @@ test('Basic types', async () => {
     new KopiRange(new KopiString('a', false), new KopiString('c', false)),
   ]);
 
-  let number = await interpret(`
+  var number = await interpret(`
     'size (1, 2, 3)
   `) as KopiNumber;
 
@@ -41,7 +41,7 @@ test('Basic types', async () => {
 });
 
 test('Async operations', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     (sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)
   `) as KopiTuple;
 
@@ -52,7 +52,7 @@ test('Async operations', async () => {
 });
 
 test('Math', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     5 * 'sin 1 + 5 * 'cos 1
   `) as KopiNumber;
 
@@ -60,7 +60,7 @@ test('Math', async () => {
 });
 
 test('Function application', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     (x => x + 1) 3 + 'round 2.7
   `) as KopiNumber;
 
@@ -86,7 +86,7 @@ test('Function application', async () => {
 });
 
 test('Default arguments', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     ((a, b = 2, c = 3) => (a, b, c)) (1)
   `) as KopiTuple;
 
@@ -98,13 +98,13 @@ test('Default arguments', async () => {
 });
 
 test('Extension Methods', async () => {
-  // let string = await interpret(`
+  // var string = await interpret(`
   //   String ()
   // `) as KopiString;
 
   // expect(string.value).toEqual("Hello, world");
 
-  let string = await interpret(`
+  var string = await interpret(`
     'capitalize "foo"
   `) as KopiString;
 
@@ -112,7 +112,7 @@ test('Extension Methods', async () => {
 });
 
 test('Block Expressions', async () => {
-  let string = await interpret(`{
+  var string = await interpret(`{
 
     (1, 2, 3)
 
@@ -122,7 +122,7 @@ test('Block Expressions', async () => {
 
   expect(string.value).toEqual("abc");
 
-  let number = await interpret(`
+  var number = await interpret(`
     ((a, b) => {
 
       a + b
@@ -134,7 +134,7 @@ test('Block Expressions', async () => {
 });
 
 test('Tuple Element Newlines', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     (
 
       ((a, b) => a + b) (0, 1)
@@ -154,7 +154,7 @@ test('Tuple Element Newlines', async () => {
 });
 
 test('match', async () => {
-  let string = await interpret(`
+  var string = await interpret(`
     match 0 (
       0 => "Zero"
       1 => "One"
@@ -165,7 +165,7 @@ test('match', async () => {
 });
 
 test('Pipe', async () => {
-  let string = await interpret(`"foo" | capitalize`) as KopiString;
+  var string = await interpret(`"foo" | capitalize`) as KopiString;
 
   expect(string.value).toEqual("FOO");
 
@@ -173,13 +173,13 @@ test('Pipe', async () => {
 
   expect(string.value).toEqual("3.14");
 
-  let number = await interpret(`1 | test 2 3`) as KopiNumber;
+  var number = await interpret(`1 | test 2 3`) as KopiNumber;
 
   expect(number.value).toEqual(9);
 });
 
 test('Fetch', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     fetch "https://mike-austin.com" | size
   `) as KopiNumber;
 
@@ -187,7 +187,7 @@ test('Fetch', async () => {
 });
 
 test('Assignment', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     a = 1
     b = 2
 
@@ -208,7 +208,7 @@ test('Assignment', async () => {
 });
 
 test('Loop', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     let (n = 1) => {
       sleep 0.5
       # print n
@@ -224,13 +224,13 @@ test('Loop', async () => {
 });
 
 test('Member', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     (1..5).to
   `) as KopiNumber;
 
   expect(number.value).toEqual(5);
 
-  let array = await interpret(`
+  var array = await interpret(`
     (1..5 2) | toArray
   `) as KopiArray;
 
@@ -252,7 +252,7 @@ test('Member', async () => {
 });
 
 test('FunctionPattern', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     add (a, b) = a + b
 
     add (1, 2)
@@ -262,7 +262,7 @@ test('FunctionPattern', async () => {
 });
 
 test('Named tuple fields', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     tuple = (1, b: 2, c: 3)
     (tuple.0, tuple.1, tuple.2)
   `) as KopiTuple;
@@ -278,7 +278,7 @@ test('Named tuple fields', async () => {
 });
 
 test('Context', async () => {
-  let tuple = await interpret(`
+  var tuple = await interpret(`
     columnWidth = context 80
 
     (
@@ -299,7 +299,7 @@ test('Context', async () => {
 });
 
 test('Dict', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     dict = { "a": 1, "b": 2 }
     dict | get "b"
   `) as KopiNumber;
@@ -322,7 +322,7 @@ test('Dict', async () => {
 
   expect(number.value).toEqual(2);
 
-  let dict = await interpret(`
+  var dict = await interpret(`
     "a b c a b a" | split " " | reduce (counts = {:}, word) => {
       counts | update word (n = 0) => n + 1
     }
@@ -330,7 +330,7 @@ test('Dict', async () => {
 
   console.log(await dict.inspect());
 
-  let stream = await interpret(`
+  var stream = await interpret(`
     { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
   `) as KopiStream;
 
@@ -338,7 +338,7 @@ test('Dict', async () => {
 });
 
 test('User Type', async () => {
-  let number = await interpret(`
+  var number = await interpret(`
     Person = type (name: String, age: String)
 
     Person (name: "Joe", age: 30)

@@ -6,13 +6,13 @@ import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean }
 import KopiIterable from '../modules/operators/traits/KopiIterable';
 
 async function interpret(source: string) {
-  let ast = parser.parse(source);
+  var ast = parser.parse(source);
 
   return evaluate(transform(ast), environment, () => { });
 }
 
 test('Range', async () => {
-  let stream = await interpret(`
+  var stream = await interpret(`
     1..5 | map (n) => n * n | filter (n) => 'even n
   `) as KopiStream;
 
@@ -23,7 +23,7 @@ test('Range', async () => {
     new KopiNumber(16),
   ]);
 
-  let array = await interpret(`
+  var array = await interpret(`
     1..3 | map (n) => n * n | toArray
   `) as KopiArray;
 
@@ -61,16 +61,17 @@ test('Range', async () => {
 });
 
 test('Map and filter', async () => {
-  let stream = await interpret(`
-    (1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n
-  `) as KopiStream;
+  var array = await interpret(`
+    (1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n | toArray
+  `) as KopiArray;
 
-  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
+  // BUG: This causes <"abcabca" | splitEvery 3> stream.inspect() to throw "undefined is not a function"
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiString('b', false)), Promise.resolve(new KopiNumber(4))]),
     new KopiTuple([Promise.resolve(new KopiString('a', false)), Promise.resolve(new KopiNumber(16))]),
   ]);
 
-  let array = await interpret(`
+  var array = await interpret(`
     1..3 | flatMap a => ((a + 1)..3 | map b => (a, b)) | toArray
   `) as KopiArray;
 
@@ -80,7 +81,7 @@ test('Map and filter', async () => {
     new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
   ]);
 
-  stream = await interpret(
+  var stream = await interpret(
     `1..1000000000 | map (n) => (n * n) | take 3
   `) as KopiStream;
 
@@ -90,13 +91,13 @@ test('Map and filter', async () => {
     new KopiNumber(9),
   ]);
 
-  let number = await interpret(`
+  var number = await interpret(`
     1..2 | find (n) => 'even n
   `) as KopiNumber;
 
   expect(number.value).toEqual(2);
 
-  number = await interpret(`
+  var number = await interpret(`
     1..5 | reduce (a = 1, n) => a * n
   `) as KopiNumber;
 
@@ -104,7 +105,7 @@ test('Map and filter', async () => {
 });
 
 test('Take and skip', async () => {
-  let array = await interpret(`
+  var array = await interpret(`
     1..5 | skip 3 | toArray
   `) as KopiArray;
 
@@ -113,7 +114,7 @@ test('Take and skip', async () => {
     new KopiNumber(5),
   ]);
 
-  let boolean = await interpret(`
+  var boolean = await interpret(`
     [1, 3, 5] | some (n) => 'even n
   `) as KopiBoolean;
 
@@ -137,23 +138,21 @@ test('Take and skip', async () => {
 });
 
 test('Splitting', async () => {
-  let stream = await interpret(`
-    [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
-  `) as KopiStream;
+  var stream = await interpret(`
+      [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
+    `) as KopiStream;
 
   console.log(await stream.inspect());
 
-  stream = await interpret(`
-    1..7 | splitEvery 3
-  `) as KopiStream;
+  var stream = await interpret(`
+      1..7 | splitEvery 3
+    `) as KopiStream;
 
   console.log(await stream.inspect());
+
+  // var stream = await interpret(`
+  //   "abcabca" | splitEvery 3
+  // `) as KopiStream;
+
+  // console.log(await stream.inspect());
 });
-
-// test('Iterable', async () => {
-//   let stream = await interpret(`
-//     "abcabca" | splitEvery 3
-//   `) as KopiStream;
-
-//   console.log(await stream.inspect());
-// });
