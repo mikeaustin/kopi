@@ -34,7 +34,6 @@ class KopiArray extends KopiValue {
   }
 
   append(that: KopiValue) {
-    console.log('zzz this =', this, 'that =', that);
     return new KopiArray(this.elements.concat([Promise.resolve(that)]));
   }
 

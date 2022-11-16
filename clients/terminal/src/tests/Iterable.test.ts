@@ -38,9 +38,9 @@ test('Range', async () => {
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
-    new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
+    new KopiString("a", false),
+    new KopiString("b", false),
+    new KopiString("c", false),
   ]);
 
   array = await interpret(`
@@ -48,15 +48,15 @@ test('Range', async () => {
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
-    new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
-    new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
-    new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
+    new KopiString("a", false),
+    new KopiString("b", false),
+    new KopiString("c", false),
+    new KopiString("a", false),
+    new KopiString("b", false),
+    new KopiString("c", false),
+    new KopiString("a", false),
+    new KopiString("b", false),
+    new KopiString("c", false),
   ]);
 });
 
@@ -66,8 +66,8 @@ test('Map and filter', async () => {
   `) as KopiStream;
 
   expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
-    new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
-    new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
+    new KopiTuple([Promise.resolve(new KopiString('b', false)), Promise.resolve(new KopiNumber(4))]),
+    new KopiTuple([Promise.resolve(new KopiString('a', false)), Promise.resolve(new KopiNumber(16))]),
   ]);
 
   let array = await interpret(`

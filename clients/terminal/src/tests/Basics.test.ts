@@ -17,7 +17,7 @@ test('Basic types', async () => {
 
   expect(await Promise.all(tuple.fields)).toEqual([
     new KopiNumber(-123),
-    new KopiString("abc"),
+    new KopiString("abc", false),
     new KopiBoolean(true),
     new KopiRange(new KopiNumber(1), new KopiNumber(5)),
   ]);
@@ -28,9 +28,9 @@ test('Basic types', async () => {
 
   expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(123),
-    new KopiString("abc"),
+    new KopiString("abc", false),
     new KopiBoolean(true),
-    new KopiRange(new KopiString('a'), new KopiString('c')),
+    new KopiRange(new KopiString('a', false), new KopiString('c', false)),
   ]);
 
   let number = await interpret(`
@@ -245,9 +245,9 @@ test('Member', async () => {
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
-    new KopiString('a'),
-    new KopiString('c'),
-    new KopiString('e'),
+    new KopiString('a', false),
+    new KopiString('c', false),
+    new KopiString('e', false),
   ]);
 });
 

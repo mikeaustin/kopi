@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from '../modules/terminals/classes';
+import { KopiNumber, KopiString, KopiArray } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   let ast = parser.parse(source);
@@ -24,18 +24,18 @@ test('FizzBuzz', async () => {
   expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
-    new KopiString('Fizz'),
+    new KopiString('Fizz', false),
     new KopiNumber(4),
-    new KopiString('Buzz'),
-    new KopiString('Fizz'),
+    new KopiString('Buzz', false),
+    new KopiString('Fizz', false),
     new KopiNumber(7),
     new KopiNumber(8),
-    new KopiString('Fizz'),
-    new KopiString('Buzz'),
+    new KopiString('Fizz', false),
+    new KopiString('Buzz', false),
     new KopiNumber(11),
-    new KopiString('Fizz'),
+    new KopiString('Fizz', false),
     new KopiNumber(13),
     new KopiNumber(14),
-    new KopiString('FizzBuzz'),
+    new KopiString('FizzBuzz', false),
   ]);
 });

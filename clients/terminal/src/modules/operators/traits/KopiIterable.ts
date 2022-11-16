@@ -163,7 +163,7 @@ abstract class KopiIterable {
           length = 0;
         }
 
-        values = (values as any).append(await value);
+        values = (values as any).append(value);
         ++index;
         ++length;
       }

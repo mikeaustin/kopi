@@ -17,8 +17,8 @@ class KopiString extends KopiValue {
     this.value = value;
 
     if (!hasIterator) {
-      delete (this as any)[Symbol.iterator];
-      delete (this as any)[Symbol.asyncIterator];
+      delete (this.constructor.prototype as any)[Symbol.iterator];
+      delete (this.constructor.prototype as any)[Symbol.asyncIterator];
     }
   }
 
@@ -32,15 +32,14 @@ class KopiString extends KopiValue {
     return `"${this.value}"`;
   }
 
-  // *[Symbol.iterator]() {
-  //   for (const value of this.value) {
-  //     console.log('here');
-  //     yield new KopiString(value);
-  //   }
-  // }
+  *[Symbol.iterator]() {
+    for (const value of this.value) {
+      yield Promise.resolve(new KopiString(value));
+    }
+  }
 
-  // *[Symbol.asyncIterator]() {
-  //   for (const value of this.value) {
+  // async *[Symbol.asyncIterator]() {
+  //   for await (const value of this.value) {
   //     yield value;
   //   }
   // }
