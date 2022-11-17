@@ -11,14 +11,6 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-expect.extend({
-  toBeEquivalent(received, expected) {
-    return this.equals(JSON.stringify(received), JSON.stringify(expected))
-      ? { pass: true, message: () => '' }
-      : { pass: false, message: () => '' };
-  }
-});
-
 test('Range', async () => {
   var stream = await interpret(`
     1..5 | map (n) => n * n | filter (n) => 'even n
@@ -26,7 +18,7 @@ test('Range', async () => {
 
   const elements = (await (stream as unknown as KopiIterable).toArray()).elements;
 
-  expect(await Promise.all(elements)).toBeEquivalent([
+  expect(await Promise.all(elements)).toEqual([
     new KopiNumber(4),
     new KopiNumber(16),
   ]);
@@ -35,7 +27,7 @@ test('Range', async () => {
     1..3 | map (n) => n * n | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
@@ -45,7 +37,7 @@ test('Range', async () => {
     "a".."c" | map (c) => c | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiString("a"),
     new KopiString("b"),
     new KopiString("c"),
@@ -55,7 +47,7 @@ test('Range', async () => {
     "a".."c" | cycle | take 9 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiString("a"),
     new KopiString("b"),
     new KopiString("c"),
@@ -74,7 +66,7 @@ test('Map and filter', async () => {
   `) as KopiArray;
 
   // BUG: This causes <"abcabca" | splitEvery 3> stream.inspect() to throw "undefined is not a function"
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
     new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
   ]);
@@ -83,7 +75,7 @@ test('Map and filter', async () => {
     1..3 | flatMap a => ((a + 1)..3 | map b => (a, b)) | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))]),
     new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(3))]),
     new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
@@ -93,7 +85,7 @@ test('Map and filter', async () => {
     `1..1000000000 | map (n) => (n * n) | take 3
   `) as KopiStream;
 
-  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toBeEquivalent([
+  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
@@ -103,13 +95,13 @@ test('Map and filter', async () => {
     1..2 | find (n) => 'even n
   `) as KopiNumber;
 
-  expect(number.value).toBeEquivalent(2);
+  expect(number.value).toEqual(2);
 
   var number = await interpret(`
     1..5 | reduce (a = 1, n) => a * n
   `) as KopiNumber;
 
-  expect(number.value).toBeEquivalent(120);
+  expect(number.value).toEqual(120);
 });
 
 test('Take and skip', async () => {
@@ -117,7 +109,7 @@ test('Take and skip', async () => {
     1..5 | skip 3 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(4),
     new KopiNumber(5),
   ]);
@@ -126,19 +118,19 @@ test('Take and skip', async () => {
     [1, 3, 5] | some (n) => 'even n
   `) as KopiBoolean;
 
-  expect(boolean.value).toBeEquivalent(false);
+  expect(boolean.value).toEqual(false);
 
   boolean = await interpret(`
     [1, 2, 3, 4, 5] | some (n) => 'even n
   `) as KopiBoolean;
 
-  expect(boolean.value).toBeEquivalent(true);
+  expect(boolean.value).toEqual(true);
 
   array = await interpret(`
     iterate 1 (n) => n * 2 | take 3 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(2),
     new KopiNumber(4),
     new KopiNumber(8),
@@ -146,21 +138,33 @@ test('Take and skip', async () => {
 });
 
 test('Splitting', async () => {
-  var stream = await interpret(`
-      [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
-    `) as KopiStream;
+  var array = await interpret(`
+    [1, 2, 3, 4, 5, 6, 7] | splitEvery 3 | toArray
+  `) as KopiArray;
 
-  console.log(await stream.inspect());
+  expect(await Promise.all(array.elements)).toEqual([
+    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))] },
+    { elements: [Promise.resolve(new KopiNumber(4)), Promise.resolve(new KopiNumber(5)), Promise.resolve(new KopiNumber(6))] },
+    { elements: [Promise.resolve(new KopiNumber(7))] },
+  ]);
 
-  var stream = await interpret(`
-      1..7 | splitEvery 3
-    `) as KopiStream;
+  var array = await interpret(`
+      1..7 | splitEvery 3 | toArray
+    `) as KopiArray;
 
-  console.log(await stream.inspect());
+  expect(await Promise.all(array.elements)).toEqual([
+    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))] },
+    { elements: [Promise.resolve(new KopiNumber(4)), Promise.resolve(new KopiNumber(5)), Promise.resolve(new KopiNumber(6))] },
+    { elements: [Promise.resolve(new KopiNumber(7))] },
+  ]);
 
-  var stream = await interpret(`
-    "abcabca" | splitEvery 3
-  `) as KopiStream;
+  var array = await interpret(`
+    "abcabca" | splitEvery 3 | toArray
+  `) as KopiArray;
 
-  console.log(await stream.inspect());
+  // expect(await Promise.all(array.elements)).toEqual([
+  //   { elements: [Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('b')), Promise.resolve(new KopiString('c'))] },
+  //   { elements: [Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('b')), Promise.resolve(new KopiString('c'))] },
+  //   { elements: [Promise.resolve(new KopiString('a'))] },
+  // ]);
 });

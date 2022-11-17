@@ -32,6 +32,12 @@ class KopiDict extends KopiValue {
     return `{ ${entries.join(', ')} }`;
   }
 
+  override async toJS() {
+    return Promise.all(
+      [...this.entries].map(async ([key, [_, value]]) => [key, (await value).toJS()])
+    );
+  }
+
   *[Symbol.asyncIterator]() {
     for (const [_, [key, value]] of this.entries) {
       yield new KopiTuple([Promise.resolve(key), value]);

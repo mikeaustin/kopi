@@ -10,18 +10,10 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-expect.extend({
-  toBeEquivalent(received, expected) {
-    return this.equals(JSON.stringify(received), JSON.stringify(expected))
-      ? { pass: true, message: () => '' }
-      : { pass: false, message: () => '' };
-  }
-});
-
 test('Basic types', async () => {
   let string = await interpret(`
     "foo" ++ "bar"
   `) as KopiString;
 
-  expect(string.value).toBeEquivalent('foobar');
+  expect(string).toEqual(new KopiString('foobar'));
 });

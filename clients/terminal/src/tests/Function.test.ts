@@ -9,14 +9,6 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-expect.extend({
-  toBeEquivalent(received, expected) {
-    return this.equals(JSON.stringify(received), JSON.stringify(expected))
-      ? { pass: true, message: () => '' }
-      : { pass: false, message: () => '' };
-  }
-});
-
 test('Factorial', async () => {
   let number = await interpret(`
     fix = f => (x => f (y => x x y)) x => f (y => x x y)
@@ -29,7 +21,7 @@ test('Factorial', async () => {
     factorial 5
   `) as KopiNumber;
 
-  expect(number.value).toBeEquivalent(120);
+  expect(number.value).toEqual(120);
 
   number = await interpret(`
     factorial (n) = match n (
@@ -40,5 +32,5 @@ test('Factorial', async () => {
     factorial 5
   `) as KopiNumber;
 
-  expect(number.value).toBeEquivalent(120);
+  expect(number.value).toEqual(120);
 });

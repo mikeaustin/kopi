@@ -9,14 +9,6 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-expect.extend({
-  toBeEquivalent(received, expected) {
-    return this.equals(JSON.stringify(received), JSON.stringify(expected))
-      ? { pass: true, message: () => '' }
-      : { pass: false, message: () => '' };
-  }
-});
-
 test('Coroutine', async () => {
   let string = await interpret(`
     coro = spawn (yield) => {
@@ -38,5 +30,5 @@ test('Coroutine', async () => {
     }
   `) as KopiNumber;
 
-  expect(string.value).toBeEquivalent('Done');
+  expect(string.value).toEqual('Done');
 });

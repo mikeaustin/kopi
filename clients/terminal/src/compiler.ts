@@ -18,7 +18,7 @@ declare global {
   interface Function {
     inspect(): Promise<string>;
     getFieldAt(index: number): Promise<KopiValue> | undefined;
-    force(): Promise<KopiValue>;
+    toJS(): Promise<KopiValue>;
     invoke(
       methodName: string,
       [argument, context]: [KopiValue, Context]

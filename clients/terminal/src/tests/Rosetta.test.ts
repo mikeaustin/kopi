@@ -9,14 +9,6 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-expect.extend({
-  toBeEquivalent(received, expected) {
-    return this.equals(JSON.stringify(received), JSON.stringify(expected))
-      ? { pass: true, message: () => '' }
-      : { pass: false, message: () => '' };
-  }
-});
-
 test('FizzBuzz', async () => {
   let array = await interpret(`
     fizzBuzz (n) = 1..n | map (n) => match (n % 3, n % 5) (
@@ -29,7 +21,7 @@ test('FizzBuzz', async () => {
     fizzBuzz 15
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toBeEquivalent([
+  expect(await Promise.all(array.elements)).toEqual([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiString('Fizz'),

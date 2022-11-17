@@ -21,6 +21,12 @@ class KopiArray extends KopiValue {
     return `[${elements.join(', ')}]`;
   }
 
+  override async toJS() {
+    return Promise.all(
+      this.elements.map(async element => (await element).toJS())
+    );
+  }
+
   *[Symbol.iterator]() {
     for (const value of this.elements) {
       yield value;
@@ -39,16 +45,6 @@ class KopiArray extends KopiValue {
 
   size() {
     return new KopiNumber(this.elements.length);
-  }
-
-  override async force() {
-    let elements: Promise<KopiValue>[] = [];
-
-    for (const element of this.elements) {
-      elements.push(element);
-    }
-
-    return new KopiArray(elements);
   }
 
   elements: Promise<KopiValue>[];

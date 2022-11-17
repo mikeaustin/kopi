@@ -82,7 +82,7 @@ class KopiValue implements Indexable {
     return index === 0 ? Promise.resolve(this) : undefined;
   }
 
-  async force(): Promise<KopiValue> {
+  async toJS(): Promise<any> {
     return this;
   }
 

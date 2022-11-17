@@ -23,6 +23,10 @@ class KopiNumber extends KopiValue {
     return `${this.value}`;
   }
 
+  override async toJS() {
+    return this.value;
+  }
+
   // Numeric methods
 
   '+'(that: KopiNumber) {
