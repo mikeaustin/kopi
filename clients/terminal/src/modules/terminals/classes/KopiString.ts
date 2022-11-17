@@ -51,6 +51,10 @@ class KopiString extends KopiValue {
     return new KopiString(this.value + that.value);
   }
 
+  '++'(that: KopiString) {
+    return new KopiString(this.value.concat(that.value));
+  }
+
   // Enumerable methods
 
   succ(count: KopiNumber | KopiTuple): KopiString {

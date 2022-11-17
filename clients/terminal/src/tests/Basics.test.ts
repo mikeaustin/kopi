@@ -128,7 +128,7 @@ test('Block Expressions', async () => {
 
   }`) as KopiString;
 
-  expect(string.value).toBeEquivalent("abc");
+  expect(string.value).toBeEquivalent('abc');
 
   var number = await interpret(`
     ((a, b) => {
@@ -169,17 +169,17 @@ test('match', async () => {
     )
   `) as KopiString;
 
-  expect(string.value).toBeEquivalent("Zero");
+  expect(string.value).toBeEquivalent('Zero');
 });
 
 test('Pipe', async () => {
   var string = await interpret(`"foo" | capitalize`) as KopiString;
 
-  expect(string.value).toBeEquivalent("FOO");
+  expect(string.value).toBeEquivalent('FOO');
 
   string = await interpret(`3.14149 | toFixed 2`) as KopiString;
 
-  expect(string.value).toBeEquivalent("3.14");
+  expect(string.value).toBeEquivalent('3.14');
 
   var number = await interpret(`1 | test 2 3`) as KopiNumber;
 

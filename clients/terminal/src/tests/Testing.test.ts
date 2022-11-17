@@ -1,9 +1,8 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiTuple } from '../modules/terminals/classes';
+import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
 import { KopiRange } from '../modules/operators/classes';
-import { KopiStringWithoutIterator as KopiString } from '../modules/terminals/classes/KopiString';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
@@ -20,4 +19,9 @@ expect.extend({
 });
 
 test('Basic types', async () => {
+  let string = await interpret(`
+    "foo" ++ "bar"
+  `) as KopiString;
+
+  expect(string.value).toBeEquivalent('foobar');
 });

@@ -30,7 +30,7 @@ function Menu({
     <View style={{ position: 'relative' }}>
       <Button hover size="small" title={title} titleFontWeight={titleFontWeight} style={{ justifyContent: 'center', cursor: 'pointer' }} onPointerDown={handleTitlePointerDown} {...props} />
       {isMenuVisible && (
-        <View border fillColor="white" padding="small" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5, boxShadow: '0 4px 8px hsla(0, 0%, 0%, 0.24), 0 0 0 1px hsla(0, 0%, 0%, 0.1)' }}>
+        <View border fillColor="white" padding="xsmall" style={{ position: 'absolute', top: '100%', zIndex: 1000, borderRadius: 2.5, boxShadow: '0 4px 8px hsla(0, 0%, 0%, 0.24), 0 0 0 1px hsla(0, 0%, 0%, 0.1)' }}>
           {React.Children.map(children, child => React.isValidElement(child) && child.type === Button
             ? React.cloneElement(child as React.ReactElement<React.ComponentProps<typeof Button>>, {
               size: 'small',
@@ -111,7 +111,7 @@ function Desktop({
   };
 
   return (
-    <View flex style={{ background: `center / cover url(images/${backgroundUrl})` }}>
+    <View flex style={{ background: `center / cover url(images/${backgroundUrl})`, userSelect: 'none', WebkitUserSelect: 'none' }}>
       <View horizontal padding="none small" fillColor="white">
         <Menu title="Desktop" titleFontWeight="bold">
           {desktopMenu.map((item, index) => (
@@ -120,7 +120,9 @@ function Desktop({
         </Menu>
         <Menu title="Applications">
           {applicationsMenu.map((item, index) => (
-            item.title ? <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} /> : <Divider spacing="small" />
+            item.title
+              ? <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
+              : <Divider spacing="small" />
           ))}
         </Menu>
         <Menu title="Games">

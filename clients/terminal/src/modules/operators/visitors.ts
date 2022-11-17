@@ -87,6 +87,8 @@ async function OperatorExpression(
     if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
       return (leftValue as unknown as Numeric)[operator](rightValue);
     }
+  } else if (operator === '++') {
+    return (leftValue as any)[operator](rightValue);
   }
 
   throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);
