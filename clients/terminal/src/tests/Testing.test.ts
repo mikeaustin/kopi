@@ -1,7 +1,9 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiStream } from '../modules/terminals/classes';
+import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiTuple } from '../modules/terminals/classes';
+import { KopiRange } from '../modules/operators/classes';
+import { KopiStringWithoutIterator as KopiString } from '../modules/terminals/classes/KopiString';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
@@ -9,22 +11,13 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-test('Iterable', async () => {
-  var stream = await interpret(`
-    [1, 2, 3, 4, 5, 6, 7] | splitEvery 3
-  `) as KopiStream;
+expect.extend({
+  toBeEquivalent(received, expected) {
+    return this.equals(JSON.stringify(received), JSON.stringify(expected))
+      ? { pass: true, message: () => '' }
+      : { pass: false, message: () => '' };
+  }
+});
 
-  console.log(await stream.inspect());
-
-  stream = await interpret(`
-    1..7 | splitEvery 3
-  `) as KopiStream;
-
-  console.log(await stream.inspect());
-
-  stream = await interpret(`
-    "abcabca" | splitEvery 3
-  `) as KopiStream;
-
-  console.log(await stream.inspect());
+test('Basic types', async () => {
 });

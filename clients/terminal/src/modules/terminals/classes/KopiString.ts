@@ -11,15 +11,14 @@ import KopiTuple from "./KopiTuple";
 class KopiString extends KopiValue {
   static emptyValue = () => new KopiString('');
 
-  constructor(value: string, hasIterator = true) {
+  // static [Symbol.hasInstance](instance: KopiStringWithoutIterator) {
+  //   return instance instanceof KopiString;
+  // }
+
+  constructor(value: string, withIterator = true) {
     super();
 
     this.value = value;
-
-    if (!hasIterator) {
-      delete (this.constructor.prototype as any)[Symbol.iterator];
-      delete (this.constructor.prototype as any)[Symbol.asyncIterator];
-    }
   }
 
   // Core methods

@@ -9,6 +9,14 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
+expect.extend({
+  toBeEquivalent(received, expected) {
+    return this.equals(JSON.stringify(received), JSON.stringify(expected))
+      ? { pass: true, message: () => '' }
+      : { pass: false, message: () => '' };
+  }
+});
+
 test('FizzBuzz', async () => {
   let array = await interpret(`
     fizzBuzz (n) = 1..n | map (n) => match (n % 3, n % 5) (
@@ -21,21 +29,21 @@ test('FizzBuzz', async () => {
     fizzBuzz 15
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(await Promise.all(array.elements)).toBeEquivalent([
     new KopiNumber(1),
     new KopiNumber(2),
-    new KopiString('Fizz', false),
+    new KopiString('Fizz'),
     new KopiNumber(4),
-    new KopiString('Buzz', false),
-    new KopiString('Fizz', false),
+    new KopiString('Buzz'),
+    new KopiString('Fizz'),
     new KopiNumber(7),
     new KopiNumber(8),
-    new KopiString('Fizz', false),
-    new KopiString('Buzz', false),
+    new KopiString('Fizz'),
+    new KopiString('Buzz'),
     new KopiNumber(11),
-    new KopiString('Fizz', false),
+    new KopiString('Fizz'),
     new KopiNumber(13),
     new KopiNumber(14),
-    new KopiString('FizzBuzz', false),
+    new KopiString('FizzBuzz'),
   ]);
 });

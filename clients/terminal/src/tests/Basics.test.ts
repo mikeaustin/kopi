@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiBoolean, KopiDict, KopiStream } from '../modules/terminals/classes';
+import { KopiNumber, KopiTuple, KopiString, KopiArray, KopiBoolean, KopiDict, KopiStream } from '../modules/terminals/classes';
 import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
@@ -10,14 +10,22 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
+expect.extend({
+  toBeEquivalent(received, expected) {
+    return this.equals(JSON.stringify(received), JSON.stringify(expected))
+      ? { pass: true, message: () => '' }
+      : { pass: false, message: () => '' };
+  }
+});
+
 test('Basic types', async () => {
   var tuple = await interpret(`
     (-123, "abc", true, 1..5)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.fields)).toEqual([
+  expect(await Promise.all(tuple.fields)).toBeEquivalent([
     new KopiNumber(-123),
-    new KopiString("abc", false),
+    new KopiString('abc'),
     new KopiBoolean(true),
     new KopiRange(new KopiNumber(1), new KopiNumber(5)),
   ]);
@@ -26,18 +34,18 @@ test('Basic types', async () => {
     [123, "abc", true, "a".."c"]
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(await Promise.all(array.elements)).toBeEquivalent([
     new KopiNumber(123),
-    new KopiString("abc", false),
+    new KopiString('abc'),
     new KopiBoolean(true),
-    new KopiRange(new KopiString('a', false), new KopiString('c', false)),
+    new KopiRange(new KopiString('a'), new KopiString('c')),
   ]);
 
   var number = await interpret(`
     'size (1, 2, 3)
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 });
 
 test('Async operations', async () => {
@@ -45,7 +53,7 @@ test('Async operations', async () => {
     (sleep (sleep 1) + sleep 1, sleep 1 + sleep 1)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.fields)).toEqual([
+  expect(await Promise.all(tuple.fields)).toBeEquivalent([
     new KopiNumber(2),
     new KopiNumber(2),
   ]);
@@ -82,7 +90,7 @@ test('Function application', async () => {
     ((a, b) => c => (a + b) * c) (1, 2) 3
   `) as KopiNumber;
 
-  expect(number.value).toEqual(9);
+  expect(number.value).toBeEquivalent(9);
 });
 
 test('Default arguments', async () => {
@@ -90,7 +98,7 @@ test('Default arguments', async () => {
     ((a, b = 2, c = 3) => (a, b, c)) (1)
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.fields)).toEqual([
+  expect(await Promise.all(tuple.fields)).toBeEquivalent([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -102,13 +110,13 @@ test('Extension Methods', async () => {
   //   String ()
   // `) as KopiString;
 
-  // expect(string.value).toEqual("Hello, world");
+  // expect(string.value).toBeEquivalent("Hello, world");
 
   var string = await interpret(`
     'capitalize "foo"
   `) as KopiString;
 
-  expect(string.value).toEqual("FOO");
+  expect(string.value).toBeEquivalent("FOO");
 });
 
 test('Block Expressions', async () => {
@@ -120,7 +128,7 @@ test('Block Expressions', async () => {
 
   }`) as KopiString;
 
-  expect(string.value).toEqual("abc");
+  expect(string.value).toBeEquivalent("abc");
 
   var number = await interpret(`
     ((a, b) => {
@@ -130,7 +138,7 @@ test('Block Expressions', async () => {
     }) (1, 2)
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 });
 
 test('Tuple Element Newlines', async () => {
@@ -146,7 +154,7 @@ test('Tuple Element Newlines', async () => {
     )
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.fields)).toEqual([
+  expect(await Promise.all(tuple.fields)).toBeEquivalent([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
@@ -161,21 +169,21 @@ test('match', async () => {
     )
   `) as KopiString;
 
-  expect(string.value).toEqual("Zero");
+  expect(string.value).toBeEquivalent("Zero");
 });
 
 test('Pipe', async () => {
   var string = await interpret(`"foo" | capitalize`) as KopiString;
 
-  expect(string.value).toEqual("FOO");
+  expect(string.value).toBeEquivalent("FOO");
 
   string = await interpret(`3.14149 | toFixed 2`) as KopiString;
 
-  expect(string.value).toEqual("3.14");
+  expect(string.value).toBeEquivalent("3.14");
 
   var number = await interpret(`1 | test 2 3`) as KopiNumber;
 
-  expect(number.value).toEqual(9);
+  expect(number.value).toBeEquivalent(9);
 });
 
 test('Fetch', async () => {
@@ -183,7 +191,7 @@ test('Fetch', async () => {
     fetch "https://mike-austin.com" | size
   `) as KopiNumber;
 
-  expect(number.value).toEqual(2138);
+  expect(number.value).toBeEquivalent(2138);
 });
 
 test('Assignment', async () => {
@@ -194,7 +202,7 @@ test('Assignment', async () => {
     a + b
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 
   number = await interpret(`
     z = 1
@@ -204,7 +212,7 @@ test('Assignment', async () => {
     f 2
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 });
 
 test('Loop', async () => {
@@ -220,7 +228,7 @@ test('Loop', async () => {
     }
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 });
 
 test('Member', async () => {
@@ -228,13 +236,13 @@ test('Member', async () => {
     (1..5).to
   `) as KopiNumber;
 
-  expect(number.value).toEqual(5);
+  expect(number.value).toBeEquivalent(5);
 
   var array = await interpret(`
     (1..5 2) | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(await Promise.all(array.elements)).toBeEquivalent([
     new KopiNumber(1),
     new KopiNumber(3),
     new KopiNumber(5),
@@ -244,10 +252,10 @@ test('Member', async () => {
     ("a".."z" 2) | take 3 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiString('a', false),
-    new KopiString('c', false),
-    new KopiString('e', false),
+  expect(await Promise.all(array.elements)).toBeEquivalent([
+    new KopiString('a'),
+    new KopiString('c'),
+    new KopiString('e'),
   ]);
 });
 
@@ -258,7 +266,7 @@ test('FunctionPattern', async () => {
     add (1, 2)
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 });
 
 test('Named tuple fields', async () => {
@@ -291,7 +299,7 @@ test('Context', async () => {
     )
   `) as KopiTuple;
 
-  expect(await Promise.all(tuple.fields)).toEqual([
+  expect(await Promise.all(tuple.fields)).toBeEquivalent([
     new KopiNumber(80),
     new KopiNumber(120),
     new KopiNumber(80),
@@ -304,7 +312,7 @@ test('Dict', async () => {
     dict | get "b"
   `) as KopiNumber;
 
-  expect(number.value).toEqual(2);
+  expect(number.value).toBeEquivalent(2);
 
   number = await interpret(`
     dict = {:}
@@ -312,7 +320,7 @@ test('Dict', async () => {
     dict | get "c"
   `) as KopiNumber;
 
-  expect(number.value).toEqual(3);
+  expect(number.value).toBeEquivalent(3);
 
   number = await interpret(`
     dict = { "a": 1 }
@@ -320,7 +328,7 @@ test('Dict', async () => {
     dict | get "a"
   `) as KopiNumber;
 
-  expect(number.value).toEqual(2);
+  expect(number.value).toBeEquivalent(2);
 
   var dict = await interpret(`
     "a b c a b a" | split " " | reduce (counts = {:}, word) => {
