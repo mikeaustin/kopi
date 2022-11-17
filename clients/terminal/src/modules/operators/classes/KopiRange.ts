@@ -1,4 +1,4 @@
-import { addTraits, KopiValue } from "../../shared";
+import { addTraits, KopiValue, KopiMonoid } from "../../shared";
 import { Applicative, Enumerable } from "../../shared";
 
 import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
@@ -82,6 +82,6 @@ class KopiRange extends KopiValue {
   stride: KopiNumber;
 }
 
-addTraits([KopiIterable, Applicative], KopiRange);
+addTraits([KopiIterable, KopiMonoid, Applicative], KopiRange);
 
 export default KopiRange;

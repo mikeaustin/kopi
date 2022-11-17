@@ -1,4 +1,4 @@
-import { addTraits, KopiValue } from "../../shared";
+import { addTraits, KopiValue, KopiMonoid } from "../../shared";
 
 import { Enumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
@@ -96,6 +96,6 @@ class KopiString extends KopiValue {
   value: string;
 }
 
-addTraits([Enumerable, Comparable, KopiIterable], KopiString);
+addTraits([Enumerable, Comparable, KopiIterable, KopiMonoid], KopiString);
 
 export default KopiString;

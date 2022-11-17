@@ -32,6 +32,11 @@ abstract class Bounded extends Trait {
   abstract max(this: KopiValue): KopiValue;
 }
 
+abstract class KopiMonoid extends Trait {
+  static emptyValue(): KopiValue { return new KopiValue(); };
+  abstract append(this: KopiMonoid, that: Promise<KopiValue>): KopiValue;
+}
+
 // const $Comparable = ({
 //   compare,
 //   '<': lessThan = (thisArg: KopiValue, that: KopiValue) => compare(thisArg, that) < 0,
@@ -65,7 +70,7 @@ interface Indexable {
   [name: string]: any;
 }
 
-abstract class KopiValue implements Indexable {
+class KopiValue implements Indexable {
   static traits: Trait[] = [];
 
   async inspect() {
@@ -164,6 +169,7 @@ export {
   Equatable,
   Applicative,
   Enumerable,
+  KopiMonoid,
   KopiValue,
   Extensions,
   addTraits,

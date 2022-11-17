@@ -1,4 +1,4 @@
-import { addTraits, KopiValue } from "../../shared";
+import { addTraits, KopiValue, KopiMonoid } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
@@ -54,6 +54,6 @@ class KopiArray extends KopiValue {
   elements: Promise<KopiValue>[];
 }
 
-addTraits([KopiIterable], KopiArray);
+addTraits([KopiIterable, KopiMonoid], KopiArray);
 
 export default KopiArray;

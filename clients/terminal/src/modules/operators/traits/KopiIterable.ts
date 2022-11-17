@@ -1,4 +1,4 @@
-import { Context, KopiValue } from "../../shared";
+import { Context, KopiValue, KopiMonoid } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
 
 abstract class KopiIterable {
@@ -150,7 +150,13 @@ abstract class KopiIterable {
   }
 
   async splitEvery(count: KopiNumber) {
-    let values: KopiValue = (this.constructor as any).emptyValue();
+    const constructorTraits = (this.constructor as typeof KopiValue).traits;
+
+    if (!constructorTraits.includes(KopiMonoid)) {
+      throw new Error(`Iterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not implement trait 'KopiMonoid'\n  Trait 'KopiMonoid' requires methods 'static emptyValue()' and 'append()'`);
+    }
+
+    let values: KopiValue = (this.constructor as typeof KopiMonoid).emptyValue();
     let index = 0;
     let length = 0;
 
@@ -159,11 +165,11 @@ abstract class KopiIterable {
         if (length > 0 && index % count.value === 0) {
           yield values;
 
-          values = (this.constructor as any).emptyValue();
+          values = (this.constructor as typeof KopiMonoid).emptyValue();
           length = 0;
         }
 
-        values = (values as any).append(value);
+        values = (values as unknown as KopiMonoid).append(value);
         ++index;
         ++length;
       }
