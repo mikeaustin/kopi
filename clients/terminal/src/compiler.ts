@@ -148,17 +148,30 @@ class Observer extends KopiValue {
 
   async *[Symbol.asyncIterator]() {
     while (true) {
-      yield 0;
-      console.log('here 1');
-      const value = await this.promise;
-      console.log('here 2');
-
-      yield value;
+      yield this.promise;
     }
   }
 }
 
 addTraits([KopiIterable], Observer);
+
+class Timer extends KopiValue {
+  *[Symbol.asyncIterator]() {
+    let deferred = new Deferred();
+
+    setInterval(() => {
+      (deferred as any).resolve(new KopiNumber(Date.now()));
+
+      deferred = new Deferred();
+    }, 500);
+
+    for (; ;) {
+      yield deferred;
+    }
+  }
+}
+
+addTraits([KopiIterable], Timer);
 
 const environment: {
   [name: string]: KopiValue;
@@ -169,6 +182,10 @@ const environment: {
 
   Observer(value: KopiValue) {
     return new Observer(value);
+  },
+
+  async timer() {
+    return new Timer();
   },
 
   async type(type: KopiTuple) {

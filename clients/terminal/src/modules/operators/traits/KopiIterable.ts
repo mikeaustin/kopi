@@ -9,8 +9,13 @@ abstract class KopiIterable extends KopiTrait {
   async toArray() {
     const values: Promise<KopiValue>[] = [];
 
-    for await (const element of this) {
-      values.push(Promise.resolve(element));
+    const iter = this[Symbol.asyncIterator]();
+    let result = iter.next();
+
+    while (!(await result).done) {
+      values.push((await result).value);
+
+      result = iter.next();
     }
 
     return new KopiArray(values);
@@ -33,13 +38,26 @@ abstract class KopiIterable extends KopiTrait {
   //
 
   async reduce(func: KopiFunction, context: Context): Promise<KopiValue> {
-    let result: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
+    let accum: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
 
-    for await (const value of this) {
-      result = func.apply(new KopiTuple([]), [new KopiTuple([result, Promise.resolve(value)]), context]);
+    const iter = this[Symbol.asyncIterator]();
+    let result = iter.next();
+
+    while (!(await result).done) {
+      accum = func.apply(new KopiTuple([]), [new KopiTuple([accum, (await result).value]), context]);
+
+      result = iter.next();
     }
 
-    return result;
+    return accum;
+  }
+
+  async each(func: KopiFunction, context: Context): Promise<KopiValue> {
+    for await (const value of this) {
+      func.apply(new KopiTuple([]), [value, context]);
+    }
+
+    return new KopiTuple([]);
   }
 
   async map(func: KopiFunction, context: Context): Promise<KopiStream> {

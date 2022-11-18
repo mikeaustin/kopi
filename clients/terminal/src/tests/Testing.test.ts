@@ -17,17 +17,25 @@ test('Basic types', async () => {
 
   expect(string).toEqual(new KopiString('foobar'));
 
+  var object = await interpret(`
+    timer () | map (n) => n / 1000 | take 3 | each (n) => {
+      print n
+    }
+  `) as KopiStream;
+
+  console.log(object);
+
   // var string = await interpret(`
   //   o = Observer 5
 
   //   oo = o | map (n) => {
   //     print "here"
-  //     sleep 1
+  //     sleep 0.1
   //   }
 
   //   print "zzz 1"
 
-  //   oo | take 2 | toArray
+  //   oo | take 2 | each (n) => print n
 
   //   print "zzz 2"
 
@@ -35,5 +43,5 @@ test('Basic types', async () => {
   //   o | set 10
   // `) as KopiString;
 
-  console.log(string);
+  console.log('Done.');
 });
