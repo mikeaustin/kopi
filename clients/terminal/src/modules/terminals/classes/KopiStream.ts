@@ -1,10 +1,13 @@
-import { addTraits, KopiValue } from '../../shared';
+import { addTraits, KopiMonoid, KopiValue } from '../../shared';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 
 import KopiArray from './KopiArray';
+import KopiString from './KopiString';
 
 class KopiStream extends KopiValue {
+  static emptyValue = () => new KopiString('');
+
   constructor(iterable: AsyncIterable<KopiValue>) {
     super();
 
@@ -21,10 +24,6 @@ class KopiStream extends KopiValue {
     return new KopiArray(values).inspect();
   }
 
-  // emptyValue() {
-  //   return new KopiArray();
-  // }
-
   [Symbol.asyncIterator]() {
     return this.iterable[Symbol.asyncIterator]();
   }
@@ -38,6 +37,6 @@ for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
   }
 }
 
-addTraits([KopiIterable], KopiStream);
+addTraits([KopiIterable, KopiMonoid], KopiStream);
 
 export default KopiStream;

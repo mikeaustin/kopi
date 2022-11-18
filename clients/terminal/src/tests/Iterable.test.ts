@@ -162,9 +162,19 @@ test('Splitting', async () => {
     "abcabca" | splitEvery 3 | toArray
   `) as KopiArray;
 
-  // expect(await Promise.all(array.elements)).toEqual([
-  //   { elements: [Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('b')), Promise.resolve(new KopiString('c'))] },
-  //   { elements: [Promise.resolve(new KopiString('a')), Promise.resolve(new KopiString('b')), Promise.resolve(new KopiString('c'))] },
-  //   { elements: [Promise.resolve(new KopiString('a'))] },
-  // ]);
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiString('abc'),
+    new KopiString('abc'),
+    new KopiString('a'),
+  ]);
+
+  var array = await interpret(`
+    "abcabca" | map 'succ | splitEvery 3 | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiString('bcd'),
+    new KopiString('bcd'),
+    new KopiString('b'),
+  ]);
 });

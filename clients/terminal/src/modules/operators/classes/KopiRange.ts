@@ -39,25 +39,6 @@ class KopiRange extends KopiValue {
 
   // Iterator methods
 
-  *[Symbol.iterator]() {
-    let errors: string[] = [];
-
-    assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
-    assertTrait(this.to, 'to', [Enumerable, Comparable], errors);
-
-    if (errors.length > 0) {
-      throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
-    }
-
-    for (
-      let current = this.from;
-      ((current as unknown as Comparable)['<='].apply(current as unknown as Comparable, [this.to]) as KopiBoolean).value;
-      current = (current as unknown as Enumerable).succ(this.stride)
-    ) {
-      yield current;
-    }
-  }
-
   async *[Symbol.asyncIterator]() {
     let errors: string[] = [];
 

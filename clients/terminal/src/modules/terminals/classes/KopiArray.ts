@@ -27,12 +27,6 @@ class KopiArray extends KopiValue {
     );
   }
 
-  *[Symbol.iterator]() {
-    for (const value of this.elements) {
-      yield value;
-    }
-  }
-
   *[Symbol.asyncIterator]() {
     for (const value of this.elements) {
       yield value;

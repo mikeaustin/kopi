@@ -35,16 +35,6 @@ class KopiString extends KopiValue {
     return this.value;
   }
 
-  *[Symbol.iterator]() {
-    if (typeof jest !== 'undefined') {
-      return '<KopiString Jest Iterator Value>';
-    }
-
-    for (const value of this.value) {
-      yield new KopiString(value);
-    }
-  }
-
   async *[Symbol.asyncIterator]() {
     for (const value of this.value) {
       yield new KopiString(value);

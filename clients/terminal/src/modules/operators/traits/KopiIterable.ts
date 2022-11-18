@@ -2,7 +2,6 @@ import { Context, KopiValue, KopiMonoid } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
 
 abstract class KopiIterable {
-  abstract [Symbol.iterator](): Iterator<Promise<KopiValue>>;
   abstract [Symbol.asyncIterator](): AsyncIterator<KopiValue>;
 
   async toArray() {
@@ -18,7 +17,7 @@ abstract class KopiIterable {
   async toDict() {
     const values: [key: KopiValue, value: Promise<KopiValue>][] = [];
 
-    for await (const tuple of this as AsyncIterable<KopiTuple>) {
+    for await (const tuple of this) {
       const fields = [tuple.getFieldAt(0), tuple.getFieldAt(1)];
 
       if (fields[0] && fields[1]) {
@@ -161,7 +160,10 @@ abstract class KopiIterable {
     let length = 0;
 
     const generator = async function* (this: KopiIterable) {
-      for (const value of this) {
+      const iter = this[Symbol.asyncIterator]();
+      let result = iter.next();
+
+      while (!(await result).done) {
         if (length > 0 && index % count.value === 0) {
           yield values;
 
@@ -169,9 +171,12 @@ abstract class KopiIterable {
           length = 0;
         }
 
-        values = (values as unknown as KopiMonoid).append(value);
+        values = await (values as unknown as KopiMonoid).append((await result).value);
+
         ++index;
         ++length;
+
+        result = iter.next();
       }
 
       if (length !== 0) {
