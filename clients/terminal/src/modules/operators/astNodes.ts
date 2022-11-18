@@ -2,18 +2,22 @@ import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
 class Assignment extends ASTNode {
+  pattern: ASTPatternNode;
+  expression: ASTNode;
+
   constructor({ pattern, expression, location }: Assignment) {
     super(location);
 
     this.pattern = pattern;
     this.expression = expression;
   }
-
-  pattern: ASTPatternNode;
-  expression: ASTNode;
 }
 
 class PipeExpression extends ASTNode {
+  expression: ASTNode;
+  methodName: string;
+  argumentExpression: ASTNode | null;
+
   constructor({ expression, methodName, argumentExpression, location }: PipeExpression) {
     super(location);
 
@@ -21,23 +25,23 @@ class PipeExpression extends ASTNode {
     this.methodName = methodName;
     this.argumentExpression = argumentExpression;
   }
-
-  expression: ASTNode;
-  methodName: string;
-  argumentExpression: ASTNode | null;
 }
 
 class BlockExpression extends ASTNode {
+  statements: ASTNode[];
+
   constructor({ statements, location }: BlockExpression) {
     super(location);
 
     this.statements = statements;
   }
-
-  statements: ASTNode[];
 }
 
 class OperatorExpression extends ASTNode {
+  operator: string;
+  leftExpression: ASTNode;
+  rightExpression: ASTNode;
+
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
     super(location);
 
@@ -45,49 +49,48 @@ class OperatorExpression extends ASTNode {
     this.leftExpression = leftExpression;
     this.rightExpression = rightExpression;
   }
-
-  operator: string;
-  leftExpression: ASTNode;
-  rightExpression: ASTNode;
 }
 
 class MemberExpression extends ASTNode {
+  expression: ASTNode;
+  member: string;
+
   constructor({ expression, member, location }: MemberExpression) {
     super(location);
 
     this.expression = expression;
     this.member = member;
   }
-
-  expression: ASTNode;
-  member: string;
 }
 
 class UnaryExpression extends ASTNode {
+  operator: string;
+  argumentExpression: ASTNode;
+
   constructor({ operator, argumentExpression, location }: UnaryExpression) {
     super(location);
 
     this.operator = operator;
     this.argumentExpression = argumentExpression;
   }
-
-  operator: string;
-  argumentExpression: ASTNode;
 }
 
 class TupleExpression extends ASTNode {
+  expressionFields: ASTNode[];
+  expressionFieldNames: string[];
+
   constructor({ expressionFields, expressionFieldNames, location }: TupleExpression) {
     super(location);
 
     this.expressionFields = expressionFields;
     this.expressionFieldNames = expressionFieldNames;
   }
-
-  expressionFields: ASTNode[];
-  expressionFieldNames: string[];
 }
 
 class ApplyExpression extends ASTNode {
+  expression: ASTNode;
+  argumentExpression: ASTNode;
+
   constructor({ expression, argumentExpression, location }: ApplyExpression) {
     super(location);
 
@@ -99,12 +102,13 @@ class ApplyExpression extends ASTNode {
     // TODO
     return (argument as any)[(this.expression as Identifier).name]();
   }
-
-  expression: ASTNode;
-  argumentExpression: ASTNode;
 }
 
 class FunctionExpression extends ASTNode {
+  parameterPattern: ASTPatternNode;
+  bodyExpression: ASTNode;
+  name?: string;
+
   constructor({ parameterPattern, bodyExpression, name, location }: FunctionExpression) {
     super(location);
 
@@ -112,22 +116,18 @@ class FunctionExpression extends ASTNode {
     this.bodyExpression = bodyExpression;
     this.name = name;
   }
-
-  parameterPattern: ASTPatternNode;
-  bodyExpression: ASTNode;
-  name?: string;
 }
 
 class RangeExpression extends ASTNode {
+  from: ASTNode;
+  to: ASTNode;
+
   constructor({ from, to, location }: RangeExpression) {
     super(location);
 
     this.from = from;
     this.to = to;
   }
-
-  from: ASTNode;
-  to: ASTNode;
 }
 
 export {

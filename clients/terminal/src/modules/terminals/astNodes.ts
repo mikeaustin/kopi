@@ -2,67 +2,69 @@ import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicativ
 import { KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
+  value: number;
+
   constructor({ value, location }: NumericLiteral) {
     super(location);
 
     this.value = value;
   }
-
-  value: number;
 }
 
 class BooleanLiteral extends ASTNode {
+  value: boolean;
+
   constructor({ value, location }: BooleanLiteral) {
     super(location);
 
     this.value = value;
   }
-
-  value: boolean;
 }
 
 class StringLiteral extends ASTNode {
+  value: string;
+
   constructor({ value, location }: StringLiteral) {
     super(location);
 
     this.value = value;
   }
-
-  value: string;
 }
 
 class ArrayLiteral extends ASTNode {
+  expressionElements: ASTNode[];
+
   constructor({ expressionElements, location }: ArrayLiteral) {
     super(location);
 
     this.expressionElements = expressionElements;
   }
-
-  expressionElements: ASTNode[];
 }
 
 class DictLiteral extends ASTNode {
+  expressionEntries: [key: ASTNode, expression: ASTNode][];
+
   constructor({ expressionEntries, location }: DictLiteral) {
     super(location);
 
     this.expressionEntries = expressionEntries;
   }
-
-  expressionEntries: [key: ASTNode, expression: ASTNode][];
 }
 
 class AstLiteral extends ASTNode {
+  value: ASTNode;
+
   constructor({ value, location }: AstLiteral) {
     super(location);
 
     this.value = value;
   }
-
-  value: ASTNode;
 }
 
 class Identifier extends ASTNode {
   static override traits: KopiTrait[] = [KopiApplicative];
+
+  name: string;
 
   constructor({ name, location }: Identifier) {
     super(location);
@@ -76,8 +78,6 @@ class Identifier extends ASTNode {
   ): Promise<KopiValue> {
     return argument.invoke(this.name, [new KopiTuple([]), context]);
   }
-
-  name: string;
 }
 
 //
@@ -85,6 +85,8 @@ class Identifier extends ASTNode {
 //
 
 class NumericLiteralPattern extends ASTPatternNode {
+  value: number;
+
   constructor({ value, location }: NumericLiteralPattern) {
     super(location);
 
@@ -98,11 +100,12 @@ class NumericLiteralPattern extends ASTPatternNode {
 
     return undefined;
   }
-
-  value: number;
 }
 
 class IdentifierPattern extends ASTPatternNode {
+  name: string;
+  defaultExpression: ASTNode | null;
+
   constructor({ name, defaultExpression, location }: IdentifierPattern) {
     super(location);
 
@@ -127,12 +130,11 @@ class IdentifierPattern extends ASTPatternNode {
       [this.name]: value
     };
   }
-
-  name: string;
-  defaultExpression: ASTNode | null;
 }
 
 class TuplePattern extends ASTPatternNode {
+  patterns: ASTPatternNode[];
+
   constructor({ patterns, location }: TuplePattern) {
     super(location);
 
@@ -162,11 +164,12 @@ class TuplePattern extends ASTPatternNode {
       throw Error('TuplePattern.match\n  ' + (error as Error).message);
     }
   }
-
-  patterns: ASTPatternNode[];
 }
 
 class FunctionPattern extends ASTPatternNode {
+  name: string;
+  parameterPattern: ASTPatternNode;
+
   constructor({ name, parameterPattern, location }: FunctionPattern) {
     super(location);
 
@@ -179,9 +182,6 @@ class FunctionPattern extends ASTPatternNode {
       [this.name]: value,
     };
   }
-
-  name: string;
-  parameterPattern: ASTPatternNode;
 }
 
 export {
