@@ -27,7 +27,7 @@ abstract class KopiEnumerable extends KopiTrait {
   abstract succ(count: KopiValue): KopiValue;
 }
 
-abstract class Bounded extends KopiTrait {
+abstract class KopiBounded extends KopiTrait {
   abstract min(this: KopiValue): KopiValue;
   abstract max(this: KopiValue): KopiValue;
 }

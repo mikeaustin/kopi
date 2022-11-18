@@ -1,14 +1,15 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative } from './modules/shared';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative, addTraits } from './modules/shared';
 
 import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple } from './modules/terminals/classes';
+import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple, KopiArray } from './modules/terminals/classes';
 
 import KopiStream from './modules/terminals/classes/KopiStream';
+import KopiIterable from './modules/operators/traits/KopiIterable';
 
 declare global {
   interface FunctionConstructor {
@@ -126,12 +127,49 @@ class KopiContext extends KopiValue {
   value: KopiValue;
 }
 
+class Observer extends KopiValue {
+  static emptyValue = () => new KopiArray([]);
+
+  promise: Deferred;
+
+  constructor(value: KopiValue) {
+    super();
+
+    this.promise = new Deferred();
+  }
+
+  set(value: KopiValue) {
+    console.log('Observer.set');
+    (this.promise as any).resolve(value);
+    this.promise = new Deferred();
+
+    return this;
+  }
+
+  async *[Symbol.asyncIterator]() {
+    while (true) {
+      yield 0;
+      console.log('here 1');
+      const value = await this.promise;
+      console.log('here 2');
+
+      yield value;
+    }
+  }
+}
+
+addTraits([KopiIterable], Observer);
+
 const environment: {
   [name: string]: KopiValue;
 } = {
   x: new KopiNumber(3),
 
   String: new KopiType(KopiString),
+
+  Observer(value: KopiValue) {
+    return new Observer(value);
+  },
 
   async type(type: KopiTuple) {
     const _class = class extends (type as any).constructor {

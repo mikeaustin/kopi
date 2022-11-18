@@ -11,9 +11,29 @@ async function interpret(source: string) {
 }
 
 test('Basic types', async () => {
-  let string = await interpret(`
+  var string = await interpret(`
     "foo" ++ "bar"
   `) as KopiString;
 
   expect(string).toEqual(new KopiString('foobar'));
+
+  // var string = await interpret(`
+  //   o = Observer 5
+
+  //   oo = o | map (n) => {
+  //     print "here"
+  //     sleep 1
+  //   }
+
+  //   print "zzz 1"
+
+  //   oo | take 2 | toArray
+
+  //   print "zzz 2"
+
+  //   o | set 10
+  //   o | set 10
+  // `) as KopiString;
+
+  console.log(string);
 });
