@@ -1,6 +1,8 @@
 import { KopiValue } from "../../shared";
 
 class KopiBoolean extends KopiValue {
+  value: boolean;
+
   constructor(value: boolean) {
     super();
 
@@ -10,8 +12,6 @@ class KopiBoolean extends KopiValue {
   override async inspect() {
     return this.value ? 'true' : 'false';
   }
-
-  value: boolean;
 }
 
 export default KopiBoolean;

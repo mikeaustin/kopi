@@ -1,4 +1,4 @@
-import { Context, KopiValue } from '../../shared';
+import { addTraits, Context, KopiValue } from '../../shared';
 
 import KopiNumber from './KopiNumber';
 
@@ -9,6 +9,8 @@ import KopiFunction from './KopiFunction';
 
 class KopiDict extends KopiValue {
   static empty = new KopiDict([]);
+
+  entries: Map<any, [KopiValue, Promise<KopiValue>]>;
 
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
     super();
@@ -80,30 +82,8 @@ class KopiDict extends KopiValue {
       );
     };
   }
-
-  // override async force() {
-  //   let elements: Promise<KopiValue>[] = [];
-
-  //   for (const element of this.elements) {
-  //     elements.push(element);
-  //   }
-
-  //   return new KopiArray(elements);
-  // }
-
-  entries: Map<any, [KopiValue, Promise<KopiValue>]>;
 }
 
-// for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
-//   if (name !== 'constructor') {
-//     (KopiArray.prototype as any)[name] = (KopiIterable.prototype as any)[name];
-//   }
-// }
-
-for (const name of Object.getOwnPropertyNames(KopiIterable.prototype)) {
-  if (name !== 'constructor') {
-    (KopiDict.prototype as any)[name] = (KopiIterable.prototype as any)[name];
-  }
-}
+addTraits([KopiIterable], KopiDict);
 
 export default KopiDict;

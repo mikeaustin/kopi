@@ -1,4 +1,4 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, Applicative, Context } from '../shared';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
 import { KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
@@ -62,7 +62,7 @@ class AstLiteral extends ASTNode {
 }
 
 class Identifier extends ASTNode {
-  static override traits: KopiTrait[] = [Applicative];
+  static override traits: KopiTrait[] = [KopiApplicative];
 
   constructor({ name, location }: Identifier) {
     super(location);

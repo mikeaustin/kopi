@@ -1,8 +1,13 @@
 import { KopiValue, ASTNode, ASTPatternNode, Environment, Context } from "../../shared";
-import { Applicative } from "../../shared";
+import { KopiApplicative } from "../../shared";
 
 class KopiFunction extends KopiValue {
-  static override traits = [Applicative];
+  static override traits = [KopiApplicative];
+
+  parameterPattern: ASTPatternNode;
+  bodyExpression: ASTNode;
+  environment: Environment;
+  name?: string;
 
   constructor(
     parameterPattern: ASTPatternNode,
@@ -36,11 +41,6 @@ class KopiFunction extends KopiValue {
 
     return evaluate(this.bodyExpression, newEnvironment, bindValues);
   }
-
-  parameterPattern: ASTPatternNode;
-  bodyExpression: ASTNode;
-  environment: Environment;
-  name?: string;
 }
 
 export default KopiFunction;

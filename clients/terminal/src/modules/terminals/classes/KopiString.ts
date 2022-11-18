@@ -1,6 +1,6 @@
 import { addTraits, KopiValue, KopiMonoid } from "../../shared";
 
-import { Enumerable } from "../../shared";
+import { KopiEnumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
 import KopiIterable from "../../operators/traits/KopiIterable";
 
@@ -10,6 +10,8 @@ import KopiTuple from "./KopiTuple";
 
 class KopiString extends KopiValue {
   static emptyValue = () => new KopiString('');
+
+  value: string;
 
   // static [Symbol.hasInstance](instance: KopiStringWithoutIterator) {
   //   return instance instanceof KopiString;
@@ -90,10 +92,8 @@ class KopiString extends KopiValue {
       this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
     );
   }
-
-  value: string;
 }
 
-addTraits([Enumerable, Comparable, KopiIterable, KopiMonoid], KopiString);
+addTraits([KopiEnumerable, Comparable, KopiIterable, KopiMonoid], KopiString);
 
 export default KopiString;

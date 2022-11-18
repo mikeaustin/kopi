@@ -1,8 +1,10 @@
 import { KopiValue, Context } from "../../shared";
-import { Applicative } from "../../shared";
+import { KopiApplicative } from "../../shared";
 
 class KopiType extends KopiValue {
-  static override traits = [Applicative];
+  static override traits = [KopiApplicative];
+
+  _class: any;
 
   constructor(_class: Function) {
     super();
@@ -20,8 +22,6 @@ class KopiType extends KopiValue {
   ): Promise<KopiValue> {
     return new this._class(argument);
   }
-
-  _class: any;
 }
 
 export default KopiType;

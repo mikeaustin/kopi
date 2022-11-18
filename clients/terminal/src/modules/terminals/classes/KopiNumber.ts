@@ -1,5 +1,5 @@
 import { addTraits, KopiValue } from "../../shared";
-import { Numeric, Equatable, Enumerable } from "../../shared";
+import { KopiNumeric, KopiEquatable, KopiEnumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
 
 import KopiString from './KopiString';
@@ -7,6 +7,8 @@ import KopiBoolean from './KopiBoolean';
 import KopiTuple from './KopiTuple';
 
 class KopiNumber extends KopiValue {
+  value: number;
+
   constructor(value: number) {
     super();
 
@@ -27,7 +29,7 @@ class KopiNumber extends KopiValue {
     return this.value;
   }
 
-  // Numeric methods
+  // KopiNumeric methods
 
   '+'(that: KopiNumber) {
     return new KopiNumber(this.value + that.value);
@@ -104,10 +106,8 @@ class KopiNumber extends KopiValue {
   test(a: KopiNumber) {
     return (b: KopiNumber) => new KopiNumber((this.value + a.value) * b.value);
   }
-
-  value: number;
 }
 
-addTraits([Numeric, Equatable, Enumerable, Comparable], KopiNumber);
+addTraits([KopiNumeric, KopiEquatable, KopiEnumerable, Comparable], KopiNumber);
 
 export default KopiNumber;

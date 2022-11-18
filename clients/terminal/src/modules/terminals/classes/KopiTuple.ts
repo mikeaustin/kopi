@@ -7,6 +7,9 @@ import KopiStream from './KopiStream';
 class KopiTuple extends KopiValue {
   static empty = new KopiTuple([], [], true);
 
+  fields: Promise<KopiValue>[];
+  fieldNames: (string | null)[];
+
   static create(tuple: KopiTuple) {
     return new KopiTuple(tuple.fields, tuple.fieldNames);
   }
@@ -70,9 +73,6 @@ class KopiTuple extends KopiValue {
 
     return new KopiStream(result);
   }
-
-  fields: Promise<KopiValue>[];
-  fieldNames: (string | null)[];
 }
 
 export default KopiTuple;

@@ -7,6 +7,8 @@ import KopiIterable from '../../operators/traits/KopiIterable';
 class KopiArray extends KopiValue {
   static emptyValue = () => new KopiArray([]);
 
+  elements: Promise<KopiValue>[];
+
   constructor(elements: Promise<KopiValue>[]) {
     super();
 
@@ -40,8 +42,6 @@ class KopiArray extends KopiValue {
   size() {
     return new KopiNumber(this.elements.length);
   }
-
-  elements: Promise<KopiValue>[];
 }
 
 addTraits([KopiIterable, KopiMonoid], KopiArray);

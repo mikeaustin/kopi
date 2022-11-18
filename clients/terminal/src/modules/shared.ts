@@ -2,7 +2,7 @@ import { inspect } from './utils';
 
 abstract class KopiTrait { }
 
-abstract class Numeric extends KopiTrait {
+abstract class KopiNumeric extends KopiTrait {
   abstract '+'(that: KopiValue): KopiValue;
   abstract '-'(that: KopiValue): KopiValue;
   abstract '*'(that: KopiValue): KopiValue;
@@ -11,11 +11,11 @@ abstract class Numeric extends KopiTrait {
   abstract negate(): KopiValue;
 }
 
-abstract class Equatable extends KopiTrait {
+abstract class KopiEquatable extends KopiTrait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
-abstract class Applicative extends KopiTrait {
+abstract class KopiApplicative extends KopiTrait {
   abstract apply(
     thisArg: KopiValue | undefined,
     [argument, context]: [KopiValue, Context]
@@ -23,7 +23,7 @@ abstract class Applicative extends KopiTrait {
   ): Promise<KopiValue>;
 }
 
-abstract class Enumerable extends KopiTrait {
+abstract class KopiEnumerable extends KopiTrait {
   abstract succ(count: KopiValue): KopiValue;
 }
 
@@ -66,12 +66,10 @@ const addTraits = (traits: Function[], _class: Function) => {
 
 //
 
-interface Indexable {
-  [name: string]: any;
-}
-
-class KopiValue implements Indexable {
+class KopiValue {
   static traits: KopiTrait[] = [];
+
+  [key: string]: any;
 
   async inspect() {
     return inspect(this);
@@ -95,7 +93,7 @@ class KopiValue implements Indexable {
 
     const method = functions && functions[methodName]
       ? functions[methodName]
-      : (this as Indexable)[methodName];
+      : this[methodName];
 
     if (method) {
       return await method.apply(this, [argument, context]);
@@ -106,6 +104,8 @@ class KopiValue implements Indexable {
 }
 
 class ASTNode extends KopiValue {
+  location: {} = {};
+
   constructor(location: {}) {
     super();
 
@@ -115,8 +115,6 @@ class ASTNode extends KopiValue {
   override async inspect() {
     return inspect(this);
   }
-
-  location: {} = {};
 }
 
 abstract class ASTPatternNode extends ASTNode {
@@ -146,13 +144,13 @@ interface Environment {
 }
 
 class Extensions extends KopiValue {
+  map: Map<Function, { [name: string]: any; }>;
+
   constructor(mappings: [[Function, { [name: string]: any; }]]) {
     super();
 
     this.map = new Map(mappings);
   }
-
-  map: Map<Function, { [name: string]: any; }>;
 }
 
 type Context = {
@@ -165,10 +163,10 @@ export {
   ASTNode,
   ASTPatternNode,
   KopiTrait,
-  Numeric,
-  Equatable,
-  Applicative,
-  Enumerable,
+  KopiNumeric,
+  KopiEquatable,
+  KopiApplicative,
+  KopiEnumerable,
   KopiMonoid,
   KopiValue,
   Extensions,

@@ -9,6 +9,8 @@ const KopiStream2 = (collection: KopiMonoid) => {
   class KopiStream extends KopiValue {
     static emptyValue = () => new KopiString('');
 
+    iterable: AsyncIterable<KopiValue>;
+
     constructor(iterable: AsyncIterable<KopiValue>) {
       super();
 
@@ -28,8 +30,6 @@ const KopiStream2 = (collection: KopiMonoid) => {
     [Symbol.asyncIterator]() {
       return this.iterable[Symbol.asyncIterator]();
     }
-
-    iterable: AsyncIterable<KopiValue>;
   }
 
   addTraits([KopiIterable, KopiMonoid], KopiStream);
@@ -39,6 +39,8 @@ const KopiStream2 = (collection: KopiMonoid) => {
 
 class KopiStream extends KopiValue {
   static emptyValue = () => new KopiString('');
+
+  iterable: AsyncIterable<KopiValue>;
 
   constructor(iterable: AsyncIterable<KopiValue>) {
     super();
@@ -59,8 +61,6 @@ class KopiStream extends KopiValue {
   [Symbol.asyncIterator]() {
     return this.iterable[Symbol.asyncIterator]();
   }
-
-  iterable: AsyncIterable<KopiValue>;
 }
 
 addTraits([KopiIterable, KopiMonoid], KopiStream);

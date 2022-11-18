@@ -1,4 +1,4 @@
-import { KopiValue, Numeric, Applicative, KopiTrait, Context } from '../shared';
+import { KopiValue, KopiNumeric, KopiApplicative, KopiTrait, Context } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 import { KopiRange } from './classes';
 
@@ -83,9 +83,9 @@ async function OperatorExpression(
     evaluate(rightExpression, environment, bindValues),
   ]);
 
-  if ((leftValue.constructor as typeof KopiValue).traits.includes(Numeric)) {
+  if ((leftValue.constructor as typeof KopiValue).traits.includes(KopiNumeric)) {
     if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
-      return (leftValue as unknown as Numeric)[operator](rightValue);
+      return (leftValue as unknown as KopiNumeric)[operator](rightValue);
     }
   } else if (operator === '++') {
     return (leftValue as any)[operator](rightValue);
@@ -119,9 +119,9 @@ async function UnaryExpression(
 
   const argumentValue = await evaluate(argumentExpression, environment, bindValues);
 
-  if ((argumentValue.constructor as typeof KopiValue).traits.includes(Numeric)) {
+  if ((argumentValue.constructor as typeof KopiValue).traits.includes(KopiNumeric)) {
     if (operator === '-') {
-      return (argumentValue as unknown as Numeric).negate();
+      return (argumentValue as unknown as KopiNumeric).negate();
     }
   }
 
@@ -162,14 +162,14 @@ async function ApplyExpression(
 
   const func = await evaluate(expression, environment, bindValues);
 
-  if ((func.constructor as typeof KopiValue).traits.includes(Applicative)) {
-    return (func as unknown as Applicative).apply(
+  if ((func.constructor as typeof KopiValue).traits.includes(KopiApplicative)) {
+    return (func as unknown as KopiApplicative).apply(
       undefined,
       [await evaluate(argumentExpression, environment, bindValues), context]
     );
   }
 
-  throw new Error(`No Applicative.apply() method found for ${func.constructor.name}`);
+  throw new Error(`No KopiApplicative.apply() method found for ${func.constructor.name}`);
 }
 
 async function RangeExpression(

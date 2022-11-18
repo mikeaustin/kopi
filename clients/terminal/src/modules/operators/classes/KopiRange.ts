@@ -1,5 +1,5 @@
 import { addTraits, KopiValue, KopiMonoid } from "../../shared";
-import { Applicative, Enumerable } from "../../shared";
+import { KopiApplicative, KopiEnumerable } from "../../shared";
 
 import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
 
@@ -18,6 +18,10 @@ const assertTrait = async (value: KopiValue, variableName: string, traits: Funct
 
 class KopiRange extends KopiValue {
   static emptyValue = () => new KopiArray([]);
+
+  from: KopiValue;
+  to: KopiValue;
+  stride: KopiNumber;
 
   constructor(from: KopiValue, to: KopiValue, stride?: KopiNumber) {
     super();
@@ -42,8 +46,8 @@ class KopiRange extends KopiValue {
   async *[Symbol.asyncIterator]() {
     let errors: string[] = [];
 
-    assertTrait(this.from, 'from', [Enumerable, Comparable], errors);
-    assertTrait(this.to, 'to', [Enumerable, Comparable], errors);
+    assertTrait(this.from, 'from', [KopiEnumerable, Comparable], errors);
+    assertTrait(this.to, 'to', [KopiEnumerable, Comparable], errors);
 
     if (errors.length > 0) {
       throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
@@ -52,17 +56,13 @@ class KopiRange extends KopiValue {
     for (
       let current = this.from;
       ((current as unknown as Comparable)['<='].apply(current as unknown as Comparable, [this.to]) as KopiBoolean).value;
-      current = (current as unknown as Enumerable).succ(this.stride)
+      current = (current as unknown as KopiEnumerable).succ(this.stride)
     ) {
       yield current;
     }
   }
-
-  from: KopiValue;
-  to: KopiValue;
-  stride: KopiNumber;
 }
 
-addTraits([KopiIterable, KopiMonoid, Applicative], KopiRange);
+addTraits([KopiIterable, KopiMonoid, KopiApplicative], KopiRange);
 
 export default KopiRange;
