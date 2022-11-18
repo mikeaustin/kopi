@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Environment, Context, BindValues, Trait, Applicative } from './modules/shared';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, Applicative } from './modules/shared';
 
 import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
@@ -12,7 +12,7 @@ import KopiStream from './modules/terminals/classes/KopiStream';
 
 declare global {
   interface FunctionConstructor {
-    traits: Trait[];
+    traits: KopiTrait[];
   }
 
   interface Function {

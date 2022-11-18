@@ -1,4 +1,4 @@
-import { KopiValue, Numeric, Applicative, Trait, Context } from '../shared';
+import { KopiValue, Numeric, Applicative, KopiTrait, Context } from '../shared';
 import { KopiTuple, KopiFunction } from '../terminals/classes';
 import { KopiRange } from './classes';
 
@@ -7,7 +7,7 @@ import * as terminalAstNodes from '../terminals/astNodes';
 
 declare global {
   interface FunctionConstructor {
-    traits: Trait[];
+    traits: KopiTrait[];
   }
 }
 

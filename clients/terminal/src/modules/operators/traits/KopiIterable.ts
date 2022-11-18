@@ -1,7 +1,9 @@
-import { Context, KopiValue, KopiMonoid } from "../../shared";
+import { Context, KopiValue, KopiMonoid, KopiTrait } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
+import { KopiStream2 } from "../../terminals/classes/KopiStream";
 
-abstract class KopiIterable {
+abstract class KopiIterable extends KopiTrait {
+  // static emptyValue() { return new KopiValue(); };
   abstract [Symbol.asyncIterator](): AsyncIterator<KopiValue>;
 
   async toArray() {
@@ -49,6 +51,16 @@ abstract class KopiIterable {
 
     return new KopiStream(generator);
   }
+
+  // async map2(func: KopiFunction, context: Context): Promise<InstanceType<ReturnType<typeof KopiStream2>>> {
+  //   const generator = async function* (this: KopiIterable) {
+  //     for await (const value of this) {
+  //       yield func.apply(new KopiTuple([]), [value, context]);
+  //     }
+  //   }.apply(this);
+
+  //   return new (KopiStream2(KopiIterable.emptyValue() as unknown as KopiMonoid))(generator);
+  // }
 
   async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = async function* (this: KopiIterable) {
@@ -152,7 +164,7 @@ abstract class KopiIterable {
     const constructorTraits = (this.constructor as typeof KopiValue).traits;
 
     if (!constructorTraits.includes(KopiMonoid)) {
-      throw new Error(`Iterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not implement trait 'KopiMonoid'\n  Trait 'KopiMonoid' requires methods 'static emptyValue()' and 'append()'`);
+      throw new Error(`KopiIterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not implement trait 'KopiMonoid'\n  Trait 'KopiMonoid' requires methods 'static emptyValue()' and 'append()'`);
     }
 
     let values: KopiValue = (this.constructor as typeof KopiMonoid).emptyValue();

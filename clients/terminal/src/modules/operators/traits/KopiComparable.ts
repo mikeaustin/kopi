@@ -1,7 +1,7 @@
-import { KopiValue, Trait } from '../../shared';
+import { KopiValue, KopiTrait } from '../../shared';
 import { KopiBoolean, KopiNumber } from '../../terminals/classes';
 
-abstract class Comparable extends Trait {
+abstract class Comparable extends KopiTrait {
   abstract compare(this: Comparable, that: KopiValue): KopiNumber;
 
   '<'(this: Comparable, that: KopiValue): KopiValue {

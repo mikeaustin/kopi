@@ -1,8 +1,8 @@
 import { inspect } from './utils';
 
-abstract class Trait { }
+abstract class KopiTrait { }
 
-abstract class Numeric extends Trait {
+abstract class Numeric extends KopiTrait {
   abstract '+'(that: KopiValue): KopiValue;
   abstract '-'(that: KopiValue): KopiValue;
   abstract '*'(that: KopiValue): KopiValue;
@@ -11,11 +11,11 @@ abstract class Numeric extends Trait {
   abstract negate(): KopiValue;
 }
 
-abstract class Equatable extends Trait {
+abstract class Equatable extends KopiTrait {
   abstract '=='(that: KopiValue): KopiValue;
 }
 
-abstract class Applicative extends Trait {
+abstract class Applicative extends KopiTrait {
   abstract apply(
     thisArg: KopiValue | undefined,
     [argument, context]: [KopiValue, Context]
@@ -23,16 +23,16 @@ abstract class Applicative extends Trait {
   ): Promise<KopiValue>;
 }
 
-abstract class Enumerable extends Trait {
+abstract class Enumerable extends KopiTrait {
   abstract succ(count: KopiValue): KopiValue;
 }
 
-abstract class Bounded extends Trait {
+abstract class Bounded extends KopiTrait {
   abstract min(this: KopiValue): KopiValue;
   abstract max(this: KopiValue): KopiValue;
 }
 
-abstract class KopiMonoid extends Trait {
+abstract class KopiMonoid extends KopiTrait {
   static emptyValue(): KopiValue { return new KopiValue(); };
   abstract append(this: KopiMonoid, that: Promise<KopiValue>): KopiValue;
 }
@@ -71,7 +71,7 @@ interface Indexable {
 }
 
 class KopiValue implements Indexable {
-  static traits: Trait[] = [];
+  static traits: KopiTrait[] = [];
 
   async inspect() {
     return inspect(this);
@@ -164,7 +164,7 @@ type Context = {
 export {
   ASTNode,
   ASTPatternNode,
-  Trait,
+  KopiTrait,
   Numeric,
   Equatable,
   Applicative,
