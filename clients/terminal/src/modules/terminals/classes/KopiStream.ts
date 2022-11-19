@@ -1,11 +1,11 @@
-import { addTraits, KopiMonoid, KopiValue } from '../../shared';
+import { addTraits, KopiCollection, KopiValue } from '../../shared';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 
 import KopiArray from './KopiArray';
 import KopiString from './KopiString';
 
-const KopiStream2 = (collection: KopiMonoid) => {
+const KopiStream2 = (collection: KopiCollection) => {
   class KopiStream extends KopiValue {
     static emptyValue = () => new KopiString('');
 
@@ -32,7 +32,7 @@ const KopiStream2 = (collection: KopiMonoid) => {
     }
   }
 
-  addTraits([KopiIterable, KopiMonoid], KopiStream);
+  addTraits([KopiIterable, KopiCollection], KopiStream);
 
   return KopiStream;
 };
@@ -63,7 +63,7 @@ class KopiStream extends KopiValue {
   }
 }
 
-addTraits([KopiIterable, KopiMonoid], KopiStream);
+addTraits([KopiIterable, KopiCollection], KopiStream);
 
 export default KopiStream;
 

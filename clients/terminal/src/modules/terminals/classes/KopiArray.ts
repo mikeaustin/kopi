@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiMonoid } from "../../shared";
+import { addTraits, KopiValue, KopiCollection } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
@@ -29,6 +29,12 @@ class KopiArray extends KopiValue {
     );
   }
 
+  *iterator() {
+    for (const value of this.elements) {
+      yield value;
+    }
+  }
+
   // TODO: This is not really async, but useful when you don't care about the value
   *[Symbol.asyncIterator]() {
     for (const value of this.elements) {
@@ -45,6 +51,6 @@ class KopiArray extends KopiValue {
   }
 }
 
-addTraits([KopiIterable, KopiMonoid], KopiArray);
+addTraits([KopiIterable, KopiCollection], KopiArray);
 
 export default KopiArray;

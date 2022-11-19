@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiMonoid } from "../../shared";
+import { addTraits, KopiValue, KopiCollection } from "../../shared";
 import { KopiApplicative, KopiEnumerable } from "../../shared";
 
 import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
@@ -43,6 +43,25 @@ class KopiRange extends KopiValue {
 
   // Iterator methods
 
+  *iterator() {
+    let errors: string[] = [];
+
+    assertTrait(this.from, 'from', [KopiEnumerable, Comparable], errors);
+    assertTrait(this.to, 'to', [KopiEnumerable, Comparable], errors);
+
+    if (errors.length > 0) {
+      throw new Error(`Range.iterator(): 'from' or 'to' values are missing traits:\n${errors.join('\n')}`);
+    }
+
+    for (
+      let current = this.from;
+      ((current as unknown as Comparable)['<='].apply(current as unknown as Comparable, [this.to]) as KopiBoolean).value;
+      current = (current as unknown as KopiEnumerable).succ(this.stride)
+    ) {
+      yield current;
+    }
+  }
+
   async *[Symbol.asyncIterator]() {
     let errors: string[] = [];
 
@@ -63,6 +82,6 @@ class KopiRange extends KopiValue {
   }
 }
 
-addTraits([KopiIterable, KopiMonoid, KopiApplicative], KopiRange);
+addTraits([KopiIterable, KopiCollection, KopiApplicative], KopiRange);
 
 export default KopiRange;

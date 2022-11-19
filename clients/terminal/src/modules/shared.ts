@@ -32,9 +32,9 @@ abstract class KopiBounded extends KopiTrait {
   abstract max(this: KopiValue): KopiValue;
 }
 
-abstract class KopiMonoid extends KopiTrait {
+abstract class KopiCollection extends KopiTrait {
   static emptyValue(): KopiValue { return new KopiValue(); };
-  abstract append(this: KopiMonoid, that: Promise<KopiValue>): KopiValue;
+  abstract append(this: KopiCollection, that: Promise<KopiValue>): KopiValue;
 }
 
 // const $Comparable = ({
@@ -167,7 +167,7 @@ export {
   KopiEquatable,
   KopiApplicative,
   KopiEnumerable,
-  KopiMonoid,
+  KopiCollection,
   KopiValue,
   Extensions,
   addTraits,

@@ -1,4 +1,4 @@
-import { Context, KopiValue, KopiMonoid, KopiTrait } from "../../shared";
+import { Context, KopiValue, KopiCollection, KopiTrait } from "../../shared";
 import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
 import { KopiStream2 } from "../../terminals/classes/KopiStream";
 
@@ -77,7 +77,7 @@ abstract class KopiIterable extends KopiTrait {
   //     }
   //   }.apply(this);
 
-  //   return new (KopiStream2(KopiIterable.emptyValue() as unknown as KopiMonoid))(generator);
+  //   return new (KopiStream2(KopiIterable.emptyValue() as unknown as KopiCollection))(generator);
   // }
 
   async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
@@ -206,11 +206,11 @@ abstract class KopiIterable extends KopiTrait {
   async splitEvery(count: KopiNumber) {
     const constructorTraits = (this.constructor as typeof KopiValue).traits;
 
-    if (!constructorTraits.includes(KopiMonoid)) {
-      throw new Error(`KopiIterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not conform to trait 'KopiMonoid'\n  Trait 'KopiMonoid' implements methods 'static emptyValue()' and 'append()'`);
+    if (!constructorTraits.includes(KopiCollection)) {
+      throw new Error(`KopiIterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not conform to trait 'KopiCollection'\n  Trait 'KopiCollection' implements methods 'static emptyValue()' and 'append()'`);
     }
 
-    let values: KopiValue = (this.constructor as typeof KopiMonoid).emptyValue();
+    let values: KopiValue = (this.constructor as typeof KopiCollection).emptyValue();
     let index = 0;
     let length = 0;
 
@@ -222,11 +222,11 @@ abstract class KopiIterable extends KopiTrait {
         if (length > 0 && index % count.value === 0) {
           yield values;
 
-          values = (this.constructor as typeof KopiMonoid).emptyValue();
+          values = (this.constructor as typeof KopiCollection).emptyValue();
           length = 0;
         }
 
-        values = await (values as unknown as KopiMonoid).append((await result).value);
+        values = await (values as unknown as KopiCollection).append((await result).value);
 
         ++index;
         ++length;
