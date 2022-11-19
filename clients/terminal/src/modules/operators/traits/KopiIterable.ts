@@ -114,6 +114,31 @@ abstract class KopiIterable extends KopiTrait {
     return new KopiTuple([]);
   }
 
+  async includes(value: KopiValue, context: Context): Promise<KopiBoolean> {
+    for await (const _value of this) {
+      if ((value['=='].apply(value, [await _value, context]) as KopiBoolean).value) {
+        return new KopiBoolean(true);
+      }
+    }
+
+    return new KopiBoolean(false);
+  }
+
+  async count(func: KopiFunction, context: Context): Promise<KopiNumber> {
+    var count = 0;
+
+    const iter = this[Symbol.asyncIterator]();
+    let result = iter.next();
+
+    while (!(await result).done) {
+      count += 1;
+
+      result = iter.next();
+    }
+
+    return new KopiNumber(count);
+  }
+
   take(count: KopiNumber) {
     let index = 0;
 
@@ -182,7 +207,7 @@ abstract class KopiIterable extends KopiTrait {
     const constructorTraits = (this.constructor as typeof KopiValue).traits;
 
     if (!constructorTraits.includes(KopiMonoid)) {
-      throw new Error(`KopiIterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not implement trait 'KopiMonoid'\n  Trait 'KopiMonoid' requires methods 'static emptyValue()' and 'append()'`);
+      throw new Error(`KopiIterable.splitEvery(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not conform to trait 'KopiMonoid'\n  Trait 'KopiMonoid' implements methods 'static emptyValue()' and 'append()'`);
     }
 
     let values: KopiValue = (this.constructor as typeof KopiMonoid).emptyValue();

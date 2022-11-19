@@ -102,6 +102,30 @@ test('Map and filter', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(120);
+
+  var boolean = await interpret(`
+    1..5 | includes 3
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
+
+  var boolean = await interpret(`
+    1..5 | includes 7
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(false));
+
+  var boolean = await interpret(`
+    [1, 2, 3, 4, 5] | includes 3
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
+
+  var boolean = await interpret(`
+    [1, 2, 3, 4, 5] | includes 7
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(false));
 });
 
 test('Take and skip', async () => {

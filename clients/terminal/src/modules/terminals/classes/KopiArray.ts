@@ -29,6 +29,7 @@ class KopiArray extends KopiValue {
     );
   }
 
+  // TODO: This is not really async, but useful when you don't care about the value
   *[Symbol.asyncIterator]() {
     for (const value of this.elements) {
       yield value;
