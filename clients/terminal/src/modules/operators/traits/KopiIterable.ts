@@ -131,7 +131,9 @@ abstract class KopiIterable extends KopiTrait {
     let result = iter.next();
 
     while (!(await result).done) {
-      count += 1;
+      if ((await func.apply(new KopiTuple([]), [(await result).value, context]) as KopiBoolean).value) {
+        count += 1;
+      }
 
       result = iter.next();
     }

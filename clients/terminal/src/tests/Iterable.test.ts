@@ -150,6 +150,12 @@ test('Map and filter', async () => {
   `) as KopiBoolean;
 
   expect(boolean).toEqual(new KopiBoolean(true));
+
+  var number = await interpret(`
+    1..5 | count (n) => 'odd n
+  `) as KopiNumber;
+
+  expect(number).toEqual(new KopiNumber(3));
 });
 
 test('Take and skip', async () => {
