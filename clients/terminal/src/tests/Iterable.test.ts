@@ -144,6 +144,12 @@ test('Map and filter', async () => {
   `) as KopiBoolean;
 
   expect(boolean).toEqual(new KopiBoolean(true));
+
+  var boolean = await interpret(`
+    1..5 | filter 'odd | includes 3
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
 });
 
 test('Take and skip', async () => {
