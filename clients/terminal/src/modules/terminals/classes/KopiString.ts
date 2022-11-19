@@ -7,6 +7,7 @@ import KopiIterable from "../../operators/traits/KopiIterable";
 import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
+import KopiBoolean from "./KopiBoolean";
 
 class KopiString extends KopiValue {
   static emptyValue = () => new KopiString('');
@@ -74,6 +75,10 @@ class KopiString extends KopiValue {
   }
 
   // Comparable methods
+
+  '=='(that: KopiString): KopiBoolean {
+    return new KopiBoolean(this.value === that.value);
+  }
 
   compare(that: KopiString) {
     if (this.value < that.value) {

@@ -116,6 +116,18 @@ test('Map and filter', async () => {
   expect(boolean).toEqual(new KopiBoolean(false));
 
   var boolean = await interpret(`
+    "a".."e" | includes "c"
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
+
+  var boolean = await interpret(`
+    "a".."e" | includes "g"
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(false));
+
+  var boolean = await interpret(`
     [1, 2, 3, 4, 5] | includes 3
   `) as KopiBoolean;
 
@@ -126,6 +138,12 @@ test('Map and filter', async () => {
   `) as KopiBoolean;
 
   expect(boolean).toEqual(new KopiBoolean(false));
+
+  var boolean = await interpret(`
+    "abcde" | includes "c"
+  `) as KopiBoolean;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
 });
 
 test('Take and skip', async () => {
