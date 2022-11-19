@@ -267,14 +267,21 @@ test('Named tuple fields', async () => {
     (tuple.0, tuple.1, tuple.2)
   `) as KopiTuple;
 
-  console.log(await tuple.inspect());
+  expect(await Promise.all(tuple.fields)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
 
   tuple = await interpret(`
     tuple = (1, b: 2, c: 3)
     (tuple.b, tuple.c)
   `) as KopiTuple;
 
-  console.log(await tuple.inspect());
+  expect(await Promise.all(tuple.fields)).toEqual([
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
 });
 
 test('Context', async () => {

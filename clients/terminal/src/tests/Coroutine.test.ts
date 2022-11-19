@@ -21,7 +21,7 @@ test('Coroutine', async () => {
     }
 
     let (n = 1) => {
-      print (coro | send n)
+      (coro | send n)
 
       match (n) (
         3 => "Done"

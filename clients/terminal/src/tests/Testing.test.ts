@@ -23,8 +23,6 @@ test('Basic types', async () => {
     }
   `) as KopiStream;
 
-  console.log(object);
-
   // var string = await interpret(`
   //   o = Observer 5
 
@@ -42,6 +40,4 @@ test('Basic types', async () => {
   //   o | set 10
   //   o | set 10
   // `) as KopiString;
-
-  console.log('Done.');
 });
