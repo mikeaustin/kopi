@@ -1,8 +1,9 @@
-import { addTraits, KopiValue, KopiCollection } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
+import KopiBoolean from "./KopiBoolean";
 
 class KopiArray extends KopiValue {
   static emptyValue = () => new KopiArray([]);
@@ -27,6 +28,26 @@ class KopiArray extends KopiValue {
     return Promise.all(
       this.elements.map(async element => (await element).toJS())
     );
+  }
+
+  async '=='(that: KopiArray, context: Context): Promise<KopiBoolean> {
+    if (that.elements.length !== this.elements.length) {
+      return new KopiBoolean(false);
+    }
+
+    for (const [index, thatValue] of that.elements.entries()) {
+      const thisValue = this.elements[index];
+
+      if (thisValue === undefined) {
+        return new KopiBoolean(false);
+      }
+
+      if (!(await (await thatValue).invoke('==', [await thisValue, context]) as KopiBoolean).value) {
+        return new KopiBoolean(false);
+      }
+    }
+
+    return new KopiBoolean(true);
   }
 
   *iterator() {

@@ -12,6 +12,10 @@ class KopiBoolean extends KopiValue {
   override async inspect() {
     return this.value ? 'true' : 'false';
   }
+
+  '=='(that: KopiBoolean): KopiBoolean {
+    return new KopiBoolean(this.value === that.value);
+  }
 }
 
 export default KopiBoolean;

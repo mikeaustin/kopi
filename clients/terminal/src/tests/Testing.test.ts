@@ -17,6 +17,18 @@ test('Basic types', async () => {
 
   expect(string).toEqual(new KopiString('foobar'));
 
+  var boolean = await interpret(`
+    (1, "2", [true, 'bar]) == (1, "2", [true, 'bar])
+  `) as KopiString;
+
+  expect(boolean).toEqual(new KopiBoolean(true));
+
+  var boolean = await interpret(`
+    (1, 2) == (1, 3)
+  `) as KopiString;
+
+  expect(boolean).toEqual(new KopiBoolean(false));
+
   var object = await interpret(`
     timer () | map (n) => n / 1000 | take 3 | each (n) => {
       print n

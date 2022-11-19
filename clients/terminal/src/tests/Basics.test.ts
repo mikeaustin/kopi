@@ -34,7 +34,7 @@ test('Basic types', async () => {
   ]);
 
   var number = await interpret(`
-    'size (1, 2, 3)
+    'size [1, 2, 3]
   `) as KopiNumber;
 
   expect(number.value).toEqual(3);

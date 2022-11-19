@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
-import { KopiNumber, KopiTuple } from './classes';
+import { KopiBoolean, KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   value: number;
@@ -70,6 +70,10 @@ class Identifier extends ASTNode {
     super(location);
 
     this.name = name;
+  }
+
+  '=='(that: Identifier): KopiBoolean {
+    return new KopiBoolean(this.name === that.name);
   }
 
   async apply(

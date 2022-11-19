@@ -44,10 +44,21 @@ PipeExpression
     }
 
 ConcatenationExpression
-  = head:AddExpression tail:(_ "++" _ ConcatenationExpression)? {
+  = head:EqualityExpression tail:(_ "++" _ ConcatenationExpression)? {
       return !tail ? head : {
         type: 'OperatorExpression', operator: '++', leftExpression: head, rightExpression: tail[3]
       };
+    }
+
+EqualityExpression
+  = head:AddExpression tail:(_ ("==" / "!=") _ AddExpression)* {
+      return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
+        type: 'OperatorExpression',
+        operator,
+        leftExpression,
+        rightExpression,
+        location: location(),
+       }), head);
     }
 
 AddExpression

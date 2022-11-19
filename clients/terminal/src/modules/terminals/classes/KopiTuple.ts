@@ -1,4 +1,5 @@
 import { Context, KopiValue } from '../../shared';
+import KopiBoolean from './KopiBoolean';
 
 import KopiFunction from './KopiFunction';
 import KopiNumber from './KopiNumber';
@@ -50,8 +51,24 @@ class KopiTuple extends KopiValue {
     return this.fields[index];
   }
 
-  async size() {
-    return new KopiNumber(this.fields.length);
+  async '=='(that: KopiTuple, context: Context): Promise<KopiBoolean> {
+    if (that.fields.length !== this.fields.length) {
+      return new KopiBoolean(false);
+    }
+
+    for (const [index, thatValue] of that.fields.entries()) {
+      const thisValue = this.fields[index];
+
+      if (thisValue === undefined) {
+        return new KopiBoolean(false);
+      }
+
+      if (!(await (await thatValue).invoke('==', [await thisValue, context]) as KopiBoolean).value) {
+        return new KopiBoolean(false);
+      }
+    }
+
+    return new KopiBoolean(true);
   }
 
   map(func: KopiFunction, context: Context) {

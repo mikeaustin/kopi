@@ -87,8 +87,8 @@ async function OperatorExpression(
     if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
       return (leftValue as unknown as KopiNumeric)[operator](rightValue);
     }
-  } else if (operator === '++') {
-    return (leftValue as any)[operator](rightValue);
+  } else if (operator === '++' || operator === '==') {
+    return (leftValue as any)[operator](rightValue, context);
   }
 
   throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);

@@ -69,8 +69,6 @@ const addTraits = (traits: Function[], _class: Function) => {
 class KopiValue {
   static traits: KopiTrait[] = [];
 
-  [key: string]: any;
-
   async inspect() {
     return inspect(this);
   }
@@ -93,7 +91,7 @@ class KopiValue {
 
     const method = functions && functions[methodName]
       ? functions[methodName]
-      : this[methodName];
+      : (this as any)[methodName];
 
     if (method) {
       return await method.apply(this, [argument, context]);
