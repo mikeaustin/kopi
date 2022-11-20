@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiCollection } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
 import { KopiApplicative, KopiEnumerable } from "../../shared";
 
 import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
@@ -33,6 +33,22 @@ class KopiRange extends KopiValue {
 
   override async inspect() {
     return `${await (await this.from).inspect()}..${await (await this.to).inspect()}`;
+  }
+
+  async '=='(that: KopiRange, context: Context) {
+    if (!(await that.from.invoke('==', [this.from, context]) as KopiBoolean).value) {
+      return new KopiBoolean(false);
+    };
+
+    if (!(await that.to.invoke('==', [this.to, context]) as KopiBoolean).value) {
+      return new KopiBoolean(false);
+    };
+
+    if (!(await that.stride.invoke('==', [this.stride, context]) as KopiBoolean).value) {
+      return new KopiBoolean(false);
+    };
+
+    return new KopiBoolean(true);
   }
 
   // Applicatie methods
