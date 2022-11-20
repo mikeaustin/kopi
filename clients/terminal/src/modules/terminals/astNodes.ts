@@ -152,9 +152,10 @@ class TuplePattern extends ASTPatternNode {
 
     try {
       let bindings = {} as Bindings;
+      const fields = tuple.fields;
 
       for (const [index, pattern] of this.patterns.entries()) {
-        let matches = await pattern.match(await tuple.getFieldAt(index) ?? new KopiTuple([]), context);
+        let matches = await pattern.match(await fields[index] ?? new KopiTuple([]), context);
 
         if (matches === undefined) {
           return undefined;

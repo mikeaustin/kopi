@@ -51,10 +51,6 @@ class KopiTuple extends KopiValue {
     return `(${fields.join(', ')})`;
   }
 
-  override getFieldAt(index: number): Promise<KopiValue> | undefined {
-    return this._fields[index];
-  }
-
   async '=='(that: KopiTuple, context: Context): Promise<KopiBoolean> {
     if (that._fields.length !== this._fields.length) {
       return new KopiBoolean(false);

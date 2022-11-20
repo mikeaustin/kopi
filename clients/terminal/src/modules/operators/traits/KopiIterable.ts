@@ -25,7 +25,7 @@ abstract class KopiIterable extends KopiTrait {
     const values: [key: KopiValue, value: Promise<KopiValue>][] = [];
 
     for await (const tuple of this) {
-      const fields = [tuple.getFieldAt(0), tuple.getFieldAt(1)];
+      const fields = tuple.fields;
 
       if (fields[0] && fields[1]) {
         values.push([await fields[0], fields[1]]);

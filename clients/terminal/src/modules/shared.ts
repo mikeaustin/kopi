@@ -77,11 +77,6 @@ class KopiValue {
     return [Promise.resolve(this)];
   }
 
-  // TODO: How to return Tuple: recursive import
-  getFieldAt(index: number): Promise<KopiValue> | undefined {
-    return index === 0 ? Promise.resolve(this) : undefined;
-  }
-
   async toJS(): Promise<any> {
     return this;
   }
