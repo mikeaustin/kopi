@@ -343,7 +343,7 @@ function peg$parse(input, options) {
       };
     };
   var peg$f11 = function(fieldName, head, tail) {
-      return head && tail.length === 0 ? head : {
+      return head && !fieldName && tail.length === 0 ? head : {
         type: 'TupleExpression',
         expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , expressionField]) =>
           [...expressionFields, expressionField], [head]),

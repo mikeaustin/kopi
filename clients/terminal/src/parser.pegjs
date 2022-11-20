@@ -129,7 +129,7 @@ UnaryExpression
 
 PrimaryExpression
   = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
-      return head && tail.length === 0 ? head : {
+      return head && !fieldName && tail.length === 0 ? head : {
         type: 'TupleExpression',
         expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , expressionField]) =>
           [...expressionFields, expressionField], [head]),

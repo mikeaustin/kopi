@@ -8,24 +8,24 @@ import KopiStream from './KopiStream';
 class KopiTuple extends KopiValue {
   static empty = new KopiTuple([], [], true);
 
-  fields: Promise<KopiValue>[];
+  _fields: Promise<KopiValue>[];
   fieldNames: (string | null)[];
 
   static create(tuple: KopiTuple) {
-    return new KopiTuple(tuple.fields, tuple.fieldNames);
+    return new KopiTuple(tuple._fields, tuple.fieldNames);
   }
 
   constructor(fields: Promise<KopiValue>[], fieldNames?: (string | null)[], isEmpty = false) {
     super();
 
     if (fields.length === 0 && !isEmpty) {
-      this.fields = [];
+      this._fields = [];
       this.fieldNames = [];
 
       return KopiTuple.empty;
     }
 
-    this.fields = fields;
+    this._fields = fields;
     this.fieldNames = fieldNames ?? Array.from(fields, (_) => null);
 
     this.fieldNames.forEach((fieldName, index) => {
@@ -37,9 +37,13 @@ class KopiTuple extends KopiValue {
     });
   }
 
+  override get fields() {
+    return this._fields;
+  }
+
   override async inspect() {
     const fields = await Promise.all(
-      this.fields.map(async (element, index) =>
+      this._fields.map(async (element, index) =>
         this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : `` +
           `${await (await element).inspect()}`)
     );
@@ -48,16 +52,16 @@ class KopiTuple extends KopiValue {
   }
 
   override getFieldAt(index: number): Promise<KopiValue> | undefined {
-    return this.fields[index];
+    return this._fields[index];
   }
 
   async '=='(that: KopiTuple, context: Context): Promise<KopiBoolean> {
-    if (that.fields.length !== this.fields.length) {
+    if (that._fields.length !== this._fields.length) {
       return new KopiBoolean(false);
     }
 
-    for (const [index, thatValue] of that.fields.entries()) {
-      const thisValue = this.fields[index];
+    for (const [index, thatValue] of that._fields.entries()) {
+      const thisValue = this._fields[index];
 
       if (thisValue === undefined) {
         return new KopiBoolean(false);
@@ -74,7 +78,7 @@ class KopiTuple extends KopiValue {
   map(func: KopiFunction, context: Context) {
     const result = (async function* map(this: KopiTuple) {
       const iters = await Promise.all(
-        this.fields.map(
+        this._fields.map(
           async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]()
         )
       );

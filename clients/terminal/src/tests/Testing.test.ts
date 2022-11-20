@@ -32,7 +32,6 @@ test('Basic types', async () => {
   var number = await interpret(`
     extend String (
       foo: () => "Hello"
-      bar: () => 0
     )
 
     'foo "foo"
