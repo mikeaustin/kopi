@@ -4,23 +4,23 @@ import { KopiApplicative } from "../../shared";
 class KopiType extends KopiValue {
   static override traits = [KopiApplicative];
 
-  _class: any;
+  _constructor: any;
 
-  constructor(_class: Function) {
+  constructor(_constructor: Function) {
     super();
 
-    this._class = _class;
+    this._constructor = _constructor;
   }
 
   override async inspect() {
-    return this._class.prototype.inspect.apply(undefined, []);
+    return this._constructor.prototype.inspect.apply(undefined, []);
   }
 
   async apply(
     thisArg: KopiValue,
     [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    return new this._class(argument);
+    return new this._constructor(argument);
   }
 }
 

@@ -52,15 +52,15 @@ abstract class KopiCollection extends KopiTrait {
 //     '>' = greaterThan;
 //   };
 
-const addTraits = (traits: Function[], _class: Function) => {
+const addTraits = (traits: Function[], _constructor: Function) => {
   for (const trait of traits) {
     for (const name of Object.getOwnPropertyNames(trait.prototype)) {
       if (name !== 'constructor') {
-        (_class.prototype as any)[name] = (trait.prototype as any)[name];
+        (_constructor.prototype as any)[name] = (trait.prototype as any)[name];
       }
     }
 
-    (_class as any).traits = traits;
+    (_constructor as any).traits = traits;
   }
 };
 
@@ -144,7 +144,7 @@ interface Environment {
 class Extensions extends KopiValue {
   map: Map<Function, { [name: string]: any; }>;
 
-  constructor(mappings: [[Function, { [name: string]: any; }]]) {
+  constructor(mappings: [Function, { [name: string]: any; }][]) {
     super();
 
     this.map = new Map(mappings);

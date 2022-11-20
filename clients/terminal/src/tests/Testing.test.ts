@@ -29,11 +29,22 @@ test('Basic types', async () => {
 
   expect(boolean).toEqual(new KopiBoolean(false));
 
-  var object = await interpret(`
-    timer () | map (n) => n / 1000 | take 3 | each (n) => {
-      print n
-    }
-  `) as KopiStream;
+  var number = await interpret(`
+    extend String (
+      foo: () => "Hello"
+      bar: () => 0
+    )
+
+    'foo "foo"
+  `) as KopiNumber;
+
+  console.log(number);
+
+  // var object = await interpret(`
+  //   timer () | map (n) => n / 1000 | take 3 | each (n) => {
+  //     print n
+  //   }
+  // `) as KopiStream;
 
   // var string = await interpret(`
   //   o = Observer 5

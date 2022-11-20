@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative, addTraits } from './modules/shared';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative, addTraits, Bindings } from './modules/shared';
 
 import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
@@ -189,16 +189,16 @@ const environment: {
   },
 
   async type(type: KopiTuple) {
-    const _class = class extends (type as any).constructor {
+    const _constructor = class extends (type as any).constructor {
       constructor(tuple: KopiTuple) {
         super(tuple.fields, tuple.fieldNames);
         // Add copy constructor
       }
     };
 
-    Object.defineProperty(_class, 'name', { value: 'Custom' });
+    Object.defineProperty(_constructor, 'name', { value: 'Custom' });
 
-    return new KopiType(_class);
+    return new KopiType(_constructor);
   },
 
   async context(value: KopiValue, context: Context) {
@@ -219,6 +219,21 @@ const environment: {
     console.log(value);
 
     return new KopiTuple([]);
+  },
+
+  async extend(type: KopiType, context: Context) {
+    const extensions = (context.environment._extensions as Extensions);
+
+    return async (methods: KopiTuple) => {
+      const newMethods = await methods.fields.reduce(async (newMethods, method, index) => ({
+        ...await newMethods,
+        [methods.fieldNames[index] ?? 'invalid']: await method,
+      }), extensions.map.get(type._constructor) ?? {});
+
+      context.bindValues({
+        _extensions: new Extensions([...extensions.map, [type._constructor, newMethods]])
+      });
+    };
   },
 
   async iterate(value: KopiValue, context: Context) {

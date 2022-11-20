@@ -56,6 +56,10 @@ class KopiString extends KopiValue {
     return new KopiString(this.value.concat(that.value));
   }
 
+  toUpperCase() {
+    return new KopiString(this.value.toLocaleUpperCase());
+  }
+
   // Enumerable methods
 
   succ(count: KopiNumber | KopiTuple): KopiString {
