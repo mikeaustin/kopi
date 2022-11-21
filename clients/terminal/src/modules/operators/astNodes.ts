@@ -2,8 +2,8 @@ import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
 class Assignment extends ASTNode {
-  pattern: ASTPatternNode;
-  expression: ASTNode;
+  readonly pattern: ASTPatternNode;
+  readonly expression: ASTNode;
 
   constructor({ pattern, expression, location }: Assignment) {
     super(location);
@@ -14,9 +14,9 @@ class Assignment extends ASTNode {
 }
 
 class PipeExpression extends ASTNode {
-  expression: ASTNode;
-  methodName: string;
-  argumentExpression: ASTNode | null;
+  readonly expression: ASTNode;
+  readonly methodName: string;
+  readonly argumentExpression: ASTNode | null;
 
   constructor({ expression, methodName, argumentExpression, location }: PipeExpression) {
     super(location);
@@ -28,7 +28,7 @@ class PipeExpression extends ASTNode {
 }
 
 class BlockExpression extends ASTNode {
-  statements: ASTNode[];
+  readonly statements: ASTNode[];
 
   constructor({ statements, location }: BlockExpression) {
     super(location);
@@ -38,9 +38,9 @@ class BlockExpression extends ASTNode {
 }
 
 class OperatorExpression extends ASTNode {
-  operator: string;
-  leftExpression: ASTNode;
-  rightExpression: ASTNode;
+  readonly operator: string;
+  readonly leftExpression: ASTNode;
+  readonly rightExpression: ASTNode;
 
   constructor({ operator, leftExpression, rightExpression, location }: OperatorExpression) {
     super(location);
@@ -52,8 +52,8 @@ class OperatorExpression extends ASTNode {
 }
 
 class MemberExpression extends ASTNode {
-  expression: ASTNode;
-  member: string;
+  readonly expression: ASTNode;
+  readonly member: string;
 
   constructor({ expression, member, location }: MemberExpression) {
     super(location);
@@ -64,8 +64,8 @@ class MemberExpression extends ASTNode {
 }
 
 class UnaryExpression extends ASTNode {
-  operator: string;
-  argumentExpression: ASTNode;
+  readonly operator: string;
+  readonly argumentExpression: ASTNode;
 
   constructor({ operator, argumentExpression, location }: UnaryExpression) {
     super(location);
@@ -76,8 +76,8 @@ class UnaryExpression extends ASTNode {
 }
 
 class TupleExpression extends ASTNode {
-  expressionFields: ASTNode[];
-  expressionFieldNames: string[];
+  readonly expressionFields: ASTNode[];
+  readonly expressionFieldNames: string[];
 
   constructor({ expressionFields, expressionFieldNames, location }: TupleExpression) {
     super(location);
@@ -88,8 +88,8 @@ class TupleExpression extends ASTNode {
 }
 
 class ApplyExpression extends ASTNode {
-  expression: ASTNode;
-  argumentExpression: ASTNode;
+  readonly expression: ASTNode;
+  readonly argumentExpression: ASTNode;
 
   constructor({ expression, argumentExpression, location }: ApplyExpression) {
     super(location);
@@ -105,9 +105,9 @@ class ApplyExpression extends ASTNode {
 }
 
 class FunctionExpression extends ASTNode {
-  parameterPattern: ASTPatternNode;
-  bodyExpression: ASTNode;
-  name?: string;
+  readonly parameterPattern: ASTPatternNode;
+  readonly bodyExpression: ASTNode;
+  readonly name?: string;
 
   constructor({ parameterPattern, bodyExpression, name, location }: FunctionExpression) {
     super(location);
@@ -119,8 +119,8 @@ class FunctionExpression extends ASTNode {
 }
 
 class RangeExpression extends ASTNode {
-  from: ASTNode;
-  to: ASTNode;
+  readonly from: ASTNode;
+  readonly to: ASTNode;
 
   constructor({ from, to, location }: RangeExpression) {
     super(location);

@@ -2,7 +2,7 @@ import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicativ
 import { KopiBoolean, KopiNumber, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
-  value: number;
+  readonly value: number;
 
   constructor({ value, location }: NumericLiteral) {
     super(location);
@@ -12,7 +12,7 @@ class NumericLiteral extends ASTNode {
 }
 
 class BooleanLiteral extends ASTNode {
-  value: boolean;
+  readonly value: boolean;
 
   constructor({ value, location }: BooleanLiteral) {
     super(location);
@@ -22,7 +22,7 @@ class BooleanLiteral extends ASTNode {
 }
 
 class StringLiteral extends ASTNode {
-  value: string;
+  readonly value: string;
 
   constructor({ value, location }: StringLiteral) {
     super(location);
@@ -32,7 +32,7 @@ class StringLiteral extends ASTNode {
 }
 
 class ArrayLiteral extends ASTNode {
-  expressionElements: ASTNode[];
+  readonly expressionElements: ASTNode[];
 
   constructor({ expressionElements, location }: ArrayLiteral) {
     super(location);
@@ -42,7 +42,7 @@ class ArrayLiteral extends ASTNode {
 }
 
 class DictLiteral extends ASTNode {
-  expressionEntries: [key: ASTNode, expression: ASTNode][];
+  readonly expressionEntries: [key: ASTNode, expression: ASTNode][];
 
   constructor({ expressionEntries, location }: DictLiteral) {
     super(location);
@@ -52,7 +52,7 @@ class DictLiteral extends ASTNode {
 }
 
 class AstLiteral extends ASTNode {
-  value: ASTNode;
+  readonly value: ASTNode;
 
   constructor({ value, location }: AstLiteral) {
     super(location);
@@ -62,9 +62,9 @@ class AstLiteral extends ASTNode {
 }
 
 class Identifier extends ASTNode {
-  static override traits: KopiTrait[] = [KopiApplicative];
+  static override readonly traits: KopiTrait[] = [KopiApplicative];
 
-  name: string;
+  readonly name: string;
 
   constructor({ name, location }: Identifier) {
     super(location);
@@ -89,7 +89,7 @@ class Identifier extends ASTNode {
 //
 
 class NumericLiteralPattern extends ASTPatternNode {
-  value: number;
+  readonly value: number;
 
   constructor({ value, location }: NumericLiteralPattern) {
     super(location);
@@ -107,8 +107,8 @@ class NumericLiteralPattern extends ASTPatternNode {
 }
 
 class IdentifierPattern extends ASTPatternNode {
-  name: string;
-  defaultExpression: ASTNode | null;
+  readonly name: string;
+  readonly defaultExpression: ASTNode | null;
 
   constructor({ name, defaultExpression, location }: IdentifierPattern) {
     super(location);
@@ -137,7 +137,7 @@ class IdentifierPattern extends ASTPatternNode {
 }
 
 class TuplePattern extends ASTPatternNode {
-  patterns: ASTPatternNode[];
+  readonly patterns: ASTPatternNode[];
 
   constructor({ patterns, location }: TuplePattern) {
     super(location);
@@ -172,8 +172,8 @@ class TuplePattern extends ASTPatternNode {
 }
 
 class FunctionPattern extends ASTPatternNode {
-  name: string;
-  parameterPattern: ASTPatternNode;
+  readonly name: string;
+  readonly parameterPattern: ASTPatternNode;
 
   constructor({ name, parameterPattern, location }: FunctionPattern) {
     super(location);
