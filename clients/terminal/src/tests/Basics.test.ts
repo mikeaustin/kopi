@@ -229,26 +229,6 @@ test('Member', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(5);
-
-  var array = await interpret(`
-    (1..5 2) | toArray
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiNumber(1),
-    new KopiNumber(3),
-    new KopiNumber(5),
-  ]);
-
-  array = await interpret(`
-    ("a".."z" 2) | take 3 | toArray
-  `) as KopiArray;
-
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiString('a'),
-    new KopiString('c'),
-    new KopiString('e'),
-  ]);
 });
 
 test('FunctionPattern', async () => {
@@ -303,45 +283,6 @@ test('Context', async () => {
     new KopiNumber(120),
     new KopiNumber(80),
   ]);
-});
-
-test('Dict', async () => {
-  var number = await interpret(`
-    dict = { "a": 1, "b": 2 }
-    dict | get "b"
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(2);
-
-  number = await interpret(`
-    dict = {:}
-    dict = dict | set "c" 3
-    dict | get "c"
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(3);
-
-  number = await interpret(`
-    dict = { "a": 1 }
-    dict = dict | update "a" (n = 0) => n + 1
-    dict | get "a"
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(2);
-
-  var dict = await interpret(`
-    "a b c a b a" | split " " | reduce (counts = {:}, word) => {
-      counts | update word (n = 0) => n + 1
-    }
-  `) as KopiDict;
-
-  console.log(await dict.inspect());
-
-  var stream = await interpret(`
-    { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
-  `) as KopiStream;
-
-  console.log(await stream.inspect());
 });
 
 test('User Type', async () => {

@@ -1,11 +1,11 @@
 import { addTraits, Context, KopiValue } from '../../shared';
 
-import KopiNumber from './KopiNumber';
-
 import KopiIterable from '../../operators/traits/KopiIterable';
 
 import KopiTuple from './KopiTuple';
+import KopiNumber from './KopiNumber';
 import KopiFunction from './KopiFunction';
+import KopiBoolean from './KopiBoolean';
 
 class KopiDict extends KopiValue {
   static empty = new KopiDict([]);
@@ -66,6 +66,10 @@ class KopiDict extends KopiValue {
         [...foo, [key, Promise.resolve(value)]]
       );
     };
+  }
+
+  has(key: KopiValue) {
+    return new KopiBoolean(this.entries.has(key.valueOf()));
   }
 
   update(key: KopiValue, context: Context) {

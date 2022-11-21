@@ -55,7 +55,7 @@ abstract class KopiCollection extends KopiTrait {
 const addTraits = (traits: Function[], _constructor: Function) => {
   for (const trait of traits) {
     for (const name of Object.getOwnPropertyNames(trait.prototype)) {
-      if (name !== 'constructor') {
+      if (!(name in (_constructor.prototype as any)) && name !== 'constructor') {
         (_constructor.prototype as any)[name] = (trait.prototype as any)[name];
       }
     }
@@ -91,6 +91,13 @@ class KopiValue {
     const method = functions && functions[methodName]
       ? functions[methodName]
       : (this as any)[methodName];
+
+    // const newContext = {
+    //   ...context,
+    //   environment: {
+    //     ...context.environment,
+    //   }
+    // };
 
     if (method) {
       return await method.apply(this, [argument, context]);

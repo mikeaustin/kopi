@@ -4,6 +4,7 @@ import KopiNumber from './KopiNumber';
 
 import KopiIterable from '../../operators/traits/KopiIterable';
 import KopiBoolean from "./KopiBoolean";
+import { KopiRange } from "../../operators/classes";
 
 class KopiArray extends KopiValue {
   static emptyValue = () => new KopiArray([]);
@@ -28,6 +29,40 @@ class KopiArray extends KopiValue {
     return Promise.all(
       this.elements.map(async element => (await element).toJS())
     );
+  }
+
+  size() {
+    return new KopiNumber(this.elements.length);
+  }
+
+  has(index: KopiNumber) {
+    return new KopiBoolean(index.value >= 0 && index.value < this.elements.length);
+  }
+
+  // TODO: Can't be done with this.elements.includes() since Array stores promises
+  // includes(value: KopiValue) {
+  //   return new KopiBoolean(false);
+  // }
+
+  // TODO: Don't resolve promises for arguments, since they may not need to be
+  // Or, pass in values via a tuple or array to keep their promise
+  set(index: KopiValue) {
+    return (value: KopiValue) => {
+      if (index instanceof KopiRange) {
+        const elements = [...this.elements];
+
+        const deleteCount = (index.to as KopiNumber).value - (index.from as KopiNumber).value + 1;
+        elements.splice((index.from as KopiNumber).value, deleteCount, Promise.resolve(value));
+
+        return new KopiArray(elements);
+      } else if (index instanceof KopiNumber) {
+        const elements = [...this.elements];
+
+        elements[index.value] = Promise.resolve(value);
+
+        return new KopiArray(elements);
+      }
+    };
   }
 
   async '=='(that: KopiArray, context: Context): Promise<KopiBoolean> {
@@ -65,10 +100,6 @@ class KopiArray extends KopiValue {
 
   append(that: KopiValue) {
     return new KopiArray(this.elements.concat([Promise.resolve(that)]));
-  }
-
-  size() {
-    return new KopiNumber(this.elements.length);
   }
 }
 

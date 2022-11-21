@@ -116,7 +116,7 @@ abstract class KopiIterable extends KopiTrait {
 
   async includes(value: KopiValue, context: Context): Promise<KopiBoolean> {
     for await (const _value of this) {
-      if ((value['=='].apply(value, [await _value, context]) as KopiBoolean).value) {
+      if (((value as any)['=='].apply(value, [await _value, context]) as KopiBoolean).value) {
         return new KopiBoolean(true);
       }
     }

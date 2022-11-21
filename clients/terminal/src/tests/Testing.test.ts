@@ -31,10 +31,10 @@ test('Basic types', async () => {
 
   var number = await interpret(`
     extend String (
-      foo: () => "Hello"
+      foo: (n) => n
     )
 
-    'foo "foo"
+    "foo" | foo 5
   `) as KopiNumber;
 
   console.log(number);
