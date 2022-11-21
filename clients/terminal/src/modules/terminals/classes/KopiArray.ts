@@ -5,11 +5,12 @@ import KopiNumber from './KopiNumber';
 import KopiIterable from '../../operators/traits/KopiIterable';
 import KopiBoolean from "./KopiBoolean";
 import { KopiRange } from "../../operators/classes";
+import KopiTuple from "./KopiTuple";
 
 class KopiArray extends KopiValue {
-  static emptyValue = () => new KopiArray([]);
+  static readonly emptyValue = () => new KopiArray([]);
 
-  elements: Promise<KopiValue>[];
+  readonly elements: Promise<KopiValue>[];
 
   constructor(elements: Promise<KopiValue>[]) {
     super();
@@ -37,6 +38,10 @@ class KopiArray extends KopiValue {
 
   has(index: KopiNumber) {
     return new KopiBoolean(index.value >= 0 && index.value < this.elements.length);
+  }
+
+  async get(index: KopiNumber): Promise<KopiValue> {
+    return await this.elements[index.value] ?? KopiTuple.empty;
   }
 
   // TODO: Can't be done with this.elements.includes() since Array stores promises

@@ -193,23 +193,23 @@ test('Take and skip', async () => {
 
 test('Splitting', async () => {
   var array = await interpret(`
-    [1, 2, 3, 4, 5, 6, 7] | splitEvery 3 | toArray
+    [1, 2, 3, 4, 5] | splitEvery 2 | toArray
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
-    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))] },
-    { elements: [Promise.resolve(new KopiNumber(4)), Promise.resolve(new KopiNumber(5)), Promise.resolve(new KopiNumber(6))] },
-    { elements: [Promise.resolve(new KopiNumber(7))] },
+    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
+    { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
+    { elements: [Promise.resolve(new KopiNumber(5))] },
   ]);
 
   var array = await interpret(`
-      1..7 | splitEvery 3 | toArray
-    `) as KopiArray;
+    1..5 | splitEvery 2 | toArray
+  `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
-    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))] },
-    { elements: [Promise.resolve(new KopiNumber(4)), Promise.resolve(new KopiNumber(5)), Promise.resolve(new KopiNumber(6))] },
-    { elements: [Promise.resolve(new KopiNumber(7))] },
+    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
+    { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
+    { elements: [Promise.resolve(new KopiNumber(5))] },
   ]);
 
   var array = await interpret(`

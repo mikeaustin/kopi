@@ -10,9 +10,9 @@ import KopiTuple from "./KopiTuple";
 import KopiBoolean from "./KopiBoolean";
 
 class KopiString extends KopiValue {
-  static emptyValue = () => new KopiString('');
+  static readonly emptyValue = () => new KopiString('');
 
-  value: string;
+  readonly value: string;
 
   // static [Symbol.hasInstance](instance: KopiStringWithoutIterator) {
   //   return instance instanceof KopiString;

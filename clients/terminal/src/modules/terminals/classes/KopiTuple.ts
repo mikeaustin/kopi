@@ -6,10 +6,10 @@ import KopiNumber from './KopiNumber';
 import KopiStream from './KopiStream';
 
 class KopiTuple extends KopiValue {
-  static empty = new KopiTuple([], [], true);
+  static readonly empty = new KopiTuple([], [], true);
 
-  _fields: Promise<KopiValue>[];
-  fieldNames: (string | null)[];
+  readonly _fields: Promise<KopiValue>[];
+  readonly fieldNames: (string | null)[];
 
   static create(tuple: KopiTuple) {
     return new KopiTuple(tuple._fields, tuple.fieldNames);
@@ -82,7 +82,7 @@ class KopiTuple extends KopiValue {
       let results = await Promise.all(iters.map((iter) => iter.next()));
 
       while (results.every((result) => !result.done)) {
-        yield func.apply(new KopiTuple([]), [new KopiTuple(results.map((result) => result.value)), context]);
+        yield func.apply(KopiTuple.empty, [new KopiTuple(results.map((result) => result.value)), context]);
 
         results = await Promise.all(iters.map((iter) => iter.next()));
       }

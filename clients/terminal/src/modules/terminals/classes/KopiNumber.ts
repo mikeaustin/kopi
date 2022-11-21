@@ -7,7 +7,7 @@ import KopiBoolean from './KopiBoolean';
 import KopiTuple from './KopiTuple';
 
 class KopiNumber extends KopiValue {
-  value: number;
+  readonly value: number;
 
   constructor(value: number) {
     super();

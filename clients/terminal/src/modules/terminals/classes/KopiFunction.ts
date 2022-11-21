@@ -2,12 +2,12 @@ import { KopiValue, ASTNode, ASTPatternNode, Environment, Context } from "../../
 import { KopiApplicative } from "../../shared";
 
 class KopiFunction extends KopiValue {
-  static override traits = [KopiApplicative];
+  static override readonly traits = [KopiApplicative];
 
-  parameterPattern: ASTPatternNode;
-  bodyExpression: ASTNode;
-  environment: Environment;
-  name?: string;
+  readonly parameterPattern: ASTPatternNode;
+  readonly bodyExpression: ASTNode;
+  readonly environment: Environment;
+  readonly name?: string;
 
   constructor(
     parameterPattern: ASTPatternNode,

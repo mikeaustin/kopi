@@ -7,9 +7,9 @@ import KopiString from './KopiString';
 
 const KopiStream2 = (collection: KopiCollection) => {
   class KopiStream extends KopiValue {
-    static emptyValue = () => new KopiString('');
+    static readonly emptyValue = () => new KopiString('');
 
-    iterable: AsyncIterable<KopiValue>;
+    readonly iterable: AsyncIterable<KopiValue>;
 
     constructor(iterable: AsyncIterable<KopiValue>) {
       super();
@@ -38,9 +38,9 @@ const KopiStream2 = (collection: KopiCollection) => {
 };
 
 class KopiStream extends KopiValue {
-  static emptyValue = () => new KopiString('');
+  static readonly emptyValue = () => new KopiString('');
 
-  iterable: AsyncIterable<KopiValue>;
+  readonly iterable: AsyncIterable<KopiValue>;
 
   constructor(iterable: AsyncIterable<KopiValue>) {
     super();

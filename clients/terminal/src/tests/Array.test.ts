@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray } from '../modules/terminals/classes';
+import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiTuple } from '../modules/terminals/classes';
 
 import KopiIterable from '../modules/operators/traits/KopiIterable';
 
@@ -12,23 +12,38 @@ async function interpret(source: string) {
 }
 
 test('Array', async () => {
-  var number = await interpret(`
+  var boolean = await interpret(`
     [1, 2, 3] | has 1
   `) as KopiBoolean;
 
-  expect(number).toEqual(new KopiBoolean(true));
+  expect(boolean).toEqual(new KopiBoolean(true));
 
-  var number = await interpret(`
+  var boolean = await interpret(`
     [1, 2, 3] | has 3
   `) as KopiBoolean;
 
-  expect(number).toEqual(new KopiBoolean(false));
+  expect(boolean).toEqual(new KopiBoolean(false));
 
-  var number = await interpret(`
+
+  var boolean = await interpret(`
     [1, 2, 3] | includes 2
   `) as KopiBoolean;
 
-  expect(number).toEqual(new KopiBoolean(true));
+  expect(boolean).toEqual(new KopiBoolean(true));
+
+
+  var number = await interpret(`
+    [1, 2, 3] | get 1
+  `) as KopiBoolean;
+
+  expect(number).toEqual(new KopiNumber(2));
+
+  var number = await interpret(`
+    [1, 2, 3] | get 3
+  `) as KopiBoolean;
+
+  expect(number).toEqual(KopiTuple.empty);
+
 
   var array = await interpret(`
     [1, 2, 3] | set 1 5

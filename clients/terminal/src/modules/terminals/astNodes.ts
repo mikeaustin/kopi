@@ -80,7 +80,7 @@ class Identifier extends ASTNode {
     thisArg: KopiValue,
     [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    return argument.invoke(this.name, [new KopiTuple([]), context]);
+    return argument.invoke(this.name, [KopiTuple.empty, context]);
   }
 }
 
@@ -155,7 +155,7 @@ class TuplePattern extends ASTPatternNode {
       const fields = tuple.fields;
 
       for (const [index, pattern] of this.patterns.entries()) {
-        let matches = await pattern.match(await fields[index] ?? new KopiTuple([]), context);
+        let matches = await pattern.match(await fields[index] ?? KopiTuple.empty, context);
 
         if (matches === undefined) {
           return undefined;

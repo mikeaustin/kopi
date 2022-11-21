@@ -32,7 +32,7 @@ async function Assignment(
     bindValues(patternMatches);
   }
 
-  return new KopiTuple([]);
+  return KopiTuple.empty;
 }
 
 async function BlockExpression(
@@ -57,7 +57,7 @@ async function BlockExpression(
 
   return statements.reduce<Promise<KopiValue>>(async (result, statement) => (
     (await result, await evaluate(statement, environment, bindValues))
-  ), Promise.resolve(new KopiTuple([])));
+  ), Promise.resolve(KopiTuple.empty));
 }
 
 async function PipeExpression(
@@ -67,7 +67,7 @@ async function PipeExpression(
   const { evaluate, environment, bindValues } = context;
 
   const expressionValue = await evaluate(expression, environment, bindValues);
-  const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment, bindValues) : new KopiTuple([]);
+  const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment, bindValues) : KopiTuple.empty;
 
   return expressionValue.invoke(methodName, [argumentValue, context]);
 }

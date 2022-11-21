@@ -69,7 +69,7 @@ class KopiCoroutine extends KopiValue {
     const data = await this.deferred[0] as KopiValue;
     this.deferred[0] = new Deferred();
 
-    const value = await func.apply(new KopiTuple([]), [data, context]);
+    const value = await func.apply(KopiTuple.empty, [data, context]);
 
     (this.deferred[1] as any).resolve(value);
     this.deferred[1] = new Deferred();
@@ -210,7 +210,7 @@ const environment: {
   async spawn(func: KopiFunction, context: Context) {
     const coroutine = new KopiCoroutine();
 
-    func.apply(new KopiTuple([]), [coroutine.yield.bind(coroutine), context]);
+    func.apply(KopiTuple.empty, [coroutine.yield.bind(coroutine), context]);
 
     return coroutine;
   },
@@ -218,7 +218,7 @@ const environment: {
   async print(value: KopiValue) {
     console.log(value);
 
-    return new KopiTuple([]);
+    return KopiTuple.empty;
   },
 
   async extend(type: KopiType, context: Context) {
@@ -242,7 +242,7 @@ const environment: {
 
       const generator = (async function* () {
         for (; ;) {
-          yield result = await func.apply(new KopiTuple([]), [result, context]);
+          yield result = await func.apply(KopiTuple.empty, [result, context]);
         }
       })();
 
@@ -256,7 +256,7 @@ const environment: {
         const matches = await (func as KopiFunction).parameterPattern.match(value, context);
 
         if (matches) {
-          return (func as KopiFunction).apply(new KopiTuple([]), [value, context]);
+          return (func as KopiFunction).apply(KopiTuple.empty, [value, context]);
         }
       }
 
@@ -267,12 +267,12 @@ const environment: {
   // extend: () => {},
 
   async let(func: KopiFunction, context: Context) {
-    let result: KopiValue = new KopiTuple([]);
+    let result: KopiValue = KopiTuple.empty;
 
     do {
       const result2 = result instanceof KopiLoop ? result.value : result;
 
-      result = await func.apply(new KopiTuple([]), [result2, context]);
+      result = await func.apply(KopiTuple.empty, [result2, context]);
     } while (result instanceof KopiLoop);
 
     return result instanceof KopiLoop ? result.value : result;

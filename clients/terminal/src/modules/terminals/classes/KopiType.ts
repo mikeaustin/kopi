@@ -2,9 +2,9 @@ import { KopiValue, Context } from "../../shared";
 import { KopiApplicative } from "../../shared";
 
 class KopiType extends KopiValue {
-  static override traits = [KopiApplicative];
+  static override readonly traits = [KopiApplicative];
 
-  _constructor: any;
+  readonly _constructor: any;
 
   constructor(_constructor: Function) {
     super();

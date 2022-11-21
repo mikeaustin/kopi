@@ -8,9 +8,9 @@ import KopiFunction from './KopiFunction';
 import KopiBoolean from './KopiBoolean';
 
 class KopiDict extends KopiValue {
-  static empty = new KopiDict([]);
+  static readonly empty = new KopiDict([]);
 
-  entries: Map<any, [KopiValue, Promise<KopiValue>]>;
+  readonly entries: Map<any, [KopiValue, Promise<KopiValue>]>;
 
   constructor(entries: [key: KopiValue, value: Promise<KopiValue>][]) {
     super();
@@ -51,7 +51,7 @@ class KopiDict extends KopiValue {
   }
 
   async get(key: KopiValue): Promise<KopiValue> {
-    const [_, value] = this.entries.get(key.valueOf()) ?? [key, new KopiTuple([])];
+    const [_, value] = this.entries.get(key.valueOf()) ?? [key, KopiTuple.empty];
 
     return value;
   }
@@ -74,9 +74,9 @@ class KopiDict extends KopiValue {
 
   update(key: KopiValue, context: Context) {
     return async (func: KopiFunction) => {
-      const [_, value] = this.entries.get(key.valueOf()) ?? [key, new KopiTuple([])];
+      const [_, value] = this.entries.get(key.valueOf()) ?? [key, KopiTuple.empty];
 
-      const updatedValue = func.apply(new KopiTuple([]), [await value, context]);
+      const updatedValue = func.apply(KopiTuple.empty, [await value, context]);
 
       const foo = [...this.entries.entries()].map(([key, value]) => [key, value[1]]) as
         [key: any, value: Promise<KopiValue>][];

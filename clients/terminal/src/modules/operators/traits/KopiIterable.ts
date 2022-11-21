@@ -38,13 +38,13 @@ abstract class KopiIterable extends KopiTrait {
   //
 
   async reduce(func: KopiFunction, context: Context): Promise<KopiValue> {
-    let accum: Promise<KopiValue> = Promise.resolve(new KopiTuple([]));
+    let accum: Promise<KopiValue> = Promise.resolve(KopiTuple.empty);
 
     const iter = this[Symbol.asyncIterator]();
     let result = iter.next();
 
     while (!(await result).done) {
-      accum = func.apply(new KopiTuple([]), [new KopiTuple([accum, (await result).value]), context]);
+      accum = func.apply(KopiTuple.empty, [new KopiTuple([accum, (await result).value]), context]);
 
       result = iter.next();
     }
@@ -54,16 +54,16 @@ abstract class KopiIterable extends KopiTrait {
 
   async each(func: KopiFunction, context: Context): Promise<KopiValue> {
     for await (const value of this) {
-      func.apply(new KopiTuple([]), [value, context]);
+      func.apply(KopiTuple.empty, [value, context]);
     }
 
-    return new KopiTuple([]);
+    return KopiTuple.empty;
   }
 
   async map(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
-        yield func.apply(new KopiTuple([]), [value, context]);
+        yield func.apply(KopiTuple.empty, [value, context]);
       }
     }.apply(this);
 
@@ -73,7 +73,7 @@ abstract class KopiIterable extends KopiTrait {
   // async map2(func: KopiFunction, context: Context): Promise<InstanceType<ReturnType<typeof KopiStream2>>> {
   //   const generator = async function* (this: KopiIterable) {
   //     for await (const value of this) {
-  //       yield func.apply(new KopiTuple([]), [value, context]);
+  //       yield func.apply(KopiTuple.empty, [value, context]);
   //     }
   //   }.apply(this);
 
@@ -83,7 +83,7 @@ abstract class KopiIterable extends KopiTrait {
   async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
-        yield* (await func.apply(new KopiTuple([]), [value, context]) as KopiStream);
+        yield* (await func.apply(KopiTuple.empty, [value, context]) as KopiStream);
       }
     }.apply(this);
 
@@ -93,7 +93,7 @@ abstract class KopiIterable extends KopiTrait {
   async filter(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
-        if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
+        if ((await func.apply(KopiTuple.empty, [value, context]) as KopiBoolean).value) {
           yield value;
         }
       }
@@ -106,12 +106,12 @@ abstract class KopiIterable extends KopiTrait {
 
   async find(func: KopiFunction, context: Context): Promise<KopiValue> {
     for await (const value of this) {
-      if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
+      if ((await func.apply(KopiTuple.empty, [value, context]) as KopiBoolean).value) {
         return value;
       }
     }
 
-    return new KopiTuple([]);
+    return KopiTuple.empty;
   }
 
   async includes(value: KopiValue, context: Context): Promise<KopiBoolean> {
@@ -131,7 +131,7 @@ abstract class KopiIterable extends KopiTrait {
     let result = iter.next();
 
     while (!(await result).done) {
-      if ((await func.apply(new KopiTuple([]), [(await result).value, context]) as KopiBoolean).value) {
+      if ((await func.apply(KopiTuple.empty, [(await result).value, context]) as KopiBoolean).value) {
         count += 1;
       }
 
@@ -173,7 +173,7 @@ abstract class KopiIterable extends KopiTrait {
 
   async some(func: KopiFunction, context: Context): Promise<KopiBoolean> {
     for await (const value of this) {
-      if ((await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
+      if ((await func.apply(KopiTuple.empty, [value, context]) as KopiBoolean).value) {
         return new KopiBoolean(true);
       }
     }
@@ -183,7 +183,7 @@ abstract class KopiIterable extends KopiTrait {
 
   async every(func: KopiFunction, context: Context): Promise<KopiBoolean> {
     for await (const value of this) {
-      if (!(await func.apply(new KopiTuple([]), [value, context]) as KopiBoolean).value) {
+      if (!(await func.apply(KopiTuple.empty, [value, context]) as KopiBoolean).value) {
         return new KopiBoolean(false);
       }
     }

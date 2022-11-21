@@ -1,7 +1,7 @@
 import { KopiValue } from "../../shared";
 
 class KopiBoolean extends KopiValue {
-  value: boolean;
+  readonly value: boolean;
 
   constructor(value: boolean) {
     super();
