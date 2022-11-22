@@ -31,10 +31,12 @@ test('Basic types', async () => {
 
   var number = await interpret(`
     extend String (
-      foo: (n) => this
+      capitalize2: (n) => {
+        'toUpperCase (this | get (0..1)) ++ (this | get (1..3))
+      }
     )
 
-    "foo" | foo 5
+    "foo" | capitalize2
   `) as KopiNumber;
 
   console.log(number);

@@ -8,6 +8,7 @@ import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 import KopiBoolean from "./KopiBoolean";
+import { KopiRange } from "../../operators/classes";
 
 class KopiString extends KopiValue {
   static readonly emptyValue = () => new KopiString('');
@@ -46,6 +47,24 @@ class KopiString extends KopiValue {
 
   size() {
     return new KopiNumber(this.value.length);
+  }
+
+  async get(index: KopiValue): Promise<KopiValue> {
+    if (index instanceof KopiRange) {
+      return new KopiString(
+        this.value.slice((index.from as KopiNumber).value, (index.to as KopiNumber).value)
+      );
+    }
+
+    if (index instanceof KopiNumber) {
+      const codePoint = this.value.codePointAt(index.value);
+
+      if (codePoint) {
+        return new KopiString(String.fromCodePoint(codePoint));
+      }
+    }
+
+    throw new Error('Invalid codePoint');
   }
 
   append(that: KopiString) {
