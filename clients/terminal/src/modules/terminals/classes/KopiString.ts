@@ -50,6 +50,10 @@ class KopiString extends KopiValue {
   }
 
   async get(index: KopiValue): Promise<KopiValue> {
+    if (index instanceof KopiTuple) {
+      return index;
+    }
+
     if (index instanceof KopiRange) {
       return new KopiString(
         this.value.slice((index.from as KopiNumber).value, (index.to as KopiNumber).value)

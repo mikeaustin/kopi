@@ -93,24 +93,33 @@ ApplyExpression
     }
 
 RangeExpression
-  = from:MemberExpression _ ".." _ to:MemberExpression {
+  = from:CalculatedMemberExpression _ ".." _ to:CalculatedMemberExpression {
       return {
         type: 'RangeExpression',
         from,
         to
       };
     }
-  / MemberExpression
+  / CalculatedMemberExpression
+
+CalculatedMemberExpression
+  = head:MemberExpression tail:("." & "(" _ PrimaryExpression _)* {
+      return tail.reduce((expression, [, , , argumentExpression]) => ({
+        type: 'PipeExpression',
+        expression,
+        methodName: 'get',
+        argumentExpression,
+        location: location()
+      }), head);
+    }
 
 MemberExpression
   = head:UnaryExpression tail:("." (Identifier / NumericLiteral))* {
-      return tail.reduce((expression, [, member]) => (
-        ({
-          type: 'MemberExpression',
-          expression,
-          member: member.name ? member.name : member.value
-        })
-      ), head)
+      return tail.reduce((expression, [, member]) => ({
+        type: 'MemberExpression',
+        expression,
+        member: member.name ? member.name : member.value
+      }), head);
     }
 
 UnaryExpression
@@ -285,7 +294,7 @@ NumericLiteralPattern
         value: number.value,
       }
     }
-  
+
 IdentifierPattern
   = identifier:Identifier defaultExpression:(_ "=" _ Expression)? {
     return {

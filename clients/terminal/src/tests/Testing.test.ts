@@ -29,17 +29,23 @@ test('Basic types', async () => {
 
   expect(boolean).toEqual(new KopiBoolean(false));
 
-  var number = await interpret(`
+  var string = await interpret(`
     extend String (
       capitalize2: (n) => {
-        'toUpperCase (this | get (0..1)) ++ (this | get (1..3))
+        'toUpperCase this.(0..1) ++ this.(1..3)
       }
     )
 
     "foo" | capitalize2
-  `) as KopiNumber;
+  `) as KopiString;
 
-  console.log(number);
+  console.log(string);
+
+  var string = await interpret(`
+    "foo".(0, "b", (c) => 'succ c)
+  `) as KopiString;
+
+  console.log(string);
 
   // var object = await interpret(`
   //   timer () | map (n) => n / 1000 | take 3 | each (n) => {
