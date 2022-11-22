@@ -92,13 +92,6 @@ class KopiValue {
       ? functions[methodName]
       : (this as any)[methodName];
 
-    // const newContext = {
-    //   ...context,
-    //   environment: {
-    //     ...context.environment,
-    //   }
-    // };
-
     if (method) {
       return await method.apply(this, [argument, context]);
     }

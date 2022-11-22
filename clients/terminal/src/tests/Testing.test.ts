@@ -31,7 +31,7 @@ test('Basic types', async () => {
 
   var number = await interpret(`
     extend String (
-      foo: (n) => n
+      foo: (n) => this
     )
 
     "foo" | foo 5

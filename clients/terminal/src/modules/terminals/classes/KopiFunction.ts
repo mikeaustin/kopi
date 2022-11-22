@@ -35,6 +35,7 @@ class KopiFunction extends KopiValue {
       ...this.environment,
       ...matches,
       ...(this.name ? { [this.name]: this } : {}),
+      'this': thisArg,
     };
 
     Object.setPrototypeOf(newEnvironment, Object.getPrototypeOf(this.environment));
