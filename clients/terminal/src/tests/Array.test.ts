@@ -75,4 +75,14 @@ test('Array', async () => {
     new KopiNumber(5),
     new KopiNumber(3),
   ]);
+
+  var array = await interpret(`
+    [1, 2, 3] | update 1 (n) => n + 3
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(5),
+    new KopiNumber(3),
+  ]);
 });

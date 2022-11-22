@@ -6,6 +6,7 @@ import KopiIterable from '../../operators/traits/KopiIterable';
 import KopiBoolean from "./KopiBoolean";
 import { KopiRange } from "../../operators/classes";
 import KopiTuple from "./KopiTuple";
+import KopiFunction from "./KopiFunction";
 
 class KopiArray extends KopiValue {
   static readonly emptyValue = () => new KopiArray([]);
@@ -67,6 +68,17 @@ class KopiArray extends KopiValue {
 
         return new KopiArray(elements);
       }
+    };
+  }
+
+  update(index: KopiNumber) {
+    return async (func: KopiFunction, context: Context) => {
+      const elements = [...this.elements];
+
+      const value = elements[index.value] ?? Promise.resolve(KopiTuple.empty);
+      elements[index.value] = func.apply(KopiTuple.empty, [await value, context]);
+
+      return new KopiArray(elements);
     };
   }
 
