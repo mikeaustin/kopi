@@ -49,18 +49,53 @@ class KopiString extends KopiValue {
     return new KopiNumber(this.value.length);
   }
 
-  async get(index: KopiValue): Promise<KopiValue> {
-    if (index instanceof KopiTuple) {
-      return index;
-    }
+  async getTuple(tuple: KopiTuple) {
+    const arg = await tuple.fields[0] as KopiNumber;
+    const value = await tuple.fields[1] as KopiString;
 
-    if (index instanceof KopiRange) {
+    if (arg instanceof KopiRange) {
+      const range = arg;
+      const array = [...this.value];
+
       return new KopiString(
-        this.value.slice((index.from as KopiNumber).value, (index.to as KopiNumber).value)
+        array.slice(0, (range.from as KopiNumber).value)
+          .concat(value.value)
+          .concat(array.slice((range.to as KopiNumber).value, Infinity))
+          .join('')
       );
     }
 
-    if (index instanceof KopiNumber) {
+    if (arg instanceof KopiNumber) {
+      const index = arg;
+      const array = [...this.value];
+
+      return new KopiString(
+        array.slice(0, index.value)
+          .concat(value.value)
+          .concat(array.slice(index.value + 1, Infinity))
+          .join('')
+      );
+    }
+
+    throw new Error('');
+  }
+
+  async get(arg: KopiValue): Promise<KopiValue> {
+    if (arg instanceof KopiTuple) {
+      return this.getTuple(arg);
+    }
+
+    if (arg instanceof KopiRange) {
+      const range = arg;
+
+      return new KopiString(
+        this.value.slice((range.from as KopiNumber).value, (range.to as KopiNumber).value)
+      );
+    }
+
+    if (arg instanceof KopiNumber) {
+      const index = arg;
+
       const codePoint = this.value.codePointAt(index.value);
 
       if (codePoint) {

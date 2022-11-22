@@ -39,13 +39,19 @@ test('Basic types', async () => {
     "foo" | capitalize2
   `) as KopiString;
 
-  console.log(string);
+  expect(string).toEqual(new KopiString('Foo'));
 
   var string = await interpret(`
-    "foo".(0, "b", (c) => 'succ c)
+    "foo".(0, "b")
   `) as KopiString;
 
-  console.log(string);
+  expect(string).toEqual(new KopiString('boo'));
+
+  var string = await interpret(`
+    "𝒽𝑒𝓁𝓁𝑜".(2..4, "𝓇")
+  `) as KopiString;
+
+  expect(string).toEqual(new KopiString('𝒽𝑒𝓇𝑜'));
 
   // var object = await interpret(`
   //   timer () | map (n) => n / 1000 | take 3 | each (n) => {
