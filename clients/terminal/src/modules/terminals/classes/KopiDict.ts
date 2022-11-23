@@ -58,14 +58,24 @@ class KopiDict extends KopiValue {
 
   set(key: KopiValue) {
     return async (value: Promise<KopiValue>): Promise<KopiDict> => {
-      const foo = [...this.entries.entries()].map(
-        ([key, [_, value]]) => [key, value]
-      ) as [key: any, value: Promise<KopiValue>][];
+      const map = new Map(this.entries);
+
+      map.set(key.valueOf(), [key, Promise.resolve(value)]);
 
       return new KopiDict(
-        [...foo, [key, Promise.resolve(value)]]
+        [...map.entries()].map(([_, [key, value]]) => [key, value])
       );
     };
+  }
+
+  remove(key: KopiValue) {
+    const map = new Map(this.entries);
+
+    map.delete(key.valueOf());
+
+    return new KopiDict(
+      [...map.entries()].map(([_, [key, value]]) => [key, value])
+    );
   }
 
   has(key: KopiValue) {

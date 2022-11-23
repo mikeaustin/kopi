@@ -71,6 +71,14 @@ class KopiArray extends KopiValue {
     };
   }
 
+  remove(index: KopiNumber) {
+    return new KopiArray(
+      this.elements
+        .slice(0, index.value)
+        .concat(this.elements.slice(index.value + 1, Infinity))
+    );
+  }
+
   update(index: KopiNumber) {
     return async (func: KopiFunction, context: Context) => {
       const elements = [...this.elements];

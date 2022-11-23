@@ -49,6 +49,31 @@ class KopiString extends KopiValue {
     return new KopiNumber(this.value.length);
   }
 
+  set(index: KopiNumber) {
+    return (value: KopiString) => {
+      const array = [...this.value];
+
+      return new KopiString(
+        array
+          .slice(0, index.value)
+          .concat(value.value)
+          .concat(array.slice(index.value + 1, Infinity))
+          .join('')
+      );
+    };
+  }
+
+  remove(index: KopiNumber) {
+    const array = [...this.value];
+
+    return new KopiString(
+      array
+        .slice(0, index.value)
+        .concat(array.slice(index.value + 1, Infinity))
+        .join('')
+    );
+  }
+
   async getTuple(tuple: KopiTuple) {
     const arg = await tuple.fields[0] as KopiNumber;
     const value = await tuple.fields[1] as KopiString;
@@ -58,7 +83,8 @@ class KopiString extends KopiValue {
       const array = [...this.value];
 
       return new KopiString(
-        array.slice(0, (range.from as KopiNumber).value)
+        array
+          .slice(0, (range.from as KopiNumber).value)
           .concat(value.value)
           .concat(array.slice((range.to as KopiNumber).value, Infinity))
           .join('')
@@ -70,7 +96,8 @@ class KopiString extends KopiValue {
       const array = [...this.value];
 
       return new KopiString(
-        array.slice(0, index.value)
+        array
+          .slice(0, index.value)
           .concat(value.value)
           .concat(array.slice(index.value + 1, Infinity))
           .join('')
