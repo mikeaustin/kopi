@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiCollection } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
 
 import { KopiEnumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
@@ -9,6 +9,7 @@ import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 import KopiBoolean from "./KopiBoolean";
 import { KopiRange } from "../../operators/classes";
+import KopiFunction from "./KopiFunction";
 
 class KopiString extends KopiValue {
   static readonly emptyValue = () => new KopiString('');
@@ -60,6 +61,19 @@ class KopiString extends KopiValue {
           .concat(array.slice(index.value + 1, Infinity))
           .join('')
       );
+    };
+  }
+
+  update(index: KopiNumber, context: Context) {
+    return async (func: KopiFunction) => {
+      const array = [...this.value];
+      const value = array[index.value] ?? '';
+
+      const updatedValue = (await func.apply(KopiTuple.empty, [new KopiString(value), context]) as KopiString).value;
+
+      array.splice(index.value, 1, updatedValue);
+
+      return new KopiString(array.join(''));
     };
   }
 

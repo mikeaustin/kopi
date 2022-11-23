@@ -85,14 +85,14 @@ class KopiDict extends KopiValue {
   update(key: KopiValue, context: Context) {
     return async (func: KopiFunction) => {
       const [_, value] = this.entries.get(key.valueOf()) ?? [key, KopiTuple.empty];
-
       const updatedValue = func.apply(KopiTuple.empty, [await value, context]);
 
-      const foo = [...this.entries.entries()].map(([key, value]) => [key, value[1]]) as
-        [key: any, value: Promise<KopiValue>][];
+      const map = new Map(this.entries);
+
+      map.set(key.valueOf(), [key, Promise.resolve(updatedValue)]);
 
       return new KopiDict(
-        [...foo, [key, Promise.resolve(updatedValue)]]
+        [...map.entries()].map(([_, [key, value]]) => [key, value])
       );
     };
   }

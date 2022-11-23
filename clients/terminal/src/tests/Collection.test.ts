@@ -11,7 +11,7 @@ async function interpret(source: string) {
 }
 
 describe('Collection', () => {
-  test('get', async () => {
+  test('get key', async () => {
     var string = await interpret(`
       "foo" | get 0
     `) as KopiString;
@@ -31,7 +31,7 @@ describe('Collection', () => {
     expect(string).toEqual(new KopiString('f'));
   });
 
-  test('set', async () => {
+  test('set key', async () => {
     var string = await interpret(`
       "abc" | set 1 "e"
     `) as KopiString;
@@ -59,7 +59,7 @@ describe('Collection', () => {
     ]));
   });
 
-  test('remove', async () => {
+  test('remove key', async () => {
     var string = await interpret(`
       "abc" | remove 1
     `) as KopiString;
@@ -76,11 +76,38 @@ describe('Collection', () => {
     ]);
 
     var dict = await interpret(`
-      { 0: "f", 1: "o", 2: "o" } | remove 1
+      { 0: "a", 1: "b", 2: "c" } | remove 1
     `) as KopiDict;
 
     expect(dict).toEqual(new KopiDict([
       [new KopiNumber(0), Promise.resolve(new KopiString("a"))],
+      [new KopiNumber(2), Promise.resolve(new KopiString("c"))],
+    ]));
+  });
+
+  test('update key func', async () => {
+    var string = await interpret(`
+      "abc" | update 1 (c) => 'succ c
+    `) as KopiString;
+
+    expect(string).toEqual(new KopiString('acc'));
+
+    // var array = await interpret(`
+    //   ["a", "b", "c"] | remove 1
+    // `) as KopiArray;
+
+    // expect(await Promise.all(array.elements)).toEqual([
+    //   new KopiString('a'),
+    //   new KopiString('c'),
+    // ]);
+
+    var dict = await interpret(`
+      { 0: "a", 1: "b", 2: "c" } | update 1 (c) => 'succ c
+    `) as KopiDict;
+
+    expect(dict).toEqual(new KopiDict([
+      [new KopiNumber(0), Promise.resolve(new KopiString("a"))],
+      [new KopiNumber(1), Promise.resolve(new KopiString("c"))],
       [new KopiNumber(2), Promise.resolve(new KopiString("c"))],
     ]));
   });
