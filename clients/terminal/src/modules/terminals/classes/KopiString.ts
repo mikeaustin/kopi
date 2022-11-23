@@ -85,6 +85,20 @@ class KopiString extends KopiValue {
       return this.getTuple(arg);
     }
 
+    if (arg instanceof KopiArray) {
+      const accum = [];
+      const indices = arg;
+      const array = [...this.value];
+
+      for (const index of indices.elements) {
+        accum.push(array[(await index as KopiNumber).value]);
+      }
+
+      return new KopiString(
+        accum.join('')
+      );
+    }
+
     if (arg instanceof KopiRange) {
       const range = arg;
       const array = [...this.value];
