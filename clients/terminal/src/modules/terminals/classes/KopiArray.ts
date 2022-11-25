@@ -52,6 +52,14 @@ class KopiArray extends KopiValue {
       return new KopiArray(accum);
     }
 
+    if (argument instanceof KopiRange) {
+      const range = argument;
+
+      return new KopiArray(
+        this.elements.slice((range.from as KopiNumber).value, (range.to as KopiNumber).value)
+      );
+    }
+
     if (argument instanceof KopiNumber) {
       const index = argument;
 
