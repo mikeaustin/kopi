@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from "../../shared";
 
 import KopiNumber from './KopiNumber';
 
@@ -36,6 +36,10 @@ class KopiArray extends KopiValue {
 
   size() {
     return new KopiNumber(this.elements.length);
+  }
+
+  async apply(thisArg: KopiValue, [index]: [KopiNumber]) {
+    return await this.elements[index.value] ?? KopiTuple.empty;
   }
 
   has(index: KopiNumber) {
@@ -143,6 +147,6 @@ class KopiArray extends KopiValue {
   }
 }
 
-addTraits([KopiIterable, KopiCollection], KopiArray);
+addTraits([KopiIterable, KopiCollection, KopiApplicative], KopiArray);
 
 export default KopiArray;

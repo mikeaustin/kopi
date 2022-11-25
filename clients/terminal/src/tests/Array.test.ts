@@ -33,6 +33,12 @@ test('Array', async () => {
 
 
   var number = await interpret(`
+    [1, 2, 3] 1
+  `) as KopiBoolean;
+
+  expect(number).toEqual(new KopiNumber(2));
+
+  var number = await interpret(`
     [1, 2, 3] | get 1
   `) as KopiBoolean;
 
