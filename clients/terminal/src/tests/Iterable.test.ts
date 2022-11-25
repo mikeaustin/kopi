@@ -191,44 +191,97 @@ test('Take and skip', async () => {
   ]);
 });
 
-test('Splitting', async () => {
-  var array = await interpret(`
-    [1, 2, 3, 4, 5] | splitEvery 2 | toArray
-  `) as KopiArray;
+describe('Splitting', () => {
+  test('splitEvery', async () => {
+    var array = await interpret(`
+      [1, 2, 3, 4, 5] | splitEvery 2 | toArray
+    `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
-    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
-    { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
-    { elements: [Promise.resolve(new KopiNumber(5))] },
-  ]);
+    expect(await Promise.all(array.elements)).toEqual([
+      { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
+      { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
+      { elements: [Promise.resolve(new KopiNumber(5))] },
+    ]);
 
-  var array = await interpret(`
-    1..5 | splitEvery 2 | toArray
-  `) as KopiArray;
+    var array = await interpret(`
+      1..5 | splitEvery 2 | toArray
+    `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
-    { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
-    { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
-    { elements: [Promise.resolve(new KopiNumber(5))] },
-  ]);
+    expect(await Promise.all(array.elements)).toEqual([
+      { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
+      { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
+      { elements: [Promise.resolve(new KopiNumber(5))] },
+    ]);
 
-  var array = await interpret(`
-    "abcabca" | splitEvery 3 | toArray
-  `) as KopiArray;
+    var array = await interpret(`
+      "abcabca" | splitEvery 3 | toArray
+    `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiString('abc'),
-    new KopiString('abc'),
-    new KopiString('a'),
-  ]);
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString('abc'),
+      new KopiString('abc'),
+      new KopiString('a'),
+    ]);
 
-  var array = await interpret(`
-    "abcabca" | map 'succ | splitEvery 3 | toArray
-  `) as KopiArray;
+    var array = await interpret(`
+      "abcabca" | map 'succ | splitEvery 3 | toArray
+    `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
-    new KopiString('bcd'),
-    new KopiString('bcd'),
-    new KopiString('b'),
-  ]);
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString('bcd'),
+      new KopiString('bcd'),
+      new KopiString('b'),
+    ]);
+  });
+
+  test('splitOn', async () => {
+    var array = await interpret(`
+      ["a", ",", "b", ",", "c"] | splitOn "," | toArray
+    `) as KopiArray;
+
+    expect(await Promise.all(array.elements)).toEqual([
+      { elements: [Promise.resolve(new KopiString('a'))] },
+      { elements: [Promise.resolve(new KopiString('b'))] },
+      { elements: [Promise.resolve(new KopiString('c'))] },
+    ]);
+
+    var array = await interpret(`
+      "a,b,c" | splitOn "," | toArray
+    `) as KopiArray;
+
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString('a'),
+      new KopiString('b'),
+      new KopiString('c'),
+    ]);
+
+    var array = await interpret(`
+      ",a,b,c," | splitOn "," | toArray
+    `) as KopiArray;
+
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString(''),
+      new KopiString('a'),
+      new KopiString('b'),
+      new KopiString('c'),
+      new KopiString(''),
+    ]);
+
+    var array = await interpret(`
+      "" | splitOn "," | toArray
+    `) as KopiArray;
+
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString(''),
+    ]);
+
+    var array = await interpret(`
+      "," | splitOn "," | toArray
+    `) as KopiArray;
+
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString(''),
+      new KopiString(''),
+    ]);
+  });
 });
