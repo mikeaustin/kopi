@@ -76,7 +76,7 @@ describe('Collection', () => {
     ]);
 
     var dict = await interpret(`
-      { 0: "a", 1: "b", 2: "c" } | remove 1
+      { 0: "a", 1: "b", 2: "c" } | delete 1
     `) as KopiDict;
 
     expect(dict).toEqual(new KopiDict([

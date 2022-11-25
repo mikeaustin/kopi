@@ -68,7 +68,7 @@ class KopiDict extends KopiValue {
     };
   }
 
-  remove(key: KopiValue) {
+  delete(key: KopiValue) {
     const map = new Map(this.entries);
 
     map.delete(key.valueOf());
