@@ -38,8 +38,25 @@ class KopiArray extends KopiValue {
     return new KopiNumber(this.elements.length);
   }
 
-  async apply(thisArg: KopiValue, [index]: [KopiNumber]) {
-    return await this.elements[index.value] ?? KopiTuple.empty;
+  async apply(thisArg: KopiValue, [argument]: [KopiNumber]) {
+    if (argument instanceof KopiArray) {
+      const indices = argument;
+      const accum: Promise<KopiValue>[] = [];
+
+      for (const index of indices.elements) {
+        const value = this.elements[(await index as KopiNumber).value] ?? Promise.resolve(KopiTuple.empty);
+
+        accum.push(value);
+      }
+
+      return new KopiArray(accum);
+    }
+
+    if (argument instanceof KopiNumber) {
+      const index = argument;
+
+      return await this.elements[index.value] ?? KopiTuple.empty;
+    }
   }
 
   has(index: KopiNumber) {

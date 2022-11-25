@@ -38,6 +38,16 @@ test('Array', async () => {
 
   expect(number).toEqual(new KopiNumber(2));
 
+  var array = await interpret(`
+    [1, 2, 3] [1, 2]
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
+
+
   var number = await interpret(`
     [1, 2, 3] | get 1
   `) as KopiBoolean;
