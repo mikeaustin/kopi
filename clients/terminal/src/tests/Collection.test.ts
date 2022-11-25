@@ -92,14 +92,15 @@ describe('Collection', () => {
 
     expect(string).toEqual(new KopiString('acc'));
 
-    // var array = await interpret(`
-    //   ["a", "b", "c"] | remove 1
-    // `) as KopiArray;
+    var array = await interpret(`
+      ["a", "b", "c"] | update 1 (c) => 'succ c
+    `) as KopiArray;
 
-    // expect(await Promise.all(array.elements)).toEqual([
-    //   new KopiString('a'),
-    //   new KopiString('c'),
-    // ]);
+    expect(await Promise.all(array.elements)).toEqual([
+      new KopiString("a"),
+      new KopiString("c"),
+      new KopiString("c"),
+    ]);
 
     var dict = await interpret(`
       { 0: "a", 1: "b", 2: "c" } | update 1 (c) => 'succ c
