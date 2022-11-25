@@ -7,6 +7,7 @@ import KopiBoolean from "./KopiBoolean";
 import { KopiRange } from "../../operators/classes";
 import KopiTuple from "./KopiTuple";
 import KopiFunction from "./KopiFunction";
+import KopiString from "./KopiString";
 
 class KopiArray extends KopiValue {
   static readonly emptyValue = () => new KopiArray([]);
@@ -125,6 +126,20 @@ class KopiArray extends KopiValue {
 
   append(that: KopiValue) {
     return new KopiArray(this.elements.concat([Promise.resolve(that)]));
+  }
+
+  async joinWith(separator: KopiString) {
+    let string: KopiString = new KopiString('');
+
+    for (const [index, value] of this.elements.entries()) {
+      if (index > 0) {
+        string = string.append(separator);
+      }
+
+      string = string.append(await value as KopiString);
+    }
+
+    return string;
   }
 }
 

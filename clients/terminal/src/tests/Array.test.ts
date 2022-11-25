@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiTuple } from '../modules/terminals/classes';
+import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiTuple, KopiString } from '../modules/terminals/classes';
 
 import KopiIterable from '../modules/operators/traits/KopiIterable';
 
@@ -85,4 +85,12 @@ test('Array', async () => {
     new KopiNumber(5),
     new KopiNumber(3),
   ]);
+
+  var string = await interpret(`
+    ["a", "b", "c"] | joinWith ", "
+  `) as KopiString;
+
+  expect(string).toEqual(
+    new KopiString('a, b, c')
+  );
 });
