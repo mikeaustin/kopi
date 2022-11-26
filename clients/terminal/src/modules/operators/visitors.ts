@@ -1,5 +1,5 @@
 import { KopiValue, KopiNumeric, KopiApplicative, KopiTrait, Context } from '../shared';
-import { KopiTuple, KopiFunction } from '../terminals/classes';
+import { KopiTuple, KopiFunction, KopiBoolean } from '../terminals/classes';
 import { KopiRange } from './classes';
 
 import * as astNodes from './astNodes';
@@ -91,7 +91,7 @@ async function OperatorExpression(
     return (leftValue as any)[operator](rightValue, context);
   }
 
-  throw new Error(`${await leftValue.inspect()} doesn't have a method '${operator}'`);
+  throw new Error(`'${await leftValue.inspect()}' of type ${leftValue.constructor.name} doesn't have an operator method '${operator}'`);
 }
 
 async function MemberExpression(
@@ -123,9 +123,11 @@ async function UnaryExpression(
     if (operator === '-') {
       return (argumentValue as unknown as KopiNumeric).negate();
     }
+  } else {
+    return (argumentValue as any)[operator](argumentValue, context);
   }
 
-  throw new Error(`${await argumentValue.inspect()} doesn't have a method '${operator}'`);
+  throw new Error(`'${await argumentValue.inspect()}' of type '${argumentValue.constructor.name}' doesn't have a unary method '${operator}'`);
 }
 
 async function TupleExpression(

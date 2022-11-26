@@ -124,7 +124,7 @@ MemberExpression
 
 UnaryExpression
   = PrimaryExpression
-  / operator:("-") argumentExpression:UnaryExpression {
+  / operator:("-" / "!") argumentExpression:UnaryExpression {
       return {
         type: 'UnaryExpression',
         operator,
