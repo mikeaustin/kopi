@@ -88,6 +88,7 @@ async function OperatorExpression(
       return (leftValue as unknown as KopiNumeric)[operator](rightValue);
     }
   } else if (operator === '++' || operator === '==') {
+    // return leftValue.invoke(operator, [rightValue, context]);
     return (leftValue as any)[operator](rightValue, context);
   }
 

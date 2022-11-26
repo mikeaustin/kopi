@@ -284,13 +284,3 @@ test('Context', async () => {
     new KopiNumber(80),
   ]);
 });
-
-test('User Type', async () => {
-  var number = await interpret(`
-    Person = type (name: String, age: String)
-
-    Person (name: "Joe", age: 30)
-  `) as KopiNumber;
-
-  console.log(number);
-});
