@@ -9,26 +9,6 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-// test('Boolean', async () => {
-//   var boolean = await interpret(`
-//     'even 2
-//   `) as KopiBoolean;
-
-//   expect(boolean).toEqual(new KopiBoolean(true));
-
-//   var boolean = await interpret(`
-//     !('even 2)
-//   `) as KopiBoolean;
-
-//   expect(boolean).toEqual(new KopiBoolean(false));
-
-//   var boolean = await interpret(`
-//     !!('even 2)
-//   `) as KopiBoolean;
-
-//   expect(boolean).toEqual(new KopiBoolean(true));
-// });
-
 test('User Type', async () => {
   var number = await interpret(`
     Person = type (name: String, age: String)
