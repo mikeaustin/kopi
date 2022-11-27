@@ -51,7 +51,18 @@ ConcatenationExpression
     }
 
 EqualityExpression
-  = head:AddExpression tail:(_ ("==" / "!=") _ AddExpression)* {
+  = head:RelationalExpression tail:(_ ("==" / "!=") _ RelationalExpression)* {
+      return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
+        type: 'OperatorExpression',
+        operator,
+        leftExpression,
+        rightExpression,
+        location: location(),
+       }), head);
+    }
+
+RelationalExpression
+  = head:AddExpression tail:(_ ("<=" / ">=" / "<" / ">") _ AddExpression)* {
       return tail.reduce((leftExpression, [, operator, , rightExpression]) => ({
         type: 'OperatorExpression',
         operator,

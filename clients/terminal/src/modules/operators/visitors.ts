@@ -83,11 +83,11 @@ async function OperatorExpression(
     evaluate(rightExpression, environment, bindValues),
   ]);
 
-  if ((leftValue.constructor as typeof KopiValue).traits.includes(KopiNumeric)) {
-    if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
+  if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
+    if ((leftValue.constructor as typeof KopiValue).traits.includes(KopiNumeric)) {
       return (leftValue as unknown as KopiNumeric)[operator](rightValue);
     }
-  } else if (operator === '++' || operator === '==') {
+  } else if (operator === '++' || operator === '==' || operator === '!=' || operator === '<' || operator === '>' || operator === '<=' || operator === '>=') {
     // return leftValue.invoke(operator, [rightValue, context]);
     return (leftValue as any)[operator](rightValue, context);
   }

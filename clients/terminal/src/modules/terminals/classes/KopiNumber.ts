@@ -71,6 +71,10 @@ class KopiNumber extends KopiValue {
     return new KopiBoolean(this.value === that.value);
   }
 
+  '!='(that: KopiNumber): KopiBoolean {
+    return new KopiBoolean(this.value !== that.value);
+  }
+
   compare(that: KopiNumber) {
     if (this.value < that.value) {
       return new KopiNumber(-1);
