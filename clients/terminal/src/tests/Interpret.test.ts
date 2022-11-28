@@ -14,11 +14,15 @@ async function interpret(source: string) {
 test('Interpret', async () => {
   var string = await interpret(`
     incrementIndex = index => index + 1
+    setIndex = index => () => index
 
-    evaluate (statement) = match statement (
+    evaluate (statement, indexes) = match statement (
       (lineNo, "PRINT", value) => {
         print value
         incrementIndex
+      }
+      (lineNo, "GOTO", value) => {
+        setIndex (indexes | get value)
       }
     )
 
@@ -29,17 +33,25 @@ test('Interpret', async () => {
         (array.(0), array.(1), array.(2))
       } | toArray
 
+      indexes = (0..99, program) | map (index, statement) => {
+        (index, statement)
+      } | reduce (map = {:}, (index, statement)) => {
+        map | set (statement.0) index
+      }
+
       let (index = 0) => {
         match (index == 'size program) (
           true => "Done"
-          _    => loop (evaluate program.(index) index)
+          _    => loop (evaluate (program.(index), indexes) index)
         )
       }
     }
 
     source = "
       10 PRINT 'Hello, world.'
-      20 PRINT 'How are you?'
+      20 GOTO 40
+      30 PRINT 'How are you?'
+      40 PRINT 'Goodbye.'
     "
 
     interpret source
