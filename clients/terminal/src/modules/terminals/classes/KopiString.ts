@@ -1,4 +1,4 @@
-import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from "../../shared";
 
 import { KopiEnumerable } from "../../shared";
 import Comparable from '../../operators/traits/KopiComparable';
@@ -50,15 +50,62 @@ class KopiString extends KopiValue {
     return new KopiNumber(this.value.length);
   }
 
-  set(index: KopiNumber) {
-    return (value: KopiString) => {
+  async apply(thisArg: KopiValue, [argument]: [KopiNumber]) {
+    if (argument instanceof KopiArray) {
+      const accum = [];
+      const indices = argument;
+      const array = [...this.value];
+
+      for (const index of indices.elements) {
+        accum.push(array[(await index as KopiNumber).value]);
+      }
+
+      return new KopiString(
+        accum.join('')
+      );
+    }
+
+    if (argument instanceof KopiRange) {
+      const range = argument;
       const array = [...this.value];
 
       return new KopiString(
+        array.slice((range.from as KopiNumber).value, (range.to as KopiNumber).value).join('')
+      );
+    }
+
+    if (argument instanceof KopiNumber) {
+      const index = argument;
+
+      const codePoint = this.value.codePointAt(index.value);
+
+      if (codePoint) {
+        return new KopiString(String.fromCodePoint(codePoint));
+      }
+    }
+
+    throw new Error('Invalid codePoint');
+  }
+
+  set(argument: KopiNumber | KopiRange) {
+    return (value: KopiString) => {
+      const array = [...this.value];
+
+      const start = argument instanceof KopiRange ? (argument.from as KopiNumber) : argument;
+      const end = argument instanceof KopiRange ? (argument.to as KopiNumber) : new KopiNumber(argument.value + 1);
+
+      // const deleteCount = to.value - from.value;
+      // array.splice(from.value, deleteCount, value.value);
+
+      // return new KopiString(
+      //   array.join('')
+      // );
+
+      return new KopiString(
         array
-          .slice(0, index.value)
+          .slice(0, start.value)
           .concat(value.value)
-          .concat(array.slice(index.value + 1, Infinity))
+          .concat(array.slice(end.value, Infinity))
           .join('')
       );
     };
@@ -217,6 +264,6 @@ class KopiString extends KopiValue {
   }
 }
 
-addTraits([KopiEnumerable, Comparable, KopiIterable, KopiCollection], KopiString);
+addTraits([KopiEnumerable, Comparable, KopiIterable, KopiCollection, KopiApplicative], KopiString);
 
 export default KopiString;
