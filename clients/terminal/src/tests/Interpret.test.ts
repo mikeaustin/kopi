@@ -2,7 +2,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
+import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiString } from '../modules/terminals/classes';
 import { KopiRange } from '../modules/operators/classes';
 
 async function interpret(source: string) {
@@ -23,6 +23,11 @@ test('Interpret', async () => {
     )
 
     interpret (source) = {
+      program = source | trim | split (String._constructor.newlineRegExp) | map (line) => {
+        'trim line
+      }
+      print (program | inspect)
+
       program = [
         (10, "PRINT", "Hello, world.")
         (20, "PRINT", "How are you?")
@@ -36,7 +41,12 @@ test('Interpret', async () => {
       }
     }
 
-    interpret ()
+    source = "
+      10 PRINT 'Hello, world.'
+      20 PRINT 'How are you?'
+    "
+
+    interpret source
   `) as KopiString;
 
   console.log(string);

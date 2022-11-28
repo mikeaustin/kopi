@@ -13,6 +13,7 @@ import KopiFunction from "./KopiFunction";
 
 class KopiString extends KopiValue {
   static readonly emptyValue = () => new KopiString('');
+  static readonly newlineRegExp = new KopiString(/\n/ as any);
 
   readonly value: string;
 
@@ -260,6 +261,12 @@ class KopiString extends KopiValue {
   split(string: KopiString) {
     return new KopiArray(
       this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
+    );
+  }
+
+  trim(string: KopiString) {
+    return new KopiString(
+      this.value.trim()
     );
   }
 }
