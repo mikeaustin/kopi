@@ -296,6 +296,8 @@ PrimaryPattern
     }
   }
   / NumericLiteralPattern
+  / StringLiteralPattern
+  / BooleanLiteralPattern
   / IdentifierPattern
 
 NumericLiteralPattern
@@ -303,6 +305,22 @@ NumericLiteralPattern
       return {
         type: 'NumericLiteralPattern',
         value: number.value,
+      }
+    }
+
+StringLiteralPattern
+  = string:StringLiteral {
+      return {
+        type: 'StringLiteralPattern',
+        value: string.value,
+      }
+    }
+
+BooleanLiteralPattern
+  = boolean:BooleanLiteral {
+      return {
+        type: 'BooleanLiteralPattern',
+        value: boolean.value,
       }
     }
 

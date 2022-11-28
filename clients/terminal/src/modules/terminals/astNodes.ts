@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
-import { KopiBoolean, KopiNumber, KopiTuple } from './classes';
+import { KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   readonly value: number;
@@ -106,6 +106,42 @@ class NumericLiteralPattern extends ASTPatternNode {
   }
 }
 
+class StringLiteralPattern extends ASTPatternNode {
+  readonly value: string;
+
+  constructor({ value, location }: StringLiteralPattern) {
+    super(location);
+
+    this.value = value;
+  }
+
+  override async match(string: KopiValue, context: Context) {
+    if (string instanceof KopiString && string.value === this.value) {
+      return {} as Bindings;
+    }
+
+    return undefined;
+  }
+}
+
+class BooleanLiteralPattern extends ASTPatternNode {
+  readonly value: boolean;
+
+  constructor({ value, location }: BooleanLiteralPattern) {
+    super(location);
+
+    this.value = value;
+  }
+
+  override async match(boolean: KopiValue, context: Context) {
+    if (boolean instanceof KopiBoolean && boolean.value === this.value) {
+      return {} as Bindings;
+    }
+
+    return undefined;
+  }
+}
+
 class IdentifierPattern extends ASTPatternNode {
   readonly name: string;
   readonly defaultExpression: ASTNode | null;
@@ -198,6 +234,8 @@ export {
   AstLiteral,
   Identifier,
   NumericLiteralPattern,
+  StringLiteralPattern,
+  BooleanLiteralPattern,
   IdentifierPattern,
   TuplePattern,
   FunctionPattern,
