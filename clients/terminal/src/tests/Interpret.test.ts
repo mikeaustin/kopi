@@ -28,15 +28,13 @@ test('Interpret', async () => {
 
     interpret (source) = {
       program = source | trim | split (String._constructor.newlineRegExp) | map (line) => {
-        # [lineNo, command, value] = 'trim line | splitOnLimit " " 2
+        # [lineNo, command, value] = line | trim | splitOnLimit " " 2
         array = line | trim | splitOnLimit " " 2 | toArray
         (array.(0), array.(1), array.(2))
       } | toArray
 
-      indexes = (0..99, program) | map (index, statement) => {
-        (index, statement)
-      } | reduce (map = {:}, (index, statement)) => {
-        map | set (statement.0) index
+      indexes = (0..99, program) | reduce (dict = {:}, index, statement) => {
+        dict | set (statement.0) index
       }
 
       let (index = 0) => {

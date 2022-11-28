@@ -94,6 +94,26 @@ class KopiTuple extends KopiValue {
 
     return new KopiStream(result);
   }
+
+  async reduce(func: KopiFunction, context: Context) {
+    let accum: KopiValue = KopiTuple.empty;
+
+    const iters = await Promise.all(
+      this._fields.map(
+        async (element) => (await element as unknown as AsyncIterable<KopiValue>)[Symbol.asyncIterator]()
+      )
+    );
+
+    let results = await Promise.all(iters.map((iter) => iter.next()));
+
+    while (results.every((result) => !result.done)) {
+      accum = await func.apply(KopiTuple.empty, [new KopiTuple([accum, ...results.map((result) => result.value)]), context]);
+
+      results = await Promise.all(iters.map((iter) => iter.next()));
+    }
+
+    return accum;
+  }
 }
 
 export default KopiTuple;
