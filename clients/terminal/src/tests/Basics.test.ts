@@ -32,12 +32,6 @@ test('Basic types', async () => {
     new KopiBoolean(true),
     new KopiRange(new KopiString('a'), new KopiString('c')),
   ]);
-
-  var number = await interpret(`
-    'size [1, 2, 3]
-  `) as KopiNumber;
-
-  expect(number.value).toEqual(3);
 });
 
 test('Async operations', async () => {

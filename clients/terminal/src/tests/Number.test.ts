@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiBoolean, KopiNumber } from '../modules/terminals/classes';
+import { KopiBoolean, KopiNumber, KopiString } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
@@ -10,6 +10,7 @@ async function interpret(source: string) {
 }
 
 describe('Number', () => {
+
   test('Math', async () => {
     var number = await interpret(`
       2 + 3
@@ -40,6 +41,12 @@ describe('Number', () => {
     `) as KopiNumber;
 
     expect(number).toEqual(new KopiNumber(1));
+
+    var number = await interpret(`
+      'round 2.5
+    `) as KopiNumber;
+
+    expect(number).toEqual(new KopiNumber(3));
   });
 
   test('Relational', async () => {
@@ -79,4 +86,27 @@ describe('Number', () => {
 
     expect(boolean).toEqual(new KopiBoolean(true));
   });
+
+  test('Trig', async () => {
+    var number = await interpret(`
+      'sin 0
+    `) as KopiNumber;
+
+    expect(number.value).toBeCloseTo(0);
+
+    var number = await interpret(`
+      'cos 0
+    `) as KopiNumber;
+
+    expect(number.value).toBeCloseTo(1);
+  });
+
+  test('Misc', async () => {
+    var number = await interpret(`
+      3.14159 | toFixed 2
+    `) as KopiNumber;
+
+    expect(number).toEqual(new KopiString('3.14'));
+  });
+
 });

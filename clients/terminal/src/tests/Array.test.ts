@@ -12,6 +12,12 @@ async function interpret(source: string) {
 }
 
 test('Array', async () => {
+  var number = await interpret(`
+    'size [1, 2, 3]
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(3);
+
   var boolean = await interpret(`
     [1, 2, 3] | has 1
   `) as KopiBoolean;
