@@ -236,6 +236,47 @@ abstract class KopiIterable extends KopiTrait {
     return new KopiStream(generator);
   }
 
+  async splitOnLimit(splitter: KopiValue, context: Context) {
+    return async (limit: KopiNumber) => {
+      const constructorTraits = (this.constructor as typeof KopiValue).traits;
+
+      if (!constructorTraits.includes(KopiCollection)) {
+        throw new Error(`KopiIterable.splitOn(): 'this' value '${await (this as unknown as KopiValue).inspect()}' of type '${(this as unknown as KopiValue).constructor.name}' does not conform to trait 'KopiCollection'\n  Trait 'KopiCollection' implements methods 'static emptyValue()' and 'append()'`);
+      }
+
+      let values: KopiValue = (this.constructor as typeof KopiCollection).emptyValue();
+
+      const generator = async function* (this: KopiIterable) {
+        const iter = this[Symbol.asyncIterator]();
+        let result = iter.next();
+        let count = 0;
+
+        while (count < limit.value && !(await result).done) {
+          if ((await (await (await result).value).invoke('==', [splitter, context]) as KopiBoolean).value) {
+            yield values;
+
+            values = (this.constructor as typeof KopiCollection).emptyValue();
+            ++count;
+          } else {
+            values = await (values as unknown as KopiCollection).append((await result).value);
+          }
+
+          result = iter.next();
+        }
+
+        while (!(await result).done) {
+          values = await (values as unknown as KopiCollection).append((await result).value);
+
+          result = iter.next();
+        }
+
+        yield values;
+      }.apply(this);
+
+      return new KopiStream(generator);
+    };
+  }
+
   async splitEvery(count: KopiNumber) {
     const constructorTraits = (this.constructor as typeof KopiValue).traits;
 

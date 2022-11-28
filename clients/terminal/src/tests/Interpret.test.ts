@@ -24,14 +24,10 @@ test('Interpret', async () => {
 
     interpret (source) = {
       program = source | trim | split (String._constructor.newlineRegExp) | map (line) => {
-        'trim line
-      }
-      print (program | inspect)
-
-      program = [
-        (10, "PRINT", "Hello, world.")
-        (20, "PRINT", "How are you?")
-      ]
+        # [lineNo, command, value] = 'trim line | splitOnLimit " " 2
+        array = line | trim | splitOnLimit " " 2 | toArray
+        (array.(0), array.(1), array.(2))
+      } | toArray
 
       let (index = 0) => {
         match (index == 'size program) (

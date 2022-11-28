@@ -20,12 +20,16 @@ class KopiArray extends KopiValue {
     this.elements = elements;
   }
 
-  override async inspect() {
+  override async toString() {
     const elements = await Promise.all(
       this.elements.map(async element => (await element).inspect())
     );
 
     return `[${elements.join(', ')}]`;
+  }
+
+  override async inspect() {
+    return this.toString();
   }
 
   override async toJS() {

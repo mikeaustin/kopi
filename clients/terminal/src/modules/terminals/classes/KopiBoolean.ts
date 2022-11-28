@@ -9,8 +9,12 @@ class KopiBoolean extends KopiValue {
     this.value = value;
   }
 
-  override async inspect() {
+  override async toString() {
     return this.value ? 'true' : 'false';
+  }
+
+  override async inspect() {
+    return this.toString();
   }
 
   '!'(): KopiBoolean {

@@ -20,7 +20,7 @@ class KopiDict extends KopiValue {
     );
   }
 
-  override async inspect() {
+  override async toString() {
     if (this.entries.size === 0) {
       return `{:}`;
     }
@@ -32,6 +32,10 @@ class KopiDict extends KopiValue {
     );
 
     return `{ ${entries.join(', ')} }`;
+  }
+
+  override async inspect() {
+    return this.toString();
   }
 
   override async toJS() {

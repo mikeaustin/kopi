@@ -33,8 +33,12 @@ class KopiString extends KopiValue {
     return this.value;
   }
 
+  override async toString() {
+    return `${this.value}`;
+  }
+
   override async inspect() {
-    return `"${this.value}"`;
+    return `"${this.toString()}"`;
   }
 
   override async toJS() {

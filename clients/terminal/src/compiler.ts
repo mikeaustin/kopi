@@ -216,7 +216,7 @@ const environment: {
   },
 
   async print(value: KopiValue) {
-    console.log(value);
+    console.log(await value.toString());
 
     return KopiTuple.empty;
   },

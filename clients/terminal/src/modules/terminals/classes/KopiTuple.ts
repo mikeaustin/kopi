@@ -41,7 +41,7 @@ class KopiTuple extends KopiValue {
     return this._fields;
   }
 
-  override async inspect() {
+  override async toString() {
     const fields = await Promise.all(
       this._fields.map(async (element, index) =>
         this.fieldNames[index] !== null ? `${this.fieldNames[index]}: ` : `` +
@@ -49,6 +49,10 @@ class KopiTuple extends KopiValue {
     );
 
     return `(${fields.join(', ')})`;
+  }
+
+  override async inspect() {
+    return this.toString();
   }
 
   async '=='(that: KopiTuple, context: Context): Promise<KopiBoolean> {

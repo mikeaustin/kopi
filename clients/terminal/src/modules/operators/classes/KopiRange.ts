@@ -31,6 +31,10 @@ class KopiRange extends KopiValue {
     this.stride = stride ?? new KopiNumber(1);
   }
 
+  override async toString() {
+    return `${await (await this.from).inspect()}..${await (await this.to).inspect()}`;
+  }
+
   override async inspect() {
     return `${await (await this.from).inspect()}..${await (await this.to).inspect()}`;
   }

@@ -21,8 +21,12 @@ class KopiNumber extends KopiValue {
     return this.value;
   }
 
-  override async inspect() {
+  override async toString() {
     return `${this.value}`;
+  }
+
+  override async inspect() {
+    return this.toString();
   }
 
   override async toJS() {
