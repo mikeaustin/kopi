@@ -10,7 +10,7 @@ async function interpret(source: string) {
   return evaluate(transform(ast), environment, () => { });
 }
 
-test('Basic types', async () => {
+test('Testing', async () => {
   var string = await interpret(`
     "foo" ++ "bar"
   `) as KopiString;
@@ -31,11 +31,11 @@ test('Basic types', async () => {
 
   var string = await interpret(`
     extend String (
-      capitalize2: (n) => { 'toUpperCase this.(0..1) ++ this.(1..3) }
-      capitalize3: (n) => { 'toUpperCase (this 0..1) ++ (this 1..3) }
+      capitalize2: (n) => 'toUpperCase this.(0..1) ++ this.(1..3)
+      capitalize3: (n) => 'toUpperCase (this 0..1) ++ (this 1..3)
     )
 
-    "foo" | capitalize2
+    "foo" | capitalize3
   `) as KopiString;
 
   expect(string).toEqual(new KopiString('Foo'));
