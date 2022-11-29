@@ -63,15 +63,9 @@ describe('String', () => {
     `) as KopiString;
 
     expect(string).toEqual(new KopiString('𝒽𝑒𝓇𝑜'));
-
-    // var string = await interpret(`
-    //   "𝒽𝑒𝓁𝓁𝑜" | set (3..5) (str [4, 3])
-    // `) as KopiString;
-
-    // expect(string).toEqual(new KopiString('𝒽𝑒𝓁𝑜𝓁'));
   });
 
-  test('apply', async () => {
+  test('Apply', async () => {
     var string = await interpret(`
       "foo" 0
     `) as KopiString;
@@ -89,6 +83,12 @@ describe('String', () => {
     `) as KopiString;
 
     expect(string).toEqual(new KopiString('oo'));
+
+    var string = await interpret(`
+      "foo" 3..0
+    `) as KopiString;
+
+    expect(string).toEqual(new KopiString('oof'));
   });
 
 });

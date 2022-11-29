@@ -16,8 +16,8 @@ test('Interpret', async () => {
     incrementIndex = index => index + 1
     setIndex = index => () => index
 
-    get (value) = match value.(0) (
-      "'" => value.(1..('size value - 1))
+    get (value) = match (value 0) (
+      "'" => value 1..('size value - 1)
       _   => value
     )
 
@@ -34,17 +34,17 @@ test('Interpret', async () => {
     interpret (source) = {
       program = source | trim | split (String._constructor.newlineRegExp) | map (line) => {
         [lineNo, command, value] = line | trim | splitOnLimit " " 2 | toArray
-        (lineNo, command, value)
+        (lineNo: lineNo, command, value)
       } | toArray
 
       indexes = (0..99, program) | reduce (dict = {:}, index, statement) => {
-        dict | set (statement.0) index
+        dict | set (statement.lineNo) index
       }
 
       let (index = 0) => {
         match (index == 'size program) (
           true => "Done"
-          _    => loop (evaluate (program.(index), indexes) index)
+          _    => loop (evaluate (program index, indexes) index)
         )
       }
     }

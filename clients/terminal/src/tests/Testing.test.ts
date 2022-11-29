@@ -31,9 +31,8 @@ test('Basic types', async () => {
 
   var string = await interpret(`
     extend String (
-      capitalize2: (n) => {
-        'toUpperCase this.(0..1) ++ this.(1..3)
-      }
+      capitalize2: (n) => { 'toUpperCase this.(0..1) ++ this.(1..3) }
+      capitalize3: (n) => { 'toUpperCase (this 0..1) ++ (this 1..3) }
     )
 
     "foo" | capitalize2

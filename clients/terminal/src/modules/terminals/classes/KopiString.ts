@@ -72,10 +72,20 @@ class KopiString extends KopiValue {
 
     if (argument instanceof KopiRange) {
       const range = argument;
-      const array = [...this.value];
+      const from = (range.from as KopiNumber);
+      const to = (range.to as KopiNumber);
+
+      const array = [...this.value].slice(
+        from.value > to.value ? to.value : from.value,
+        to.value < from.value ? from.value : to.value
+      );
+
+      if (from.value > to.value) {
+        array.reverse();
+      }
 
       return new KopiString(
-        array.slice((range.from as KopiNumber).value, (range.to as KopiNumber).value).join('')
+        array.join('')
       );
     }
 
