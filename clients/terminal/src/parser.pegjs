@@ -272,6 +272,7 @@ AssignmentPrimaryPattern
         [...patterns, pattern], [head]),
     }
   }
+  / ArrayPattern
   / AssignmentIdentifierPattern
 
 AssignmentIdentifierPattern
@@ -295,6 +296,7 @@ PrimaryPattern
         [...patterns, pattern], [head]),
     }
   }
+  / ArrayPattern
   / NumericLiteralPattern
   / StringLiteralPattern
   / BooleanLiteralPattern
@@ -331,6 +333,14 @@ IdentifierPattern
       name: identifier.name,
       defaultExpression: defaultExpression && defaultExpression[3],
     };
+  }
+
+ArrayPattern
+  = "[" _ head:Pattern tail:(_ "," _ Pattern)* _ "]" {
+    return {
+      type: 'ArrayPattern',
+      patterns: tail.reduce((patterns, [,,, pattern]) => [...patterns, pattern], [head]),
+    }
   }
 
 _ "space"

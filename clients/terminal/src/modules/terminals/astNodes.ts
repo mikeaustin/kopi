@@ -1,5 +1,5 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
-import { KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes';
+import { KopiArray, KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes';
 
 class NumericLiteral extends ASTNode {
   readonly value: number;
@@ -207,6 +207,40 @@ class TuplePattern extends ASTPatternNode {
   }
 }
 
+class ArrayPattern extends ASTPatternNode {
+  readonly patterns: ASTPatternNode[];
+
+  constructor({ patterns, location }: ArrayPattern) {
+    super(location);
+
+    this.patterns = patterns;
+  }
+
+  override async match(tuple: KopiArray, context: Context) {
+    if (tuple === undefined) {
+      throw new Error('ArrayPattern match(): value is not an array');
+    }
+
+    try {
+      let bindings = {} as Bindings;
+
+      for (const [index, pattern] of this.patterns.entries()) {
+        let matches = await pattern.match(await tuple.elements[index] ?? KopiTuple.empty, context);
+
+        if (matches === undefined) {
+          return undefined;
+        }
+
+        bindings = { ...bindings, ...matches };
+      }
+
+      return bindings;
+    } catch (error) {
+      throw Error('ArrayPattern.match\n  ' + (error as Error).message);
+    }
+  }
+}
+
 class FunctionPattern extends ASTPatternNode {
   readonly name: string;
   readonly parameterPattern: ASTPatternNode;
@@ -238,5 +272,6 @@ export {
   BooleanLiteralPattern,
   IdentifierPattern,
   TuplePattern,
+  ArrayPattern,
   FunctionPattern,
 };
