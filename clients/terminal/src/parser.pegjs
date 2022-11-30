@@ -168,7 +168,7 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameterPattern:Pattern _ "=>" _ bodyExpression:ConcatenationExpression {
+  = parameterPattern:Pattern _ "=>" __ bodyExpression:ConcatenationExpression {
       return {
         type: "FunctionExpression",
         parameterPattern,

@@ -1907,7 +1907,7 @@ function peg$parse(input, options) {
         if (peg$silentFails === 0) { peg$fail(peg$e21); }
       }
       if (s3 !== peg$FAILED) {
-        s4 = peg$parse_();
+        s4 = peg$parse__();
         s5 = peg$parseConcatenationExpression();
         if (s5 !== peg$FAILED) {
           peg$savedPos = s0;
