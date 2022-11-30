@@ -81,6 +81,16 @@ test('Map and filter', async () => {
     new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
   ]);
 
+  var array = await interpret(`
+    1..3 | flatMap a => a * a | toArray
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(4),
+    new KopiNumber(9),
+  ]);
+
   var stream = await interpret(
     `1..1000000000 | map (n) => (n * n) | take 3
   `) as KopiStream;

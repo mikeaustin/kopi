@@ -83,7 +83,13 @@ abstract class KopiIterable extends KopiTrait {
   async flatMap(func: KopiFunction, context: Context): Promise<KopiStream> {
     const generator = async function* (this: KopiIterable) {
       for await (const value of this) {
-        yield* (await func.apply(KopiTuple.empty, [value, context]) as KopiStream);
+        const mappedValue = await func.apply(KopiTuple.empty, [value, context]);
+
+        if (Symbol.asyncIterator in mappedValue) {
+          yield* (mappedValue as KopiStream);
+        } else {
+          yield mappedValue;
+        }
       }
     }.apply(this);
 
