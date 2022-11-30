@@ -12,6 +12,30 @@ async function interpret(source: string) {
 }
 
 test('Array', async () => {
+  var array = await interpret(`
+    [1, 2, 3]
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
+
+  var array = await interpret(`
+    [
+      1
+      2
+      3
+    ]
+  `) as KopiArray;
+
+  expect(await Promise.all(array.elements)).toEqual([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]);
+
   var number = await interpret(`
     'size [1, 2, 3]
   `) as KopiNumber;
@@ -40,7 +64,7 @@ test('Array', async () => {
 
   var number = await interpret(`
     [1, 2, 3] 1
-  `) as KopiBoolean;
+  `) as KopiNumber;
 
   expect(number).toEqual(new KopiNumber(2));
 
@@ -65,13 +89,13 @@ test('Array', async () => {
 
   var number = await interpret(`
     [1, 2, 3] | get 1
-  `) as KopiBoolean;
+  `) as KopiNumber;
 
   expect(number).toEqual(new KopiNumber(2));
 
   var number = await interpret(`
     [1, 2, 3] | get 3
-  `) as KopiBoolean;
+  `) as KopiNumber;
 
   expect(number).toEqual(KopiTuple.empty);
 
