@@ -33,4 +33,17 @@ test('Factorial', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(120);
+
+  number = await interpret(`
+    factorial (n) = let (i = 1, accum = 1) => {
+      match (i > n) (
+        true => accum
+        _    => loop (i + 1, accum * i)
+      )
+    }
+
+    factorial 5
+  `) as KopiNumber;
+
+  expect(number.value).toEqual(120);
 });
