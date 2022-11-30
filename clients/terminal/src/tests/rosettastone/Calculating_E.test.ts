@@ -22,7 +22,7 @@ test('Calculating E', async () => {
       e = e + 1 / f
 
       match i (
-        1000 => e
+        17 => e
         _    => loop (i + 1, f, e)
       )
     }
