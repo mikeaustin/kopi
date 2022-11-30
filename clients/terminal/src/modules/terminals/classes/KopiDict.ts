@@ -86,6 +86,14 @@ class KopiDict extends KopiValue {
     return new KopiBoolean(this.entries.has(key.valueOf()));
   }
 
+  merge(that: KopiDict) {
+    const map = new Map([...this.entries, ...that.entries]);
+
+    return new KopiDict(
+      [...map.entries()].map(([_, [key, value]]) => [key, value])
+    );
+  }
+
   update(key: KopiValue, context: Context) {
     return async (func: KopiFunction) => {
       const [_, value] = this.entries.get(key.valueOf()) ?? [key, KopiTuple.empty];

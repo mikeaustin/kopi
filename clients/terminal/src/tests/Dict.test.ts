@@ -55,9 +55,17 @@ test('Dict', async () => {
 
   console.log(await dict.inspect());
 
-  var stream = await interpret(`
+  var dict = await interpret(`
     { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
-  `) as KopiStream;
+  `) as KopiDict;
 
-  console.log(await stream.inspect());
+  console.log(await dict.inspect());
+
+  var dict = await interpret(`
+    (1..3, "a".."z") | reduce (dict = {:}, n, c) => {
+      dict | merge { (c): n }
+    }
+  `) as KopiDict;
+
+  console.log(await dict.inspect());
 });
