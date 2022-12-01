@@ -1,13 +1,12 @@
 import * as parser from '../lib/parser';
 
-import { transform, evaluate, environment } from '../compiler';
-import { KopiArray, KopiBoolean, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
-import { KopiRange } from '../modules/operators/classes';
+import { transform, evaluateAst, environment } from '../compiler';
+import { KopiString } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
 
-  return evaluate(transform(ast), environment, () => { });
+  return evaluateAst(transform(ast), environment, () => { });
 }
 
 test('Basic types', async () => {

@@ -14,7 +14,7 @@ async function Assignment(
   { pattern, expression }: astNodes.Assignment,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   if (pattern instanceof terminalAstNodes.FunctionPattern) {
     expression = new astNodes.FunctionExpression({
@@ -24,8 +24,8 @@ async function Assignment(
     } as astNodes.FunctionExpression);
   }
 
-  const expressionValue = await evaluate(expression, environment, bindValues);
-  const patternMatches = await pattern.match(expressionValue, { environment, evaluate, bindValues });
+  const expressionValue = await evaluateAst(expression, environment, bindValues);
+  const patternMatches = await pattern.match(expressionValue, { environment, evaluateAst, bindValues });
 
   if (patternMatches && bindValues) {
     bindValues(patternMatches);
@@ -38,7 +38,7 @@ async function BlockExpression(
   { statements }: astNodes.BlockExpression,
   context: Context,
 ): Promise<KopiValue> {
-  let { environment, evaluate } = context;
+  let { environment, evaluateAst } = context;
 
   const newEnvironment = {};
 
@@ -55,7 +55,7 @@ async function BlockExpression(
   };
 
   return statements.reduce<Promise<KopiValue>>(async (result, statement) => (
-    (await result, await evaluate(statement, environment, bindValues))
+    (await result, await evaluateAst(statement, environment, bindValues))
   ), Promise.resolve(KopiTuple.empty));
 }
 
@@ -63,10 +63,10 @@ async function PipeExpression(
   { expression, methodName, argumentExpression }: astNodes.PipeExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
-  const expressionValue = await evaluate(expression, environment, bindValues);
-  const argumentValue = argumentExpression ? await evaluate(argumentExpression, environment, bindValues) : KopiTuple.empty;
+  const expressionValue = await evaluateAst(expression, environment, bindValues);
+  const argumentValue = argumentExpression ? await evaluateAst(argumentExpression, environment, bindValues) : KopiTuple.empty;
 
   return expressionValue.invoke(methodName, [argumentValue, context]);
 }
@@ -75,11 +75,11 @@ async function OperatorExpression(
   { operator, leftExpression, rightExpression }: astNodes.OperatorExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   const [leftValue, rightValue] = await Promise.all([
-    evaluate(leftExpression, environment, bindValues),
-    evaluate(rightExpression, environment, bindValues),
+    evaluateAst(leftExpression, environment, bindValues),
+    evaluateAst(rightExpression, environment, bindValues),
   ]);
 
   if (operator === '+' || operator === '-' || operator === '*' || operator === '/' || operator === '%') {
@@ -98,9 +98,9 @@ async function MemberExpression(
   { expression, member }: astNodes.MemberExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
-  const expressionValue = await evaluate(expression, environment, bindValues);
+  const expressionValue = await evaluateAst(expression, environment, bindValues);
 
   const value = (expressionValue as any)[member];
 
@@ -115,9 +115,9 @@ async function UnaryExpression(
   { operator, argumentExpression }: astNodes.UnaryExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
-  const argumentValue = await evaluate(argumentExpression, environment, bindValues);
+  const argumentValue = await evaluateAst(argumentExpression, environment, bindValues);
 
   if ((argumentValue.constructor as typeof KopiValue).traits.includes(KopiNumeric)) {
     if (operator === '-') {
@@ -134,10 +134,10 @@ async function TupleExpression(
   { expressionFields, expressionFieldNames }: astNodes.TupleExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   return new KopiTuple(
-    expressionFields.map(expressionField => evaluate(expressionField, environment, bindValues)),
+    expressionFields.map(expressionField => evaluateAst(expressionField, environment, bindValues)),
     expressionFieldNames,
   );
 }
@@ -160,14 +160,14 @@ async function ApplyExpression(
   { expression, argumentExpression }: astNodes.ApplyExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
-  const func = await evaluate(expression, environment, bindValues);
+  const func = await evaluateAst(expression, environment, bindValues);
 
   if ((func.constructor as typeof KopiValue).traits.includes(KopiApplicative)) {
     return (func as unknown as KopiApplicative).apply(
       undefined,
-      [await evaluate(argumentExpression, environment, bindValues), context]
+      [await evaluateAst(argumentExpression, environment, bindValues), context]
     );
   }
 

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 import App from './App';
 import * as parser from './lib/parser';
-import { evaluate } from './compiler';
+import { evaluateAst } from './compiler';
 
 test('renders learn react link', () => {
   render(<App />);

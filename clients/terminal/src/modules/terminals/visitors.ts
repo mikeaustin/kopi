@@ -8,11 +8,11 @@ async function RangeExpression(
   { from, to }: astNodes.RangeExpression,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   return new KopiRange(
-    await evaluate(from, environment, bindValues),
-    await evaluate(to, environment, bindValues)
+    await evaluateAst(from, environment, bindValues),
+    await evaluateAst(to, environment, bindValues)
   );
 }
 
@@ -43,10 +43,10 @@ async function ArrayLiteral(
   { expressionElements }: astNodes.ArrayLiteral,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   return new KopiArray(
-    expressionElements.map((expression) => evaluate(expression, environment, bindValues))
+    expressionElements.map((expression) => evaluateAst(expression, environment, bindValues))
   );
 }
 
@@ -54,12 +54,12 @@ async function DictLiteral(
   { expressionEntries }: astNodes.DictLiteral,
   context: Context,
 ): Promise<KopiValue> {
-  const { environment, evaluate, bindValues } = context;
+  const { environment, evaluateAst, bindValues } = context;
 
   return new KopiDict(
     await Promise.all(expressionEntries.map(async ([key, expression]) => [
-      await evaluate(key, environment, bindValues),
-      evaluate(expression, environment, bindValues)
+      await evaluateAst(key, environment, bindValues),
+      evaluateAst(expression, environment, bindValues)
     ]))
   );
 }

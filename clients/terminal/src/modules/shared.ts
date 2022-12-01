@@ -117,7 +117,7 @@ class ASTNode extends KopiValue {
 abstract class ASTPatternNode extends ASTNode {
   abstract match(
     value: KopiValue,
-    { environment, evaluate, bindValues }: Context,
+    { environment, evaluateAst, bindValues }: Context,
   ): Promise<{ [name: string]: KopiValue; } | undefined>;
 }
 
@@ -152,7 +152,7 @@ class Extensions extends KopiValue {
 
 type Context = {
   environment: Environment,
-  evaluate: Evaluate,
+  evaluateAst: Evaluate,
   bindValues: BindValues,
 };
 

@@ -1,13 +1,13 @@
 
 import * as parser from '../lib/parser';
 
-import { transform, evaluate, environment } from '../compiler';
+import { transform, evaluateAst, environment } from '../compiler';
 import { KopiString } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
 
-  return evaluate(transform(ast), environment, () => { });
+  return evaluateAst(transform(ast), environment, () => { });
 }
 
 test('Interpret', async () => {
@@ -20,7 +20,7 @@ test('Interpret', async () => {
       _   => value
     )
 
-    evaluate (statement, indexes) = match statement (
+    evaluateAst (statement, indexes) = match statement (
       (lineNo, "PRINT", value) => {
         print (get value)
         incrementIndex
@@ -43,7 +43,7 @@ test('Interpret', async () => {
       let (index = 0) => {
         match (index == 'size program) (
           true => "Done"
-          _    => loop (evaluate (program index, indexes) index)
+          _    => loop (evaluateAst (program index, indexes) index)
         )
       }
     }

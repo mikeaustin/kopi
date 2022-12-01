@@ -2,7 +2,6 @@ import { Context, KopiValue } from '../../shared';
 import KopiBoolean from './KopiBoolean';
 
 import KopiFunction from './KopiFunction';
-import KopiNumber from './KopiNumber';
 import KopiStream from './KopiStream';
 
 class KopiTuple extends KopiValue {

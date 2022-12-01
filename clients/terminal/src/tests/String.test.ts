@@ -1,12 +1,12 @@
 import * as parser from '../lib/parser';
 
-import { transform, evaluate, environment } from '../compiler';
+import { transform, evaluateAst, environment } from '../compiler';
 import { KopiString } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
 
-  return evaluate(transform(ast), environment, () => { });
+  return evaluateAst(transform(ast), environment, () => { });
 }
 
 describe('String', () => {

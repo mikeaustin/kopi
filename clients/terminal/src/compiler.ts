@@ -178,11 +178,11 @@ const transform = (ast: RawASTNode) => {
 
 const transformPipeline = operators.transform(terminals.transform(transform), transform);
 
-const evaluate = (ast: ASTNode, environment: Environment, bindValues: BindValues) => {
-  return evaluatePipeline(ast, environment, bindValues);
+const evaluateAst = (ast: ASTNode, environment: Environment, bindValues: BindValues) => {
+  return evaluateAstPipeline(ast, environment, bindValues);
 };
 
-const evaluatePipeline = operators.evaluate(terminals.evaluate(evaluate), evaluate);
+const evaluateAstPipeline = operators.evaluateAst(terminals.evaluateAst(evaluateAst), evaluateAst);
 
 // const transformedAst = transformPipeline(ast);
 
@@ -195,6 +195,6 @@ const evaluatePipeline = operators.evaluate(terminals.evaluate(evaluate), evalua
 
 export {
   transform,
-  evaluate,
+  evaluateAst,
   environment,
 };

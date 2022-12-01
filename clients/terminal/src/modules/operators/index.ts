@@ -57,20 +57,14 @@ const transform = (next: Transform, transform: Transform) =>
           argumentExpression: transform(rawAstNode.argumentExpression),
           location: rawAstNode.location,
         } as astNodes.ApplyExpression);
-      // case 'RangeExpression':
-      //   return new astNodes.RangeExpression({
-      //     from: transform(rawAstNode.from),
-      //     to: transform(rawAstNode.to),
-      //     location: rawAstNode.location,
-      //   } as astNodes.RangeExpression);
       default:
         return next(rawAstNode);
     }
   };
 
-const evaluate = (next: Evaluate, evaluate: Evaluate) =>
+const evaluateAst = (next: Evaluate, evaluateAst: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
-    const context = { environment, evaluate, bindValues };
+    const context = { environment, evaluateAst, bindValues };
 
     if (astNode instanceof astNodes.Assignment) {
       return visitors.Assignment(astNode, context);
@@ -90,8 +84,6 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
       return visitors.FunctionExpression(astNode, context);
     } else if (astNode instanceof astNodes.ApplyExpression) {
       return visitors.ApplyExpression(astNode, context);
-      // } else if (astNode instanceof astNodes.RangeExpression) {
-      //   return visitors.RangeExpression(astNode, context);
     } else {
       return next(astNode, environment, bindValues);
     }
@@ -99,5 +91,5 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
 
 export {
   transform,
-  evaluate,
+  evaluateAst,
 };

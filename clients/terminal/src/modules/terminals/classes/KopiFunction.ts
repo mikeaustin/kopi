@@ -27,7 +27,7 @@ class KopiFunction extends KopiValue {
     thisArg: KopiValue,
     [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    const { evaluate, bindValues } = context;
+    const { evaluateAst, bindValues } = context;
 
     const matches = await this.parameterPattern.match(argument, context);
 
@@ -40,7 +40,7 @@ class KopiFunction extends KopiValue {
 
     Object.setPrototypeOf(newEnvironment, Object.getPrototypeOf(this.environment));
 
-    return evaluate(this.bodyExpression, newEnvironment, bindValues);
+    return evaluateAst(this.bodyExpression, newEnvironment, bindValues);
   }
 }
 

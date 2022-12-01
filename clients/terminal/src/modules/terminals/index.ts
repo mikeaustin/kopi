@@ -1,4 +1,4 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, Evaluate, BindValues } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, EvaluateAst, BindValues } from '../shared';
 import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';
@@ -104,9 +104,9 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
   throw new Error(`No transform found for '${inspect(rawAstNode)}'`);
 };
 
-const evaluate = (evaluate: Evaluate) =>
+const evaluateAst = (evaluateAst: EvaluateAst) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
-    const context = { environment, evaluate, bindValues };
+    const context = { environment, evaluateAst, bindValues };
 
     if (astNode instanceof astNodes.RangeExpression) {
       return visitors.RangeExpression(astNode, context);
@@ -131,5 +131,5 @@ const evaluate = (evaluate: Evaluate) =>
 
 export {
   transform,
-  evaluate,
+  evaluateAst,
 };
