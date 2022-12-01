@@ -26,7 +26,7 @@ Expression
   = PipeExpression
 
 PipeExpression
-  = head:ConcatenationExpression tail:(_ "|" _ Identifier _ PrimaryExpression? (_ PrimaryExpression)*)* {
+  = head:ConcatExpression tail:(_ "|" _ Identifier _ RangeExpression? (_ RangeExpression)*)* {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
         const pipelineExpression = {
           type: 'PipeExpression',
@@ -43,8 +43,8 @@ PipeExpression
       }, head);
     }
 
-ConcatenationExpression
-  = head:EqualityExpression tail:(_ "++" _ ConcatenationExpression)? {
+ConcatExpression
+  = head:EqualityExpression tail:(_ "++" _ ConcatExpression)? {
       return !tail ? head : {
         type: 'OperatorExpression',
         operator: '++',
@@ -171,7 +171,7 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameterPattern:Pattern _ "=>" __ bodyExpression:ConcatenationExpression {
+  = parameterPattern:Pattern _ "=>" __ bodyExpression:ConcatExpression {
       return {
         type: "FunctionExpression",
         parameterPattern,

@@ -58,7 +58,7 @@ describe('String', () => {
     expect(string).toEqual(new KopiString('boo'));
 
     var string = await interpret(`
-      "𝒽𝑒𝓁𝓁𝑜" | set (2..4) "𝓇"
+      "𝒽𝑒𝓁𝓁𝑜" | set 2..4 "𝓇"
     `) as KopiString;
 
     expect(string).toEqual(new KopiString('𝒽𝑒𝓇𝑜'));

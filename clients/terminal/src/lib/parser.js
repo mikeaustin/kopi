@@ -292,7 +292,10 @@ function peg$parse(input, options) {
     };
   var peg$f3 = function(head, tail) {
       return !tail ? head : {
-        type: 'OperatorExpression', operator: '++', leftExpression: head, rightExpression: tail[3]
+        type: 'OperatorExpression',
+        operator: '++',
+        leftExpression: head,
+        rightExpression: tail[3]
       };
     };
   var peg$f4 = function(head, tail) {
@@ -809,7 +812,7 @@ function peg$parse(input, options) {
     var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
 
     s0 = peg$currPos;
-    s1 = peg$parseConcatenationExpression();
+    s1 = peg$parseConcatExpression();
     if (s1 !== peg$FAILED) {
       s2 = [];
       s3 = peg$currPos;
@@ -826,14 +829,14 @@ function peg$parse(input, options) {
         s7 = peg$parseIdentifier();
         if (s7 !== peg$FAILED) {
           s8 = peg$parse_();
-          s9 = peg$parsePrimaryExpression();
+          s9 = peg$parseRangeExpression();
           if (s9 === peg$FAILED) {
             s9 = null;
           }
           s10 = [];
           s11 = peg$currPos;
           s12 = peg$parse_();
-          s13 = peg$parsePrimaryExpression();
+          s13 = peg$parseRangeExpression();
           if (s13 !== peg$FAILED) {
             s12 = [s12, s13];
             s11 = s12;
@@ -845,7 +848,7 @@ function peg$parse(input, options) {
             s10.push(s11);
             s11 = peg$currPos;
             s12 = peg$parse_();
-            s13 = peg$parsePrimaryExpression();
+            s13 = peg$parseRangeExpression();
             if (s13 !== peg$FAILED) {
               s12 = [s12, s13];
               s11 = s12;
@@ -880,14 +883,14 @@ function peg$parse(input, options) {
           s7 = peg$parseIdentifier();
           if (s7 !== peg$FAILED) {
             s8 = peg$parse_();
-            s9 = peg$parsePrimaryExpression();
+            s9 = peg$parseRangeExpression();
             if (s9 === peg$FAILED) {
               s9 = null;
             }
             s10 = [];
             s11 = peg$currPos;
             s12 = peg$parse_();
-            s13 = peg$parsePrimaryExpression();
+            s13 = peg$parseRangeExpression();
             if (s13 !== peg$FAILED) {
               s12 = [s12, s13];
               s11 = s12;
@@ -899,7 +902,7 @@ function peg$parse(input, options) {
               s10.push(s11);
               s11 = peg$currPos;
               s12 = peg$parse_();
-              s13 = peg$parsePrimaryExpression();
+              s13 = peg$parseRangeExpression();
               if (s13 !== peg$FAILED) {
                 s12 = [s12, s13];
                 s11 = s12;
@@ -929,7 +932,7 @@ function peg$parse(input, options) {
     return s0;
   }
 
-  function peg$parseConcatenationExpression() {
+  function peg$parseConcatExpression() {
     var s0, s1, s2, s3, s4, s5, s6;
 
     s0 = peg$currPos;
@@ -946,7 +949,7 @@ function peg$parse(input, options) {
       }
       if (s4 !== peg$FAILED) {
         s5 = peg$parse_();
-        s6 = peg$parseConcatenationExpression();
+        s6 = peg$parseConcatExpression();
         if (s6 !== peg$FAILED) {
           s3 = [s3, s4, s5, s6];
           s2 = s3;
@@ -1908,7 +1911,7 @@ function peg$parse(input, options) {
       }
       if (s3 !== peg$FAILED) {
         s4 = peg$parse__();
-        s5 = peg$parseConcatenationExpression();
+        s5 = peg$parseConcatExpression();
         if (s5 !== peg$FAILED) {
           peg$savedPos = s0;
           s0 = peg$f14(s1, s5);

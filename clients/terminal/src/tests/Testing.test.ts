@@ -39,6 +39,11 @@ test('Testing', async () => {
 
   expect(string).toEqual(new KopiString('Foo'));
 
+  var array = await interpret(`
+    [1, 2, 3] | get 1..3
+  `) as KopiString;
+
+
   // var object = await interpret(`
   //   timer () | map (n) => n / 1000 | take 3 | each (n) => {
   //     print n

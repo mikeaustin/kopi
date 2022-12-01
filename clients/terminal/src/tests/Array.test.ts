@@ -121,7 +121,7 @@ test('Array', async () => {
   ]);
 
   var array = await interpret(`
-    [1, 2, 3] | set (0..1) 5
+    [1, 2, 3] | set 0..1 5
   `) as KopiArray;
 
   expect(await Promise.all(array.elements)).toEqual([
