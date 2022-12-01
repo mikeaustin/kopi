@@ -106,7 +106,7 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
 
 const evaluate = (evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
-    const context = { evaluate, environment, bindValues };
+    const context = { environment, evaluate, bindValues };
 
     if (astNode instanceof astNodes.RangeExpression) {
       return visitors.RangeExpression(astNode, context);

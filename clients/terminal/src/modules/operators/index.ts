@@ -70,7 +70,7 @@ const transform = (next: Transform, transform: Transform) =>
 
 const evaluate = (next: Evaluate, evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
-    const context = { evaluate, environment, bindValues };
+    const context = { environment, evaluate, bindValues };
 
     if (astNode instanceof astNodes.Assignment) {
       return visitors.Assignment(astNode, context);
