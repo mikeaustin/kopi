@@ -13,6 +13,13 @@ import * as operatorsVisitors from '../operators/visitors';
 
 const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
+    case 'RangeExpression':
+      return new astNodes.RangeExpression({
+        from: transform(rawAstNode.from),
+        to: transform(rawAstNode.to),
+        location: rawAstNode.location,
+      } as astNodes.RangeExpression);
+    //
     case 'NumericLiteral':
       return new astNodes.NumericLiteral({
         value: rawAstNode.value,
@@ -101,7 +108,9 @@ const evaluate = (evaluate: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
     const context = { evaluate, environment, bindValues };
 
-    if (astNode instanceof astNodes.NumericLiteral) {
+    if (astNode instanceof astNodes.RangeExpression) {
+      return visitors.RangeExpression(astNode, context);
+    } else if (astNode instanceof astNodes.NumericLiteral) {
       return visitors.NumericLiteral(astNode, context);
     } else if (astNode instanceof astNodes.BooleanLiteral) {
       return visitors.BooleanLiteral(astNode, context);

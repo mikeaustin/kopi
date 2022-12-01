@@ -1,6 +1,20 @@
 import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
 import { KopiArray, KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes';
 
+class RangeExpression extends ASTNode {
+  readonly from: ASTNode;
+  readonly to: ASTNode;
+
+  constructor({ from, to, location }: RangeExpression) {
+    super(location);
+
+    this.from = from;
+    this.to = to;
+  }
+}
+
+//
+
 class NumericLiteral extends ASTNode {
   readonly value: number;
 
@@ -260,6 +274,8 @@ class FunctionPattern extends ASTPatternNode {
 }
 
 export {
+  RangeExpression,
+  //
   NumericLiteral,
   BooleanLiteral,
   StringLiteral,

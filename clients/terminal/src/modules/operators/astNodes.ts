@@ -118,17 +118,17 @@ class FunctionExpression extends ASTNode {
   }
 }
 
-class RangeExpression extends ASTNode {
-  readonly from: ASTNode;
-  readonly to: ASTNode;
+// class RangeExpression extends ASTNode {
+//   readonly from: ASTNode;
+//   readonly to: ASTNode;
 
-  constructor({ from, to, location }: RangeExpression) {
-    super(location);
+//   constructor({ from, to, location }: RangeExpression) {
+//     super(location);
 
-    this.from = from;
-    this.to = to;
-  }
-}
+//     this.from = from;
+//     this.to = to;
+//   }
+// }
 
 export {
   Assignment,
@@ -140,5 +140,5 @@ export {
   TupleExpression,
   ApplyExpression,
   FunctionExpression,
-  RangeExpression,
+  // RangeExpression,
 };

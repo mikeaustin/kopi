@@ -1,8 +1,22 @@
 import { Context } from '../shared';
-import { KopiNumber, KopiBoolean, KopiString, KopiArray } from './classes';
+import { KopiNumber, KopiBoolean, KopiString, KopiArray, KopiRange } from './classes';
 
 import * as astNodes from './astNodes';
 import KopiDict from './classes/KopiDict';
+
+async function RangeExpression(
+  { from, to }: astNodes.RangeExpression,
+  context: Context,
+) {
+  const { evaluate, environment, bindValues } = context;
+
+  return new KopiRange(
+    await evaluate(from, environment, bindValues),
+    await evaluate(to, environment, bindValues)
+  );
+}
+
+//
 
 async function NumericLiteral(
   { value }: astNodes.NumericLiteral,
@@ -66,6 +80,8 @@ async function Identifier(
 }
 
 export {
+  RangeExpression,
+  //
   NumericLiteral,
   BooleanLiteral,
   StringLiteral,

@@ -57,12 +57,12 @@ const transform = (next: Transform, transform: Transform) =>
           argumentExpression: transform(rawAstNode.argumentExpression),
           location: rawAstNode.location,
         } as astNodes.ApplyExpression);
-      case 'RangeExpression':
-        return new astNodes.RangeExpression({
-          from: transform(rawAstNode.from),
-          to: transform(rawAstNode.to),
-          location: rawAstNode.location,
-        } as astNodes.RangeExpression);
+      // case 'RangeExpression':
+      //   return new astNodes.RangeExpression({
+      //     from: transform(rawAstNode.from),
+      //     to: transform(rawAstNode.to),
+      //     location: rawAstNode.location,
+      //   } as astNodes.RangeExpression);
       default:
         return next(rawAstNode);
     }
@@ -90,8 +90,8 @@ const evaluate = (next: Evaluate, evaluate: Evaluate) =>
       return visitors.FunctionExpression(astNode, context);
     } else if (astNode instanceof astNodes.ApplyExpression) {
       return visitors.ApplyExpression(astNode, context);
-    } else if (astNode instanceof astNodes.RangeExpression) {
-      return visitors.RangeExpression(astNode, context);
+      // } else if (astNode instanceof astNodes.RangeExpression) {
+      //   return visitors.RangeExpression(astNode, context);
     } else {
       return next(astNode, environment, bindValues);
     }

@@ -174,17 +174,17 @@ async function ApplyExpression(
   throw new Error(`No KopiApplicative.apply() method found for ${func.constructor.name}`);
 }
 
-async function RangeExpression(
-  { from, to }: astNodes.RangeExpression,
-  context: Context,
-) {
-  const { evaluate, environment, bindValues } = context;
+// async function RangeExpression(
+//   { from, to }: astNodes.RangeExpression,
+//   context: Context,
+// ) {
+//   const { evaluate, environment, bindValues } = context;
 
-  return new KopiRange(
-    await evaluate(from, environment, bindValues),
-    await evaluate(to, environment, bindValues)
-  );
-}
+//   return new KopiRange(
+//     await evaluate(from, environment, bindValues),
+//     await evaluate(to, environment, bindValues)
+//   );
+// }
 
 export {
   Assignment,
@@ -196,5 +196,5 @@ export {
   TupleExpression,
   FunctionExpression,
   ApplyExpression,
-  RangeExpression,
+  // RangeExpression,
 };
