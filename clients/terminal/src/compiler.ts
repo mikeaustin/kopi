@@ -8,9 +8,9 @@ import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple, KopiCoroutine, KopiContext, KopiSubject, KopiTimer } from './modules/terminals/classes';
+import { KopiNumber, KopiType, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
 
-import KopiStream from './modules/terminals/classes/KopiStream';
+import * as core from './functions/core';
 
 declare global {
   interface FunctionConstructor {
@@ -36,16 +36,6 @@ Function.traits = [KopiApplicative];
 
 //
 
-class KopiLoop extends KopiValue {
-  constructor(value: KopiValue) {
-    super();
-
-    this.value = value;
-  }
-
-  value: KopiValue;
-}
-
 const environment: {
   [name: string]: KopiValue;
 } = {
@@ -57,114 +47,24 @@ const environment: {
     return new KopiSubject(value);
   },
 
-  async timer() {
-    return new KopiTimer();
-  },
+  print: core.kopi_print,
+  sleep: core.kopi_sleep,
+  match: core.kopi_match,
 
-  async type(type: KopiTuple) {
-    const _constructor = class extends (type as any).constructor {
-      constructor(tuple: KopiTuple) {
-        super(tuple.fields, tuple.fieldNames);
-        // Add copy constructor
-      }
-    };
+  let: core.kopi_let,
+  loop: core.kopi_loop,
 
-    Object.defineProperty(_constructor, 'name', { value: 'Custom' });
+  type: core.kopi_type,
+  extend: core.kopi_extend,
 
-    return new KopiType(_constructor);
-  },
+  fetch: core.kopi_fetch,
 
-  async context(value: KopiValue, context: Context) {
-    const { bindValues } = context;
+  iterate: core.kopi_iterate,
+  context: core.kopi_context,
+  spawn: core.kopi_spawn,
 
-    return new KopiContext(value, bindValues);
-  },
-
-  async spawn(func: KopiFunction, context: Context) {
-    const coroutine = new KopiCoroutine();
-
-    func.apply(KopiTuple.empty, [coroutine.yield.bind(coroutine), context]);
-
-    return coroutine;
-  },
-
-  async print(value: KopiValue) {
-    console.log(await value.toString());
-
-    return KopiTuple.empty;
-  },
-
-  async extend(type: KopiType, context: Context) {
-    const extensions = (context.environment._extensions as Extensions);
-
-    return async (methods: KopiTuple) => {
-      const newMethods = await methods.fields.reduce(async (newMethods, method, index) => ({
-        ...await newMethods,
-        [methods.fieldNames[index] ?? 'invalid']: await method,
-      }), extensions.map.get(type._constructor) ?? {});
-
-      context.bindValues({
-        _extensions: new Extensions([...extensions.map, [type._constructor, newMethods]])
-      });
-    };
-  },
-
-  async iterate(value: KopiValue, context: Context) {
-    return function (func: KopiFunction) {
-      let result = value;
-
-      const generator = (async function* () {
-        for (; ;) {
-          yield result = await func.apply(KopiTuple.empty, [result, context]);
-        }
-      })();
-
-      return new KopiStream(generator);
-    };
-  },
-
-  match(value: KopiValue, context: Context) {
-    return async (tuple: KopiTuple) => {
-      for await (const func of tuple.fields) {
-        const matches = await (func as KopiFunction).parameterPattern.match(value, context);
-
-        if (matches) {
-          return (func as KopiFunction).apply(KopiTuple.empty, [value, context]);
-        }
-      }
-
-      throw new Error('Match failed');
-    };
-  },
-
-  // extend: () => {},
-
-  async let(func: KopiFunction, context: Context) {
-    let result: KopiValue = KopiTuple.empty;
-
-    do {
-      const result2 = result instanceof KopiLoop ? result.value : result;
-
-      result = await func.apply(KopiTuple.empty, [result2, context]);
-    } while (result instanceof KopiLoop);
-
-    return result instanceof KopiLoop ? result.value : result;
-  },
-
-  async loop(value: KopiValue) {
-    return new KopiLoop(value);
-  },
-
-  async sleep(number: KopiNumber) {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(number), number.value * 1000);
-    });
-  },
-
-  async fetch(url: KopiString) {
-    const data = fetch(url.value);
-
-    return new KopiString(await (await data).text());
+  async timer(msec: KopiNumber) {
+    return new KopiTimer(msec.value);
   },
 
   _extensions: new Extensions([[KopiString, {

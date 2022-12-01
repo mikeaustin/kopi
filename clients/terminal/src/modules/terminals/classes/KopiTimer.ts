@@ -8,6 +8,14 @@ import KopiIterable from '../traits/KopiIterable';
 import { Deferred } from '../../../modules/utils';
 
 class KopiTimer extends KopiValue {
+  msec: number;
+
+  constructor(msec: number) {
+    super();
+
+    this.msec = msec;
+  }
+
   *[Symbol.asyncIterator]() {
     let deferred = new Deferred();
 
@@ -15,9 +23,9 @@ class KopiTimer extends KopiValue {
       (deferred as any).resolve(new KopiNumber(Date.now()));
 
       deferred = new Deferred();
-    }, 500);
+    }, this.msec);
 
-    for (; ;) {
+    while (true) {
       yield deferred;
     }
   }

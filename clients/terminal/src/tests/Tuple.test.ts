@@ -1,14 +1,42 @@
 import { interpret } from '../compiler';
 
-import { KopiString } from '../modules/terminals/classes';
+import { KopiDict, KopiNumber, KopiString, KopiTuple } from '../modules/terminals/classes';
 
-test('Basic types', async () => {
-  var string = await interpret(`
-    (0..5, "a".."e") | reduce (acc = {:}, n, c) => {
-      acc | set c n
-    }
-  `) as KopiString;
+describe('Tuple', () => {
 
-  console.log(await string.inspect());
-  // expect(string).toEqual(new KopiString('foobar'));
+  test('Basics', async () => {
+    var tuple = await interpret(`
+      (1, 2)
+    `) as KopiTuple;
+
+    expect(tuple).toEqual(new KopiTuple([
+      Promise.resolve(new KopiNumber(1)),
+      Promise.resolve(new KopiNumber(2)),
+    ]));
+
+    var tuple = await interpret(`
+      (a: 1, b: 2)
+    `) as KopiTuple;
+
+    expect(tuple).toEqual(new KopiTuple([
+      Promise.resolve(new KopiNumber(1)),
+      Promise.resolve(new KopiNumber(2)),
+    ], [
+      'a',
+      'b',
+    ]));
+
+    var dict = await interpret(`
+      (1..3, "a".."z") | reduce (acc = {:}, n, c) => {
+        acc | set c n
+      }
+    `) as KopiString;
+
+    expect(dict).toEqual(new KopiDict([
+      [new KopiString('a'), Promise.resolve(new KopiNumber(1))],
+      [new KopiString('b'), Promise.resolve(new KopiNumber(2))],
+      [new KopiString('c'), Promise.resolve(new KopiNumber(3))],
+    ]));
+  });
+
 });
