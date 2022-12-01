@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiTuple, KopiString } from '../modules/terminals/classes';
+import { KopiNumber, KopiBoolean, KopiArray, KopiTuple, KopiString } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
@@ -14,11 +14,11 @@ test('Array', async () => {
     [1, 2, 3]
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var array = await interpret(`
     [
@@ -28,11 +28,11 @@ test('Array', async () => {
     ]
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var number = await interpret(`
     'size [1, 2, 3]
@@ -70,19 +70,19 @@ test('Array', async () => {
     [1, 2, 3] [1, 2]
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(2),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var array = await interpret(`
     [1, 2, 3] 1..3
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(2),
     new KopiNumber(3),
-  ]);
+  ]));
 
 
   var number = await interpret(`
@@ -102,42 +102,42 @@ test('Array', async () => {
     [1, 2, 3] | set 1 5
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(5),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var array = await interpret(`
     [1, 2, 3] | set 4 5
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(2),
     new KopiNumber(3),
-    undefined,
+    undefined as any, // TODO
     new KopiNumber(5),
-  ]);
+  ]));
 
   var array = await interpret(`
     [1, 2, 3] | set 0..1 5
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(5),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var array = await interpret(`
     [1, 2, 3] | update 1 (n) => n + 3
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
-    new KopiNumber(5),
+    Promise.resolve(new KopiNumber(5)),
     new KopiNumber(3),
-  ]);
+  ]));
 
   var string = await interpret(`
     ["a", "b", "c"] | joinWith ", "
@@ -146,4 +146,26 @@ test('Array', async () => {
   expect(string).toEqual(
     new KopiString('a, b, c')
   );
+});
+
+test('Async resolve', async () => {
+  var array = await interpret(`
+    [1, 2, 3]
+  `) as KopiArray;
+
+  expect(array).toEqual(new KopiArray([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(3),
+  ]));
+
+  var array = await interpret(`
+    [1, sleep 2, 3]
+  `) as KopiArray;
+
+  expect(array).toEqual(new KopiArray([
+    Promise.resolve(new KopiNumber(1)),
+    Promise.resolve(new KopiNumber(2)),
+    Promise.resolve(new KopiNumber(3)),
+  ]));
 });

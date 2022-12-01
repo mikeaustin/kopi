@@ -12,42 +12,40 @@ async function interpret(source: string) {
 }
 
 test('Range', async () => {
-  var stream = await interpret(`
-    1..5 | map (n) => n * n | filter (n) => 'even n
-  `) as KopiStream;
+  var array = await interpret(`
+    1..5 | map (n) => n * n | filter (n) => 'even n | toArray
+  `) as KopiArray;
 
-  const elements = (await (stream as unknown as KopiIterable).toArray()).elements;
-
-  expect(await Promise.all(elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(4),
     new KopiNumber(16),
-  ]);
+  ]));
 
   var array = await interpret(`
     1..3 | map (n) => n * n | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
-  ]);
+  ]));
 
   array = await interpret(`
     "a".."c" | map (c) => c | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiString("a"),
     new KopiString("b"),
     new KopiString("c"),
-  ]);
+  ]));
 
   array = await interpret(`
     "a".."c" | cycle | take 9 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiString("a"),
     new KopiString("b"),
     new KopiString("c"),
@@ -57,7 +55,7 @@ test('Range', async () => {
     new KopiString("a"),
     new KopiString("b"),
     new KopiString("c"),
-  ]);
+  ]));
 });
 
 test('Map and filter', async () => {
@@ -65,41 +63,40 @@ test('Map and filter', async () => {
     (1..5, "a".."z") | map (n, c) => (c, n * n) | filter (c, n) => 'even n | toArray
   `) as KopiArray;
 
-  // BUG: This causes <"abcabca" | splitEvery 3> stream.inspect() to throw "undefined is not a function"
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiTuple([Promise.resolve(new KopiString('b')), Promise.resolve(new KopiNumber(4))]),
     new KopiTuple([Promise.resolve(new KopiString('a')), Promise.resolve(new KopiNumber(16))]),
-  ]);
+  ]));
 
   var array = await interpret(`
     1..3 | flatMap a => ((a + 1)..3 | map b => (a, b)) | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))]),
     new KopiTuple([Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(3))]),
     new KopiTuple([Promise.resolve(new KopiNumber(2)), Promise.resolve(new KopiNumber(3))]),
-  ]);
+  ]));
 
   var array = await interpret(`
     1..3 | flatMap a => a * a | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
-  ]);
+  ]));
 
   var stream = await interpret(
-    `1..1000000000 | map (n) => (n * n) | take 3
+    `1..1000000000 | map (n) => (n * n) | take 3 | toArray
   `) as KopiStream;
 
-  expect(await Promise.all((await (stream as unknown as KopiIterable).toArray()).elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
     new KopiNumber(4),
     new KopiNumber(9),
-  ]);
+  ]));
 
   var number = await interpret(`
     1..2 | find (n) => 'even n
@@ -173,10 +170,10 @@ test('Take and skip', async () => {
     1..5 | skip 3 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(4),
     new KopiNumber(5),
-  ]);
+  ]));
 
   var boolean = await interpret(`
     [1, 3, 5] | some (n) => 'even n
@@ -194,11 +191,11 @@ test('Take and skip', async () => {
     iterate 1 (n) => n * 2 | take 3 | toArray
   `) as KopiArray;
 
-  expect(await Promise.all(array.elements)).toEqual([
+  expect(array).toEqual(new KopiArray([
     new KopiNumber(2),
     new KopiNumber(4),
     new KopiNumber(8),
-  ]);
+  ]));
 });
 
 describe('Splitting', () => {
@@ -207,41 +204,41 @@ describe('Splitting', () => {
       [1, 2, 3, 4, 5] | splitEvery 2 | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
-      { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
-      { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
-      { elements: [Promise.resolve(new KopiNumber(5))] },
-    ]);
+    expect(array).toEqual(new KopiArray([
+      new KopiArray([new KopiNumber(1), new KopiNumber(2)]),
+      new KopiArray([new KopiNumber(3), new KopiNumber(4)]),
+      new KopiArray([new KopiNumber(5)]),
+    ]));
 
     var array = await interpret(`
       1..5 | splitEvery 2 | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
-      { elements: [Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))] },
-      { elements: [Promise.resolve(new KopiNumber(3)), Promise.resolve(new KopiNumber(4))] },
-      { elements: [Promise.resolve(new KopiNumber(5))] },
-    ]);
+    expect(array).toEqual(new KopiArray([
+      new KopiArray([new KopiNumber(1), new KopiNumber(2)]),
+      new KopiArray([new KopiNumber(3), new KopiNumber(4)]),
+      new KopiArray([new KopiNumber(5)]),
+    ]));
 
     var array = await interpret(`
       "abcabca" | splitEvery 3 | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString('abc'),
       new KopiString('abc'),
       new KopiString('a'),
-    ]);
+    ]));
 
     var array = await interpret(`
       "abcabca" | map 'succ | splitEvery 3 | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString('bcd'),
       new KopiString('bcd'),
       new KopiString('b'),
-    ]);
+    ]));
   });
 
   test('splitOn', async () => {
@@ -249,49 +246,49 @@ describe('Splitting', () => {
       ["a", ",", "b", ",", "c"] | splitOn "," | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
-      { elements: [Promise.resolve(new KopiString('a'))] },
-      { elements: [Promise.resolve(new KopiString('b'))] },
-      { elements: [Promise.resolve(new KopiString('c'))] },
-    ]);
+    expect(array).toEqual(new KopiArray([
+      new KopiArray([new KopiString('a')]),
+      new KopiArray([new KopiString('b')]),
+      new KopiArray([new KopiString('c')]),
+    ]));
 
     var array = await interpret(`
       "a,b,c" | splitOn "," | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString('a'),
       new KopiString('b'),
       new KopiString('c'),
-    ]);
+    ]));
 
     var array = await interpret(`
       ",a,b,c," | splitOn "," | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString(''),
       new KopiString('a'),
       new KopiString('b'),
       new KopiString('c'),
       new KopiString(''),
-    ]);
+    ]));
 
     var array = await interpret(`
       "" | splitOn "," | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString(''),
-    ]);
+    ]));
 
     var array = await interpret(`
       "," | splitOn "," | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiString(''),
       new KopiString(''),
-    ]);
+    ]));
   });
 });

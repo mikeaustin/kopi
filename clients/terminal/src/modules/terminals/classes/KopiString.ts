@@ -274,7 +274,7 @@ class KopiString extends KopiValue {
 
   split(string: KopiString) {
     return new KopiArray(
-      this.value.split(string.value).map(string => Promise.resolve(new KopiString(string)))
+      this.value.split(string.value).map(string => new KopiString(string))
     );
   }
 

@@ -22,20 +22,20 @@ describe('Basic syntax', () => {
       new KopiBoolean(true),
       new KopiRange(new KopiNumber(1), new KopiNumber(5)),
       new KopiArray([
-        Promise.resolve(new KopiNumber(1)), Promise.resolve(new KopiNumber(2))
+        new KopiNumber(1), new KopiNumber(2)
       ])
     ]);
 
     var array = await interpret(`
-      [123, "abc", true, "a".."c"]
+      [123, "abc", true, "a".."c"] | toArray
     `) as KopiArray;
 
-    expect(await Promise.all(array.elements)).toEqual([
+    expect(array).toEqual(new KopiArray([
       new KopiNumber(123),
       new KopiString('abc'),
       new KopiBoolean(true),
       new KopiRange(new KopiString('a'), new KopiString('c')),
-    ]);
+    ]));
   });
 
   test('Async operations', async () => {

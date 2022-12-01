@@ -12,12 +12,19 @@ import KopiString from './KopiString';
 class KopiArray extends KopiValue {
   static readonly emptyValue = () => new KopiArray([]);
 
-  readonly elements: Promise<KopiValue>[];
+  elements: (KopiValue | Promise<KopiValue>)[];
+  allResolved: boolean;
 
-  constructor(elements: Promise<KopiValue>[]) {
+  constructor(elements: (KopiValue | Promise<KopiValue>)[]) {
     super();
 
     this.elements = elements;
+    this.allResolved = !elements.every(element => element instanceof Promise);
+
+    Promise.all(elements).then(resolvedElements => {
+      this.elements = resolvedElements;
+      this.allResolved = true;
+    });
   }
 
   override async toString() {
@@ -45,10 +52,10 @@ class KopiArray extends KopiValue {
   async apply(thisArg: KopiValue, [argument]: [KopiNumber]) {
     if (argument instanceof KopiArray) {
       const indices = argument;
-      const accum: Promise<KopiValue>[] = [];
+      const accum: (KopiValue | Promise<KopiValue>)[] = [];
 
       for (const index of indices.elements) {
-        const value = this.elements[(await index as KopiNumber).value] ?? Promise.resolve(KopiTuple.empty);
+        const value = this.elements[(await index as KopiNumber).value] ?? KopiTuple.empty;
 
         accum.push(value);
       }
@@ -81,7 +88,9 @@ class KopiArray extends KopiValue {
 
   // TODO: Can't be done with this.elements.includes() since Array stores promises
   // includes(value: KopiValue) {
-  //   return new KopiBoolean(false);
+  //   if (this.allResolved) {
+  //     return this.elements.includes(value)
+  //   }
   // }
 
   // TODO: Don't resolve promises for arguments, since they may not need to be
@@ -92,13 +101,13 @@ class KopiArray extends KopiValue {
         const elements = [...this.elements];
 
         const deleteCount = (index.to as KopiNumber).value - (index.from as KopiNumber).value + 1;
-        elements.splice((index.from as KopiNumber).value, deleteCount, Promise.resolve(value));
+        elements.splice((index.from as KopiNumber).value, deleteCount, value);
 
         return new KopiArray(elements);
       } else if (index instanceof KopiNumber) {
         const elements = [...this.elements];
 
-        elements[index.value] = Promise.resolve(value);
+        elements[index.value] = value;
 
         return new KopiArray(elements);
       }
@@ -158,7 +167,7 @@ class KopiArray extends KopiValue {
   }
 
   append(that: KopiValue) {
-    return new KopiArray(this.elements.concat([Promise.resolve(that)]));
+    return new KopiArray(this.elements.concat([that]));
   }
 
   async joinWith(separator: KopiString) {
