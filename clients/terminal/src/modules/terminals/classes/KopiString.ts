@@ -1,14 +1,14 @@
 import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from "../../shared";
 
 import { KopiEnumerable } from "../../shared";
-import Comparable from '../../operators/traits/KopiComparable';
-import KopiIterable from "../../operators/traits/KopiIterable";
+import Comparable from '../traits/KopiComparable';
+import KopiIterable from "../traits/KopiIterable";
 
 import KopiArray from "./KopiArray";
 import KopiNumber from "./KopiNumber";
 import KopiTuple from "./KopiTuple";
 import KopiBoolean from "./KopiBoolean";
-import { KopiRange } from "../../operators/classes";
+import KopiRange from "./KopiRange";
 import KopiFunction from "./KopiFunction";
 
 class KopiString extends KopiValue {

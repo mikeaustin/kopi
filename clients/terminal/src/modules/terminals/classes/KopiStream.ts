@@ -1,6 +1,6 @@
 import { addTraits, KopiCollection, KopiValue } from '../../shared';
 
-import KopiIterable from '../../operators/traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable';
 
 import KopiArray from './KopiArray';
 import KopiString from './KopiString';

@@ -1,7 +1,7 @@
-import { addTraits, KopiValue, KopiCollection, Context } from "../../shared";
-import { KopiApplicative, KopiEnumerable } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context } from '../../shared';
+import { KopiApplicative, KopiEnumerable } from '../../shared';
 
-import { KopiArray, KopiBoolean, KopiNumber } from '../../terminals/classes';
+import { KopiArray, KopiBoolean, KopiNumber } from '.';
 
 import KopiIterable from '../traits/KopiIterable';
 import Comparable from '../traits/KopiComparable';

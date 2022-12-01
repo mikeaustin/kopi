@@ -1,6 +1,6 @@
 import { addTraits, KopiValue } from "../../shared";
 import { KopiNumeric, KopiEquatable, KopiEnumerable } from "../../shared";
-import Comparable from '../../operators/traits/KopiComparable';
+import Comparable from '../traits/KopiComparable';
 
 import KopiString from './KopiString';
 import KopiBoolean from './KopiBoolean';

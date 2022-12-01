@@ -3,7 +3,7 @@ import { KopiArray } from '../../../modules/terminals/classes';
 
 import { Deferred } from '../../../modules/utils';
 
-import KopiIterable from '../../operators/traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable';
 
 class KopiSubject extends KopiValue {
   static emptyValue = () => new KopiArray([]);

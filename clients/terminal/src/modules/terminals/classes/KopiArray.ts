@@ -1,13 +1,13 @@
-import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from "../../shared";
+import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from '../../shared';
+
+import KopiIterable from '../traits/KopiIterable';
 
 import KopiNumber from './KopiNumber';
-
-import KopiIterable from '../../operators/traits/KopiIterable';
 import KopiBoolean from "./KopiBoolean";
-import { KopiRange } from "../../operators/classes";
-import KopiTuple from "./KopiTuple";
-import KopiFunction from "./KopiFunction";
-import KopiString from "./KopiString";
+import KopiRange from './KopiRange';
+import KopiTuple from './KopiTuple';
+import KopiFunction from './KopiFunction';
+import KopiString from './KopiString';
 
 class KopiArray extends KopiValue {
   static readonly emptyValue = () => new KopiArray([]);

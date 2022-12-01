@@ -1,8 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiNumber, KopiTuple, KopiString, KopiArray, KopiBoolean } from '../modules/terminals/classes';
-import { KopiRange } from '../modules/operators/classes';
+import { KopiNumber, KopiTuple, KopiString, KopiRange, KopiArray, KopiBoolean } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);

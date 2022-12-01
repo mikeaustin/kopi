@@ -1,6 +1,5 @@
 import { KopiValue, KopiNumeric, KopiApplicative, KopiTrait, Context } from '../shared';
-import { KopiTuple, KopiFunction, KopiBoolean } from '../terminals/classes';
-import { KopiRange } from './classes';
+import { KopiTuple, KopiFunction, KopiRange } from '../terminals/classes';
 
 import * as astNodes from './astNodes';
 import * as terminalAstNodes from '../terminals/astNodes';

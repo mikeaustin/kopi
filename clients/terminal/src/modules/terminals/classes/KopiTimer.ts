@@ -3,7 +3,7 @@ import { addTraits } from '../../../modules/shared';
 import { KopiValue } from '../../../modules/shared';
 import { KopiNumber } from '../../../modules/terminals/classes';
 
-import KopiIterable from '../../../modules/operators/traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable';
 
 import { Deferred } from '../../../modules/utils';
 

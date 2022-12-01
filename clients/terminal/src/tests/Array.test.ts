@@ -3,8 +3,6 @@ import * as parser from '../lib/parser';
 import { transform, evaluate, environment } from '../compiler';
 import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiTuple, KopiString } from '../modules/terminals/classes';
 
-import KopiIterable from '../modules/operators/traits/KopiIterable';
-
 async function interpret(source: string) {
   var ast = parser.parse(source);
 
