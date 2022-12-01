@@ -1,7 +1,7 @@
 import * as parser from '../lib/parser';
 
 import { transform, evaluate, environment } from '../compiler';
-import { KopiBoolean, KopiNumber } from '../modules/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple } from '../modules/terminals/classes';
 
 async function interpret(source: string) {
   var ast = parser.parse(source);
@@ -10,17 +10,31 @@ async function interpret(source: string) {
 }
 
 test('User Type', async () => {
-  var number = await interpret(`
+  var value = await interpret(`
+    Person = type (name: String, age: String)
+
+    Person (name: "Joe", age: 30)
+  `) as KopiTuple;
+
+  expect(await Promise.all(value.fields)).toEqual([
+    new KopiString("Joe"),
+    new KopiNumber(30)
+  ]);
+
+  expect(value.fieldNames).toEqual([
+    "name",
+    "age",
+  ]);
+
+  var string = await interpret(`
     Person = type (name: String, age: String)
 
     extend Person (
-      toString: () => this.name
+      toString: () => "Name: " ++ this.name ++ ", age: " ++ this.age
     )
 
-    person = Person (name: "Joe", age: 30)
+    Person (name: "Joe", age: 30) | toString
+  `) as KopiString;
 
-    person | toString
-  `) as KopiNumber;
-
-  console.log(number);
+  expect(string).toEqual(new KopiString("Name: Joe, age: 30"));
 });

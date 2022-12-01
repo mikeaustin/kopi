@@ -1,15 +1,14 @@
 /* eslint-disable no-extend-native */
 
-import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative, addTraits, Bindings } from './modules/shared';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative } from './modules/shared';
 
 import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple, KopiArray } from './modules/terminals/classes';
+import { KopiNumber, KopiType, KopiString, KopiFunction, KopiTuple, KopiCoroutine, KopiContext, KopiSubject, KopiTimer } from './modules/terminals/classes';
 
 import KopiStream from './modules/terminals/classes/KopiStream';
-import KopiIterable from './modules/operators/traits/KopiIterable';
 
 declare global {
   interface FunctionConstructor {
@@ -35,58 +34,6 @@ Function.traits = [KopiApplicative];
 
 //
 
-class Deferred {
-  constructor() {
-    const promise = new Promise<KopiValue>((resolve, reject) => {
-      const timeoutId = setTimeout(() => reject, Math.pow(2, 32) / 2 - 1);
-
-      (this as any).resolve = (value: KopiValue) => {
-        clearTimeout(timeoutId);
-
-        resolve(value);
-      };
-
-      (this as any).reject = reject;
-    });
-
-    (promise as any).resolve = (this as any).resolve;
-    (promise as any).reject = (this as any).reject;
-
-    return promise;
-  }
-}
-
-class KopiCoroutine extends KopiValue {
-  deferred: Deferred[];
-
-  constructor() {
-    super();
-
-    this.deferred = [new Deferred(), new Deferred()];
-  }
-
-  async yield(func: KopiFunction, context: Context) {
-    const data = await this.deferred[0] as KopiValue;
-    this.deferred[0] = new Deferred();
-
-    const value = await func.apply(KopiTuple.empty, [data, context]);
-
-    (this.deferred[1] as any).resolve(value);
-    this.deferred[1] = new Deferred();
-  }
-
-  async send(value: KopiValue) {
-    (this.deferred[0] as any).resolve(value);
-
-    const x = await this.deferred[1];
-    this.deferred[1] = new Deferred();
-
-    return x;
-  }
-}
-
-//
-
 class KopiLoop extends KopiValue {
   constructor(value: KopiValue) {
     super();
@@ -97,82 +44,6 @@ class KopiLoop extends KopiValue {
   value: KopiValue;
 }
 
-class KopiContext extends KopiValue {
-  constructor(value: KopiValue, bindValues: BindValues) {
-    super();
-
-    this.symbol = Symbol();
-    this.value = value;
-
-    bindValues({
-      [this.symbol]: value,
-    });
-  }
-
-  set(value: KopiValue, context: Context) {
-    const { bindValues } = context;
-
-    bindValues({
-      [this.symbol]: value,
-    });
-  }
-
-  get(value: KopiValue, context: Context) {
-    const { environment } = context;
-
-    return environment[this.symbol as keyof typeof environment];
-  }
-
-  symbol: symbol;
-  value: KopiValue;
-}
-
-class Observer extends KopiValue {
-  static emptyValue = () => new KopiArray([]);
-
-  promise: Deferred;
-
-  constructor(value: KopiValue) {
-    super();
-
-    this.promise = new Deferred();
-  }
-
-  set(value: KopiValue) {
-    console.log('Observer.set');
-    (this.promise as any).resolve(value);
-    this.promise = new Deferred();
-
-    return this;
-  }
-
-  async *[Symbol.asyncIterator]() {
-    while (true) {
-      yield this.promise;
-    }
-  }
-}
-
-addTraits([KopiIterable], Observer);
-
-class Timer extends KopiValue {
-  *[Symbol.asyncIterator]() {
-    let deferred = new Deferred();
-
-    setInterval(() => {
-      (deferred as any).resolve(new KopiNumber(Date.now()));
-
-      deferred = new Deferred();
-    }, 500);
-
-    for (; ;) {
-      yield deferred;
-    }
-  }
-}
-
-addTraits([KopiIterable], Timer);
-
 const environment: {
   [name: string]: KopiValue;
 } = {
@@ -181,11 +52,11 @@ const environment: {
   String: new KopiType(KopiString),
 
   Observer(value: KopiValue) {
-    return new Observer(value);
+    return new KopiSubject(value);
   },
 
   async timer() {
-    return new Timer();
+    return new KopiTimer();
   },
 
   async type(type: KopiTuple) {

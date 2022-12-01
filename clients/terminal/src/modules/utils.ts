@@ -1,3 +1,5 @@
+import { KopiValue } from '../modules/shared';
+
 const spaces = (level: number) => {
   return '  '.repeat(level);
 };
@@ -25,6 +27,28 @@ const inspect = (value: unknown, level: number = 0): string => {
   return `${value}`;
 };
 
+class Deferred {
+  constructor() {
+    const promise = new Promise<KopiValue>((resolve, reject) => {
+      const timeoutId = setTimeout(() => reject, Math.pow(2, 32) / 2 - 1);
+
+      (this as any).resolve = (value: KopiValue) => {
+        clearTimeout(timeoutId);
+
+        resolve(value);
+      };
+
+      (this as any).reject = reject;
+    });
+
+    (promise as any).resolve = (this as any).resolve;
+    (promise as any).reject = (this as any).reject;
+
+    return promise;
+  }
+}
+
 export {
   inspect,
+  Deferred,
 };

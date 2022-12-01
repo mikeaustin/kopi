@@ -7,3 +7,7 @@ export { default as KopiStream } from './KopiStream';
 export { default as KopiDict } from './KopiDict';
 export { default as KopiFunction } from './KopiFunction';
 export { default as KopiType } from './KopiType';
+export { default as KopiCoroutine } from './KopiCoroutine';
+export { default as KopiContext } from './KopiContext';
+export { default as KopiSubject } from './KopiSubject';
+export { default as KopiTimer } from './KopiTimer';

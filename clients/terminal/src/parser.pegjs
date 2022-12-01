@@ -46,7 +46,10 @@ PipeExpression
 ConcatenationExpression
   = head:EqualityExpression tail:(_ "++" _ ConcatenationExpression)? {
       return !tail ? head : {
-        type: 'OperatorExpression', operator: '++', leftExpression: head, rightExpression: tail[3]
+        type: 'OperatorExpression',
+        operator: '++',
+        leftExpression: head,
+        rightExpression: tail[3]
       };
     }
 
