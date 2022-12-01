@@ -1,4 +1,4 @@
-import { Context } from '../shared';
+import { Context, KopiValue } from '../shared';
 import { KopiNumber, KopiBoolean, KopiString, KopiArray, KopiRange } from './classes';
 
 import * as astNodes from './astNodes';
@@ -7,7 +7,7 @@ import KopiDict from './classes/KopiDict';
 async function RangeExpression(
   { from, to }: astNodes.RangeExpression,
   context: Context,
-) {
+): Promise<KopiValue> {
   const { evaluate, environment, bindValues } = context;
 
   return new KopiRange(
@@ -21,28 +21,28 @@ async function RangeExpression(
 async function NumericLiteral(
   { value }: astNodes.NumericLiteral,
   context: Context,
-) {
+): Promise<KopiValue> {
   return new KopiNumber(value);
 }
 
 async function BooleanLiteral(
   { value }: astNodes.BooleanLiteral,
   context: Context,
-) {
+): Promise<KopiValue> {
   return new KopiBoolean(value);
 }
 
 async function StringLiteral(
   { value }: astNodes.StringLiteral,
   context: Context,
-) {
+): Promise<KopiValue> {
   return new KopiString(value);
 }
 
 async function ArrayLiteral(
   { expressionElements }: astNodes.ArrayLiteral,
   context: Context,
-) {
+): Promise<KopiValue> {
   const { evaluate, environment, bindValues } = context;
 
   return new KopiArray(
@@ -53,7 +53,7 @@ async function ArrayLiteral(
 async function DictLiteral(
   { expressionEntries }: astNodes.DictLiteral,
   context: Context,
-) {
+): Promise<KopiValue> {
   const { evaluate, environment, bindValues } = context;
 
   return new KopiDict(
@@ -67,7 +67,7 @@ async function DictLiteral(
 async function Identifier(
   astNode: astNodes.Identifier,
   context: Context,
-) {
+): Promise<KopiValue> {
   const { environment } = context;
 
   const value = environment[astNode.name];
