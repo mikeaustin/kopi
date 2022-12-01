@@ -1,13 +1,6 @@
-import * as parser from '../lib/parser';
+import { interpret } from '../compiler';
 
-import { transform, evaluateAst, environment } from '../compiler';
-import { KopiNumber, KopiStream, KopiDict, KopiBoolean, KopiArray, KopiString } from '../modules/terminals/classes';
-
-async function interpret(source: string) {
-  var ast = parser.parse(source);
-
-  return evaluateAst(transform(ast), environment, () => { });
-}
+import { KopiNumber, KopiArray, KopiString } from '../modules/terminals/classes';
 
 test('Array', async () => {
   var array = await interpret(`

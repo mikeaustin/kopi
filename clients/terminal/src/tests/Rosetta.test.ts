@@ -1,13 +1,6 @@
-import * as parser from '../lib/parser';
+import { interpret } from '../compiler';
 
-import { transform, evaluateAst, environment } from '../compiler';
 import { KopiNumber, KopiString, KopiArray, KopiTuple } from '../modules/terminals/classes';
-
-async function interpret(source: string) {
-  let ast = parser.parse(source);
-
-  return evaluateAst(transform(ast), environment, () => { });
-}
 
 describe('Rosetta Code', () => {
 

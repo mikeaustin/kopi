@@ -3,58 +3,58 @@ import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment, BindV
 import * as astNodes from './astNodes';
 import * as visitors from './visitors';
 
-const transform = (next: Transform, transform: Transform) =>
+const transformAst = (next: Transform, transformAst: Transform) =>
   (rawAstNode: RawASTNode): ASTNode => {
     switch (rawAstNode.type) {
       case 'Assignment':
         return new astNodes.Assignment({
-          pattern: transform(rawAstNode.pattern),
-          expression: transform(rawAstNode.expression),
+          pattern: transformAst(rawAstNode.pattern),
+          expression: transformAst(rawAstNode.expression),
         } as astNodes.Assignment);
       case 'PipeExpression':
         return new astNodes.PipeExpression({
-          expression: transform(rawAstNode.expression),
+          expression: transformAst(rawAstNode.expression),
           methodName: rawAstNode.methodName,
-          argumentExpression: rawAstNode.argumentExpression ? transform(rawAstNode.argumentExpression) : rawAstNode.argumentExpression,
+          argumentExpression: rawAstNode.argumentExpression ? transformAst(rawAstNode.argumentExpression) : rawAstNode.argumentExpression,
         } as astNodes.PipeExpression);
       case 'BlockExpression':
         return new astNodes.BlockExpression({
-          statements: rawAstNode.statements.map((statement: ASTNode) => transform(statement)),
+          statements: rawAstNode.statements.map((statement: ASTNode) => transformAst(statement)),
         } as astNodes.BlockExpression);
       case 'OperatorExpression':
         return new astNodes.OperatorExpression({
           operator: rawAstNode.operator,
-          leftExpression: transform(rawAstNode.leftExpression),
-          rightExpression: transform(rawAstNode.rightExpression),
+          leftExpression: transformAst(rawAstNode.leftExpression),
+          rightExpression: transformAst(rawAstNode.rightExpression),
           location: rawAstNode.location,
         } as astNodes.OperatorExpression);
       case 'MemberExpression':
         return new astNodes.MemberExpression({
-          expression: transform(rawAstNode.expression),
+          expression: transformAst(rawAstNode.expression),
           member: rawAstNode.member,
         } as astNodes.MemberExpression);
       case 'UnaryExpression':
         return new astNodes.UnaryExpression({
           operator: rawAstNode.operator,
-          argumentExpression: transform(rawAstNode.argumentExpression),
+          argumentExpression: transformAst(rawAstNode.argumentExpression),
           location: rawAstNode.location,
         } as astNodes.UnaryExpression);
       case 'FunctionExpression':
         return new astNodes.FunctionExpression({
-          parameterPattern: transform(rawAstNode.parameterPattern),
-          bodyExpression: transform(rawAstNode.bodyExpression),
+          parameterPattern: transformAst(rawAstNode.parameterPattern),
+          bodyExpression: transformAst(rawAstNode.bodyExpression),
           location: rawAstNode.location,
         } as astNodes.FunctionExpression);
       case 'TupleExpression':
         return new astNodes.TupleExpression({
-          expressionFields: rawAstNode.expressionFields.map((expressionElement: ASTNode) => transform(expressionElement)),
+          expressionFields: rawAstNode.expressionFields.map((expressionElement: ASTNode) => transformAst(expressionElement)),
           expressionFieldNames: rawAstNode.expressionFieldNames,
           location: rawAstNode.location,
         } as astNodes.TupleExpression);
       case 'ApplyExpression':
         return new astNodes.ApplyExpression({
-          expression: transform(rawAstNode.expression),
-          argumentExpression: transform(rawAstNode.argumentExpression),
+          expression: transformAst(rawAstNode.expression),
+          argumentExpression: transformAst(rawAstNode.argumentExpression),
           location: rawAstNode.location,
         } as astNodes.ApplyExpression);
       default:
@@ -90,6 +90,6 @@ const evaluateAst = (next: Evaluate, evaluateAst: Evaluate) =>
   };
 
 export {
-  transform,
+  transformAst,
   evaluateAst,
 };

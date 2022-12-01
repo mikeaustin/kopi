@@ -1,5 +1,7 @@
 /* eslint-disable no-extend-native */
 
+import * as parser from './lib/parser';
+
 import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative } from './modules/shared';
 
 import * as operators from './modules/operators';
@@ -172,11 +174,11 @@ const environment: {
   }]])
 };
 
-const transform = (ast: RawASTNode) => {
-  return transformPipeline(ast);
+const transformAst = (ast: RawASTNode) => {
+  return transformAstPipeline(ast);
 };
 
-const transformPipeline = operators.transform(terminals.transform(transform), transform);
+const transformAstPipeline = operators.transformAst(terminals.transformAst(transformAst), transformAst);
 
 const evaluateAst = (ast: ASTNode, environment: Environment, bindValues: BindValues) => {
   return evaluateAstPipeline(ast, environment, bindValues);
@@ -184,17 +186,15 @@ const evaluateAst = (ast: ASTNode, environment: Environment, bindValues: BindVal
 
 const evaluateAstPipeline = operators.evaluateAst(terminals.evaluateAst(evaluateAst), evaluateAst);
 
-// const transformedAst = transformPipeline(ast);
+async function interpret(source: string) {
+  var ast = parser.parse(source);
 
-// const main = async () => {
-//   // console.log(inspect(transformedAst));
-//   // console.log(await (await evaluate(transformedAst, environment)).inspect());
-// };
-
-// main();
+  return evaluateAst(transformAst(ast), environment, () => { });
+}
 
 export {
-  transform,
-  evaluateAst,
   environment,
+  transformAst,
+  evaluateAst,
+  interpret,
 };

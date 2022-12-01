@@ -1,22 +1,19 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, EvaluateAst, BindValues } from '../shared';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, Evaluate, BindValues } from '../shared';
 import { inspect } from '../utils';
 
 import * as astNodes from './astNodes';
-import * as operatorsAstNodes from '../operators/astNodes';
-
 import * as visitors from './visitors';
-import * as operatorsVisitors from '../operators/visitors';
 
-// const transform2 = (transform: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
+// const transformAst2 = (transformAst: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
 //   if ()
 // };
 
-const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
+const transformAst = (transformAst: Transform) => (rawAstNode: RawASTNode) => {
   switch (rawAstNode.type) {
     case 'RangeExpression':
       return new astNodes.RangeExpression({
-        from: transform(rawAstNode.from),
-        to: transform(rawAstNode.to),
+        from: transformAst(rawAstNode.from),
+        to: transformAst(rawAstNode.to),
         location: rawAstNode.location,
       } as astNodes.RangeExpression);
     //
@@ -37,22 +34,22 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
       } as astNodes.StringLiteral);
     case 'ArrayLiteral':
       return new astNodes.ArrayLiteral({
-        expressionElements: rawAstNode.expressionElements.map((expression: ASTNode) => transform(expression)),
+        expressionElements: rawAstNode.expressionElements.map((expression: ASTNode) => transformAst(expression)),
         location: rawAstNode.location,
       } as astNodes.ArrayLiteral);
     case 'DictLiteral':
       return new astNodes.DictLiteral({
         expressionEntries: rawAstNode.expressionEntries.map(
           ([key, expression]: [key: any, expression: ASTNode]) => [
-            transform(key),
-            transform(expression)
+            transformAst(key),
+            transformAst(expression)
           ]
         ),
         location: rawAstNode.location,
       } as astNodes.DictLiteral);
     case 'AstLiteral':
       return new astNodes.AstLiteral({
-        value: transform(rawAstNode.value),
+        value: transformAst(rawAstNode.value),
         location: rawAstNode.location,
       } as astNodes.AstLiteral);
     case 'Identifier':
@@ -80,31 +77,31 @@ const transform = (transform: Transform) => (rawAstNode: RawASTNode) => {
         name: rawAstNode.name,
         location: rawAstNode.location,
         defaultExpression: rawAstNode.defaultExpression
-          ? transform(rawAstNode.defaultExpression)
+          ? transformAst(rawAstNode.defaultExpression)
           : rawAstNode.defaultExpression,
       } as astNodes.IdentifierPattern);
     case 'TuplePattern':
       return new astNodes.TuplePattern({
-        patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transform(pattern)),
+        patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transformAst(pattern)),
         location: rawAstNode.location,
       } as astNodes.TuplePattern);
     case 'ArrayPattern':
       return new astNodes.ArrayPattern({
-        patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transform(pattern)),
+        patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transformAst(pattern)),
         location: rawAstNode.location,
       } as astNodes.ArrayPattern);
     case 'FunctionPattern':
       return new astNodes.FunctionPattern({
         name: rawAstNode.name,
-        parameterPattern: transform(rawAstNode.parameterPattern),
+        parameterPattern: transformAst(rawAstNode.parameterPattern),
         location: rawAstNode.location,
       } as astNodes.FunctionPattern);
   }
 
-  throw new Error(`No transform found for '${inspect(rawAstNode)}'`);
+  throw new Error(`No transformAst found for '${inspect(rawAstNode)}'`);
 };
 
-const evaluateAst = (evaluateAst: EvaluateAst) =>
+const evaluateAst = (evaluateAst: Evaluate) =>
   async (astNode: ASTNode, environment: Environment, bindValues: BindValues): Promise<KopiValue> => {
     const context = { environment, evaluateAst, bindValues };
 
@@ -130,6 +127,6 @@ const evaluateAst = (evaluateAst: EvaluateAst) =>
   };
 
 export {
-  transform,
+  transformAst,
   evaluateAst,
 };
