@@ -256,35 +256,16 @@ Identifier "identifier"
 
 AssignmentPattern
   = AssignmentFunctionPattern
-  / AssignmentPrimaryPattern
+  / PrimaryPattern
 
 AssignmentFunctionPattern
-  = ident:Identifier _ parameterPattern:AssignmentPrimaryPattern {
+  = ident:Identifier _ parameterPattern:PrimaryPattern {
       return {
         type: 'FunctionPattern',
         name: ident.name,
         parameterPattern,
       };
     }
-
-AssignmentPrimaryPattern
-  = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
-    return head && tail.length === 0 ? head : {
-      type: 'TuplePattern',
-      patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
-        [...patterns, pattern], [head]),
-    }
-  }
-  / ArrayPattern
-  / AssignmentIdentifierPattern
-
-AssignmentIdentifierPattern
-  = identifier:Identifier {
-    return {
-      type: 'IdentifierPattern',
-      name: identifier.name,
-    };
-  }
 
 //
 
@@ -298,8 +279,6 @@ PatternAssignment
         ...pattern,
         defaultExpression,
       }
-
-      return pattern;
     }
 
 PrimaryPattern
@@ -341,11 +320,11 @@ BooleanLiteralPattern
     }
 
 IdentifierPattern
-  = identifier:Identifier defaultExpression:(_ "=" _ Expression)? {
+  = identifier:Identifier {
     return {
       type: 'IdentifierPattern',
       name: identifier.name,
-      defaultExpression: defaultExpression && defaultExpression[3],
+      defaultExpression: null,
     };
   }
 
@@ -354,6 +333,7 @@ ArrayPattern
     return {
       type: 'ArrayPattern',
       patterns: tail.reduce((patterns, [,,, pattern]) => [...patterns, pattern], [head]),
+      defaultExpression: null,
     }
   }
 
