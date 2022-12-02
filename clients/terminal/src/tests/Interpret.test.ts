@@ -28,8 +28,8 @@ test('Interpret', async () => {
 
     interpret (source) = {
       program = source | trim | split (String.newlineRegExp) | map (line) => {
-        [lineNo, command, value] = line | trim | splitOnLimit " " 2 | toArray
-        (lineNo: lineNo, command, value)
+        let ([lineNo, command, value] = line | trim | splitOnLimit " " 2 | toArray) =>
+          (lineNo: lineNo, command, value)
       } | toArray
 
       indexes = (0..99, program) | reduce (dict = {:}, index, statement) => {

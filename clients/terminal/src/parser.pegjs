@@ -289,7 +289,18 @@ AssignmentIdentifierPattern
 //
 
 Pattern
-  = PrimaryPattern
+  = PatternAssignment
+  / PrimaryPattern
+
+PatternAssignment
+  = pattern:PrimaryPattern _ "=" _ defaultExpression:Expression {
+      return {
+        ...pattern,
+        defaultExpression,
+      }
+
+      return pattern;
+    }
 
 PrimaryPattern
   = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {

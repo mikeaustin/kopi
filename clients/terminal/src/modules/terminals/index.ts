@@ -88,6 +88,9 @@ const transformAst = (transformAst: Transform) => (rawAstNode: RawASTNode) => {
     case 'ArrayPattern':
       return new astNodes.ArrayPattern({
         patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transformAst(pattern)),
+        defaultExpression: rawAstNode.defaultExpression
+          ? transformAst(rawAstNode.defaultExpression)
+          : rawAstNode.defaultExpression,
         location: rawAstNode.location,
       } as astNodes.ArrayPattern);
     case 'FunctionPattern':

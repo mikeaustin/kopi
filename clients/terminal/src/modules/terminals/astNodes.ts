@@ -223,23 +223,31 @@ class TuplePattern extends ASTPatternNode {
 
 class ArrayPattern extends ASTPatternNode {
   readonly patterns: ASTPatternNode[];
+  readonly defaultExpression: ASTNode | null;
 
-  constructor({ patterns, location }: ArrayPattern) {
+  constructor({ patterns, defaultExpression, location }: ArrayPattern) {
     super(location);
 
     this.patterns = patterns;
+    this.defaultExpression = defaultExpression;
   }
 
-  override async match(tuple: KopiArray, context: Context) {
-    if (tuple === undefined) {
+  override async match(array: KopiArray | KopiTuple, context: Context): Promise<{ [name: string]: KopiValue; } | undefined> {
+    const { environment, evaluateAst, bindValues } = context;
+
+    if (array === undefined) {
       throw new Error('ArrayPattern match(): value is not an array');
     }
 
-    try {
+    if (array === KopiTuple.empty) {
+      array = await evaluateAst((this as any).defaultExpression, environment, bindValues) as KopiArray;
+    }
+
+    if (array instanceof KopiArray) {
       let bindings = {} as Bindings;
 
       for (const [index, pattern] of this.patterns.entries()) {
-        let matches = await pattern.match(await tuple.elements[index] ?? KopiTuple.empty, context);
+        let matches = await pattern.match(await array.elements[index] ?? KopiTuple.empty, context);
 
         if (matches === undefined) {
           return undefined;
@@ -249,9 +257,9 @@ class ArrayPattern extends ASTPatternNode {
       }
 
       return bindings;
-    } catch (error) {
-      throw Error('ArrayPattern.match\n  ' + (error as Error).message);
     }
+
+    throw Error('ArrayPattern.match: error');
   }
 }
 
