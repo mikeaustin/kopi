@@ -186,10 +186,10 @@ class IdentifierPattern extends ASTPatternNode {
   }
 }
 
-class TuplePattern extends ASTPatternNode {
+class TupleLiteralPattern extends ASTPatternNode {
   readonly patterns: ASTPatternNode[];
 
-  constructor({ patterns, location }: TuplePattern) {
+  constructor({ patterns, location }: TupleLiteralPattern) {
     super(location);
 
     this.patterns = patterns;
@@ -197,7 +197,7 @@ class TuplePattern extends ASTPatternNode {
 
   override async match(tuple: KopiValue, context: Context) {
     if (tuple === undefined) {
-      throw new Error('TuplePattern match(): value is not a tuple');
+      throw new Error('TupleLiteralPattern match(): value is not a tuple');
     }
 
     try {
@@ -216,16 +216,16 @@ class TuplePattern extends ASTPatternNode {
 
       return bindings;
     } catch (error) {
-      throw Error('TuplePattern.match\n  ' + (error as Error).message);
+      throw Error('TupleLiteralPattern.match\n  ' + (error as Error).message);
     }
   }
 }
 
-class ArrayPattern extends ASTPatternNode {
+class ArrayLiteralPattern extends ASTPatternNode {
   readonly patterns: ASTPatternNode[];
   readonly defaultExpression: ASTNode | null;
 
-  constructor({ patterns, defaultExpression, location }: ArrayPattern) {
+  constructor({ patterns, defaultExpression, location }: ArrayLiteralPattern) {
     super(location);
 
     this.patterns = patterns;
@@ -236,7 +236,7 @@ class ArrayPattern extends ASTPatternNode {
     const { environment, evaluateAst, bindValues } = context;
 
     if (array === undefined) {
-      throw new Error('ArrayPattern match(): value is not an array');
+      throw new Error('ArrayLiteralPattern match(): value is not an array');
     }
 
     if (array === KopiTuple.empty) {
@@ -259,7 +259,7 @@ class ArrayPattern extends ASTPatternNode {
       return bindings;
     }
 
-    throw Error('ArrayPattern.match: error');
+    throw Error('ArrayLiteralPattern.match: error');
   }
 }
 
@@ -295,7 +295,7 @@ export {
   StringLiteralPattern,
   BooleanLiteralPattern,
   IdentifierPattern,
-  TuplePattern,
-  ArrayPattern,
+  TupleLiteralPattern,
+  ArrayLiteralPattern,
   FunctionPattern,
 };

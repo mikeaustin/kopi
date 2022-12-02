@@ -25,6 +25,10 @@ Assignment
 Expression
   = PipeExpression
 
+//
+// Expressions
+//
+
 PipeExpression
   = head:ConcatExpression tail:(_ "|" _ Identifier _ RangeExpression? (_ RangeExpression)*)* {
       return tail.reduce((expression, [, , , identifier, , argumentExpression, _arguments]) => {
@@ -111,7 +115,7 @@ RangeExpression
       return {
         type: 'RangeExpression',
         from,
-        to
+        to,
       };
     }
   / CalculatedMemberExpression
@@ -123,7 +127,7 @@ CalculatedMemberExpression
         expression,
         methodName: 'get',
         argumentExpression,
-        location: location()
+        location: location(),
       }), head);
     }
 
@@ -132,7 +136,7 @@ MemberExpression
       return tail.reduce((expression, [, member]) => ({
         type: 'MemberExpression',
         expression,
-        member: member.name ? member.name : member.value
+        member: member.name ? member.name : member.value,
       }), head);
     }
 
@@ -147,26 +151,33 @@ UnaryExpression
     }
 
 //
-// PrimaryExpression
+// Primaries
 //
 
 PrimaryExpression
-  = "(" __ fieldName:(Identifier ":")? _ head:Expression? tail:(_ (("," __) / __) (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
-      return head && !fieldName && tail.length === 0 ? head : {
+  = "(" _ ")" _ !"=>" {
+      return {
         type: 'TupleExpression',
-        expressionFields: !head ? [] : tail.reduce((expressionFields, [, , , , expressionField]) =>
+        expressionFields: [],
+        expressionFieldNames: [],
+      }
+    }
+  / "(" __ fieldName:(Identifier ":")? _ head:Expression tail:(_ (","? __) (Identifier ":")? _ Expression)* __ ")" _ !"=>" {
+      return !fieldName && tail.length === 0 ? head : {
+        type: 'TupleExpression',
+        expressionFields: tail.reduce((expressionFields, [, , , , expressionField]) =>
           [...expressionFields, expressionField], [head]),
         expressionFieldNames: tail.reduce((fieldNames, [, , fieldName]) =>
           [...fieldNames, fieldName && fieldName[0].name], [fieldName && fieldName[0].name]),
       }
     }
   / FunctionExpression
+  / BlockExpression
+  / BooleanLiteral
   / NumericLiteral
   / StringLiteral
-  / BooleanLiteral
   / ArrayLiteral
   / DictLiteral
-  / BlockExpression
   / AstLiteral
   / Identifier
 
@@ -179,33 +190,17 @@ FunctionExpression
       }
     }
 
-ArrayLiteral
-  = "[" __ head:Expression? tail:(_ (("," __) / __) _ Expression)* __ "]" _ !"=>" {
-      return {
-        type: 'ArrayLiteral',
-        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
-          [...expressionElements, expressionElement], [head]),
-      }
-    }
-
-DictLiteral
-  = "{" _ ":" _ "}" {
-      return {
-        type: 'DictLiteral',
-        expressionEntries: [],
-      }
-    }
-  / "{" __ key:PrimaryExpression ":" _ head:Expression tail:(_ (("," __) / __) PrimaryExpression ":" _ Expression)* __ "}" _ !"=>" {
-      return {
-        type: 'DictLiteral',
-        expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
-          [...expressionEntries, [key, expressionValue]], [[key, head]]),
-      }
-    }
-
 BlockExpression
   = "{" _ statements:Block _ "}" {
     return statements;
+  }
+
+BooleanLiteral
+  = value:("true" / "false") {
+    return {
+      type: 'BooleanLiteral',
+      value: value === 'true' ? true : false
+    }
   }
 
 NumericLiteral "number"
@@ -226,13 +221,30 @@ StringLiteral "string"
     };
   }
 
-BooleanLiteral
-  = value:("true" / "false") {
-    return {
-      type: 'BooleanLiteral',
-      value: value === 'true' ? true : false
+ArrayLiteral
+  = "[" __ head:Expression? tail:(_ (","? __) _ Expression)* __ "]" _ !"=>" {
+      return {
+        type: 'ArrayLiteral',
+        expressionElements: !head ? [] : tail.reduce((expressionElements, [, , , expressionElement]) =>
+          [...expressionElements, expressionElement], [head]),
+      }
     }
-  }
+
+DictLiteral
+  = "{" _ ":" _ "}" {
+      return {
+        type: 'DictLiteral',
+        expressionEntries: [],
+      }
+    }
+  / "{" __ key:PrimaryExpression ":" _ head:Expression tail:(_ (","? __) PrimaryExpression ":" _ Expression)* __ "}" _ !"=>" {
+      return {
+        type: 'DictLiteral',
+        expressionEntries: tail.reduce((expressionEntries, [, , key, , , expressionValue]) =>
+          [...expressionEntries, [key, expressionValue]], [[key, head]]),
+      }
+    }
+
 
 AstLiteral "ast-literal"
   = "'" expression:PrimaryExpression {
@@ -251,7 +263,7 @@ Identifier "identifier"
     }
 
 //
-// Pattern
+// Patterns
 //
 
 AssignmentPattern
@@ -284,16 +296,24 @@ PatternAssignment
 PrimaryPattern
   = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
     return head && tail.length === 0 ? head : {
-      type: 'TuplePattern',
+      type: 'TupleLiteralPattern',
       patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
         [...patterns, pattern], [head]),
     }
   }
-  / ArrayPattern
+  / BooleanLiteralPattern
   / NumericLiteralPattern
   / StringLiteralPattern
-  / BooleanLiteralPattern
+  / ArrayLiteralPattern
   / IdentifierPattern
+
+BooleanLiteralPattern
+  = boolean:BooleanLiteral {
+      return {
+        type: 'BooleanLiteralPattern',
+        value: boolean.value,
+      }
+    }
 
 NumericLiteralPattern
   = number:NumericLiteral {
@@ -311,13 +331,14 @@ StringLiteralPattern
       }
     }
 
-BooleanLiteralPattern
-  = boolean:BooleanLiteral {
-      return {
-        type: 'BooleanLiteralPattern',
-        value: boolean.value,
-      }
+ArrayLiteralPattern
+  = "[" _ head:Pattern tail:(_ "," _ Pattern)* _ "]" {
+    return {
+      type: 'ArrayLiteralPattern',
+      patterns: tail.reduce((patterns, [,,, pattern]) => [...patterns, pattern], [head]),
+      defaultExpression: null,
     }
+  }
 
 IdentifierPattern
   = identifier:Identifier {
@@ -326,15 +347,6 @@ IdentifierPattern
       name: identifier.name,
       defaultExpression: null,
     };
-  }
-
-ArrayPattern
-  = "[" _ head:Pattern tail:(_ "," _ Pattern)* _ "]" {
-    return {
-      type: 'ArrayPattern',
-      patterns: tail.reduce((patterns, [,,, pattern]) => [...patterns, pattern], [head]),
-      defaultExpression: null,
-    }
   }
 
 _ "space"

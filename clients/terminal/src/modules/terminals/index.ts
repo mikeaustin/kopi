@@ -80,19 +80,19 @@ const transformAst = (transformAst: Transform) => (rawAstNode: RawASTNode) => {
           ? transformAst(rawAstNode.defaultExpression)
           : rawAstNode.defaultExpression,
       } as astNodes.IdentifierPattern);
-    case 'TuplePattern':
-      return new astNodes.TuplePattern({
+    case 'TupleLiteralPattern':
+      return new astNodes.TupleLiteralPattern({
         patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transformAst(pattern)),
         location: rawAstNode.location,
-      } as astNodes.TuplePattern);
-    case 'ArrayPattern':
-      return new astNodes.ArrayPattern({
+      } as astNodes.TupleLiteralPattern);
+    case 'ArrayLiteralPattern':
+      return new astNodes.ArrayLiteralPattern({
         patterns: rawAstNode.patterns.map((pattern: ASTPatternNode) => transformAst(pattern)),
         defaultExpression: rawAstNode.defaultExpression
           ? transformAst(rawAstNode.defaultExpression)
           : rawAstNode.defaultExpression,
         location: rawAstNode.location,
-      } as astNodes.ArrayPattern);
+      } as astNodes.ArrayLiteralPattern);
     case 'FunctionPattern':
       return new astNodes.FunctionPattern({
         name: rawAstNode.name,
