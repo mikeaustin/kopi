@@ -39,9 +39,7 @@ describe('Rosetta Code', () => {
     var tuple = await interpret(`
       e1 = 1..17 | reduce ((e = 1, f = 1), i) =>
         let (f = f * i) => (e + 1 / f, f)
-  
-      print e1.0
-  
+
       e2 = let (i = 1, f = 1, e = 1) => {
         f = f * i
         e = e + 1 / f
@@ -51,8 +49,6 @@ describe('Rosetta Code', () => {
           _    => loop (i + 1, f, e)
         )
       }
-  
-      print e2
   
       (e1.0, e2)
     `) as KopiTuple;

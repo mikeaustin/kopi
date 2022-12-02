@@ -7,7 +7,24 @@ import KopiBoolean from './KopiBoolean';
 import KopiTuple from './KopiTuple';
 
 class KopiNumber extends KopiValue {
+  static readonly PI: KopiNumber = new KopiNumber(Math.PI);
+  static readonly E: KopiNumber = new KopiNumber(Math.E);
+
+  static async inspect() {
+    return `Number`;
+  }
+
+  static from(value: KopiString) {
+    if (value instanceof KopiString) {
+      return new KopiNumber(Number(value.value));
+    }
+  }
+
+  //
+
   readonly value: number;
+
+  //
 
   constructor(value: number) {
     super();

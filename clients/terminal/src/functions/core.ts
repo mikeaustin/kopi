@@ -1,6 +1,6 @@
 import { Context, Extensions, KopiValue } from '../modules/shared';
 
-import { KopiContext, KopiCoroutine, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple, KopiType } from '../modules/terminals/classes';
+import { KopiContext, KopiCoroutine, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
 
 class KopiLoop extends KopiValue {
   constructor(value: KopiValue) {
@@ -58,28 +58,30 @@ async function kopi_loop(value: KopiValue) {
 
 async function kopi_type(type: KopiTuple) {
   const _constructor = class extends (type as any).constructor {
-    constructor(tuple: KopiTuple) {
-      super(tuple.fields, tuple.fieldNames);
-      // Add copy constructor
+    static async apply(
+      thisArg: KopiValue,
+      [tuple, context]: [KopiTuple, Context]
+    ): Promise<KopiValue> {
+      return new (_constructor as unknown as typeof KopiTuple)(tuple._fields, tuple.fieldNames);
     }
   };
 
   Object.defineProperty(_constructor, 'name', { value: 'Custom' });
 
-  return new KopiType(_constructor);
+  return _constructor;
 }
 
-async function kopi_extend(type: KopiType, context: Context) {
+async function kopi_extend(type: Function, context: Context) {
   const extensions = (context.environment._extensions as Extensions);
 
   return async (methods: KopiTuple) => {
     const newMethods = await methods.fields.reduce(async (newMethods, method, index) => ({
       ...await newMethods,
       [methods.fieldNames[index] ?? 'invalid']: await method,
-    }), extensions.map.get(type._constructor) ?? {});
+    }), extensions.map.get(type) ?? {});
 
     context.bindValues({
-      _extensions: new Extensions([...extensions.map, [type._constructor, newMethods]])
+      _extensions: new Extensions([...extensions.map, [type, newMethods]])
     });
   };
 }

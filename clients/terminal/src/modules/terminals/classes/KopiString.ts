@@ -15,11 +15,19 @@ class KopiString extends KopiValue {
   static readonly emptyValue = () => new KopiString('');
   static readonly newlineRegExp = new KopiString(/\n/ as any);
 
+  static async inspect() {
+    return `String`;
+  }
+
+  //
+
   readonly value: string;
 
   // static [Symbol.hasInstance](instance: KopiStringWithoutIterator) {
   //   return instance instanceof KopiString;
   // }
+
+  //
 
   constructor(value: string, withIterator = true) {
     super();
@@ -38,7 +46,7 @@ class KopiString extends KopiValue {
   }
 
   override async inspect() {
-    return `"${this.toString()}"`;
+    return `"${await this.toString()}"`;
   }
 
   override async toJS() {

@@ -8,7 +8,7 @@ import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiType, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
+import { KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
 
 import * as core from './functions/core';
 
@@ -41,7 +41,8 @@ const environment: {
 } = {
   x: new KopiNumber(3),
 
-  String: new KopiType(KopiString),
+  String: KopiString,
+  Number: KopiNumber,
 
   Observer(value: KopiValue) {
     return new KopiSubject(value);

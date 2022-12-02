@@ -20,7 +20,8 @@ class KopiType extends KopiValue {
     thisArg: KopiValue,
     [argument, context]: [KopiValue, Context]
   ): Promise<KopiValue> {
-    return new this._constructor(argument);
+    return this._constructor.create(argument);
+    // return new this._constructor(argument);
   }
 }
 

@@ -1,6 +1,6 @@
 import { interpret } from '../compiler';
 
-import { KopiNumber, KopiDict, KopiBoolean } from '../modules/terminals/classes';
+import { KopiNumber, KopiDict, KopiBoolean, KopiString } from '../modules/terminals/classes';
 
 test('Dict', async () => {
   var number = await interpret(`
@@ -44,13 +44,20 @@ test('Dict', async () => {
     }
   `) as KopiDict;
 
-  console.log(await dict.inspect());
+  expect(dict).toEqual(new KopiDict([
+    [new KopiString('a'), Promise.resolve(new KopiNumber(3))],
+    [new KopiString('b'), Promise.resolve(new KopiNumber(2))],
+    [new KopiString('c'), Promise.resolve(new KopiNumber(1))],
+  ]));
 
   var dict = await interpret(`
     { "a": 1, "b": 2 } | map (k, v) => (k, v + 1) | toDict
   `) as KopiDict;
 
-  console.log(await dict.inspect());
+  expect(dict).toEqual(new KopiDict([
+    [new KopiString('a'), Promise.resolve(new KopiNumber(2))],
+    [new KopiString('b'), Promise.resolve(new KopiNumber(3))],
+  ]));
 
   var dict = await interpret(`
     (1..3, "a".."z") | reduce (dict = {:}, n, c) => {
@@ -58,5 +65,9 @@ test('Dict', async () => {
     }
   `) as KopiDict;
 
-  console.log(await dict.inspect());
+  expect(dict).toEqual(new KopiDict([
+    [new KopiString('a'), Promise.resolve(new KopiNumber(1))],
+    [new KopiString('b'), Promise.resolve(new KopiNumber(2))],
+    [new KopiString('c'), Promise.resolve(new KopiNumber(3))],
+  ]));
 });

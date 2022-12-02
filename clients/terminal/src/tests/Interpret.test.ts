@@ -4,6 +4,10 @@ import { KopiString } from '../modules/terminals/classes';
 
 test('Interpret', async () => {
   var string = await interpret(`
+    # extend String (
+    #   print: () => ()
+    # )
+
     incrementIndex = index => index + 1
     setIndex = index => () => index
 
@@ -23,7 +27,7 @@ test('Interpret', async () => {
     )
 
     interpret (source) = {
-      program = source | trim | split (String._constructor.newlineRegExp) | map (line) => {
+      program = source | trim | split (String.newlineRegExp) | map (line) => {
         [lineNo, command, value] = line | trim | splitOnLimit " " 2 | toArray
         (lineNo: lineNo, command, value)
       } | toArray
@@ -50,5 +54,5 @@ test('Interpret', async () => {
     interpret source
   `) as KopiString;
 
-  console.log(string);
+  expect(string).toEqual(new KopiString('Done'));
 });
