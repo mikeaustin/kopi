@@ -1,6 +1,6 @@
 import { Context, Extensions, KopiValue } from '../modules/shared';
 
-import { KopiContext, KopiCoroutine, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
+import { KopiContext, KopiCoroutine, KopiEnum, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
 
 class KopiLoop extends KopiValue {
   constructor(value: KopiValue) {
@@ -71,6 +71,10 @@ async function kopi_type(type: KopiTuple) {
   return _constructor;
 }
 
+async function kopi_enum(tuple: KopiTuple) {
+  return new KopiEnum(await Promise.all(tuple.fields), tuple.fieldNames);
+}
+
 async function kopi_extend(type: Function, context: Context) {
   const extensions = (context.environment._extensions as Extensions);
 
@@ -129,6 +133,7 @@ export {
   kopi_loop,
 
   kopi_type,
+  kopi_enum,
   kopi_extend,
 
   kopi_iterate,

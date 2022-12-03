@@ -56,6 +56,7 @@ const environment: {
   loop: core.kopi_loop,
 
   type: core.kopi_type,
+  enum: core.kopi_enum,
   extend: core.kopi_extend,
 
   fetch: core.kopi_fetch,

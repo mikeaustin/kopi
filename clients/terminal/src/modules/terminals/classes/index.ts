@@ -11,3 +11,4 @@ export { default as KopiCoroutine } from './KopiCoroutine';
 export { default as KopiContext } from './KopiContext';
 export { default as KopiSubject } from './KopiSubject';
 export { default as KopiTimer } from './KopiTimer';
+export { default as KopiEnum } from './KopiEnum';
