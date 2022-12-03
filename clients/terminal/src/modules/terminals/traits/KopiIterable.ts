@@ -321,6 +321,15 @@ abstract class KopiIterable extends KopiTrait {
     return new KopiStream(generator);
   }
 
+  async sum() {
+    let total = 0;
+
+    for await (const value of this) {
+      total += (value as KopiNumber).value;
+    }
+
+    return new KopiNumber(total);
+  }
 }
 
 export default KopiIterable;

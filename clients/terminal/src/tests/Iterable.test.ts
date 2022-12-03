@@ -283,3 +283,13 @@ describe('Splitting', () => {
     ]));
   });
 });
+
+describe('Other', () => {
+  test('sum', async () => {
+    var number = await interpret(`
+      1..5 | sum
+    `);
+
+    expect(number).toEqual(new KopiNumber(15));
+  });
+});
