@@ -79,9 +79,9 @@ test('Map and filter', async () => {
     new KopiNumber(9),
   ]));
 
-  var stream = await interpret(
+  var array = await interpret(
     `1..1000000000 | map (n) => (n * n) | take 3 | toArray
-  `) as KopiStream;
+  `) as KopiArray;
 
   expect(array).toEqual(new KopiArray([
     new KopiNumber(1),
@@ -100,6 +100,16 @@ test('Map and filter', async () => {
   `) as KopiNumber;
 
   expect(number.value).toEqual(120);
+
+  var array = await interpret(`
+    1..3 | scan (a = 1, n) => a * n | toArray
+  `) as KopiArray;
+
+  expect(array).toEqual(new KopiArray([
+    new KopiNumber(1),
+    new KopiNumber(2),
+    new KopiNumber(6),
+  ]));
 
   var boolean = await interpret(`
     1..5 | includes 3

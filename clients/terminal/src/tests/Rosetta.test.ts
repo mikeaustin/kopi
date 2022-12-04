@@ -37,7 +37,7 @@ describe('Rosetta Code', () => {
 
   test('Calculating E', async () => {
     var tuple = await interpret(`
-      e1 = 1..17 | reduce ((e = 1, f = 1), i) =>
+      e1 = 1..20 | reduce ((e = 1, f = 1), i) =>
         let (f = f * i) => (e + 1 / f, f)
 
       e2 = let (i = 1, f = 1, e = 1) => {
@@ -45,7 +45,7 @@ describe('Rosetta Code', () => {
         e = e + 1 / f
 
         match i (
-          17 => e
+          20 => e
           _    => loop (i + 1, f, e)
         )
       }
@@ -55,17 +55,25 @@ describe('Rosetta Code', () => {
         n => n * factorial (n - 1)
       )
 
-      e3 = 0..17 | map (i) => 1 / factorial i | sum
+      e3 = 0..20 | map (n) => 1 / factorial n | sum
 
-      (e1.0, e2, e3)
+      factorial = let (
+        cache = [1] ++ (1..20 | scan (n = 1, i) => n * i | toArray)
+      ) => {
+        (n) => cache.(n)
+      }
+
+      e4 = 0..20 | map (i) => 1 / factorial i | sum
+
+      (e1.0, e2, e3, e4)
     `) as KopiTuple;
 
-
-    const fields = await Promise.all(tuple.fields) as [KopiNumber, KopiNumber, KopiNumber];
+    const fields = await Promise.all(tuple.fields) as [KopiNumber, KopiNumber, KopiNumber, KopiNumber];
 
     expect(fields[0].value).toBeCloseTo(2.7182818284590455);
     expect(fields[1].value).toBeCloseTo(2.7182818284590455);
     expect(fields[2].value).toBeCloseTo(2.7182818284590455);
+    expect(fields[3].value).toBeCloseTo(2.7182818284590455);
   });
 
 });

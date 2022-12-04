@@ -52,6 +52,23 @@ abstract class KopiIterable extends KopiTrait {
     return accum;
   }
 
+  async scan(func: KopiFunction, context: Context): Promise<KopiValue> {
+    let accum: Promise<KopiValue> = Promise.resolve(KopiTuple.empty);
+
+    const iter = this[Symbol.asyncIterator]();
+    let result = iter.next();
+
+    const generator = async function* (this: KopiIterable) {
+      while (!(await result).done) {
+        yield accum = func.apply(KopiTuple.empty, [new KopiTuple([accum, (await result).value]), context]);
+
+        result = iter.next();
+      }
+    }.apply(this);
+
+    return new KopiStream(generator);
+  }
+
   async each(func: KopiFunction, context: Context): Promise<KopiValue> {
     for await (const value of this) {
       func.apply(KopiTuple.empty, [value, context]);

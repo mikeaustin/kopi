@@ -49,6 +49,10 @@ class KopiArray extends KopiValue {
     return new KopiNumber(this.elements.length);
   }
 
+  '++'(that: KopiArray) {
+    return new KopiArray(this.elements.concat(that.elements));
+  }
+
   async apply(thisArg: KopiValue, [argument]: [KopiNumber]) {
     if (argument instanceof KopiArray) {
       const indices = argument;

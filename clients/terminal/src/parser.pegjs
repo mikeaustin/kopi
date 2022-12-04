@@ -294,7 +294,7 @@ PatternAssignment
     }
 
 PrimaryPattern
-  = "(" head:Pattern? tail:(_ "," _ Pattern)* ")" {
+  = "(" __ head:Pattern? tail:(_ "," _ Pattern)* __ ")" {
     return head && tail.length === 0 ? head : {
       type: 'TupleLiteralPattern',
       patterns: !head ? [] : tail.reduce((patterns, [, , , pattern]) =>
