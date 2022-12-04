@@ -46,7 +46,7 @@ describe('Rosetta Code', () => {
 
         match i (
           20 => e
-          _    => loop (i + 1, f, e)
+          _  => loop (i + 1, f, e)
         )
       }
 
