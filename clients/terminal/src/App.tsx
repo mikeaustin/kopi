@@ -60,12 +60,14 @@ import './compiler';
 //
 
 function HistoryLine({ type, output }: { type: 'input' | 'output', output: string; }) {
-  const icon = type === 'input' ? 'chevron-right' : 'chevron-left';
-
   return (
     <View horizontal align="left">
-      <Icon size="xs" icon={icon} style={{ marginLeft: -5, marginTop: -5 }} />
-      <Spacer size="xsmall" />
+      {type === 'input' && (
+        <>
+          <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4, marginTop: -5 }} />
+          <Spacer size="xsmall" />
+        </>
+      )}
       <Text style={{ padding: '4px 0', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>
         {output}
       </Text>
@@ -112,7 +114,7 @@ function App() {
       <Spacer size="xsmall" />
       <View horizontal align="left">
         {/* <Text style={{ fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>&gt;</Text> */}
-        <Icon size="xs" icon="chevron-right" style={{ marginLeft: -5, marginTop: -5 }} />
+        <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4, marginTop: -5 }} />
         <Spacer size="xsmall" />
         <input ref={inputElementRef} value={line} style={{ flex: 1, border: 0, padding: 0, outline: 'none', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace', fontSize: 14, lineHeight: 1, marginTop: -4, marginBottom: -4, background: 'transparent' }} onKeyDown={handleInputKeyDown} onChange={handleInputChange} />
       </View>
