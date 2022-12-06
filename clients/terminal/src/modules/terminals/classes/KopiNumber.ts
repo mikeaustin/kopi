@@ -10,6 +10,7 @@ class KopiNumber extends KopiValue {
   static readonly PI: KopiNumber = new KopiNumber(Math.PI);
   static readonly E: KopiNumber = new KopiNumber(Math.E);
 
+  // @ts-ignore
   static async inspect() {
     return `Number`;
   }

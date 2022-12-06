@@ -1,6 +1,6 @@
 import { interpret } from '../compiler';
 
-import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiStream, KopiBoolean } from '../modules/terminals/classes';
+import { KopiNumber, KopiString, KopiTuple, KopiArray, KopiBoolean } from '../modules/terminals/classes';
 
 test('Range', async () => {
   var array = await interpret(`
@@ -79,8 +79,8 @@ test('Map and filter', async () => {
     new KopiNumber(9),
   ]));
 
-  var array = await interpret(
-    `1..1000000000 | map (n) => (n * n) | take 3 | toArray
+  var array = await interpret(`
+    1..1000000000 | map (n) => (n * n) | take 3 | toArray
   `) as KopiArray;
 
   expect(array).toEqual(new KopiArray([

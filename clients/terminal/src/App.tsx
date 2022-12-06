@@ -1,9 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-import * as parser from './lib/parser';
-// import * as core from './modules/core';
-// import * as math from './modules/operators';
-// import * as terminals from './modules/terminals';
+import { interpret } from './compiler';
 
 import { View, Text, Icon, Spacer } from 'core';
 
@@ -62,8 +59,22 @@ import './compiler';
 
 //
 
+function HistoryLine({ type, output }: { type: 'input' | 'output', output: string; }) {
+  const icon = type === 'input' ? 'chevron-right' : 'chevron-left';
+
+  return (
+    <View horizontal align="left">
+      <Icon size="xs" icon={icon} style={{ marginLeft: -5, marginTop: -5 }} />
+      <Spacer size="xsmall" />
+      <Text style={{ padding: '4px 0', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>
+        {output}
+      </Text>
+    </View>
+  );
+}
+
 function App() {
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<{ type: 'input' | 'output', line: string; }[]>([]);
   const [line, setLine] = useState<string>('');
 
   const inputElementRef = useRef<HTMLInputElement>(null);
@@ -82,20 +93,20 @@ function App() {
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      // const ast = parser.parse(line.trim()) as AST;
-      // const value = await evaluate(ast, {})?.inspect();
-
-      setHistory(history => [...history, '> ' + line + ' ']);
-      // setHistory(history => [...history, value + ' ']);
+      setHistory(history => [...history, { type: 'input', line: line + ' ' }]);
       setLine('');
+
+      const value = await (await interpret(line)).inspect();
+
+      setHistory(history => [...history, { type: 'output', line: value + ' ' }]);
     }
   };
 
   return (
     <View padding="small" fillColor="white" className="App" style={{ overflowY: 'auto' }} onPointerDown={handleTerminalPointerDown}>
       <View flex style={{ justifyContent: 'flex-end' }}>
-        {history.map(line => (
-          <Text style={{ padding: '4px 0', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>{line}</Text>
+        {history.map((line, index) => (
+          <HistoryLine key={index} type={line.type} output={line.line} />
         ))}
       </View>
       <Spacer size="xsmall" />

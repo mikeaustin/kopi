@@ -15,6 +15,7 @@ class KopiString extends KopiValue {
   static readonly emptyValue = () => new KopiString('');
   static readonly newlineRegExp = new KopiString(/\n/ as any);
 
+  // @ts-ignore
   static async inspect() {
     return `String`;
   }

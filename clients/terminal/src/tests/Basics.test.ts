@@ -156,15 +156,21 @@ describe('Basic syntax', () => {
   });
 
   test('Pipe', async () => {
-    var string = await interpret(`"foo" | capitalize`) as KopiString;
+    var string = await interpret(`
+      "foo" | capitalize
+    `) as KopiString;
 
     expect(string.value).toEqual('FOO');
 
-    string = await interpret(`3.14149 | toFixed 2`) as KopiString;
+    string = await interpret(`
+      3.14149 | toFixed 2
+    `) as KopiString;
 
     expect(string.value).toEqual('3.14');
 
-    var number = await interpret(`1 | test 2 3`) as KopiNumber;
+    var number = await interpret(`
+      1 | test 2 3
+    `) as KopiNumber;
 
     expect(number.value).toEqual(9);
   });
