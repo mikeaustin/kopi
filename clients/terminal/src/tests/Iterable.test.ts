@@ -33,7 +33,7 @@ test('Range', async () => {
   ]));
 
   array = await interpret(`
-    "a".."c" | cycle | take 9 | toArray
+    "a".."c" | cycle | take 7 | toArray
   `) as KopiArray;
 
   expect(array).toEqual(new KopiArray([
@@ -44,8 +44,6 @@ test('Range', async () => {
     new KopiString("b"),
     new KopiString("c"),
     new KopiString("a"),
-    new KopiString("b"),
-    new KopiString("c"),
   ]));
 });
 
