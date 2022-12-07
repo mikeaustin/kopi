@@ -1,6 +1,18 @@
+import React, { useRef, useState } from 'react';
+
 import { Context, Extensions, KopiValue } from '../modules/shared';
 
 import { KopiContext, KopiCoroutine, KopiEnum, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
+
+class KopiElement extends KopiValue {
+  element: React.ReactNode;
+
+  constructor(element: React.ReactNode) {
+    super();
+
+    this.element = element;
+  }
+}
 
 class KopiLoop extends KopiValue {
   constructor(value: KopiValue) {
@@ -124,6 +136,12 @@ async function kopi_spawn(func: KopiFunction, context: Context) {
   return coroutine;
 }
 
+async function kopi_image(url: KopiString) {
+  return new KopiElement(
+    React.createElement('img', { src: url.value })
+  );
+}
+
 export {
   kopi_print,
   kopi_match,
@@ -140,4 +158,5 @@ export {
   kopi_fetch,
   kopi_context,
   kopi_spawn,
+  kopi_image,
 };

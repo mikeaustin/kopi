@@ -64,6 +64,7 @@ const environment: {
   iterate: core.kopi_iterate,
   context: core.kopi_context,
   spawn: core.kopi_spawn,
+  image: core.kopi_image,
 
   async timer(msec: KopiNumber) {
     return new KopiTimer(msec.value);
