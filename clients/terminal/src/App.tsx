@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { interpret } from './compiler';
 
@@ -25,6 +25,7 @@ function App() {
   const [history, setHistory] = useState<{ type: 'input' | 'output', line: React.ReactNode; }[]>([]);
   const [line, setLine] = useState<string>('');
 
+  const appElementRef = useRef<HTMLDivElement>(null);
   const inputElementRef = useRef<HTMLInputElement>(null);
 
   const handleTerminalPointerDown = () => {
@@ -58,8 +59,16 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (appElementRef.current) {
+      appElementRef.current.scrollTop = appElementRef.current.scrollHeight - appElementRef.current.clientHeight;
+
+      console.log(appElementRef.current.scrollTop, appElementRef.current.scrollHeight - appElementRef.current.clientHeight);
+    }
+  }, [history]);
+
   return (
-    <View padding="small" fillColor="white" className="App" style={{ overflowY: 'auto' }} onPointerDown={handleTerminalPointerDown}>
+    <View ref={appElementRef} padding="small" fillColor="white" className="App" style={{ overflowY: 'auto' }} onPointerDown={handleTerminalPointerDown}>
       <View flex style={{ justifyContent: 'flex-end' }}>
         {history.map((line, index) => (
           <HistoryLine key={index} type={line.type} output={line.line} />

@@ -8,9 +8,34 @@ import * as operators from './modules/operators';
 import * as terminals from './modules/terminals';
 
 import { KopiValue, Extensions } from './modules/shared';
-import { KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
+import { KopiArray, KopiElement, KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
 
 import * as core from './functions/core';
+import React from 'react';
+
+class KopiChart extends KopiElement {
+  // @ts-ignore
+  static async inspect() {
+    return `Chart`;
+  }
+
+  // @ts-ignore
+  static apply(thisArg: KopiValue, data: KopiArray) {
+    console.log('here');
+
+    return new KopiChart(data);
+  }
+
+  data: KopiArray;
+
+  constructor(data: KopiArray) {
+    super(React.createElement('svg', { height: 100 }, [
+      React.createElement('circle', { cx: 50, cy: 50, r: 50 })
+    ]));
+
+    this.data = data;
+  }
+}
 
 declare global {
   interface FunctionConstructor {
@@ -43,6 +68,7 @@ const environment: {
 
   String: KopiString,
   Number: KopiNumber,
+  Chart: KopiChart,
 
   Observer(value: KopiValue) {
     return new KopiSubject(value);

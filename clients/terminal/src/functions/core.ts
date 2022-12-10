@@ -2,17 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import { Context, Extensions, KopiValue } from '../modules/shared';
 
-import { KopiContext, KopiCoroutine, KopiEnum, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
-
-class KopiElement extends KopiValue {
-  element: React.ReactNode;
-
-  constructor(element: React.ReactNode) {
-    super();
-
-    this.element = element;
-  }
-}
+import { KopiContext, KopiCoroutine, KopiElement, KopiEnum, KopiFunction, KopiNumber, KopiStream, KopiString, KopiTuple } from '../modules/terminals/classes';
 
 class KopiLoop extends KopiValue {
   constructor(value: KopiValue) {
