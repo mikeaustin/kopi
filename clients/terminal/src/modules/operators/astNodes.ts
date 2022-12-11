@@ -1,4 +1,5 @@
-import { ASTNode, ASTPatternNode, KopiValue } from '../shared';
+import { evaluateAst } from '.';
+import { ASTNode, ASTPatternNode, Context, KopiApplicative, KopiTrait, KopiValue } from '../shared';
 import { Identifier } from '../terminals/astNodes';
 
 class Assignment extends ASTNode {
@@ -88,6 +89,8 @@ class TupleExpression extends ASTNode {
 }
 
 class ApplyExpression extends ASTNode {
+  static override readonly traits: KopiTrait[] = [KopiApplicative];
+
   readonly expression: ASTNode;
   readonly argumentExpression: ASTNode;
 
@@ -98,9 +101,13 @@ class ApplyExpression extends ASTNode {
     this.argumentExpression = argumentExpression;
   }
 
-  async apply(thisArg: KopiValue, [argument]: [KopiValue]): Promise<KopiValue> {
-    // TODO
-    return (argument as any)[(this.expression as Identifier).name]();
+  async apply(thisArg: KopiValue, [argument, context]: [KopiValue, Context]): Promise<KopiValue> {
+    const { environment, evaluateAst, bindValues } = context;
+
+    const identifier = this.expression as Identifier;
+    const argumentValue = await evaluateAst(this.argumentExpression, environment, bindValues);
+
+    return (argument as any)[identifier.name].apply(argument, [argumentValue, context]);
   }
 }
 

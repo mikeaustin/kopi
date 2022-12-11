@@ -1,6 +1,6 @@
 import { interpret } from '../compiler';
 
-import { KopiBoolean, KopiString } from '../modules/terminals/classes';
+import { KopiArray, KopiBoolean, KopiString } from '../modules/terminals/classes';
 
 test('Testing', async () => {
   var string = await interpret(`
@@ -8,6 +8,16 @@ test('Testing', async () => {
   `) as KopiString;
 
   expect(string).toEqual(new KopiString('foobar'));
+
+  var string = await interpret(`
+    1..3 | map '(toFixed 2) | toArray
+  `) as KopiString;
+
+  expect(string).toEqual(new KopiArray([
+    new KopiString('1.00'),
+    new KopiString('2.00'),
+    new KopiString('3.00'),
+  ]));
 
   var boolean = await interpret(`
     (1, "2", [true, 'bar, 1..5]) == (1, "2", [true, 'bar, 1..5])
