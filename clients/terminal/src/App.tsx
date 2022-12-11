@@ -8,15 +8,19 @@ import './App.css';
 import './compiler';
 
 function HistoryLine({ type, output }: { type: 'input' | 'output', output: React.ReactNode; }) {
+  const outputElement = typeof output === 'string'
+    ? <Text style={{ fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>{output}</Text>
+    : output;
+
   return (
-    <View horizontal style={{ padding: '4px 0', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>
+    <View horizontal align="left" style={{ padding: '4px 0' }}>
       {type === 'input' && (
         <>
-          <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4, marginTop: 3 }} />
+          <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4 }} />
           <Spacer size="xsmall" />
         </>
       )}
-      {output}
+      {outputElement}
     </View>
   );
 }
@@ -62,23 +66,33 @@ function App() {
   useEffect(() => {
     if (appElementRef.current) {
       appElementRef.current.scrollTop = appElementRef.current.scrollHeight - appElementRef.current.clientHeight;
-
-      console.log(appElementRef.current.scrollTop, appElementRef.current.scrollHeight - appElementRef.current.clientHeight);
     }
   }, [history]);
 
   return (
-    <View ref={appElementRef} padding="small" fillColor="white" className="App" style={{ overflowY: 'auto' }} onPointerDown={handleTerminalPointerDown}>
+    <View
+      ref={appElementRef}
+      padding="small"
+      fillColor="white"
+      className="App"
+      style={{ overflowY: 'auto' }}
+      onPointerDown={handleTerminalPointerDown}
+    >
       <View flex style={{ justifyContent: 'flex-end' }}>
         {history.map((line, index) => (
           <HistoryLine key={index} type={line.type} output={line.line} />
         ))}
       </View>
-      <Spacer size="xsmall" />
       <View horizontal align="left">
-        <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4, marginTop: -5 }} />
+        <Icon size="xs" icon="chevron-right" style={{ marginLeft: -4 }} />
         <Spacer size="xsmall" />
-        <input ref={inputElementRef} value={line} style={{ flex: 1, border: 0, padding: 0, outline: 'none', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace', fontSize: 14, lineHeight: 1, marginTop: -4, marginBottom: -4, background: 'transparent' }} onKeyDown={handleInputKeyDown} onChange={handleInputChange} />
+        <input
+          ref={inputElementRef}
+          value={line}
+          style={{ flex: 1, border: 0, padding: 0, outline: 'none', fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace', fontSize: 14, lineHeight: '20px', background: 'transparent' }}
+          onKeyDown={handleInputKeyDown}
+          onChange={handleInputChange}
+        />
       </View>
     </View>
   );
