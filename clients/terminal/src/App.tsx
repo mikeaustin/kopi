@@ -9,7 +9,7 @@ import './compiler';
 
 function HistoryLine({ type, output }: { type: 'input' | 'output', output: React.ReactNode; }) {
   const outputElement = typeof output === 'string'
-    ? <Text style={{ fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>{output}</Text>
+    ? <Text style={{ minHeight: 20, fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, monospace' }}>{output}</Text>
     : output;
 
   return (
@@ -48,9 +48,14 @@ function App() {
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      setHistoryLines(historyLines => [...historyLines, { type: 'input', line: currentLine + ' ' }]);
-      history.current.push(currentLine);
-      setHistoryIndex(-1);
+      setHistoryLines(historyLines => [...historyLines, { type: 'input', line: currentLine.trim() }]);
+
+      if (currentLine.trim().length !== 0) {
+        history.current.push(currentLine.trim());
+
+        setHistoryIndex(-1);
+      }
+
       setLine('');
 
       const value = await interpret(currentLine);
