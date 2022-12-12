@@ -235,7 +235,7 @@ function Window({
         </View>
         <Divider color="gray-4" />
         <View flex>
-          <iframe src={`${src}?id=${id}`} title={title} style={{ border: 'none', height: '100%' }} onLoad={handleIframeLoad} />
+          <iframe sandbox="allow-scripts allow-same-origin" src={`${src}?id=${id}`} title={title} style={{ border: 'none', height: '100%' }} onLoad={handleIframeLoad} />
         </View>
       </View>
     </View>
