@@ -122,7 +122,7 @@ function Desktop({
           {applicationsMenu.map((item, index) => (
             item.title
               ? <Button key={index} title={item.title} data={item} onPointerUp={handlePointerUp} />
-              : <Divider spacing="small" />
+              : <Divider key={index} spacing="small" />
           ))}
         </Menu>
         <Menu title="Games">

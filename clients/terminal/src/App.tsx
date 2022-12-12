@@ -27,7 +27,7 @@ function HistoryLine({ type, output }: { type: 'input' | 'output', output: React
 
 function App() {
   const [historyLines, setHistoryLines] = useState<{ type: 'input' | 'output', line: React.ReactNode; }[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [currentLine, setLine] = useState<string>('');
 
   const history = useRef<string[]>([]);
@@ -53,7 +53,7 @@ function App() {
       if (currentLine.trim().length !== 0) {
         history.current.push(currentLine.trim());
 
-        setHistoryIndex(-1);
+        setHistoryIndex(0);
       }
 
       setLine('');
