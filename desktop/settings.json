@@ -1,6 +1,0 @@
-{
-  "css.format.newlineBetweenSelectors": true,
-  "scss.format.newlineBetweenSelectors": false,
-  "javascript.preferences.jsxAttributeCompletionStyle": "none",
-  "typescript.preferences.jsxAttributeCompletionStyle": "none"
-}
