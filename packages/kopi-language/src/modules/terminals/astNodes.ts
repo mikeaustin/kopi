@@ -1,5 +1,5 @@
-import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared';
-import { KopiArray, KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes';
+import { ASTNode, ASTPatternNode, Bindings, KopiValue, KopiTrait, KopiApplicative, Context } from '../shared.js';
+import { KopiArray, KopiBoolean, KopiNumber, KopiString, KopiTuple } from './classes/index.js';
 
 class RangeExpression extends ASTNode {
   readonly from: ASTNode;

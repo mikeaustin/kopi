@@ -1,8 +1,10 @@
 {
-  "name": "terminal",
+  "name": "kopi-language",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "type": "module",
+  "exports": "./dist/compiler.js",
+  "types": "./dist/compiler.d.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -21,10 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "build:parser": "peggy --format es --output src/lib/parser.js src/parser.pegjs",
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "export": "npm run build && (rm -rf ../../desktop/public/clients/terminal && cp -r build ../../desktop/public/clients/terminal)",
+    "build": "peggy --format es --output src/lib/parser.js src/parser.pegjs",
+    "export": "tsc --watch --project .",
     "test": "react-scripts test --testURL https://mike-austin.com",
     "eject": "react-scripts eject"
   },

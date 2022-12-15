@@ -1,16 +1,16 @@
 /* eslint-disable no-extend-native */
 
-import * as parser from './lib/parser';
+import * as parser from './lib/parser.js';
 
-import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative } from './modules/shared';
+import { RawASTNode, ASTNode, Environment, Context, BindValues, KopiTrait, KopiApplicative } from './modules/shared.js';
 
-import * as operators from './modules/operators';
-import * as terminals from './modules/terminals';
+import * as operators from './modules/operators/index.js';
+import * as terminals from './modules/terminals/index.js';
 
-import { KopiValue, Extensions } from './modules/shared';
-import { KopiArray, KopiElement, KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes';
+import { KopiValue, Extensions } from './modules/shared.js';
+import { KopiArray, KopiElement, KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes/index.js';
 
-import * as core from './functions/core';
+import * as core from './functions/core.js';
 import React from 'react';
 
 class KopiChart extends KopiElement {
@@ -121,8 +121,13 @@ async function interpret(source: string) {
   return evaluateAst(transformAst(ast), environment, () => { });
 }
 
+const parse = (source: string) => {
+  return transformAst(parser.parse(source));
+};
+
 export {
   environment,
+  parse,
   transformAst,
   evaluateAst,
   interpret,

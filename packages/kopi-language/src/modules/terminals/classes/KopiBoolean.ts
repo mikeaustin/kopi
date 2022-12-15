@@ -1,4 +1,4 @@
-import { KopiValue } from "../../shared";
+import { KopiValue } from '../../shared.js';
 
 class KopiBoolean extends KopiValue {
   readonly value: boolean;

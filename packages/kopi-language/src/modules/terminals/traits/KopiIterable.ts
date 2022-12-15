@@ -1,6 +1,6 @@
-import { Context, KopiValue, KopiCollection, KopiTrait } from "../../shared";
-import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes';
-import { KopiStream2 } from "../../terminals/classes/KopiStream";
+import { Context, KopiValue, KopiCollection, KopiTrait } from '../../shared.js';
+import { KopiBoolean, KopiFunction, KopiNumber, KopiTuple, KopiArray, KopiStream, KopiDict } from '../../terminals/classes/index.js';
+import { KopiStream2 } from '../../terminals/classes/KopiStream.js';
 
 abstract class KopiIterable extends KopiTrait {
   // static emptyValue() { return new KopiValue(); };

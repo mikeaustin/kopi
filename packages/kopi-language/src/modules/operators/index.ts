@@ -1,7 +1,7 @@
-import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment, BindValues } from '../shared';
+import { RawASTNode, ASTNode, KopiValue, Transform, Evaluate, Environment, BindValues } from '../shared.js';
 
-import * as astNodes from './astNodes';
-import * as visitors from './visitors';
+import * as astNodes from './astNodes.js';
+import * as visitors from './visitors.js';
 
 const transformAst = (next: Transform, transformAst: Transform) =>
   (rawAstNode: RawASTNode): ASTNode => {

@@ -1,0 +1,35 @@
+import { KopiValue, Context } from '../../shared.js';
+import KopiArray from './KopiArray.js';
+import KopiNumber from './KopiNumber.js';
+import KopiTuple from './KopiTuple.js';
+import KopiBoolean from './KopiBoolean.js';
+import KopiRange from './KopiRange.js';
+import KopiFunction from './KopiFunction.js';
+declare class KopiString extends KopiValue {
+    static readonly emptyValue: () => KopiString;
+    static readonly newlineRegExp: KopiString;
+    static inspect(): Promise<string>;
+    readonly value: string;
+    constructor(value: string, withIterator?: boolean);
+    valueOf(): string;
+    toString(): Promise<string>;
+    inspect(): Promise<string>;
+    toJS(): Promise<string>;
+    [Symbol.asyncIterator](): AsyncGenerator<KopiString, void, unknown>;
+    size(): KopiNumber;
+    apply(thisArg: KopiValue, [argument]: [KopiNumber]): Promise<KopiString>;
+    set(argument: KopiNumber | KopiRange): (value: KopiString) => KopiString;
+    update(index: KopiNumber, context: Context): (func: KopiFunction) => Promise<KopiString>;
+    remove(index: KopiNumber): KopiString;
+    getTuple(tuple: KopiTuple): Promise<KopiString>;
+    get(arg: KopiValue): Promise<KopiValue>;
+    append(that: KopiString): KopiString;
+    '++'(that: KopiString): KopiString;
+    toUpperCase(): KopiString;
+    succ(count: KopiNumber | KopiTuple): KopiString;
+    '=='(that: KopiString): KopiBoolean;
+    compare(that: KopiString): KopiNumber;
+    split(string: KopiString): KopiArray;
+    trim(string: KopiString): KopiString;
+}
+export default KopiString;

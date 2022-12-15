@@ -1,8 +1,8 @@
-import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, Evaluate, BindValues } from '../shared';
-import { inspect } from '../utils';
+import { RawASTNode, ASTNode, ASTPatternNode, KopiValue, Transform, Environment, Evaluate, BindValues } from '../shared.js';
+import { inspect } from '../utils.js';
 
-import * as astNodes from './astNodes';
-import * as visitors from './visitors';
+import * as astNodes from './astNodes.js';
+import * as visitors from './visitors.js';
 
 // const transformAst2 = (transformAst: (rawAstNode: RawASTNode) => ASTNode) => (rawAstNode: RawASTNode) => {
 //   if ()

@@ -1,5 +1,5 @@
-import { KopiValue, ASTNode, ASTPatternNode, Environment, Context } from "../../shared";
-import { KopiApplicative } from "../../shared";
+import { KopiValue, ASTNode, ASTPatternNode, Environment, Context } from '../../shared.js';
+import { KopiApplicative } from '../../shared.js';
 
 class KopiFunction extends KopiValue {
   static override readonly traits = [KopiApplicative];

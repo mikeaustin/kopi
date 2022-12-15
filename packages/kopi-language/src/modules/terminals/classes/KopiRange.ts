@@ -1,10 +1,10 @@
-import { addTraits, KopiValue, KopiCollection, Context } from '../../shared';
-import { KopiApplicative, KopiEnumerable } from '../../shared';
+import { addTraits, KopiValue, KopiCollection, Context } from '../../shared.js';
+import { KopiApplicative, KopiEnumerable } from '../../shared.js';
 
-import { KopiArray, KopiBoolean, KopiNumber } from '.';
+import { KopiArray, KopiBoolean, KopiNumber } from './index.js';
 
-import KopiIterable from '../traits/KopiIterable';
-import Comparable from '../traits/KopiComparable';
+import KopiIterable from '../traits/KopiIterable.js';
+import Comparable from '../traits/KopiComparable.js';
 
 const assertTrait = async (value: KopiValue, variableName: string, traits: Function[], errors: string[]) => {
   for (const trait of traits) {

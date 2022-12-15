@@ -1,10 +1,9 @@
-import { addTraits, KopiValue } from "../../shared";
-import { KopiNumeric, KopiEquatable, KopiEnumerable } from "../../shared";
-import Comparable from '../traits/KopiComparable';
+import { addTraits, KopiValue, KopiNumeric, KopiEquatable, KopiEnumerable } from '../../shared.js';
+import Comparable from '../traits/KopiComparable.js';
 
-import KopiString from './KopiString';
-import KopiBoolean from './KopiBoolean';
-import KopiTuple from './KopiTuple';
+import KopiString from './KopiString.js';
+import KopiBoolean from './KopiBoolean.js';
+import KopiTuple from './KopiTuple.js';
 
 class KopiNumber extends KopiValue {
   static readonly PI: KopiNumber = new KopiNumber(Math.PI);

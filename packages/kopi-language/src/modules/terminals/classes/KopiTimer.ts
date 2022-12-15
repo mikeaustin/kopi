@@ -1,11 +1,11 @@
-import { addTraits } from '../../../modules/shared';
+import { addTraits } from '../../../modules/shared.js';
 
-import { KopiValue } from '../../../modules/shared';
-import { KopiNumber } from '../../../modules/terminals/classes';
+import { KopiValue } from '../../../modules/shared.js';
+import { KopiNumber } from '../../../modules/terminals/classes/index.js';
 
-import KopiIterable from '../traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable.js';
 
-import { Deferred } from '../../../modules/utils';
+import { Deferred } from '../../../modules/utils.js';
 
 class KopiTimer extends KopiValue {
   msec: number;

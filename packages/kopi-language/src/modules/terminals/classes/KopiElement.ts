@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { KopiValue } from '../../shared';
+import { KopiValue } from '../../shared.js';
 
 class KopiElement extends KopiValue {
   element: React.ReactNode;

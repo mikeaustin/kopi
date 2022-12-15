@@ -1,4 +1,4 @@
-import { KopiValue } from '../modules/shared';
+import { KopiValue } from '../modules/shared.js';
 
 const spaces = (level: number) => {
   return '  '.repeat(level);

@@ -1,0 +1,10 @@
+import { Context, KopiValue } from '../shared.js';
+import * as astNodes from './astNodes.js';
+declare function RangeExpression({ from, to }: astNodes.RangeExpression, context: Context): Promise<KopiValue>;
+declare function NumericLiteral({ value }: astNodes.NumericLiteral, context: Context): Promise<KopiValue>;
+declare function BooleanLiteral({ value }: astNodes.BooleanLiteral, context: Context): Promise<KopiValue>;
+declare function StringLiteral({ value }: astNodes.StringLiteral, context: Context): Promise<KopiValue>;
+declare function ArrayLiteral({ expressionElements }: astNodes.ArrayLiteral, context: Context): Promise<KopiValue>;
+declare function DictLiteral({ expressionEntries }: astNodes.DictLiteral, context: Context): Promise<KopiValue>;
+declare function Identifier(astNode: astNodes.Identifier, context: Context): Promise<KopiValue>;
+export { RangeExpression, NumericLiteral, BooleanLiteral, StringLiteral, ArrayLiteral, DictLiteral, Identifier };

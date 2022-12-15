@@ -1,4 +1,4 @@
-import { inspect } from './utils';
+import { inspect } from './utils.js';
 
 abstract class KopiTrait { }
 

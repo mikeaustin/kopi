@@ -1,9 +1,8 @@
-import { Context } from '../../../modules/shared';
+import { KopiValue, Context } from '../../../modules/shared.js';
 
-import { KopiValue } from '../../../modules/shared';
-import { KopiFunction, KopiTuple } from '../../../modules/terminals/classes';
+import { KopiFunction, KopiTuple } from '../../../modules/terminals/classes/index.js';
 
-import { Deferred } from '../../utils';
+import { Deferred } from '../../utils.js';
 
 class KopiCoroutine extends KopiValue {
   deferred: Deferred[];

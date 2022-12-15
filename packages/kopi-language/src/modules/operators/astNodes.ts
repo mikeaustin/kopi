@@ -1,6 +1,5 @@
-import { evaluateAst } from '.';
-import { ASTNode, ASTPatternNode, Context, KopiApplicative, KopiTrait, KopiValue } from '../shared';
-import { Identifier } from '../terminals/astNodes';
+import { ASTNode, ASTPatternNode, Context, KopiApplicative, KopiTrait, KopiValue } from '../shared.js';
+import { Identifier } from '../terminals/astNodes.js';
 
 class Assignment extends ASTNode {
   readonly pattern: ASTPatternNode;

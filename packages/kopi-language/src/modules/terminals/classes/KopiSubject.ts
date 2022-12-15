@@ -1,9 +1,9 @@
-import { addTraits, KopiValue } from '../../../modules/shared';
-import { KopiArray } from '../../../modules/terminals/classes';
+import { addTraits, KopiValue } from '../../../modules/shared.js';
+import { KopiArray } from '../../../modules/terminals/classes/index.js';
 
-import { Deferred } from '../../../modules/utils';
+import { Deferred } from '../../../modules/utils.js';
 
-import KopiIterable from '../traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable.js';
 
 class KopiSubject extends KopiValue {
   static emptyValue = () => new KopiArray([]);

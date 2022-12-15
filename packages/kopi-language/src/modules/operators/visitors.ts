@@ -1,8 +1,8 @@
-import { KopiValue, KopiNumeric, KopiApplicative, KopiTrait, Context } from '../shared';
-import { KopiTuple, KopiFunction } from '../terminals/classes';
+import { KopiValue, KopiNumeric, KopiApplicative, KopiTrait, Context } from '../shared.js';
+import { KopiTuple, KopiFunction } from '../terminals/classes/index.js';
 
-import * as astNodes from './astNodes';
-import * as terminalAstNodes from '../terminals/astNodes';
+import * as astNodes from './astNodes.js';
+import * as terminalAstNodes from '../terminals/astNodes.js';
 
 declare global {
   interface FunctionConstructor {

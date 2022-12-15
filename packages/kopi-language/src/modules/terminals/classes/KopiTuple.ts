@@ -1,8 +1,8 @@
-import { Context, KopiValue } from '../../shared';
-import KopiBoolean from './KopiBoolean';
+import { Context, KopiValue } from '../../shared.js';
+import KopiBoolean from './KopiBoolean.js';
 
-import KopiFunction from './KopiFunction';
-import KopiStream from './KopiStream';
+import KopiFunction from './KopiFunction.js';
+import KopiStream from './KopiStream.js';
 
 class KopiTuple extends KopiValue {
   static readonly empty = new KopiTuple([], [], true);

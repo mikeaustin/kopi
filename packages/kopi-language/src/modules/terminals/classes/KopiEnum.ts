@@ -1,8 +1,8 @@
-import { KopiValue } from "../../shared";
+import { KopiValue } from '../../shared.js';
 
-import KopiBoolean from "./KopiBoolean";
-import KopiString from "./KopiString";
-import KopiTuple from "./KopiTuple";
+import KopiBoolean from './KopiBoolean.js';
+import KopiString from './KopiString.js';
+import KopiTuple from './KopiTuple.js';
 
 class KopiEnumField extends KopiValue {
   _enum: KopiEnum;

@@ -1,9 +1,9 @@
-import { addTraits, KopiCollection, KopiValue } from '../../shared';
+import { addTraits, KopiCollection, KopiValue } from '../../shared.js';
 
-import KopiIterable from '../traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable.js';
 
-import KopiArray from './KopiArray';
-import KopiString from './KopiString';
+import KopiArray from './KopiArray.js';
+import KopiString from './KopiString.js';
 
 const KopiStream2 = (collection: KopiCollection) => {
   class KopiStream extends KopiValue {

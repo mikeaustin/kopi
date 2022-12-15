@@ -1,8 +1,8 @@
-import { Context, KopiValue } from '../shared';
-import { KopiNumber, KopiBoolean, KopiString, KopiArray, KopiRange } from './classes';
+import { Context, KopiValue } from '../shared.js';
+import { KopiNumber, KopiBoolean, KopiString, KopiArray, KopiRange } from './classes/index.js';
 
-import * as astNodes from './astNodes';
-import KopiDict from './classes/KopiDict';
+import * as astNodes from './astNodes.js';
+import KopiDict from './classes/KopiDict.js';
 
 async function RangeExpression(
   { from, to }: astNodes.RangeExpression,

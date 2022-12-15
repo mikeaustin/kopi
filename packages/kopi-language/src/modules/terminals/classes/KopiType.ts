@@ -1,5 +1,5 @@
-import { KopiValue, Context } from "../../shared";
-import { KopiApplicative } from "../../shared";
+import { KopiValue, Context } from '../../shared.js';
+import { KopiApplicative } from '../../shared.js';
 
 class KopiType extends KopiValue {
   static override readonly traits = [KopiApplicative];

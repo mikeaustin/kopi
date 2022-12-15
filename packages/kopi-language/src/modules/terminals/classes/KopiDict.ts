@@ -1,11 +1,11 @@
-import { addTraits, Context, KopiValue } from '../../shared';
+import { addTraits, Context, KopiValue } from '../../shared.js';
 
-import KopiIterable from '../traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable.js';
 
-import KopiTuple from './KopiTuple';
-import KopiNumber from './KopiNumber';
-import KopiFunction from './KopiFunction';
-import KopiBoolean from './KopiBoolean';
+import KopiTuple from './KopiTuple.js';
+import KopiNumber from './KopiNumber.js';
+import KopiFunction from './KopiFunction.js';
+import KopiBoolean from './KopiBoolean.js';
 
 class KopiDict extends KopiValue {
   static readonly empty = new KopiDict([]);

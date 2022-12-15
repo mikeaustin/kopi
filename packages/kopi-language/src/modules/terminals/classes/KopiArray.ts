@@ -1,13 +1,13 @@
-import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from '../../shared';
+import { addTraits, KopiValue, KopiCollection, Context, KopiApplicative } from '../../shared.js';
 
-import KopiIterable from '../traits/KopiIterable';
+import KopiIterable from '../traits/KopiIterable.js';
 
-import KopiNumber from './KopiNumber';
-import KopiBoolean from "./KopiBoolean";
-import KopiRange from './KopiRange';
-import KopiTuple from './KopiTuple';
-import KopiFunction from './KopiFunction';
-import KopiString from './KopiString';
+import KopiNumber from './KopiNumber.js';
+import KopiBoolean from './KopiBoolean.js';
+import KopiRange from './KopiRange.js';
+import KopiTuple from './KopiTuple.js';
+import KopiFunction from './KopiFunction.js';
+import KopiString from './KopiString.js';
 
 class KopiArray extends KopiValue {
   static readonly emptyValue = () => new KopiArray([]);

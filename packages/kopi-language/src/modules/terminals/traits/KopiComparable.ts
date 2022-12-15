@@ -1,5 +1,5 @@
-import { KopiValue, KopiTrait } from '../../shared';
-import { KopiBoolean, KopiNumber } from '../../terminals/classes';
+import { KopiValue, KopiTrait } from '../../shared.js';
+import { KopiBoolean, KopiNumber } from '../../terminals/classes/index.js';
 
 abstract class Comparable extends KopiTrait {
   abstract compare(this: Comparable, that: KopiValue): KopiNumber;

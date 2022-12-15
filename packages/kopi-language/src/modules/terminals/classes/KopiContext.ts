@@ -1,6 +1,4 @@
-import { Context, BindValues } from '../../../modules/shared';
-
-import { KopiValue } from '../../../modules/shared';
+import { KopiValue, Context, BindValues } from '../../../modules/shared.js';
 
 class KopiContext extends KopiValue {
   constructor(value: KopiValue, bindValues: BindValues) {
