@@ -12,8 +12,8 @@ import * as parser from './lib/parser.js';
 import { KopiApplicative } from './modules/shared.js';
 import * as operators from './modules/operators/index.js';
 import * as terminals from './modules/terminals/index.js';
-import { Extensions } from './modules/shared.js';
-import { KopiElement, KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes/index.js';
+import { KopiValue, Extensions } from './modules/shared.js';
+import { KopiElement, KopiNumber, KopiString, KopiTuple, KopiSubject, KopiTimer } from './modules/terminals/classes/index.js';
 import * as core from './functions/core.js';
 import React from 'react';
 class KopiChart extends KopiElement {
@@ -48,7 +48,7 @@ const environment = {
     Observer(value) {
         return new KopiSubject(value);
     },
-    print: core.kopi_print,
+    // print: core.kopi_print,
     sleep: core.kopi_sleep,
     match: core.kopi_match,
     let: core.kopi_let,
@@ -82,13 +82,13 @@ const evaluateAst = (ast, environment, bindValues) => {
     return evaluateAstPipeline(ast, environment, bindValues);
 };
 const evaluateAstPipeline = operators.evaluateAst(terminals.evaluateAst(evaluateAst), evaluateAst);
-function interpret(source) {
+function interpret(source, kopi_print = core.kopi_print) {
     return __awaiter(this, void 0, void 0, function* () {
         var ast = parser.parse(source);
-        return evaluateAst(transformAst(ast), environment, () => { });
+        return evaluateAst(transformAst(ast), Object.assign(Object.assign({}, environment), { print: kopi_print }), () => { });
     });
 }
 const parse = (source) => {
     return transformAst(parser.parse(source));
 };
-export { environment, parse, transformAst, evaluateAst, interpret, };
+export { environment, parse, transformAst, evaluateAst, interpret, KopiValue, KopiTuple, };

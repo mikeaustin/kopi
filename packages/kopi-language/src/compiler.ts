@@ -8,7 +8,7 @@ import * as operators from './modules/operators/index.js';
 import * as terminals from './modules/terminals/index.js';
 
 import { KopiValue, Extensions } from './modules/shared.js';
-import { KopiArray, KopiElement, KopiNumber, KopiString, KopiSubject, KopiTimer } from './modules/terminals/classes/index.js';
+import { KopiArray, KopiElement, KopiNumber, KopiString, KopiTuple, KopiSubject, KopiTimer } from './modules/terminals/classes/index.js';
 
 import * as core from './functions/core.js';
 import React from 'react';
@@ -74,7 +74,7 @@ const environment: {
     return new KopiSubject(value);
   },
 
-  print: core.kopi_print,
+  // print: core.kopi_print,
   sleep: core.kopi_sleep,
   match: core.kopi_match,
 
@@ -115,10 +115,10 @@ const evaluateAst = (ast: ASTNode, environment: Environment, bindValues: BindVal
 
 const evaluateAstPipeline = operators.evaluateAst(terminals.evaluateAst(evaluateAst), evaluateAst);
 
-async function interpret(source: string) {
+async function interpret(source: string, kopi_print = core.kopi_print) {
   var ast = parser.parse(source);
 
-  return evaluateAst(transformAst(ast), environment, () => { });
+  return evaluateAst(transformAst(ast), { ...environment, print: kopi_print }, () => { });
 }
 
 const parse = (source: string) => {
@@ -131,4 +131,6 @@ export {
   transformAst,
   evaluateAst,
   interpret,
+  KopiValue,
+  KopiTuple,
 };
