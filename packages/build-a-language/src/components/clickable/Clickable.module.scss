@@ -1,3 +1,7 @@
 .container {
   cursor: pointer;
+
+  &:active {
+    filter: brightness(0.8);
+  }
 }

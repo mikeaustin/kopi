@@ -4,8 +4,6 @@
   margin: 0;
   padding: 0;
   outline: none;
-  min-width: 0;
-  min-height: 0;
 }
 
 .flex {
@@ -20,8 +18,35 @@
   display: none;
 }
 
+.scrollX {
+  overflow-x: auto;
+}
+
+.scrollY {
+  overflow-y: auto;
+}
+
+.scrollSnapX {
+  scroll-snap-type: x mandatory;
+}
+
+.scrollSnapY {
+  scroll-snap-type: y mandatory;
+}
+
+.noScrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.border {
+  box-shadow: 0 0 0 1px var(--theme-border-color);
+}
+
 .dropShadow {
   box-shadow:
-    0 5px 10px hsla(0, 0%, 0%, 0.25),
+    0 3px 10px hsla(0, 0%, 0%, 0.25),
     0 0 0 1px hsla(0, 0%, 0%, 0.1);
+  box-shadow: var(--theme-drop-shadow);
 }

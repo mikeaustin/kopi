@@ -1,0 +1,33 @@
+import { KopiValue } from '../../shared.js';
+import KopiString from './KopiString.js';
+import KopiBoolean from './KopiBoolean.js';
+declare class KopiNumber extends KopiValue {
+    static readonly PI: KopiNumber;
+    static readonly E: KopiNumber;
+    static inspect(): Promise<string>;
+    static from(value: KopiString): KopiNumber | undefined;
+    readonly value: number;
+    constructor(value: number);
+    valueOf(): number;
+    toString(): Promise<string>;
+    inspect(): Promise<string>;
+    toJS(): Promise<number>;
+    '+'(that: KopiNumber): KopiNumber;
+    '-'(that: KopiNumber): KopiNumber;
+    '*'(that: KopiNumber): KopiNumber;
+    '/'(that: KopiNumber): KopiNumber;
+    '%'(that: KopiNumber): KopiNumber;
+    negate(): KopiNumber;
+    succ(count: KopiNumber): KopiNumber;
+    '=='(that: KopiNumber): KopiBoolean;
+    '!='(that: KopiNumber): KopiBoolean;
+    compare(that: KopiNumber): KopiNumber;
+    even(): KopiBoolean;
+    odd(): KopiBoolean;
+    round(): KopiNumber;
+    sin(): KopiNumber;
+    cos(): KopiNumber;
+    toFixed(digits: KopiNumber): KopiString;
+    test(a: KopiNumber): (b: KopiNumber) => KopiNumber;
+}
+export default KopiNumber;

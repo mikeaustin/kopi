@@ -5,11 +5,16 @@ import styles from './Clickable.module.scss';
 
 type ClickableProps = {
   children?: Exclude<React.ReactNode, React.ReactText>;
-  className?: string,
+  className?: string;
   onClick?: React.MouseEventHandler;
 } & ViewProps;
 
-const Clickable = ({ children, className, onClick, ...props }: ClickableProps) => {
+const Clickable = ({
+  children,
+  className,
+  onClick,
+  ...props
+}: ClickableProps) => {
   const containerClassName = classNames(
     styles.container,
     className,

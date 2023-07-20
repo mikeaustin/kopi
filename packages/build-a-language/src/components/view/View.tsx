@@ -10,12 +10,16 @@ import alignItemsStyles from '../../styles/alignItems.module.scss';
 import paddingStyles from '../../styles/padding.module.scss';
 import verticalPaddingStyles from '../../styles/verticalPadding.module.scss';
 import horizontalPaddingStyles from '../../styles/horizontalPadding.module.scss';
+import topPaddingStyles from '../../styles/topPadding.module.scss';
+import bottomPaddingStyles from '../../styles/bottomPadding.module.scss';
 import backgroundColorStyles from '../../styles/backgroundColor.module.scss';
 import borderRadiusStyles from '../../styles/borderRadius.module.scss';
+import scrollSnapAlignStyles from '../../styles/scrollSnapAlign.module.scss';
 
 type ViewProps = {
   tag?: string | React.ComponentType<any>;
   style?: React.CSSProperties;
+  src?: string;
   disabled?: boolean;
   children?: Exclude<React.ReactNode, React.ReactText>;
   foo?: React.ReactChild;
@@ -26,12 +30,26 @@ type ViewProps = {
   justifyContent?: 'flex-start' | 'center' | 'flex-end';
   alignItems?: 'flex-start' | 'center' | 'flex-end';
   padding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  topPadding?: 'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
+  bottomPadding?: 'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   verticalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   horizontalPadding?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
   background?: Color;
-  borderRadius?: boolean | 'xsmall' | 'small' | 'max';
+  borderRadius?: 'tiny' | 'xsmall' | 'small' | 'medium' | 'max';
   hidden?: boolean;
+  scrollX?: boolean;
+  scrollY?: boolean;
+  scrollSnapX?: boolean;
+  scrollSnapY?: boolean;
+  scrollSnapAlign?: 'start' | 'center' | 'end';
+  border?: boolean;
   dropShadow?: boolean;
+  noScrollbar?: boolean;
+  viewBox?: string;
+  controls?: boolean;
+  autoPlay?: boolean;
+  type?: string;
+  step?: string;
   onPointerDown?: PointerEventHandler;
   onPointerMove?: PointerEventHandler;
   onPointerUp?: PointerEventHandler;
@@ -41,6 +59,7 @@ type ViewProps = {
 const View = React.forwardRef(({
   tag = 'div',
   style,
+  src,
   disabled,
   children,
   className,
@@ -49,12 +68,21 @@ const View = React.forwardRef(({
   justifyContent,
   alignItems,
   padding,
+  topPadding,
+  bottomPadding,
   verticalPadding,
   horizontalPadding,
   background,
   borderRadius,
   hidden,
+  scrollX,
+  scrollY,
+  scrollSnapX,
+  scrollSnapY,
+  scrollSnapAlign,
+  border,
   dropShadow,
+  noScrollbar,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -70,12 +98,21 @@ const View = React.forwardRef(({
     justifyContent && justifyContentStyles[justifyContent],
     alignItems && alignItemsStyles[alignItems],
     padding && paddingStyles[padding],
+    topPadding && topPaddingStyles[topPadding],
+    bottomPadding && bottomPaddingStyles[bottomPadding],
     verticalPadding && verticalPaddingStyles[verticalPadding],
     horizontalPadding && horizontalPaddingStyles[horizontalPadding],
     background && backgroundColorStyles[background],
     (typeof borderRadius === 'string' && borderRadiusStyles[borderRadius]) || (borderRadius && borderRadiusStyles.xsmall),
     hidden && styles.hidden,
+    scrollX && styles.scrollX,
+    scrollY && styles.scrollY,
+    scrollSnapX && styles.scrollSnapX,
+    scrollSnapY && styles.scrollSnapY,
+    scrollSnapAlign && scrollSnapAlignStyles[scrollSnapAlign],
+    border && styles.border,
     dropShadow && styles.dropShadow,
+    noScrollbar && styles.noScrollbar,
     className,
   );
 
@@ -85,6 +122,7 @@ const View = React.forwardRef(({
       className={containerClassName}
       disabled={disabled}
       style={style}
+      src={src}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

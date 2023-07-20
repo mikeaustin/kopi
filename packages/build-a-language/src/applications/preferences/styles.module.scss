@@ -1,0 +1,26 @@
+@import 'open-color';
+
+.outerScroll {
+  position: relative;
+
+  --top: 0;
+  --height: 200px;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    background: $oc-blue-5;
+    top: var(--top);
+    right: 0;
+    height: var(--height);
+    width: 7px;
+    margin: 0 0px;
+  }
+
+}
+
+.scroll {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 10px;
+}

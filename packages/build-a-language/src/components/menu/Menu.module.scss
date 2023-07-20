@@ -1,0 +1,38 @@
+@import 'open-color';
+
+.menu.vertical {
+  position: absolute;
+  z-index: 1000;
+}
+
+.menuItem {
+  cursor: pointer;
+
+  .text {
+    white-space: nowrap;
+  }
+
+  .items {
+    display: none;
+  }
+
+  &:hover {
+    background: $oc-blue-4;
+
+    > div > .text {
+      color: white;
+    }
+
+    > .items {
+      display: unset;
+    }
+
+    > .items .items {
+      align-self: flex-end;
+
+      .menu {
+        margin-top: -35px;
+      }
+    }
+  }
+}

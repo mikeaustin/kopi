@@ -1,90 +1,200 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useCallback, useImperativeHandle } from 'react';
+import classNames from 'classnames';
 
 import View, { ViewProps } from '../view';
 import Text from '../text';
 import Divider from '../divider';
 
-import styles from './Window.module.scss';
+import { type WindowPosition } from '../desktop';
 
-const Window = ({
-  children,
-  title,
-  style,
-  onWindowStartDrag,
-  onWindowEndDrag,
-  ...props
-}: {
+import styles from './Window.module.scss';
+import textStyles from '../text/Text.module.scss';
+
+const WindowContext = React.createContext<{
+  onWindowFocus: (() => void);
+} | null>(null);
+
+type WindowProps = {
   children?: Exclude<React.ReactNode, string>;
+  className?: string;
   title?: string;
   style?: React.CSSProperties;
-  onWindowStartDrag?: any;
-  onWindowEndDrag?: any;
-} & ViewProps) => {
+  order?: number;
+  noDivider?: boolean;
+  windowId?: number;
+  borderRadius?: 'xsmall' | 'max';
+  onWindowFocus?: any;
+  onWindowChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
+  onWindowTransientChange?: ({ windowId, left, top, width, height }: WindowPosition) => void;
+} & ViewProps;
+
+const Window = React.forwardRef(({
+  children,
+  className,
+  title,
+  style,
+  order,
+  noDivider,
+  windowId,
+  borderRadius = 'xsmall',
+  onWindowFocus,
+  onWindowChange,
+  onWindowTransientChange,
+  ...props
+}: WindowProps, ref) => {
   const windowElementRef = useRef<HTMLElement>();
+  const contentElementRef = useRef<HTMLElement>();
+  const firstMouseRef = useRef<{ clientX: number, clientY: number; }>();
 
-  useEffect(() => {
-    if (windowElementRef.current) {
-      windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
-    }
-  }, []);
+  useImperativeHandle(ref, () => windowElementRef.current);
 
-  const handleWindowMouseDown = () => {
-    if (windowElementRef.current) {
-      const parentElement = windowElementRef.current?.parentElement;
+  const handleWindowPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    handleWindowFocus();
+  };
 
-      if (windowElementRef.current !== parentElement?.lastChild) {
-        const windowElement = windowElementRef.current;
+  const handleWindowFocus = useCallback(() => {
+    onWindowFocus(windowId);
+  }, [windowId, onWindowFocus]);
 
-        setTimeout(() => {
-          windowElementRef.current?.remove();
-          parentElement?.appendChild(windowElement);
-        });
-      }
+  const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if (windowElementRef.current && windowElementRef.current.parentElement && contentElementRef.current) {
+      windowElementRef.current.style.willChange = 'left, top';
+      contentElementRef.current.style.pointerEvents = 'none';
+
+      event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+
+      const boundingClientRect = windowElementRef.current.getBoundingClientRect();
+      const desktopBoundingClientRect = windowElementRef.current.parentElement.getBoundingClientRect();
+
+      firstMouseRef.current = {
+        clientX: event.nativeEvent.clientX - boundingClientRect.left,
+        clientY: event.nativeEvent.clientY - boundingClientRect.top + desktopBoundingClientRect.top,
+      };
     }
   };
 
-  const handleTitlePointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
-    if (windowElementRef.current) {
-      const boundingClientRect = windowElementRef.current.getBoundingClientRect();
+  const handleTitlePointerMove = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if (windowElementRef.current && windowElementRef.current.parentElement && firstMouseRef.current) {
+      const clientX = event.nativeEvent.clientX - windowElementRef.current.parentElement.offsetLeft;
+      const clientY = event.nativeEvent.clientY; // - windowElementRef.current.parentElement.offsetTop;
 
-      onWindowStartDrag(windowElementRef.current, {
-        clientX: event.nativeEvent.pageX - boundingClientRect.left,
-        clientY: event.nativeEvent.pageY - boundingClientRect.top,
-      });
+      windowElementRef.current.style.left = `${clientX - firstMouseRef.current.clientX}px`;
+      windowElementRef.current.style.top = `${clientY - firstMouseRef.current.clientY}px`;
+
+      if (windowId !== undefined && onWindowTransientChange) {
+        onWindowTransientChange({
+          windowId,
+          left: windowElementRef.current.offsetLeft,
+          top: windowElementRef.current.offsetTop,
+          width: windowElementRef.current.offsetWidth,
+          height: windowElementRef.current.offsetHeight,
+        });
+      }
     }
   };
 
   const handleTitlePointerUp = (event: React.SyntheticEvent<any, PointerEvent>) => {
     event.preventDefault();
 
-    onWindowEndDrag(windowElementRef.current);
+    if (windowElementRef.current) {
+      windowElementRef.current.style.willChange = '';
+    }
+
+    firstMouseRef.current = undefined;
+
+    if (contentElementRef.current) {
+      contentElementRef.current.style.pointerEvents = '';
+    }
+
+    if (windowId !== undefined && windowElementRef.current && onWindowChange) {
+      onWindowChange({
+        windowId,
+        left: windowElementRef.current.offsetLeft,
+        top: windowElementRef.current.offsetTop,
+        width: windowElementRef.current.offsetWidth,
+        height: windowElementRef.current.offsetHeight,
+      });
+    }
   };
+
+  const handleContentPointerDown = (event: React.SyntheticEvent<any, PointerEvent>) => {
+    if ((event.target as HTMLElement).classList.contains(textStyles.container)) {
+      event.currentTarget.setPointerCapture(event.nativeEvent.pointerId);
+    }
+  };
+
+  const windowContextValue = useMemo(() => ({
+    onWindowFocus: handleWindowFocus,
+  }), [handleWindowFocus]);
+
+  useEffect(() => {
+    if (windowElementRef.current) {
+      windowElementRef.current.style.width = `${windowElementRef.current.offsetWidth}px`;
+      // windowElementRef.current.style.height = `${windowElementRef.current.offsetHeight}px`;
+
+      if (windowId !== undefined && onWindowChange) {
+        onWindowChange({
+          windowId,
+          left: windowElementRef.current.offsetLeft,
+          top: windowElementRef.current.offsetTop,
+          width: windowElementRef.current.offsetWidth,
+          height: windowElementRef.current.offsetHeight,
+        });
+      }
+    }
+  }, [windowId, onWindowChange]);
 
   return (
     <View
       ref={windowElementRef}
-      borderRadius="small"
+      borderRadius={borderRadius}
       dropShadow
-      className={styles.container}
-      style={{ ...style, zIndex: 1 }}
-      onMouseDown={handleWindowMouseDown}
+      className={classNames(styles.container, className)}
+      style={{ ...style, zIndex: order }}
+      onPointerDown={handleWindowPointerDown}
     >
+      {title && (
+        <>
+          <View
+            padding="small"
+            alignItems="center"
+            // background="gray-3"
+            background="theme-panel"
+            style={{ marginBottom: -1, touchAction: 'none', borderTopLeftRadius: 5, borderTopRightRadius: 5 }}
+            onPointerDown={handleTitlePointerDown}
+            onPointerMove={handleTitlePointerMove}
+            onPointerUp={handleTitlePointerUp}
+          >
+            <Text fontSize="medium" fontWeight="semi-bold" noSelect style={{ pointerEvents: 'none' }}>{title}</Text>
+          </View>
+          {/* <Divider color="gray-4" /> */}
+          {/* {!noDivider && ( */}
+          <Divider />
+          {/* )} */}
+        </>
+      )}
       <View
-        padding="small"
-        alignItems="center"
-        background="gray-3"
-        // style={{ cursor: 'default' }}
-        onPointerDown={handleTitlePointerDown}
-        onPointerUp={handleTitlePointerUp}
+        ref={contentElementRef}
+        flex
+        background="theme-content"
+        borderRadius={borderRadius === 'max' ? borderRadius : undefined}
+        style={{ position: 'relative', minHeight: 0, overflow: 'hidden', borderBottomLeftRadius: borderRadius === 'max' ? borderRadius : 5, borderBottomRightRadius: borderRadius === 'max' ? borderRadius : 5 }}
+        onPointerDown={title ? handleContentPointerDown : handleTitlePointerDown}
+        onPointerMove={title ? undefined : handleTitlePointerMove}
+        onPointerUp={title ? undefined : handleTitlePointerUp}
+        {...props}
       >
-        <Text fontWeight="bold" noSelect>{title}</Text>
-      </View>
-      <Divider color="gray-4" />
-      <View flex background="white" style={{ position: 'relative' }} {...props}>
-        {children}
+        <WindowContext.Provider value={windowContextValue}>
+          {children}
+        </WindowContext.Provider>
       </View>
     </View>
   );
-};
+});
 
 export default Window;
+
+export {
+  type WindowProps,
+  WindowContext,
+};

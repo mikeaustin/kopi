@@ -12,18 +12,20 @@ import textColorStyles from '../../styles/textColor.module.scss';
 type TextProps = {
   children: React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
   textParent?: boolean;
   flex?: boolean,
   noSelect?: boolean;
   fitContent?: boolean;
   fontSize?: 'tiny' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
-  fontWeight?: 'thing' | 'extra-light' | 'light' | 'medium' | 'semi-bold' | 'bold';
+  fontWeight?: 'thin' | 'extra-light' | 'light' | 'medium' | 'semi-bold' | 'bold';
   textColor?: Color | 'primary';
 } & React.HTMLProps<HTMLDivElement>;
 
 const Text = React.forwardRef<HTMLDivElement, TextProps>(({
   children,
   style,
+  className,
   textParent,
   flex,
   noSelect,
@@ -66,7 +68,8 @@ const Text = React.forwardRef<HTMLDivElement, TextProps>(({
     fitContent && styles.fitContent,
     (fontSize && fontSizeStyles[fontSize]) || (!textParent && fontSizeStyles.small),
     fontWeight && fontWeightStyles[fontWeight],
-    (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['gray-7']),
+    (textColor && textColorStyles[textColor]) || (!textParent && textColorStyles['theme-text']),
+    className,
   );
 
   const Component = textParent ? 'span' : 'div';

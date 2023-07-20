@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.11",
     "classnames": "^2.3.1",
     "codemirror": "^5.65.0",
+    "cross-env": "^7.0.3",
     "open-color": "^1.9.1",
     "peggy": "^1.2.0",
     "react": "^17.0.2",
@@ -25,6 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-dev": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -48,6 +50,9 @@
     ]
   },
   "devDependencies": {
-    "@types/codemirror": "^5.60.5"
+    "@types/codemirror": "^5.60.5",
+    "stylelint": "^14.2.0",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-config-standard-scss": "^3.0.0"
   }
 }

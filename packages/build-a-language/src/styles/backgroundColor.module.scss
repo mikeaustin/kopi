@@ -1,5 +1,21 @@
 @import 'open-color';
 
+.theme-content {
+  background-color: var(--theme-content-color);
+}
+
+.theme-panel {
+  background-color: var(--theme-panel-color);
+}
+
+.theme-divider {
+  background-color: var(--theme-divider-color);
+}
+
+.primary {
+  background-color: var(--primary-color);
+}
+
 .white {
   background-color: white;
 }

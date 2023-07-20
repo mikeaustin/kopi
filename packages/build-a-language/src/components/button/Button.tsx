@@ -9,18 +9,22 @@ import styles from './Button.module.scss';
 
 const Button = ({
   title,
+  size = 'small',
   primary,
   solid,
   link,
+  hover,
   rounded,
   leftIcon,
   rightIcon,
   ...props
 }: {
-  title: string;
+  title: React.ReactNode;
+  size?: 'xsmall' | 'small' | 'medium';
   primary?: boolean;
   solid?: boolean;
   link?: boolean;
+  hover?: boolean;
   rounded?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -30,24 +34,51 @@ const Button = ({
     primary && styles.primary,
     solid && styles.solid,
     link && styles.link,
+    hover && styles.hover,
     rounded && styles.rounded,
   );
 
   const textColor = primary && solid
     ? 'gray-0'
-    : primary || link
+    : primary
       ? 'primary'
       : undefined;
 
+  const titleText = typeof title === 'string' ? (
+    <Text
+      fontSize={size}
+      fontWeight="bold"
+      textColor={textColor}
+      noSelect
+      style={{ pointerEvents: 'none', textAlign: 'center', whiteSpace: 'nowrap' }}
+    >
+      {title}
+    </Text>
+  ) : React.isValidElement(title) && React.cloneElement(title, {
+    style: {
+      ...(title as any).props.style,
+      fill: 'var(--theme-text-color)'
+    }
+  });
+  console.log(titleText);
   return (
-    <View tag="button" horizontal borderRadius={rounded ? 'max' : true} className={containerClassName} {...props}>
+    <View
+      tag="button"
+      horizontal
+      justifyContent="center"
+      horizontalPadding={size === 'xsmall' ? 'small' : 'medium'}
+      verticalPadding={size === 'xsmall' ? 'small' : 'small'}
+      borderRadius={rounded ? 'max' : 'tiny'}
+      className={containerClassName}
+      {...props}
+    >
       {leftIcon && (
         <>
           {leftIcon}
           <Spacer size="small" />
         </>
       )}
-      <Text fontWeight="bold" textColor={textColor}>{title}</Text>
+      {titleText}
       {rightIcon && (
         <>
           <Spacer size="small" />

@@ -1,0 +1,16 @@
+.slideIn {
+  animation-duration: 0.5s;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9, 0.9);
+    opacity: 0.0;
+  }
+
+  to {
+    transform: unset;
+    opacity: unset;
+  }
+}

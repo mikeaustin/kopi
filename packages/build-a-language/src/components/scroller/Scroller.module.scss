@@ -1,0 +1,53 @@
+@import 'open-color';
+
+.container {
+  position: relative;
+  min-height: 0;
+
+  --top: 0;
+  --height: 200px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    background: hsla(0, 0%, 0%, 0.25);
+    top: var(--top);
+    right: 0;
+    height: var(--height);
+    width: 7px;
+    // margin: 3px 3px;
+    // border-radius: 1000px;
+    // transform: translate(100%, 0);
+    opacity: 0.0;
+    transition: 0.15s opacity;
+  }
+
+  &:hover {
+    &::after {
+      opacity: unset;
+      transform: none;
+    }
+  }
+}
+
+.inner {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &.scrollX {
+    overflow-x: auto;
+  }
+  
+  &.scrollY {
+    overflow-y: auto;
+  }
+  
+  .scrollSnapX {
+    scroll-snap-type: x mandatory;
+  }
+  
+  .scrollSnapY {
+    scroll-snap-type: y mandatory;
+  }  
+}

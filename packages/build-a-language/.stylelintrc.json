@@ -1,0 +1,8 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "string-quotes": "single",
+    "font-family-name-quotes": null,
+    "value-list-comma-newline-after": null
+  }
+}
