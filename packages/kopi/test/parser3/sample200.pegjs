@@ -5,28 +5,28 @@
 
 {
   class Function {
-    constructor(parameter, expression, environment) {
+    constructor(parameter, bodyExpression, environment) {
       this.parameter = parameter;
-      this.expression = expression;
+      this.bodyExpression = bodyExpression;
       this.environment = environment;
     }
 
-    apply(thisArg, [argument, _]) {
-      return evaluate(this.expression, {
+    apply(thisArg, [argument]) {
+      return evaluate(this.bodyExpression, {
         ...this.environment,
         [this.parameter.name]: argument
       })
     }
   }
 
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const interpreterVisitors = {
+  const visitors = {
     Assignment: ({ variable, expression }) => {
       return {
         type: 'Assignment',
@@ -39,7 +39,7 @@
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
 
-      return operatorFunctions[operator](leftValue, rightValue, environment);
+      return operators[operator](leftValue, rightValue, environment);
     },
 
     FunctionApplicationExpression({ expression, argument }, environment) {
@@ -49,11 +49,11 @@
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
 
-    FunctionExpression({ parameter, expression }, environment) {
-      return new Function(parameter, expression, environment);
+    FunctionExpression({ parameter, bodyExpression }, environment) {
+      return new Function(parameter, bodyExpression, environment);
     },
 
-    NumericLiteral: ({ value }, _) => {
+    NumericLiteral: ({ value }) => {
       return value;
     },
 
@@ -63,7 +63,7 @@
   }
 
   function evaluate(node, environment) {
-    return interpreterVisitors[node.type](node, environment);
+    return visitors[node.type](node, environment);
   }
 }
 
@@ -79,7 +79,7 @@ Statement
   / Expression
 
 Assignment
-  = identifier:Identifier _ "=" _ expression:AddExpression {
+  = identifier:Identifier _ "=" _ expression:Expression {
     return {
       type: 'Assignment',
       variable: identifier.name,
@@ -126,7 +126,7 @@ FunctionApplicationExpression
     }
 
 PrimaryExpression
-  = "(" expression:AddExpression ")" {
+  = "(" _ expression:Expression _ ")" {
     return expression;
   }
   / FunctionExpression
@@ -134,11 +134,11 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameter:Identifier _ "=>" _ expression:AddExpression {
+  = parameter:Identifier _ "=>" _ bodyExpression:Expression {
       return {
         type: 'FunctionExpression',
         parameter,
-        expression
+        bodyExpression
       };
     }
 
@@ -146,7 +146,7 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }
 

@@ -12,6 +12,6 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }

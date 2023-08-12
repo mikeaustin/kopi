@@ -8,58 +8,58 @@
 
 {
   class Function {
-    constructor(parameter, expression, environment) {
+    constructor(parameter, bodyExpression, environment) {
       this.parameter = parameter;
-      this.expression = expression;
+      this.bodyExpression = bodyExpression;
       this.environment = environment;
     }
 
-    apply(thisArg, [argumentValue]) {
-      return evaluateNode(this.expression, {
+    apply(thisArg, [argument]) {
+      return evaluate(this.bodyExpression, {
         ...this.environment,
-        [this.parameter.name]: argumentValue
+        [this.parameter.name]: argument
       })
     }
   }
 
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue
   }
 
-  const interpreterVisitors = {
+  const visitors = {
     Block: ({ statements }, environment) => {
       const bindVariables = (bindings) => environment = ({ ...environment, ...bindings });
 
       return statements.reduce((_, expression) => (
-        evaluateNode(expression, environment, bindVariables)
+        evaluate(expression, environment, bindVariables)
       ), undefined);
     },
 
     Assignment: ({ variable, expression }, environment, bindVariables) => {
       bindVariables({
-        [variable]: evaluateNode(expression, environment, bindVariables)
+        [variable]: evaluate(expression, environment, bindVariables)
       });
     },
 
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
-      const leftValue = evaluateNode(leftExpression, environment);
-      const rightValue = evaluateNode(rightExpression, environment);
+      const leftValue = evaluate(leftExpression, environment);
+      const rightValue = evaluate(rightExpression, environment);
 
-      return operatorFunctions[operator](leftValue, rightValue, environment);
+      return operators[operator](leftValue, rightValue, environment);
     },
 
     FunctionApplicationExpression({ expression, argument }, environment) {
-      const expressionValue = evaluateNode(expression, environment);
-      const argumentValue = evaluateNode(argument, environment);
+      const expressionValue = evaluate(expression, environment);
+      const argumentValue = evaluate(argument, environment);
 
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
 
-    FunctionExpression({ parameter, expression }, environment) {
-      return new Function(parameter, expression, environment);
+    FunctionExpression({ parameter, bodyExpression }, environment) {
+      return new Function(parameter, bodyExpression, environment);
     },
 
     NumericLiteral: ({ value }) => {
@@ -71,8 +71,8 @@
     }
   }
 
-  function evaluateNode(node, environment, bindVariables) {
-    return interpreterVisitors[node.type](node, environment, bindVariables);
+  function evaluate(node, environment, bindVariables) {
+    return visitors[node.type](node, environment, bindVariables);
   }
 }
 
@@ -87,7 +87,7 @@ Program
 
       const environment = {};
 
-      return evaluateNode(statements, environment);
+      return evaluate(statements, environment);
     }
 
 Statement
@@ -107,7 +107,9 @@ Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -118,7 +120,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
+  = leftExpression:FunctionApplicationExpression _
+    operator:("*" / "/") _
+    rightExpression:FunctionApplicationExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -138,7 +142,7 @@ FunctionApplicationExpression
     }
 
 PrimaryExpression
-  = "(" expression:AddExpression ")" {
+  = "(" _ expression:Expression _ ")" {
       return expression;
     }
   / FunctionExpression
@@ -146,11 +150,11 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameter:Identifier _ "=>" _ expression:AddExpression {
+  = parameter:Identifier _ "=>" _ bodyExpression:Expression {
       return {
         type: 'FunctionExpression',
         parameter: parameter,
-        expression: expression
+        bodyExpression: bodyExpression
       };
     }
 

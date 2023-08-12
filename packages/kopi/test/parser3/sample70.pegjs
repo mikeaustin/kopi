@@ -4,26 +4,26 @@
 //
 
 {
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
-  }
+  };
 
-  const interpreterVisitors = {
+  const visitors = {
     OperatorExpression: ({ operator, leftExpression, rightExpression }) => {
-      const leftValue = evaluate(leftExpression, environment);
-      const rightValue = evaluate(rightExpression, environment);
+      const leftValue = evaluate(leftExpression);
+      const rightValue = evaluate(rightExpression);
 
-      return operatorFunctions[operator](leftValue, rightValue);
+      return operators[operator](leftValue, rightValue);
     },
 
     NumericLiteral: ({ value }) => {
       return value;
     }
-  }
+  };
 
   function evaluate(node) {
-    return interpreterVisitors[node.type](node);
+    return visitors[node.type](node);
   }
 }
 
@@ -49,8 +49,8 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
-      );
+        value: Number(text())
+      };
     }
 
 _ "whitespace"

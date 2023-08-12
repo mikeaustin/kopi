@@ -4,19 +4,19 @@
 //
 
 {
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const interpreterVisitors = {
+  const visitors = {
     OperatorExpression: ({ operator, leftExpression, rightExpression }) => {
-      const leftValue = evaluate(leftExpression, environment);
-      const rightValue = evaluate(rightExpression, environment);
+      const leftValue = evaluate(leftExpression);
+      const rightValue = evaluate(rightExpression);
 
-      return operatorFunctions[operator](leftValue, rightValue);
+      return operators[operator](leftValue, rightValue);
     },
 
     NumericLiteral: ({ value }) => {
@@ -25,7 +25,7 @@
   }
 
   function evaluate(node) {
-    return interpreterVisitors[node.type](node);
+    return visitors[node.type](node);
   }
 }
 
@@ -38,7 +38,9 @@ Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -49,7 +51,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:NumericLiteral _ operator:("*" / "/") _ rightExpression:NumericLiteral {
+  = leftExpression:NumericLiteral _
+    operator:("*" / "/") _
+    rightExpression:NumericLiteral {
       return {
         type: 'OperatorExpression',
         operator: operator,

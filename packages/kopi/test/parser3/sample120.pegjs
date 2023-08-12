@@ -5,9 +5,9 @@
 
 {
   class Function {
-    constructor(parameter, expression, environment) {
+    constructor(parameter, bodyExpression, environment) {
       this.parameter = parameter;
-      this.expression = expression;
+      this.bodyExpression = bodyExpression;
       this.environment = environment;
     }
 
@@ -41,11 +41,11 @@
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
 
-    FunctionExpression({ parameter, expression }, environment) {
-      return new Function(parameter, expression, environment);
+    FunctionExpression({ parameter, bodyExpression }, environment) {
+      return new Function(parameter, bodyExpression, environment);
     },
 
-    NumericLiteral: ({ value }, _) => {
+    NumericLiteral: ({ value }) => {
       return value;
     },
 
@@ -101,7 +101,7 @@ FunctionApplicationExpression
     }
 
 PrimaryExpression
-  = "(" expression:AddExpression ")" {
+  = "(" _ expression:Expression _ ")" {
     return expression;
   }
   / FunctionExpression
@@ -109,11 +109,11 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameter:Identifier _ "=>" _ expression:AddExpression {
+  = parameter:Identifier _ "=>" _ bodyExpression:Expression {
       return {
         type: 'FunctionExpression',
         parameter,
-        expression
+        bodyExpression
       };
     }
 
@@ -121,7 +121,7 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }
 

@@ -4,19 +4,19 @@
 //
 
 {
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   };
 
-  const interpreterVisitors = {
-    OperatorExpression: ({ operator, leftExpression, rightExpression }) => {
+  const visitors = {
+    OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
 
-      return operatorFunctions[operator](leftValue, rightValue, environment);
+      return operators[operator](leftValue, rightValue);
     },
 
     FunctionExpression({ param, body }, environment) {
@@ -27,7 +27,7 @@
       return value;
     },
 
-    Identifier: ({ name }, env) => {
+    Identifier: ({ name }, environment) => {
       return environment[name];
     }
   }
@@ -35,7 +35,7 @@
   function evaluate(node) {
     const environment = {};
 
-    return interpreterVisitors[node.type](node, environment);
+    return visitors[node.type](node, environment);
   }
 }
 
@@ -80,7 +80,7 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }
 

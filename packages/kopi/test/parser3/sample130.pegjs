@@ -5,28 +5,28 @@
 
 {
   class Function {
-    constructor(parameter, expression, environment) {
+    constructor(parameter, bodyExpression, environment) {
       this.parameter = parameter;
-      this.expression = expression;
+      this.bodyExpression = bodyExpression;
       this.environment = environment;
     }
 
-    apply(thisArg, [argument, _]) {
-      return evaluate(this.expression, {
+    apply(thisArg, [argument]) {
+      return evaluate(this.bodyExpression, {
         ...this.environment,
         [this.parameter.name]: argument
       })
     }
   }
 
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const interpreterVisitors = {
+  const visitors = {
     Block: ({ statements }, environment) => {
       // const bind = (bindings) => environment = ({ ...environment, ...bindings });
 
@@ -39,7 +39,7 @@
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
 
-      return operatorFunctions[operator](leftValue, rightValue, environment);
+      return operators[operator](leftValue, rightValue, environment);
     },
 
     FunctionApplicationExpression({ expression, argument }, environment) {
@@ -49,8 +49,8 @@
       return expressionValue.apply(undefined, [argumentValue, environment]);
     },
 
-    FunctionExpression({ parameter, expression }, environment) {
-      return new Function(parameter, expression, environment);
+    FunctionExpression({ parameter, bodyExpression }, environment) {
+      return new Function(parameter, bodyExpression, environment);
     },
 
     NumericLiteral: ({ value }, _) => {
@@ -63,7 +63,8 @@
   }
 
   function evaluate(astNode, environment) {
-    return interpreterVisitors[astNode.type](astNode, environment);
+    console.log(astNode);
+    return visitors[astNode.type](astNode, environment);
   }
 }
 
@@ -88,7 +89,9 @@ Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -99,7 +102,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:FunctionApplicationExpression _ operator:("*" / "/") _ rightExpression:FunctionApplicationExpression {
+  = leftExpression:FunctionApplicationExpression _
+    operator:("*" / "/") _
+    rightExpression:FunctionApplicationExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -127,11 +132,11 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = parameter:Identifier _ "=>" _ expression:AddExpression {
+  = parameter:Identifier _ "=>" _ bodyExpression:AddExpression {
       return {
         type: 'FunctionExpression',
         parameter,
-        expression
+        bodyExpression
       };
     }
 

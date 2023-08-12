@@ -4,36 +4,36 @@
 //
 
 {
-  function Function(param, body, closure) {
-    this.param = param;
-    this.body = body;
-    this.closure = closure;
+  function Function(parameter, bodyExpression, environment) {
+    this.parameter = parameter;
+    this.bodyExpression = bodyExpression;
+    this.closure = environment;
 
-    this.apply = (thisArg, [arg, environment]) => {
-      return evaluate(this.body, {
+    this.apply = (thisArg, [argument, environment]) => {
+      return evaluate(this.bodyExpression, {
         ...this.closure,
-        [this.param.name]: arg
+        [this.param.name]: argument
       })
     }
   }
 
-  const operatorFunctions = {
+  const operators = {
     ['+']: (leftValue, rightValue) => leftValue + rightValue,
     ['-']: (leftValue, rightValue) => leftValue - rightValue,
     ['*']: (leftValue, rightValue) => leftValue * rightValue,
     ['/']: (leftValue, rightValue) => leftValue / rightValue,
   }
 
-  const interpreterVisitors = {
+  const visitors = {
     OperatorExpression: ({ operator, leftExpression, rightExpression }, environment) => {
       const leftValue = evaluate(leftExpression, environment);
       const rightValue = evaluate(rightExpression, environment);
 
-      return operatorFunctions[operator](leftValue, rightValue, environment);
+      return operators[operator](leftValue, rightValue, environment);
     },
 
-    FunctionExpression({ param, body }, environment) {
-      return new Function(param, body, environment);
+    FunctionExpression({ parameter, bodyExpression }, environment) {
+      return new Function(parameter, bodyExpression, environment);
     },
 
     NumericLiteral: ({ value }) => {
@@ -48,7 +48,7 @@
   function evaluate(node) {
     const environment = {};
 
-    return interpreterVisitors[node.type](node);
+    return visitors[node.type](node);
   }
 }
 
@@ -61,7 +61,9 @@ Expression
   = AddExpression
 
 AddExpression
-  = leftExpression:MultiplyExpression _ operator:("+" / "-") _ rightExpression:MultiplyExpression {
+  = leftExpression:MultiplyExpression _
+    operator:("+" / "-") _
+    rightExpression:MultiplyExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -72,7 +74,9 @@ AddExpression
   / MultiplyExpression
 
 MultiplyExpression
-  = leftExpression:PrimaryExpression _ operator:("*" / "/") _ rightExpression:PrimaryExpression {
+  = leftExpression:PrimaryExpression _
+    operator:("*" / "/") _
+    rightExpression:PrimaryExpression {
       return {
         type: 'OperatorExpression',
         operator: operator,
@@ -83,7 +87,7 @@ MultiplyExpression
   / PrimaryExpression
 
 PrimaryExpression
-  = "(" expression:AddExpression ")" {
+  = "(" _ expression:Expression _ ")" {
     return expression;
   }
   / FunctionExpression
@@ -91,11 +95,11 @@ PrimaryExpression
   / Identifier
 
 FunctionExpression
-  = param:Identifier _ "=>" _ body:AddExpression {
+  = parameter:Identifier _ "=>" _ bodyExpression:Expression {
       return {
         type: 'FunctionExpression',
-        param,
-        body
+        parameter,
+        bodyExpression
       };
     }
 
@@ -103,7 +107,7 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }
 

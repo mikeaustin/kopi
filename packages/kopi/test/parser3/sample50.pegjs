@@ -4,7 +4,7 @@
 //
 
 {
-  const interpreterVisitors = {
+  const visitors = {
     AddExpression: ({ leftExpression, rightExpression }) => {
       return evaluate(leftExpression) + evaluate(rightExpression);
     },
@@ -15,7 +15,7 @@
   }
 
   function evaluate(node) {
-    return interpreterVisitors[node.type](node);
+    return visitors[node.type](node);
   }
 }
 
@@ -40,6 +40,6 @@ NumericLiteral
   = value:[0-9]+ {
       return {
         type: 'NumericLiteral',
-        value: Number(value.join(''))
+        value: Number(text())
       };
     }
